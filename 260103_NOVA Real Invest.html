@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>2026년 연초 첫 거래일 시장 분석 | AI 확산과 투자 전략</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 100%);
+            color: #e0e0e0;
+            line-height: 1.8;
+            padding: 16px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 24px 0;
+            border-bottom: 2px solid #3a3a6a;
+            margin-bottom: 24px;
+        }
+        
+        h1 {
+            font-size: 1.6rem;
+            color: #00d4ff;
+            margin-bottom: 12px;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+        
+        .date-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .source-info {
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: #888;
+        }
+        
+        h2 {
+            font-size: 1.3rem;
+            color: #00d4ff;
+            margin: 32px 0 16px;
+            padding-left: 12px;
+            border-left: 4px solid #00d4ff;
+        }
+        
+        h3 {
+            font-size: 1.1rem;
+            color: #ffd700;
+            margin: 24px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            text-align: justify;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(255, 107, 107, 0.1));
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.15), rgba(255, 142, 83, 0.15));
+            border: 1px solid rgba(255, 107, 107, 0.4);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+        
+        .success-box {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.1));
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+        
+        .key-point {
+            color: #ff6b6b;
+            font-weight: 700;
+        }
+        
+        .positive {
+            color: #00ff88;
+            font-weight: 600;
+        }
+        
+        .negative {
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+        
+        .neutral {
+            color: #ffd700;
+            font-weight: 600;
+        }
+        
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+        
+        .chart-title {
+            text-align: center;
+            color: #00d4ff;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        canvas {
+            max-width: 100%;
+            height: auto !important;
+        }
+        
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #888;
+        }
+        
+        .ticker {
+            display: inline-block;
+            background: rgba(0, 212, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: 600;
+            color: #00d4ff;
+        }
+        
+        .sector-list {
+            list-style: none;
+            margin: 16px 0;
+        }
+        
+        .sector-list li {
+            padding: 12px;
+            margin: 8px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+            margin: 20px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, #00d4ff, #ff6b6b);
+            border-radius: 2px;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+            padding-left: 16px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -27px;
+            top: 8px;
+            width: 12px;
+            height: 12px;
+            background: #00d4ff;
+            border-radius: 50%;
+            border: 3px solid #0a0a1a;
+        }
+        
+        .timeline-date {
+            font-size: 0.85rem;
+            color: #ffd700;
+            font-weight: 600;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.9rem;
+        }
+        
+        th, td {
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        th {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .conclusion-box {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 107, 107, 0.1));
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+        
+        .strategy-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 12px 0;
+        }
+        
+        .strategy-title {
+            color: #00d4ff;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 24px 0;
+            margin-top: 32px;
+            border-top: 1px solid #3a3a6a;
+            color: #666;
+            font-size: 0.8rem;
+        }
+        
+        .emoji {
+            font-size: 1.2em;
+        }
+        
+        @media (max-width: 400px) {
+            body {
+                padding: 12px;
+            }
+            h1 {
+                font-size: 1.4rem;
+            }
+            .stat-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 2026년 연초 첫 거래일<br>AI 확산과 투자 전략 분석</h1>
+            <span class="date-badge">2026년 1월 2일 금요일</span>
+            <p class="source-info">📺 출처: 노바 유튜브 채널</p>
+        </header>
+
+        <section>
+            <h2>📊 시장 핵심 요약</h2>
+            
+            <div class="highlight-box">
+                <p style="font-size: 1.1rem; text-align: center; margin: 0;">
+                    <strong>"반도체가 살렸고, 소프트웨어가 눌렸고,<br>다우가 웃은 하루"</strong>
+                </p>
+            </div>
+            
+            <p>2026년 새해 첫 거래일은 <span class="key-point">연초, 분기초, 월초가 동시에 겹친</span> 매우 중요한 날이었습니다. 이 날의 시장 흐름은 향후 상반기 전체의 투자 방향성을 가늠할 수 있는 핵심 지표로 작용합니다.</p>
+            
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="stat-value positive">▲</div>
+                    <div class="stat-label">다우지수</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value negative">▼</div>
+                    <div class="stat-label">나스닥</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value positive">+10.48%</div>
+                    <div class="stat-label">MU (마이크론)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value positive">+1.37%</div>
+                    <div class="stat-label">비트코인</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>🔥 핵심 투자 테마: AI 하드웨어</h2>
+            
+            <p>2026년 시장의 핵심 키워드는 명확합니다. AI 확산이 소프트웨어가 아닌 <span class="key-point">하드웨어, 특히 반도체와 메모리</span>로 집중되고 있다는 점입니다.</p>
+            
+            <div class="chart-container">
+                <div class="chart-title">📈 2026년 첫 거래일 섹터별 수익률</div>
+                <canvas id="sectorChart"></canvas>
+            </div>
+            
+            <h3>💡 AI 투자 흐름의 진실</h3>
+            
+            <div class="highlight-box">
+                <p><strong>노바의 핵심 통찰:</strong></p>
+                <p>"사람들은 AI 소프트웨어로 수익이 확산될 것이라 기대하지만, <span class="key-point">결론은 다시 하드웨어</span>로 돌아온다. 돈을 '만드느냐'가 아니라 돈이 '어디로 들어가느냐'가 중요하다."</p>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-title">🎯 AI 투자 자금 흐름도</div>
+                <canvas id="flowChart"></canvas>
+            </div>
+            
+            <h3>🏆 메모리 반도체 강세</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>종목</th>
+                        <th>티커</th>
+                        <th>등락률</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>마이크론</td>
+                        <td><span class="ticker">MU</span></td>
+                        <td class="positive">+10.48%</td>
+                    </tr>
+                    <tr>
+                        <td>샌디스크</td>
+                        <td><span class="ticker">SNDK</span></td>
+                        <td class="positive">+15.97%</td>
+                    </tr>
+                    <tr>
+                        <td>웨스턴디지털</td>
+                        <td><span class="ticker">WDC</span></td>
+                        <td class="positive">+8.96%</td>
+                    </tr>
+                    <tr>
+                        <td>버티브</td>
+                        <td><span class="ticker">VRT</span></td>
+                        <td class="positive">+8.00%</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p>메모리 반도체의 급등은 AI 데이터센터 수요 폭증으로 인한 <span class="key-point">공급 병목 현상</span>이 지속되고 있음을 보여줍니다. 특히 SK하이닉스의 미국 상장 루머도 주목할 만한 변수입니다.</p>
+        </section>
+
+        <section>
+            <h2>⚠️ 10년물 국채금리: 핵심 모니터링 지표</h2>
+            
+            <div class="warning-box">
+                <p><strong>🚨 경고 신호:</strong> 10년물 국채금리 <span class="negative">4.18%</span></p>
+                <p>5일 연속 상승 중이며, 이는 시장에 부담을 주는 수준입니다.</p>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-title">📉 10년물 국채금리 기준선 변화</div>
+                <canvas id="yieldChart"></canvas>
+            </div>
+            
+            <div class="highlight-box">
+                <h3 style="color: #ffd700; margin-bottom: 12px;">📌 새로운 금리 기준선: 4.15%</h3>
+                <ul style="list-style: none;">
+                    <li>✅ <strong>4.15% 이하:</strong> 시장 우호적, 성장주 강세 가능</li>
+                    <li>❌ <strong>4.15% 이상:</strong> 시장 부담, 고밸류 종목 압박</li>
+                </ul>
+                <p style="margin-top: 12px; font-size: 0.9rem; color: #888;">※ 기존 기준(4.50%)에서 하향 조정 - 금리 인하 2회 반영</p>
+            </div>
+            
+            <p>금리가 4.15%를 상회하면 고밸류 성장주와 소프트웨어 섹터가 압박을 받고, 이하로 내려가면 전반적인 리스크 온(Risk-on) 분위기가 형성될 수 있습니다.</p>
+        </section>
+
+        <section>
+            <h2>🚗 테슬라: 인도량 쇼크</h2>
+            
+            <div class="warning-box">
+                <p><strong>📊 4분기 인도량 실적</strong></p>
+                <p>예상: <span class="neutral">418,227대</span> → 실제: <span class="negative">406,000대</span></p>
+                <p>전년 대비 <span class="negative">-16%</span> 감소</p>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-title">📉 테슬라 분기별 생산/판매량 추이</div>
+                <canvas id="teslaChart"></canvas>
+            </div>
+            
+            <h3>⚡ 핵심 분석 포인트</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>모델</th>
+                        <th>생산량</th>
+                        <th>인도량</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Model 3/Y</td>
+                        <td>422,652대</td>
+                        <td>~406,000대</td>
+                    </tr>
+                    <tr>
+                        <td>기타 (X, 사이버트럭 등)</td>
+                        <td>11,706대</td>
+                        <td>11,640대</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="highlight-box">
+                <p><strong>노바의 해석:</strong></p>
+                <p>"전기차는 <span class="key-point">경제적 이유</span>로 구매되고 있다. Model 3/Y만 팔리고, 고가 모델은 거의 팔리지 않는다. 2025년 9월 보조금(Tax Credit) 종료 이후 3개월분의 수요가 사라진 것이다."</p>
+            </div>
+            
+            <p>테슬라는 2023년을 정점으로 생산량과 판매량 모두 감소세를 보이고 있으며, 2026년에는 보조금 완전 종료로 인해 더 큰 하락이 예상됩니다. 따라서 테슬라는 <span class="key-point">장기 투자보다는 트레이딩 접근</span>이 권장됩니다.</p>
+        </section>
+
+        <section>
+            <h2>🏠 가구 섹터: 관세 유예 수혜</h2>
+            
+            <div class="success-box">
+                <p><strong>🎉 호재:</strong> 트럼프 행정부, 가구 관세 부과 계획 사실상 백지화</p>
+            </div>
+            
+            <p>트럼프 대통령이 가구에 300% 관세를 부과하겠다고 했으나, 실제 시행이 어렵다는 분석이 나왔습니다. 가구 카테고리에는 나무로 된 모든 물건이 포함되어 있어, 관세 부과 시 제조업 전반에 타격이 불가피하기 때문입니다.</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>종목</th>
+                        <th>티커</th>
+                        <th>등락률</th>
+                        <th>특징</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>RH (레스토레이션 하드웨어)</td>
+                        <td><span class="ticker">RH</span></td>
+                        <td class="positive">+8.04%</td>
+                        <td>고급 가구</td>
+                    </tr>
+                    <tr>
+                        <td>웨이페어</td>
+                        <td><span class="ticker">W</span></td>
+                        <td class="positive">+6%↑</td>
+                        <td>대중 가구</td>
+                    </tr>
+                    <tr>
+                        <td>윌리엄스-소노마</td>
+                        <td><span class="ticker">WSM</span></td>
+                        <td class="positive">+5.21%</td>
+                        <td>중고급 가구</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>🇰🇷 한국 ETF: 폭발적 상승</h2>
+            
+            <div class="success-box">
+                <p><strong>🔥 KORU (한국 3배 레버리지 ETF)</strong></p>
+                <p>일일 수익률: <span class="positive">+14.84%</span></p>
+                <p>구속 시점(4월) 대비: <span class="positive">약 +500%</span> ($30 → $208)</p>
+            </div>
+            
+            <p>"윤석열 전 대통령 구속 시점에서 '법치가 살면 자본주의가 산다'고 말하며 매수를 권고했다. 그때 $30이었던 KORU가 현재 $208까지 상승했다."</p>
+            
+            <div class="chart-container">
+                <div class="chart-title">📈 KORU ETF 가격 추이</div>
+                <canvas id="koruChart"></canvas>
+            </div>
+            
+            <p>현재 전세계 시장 중에서 한국이 가장 좋은 성과를 보이고 있으며, 이머징 마켓을 넘어 글로벌 최고 수익률을 기록 중입니다.</p>
+        </section>
+
+        <section>
+            <h2>📅 2026년 주요 일정 및 전망</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">1월 5일</div>
+                    <p><strong>CES 2026 (라스베가스)</strong><br>젠슨 황 키노트 연설 - 엔비디아 협력사 주목</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">1월 둘째주</div>
+                    <p><strong>고용지표 발표</strong><br>시장 방향성 결정의 핵심 변수</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">4월</div>
+                    <p><strong>미중 협상 기대</strong><br>시진핑-트럼프 빅뉴스 예상</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">11월</div>
+                    <p><strong>정치적 빅 이벤트</strong><br>하반기 전략 수립의 핵심 시점</p>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3 style="color: #ffd700;">🎯 CES 2026 투자 포인트</h3>
+                <p>2025년 CES에서 엔비디아보다 <span class="ticker">VRT</span>(버티브) 같은 협력사가 더 크게 상승했던 점을 기억하세요. 이번에도 젠슨 황이 언급하는 파트너십 기업들이 큰 움직임을 보일 것입니다.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>⏰ 시간별 투자 체크리스트</h2>
+            
+            <div class="strategy-card">
+                <div class="strategy-title"><span class="emoji">📅</span> 연초 (1년에 1번)</div>
+                <p>올해의 메인 테마 설정, 사이클 위치 파악, 주도 자산/스타일 결정</p>
+                <p><strong>핵심:</strong> "종목보다 방향만 정하면 성공"</p>
+            </div>
+            
+            <div class="strategy-card">
+                <div class="strategy-title"><span class="emoji">📊</span> 분기초 (연 4회)</div>
+                <p>실적 시즌 대비, 로테이션 확인, 포트폴리오 리밸런싱</p>
+                <p><strong>핵심:</strong> "버릴 것을 정하는 시기"</p>
+            </div>
+            
+            <div class="strategy-card">
+                <div class="strategy-title"><span class="emoji">🗓️</span> 월초 (월 1회)</div>
+                <p>FOMC, CPI 체크, VIX 지수 확인, 기관 자금 이동 파악</p>
+                <p><strong>핵심:</strong> "얼마 벌까보다 얼마 잃지 않을까"</p>
+            </div>
+            
+            <div class="strategy-card">
+                <div class="strategy-title"><span class="emoji">🌅</span> 장전 (매일)</div>
+                <p>선물 지수, 10년물 금리, 달러 방향성, 경제 지표/실적 확인</p>
+                <p><strong>핵심:</strong> "장전 1시간이 하루를 결정"</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>💰 투자 전략 종합</h2>
+            
+            <div class="conclusion-box">
+                <h3 style="color: #ffd700; margin-bottom: 16px;">🎯 2026년 상반기 핵심 전략</h3>
+                
+                <div class="strategy-card" style="background: rgba(0, 212, 255, 0.1);">
+                    <p><strong>📌 메인 테마:</strong> AI 하드웨어 (반도체, 메모리)</p>
+                </div>
+                
+                <div class="strategy-card" style="background: rgba(0, 255, 136, 0.1);">
+                    <p><strong>📌 핵심 종목:</strong></p>
+                    <p>• <span class="ticker">NVDA</span> (엔비디아) - 결론은 항상 여기로</p>
+                    <p>• <span class="ticker">MU</span>, <span class="ticker">WDC</span>, <span class="ticker">SNDK</span> - 메모리</p>
+                    <p>• <span class="ticker">VRT</span>, <span class="ticker">AMAT</span> - 장비/인프라</p>
+                </div>
+                
+                <div class="strategy-card" style="background: rgba(255, 215, 0, 0.1);">
+                    <p><strong>📌 금리 기준:</strong> 10년물 4.15% 상/하 모니터링</p>
+                </div>
+                
+                <div class="strategy-card" style="background: rgba(255, 107, 107, 0.1);">
+                    <p><strong>📌 주의 종목:</strong></p>
+                    <p>• <span class="ticker">TSLA</span> - 트레이딩만 권장</p>
+                    <p>• <span class="ticker">CRM</span> - 모럴 해저드 경고</p>
+                    <p>• 소프트웨어 섹터 전반 - 금리 부담</p>
+                </div>
+                
+                <div class="strategy-card" style="background: rgba(138, 43, 226, 0.1);">
+                    <p><strong>📌 하반기 대비:</strong> 캐시 확보 중요, 11월 빅 이벤트 주목</p>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-title">📊 2026년 투자 전략 로드맵</div>
+                <canvas id="roadmapChart"></canvas>
+            </div>
+        </section>
+
+        <section>
+            <h2>📝 경제 지표 점검</h2>
+            
+            <h3>🏭 S&P 제조업 PMI</h3>
+            <p>발표치: <span class="neutral">51.8</span> (50 이상이면 확장)</p>
+            <p>전월 대비 축소세를 보이고 있어 경기 둔화 우려가 있습니다. 정부 발표 PMI는 50 이하로 더 부진했습니다.</p>
+            
+            <h3>🛢️ 원유 시장</h3>
+            <p>박스권 등락 지속. 트럼프의 이란 제재 협박으로 공급 우려가 있으나, 현재 생산량 과잉으로 상쇄되는 양상입니다.</p>
+            
+            <h3>🥇 금(Gold)</h3>
+            <p>5일간 하락 후 소폭 반등. 여전히 박스권 움직임을 보이며 방향성 탐색 중입니다.</p>
+            
+            <h3>₿ 비트코인</h3>
+            <p>주말부터 상승하며 +1.37%. 그러나 반감기 효력이 꺾인 상태로 신고점 돌파는 어려울 전망입니다.</p>
+        </section>
+
+        <section>
+            <h2>🌐 지정학적 리스크</h2>
+            
+            <div class="warning-box">
+                <p><strong>⚠️ 주요 리스크 요인</strong></p>
+                <ul style="list-style: disc; margin-left: 20px; margin-top: 12px;">
+                    <li>트럼프의 이란 제재 협박 - 원유 공급 불안</li>
+                    <li>베네수엘라 정세 변화 - 협상 가능성</li>
+                    <li>트럼프 3선 시도 논란 - 지지율 하락 변수</li>
+                    <li>농업 보조금 정책 - 물가 상승 압력</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>💡 핵심 인사이트</h2>
+            
+            <div class="highlight-box">
+                <p><strong>"시장은 맞추는 게임이 아니라 살아남는 게임이다"</strong></p>
+            </div>
+            
+            <div class="highlight-box">
+                <p><strong>"연초는 방향 설정, 분기초는 로테이션 확인, 월/주초는 리스크 관리, 매일 장전은 실행 판단"</strong></p>
+            </div>
+            
+            <div class="highlight-box">
+                <p><strong>"정성을 들이면 투자, 정성 없이 따라가면 투기. 양심이 살아있어야 고수가 된다."</strong></p>
+            </div>
+        </section>
+
+        <footer>
+            <p>⚠️ 본 자료는 투자 참고용이며, 투자 결정에 대한 책임은 투자자 본인에게 있습니다.</p>
+            <p>📺 출처: 노바 유튜브 채널 | 2026년 1월 3일 작성</p>
+        </footer>
+    </div>
+
+    <script>
+        // 섹터별 수익률 차트
+        const sectorCtx = document.getElementById('sectorChart').getContext('2d');
+        new Chart(sectorCtx, {
+            type: 'bar',
+            data: {
+                labels: ['메모리\n반도체', '에너지', '산업재', '금융', '유틸리티', '소비재', '소프트\n웨어'],
+                datasets: [{
+                    label: '등락률 (%)',
+                    data: [12, 8, 6, 5, 4, -2, -4],
+                    backgroundColor: [
+                        'rgba(0, 255, 136, 0.7)',
+                        'rgba(0, 212, 255, 0.7)',
+                        'rgba(0, 180, 220, 0.7)',
+                        'rgba(255, 215, 0, 0.7)',
+                        'rgba(138, 43, 226, 0.7)',
+                        'rgba(255, 107, 107, 0.5)',
+                        'rgba(255, 107, 107, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgb(0, 255, 136)',
+                        'rgb(0, 212, 255)',
+                        'rgb(0, 180, 220)',
+                        'rgb(255, 215, 0)',
+                        'rgb(138, 43, 226)',
+                        'rgb(255, 107, 107)',
+                        'rgb(255, 107, 107)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { color: '#888' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#888', font: { size: 10 } }
+                    }
+                }
+            }
+        });
+
+        // AI 자금 흐름 차트
+        const flowCtx = document.getElementById('flowChart').getContext('2d');
+        new Chart(flowCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['하드웨어 (GPU/반도체)', '메모리', '인프라/장비', '소프트웨어'],
+                datasets: [{
+                    data: [40, 30, 20, 10],
+                    backgroundColor: [
+                        'rgba(0, 212, 255, 0.8)',
+                        'rgba(0, 255, 136, 0.8)',
+                        'rgba(255, 215, 0, 0.8)',
+                        'rgba(255, 107, 107, 0.5)'
+                    ],
+                    borderColor: '#0a0a1a',
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#e0e0e0', font: { size: 11 }, padding: 15 }
+                    }
+                }
+            }
+        });
+
+        // 국채금리 차트
+        const yieldCtx = document.getElementById('yieldChart').getContext('2d');
+        new Chart(yieldCtx, {
+            type: 'line',
+            data: {
+                labels: ['이전 기준', '금리인하 1회', '금리인하 2회', '현재 기준'],
+                datasets: [{
+                    label: '기준선',
+                    data: [4.50, 4.35, 4.15, 4.15],
+                    borderColor: 'rgb(0, 212, 255)',
+                    backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }, {
+                    label: '현재 금리',
+                    data: [4.50, 4.40, 4.20, 4.18],
+                    borderColor: 'rgb(255, 107, 107)',
+                    borderDash: [5, 5],
+                    fill: false,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: { color: '#e0e0e0' }
+                    }
+                },
+                scales: {
+                    y: {
+                        min: 4.0,
+                        max: 4.6,
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { color: '#888' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#888' }
+                    }
+                }
+            }
+        });
+
+        // 테슬라 차트
+        const teslaCtx = document.getElementById('teslaChart').getContext('2d');
+        new Chart(teslaCtx, {
+            type: 'bar',
+            data: {
+                labels: ['2023', '2024', '2025'],
+                datasets: [{
+                    label: '생산량 (만대)',
+                    data: [48, 44, 43],
+                    backgroundColor: 'rgba(0, 212, 255, 0.7)',
+                    borderColor: 'rgb(0, 212, 255)',
+                    borderWidth: 1
+                }, {
+                    label: '판매량 (만대)',
+                    data: [46, 42, 41],
+                    backgroundColor: 'rgba(255, 107, 107, 0.7)',
+                    borderColor: 'rgb(255, 107, 107)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: { color: '#e0e0e0' }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 35,
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { color: '#888' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#888' }
+                    }
+                }
+            }
+        });
+
+        // KORU 차트
+        const koruCtx = document.getElementById('koruChart').getContext('2d');
+        new Chart(koruCtx, {
+            type: 'line',
+            data: {
+                labels: ['4월\n(구속)', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월', '1월'],
+                datasets: [{
+                    label: 'KORU 가격 ($)',
+                    data: [30, 45, 70, 95, 120, 145, 165, 180, 195, 208],
+                    borderColor: 'rgb(0, 255, 136)',
+                    backgroundColor: 'rgba(0, 255, 136, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: 'rgb(0, 255, 136)',
+                    pointBorderColor: '#fff',
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: { color: '#e0e0e0' }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { 
+                            color: '#888',
+                            callback: function(value) { return '$' + value; }
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#888', font: { size: 10 } }
+                    }
+                }
+            }
+        });
+
+        // 투자 로드맵 차트
+        const roadmapCtx = document.getElementById('roadmapChart').getContext('2d');
+        new Chart(roadmapCtx, {
+            type: 'line',
+            data: {
+                labels: ['1월\nCES', '2월', '3월', '4월\n미중협상', '5월', '6월', '7월', '8월', '9월', '10월', '11월\n빅이벤트', '12월'],
+                datasets: [{
+                    label: '공격적 투자 구간',
+                    data: [80, 85, 75, 90, 70, 60, 50, 45, 40, 35, 30, 40],
+                    borderColor: 'rgb(0, 255, 136)',
+                    backgroundColor: 'rgba(0, 255, 136, 0.2)',
+                    fill: true,
+                    tension: 0.4
+                }, {
+                    label: '캐시 비중',
+                    data: [20, 15, 25, 10, 30, 40, 50, 55, 60, 65, 70, 60],
+                    borderColor: 'rgb(255, 215, 0)',
+                    backgroundColor: 'rgba(255, 215, 0, 0.2)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: { color: '#e0e0e0' }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { 
+                            color: '#888',
+                            callback: function(value) { return value + '%'; }
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#888', font: { size: 9 } }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
