@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>미국 증시 분석 - 2026년 1월 6일</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            line-height: 1.7;
+            color: #1a1a2e;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 16px;
+            max-width: 100%;
+        }
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 24px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .header .date {
+            font-size: 0.9rem;
+            opacity: 0.85;
+        }
+        .header .subtitle {
+            font-size: 0.85rem;
+            margin-top: 12px;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            display: inline-block;
+        }
+        .content {
+            padding: 20px;
+        }
+        .section {
+            margin-bottom: 28px;
+        }
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 3px solid #e94560;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title .icon {
+            font-size: 1.3rem;
+        }
+        .subsection {
+            margin-bottom: 20px;
+        }
+        .subsection-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #16213e;
+            margin-bottom: 10px;
+            padding-left: 12px;
+            border-left: 4px solid #0f3460;
+        }
+        p {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            color: #333;
+            text-align: justify;
+        }
+        .highlight {
+            background: linear-gradient(120deg, #fff3cd 0%, #fff3cd 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .strong-highlight {
+            background: linear-gradient(120deg, #e94560 0%, #e94560 100%);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .info-box {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            border-left: 4px solid #0f3460;
+        }
+        .warning-box {
+            background: #fff3cd;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            border-left: 4px solid #ffc107;
+        }
+        .danger-box {
+            background: #f8d7da;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            border-left: 4px solid #dc3545;
+        }
+        .success-box {
+            background: #d4edda;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            border-left: 4px solid #28a745;
+        }
+        
+        /* 테이블 스타일 */
+        .table-container {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            min-width: 300px;
+        }
+        th {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 12px 10px;
+            text-align: center;
+            font-weight: 600;
+        }
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #e9ecef;
+            text-align: center;
+        }
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        tr:hover {
+            background: #e3f2fd;
+        }
+        .positive {
+            color: #28a745;
+            font-weight: 700;
+        }
+        .negative {
+            color: #dc3545;
+            font-weight: 700;
+        }
+        .neutral {
+            color: #6c757d;
+            font-weight: 600;
+        }
+        
+        /* 차트 컨테이너 */
+        .chart-container {
+            margin: 20px 0;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        .chart-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .bar-label {
+            width: 60px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #333;
+            flex-shrink: 0;
+        }
+        .bar-wrapper {
+            flex: 1;
+            background: #e9ecef;
+            border-radius: 8px;
+            height: 24px;
+            overflow: hidden;
+        }
+        .bar {
+            height: 100%;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            transition: width 0.5s ease;
+        }
+        .bar.green {
+            background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+        }
+        .bar.red {
+            background: linear-gradient(90deg, #dc3545 0%, #e94560 100%);
+        }
+        .bar.blue {
+            background: linear-gradient(90deg, #007bff 0%, #0f3460 100%);
+        }
+        .bar.gold {
+            background: linear-gradient(90deg, #ffc107 0%, #fd7e14 100%);
+        }
+        
+        /* 카드 스타일 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 1px solid #e9ecef;
+        }
+        .card-title {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-bottom: 6px;
+        }
+        .card-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        .card-change {
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+        
+        /* 타임라인 */
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+            margin: 16px 0;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e94560;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 16px;
+            padding-left: 16px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #e94560;
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px #e94560;
+        }
+        .timeline-date {
+            font-size: 0.75rem;
+            color: #6c757d;
+            font-weight: 600;
+        }
+        .timeline-content {
+            font-size: 0.9rem;
+            color: #333;
+            margin-top: 4px;
+        }
+        
+        /* 리스트 스타일 */
+        .styled-list {
+            list-style: none;
+            padding: 0;
+            margin: 12px 0;
+        }
+        .styled-list li {
+            padding: 10px 12px 10px 36px;
+            position: relative;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        .styled-list li::before {
+            content: '▶';
+            position: absolute;
+            left: 12px;
+            color: #e94560;
+            font-size: 0.7rem;
+        }
+        
+        /* 인용 박스 */
+        .quote-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            position: relative;
+            font-style: italic;
+        }
+        .quote-box::before {
+            content: '"';
+            font-size: 3rem;
+            color: #e94560;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            opacity: 0.3;
+        }
+        .quote-source {
+            text-align: right;
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 8px;
+            font-style: normal;
+        }
+        
+        /* 비교 차트 */
+        .comparison-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 16px 0;
+        }
+        .comparison-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .comparison-label {
+            width: 80px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .comparison-bar-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .comparison-bar {
+            height: 20px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: white;
+        }
+        
+        /* 푸터 */
+        .footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+        .footer p {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 8px;
+        }
+        
+        /* 반응형 */
+        @media (max-width: 480px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            .section-title {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇺🇸 미국 증시 종합 분석</h1>
+            <div class="date">2026년 1월 6일 (화요일)</div>
+            <div class="subtitle">베네수엘라 사건 · 엔비디아 CES · 에너지 섹터 급등</div>
+        </div>
+        
+        <div class="content">
+            <!-- 핵심 요약 섹션 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">📊</span>
+                    주요 지수 마감 현황
+                </div>
+                
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-title">다우존스</div>
+                        <div class="card-value positive">+1.23%</div>
+                        <div class="card-change positive">📈 역대 최고가 경신</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">나스닥</div>
+                        <div class="card-value positive">상승 마감</div>
+                        <div class="card-change neutral">기술주 혼조세</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">S&P 500</div>
+                        <div class="card-value positive">상승</div>
+                        <div class="card-change positive">광범위한 상승</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">러셀 2000</div>
+                        <div class="card-value positive">강세</div>
+                        <div class="card-change positive">중소형주 활기</div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-title">📈 주요 자산 등락률</div>
+                    <div class="bar-chart">
+                        <div class="bar-item">
+                            <span class="bar-label">골드</span>
+                            <div class="bar-wrapper">
+                                <div class="bar gold" style="width: 60%;">+3.0%</div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <span class="bar-label">비트코인</span>
+                            <div class="bar-wrapper">
+                                <div class="bar green" style="width: 66%;">+3.29%</div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <span class="bar-label">원유</span>
+                            <div class="bar-wrapper">
+                                <div class="bar blue" style="width: 40%;">상승</div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <span class="bar-label">다우</span>
+                            <div class="bar-wrapper">
+                                <div class="bar green" style="width: 55%;">+1.23%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <strong>💡 핵심 포인트:</strong> 다우지수가 연일 사상 최고가를 경신하며 상당한 속도로 상승 중입니다. 금융, 에너지 섹터가 시장 상승을 주도하고 있으며, 중소형주(러셀)도 신이 나는 모습을 보여주고 있습니다. 골드는 <span class="highlight">$4,459</span>를 기록하며 $4,500 돌파를 눈앞에 두고 있습니다.
+                </div>
+            </div>
+            
+            <!-- 베네수엘라 사건 분석 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">🌎</span>
+                    베네수엘라 군사 개입과 시장 영향
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">사건 개요</div>
+                    <p>미국이 베네수엘라에 대한 군사 작전을 실행했습니다. <span class="highlight">최신 전투기 150대</span>가 출격하여 방공망을 장악하고 주요 군사 시설을 폭격했습니다. 공식적인 명분은 마약 문제였지만, 실질적인 목표는 <span class="strong-highlight">석유 자원 확보</span>로 분석됩니다.</p>
+                    
+                    <div class="warning-box">
+                        <strong>⚠️ 작전 특이사항:</strong> 미군은 사전에 베네수엘라 군 장성들에게 접촉하여 반격 여부를 확인했고, 협조 의사를 밝힌 부대는 공격에서 제외되었습니다. 이로 인해 작전이 신속하게 완료되었으며, 대통령궁 진입 시에도 별다른 저항이 없었던 것으로 알려졌습니다.
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">시장에 미친 영향</div>
+                    <p>이번 사건은 단순한 지정학적 리스크가 아닌 <span class="highlight">"긍정적 충격"</span>으로 작용했습니다. 그동안 트럼프 대통령이 그린랜드, 콜롬비아, 쿠바 등에 대해 위협적인 발언을 지속해왔지만, 실제 행동으로 옮기지 않아 <span class="highlight">장기적 불안정성</span>이 시장에 부담을 주고 있었습니다.</p>
+                    
+                    <p>그러나 베네수엘라에서 <span class="strong-highlight">하루 만에 작전이 성공적으로 완료</span>되면서, 오히려 불확실성 하나가 해소되는 효과가 나타났습니다. 미국의 군사적 우위가 재확인되면서 시장은 안도하는 모습을 보였습니다.</p>
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">향후 지정학적 리스크</div>
+                    <p>트럼프 대통령이 이번 성공에 고무되어 추가적인 군사적 행동을 고려할 가능성이 높아졌습니다.</p>
+                    
+                    <ul class="styled-list">
+                        <li><strong>그린랜드:</strong> 덴마크에 "다음은 너희다"라는 메시지 전달</li>
+                        <li><strong>콜롬비아:</strong> 남미 국가들에 대한 경고 메시지</li>
+                        <li><strong>쿠바:</strong> 지속적인 압박 예상</li>
+                        <li><strong>이란:</strong> 현재 시위로 정권 불안정, 미국의 개입 가능성</li>
+                        <li><strong>멕시코:</strong> 장기적으로 압박 대상이 될 수 있음</li>
+                    </ul>
+                    
+                    <div class="info-box">
+                        <strong>📌 투자 시사점:</strong> 베네수엘라 사건은 단발성 이벤트가 아닐 가능성이 높습니다. 트럼프 대통령의 특성상 이러한 "승전보"를 반복적으로 활용할 것으로 예상되며, 이는 방산, 에너지, 인프라 섹터에 지속적인 투자 기회를 제공할 수 있습니다.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 에너지 섹터 분석 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">⛽</span>
+                    에너지 섹터 심층 분석
+                </div>
+                
+                <p>베네수엘라 사건 이후 에너지 섹터가 급등했지만, <span class="highlight">모든 에너지주가 같은 이유로 오른 것은 아닙니다.</span> 각 기업의 비즈니스 모델에 따라 상승 폭과 이유가 다릅니다.</p>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>종목</th>
+                                <th>등락률</th>
+                                <th>사업 영역</th>
+                                <th>상승 이유</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>CVX</strong></td>
+                                <td class="positive">+5.1%</td>
+                                <td>시추·생산</td>
+                                <td>베네수엘라 기존 나와바리</td>
+                            </tr>
+                            <tr>
+                                <td><strong>HAL</strong></td>
+                                <td class="positive">+7.87%</td>
+                                <td>시추 장비·서비스</td>
+                                <td>재건사업 장비 수요</td>
+                            </tr>
+                            <tr>
+                                <td><strong>VLO</strong></td>
+                                <td class="positive">+9.26%</td>
+                                <td>정유</td>
+                                <td>헤비오일 정제 수요</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-title">📊 에너지 섹터 상승률 비교</div>
+                    <div class="bar-chart">
+                        <div class="bar-item">
+                            <span class="bar-label">VLO</span>
+                            <div class="bar-wrapper">
+                                <div class="bar green" style="width: 93%;">+9.26%</div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <span class="bar-label">HAL</span>
+                            <div class="bar-wrapper">
+                                <div class="bar green" style="width: 79%;">+7.87%</div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <span class="bar-label">CVX</span>
+                            <div class="bar-wrapper">
+                                <div class="bar green" style="width: 51%;">+5.1%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">왜 VLO(정유)가 가장 많이 올랐나?</div>
+                    <p>베네수엘라는 <span class="strong-highlight">세계 1위 석유 매장량</span>을 보유하고 있지만, 생산량은 사우디아라비아에 뒤집니다. 그 이유는 <span class="highlight">원유 품질 문제</span> 때문입니다.</p>
+                    
+                    <div class="info-box">
+                        <strong>🛢️ 베네수엘라 원유의 특성:</strong><br>
+                        베네수엘라 원유는 "헤비 오일"로 점도가 높고 걸쭉합니다. 일반 원유보다 정제 과정이 복잡하고 비용이 많이 들기 때문에, 시추·생산보다 <span class="highlight">정유(정제) 업체의 수혜가 더 크다</span>고 시장이 판단한 것입니다.
+                    </div>
+                    
+                    <p><strong>HAL(할리버튼)</strong>의 경우, 시추 장비 및 인프라 서비스를 제공하는 회사로, 베네수엘라 재건사업에서 장비 수요 증가가 예상됩니다. 이는 마치 <span class="highlight">"AI 분야의 엔비디아"</span>처럼 인프라에 투자하는 것과 같은 논리입니다.</p>
+                </div>
+                
+                <div class="warning-box">
+                    <strong>⚠️ 투자 주의사항:</strong> 급등 테마를 추격 매수하지 마십시오. 어제 장전 시장에서 CVX가 9~10%까지 올랐다가 정규장에서 5%로 수렴했습니다. <span class="highlight">눌림목에서 진입</span>하는 전략이 안전합니다.
+                </div>
+            </div>
+            
+            <!-- 엔비디아 CES 발표 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">🤖</span>
+                    엔비디아 CES 2026 키노트 핵심 정리
+                </div>
+                
+                <p>젠슨 황 CEO가 CES 2026에서 혁신적인 발표를 진행했습니다. 이번 발표의 핵심은 <span class="strong-highlight">"Thinking Vehicle"</span> 개념과 차세대 칩 <span class="strong-highlight">"베라 루빈(Vera Rubin)"</span>입니다.</p>
+                
+                <div class="subsection">
+                    <div class="subsection-title">1. 로보택시 & Thinking Vehicle</div>
+                    
+                    <div class="success-box">
+                        <strong>🚗 핵심 발표:</strong> 엔비디아가 <span class="highlight">2027년부터 로보택시 사업 진출</span>을 선언했습니다. 웨이모 방식 + 차량 판매 모델을 결합할 계획입니다.
+                    </div>
+                    
+                    <p>"Thinking Vehicle"은 단순한 자율주행차를 넘어서는 개념입니다. 엔비디아는 이미 <span class="highlight">"코스모스(Cosmos)"</span>라는 디지털 세계에서 실제 물리 법칙이 적용되는 가상 환경을 구축하고, 여기서 모든 상황을 시뮬레이션하며 훈련을 완료했습니다.</p>
+                    
+                    <ul class="styled-list">
+                        <li><strong>메르세데스 벤츠:</strong> 첫 번째 파트너십 체결, "알파메오" 시스템 탑재</li>
+                        <li><strong>적용 범위:</strong> 자율주행차, 건설 장비, 창고 로봇, 군사 장비 등</li>
+                        <li><strong>핵심 기술:</strong> Cosmos Transfer 2.5 + Cosmos Reason 2</li>
+                    </ul>
+                    
+                    <div class="info-box">
+                        <strong>💡 투자 시사점:</strong> Thinking Vehicle 발표로 인해 모빌아이(MBLY)가 장중 급등했습니다. 자율주행 관련 종목들의 연쇄 반응이 예상됩니다. 또한 현대자동차 등 자율주행 기술이 시급한 기업들의 엔비디아 파트너십 발표 가능성도 있습니다.
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">2. 베라 루빈(Vera Rubin) 칩</div>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>항목</th>
+                                    <th>성능 개선</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>처리 속도</td>
+                                    <td class="positive">기존 대비 10배 향상</td>
+                                </tr>
+                                <tr>
+                                    <td>전력 소비 (토큰당)</td>
+                                    <td class="positive">블랙웰 대비 1/10 수준</td>
+                                </tr>
+                                <tr>
+                                    <td>총 운영 비용</td>
+                                    <td class="positive">약 75% 절감 (1/4 수준)</td>
+                                </tr>
+                                <tr>
+                                    <td>냉각 시스템</td>
+                                    <td class="positive">팬리스(Fanless) 설계</td>
+                                </tr>
+                                <tr>
+                                    <td>연결 방식</td>
+                                    <td class="positive">와이어리스 (NVLink)</td>
+                                </tr>
+                                <tr>
+                                    <td>양산 시점</td>
+                                    <td class="neutral">이미 양산 돌입</td>
+                                </tr>
+                                <tr>
+                                    <td>출하 예정</td>
+                                    <td class="neutral">2026년 하반기</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="success-box">
+                        <strong>🔥 핵심 메시지:</strong> "전력 소비가 1/10로 줄었다면, 운영 비용 측면에서 25% 가격에 사는 것과 같다. 안 살래야 안 살 수가 없다."
+                    </div>
+                    
+                    <p>엔비디아는 <span class="highlight">매년 10배 성능 향상</span>을 목표로 하고 있으며, 이번 베라 루빈이 그 약속을 지킨 것입니다. AI 인프라의 가장 큰 문제였던 전력 비용을 획기적으로 줄임으로써, 고객사들의 구매 결정을 더욱 쉽게 만들었습니다.</p>
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">3. 내일 AMD CES 발표 전망</div>
+                    <p>내일(1월 7일) AMD가 CES 키노트를 진행합니다. 엔비디아가 이렇게 압도적인 발표를 한 후, AMD가 어떤 대응을 할지 주목됩니다.</p>
+                    
+                    <div class="warning-box">
+                        <strong>📌 AMD 전망:</strong> AMD가 특별한 발표 없이 무난하게 넘어가면 엔비디아 주가 상승 요인이 될 수 있고, AMD가 차별화된 전략(다른 영역 집중 등)을 제시하면 AMD도 반등할 수 있습니다.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 금융 섹터 분석 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">🏦</span>
+                    금융 섹터 강세 분석
+                </div>
+                
+                <p>2025년 12월 31일 방송에서 <span class="highlight">"2026년 테마: AI, 금융, 에너지"</span>를 제시했고, 실제로 2026년이 시작되자마자 금융주가 총알같이 올라가고 있습니다.</p>
+                
+                <div class="subsection">
+                    <div class="subsection-title">금융 섹터 상승 배경</div>
+                    <ul class="styled-list">
+                        <li><strong>금리 인하 기대감:</strong> 연준의 완화적 정책 전환 기대</li>
+                        <li><strong>규제 완화:</strong> 트럼프 행정부의 금융 규제 완화 정책</li>
+                        <li><strong>경기 전망:</strong> AI로 인한 생산성 증가로 경기 악화 제한적</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <strong>📊 KBE (금융 ETF) 현황:</strong><br>
+                    오늘 +2% 상승 후 장후 +1% 추가 상승하여 총 +3%대 상승을 기록했습니다. ETF 구성 종목 대부분이 <span class="highlight">52주 신고가</span>를 경신 중입니다.
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">소파이(SOFI) 급등 이유</div>
+                    <p>학자금 대출 연체자들에게 "딜린퀀시(Delinquency)" 선언이 시작되었습니다. 3개월 이상 연체된 대출에 대한 추심 절차가 본격화되면서, 핀테크 기업인 소파이의 수익성 개선 기대감이 반영되었습니다.</p>
+                </div>
+                
+                <div class="quote-box">
+                    "52주 신고가를 계속 추적하십시오. 그리고 계속 들어가세요."
+                    <div class="quote-source">- 52주 신고가 투자 전략</div>
+                </div>
+                
+                <p><span class="highlight">52주 신고가</span>가 중요한 이유: 52주 신고가를 찍은 종목은 1년 기준으로 최고점에 있지만, 3년~5년 차트로 보면 아직 상승 여력이 큰 경우가 많습니다. 즉, 52주 신고가는 장기 상승 추세의 신호탄일 수 있습니다.</p>
+            </div>
+            
+            <!-- 원자력 섹터 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">☢️</span>
+                    원자력 섹터 급등
+                </div>
+                
+                <p>미국 에너지부(DOE)에서 인프라 투자를 발표하면서 원자력 관련주가 폭등했습니다.</p>
+                
+                <div class="chart-container">
+                    <div class="chart-title">📊 원자력 관련주 상승률</div>
+                    <div class="bar-chart">
+                        <div class="bar-item">
+                            <span class="bar-label">SMR</span>
+                            <div class="bar-wrapper">
+                                <div class="bar green" style="width: 100%;">+16%</div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <span class="bar-label">OKLO</span>
+                            <div class="bar-wrapper">
+                                <div class="bar green" style="width: 94%;">+15%</div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <span class="bar-label">NNE</span>
+                            <div class="bar-wrapper">
+                                <div class="bar green" style="width: 75%;">+12%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="danger-box">
+                    <strong>⚠️ 원자력주 투자 주의사항:</strong><br>
+                    원자력 관련주는 대부분 <span class="highlight">"빈껍데기 회사"</span>입니다. 계약만 체결했을 뿐, 실제 착공하거나 매출을 내는 회사가 거의 없습니다. 실제 수익 창출까지 5년 이상 걸릴 수 있어 변동성이 매우 큽니다.
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">SMR 52주 레인지 분석</div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>지표</th>
+                                    <th>가격</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>52주 최저가</td>
+                                    <td>$11.08</td>
+                                </tr>
+                                <tr>
+                                    <td>현재가</td>
+                                    <td class="neutral">$18.78</td>
+                                </tr>
+                                <tr>
+                                    <td>52주 최고가</td>
+                                    <td class="positive">$57.42</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <p>SMR의 경우 52주 레인지가 $11~$57로 매우 넓습니다. 현재 $18 수준이므로, 탄력을 받으면 $57까지 갈 여력이 있지만, 동시에 $11까지 빠질 수도 있습니다. <span class="highlight">더블 바텀 패턴</span>이 형성된 것으로 보이며, 상승 가능성에 무게가 실립니다.</p>
+                </div>
+            </div>
+            
+            <!-- 연준 정책 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">🏛️</span>
+                    연준 정책 및 거시경제
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">카시카리 연준 위원 발언</div>
+                    
+                    <div class="quote-box">
+                        "중앙은행이 금리 인하를 중단해야 할 시점에 가까이 왔다."
+                        <div class="quote-source">- 닐 카시카리, 미니애폴리스 연준 총재</div>
+                    </div>
+                    
+                    <ul class="styled-list">
+                        <li><strong>1월 금리 인하:</strong> 없을 것으로 전망</li>
+                        <li><strong>인플레이션:</strong> 여전히 너무 높다고 평가</li>
+                        <li><strong>중립금리:</strong> 거의 도달한 수준</li>
+                        <li><strong>제롬 파월 재임:</strong> 불확실 (트럼프가 후임자 인터뷰 완료)</li>
+                    </ul>
+                    
+                    <div class="warning-box">
+                        <strong>📌 시장 전망:</strong> 시장은 2026년 <span class="highlight">2회 금리 인하</span>를 예상하고 있습니다. 트럼프 대통령이 연준 의장을 교체할 경우 완화적 정책으로 선회할 가능성이 있습니다. 1월 중 새 연준 의장 후보 발표가 예상됩니다.
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">주요 경제지표</div>
+                    <div class="card-grid">
+                        <div class="card">
+                            <div class="card-title">10년물 국채금리</div>
+                            <div class="card-value neutral">4.16%</div>
+                            <div class="card-change negative">여전히 높은 수준</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">ISM PMI</div>
+                            <div class="card-value negative">47.9</div>
+                            <div class="card-change negative">위축 지속</div>
+                        </div>
+                    </div>
+                    
+                    <p>ISM 제조업 PMI가 <span class="highlight">47.9</span>를 기록하며 경기 위축 국면이 지속되고 있습니다. 50 이하는 제조업 경기 위축을 의미합니다. 그러나 서비스업 중심의 미국 경제 특성상 제조업 지표만으로 전체 경기를 판단하기는 어렵습니다.</p>
+                </div>
+            </div>
+            
+            <!-- 비트코인 & 암호화폐 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">₿</span>
+                    비트코인 & 암호화폐 동향
+                </div>
+                
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-title">비트코인</div>
+                        <div class="card-value positive">+3.29%</div>
+                        <div class="card-change positive">불확실성 헤지 수요</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">COIN</div>
+                        <div class="card-value positive">+7.75%</div>
+                        <div class="card-change positive">업그레이드 수혜</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">MSTR</div>
+                        <div class="card-value positive">+4.81%</div>
+                        <div class="card-change positive">비트코인 반등</div>
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">상승 요인</div>
+                    <ul class="styled-list">
+                        <li><strong>지정학적 불확실성:</strong> 베네수엘라 사건으로 헤지 수요 증가</li>
+                        <li><strong>잡주/잡코인 반등:</strong> 위험자산 선호 심리 회복</li>
+                        <li><strong>2026년 기대감:</strong> 새해 리프레시 심리</li>
+                    </ul>
+                </div>
+                
+                <div class="danger-box">
+                    <strong>⚠️ 투자 경고:</strong><br>
+                    비트코인과 암호화폐의 현재 상승은 <span class="highlight">단기적일 수 있습니다.</span> 골드와는 다르게 본질적 가치에 대한 논쟁이 있으므로, 장기 보유보다는 단기 트레이딩 관점으로 접근하시기 바랍니다. "잠깐 뽑아먹고 가는" 전략이 필요합니다.
+                </div>
+            </div>
+            
+            <!-- 이번 주 전망 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">📅</span>
+                    이번 주 주요 일정 및 전망
+                </div>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">화요일 (1/7)</div>
+                        <div class="timeline-content">
+                            <strong>AMD CES 키노트</strong><br>
+                            엔비디아 대응 전략 발표 예정
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">수요일 (1/8)</div>
+                        <div class="timeline-content">
+                            <strong>ADP 민간 고용</strong> + <strong>JOLTS 구인건수</strong><br>
+                            금요일 고용보고서의 예고편
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">목요일 (1/9)</div>
+                        <div class="timeline-content">
+                            <strong>주간 실업수당 청구</strong><br>
+                            정례 발표 (비중 낮음)
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">금요일 (1/10)</div>
+                        <div class="timeline-content">
+                            <strong style="color: #e94560;">★ 미국 고용보고서 (NFP)</strong><br>
+                            이번 주 최대 이벤트. 시장 방향성 결정
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="warning-box">
+                    <strong>📌 금요일 고용보고서 중요성:</strong><br>
+                    이번 주는 차트보다 <span class="highlight">고용 데이터</span>가 중요합니다. 고용보고서 발표 전까지 시장이 관망세를 보일 수 있으며, 발표 결과에 따라 기술주와 잡주의 급변동이 예상됩니다.
+                </div>
+            </div>
+            
+            <!-- 투자 전략 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">🎯</span>
+                    투자 전략 정리
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">트레이더를 위한 전략</div>
+                    <ul class="styled-list">
+                        <li><strong>급등 테마 추격 금지:</strong> 눌림목에서 진입</li>
+                        <li><strong>뉴스 디테일 확인:</strong> 추세 확인 후 진입</li>
+                        <li><strong>목표가 설정:</strong> 단계별 익절 전략 수립</li>
+                    </ul>
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">장기 투자자를 위한 전략</div>
+                    <ul class="styled-list">
+                        <li><strong>확산장세 대비:</strong> 다양한 섹터로 분산</li>
+                        <li><strong>대표 종목 집중:</strong> 섹터별 1~2개 대표주 보유</li>
+                        <li><strong>52주 신고가 추적:</strong> 신고가 종목 지속 모니터링</li>
+                    </ul>
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">2026년 핵심 테마</div>
+                    <div class="card-grid">
+                        <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                            <div class="card-title" style="color: rgba(255,255,255,0.8);">AI</div>
+                            <div class="card-value">엔비디아</div>
+                            <div class="card-change" style="color: rgba(255,255,255,0.9);">모든 테마의 공통분모</div>
+                        </div>
+                        <div class="card" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white;">
+                            <div class="card-title" style="color: rgba(255,255,255,0.8);">에너지</div>
+                            <div class="card-value">원자력/정유</div>
+                            <div class="card-change" style="color: rgba(255,255,255,0.9);">지정학적 수혜</div>
+                        </div>
+                        <div class="card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+                            <div class="card-title" style="color: rgba(255,255,255,0.8);">금융</div>
+                            <div class="card-value">은행/핀테크</div>
+                            <div class="card-change" style="color: rgba(255,255,255,0.9);">규제 완화 기대</div>
+                        </div>
+                        <div class="card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
+                            <div class="card-title" style="color: rgba(255,255,255,0.8);">인프라</div>
+                            <div class="card-value">재건/중장비</div>
+                            <div class="card-change" style="color: rgba(255,255,255,0.9);">베네수엘라 수혜</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="success-box">
+                    <strong>🔑 핵심 메시지:</strong><br>
+                    "라면 끓이다가 파스타 못 만듭니다. 본인의 투자 목표(단기/중기/장기)를 명확히 하고, 그에 맞는 레시피(전략)를 따르십시오. 엔비디아가 내려갔다 싶으면 들어가세요. 반드시 올라갑니다."
+                </div>
+            </div>
+            
+            <!-- 주요 종목 요약 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">📋</span>
+                    주요 종목 요약
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>종목</th>
+                                <th>등락</th>
+                                <th>코멘트</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>NVDA</strong></td>
+                                <td class="negative">-0.37%</td>
+                                <td>CES 발표 대기, 장후 발표</td>
+                            </tr>
+                            <tr>
+                                <td><strong>TSLA</strong></td>
+                                <td class="positive">+3.1%</td>
+                                <td>운전자 없는 차량 목격 소식</td>
+                            </tr>
+                            <tr>
+                                <td><strong>CVX</strong></td>
+                                <td class="positive">+5.1%</td>
+                                <td>베네수엘라 기존 진출 기업</td>
+                            </tr>
+                            <tr>
+                                <td><strong>HAL</strong></td>
+                                <td class="positive">+7.87%</td>
+                                <td>시추 장비, 재건 수혜</td>
+                            </tr>
+                            <tr>
+                                <td><strong>VLO</strong></td>
+                                <td class="positive">+9.26%</td>
+                                <td>정유, 헤비오일 정제</td>
+                            </tr>
+                            <tr>
+                                <td><strong>SMR</strong></td>
+                                <td class="positive">+16%</td>
+                                <td>DOE 투자 발표</td>
+                            </tr>
+                            <tr>
+                                <td><strong>OKLO</strong></td>
+                                <td class="positive">+15%</td>
+                                <td>원자력 테마</td>
+                            </tr>
+                            <tr>
+                                <td><strong>COIN</strong></td>
+                                <td class="positive">+7.75%</td>
+                                <td>업그레이드 + BTC 반등</td>
+                            </tr>
+                            <tr>
+                                <td><strong>MSTR</strong></td>
+                                <td class="positive">+4.81%</td>
+                                <td>BTC 보유 기업</td>
+                            </tr>
+                            <tr>
+                                <td><strong>KBE</strong></td>
+                                <td class="positive">+3%↑</td>
+                                <td>금융 ETF, 섹터 강세</td>
+                            </tr>
+                            <tr>
+                                <td><strong>KORU</strong></td>
+                                <td class="positive">강세</td>
+                                <td>한국 3배 레버리지</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>본 자료는 투자 참고용이며, 투자의 최종 판단과 책임은 본인에게 있습니다.</p>
+            <p>출처: NOVA Real Invest 유튜브 | 2026년 1월 6일</p>
+        </div>
+    </div>
+</body>
+</html>
