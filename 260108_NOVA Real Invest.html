@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>미국 증시 분석 | 2026년 1월 8일</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e8e8e8;
+            line-height: 1.8;
+            padding: 16px;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 24px 0;
+            border-bottom: 2px solid #4a5568;
+            margin-bottom: 24px;
+        }
+        h1 {
+            font-size: 1.5rem;
+            color: #ffd700;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        .date {
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+        .section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4299e1;
+        }
+        .section-red {
+            border-left-color: #fc8181;
+        }
+        .section-green {
+            border-left-color: #68d391;
+        }
+        .section-yellow {
+            border-left-color: #f6e05e;
+        }
+        .section-purple {
+            border-left-color: #b794f4;
+        }
+        h2 {
+            font-size: 1.2rem;
+            color: #63b3ed;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        h3 {
+            font-size: 1.05rem;
+            color: #90cdf4;
+            margin: 16px 0 12px 0;
+        }
+        p {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+        .highlight {
+            background: linear-gradient(120deg, #ffd700 0%, #ff8c00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+        .highlight-red {
+            color: #fc8181;
+            font-weight: 700;
+        }
+        .highlight-green {
+            color: #68d391;
+            font-weight: 700;
+        }
+        .highlight-blue {
+            color: #63b3ed;
+            font-weight: 700;
+        }
+        .data-box {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .data-row:last-child {
+            border-bottom: none;
+        }
+        .data-label {
+            color: #a0aec0;
+        }
+        .data-value {
+            font-weight: 600;
+        }
+        .positive {
+            color: #68d391;
+        }
+        .negative {
+            color: #fc8181;
+        }
+        .chart-container {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+        .chart-title {
+            text-align: center;
+            color: #a0aec0;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
+        canvas {
+            max-width: 100%;
+            height: auto !important;
+        }
+        .key-point {
+            background: linear-gradient(135deg, rgba(66,153,225,0.2) 0%, rgba(99,179,237,0.1) 100%);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            border: 1px solid rgba(99,179,237,0.3);
+        }
+        .key-point-title {
+            color: #ffd700;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        .warning-box {
+            background: linear-gradient(135deg, rgba(252,129,129,0.2) 0%, rgba(252,129,129,0.1) 100%);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            border: 1px solid rgba(252,129,129,0.3);
+        }
+        .insight-box {
+            background: linear-gradient(135deg, rgba(104,211,145,0.2) 0%, rgba(104,211,145,0.1) 100%);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            border: 1px solid rgba(104,211,145,0.3);
+        }
+        .ticker {
+            display: inline-block;
+            background: rgba(99,179,237,0.2);
+            color: #63b3ed;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin: 2px;
+        }
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #4a5568, transparent);
+            margin: 24px 0;
+        }
+        footer {
+            text-align: center;
+            padding: 24px 0;
+            color: #718096;
+            font-size: 0.8rem;
+            border-top: 1px solid #4a5568;
+            margin-top: 24px;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .summary-item {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+        }
+        .summary-label {
+            font-size: 0.75rem;
+            color: #a0aec0;
+            margin-bottom: 4px;
+        }
+        .summary-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        .timeline {
+            position: relative;
+            padding-left: 20px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, #4299e1, #805ad5);
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 16px;
+            padding-left: 16px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 6px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #4299e1;
+        }
+        .quote {
+            font-style: italic;
+            border-left: 3px solid #ffd700;
+            padding-left: 16px;
+            margin: 16px 0;
+            color: #cbd5e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏛️ 구글 시총 2위 등극!<br>AI만 홀로 살아남은 날</h1>
+            <p class="date">2026년 1월 8일 (수) | 미국 증시 분석</p>
+        </header>
+
+        <!-- 시장 개요 -->
+        <div class="section">
+            <h2>📊 오늘의 시장 개요</h2>
+            <p>이날 미국 증시는 <span class="highlight">AI 섹터만이 유일하게 방어</span>에 성공한 하루였습니다. 전일 다우가 주도했던 시장과 달리, 오늘은 나스닥만 겨우 상승 마감했으며, 나머지 지수들은 하락세를 보였습니다.</p>
+            
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <div class="summary-label">나스닥</div>
+                    <div class="summary-value positive">▲ 상승</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">S&P 500</div>
+                    <div class="summary-value negative">▼ 하락</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">다우</div>
+                    <div class="summary-value negative">▼ 하락</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">러셀 2000</div>
+                    <div class="summary-value negative">▼ 혼조</div>
+                </div>
+            </div>
+            
+            <p>전일 다우가 강세를 보였던 이유는 <span class="highlight-blue">유가 상승에 따른 에너지주</span>와 <span class="highlight-blue">금융주</span>의 동반 상승 때문이었습니다. 그러나 오늘은 같은 이유로 이들 섹터가 하락하면서 다우가 무너지기 시작했습니다.</p>
+        </div>
+
+        <!-- 주요 지수 차트 -->
+        <div class="chart-container">
+            <div class="chart-title">📈 섹터별 등락 현황</div>
+            <canvas id="sectorChart"></canvas>
+        </div>
+
+        <!-- 핵심 뉴스: 구글 시총 2위 -->
+        <div class="section section-green">
+            <h2>🚀 구글, 시가총액 2위 등극</h2>
+            <p>오늘 가장 주목할 만한 뉴스는 <span class="highlight">구글이 애플을 제치고 시가총액 2위</span>에 올랐다는 점입니다. 구글은 이날 <span class="highlight-green">+2.45%</span> 상승하며 강세를 보였습니다.</p>
+            
+            <div class="key-point">
+                <div class="key-point-title">💡 구글 상승의 핵심 동력: 제미나이 3 프로</div>
+                <p>구글의 AI 모델인 제미나이(Gemini) 3 프로가 시장에서 높은 평가를 받고 있습니다. 실시간 데이터 활용, 빠른 속도, ChatGPT 수준의 성능을 모두 갖추고 있으며, 구글의 검색 엔진과 유튜브 생태계까지 활용할 수 있다는 장점이 부각되고 있습니다.</p>
+            </div>
+            
+            <div class="data-box">
+                <div class="data-row">
+                    <span class="data-label">구글(GOOGL)</span>
+                    <span class="data-value positive">+2.45%</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">시총 순위</span>
+                    <span class="data-value highlight-green">2위 (↑)</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">애플(AAPL)</span>
+                    <span class="data-value negative">3위 (↓)</span>
+                </div>
+            </div>
+            
+            <p>이는 <span class="highlight-blue">AI 주도권이 하드웨어(GPU)에서 소프트웨어·플랫폼·서비스로 이동</span>하고 있음을 보여주는 중요한 신호입니다. 특히 ChatGPT를 운영하는 OpenAI에서 구글로 AI 리더십이 넘어가고 있다는 분석이 나옵니다.</p>
+        </div>
+
+        <!-- 엔비디아 동향 -->
+        <div class="section section-purple">
+            <h2>🎮 엔비디아: AI의 본진</h2>
+            <p>엔비디아는 장중 <span class="highlight-green">$191.36</span>까지 상승했다가 <span class="highlight-blue">$189</span>에 종가를 형성했습니다. 시장이 흔들려도 결국 남는 것은 AI 본진이라는 점을 다시 한번 확인시켜 주었습니다.</p>
+            
+            <div class="data-box">
+                <div class="data-row">
+                    <span class="data-label">장중 고점</span>
+                    <span class="data-value">$191.36</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">종가</span>
+                    <span class="data-value">$189.00</span>
+                </div>
+            </div>
+            
+            <div class="quote">
+                "AI의 확산 구조, 소프트웨어, 앱, 서비스 전부 다 엔비디아 우산(umbrella) 안에 들어가 있습니다. 엔비디아와 어떻게 연결되어 있는가를 찾아내는 것이 핵심입니다."
+            </div>
+            
+            <p>특히 엔비디아가 발표한 <span class="highlight-blue">자율주행 기술</span>이 주목받고 있습니다. 테슬라가 9년 동안 개발해온 풀셀프 드라이빙(FSD)을 엔비디아는 코스모스(Cosmos) 시뮬레이션을 통해 <span class="highlight">단 2년 만에</span> 경쟁 수준까지 끌어올렸다는 평가입니다.</p>
+        </div>
+
+        <!-- 고용 지표 분석 -->
+        <div class="section section-red">
+            <h2>📉 고용 지표: 조용한 감소 신호</h2>
+            <p>이날 발표된 고용 관련 지표들은 <span class="highlight-red">"No Firing, No Hiring"</span> 현상을 명확히 보여주었습니다. 해고는 없지만 신규 고용도 없는 상황이 지속되고 있습니다.</p>
+            
+            <h3>ADP 민간 고용 보고서</h3>
+            <div class="data-box">
+                <div class="data-row">
+                    <span class="data-label">예상</span>
+                    <span class="data-value">49,000개</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">실제</span>
+                    <span class="data-value negative">41,000개</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">결과</span>
+                    <span class="data-value negative">예상 하회 ▼</span>
+                </div>
+            </div>
+            
+            <h3>JOLTS 구인 현황 (11월)</h3>
+            <p>구인 건수가 예상치를 <span class="highlight-red">상당히 밑돌았으며</span>, 2023년 말 고점 이후 지속적인 하락세를 보이고 있습니다.</p>
+        </div>
+
+        <!-- 고용 지표 차트 -->
+        <div class="chart-container">
+            <div class="chart-title">📊 ADP 고용 추이 (개념도)</div>
+            <canvas id="employmentChart"></canvas>
+        </div>
+
+        <div class="section">
+            <h3>서비스 PMI vs 제조업</h3>
+            <div class="data-box">
+                <div class="data-row">
+                    <span class="data-label">서비스 PMI</span>
+                    <span class="data-value positive">54.4 (예상 52)</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">제조업(Factory Order)</span>
+                    <span class="data-value negative">-1.3%</span>
+                </div>
+            </div>
+            <p>서비스업은 양호하나 제조업은 여전히 부진한 <span class="highlight-blue">믹스된 결과</span>가 나왔습니다. 소비는 살아있으나 고용이 늘지 않는 구조가 지속되고 있습니다.</p>
+            
+            <div class="warning-box">
+                <div class="key-point-title">⚠️ AI 시대의 고용 구조 변화</div>
+                <p>"AI가 생기면 사람들이 많이 잘릴 것이다"가 아니라, <strong>"AI가 생기면 신규 고용이 늘지 않을 것이다"</strong>가 정확한 표현입니다. ChatGPT 출시 이후 이 패턴이 명확하게 나타나고 있습니다.</p>
+            </div>
+        </div>
+
+        <!-- 트럼프 정책 리스크 -->
+        <div class="section section-red">
+            <h2>🏛️ 정책 리스크 ON</h2>
+            <p>트럼프 대통령의 여러 발언이 시장에 변동성을 야기했습니다.</p>
+            
+            <h3>1. 방산주 급락 후 반등</h3>
+            <p>트럼프 대통령이 트루스 소셜에서 방산업체들의 <span class="highlight-red">자사주 매입 금지, 배당금 의존 금지, 임원 보상 제한</span>을 언급하면서 방산주가 급락했습니다.</p>
+            
+            <div class="data-box">
+                <div class="data-row">
+                    <span class="data-label">LMT (록히드마틴)</span>
+                    <span class="data-value negative">-4.87% → 장후 +6.33%</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">NOC (노스롭그루먼)</span>
+                    <span class="data-value negative">-5.52% → 장후 +5.68%</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">GD (제너럴다이나믹스)</span>
+                    <span class="data-value negative">-4.17% → 장후 +4.44%</span>
+                </div>
+            </div>
+            
+            <p>다만 아침에는 2027년 국방예산을 <span class="highlight-green">1.5조 달러</span>(기존 1조 달러 대비 50% 증액)로 늘리겠다는 발표로 장전 상승했다가, 위 발언 이후 급락하는 양상을 보였습니다. 장 마감 후에는 지정학적 리스크 우려가 더 크다는 판단에 다시 반등했습니다.</p>
+            
+            <h3>2. 기관투자자 주택 매입 금지 위협</h3>
+            <div class="data-box">
+                <div class="data-row">
+                    <span class="data-label">BX (블랙스톤)</span>
+                    <span class="data-value negative">-5.58%</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">APO (아폴로)</span>
+                    <span class="data-value negative">-5.51%</span>
+                </div>
+            </div>
+            <p>블랙스톤 등 대형 기관투자자들이 단독주택(Single Home)을 매입하는 것을 금지하겠다고 위협하면서 관련주가 급락했습니다. 이는 젊은 세대의 주택 구입 어려움을 해소하기 위한 정책 의지로 해석됩니다.</p>
+        </div>
+
+        <!-- 방산주 움직임 차트 -->
+        <div class="chart-container">
+            <div class="chart-title">🛡️ 방산주 장중-장후 변동</div>
+            <canvas id="defenseChart"></canvas>
+        </div>
+
+        <!-- 베네수엘라 & 에너지 -->
+        <div class="section section-yellow">
+            <h2>🛢️ 베네수엘라 석유 & 에너지</h2>
+            <p>트럼프 대통령이 베네수엘라로부터 <span class="highlight-blue">3,000만~5,000만 배럴</span>의 석유를 <span class="highlight">2백만 달러</span> 수준으로 도입하겠다고 발표했습니다. 이는 사실상 "삥 뜯는" 수준의 헐값이라는 분석입니다.</p>
+            
+            <div class="insight-box">
+                <div class="key-point-title">💰 정유주 수혜: Valero(VLO)</div>
+                <p>베네수엘라 석유는 <strong>"걸쭉하고 찐득찐득한"</strong> 중질유로, 정제 과정이 필수입니다. 따라서 시추·채굴 업체보다 <span class="ticker">VLO</span>(발레로) 같은 정유사가 수혜를 받습니다.</p>
+                <div class="data-box">
+                    <div class="data-row">
+                        <span class="data-label">VLO (발레로)</span>
+                        <span class="data-value positive">+3.12%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <p>다른 에너지주는 하락했으나 정유사만 상승한 이유는, 싸게 들여온 원유를 정제하여 높은 마진을 얻을 수 있기 때문입니다.</p>
+            
+            <h3>VLO 기술적 분석</h3>
+            <p>현재 W자 패턴 또는 컵앤핸들 형성 가능성이 있으며, 갭 발생 시 PG(Power Gap) 전략으로 접근 가능합니다. 1차·2차 매수 포인트를 설정하고, 갭 하단 이탈 시 손절하는 전략이 유효합니다.</p>
+        </div>
+
+        <!-- 기타 주요 종목 -->
+        <div class="section">
+            <h2>📈 기타 주요 종목 동향</h2>
+            
+            <h3>일라이릴리(LLY) +4.14%</h3>
+            <p>비만치료제 시장 선두주자인 일라이릴리가 <span class="ticker">벤틱스(Ventyx)</span>를 <span class="highlight-blue">12억 달러</span>에 인수한다고 발표했습니다. 주당 14달러, 약 62% 프리미엄을 적용한 가격입니다.</p>
+            
+            <div class="data-box">
+                <div class="data-row">
+                    <span class="data-label">인수 대상</span>
+                    <span class="data-value">벤틱스(Ventyx)</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">인수 금액</span>
+                    <span class="data-value">$1.2B</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">프리미엄</span>
+                    <span class="data-value">약 62%</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">타겟 질환</span>
+                    <span class="data-value">궤양성 대장염, 크론병</span>
+                </div>
+            </div>
+            
+            <p>특이한 점은 인수 발표 후 일라이릴리와 벤틱스 <span class="highlight-green">모두 주가가 상승</span>했다는 것입니다. 통상 인수 기업 주가는 하락하는 경향이 있는데, 이는 시장이 이번 인수를 매우 긍정적으로 평가했음을 의미합니다.</p>
+            
+            <h3>인텔(INTC) 상승</h3>
+            <p>신제품 발표와 그래픽 칩 개발 계획을 발표하며 상승했으나, 반도체 시장에서의 경쟁력 회복에 대해서는 여전히 회의적인 시각이 있습니다.</p>
+            
+            <h3>비트코인: 저항선 돌파 실패</h3>
+            <div class="data-box">
+                <div class="data-row">
+                    <span class="data-label">현재 저항선</span>
+                    <span class="data-value">$95,000~$96,000</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">핵심 저항선</span>
+                    <span class="data-value highlight-red">$98,000</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">당일 변동</span>
+                    <span class="data-value negative">-2.67%</span>
+                </div>
+            </div>
+            <p>$98,000 저항선을 돌파하지 못하면 수개월간 횡보 또는 $89,000까지 하락 가능성이 있습니다.</p>
+        </div>
+
+        <!-- AEHR 실적 -->
+        <div class="section">
+            <h2>📋 AEHR 실적 발표 (장후)</h2>
+            <div class="data-box">
+                <div class="data-row">
+                    <span class="data-label">매출 예상</span>
+                    <span class="data-value">$10.02M</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">매출 실제</span>
+                    <span class="data-value">예상 부합</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">EPS 예상</span>
+                    <span class="data-value">$0.00</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">EPS 실제</span>
+                    <span class="data-value negative">-$0.21</span>
+                </div>
+            </div>
+            <p>실적 발표 후 장후 상승했다가, 어닝콜에서 <span class="highlight-red">새로운 계약 체결 소식이 없어</span> 하락 반전했습니다. 이는 기업들의 <span class="highlight-blue">CAPEX(자본지출) 축소</span> 우려를 반영합니다. 다만 노스다코타주에 두 개의 캠퍼스 건설 계획이 발표되어 장기적 관점에서는 긍정적입니다.</p>
+        </div>
+
+        <!-- 금요일 전망 -->
+        <div class="section section-yellow">
+            <h2>🔮 금요일 고용보고서 대비 전략</h2>
+            <p><span class="highlight">12월 고용보고서</span>가 금요일 오전 8시 30분(미국 동부시간)에 발표됩니다. 이번 주의 핵심 이벤트입니다.</p>
+            
+            <div class="warning-box">
+                <div class="key-point-title">⚠️ 목요일 전략</div>
+                <p>금요일 고용보고서 결과를 확인하기 위해 <strong>포지션을 줄이는 것이 현명</strong>합니다. 목요일은 큰 뉴스가 없다면 고만고만하거나 오히려 안 좋을 수 있습니다.</p>
+            </div>
+            
+            <h3>시나리오별 전망</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <strong class="highlight-green">시나리오 A: 고용이 예상보다 양호</strong>
+                    <p>→ 연준의 완만한 금리 인하 기대<br>→ 실적 시즌으로 테마 전환<br>→ AI가 다시 리더십 확보</p>
+                </div>
+                <div class="timeline-item">
+                    <strong class="highlight-red">시나리오 B: 고용이 크게 부진</strong>
+                    <p>→ 경기 둔화 우려 vs 금리 인하 기대 충돌<br>→ <span class="highlight-red">첫 반응은 페이크일 가능성</span><br>→ 변동성 극대화</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 트럼프 사골 트레이딩 -->
+        <div class="section section-purple">
+            <h2>🍖 "트럼프 사골" 트레이딩 전략</h2>
+            <p>트럼프 대통령의 정책 발언은 반복적으로 재사용되는 패턴을 보입니다. 베네수엘라 이슈는 <span class="highlight">"완료된 사건이 아니라 보관된 카드"</span>입니다.</p>
+            
+            <div class="key-point">
+                <div class="key-point-title">📌 48시간 vs 48개월 프레임워크</div>
+                <p><strong>48시간:</strong> 단기 트레이딩 관점. 정책 발표 직후 급등/급락 대응<br>
+                <strong>48개월:</strong> 투자자 관점. 4년 임기 동안의 정책 방향성 파악</p>
+            </div>
+            
+            <div class="insight-box">
+                <div class="key-point-title">💡 핵심 전략</div>
+                <p>• 첫 급등 추격이 아니라 <strong>급등 후 눌림에서 자리잡기</strong><br>
+                • 재점화(Re-ignition) 신호: 유가 변동성 확대 시<br>
+                • 실패 신호: AI 주도 강한 리스크온 + 에너지 무반응 시 빠르게 청산</p>
+            </div>
+            
+            <p>트럼프 정책 이슈의 프랙탈(Fractal) 패턴을 이해하면, 하루의 움직임이 전체 임기의 축소판임을 알 수 있습니다.</p>
+        </div>
+
+        <!-- 투자 시사점 요약 차트 -->
+        <div class="chart-container">
+            <div class="chart-title">🎯 섹터별 투자 판단</div>
+            <canvas id="investmentChart"></canvas>
+        </div>
+
+        <!-- 결론 -->
+        <div class="section section-green">
+            <h2>📝 핵심 요약 및 투자 시사점</h2>
+            
+            <div class="key-point">
+                <div class="key-point-title">✅ 오늘의 핵심</div>
+                <p>1. <strong>AI가 시장을 방어</strong>: 고용 불안, 정책 리스크에도 AI 섹터만 상승<br>
+                2. <strong>구글 시총 2위</strong>: AI 주도권이 하드웨어→소프트웨어로 이동 중<br>
+                3. <strong>고용의 조용한 감소</strong>: No Hiring 현상 지속, AI 대체 가속화<br>
+                4. <strong>트럼프 정책 변동성</strong>: 방산·부동산 관련 발언으로 섹터별 급등락</p>
+            </div>
+            
+            <h3>단기 전략 (이번 주)</h3>
+            <p>• 금요일 고용보고서 전까지 포지션 축소 권장<br>
+            • 목요일은 관망 또는 소극적 대응<br>
+            • 첫 반응에 추격 매수 자제</p>
+            
+            <h3>중기 관점</h3>
+            <p>• <span class="ticker">GOOGL</span> <span class="ticker">NVDA</span> AI 핵심주 유지<br>
+            • <span class="ticker">VLO</span> 정유주 베네수엘라 이슈 수혜 주시<br>
+            • <span class="ticker">LLY</span> 헬스케어·비만치료제 섹터 강세 지속</p>
+            
+            <h3>리스크 요인</h3>
+            <p>• 트럼프 정책 불확실성 (방산, 주택, 관세)<br>
+            • CAPEX 축소에 따른 기업 투자 위축<br>
+            • 금요일 고용지표 서프라이즈 가능성</p>
+        </div>
+
+        <footer>
+            <p>⚠️ 본 자료는 투자 참고용이며, 투자 결정은 본인 책임입니다.</p>
+            <p>출처: NOVA Real Invest | 2026년 1월 8일</p>
+        </footer>
+    </div>
+
+    <script>
+        // 섹터별 등락 차트
+        const sectorCtx = document.getElementById('sectorChart').getContext('2d');
+        new Chart(sectorCtx, {
+            type: 'bar',
+            data: {
+                labels: ['헬스케어', 'AI/Tech', '에너지', '금융', '방산', '부동산'],
+                datasets: [{
+                    label: '등락률 (%)',
+                    data: [1.23, 2.45, -1.5, -3.2, -4.87, -5.5],
+                    backgroundColor: [
+                        'rgba(104, 211, 145, 0.8)',
+                        'rgba(99, 179, 237, 0.8)',
+                        'rgba(252, 129, 129, 0.8)',
+                        'rgba(252, 129, 129, 0.8)',
+                        'rgba(252, 129, 129, 0.8)',
+                        'rgba(252, 129, 129, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(104, 211, 145, 1)',
+                        'rgba(99, 179, 237, 1)',
+                        'rgba(252, 129, 129, 1)',
+                        'rgba(252, 129, 129, 1)',
+                        'rgba(252, 129, 129, 1)',
+                        'rgba(252, 129, 129, 1)'
+                    ],
+                    borderWidth: 1,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        ticks: { color: '#a0aec0' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#a0aec0' }
+                    }
+                }
+            }
+        });
+
+        // 고용 추이 차트
+        const employmentCtx = document.getElementById('employmentChart').getContext('2d');
+        new Chart(employmentCtx, {
+            type: 'line',
+            data: {
+                labels: ['2023 Q1', 'Q2', 'Q3', 'Q4', '2024 Q1', 'Q2', 'Q3', 'Q4', '2025 Q1', 'Q2', 'Q3', 'Q4'],
+                datasets: [{
+                    label: 'ADP 신규고용 (천명)',
+                    data: [180, 165, 150, 140, 120, 100, 85, 70, 60, 55, 48, 41],
+                    borderColor: 'rgba(252, 129, 129, 1)',
+                    backgroundColor: 'rgba(252, 129, 129, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointBackgroundColor: 'rgba(252, 129, 129, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { 
+                        labels: { color: '#a0aec0' }
+                    }
+                },
+                scales: {
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        ticks: { color: '#a0aec0' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#a0aec0' }
+                    }
+                }
+            }
+        });
+
+        // 방산주 차트
+        const defenseCtx = document.getElementById('defenseChart').getContext('2d');
+        new Chart(defenseCtx, {
+            type: 'bar',
+            data: {
+                labels: ['LMT', 'NOC', 'GD'],
+                datasets: [
+                    {
+                        label: '장중',
+                        data: [-4.87, -5.52, -4.17],
+                        backgroundColor: 'rgba(252, 129, 129, 0.8)',
+                        borderRadius: 4
+                    },
+                    {
+                        label: '장후',
+                        data: [6.33, 5.68, 4.44],
+                        backgroundColor: 'rgba(104, 211, 145, 0.8)',
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { 
+                        labels: { color: '#a0aec0' }
+                    }
+                },
+                scales: {
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        ticks: { color: '#a0aec0' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#a0aec0' }
+                    }
+                }
+            }
+        });
+
+        // 투자 판단 차트
+        const investmentCtx = document.getElementById('investmentChart').getContext('2d');
+        new Chart(investmentCtx, {
+            type: 'radar',
+            data: {
+                labels: ['AI/Tech', '헬스케어', '에너지(정유)', '방산', '금융', '부동산'],
+                datasets: [{
+                    label: '투자 매력도',
+                    data: [95, 80, 70, 50, 40, 35],
+                    backgroundColor: 'rgba(99, 179, 237, 0.2)',
+                    borderColor: 'rgba(99, 179, 237, 1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(99, 179, 237, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { 
+                        labels: { color: '#a0aec0' }
+                    }
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        angleLines: { color: 'rgba(255,255,255,0.1)' },
+                        pointLabels: { color: '#a0aec0' },
+                        ticks: { 
+                            color: '#a0aec0',
+                            backdropColor: 'transparent'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
