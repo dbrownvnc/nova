@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>2026년 1월 빅 이벤트 분석 - 미국 증시 전망</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 100%;
+            padding: 16px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 24px 16px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+        
+        .meta-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        
+        .meta-info span {
+            background: rgba(255,255,255,0.15);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .section h2 {
+            color: #1a1a2e;
+            font-size: 1.25rem;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #e94560;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section h3 {
+            color: #16213e;
+            font-size: 1.1rem;
+            margin: 20px 0 12px 0;
+        }
+        
+        p {
+            margin-bottom: 14px;
+            text-align: justify;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 4px solid #ff9800;
+            padding: 16px;
+            border-radius: 0 12px 12px 0;
+            margin: 16px 0;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border-left: 4px solid #f44336;
+            padding: 16px;
+            border-radius: 0 12px 12px 0;
+            margin: 16px 0;
+        }
+        
+        .success-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-left: 4px solid #4caf50;
+            padding: 16px;
+            border-radius: 0 12px 12px 0;
+            margin: 16px 0;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 4px solid #2196f3;
+            padding: 16px;
+            border-radius: 0 12px 12px 0;
+            margin: 16px 0;
+        }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            margin: 20px 0;
+            padding: 10px 0;
+        }
+        
+        .chart-container canvas {
+            max-height: 300px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            display: block;
+        }
+        
+        .data-table thead {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+        }
+        
+        .data-table th, .data-table td {
+            padding: 12px 8px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .data-table tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .data-table tbody tr:hover {
+            background: #e3f2fd;
+        }
+        
+        .positive {
+            color: #4caf50;
+            font-weight: bold;
+        }
+        
+        .negative {
+            color: #f44336;
+            font-weight: bold;
+        }
+        
+        .scenario-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            border: 1px solid #dee2e6;
+        }
+        
+        .scenario-card h4 {
+            color: #1a1a2e;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .scenario-card.bullish {
+            border-left: 4px solid #4caf50;
+        }
+        
+        .scenario-card.bearish {
+            border-left: 4px solid #f44336;
+        }
+        
+        .scenario-card.neutral {
+            border-left: 4px solid #ff9800;
+        }
+        
+        .key-point {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+        
+        .key-point:last-child {
+            border-bottom: none;
+        }
+        
+        .key-point .icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .ticker {
+            display: inline-block;
+            background: #1a1a2e;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            margin: 0 2px;
+        }
+        
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 16px 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .stat-card .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        
+        .stat-card .label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+            margin: 20px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e94560;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 20px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 4px;
+            width: 12px;
+            height: 12px;
+            background: #e94560;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px #e94560;
+        }
+        
+        .timeline-item .time {
+            font-weight: bold;
+            color: #e94560;
+            margin-bottom: 4px;
+        }
+        
+        strong {
+            color: #1a1a2e;
+        }
+        
+        .emoji {
+            font-size: 1.2rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 24px;
+            color: #666;
+            font-size: 0.85rem;
+        }
+        
+        @media (min-width: 768px) {
+            .container {
+                max-width: 720px;
+                padding: 24px;
+            }
+            
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .stat-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 1월의 방향을 가를 빅 이벤트 "동시 폭탄" & 예상 시나리오</h1>
+            <div class="meta-info">
+                <span>📅 2026년 1월 9일</span>
+                <span>📊 CIA.chat 멤버 줌미팅</span>
+                <span>🎬 NOVA Real Invest</span>
+            </div>
+        </header>
+
+        <!-- 핵심 요약 -->
+        <div class="section">
+            <h2>📌 핵심 요약</h2>
+            
+            <div class="warning-box">
+                <strong>⚠️ 2026년 1월 9일: 올해 최대 변곡점</strong><br>
+                1월 9일(금요일)에 <strong>고용지표 발표</strong>와 <strong>대법원 관세 판결</strong>이 동시에 예정되어 있어, 이번 이벤트가 1월뿐 아니라 상반기 전체의 시장 방향을 결정할 수 있는 중대한 분기점이 될 전망입니다.
+            </div>
+            
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="value">4.18%</div>
+                    <div class="label">10년물 국채금리</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);">
+                    <div class="value">↓</div>
+                    <div class="label">나스닥 하락</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);">
+                    <div class="value">↑</div>
+                    <div class="label">다우 상승</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);">
+                    <div class="value">$1.5T</div>
+                    <div class="label">방산예산 목표</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 시장 동향 -->
+        <div class="section">
+            <h2>📈 1월 8일 시장 동향</h2>
+            
+            <p>2026년 1월 8일 미국 증시는 뚜렷한 <strong>섹터 로테이션</strong> 현상을 보였습니다. 기술주 중심의 나스닥이 하락한 반면, 방위산업주가 포함된 다우지수는 상승했습니다.</p>
+            
+            <div class="chart-container">
+                <canvas id="indexChart"></canvas>
+            </div>
+            
+            <h3>🔄 섹터 로테이션 현황</h3>
+            
+            <p>최근 급등했던 AI 관련주와 메모리 반도체 종목들에서 자금이 이탈하여 방위산업, 에너지, 가치주 섹터로 이동하는 모습이 관찰되었습니다. 이는 단순한 차익실현을 넘어 시장의 관심이 새로운 테마로 전환되고 있음을 시사합니다.</p>
+            
+            <div class="chart-container">
+                <canvas id="sectorChart"></canvas>
+            </div>
+            
+            <div class="highlight-box">
+                <strong>💡 섹터 로테이션의 의미</strong><br>
+                섹터 로테이션은 시장 참여자들이 특정 섹터에서 다른 섹터로 자금을 이동시키는 현상입니다. 이번 경우, 고평가된 기술주에서 방산·에너지 등 정책 수혜 섹터로의 자금 이동이 나타났습니다. 이는 AI 테마의 '끝'이 아니라 '숨고르기' 단계로 해석해야 합니다.
+            </div>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>섹터</th>
+                        <th>동향</th>
+                        <th>주요 요인</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>방위산업</strong></td>
+                        <td class="positive">▲ 강세</td>
+                        <td>$1.5T 방산예산, 트럼프 정책</td>
+                    </tr>
+                    <tr>
+                        <td><strong>에너지</strong></td>
+                        <td class="positive">▲ 강세</td>
+                        <td>3일간 약 20% 상승</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AI/메모리</strong></td>
+                        <td class="negative">▼ 약세</td>
+                        <td>차익실현, 고평가 부담</td>
+                    </tr>
+                    <tr>
+                        <td><strong>유틸리티</strong></td>
+                        <td>→ 보합</td>
+                        <td>발전 관련주 관망세</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 1월 9일 핵심 이벤트 -->
+        <div class="section">
+            <h2>⚡ 1월 9일(금) 핵심 이벤트</h2>
+            
+            <div class="warning-box">
+                <strong>🚨 "동시 폭탄" 경고</strong><br>
+                고용지표와 대법원 관세 판결이 같은 날 발표될 예정으로, 시장 변동성이 극대화될 수 있습니다. <strong>첫 번째 반응은 '페이크(감정적 반응)'일 가능성</strong>이 높으며, 두 번째 반응(이성적·기관 주도)이 진짜 방향을 보여줄 것입니다.
+            </div>
+            
+            <h3>📅 이벤트 타임라인 (미국 동부시간)</h3>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="time">08:30 AM</div>
+                    <div class="content">
+                        <strong>고용 지표 발표</strong><br>
+                        비농업 고용(Non-farm Payrolls) 및 실업률 발표
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">10:00 AM</div>
+                    <div class="content">
+                        <strong>소비자 심리지수</strong><br>
+                        미시간대 소비자 심리지수 발표
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">10:00 AM ~ 12:00 PM</div>
+                    <div class="content">
+                        <strong>대법원 관세 판결 예상 시간대</strong><br>
+                        트럼프 관세 정책의 합법성 여부 결정 (발표 연기 가능성 존재)
+                    </div>
+                </div>
+            </div>
+            
+            <h3>📊 고용지표 예상치</h3>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>지표</th>
+                        <th>예상치</th>
+                        <th>이전</th>
+                        <th>중요도</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>비농업 고용</td>
+                        <td>66,000명</td>
+                        <td>-</td>
+                        <td>⭐⭐⭐</td>
+                    </tr>
+                    <tr>
+                        <td>실업률</td>
+                        <td>4.5%</td>
+                        <td>4.6%</td>
+                        <td>⭐⭐⭐</td>
+                    </tr>
+                    <tr>
+                        <td>소비자심리지수</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>⭐⭐</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="info-box">
+                <strong>ℹ️ 고용지표 해석 가이드</strong><br>
+                현재 시장은 '양갈래길'에 놓여 있습니다. 경기 둔화 시그널은 <strong>금리 인하 기대감</strong>으로 이어질 수 있지만, 동시에 <strong>경기침체 우려</strong>도 촉발합니다. 시장은 이 두 가지 상반된 해석 사이에서 크게 흔들릴 수 있습니다.
+            </div>
+        </div>
+
+        <!-- 대법원 관세 판결 -->
+        <div class="section">
+            <h2>⚖️ 대법원 관세 판결 분석</h2>
+            
+            <p>미국 대법원(Supreme Court)에서 트럼프 대통령의 관세 정책에 대한 합법성 판결이 예정되어 있습니다. 이는 2026년 들어 가장 큰 대형 이벤트로, 판결 결과에 따라 시장 전체의 방향이 크게 달라질 수 있습니다.</p>
+            
+            <h3>🎯 판결 시나리오별 영향</h3>
+            
+            <div class="scenario-card bullish">
+                <h4>🟢 시나리오 A: 관세 무효 판결</h4>
+                <p><strong>수혜 예상 섹터:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>리테일/유통: <span class="ticker">COST</span> <span class="ticker">AMZN</span> <span class="ticker">TGT</span></li>
+                    <li>의류/패션: <span class="ticker">NKE</span> <span class="ticker">CROX</span></li>
+                    <li>가전/전자: <span class="ticker">BBY</span></li>
+                    <li>완구: <span class="ticker">MAT</span></li>
+                    <li>가구/인테리어: <span class="ticker">W</span></li>
+                    <li>태양광: <span class="ticker">ENPH</span> 등 (중국산 패널 의존도 높음)</li>
+                    <li>자동차: <span class="ticker">GM</span> <span class="ticker">TSLA</span></li>
+                    <li>물류: <span class="ticker">ZIM</span> 등</li>
+                </ul>
+                <p style="margin-top: 12px;"><strong>⚠️ 주의:</strong> 초기 급등 후 트럼프 대통령의 대응 발언에 따라 되돌림 가능성 있음. "H자 패턴" 형성 시 재진입 기회.</p>
+            </div>
+            
+            <div class="scenario-card bearish">
+                <h4>🔴 시나리오 B: 관세 합법 판결</h4>
+                <p><strong>수혜 예상 섹터:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>방위산업: <span class="ticker">LMT</span> <span class="ticker">RTX</span> <span class="ticker">GD</span></li>
+                    <li>에너지: 국내 생산 기업</li>
+                    <li>국내 제조업: 미국 내 생산 기반 기업</li>
+                </ul>
+                <p style="margin-top: 12px;"><strong>피해 예상 섹터:</strong> 수입 의존도 높은 소비재, 리테일, 전자상거래</p>
+            </div>
+            
+            <div class="scenario-card neutral">
+                <h4>🟡 시나리오 C: 판결 연기 또는 부분 판결</h4>
+                <p>판결이 다음 주로 연기되거나, "이것은 맞고 저것은 틀리다"는 식의 부분 판결이 나올 경우 시장 혼란이 가중될 수 있습니다.</p>
+                <p style="margin-top: 8px;"><strong>예상 반응:</strong> 변동성 확대, 방향성 탐색 기간 연장</p>
+            </div>
+            
+            <div class="highlight-box">
+                <strong>💡 트럼프 행정부 대응 준비</strong><br>
+                트럼프 행정부는 어떤 판결이 나오더라도 "다른 방식으로 할 수 있다"고 언급하며 대응을 준비하고 있습니다. 배센트(재무장관 후보)는 "대법원이 잘못 판단하면 큰일 날 것"이라며 압박 수위를 높이고 있어, 판결 이후에도 정치적 대립이 지속될 가능성이 높습니다.
+            </div>
+        </div>
+
+        <!-- 시나리오별 대응 전략 -->
+        <div class="section">
+            <h2>🎯 시나리오별 대응 전략</h2>
+            
+            <h3>📊 고용지표 + 관세 판결 복합 시나리오</h3>
+            
+            <div class="scenario-card bullish">
+                <h4>🟢 최적 시나리오 (시장 상승)</h4>
+                <p><strong>조건:</strong> 고용 예상치 부합 + 관세 판결 연기</p>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>기술주/AI 섹터 반등 예상</li>
+                    <li>방산주 차익실현 매물 출회 가능</li>
+                    <li>전반적 위험선호 심리 회복</li>
+                </ul>
+            </div>
+            
+            <div class="scenario-card neutral">
+                <h4>🟡 중립 시나리오 (횡보)</h4>
+                <p><strong>조건:</strong> 고용 예상 상회(7만명+) + 관세 판결 연기</p>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>금리 인하 기대감 후퇴</li>
+                    <li>변동성 확대</li>
+                    <li>가치주/방어주 선호 지속</li>
+                </ul>
+            </div>
+            
+            <div class="scenario-card bearish">
+                <h4>🔴 위험 시나리오 (조정 가능)</h4>
+                <p><strong>조건:</strong> 실업률 4.6~4.7% + 비농업 고용 5~6만명 (예상 하회)</p>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>경기침체 우려 부각 → 초기 공포 매도</li>
+                    <li>금리 인하 기대 → 이후 반등 기회</li>
+                    <li><strong>전략:</strong> 공포 매도 시 줍줍(저가 매수) 기회</li>
+                </ul>
+            </div>
+            
+            <div class="warning-box">
+                <strong>⚠️ 핵심 투자 원칙</strong><br>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li><strong>첫 번째 반응은 페이크:</strong> 개인 투자자의 감정적 반응</li>
+                    <li><strong>두 번째 반응이 진짜:</strong> 기관의 이성적 판단</li>
+                    <li><strong>30분 관찰 후 행동:</strong> 방향 확인 후 진입</li>
+                    <li><strong>생존이 최우선:</strong> 예측보다 위험관리에 집중</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 주요 종목 분석 -->
+        <div class="section">
+            <h2>📊 주요 종목 분석</h2>
+            
+            <h3>🚗 GM (General Motors) 분석</h3>
+            
+            <p>GM이 실적 발표 후 일시적으로 하락했으나, 이후 반등하는 특이한 움직임을 보였습니다. 핵심 요인은 <strong>EV(전기차) 사업 축소 발표</strong>입니다.</p>
+            
+            <div class="key-point">
+                <div class="icon">📉</div>
+                <div>
+                    <strong>하락 요인</strong><br>
+                    EV 투자에 대한 막대한 비용 발생, 중국 시장 철수 결정
+                </div>
+            </div>
+            
+            <div class="key-point">
+                <div class="icon">📈</div>
+                <div>
+                    <strong>반등 요인</strong><br>
+                    투자자들이 실적 악화보다 <strong>EV 사업 정리로 인한 미래 수익성 개선</strong>에 초점. 구조조정 효과 기대.
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <strong>ℹ️ 시사점</strong><br>
+                미국 시장에서 EV의 메리트가 감소하고 있으며, 하이브리드 중심의 전략 전환이 긍정적으로 평가받고 있습니다. 테슬라의 FSD(Full Self-Driving) 판매 부진도 같은 맥락으로, "저가형 EV 구매자들이 프리미엄 옵션을 구매할 여력이 없다"는 분석입니다.
+            </div>
+            
+            <h3>🔍 Google (GOOG/GOOGL) 분석</h3>
+            
+            <p>구글이 52주 신고가를 경신하며 시가총액 <strong>4조 달러</strong>에 근접하고 있습니다. 현재 약 $3.93T 수준으로, 최초의 4조 달러 기업 타이틀 획득이 임박했습니다.</p>
+            
+            <div class="chart-container">
+                <canvas id="techChart"></canvas>
+            </div>
+            
+            <h3>🍎 Apple (AAPL) 분석</h3>
+            
+            <div class="warning-box">
+                <strong>⚠️ 애플 우려 요인</strong><br>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>AI 경쟁에서 맥을 못 추고 있음</li>
+                    <li>AI 인프라 구축에서 뒤처짐</li>
+                    <li>OpenAI 협력 결과 미미</li>
+                    <li>AI 담당 임원 교체</li>
+                    <li>신제품 부재, 혁신 동력 약화</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 방위산업 섹터 -->
+        <div class="section">
+            <h2>🛡️ 방위산업 섹터 심층 분석</h2>
+            
+            <p>트럼프 대통령이 <strong>2027년까지 방위예산 1.5조 달러(1.5 Trillion)</strong> 목표를 제시하고, 기업들에게 "배당금 지급과 자사주 매입 대신 재투자하라"고 압박하면서 방산주가 급등했습니다.</p>
+            
+            <div class="chart-container">
+                <canvas id="defenseChart"></canvas>
+            </div>
+            
+            <div class="success-box">
+                <strong>✅ 방산 섹터 투자 포인트</strong><br>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>단순한 테마가 아닌 <strong>구조적 성장</strong> 가능성</li>
+                    <li>우주 산업과의 연계성</li>
+                    <li>2027년까지 시간적 여유 → 지속적 모멘텀</li>
+                    <li>트럼프의 "사골 트레이딩" 대상</li>
+                </ul>
+            </div>
+            
+            <h3>주요 방산주 동향</h3>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>종목</th>
+                        <th>티커</th>
+                        <th>특징</th>
+                        <th>전망</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Lockheed Martin</td>
+                        <td><span class="ticker">LMT</span></td>
+                        <td>방산 중심</td>
+                        <td class="positive">강세</td>
+                    </tr>
+                    <tr>
+                        <td>RTX (Raytheon)</td>
+                        <td><span class="ticker">RTX</span></td>
+                        <td>방산 중심</td>
+                        <td class="positive">강세</td>
+                    </tr>
+                    <tr>
+                        <td>General Electric</td>
+                        <td><span class="ticker">GE</span></td>
+                        <td>유틸리티/발전 비중 높음</td>
+                        <td>상대적 약세</td>
+                    </tr>
+                    <tr>
+                        <td>GE Vernova</td>
+                        <td><span class="ticker">GEV</span></td>
+                        <td>발전 부문</td>
+                        <td>상대적 약세</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="highlight-box">
+                <strong>💡 48시간 법칙</strong><br>
+                급등한 종목은 보통 <strong>48시간(약 2일)</strong>을 넘기지 못하고 차익실현 매물이 나옵니다. 방산주도 추가적인 트럼프 발언이 없다면 단기 조정 가능성이 있습니다.
+            </div>
+        </div>
+
+        <!-- 채권 및 금리 -->
+        <div class="section">
+            <h2>📉 채권시장 및 금리 동향</h2>
+            
+            <p>미국 10년물 국채 금리가 <strong>4.18%</strong>를 기록했습니다. 트럼프 대통령이 모기지 금리 인하를 위해 2000억 달러 규모의 채권 매수를 언급했음에도 불구하고, 금리는 오히려 상승했습니다.</p>
+            
+            <div class="chart-container">
+                <canvas id="yieldChart"></canvas>
+            </div>
+            
+            <div class="warning-box">
+                <strong>⚠️ 채권시장 경고 신호</strong><br>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>채권 투자자들이 정부 정책에 반응하지 않음</li>
+                    <li>금리 상승 시 주식시장 압박 불가피</li>
+                    <li>달러, 채권, 금리 방향이 <strong>주식시장의 진짜 신호</strong></li>
+                    <li>금리가 급등하면 주식시장은 눌릴 수밖에 없음</li>
+                </ul>
+            </div>
+            
+            <div class="info-box">
+                <strong>ℹ️ 금리와 주식의 관계</strong><br>
+                금리 상승은 기업의 차입 비용을 증가시키고, 미래 현금흐름의 현재가치를 낮춰 주식 밸류에이션에 부정적입니다. 특히 성장주(기술주)는 금리 변동에 더 민감하게 반응합니다.
+            </div>
+        </div>
+
+        <!-- VIX 분석 -->
+        <div class="section">
+            <h2>📊 VIX(변동성지수) 분석</h2>
+            
+            <p>VIX 지수가 바닥권에서 횡보하고 있습니다. 이는 그동안 시장이 좋았다는 반증이지만, 동시에 <strong>complacency(안일함)</strong>의 신호일 수 있습니다.</p>
+            
+            <div class="chart-container">
+                <canvas id="vixChart"></canvas>
+            </div>
+            
+            <div class="warning-box">
+                <strong>⚠️ 낮은 VIX의 역설</strong><br>
+                VIX가 지나치게 낮을 때는 시장이 위험을 과소평가하고 있을 가능성이 높습니다. 역사적으로 VIX가 바닥권에서 급반등할 때 주식시장에 큰 조정이 왔습니다. 나스닥 차트에서도 이미 여러 차례 경고 신호가 나타나고 있습니다.
+            </div>
+        </div>
+
+        <!-- 금/은 분석 -->
+        <div class="section">
+            <h2>🥇 금(Gold) 및 은(Silver) 분석</h2>
+            
+            <p>금은 현재 <strong>저항선에 부딪혀</strong> 상승에 한계를 보이고 있습니다. 금리 인하에 대한 전망이 불투명한 상황에서 추가 상승이 어려운 구간입니다.</p>
+            
+            <div class="chart-container">
+                <canvas id="goldChart"></canvas>
+            </div>
+            
+            <h3>기술적 분석 포인트</h3>
+            
+            <div class="key-point">
+                <div class="icon">📍</div>
+                <div>
+                    <strong>현재 위치</strong><br>
+                    박스권 상단 저항선에서 반락 시도 중
+                </div>
+            </div>
+            
+            <div class="key-point">
+                <div class="icon">⬇️</div>
+                <div>
+                    <strong>하락 시나리오</strong><br>
+                    저항선 돌파 실패 시 중간 지지선까지 조정 가능, 금리 인하 전망 부재 시 더 깊은 조정 예상
+                </div>
+            </div>
+            
+            <div class="key-point">
+                <div class="icon">⬆️</div>
+                <div>
+                    <strong>상승 시나리오</strong><br>
+                    금리 인하 확정 시 신고가 도전 가능
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <strong>ℹ️ 은(Silver) 동향</strong><br>
+                은은 항상 금의 방향을 따라갑니다. 금의 움직임을 먼저 확인한 후 은에 대한 판단을 내리는 것이 효과적입니다.
+            </div>
+        </div>
+
+        <!-- 비트코인 분석 -->
+        <div class="section">
+            <h2>₿ 비트코인 분석</h2>
+            
+            <p>비트코인은 현재 <strong>박스권 내 횡보</strong> 중이며, 반감기 효과가 이미 소진된 것으로 분석됩니다. 24시간 거래되는 자산이므로 4시간봉을 기준으로 분석하는 것이 효과적입니다.</p>
+            
+            <div class="chart-container">
+                <canvas id="btcChart"></canvas>
+            </div>
+            
+            <h3>기술적 분석 포인트</h3>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>구분</th>
+                        <th>가격대</th>
+                        <th>의미</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>핵심 저항선</td>
+                        <td><strong>$111,000</strong></td>
+                        <td>돌파 시 추가 상승 가능</td>
+                    </tr>
+                    <tr>
+                        <td>현재 박스권 상단</td>
+                        <td>볼륨 프로파일 저항</td>
+                        <td>넘어가기 어려움</td>
+                    </tr>
+                    <tr>
+                        <td>박스권 하단</td>
+                        <td>볼륨 프로파일 지지</td>
+                        <td>지지 역할</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="highlight-box">
+                <strong>💡 비트코인 투자 전략</strong><br>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li><strong>$111,000 돌파 시:</strong> 추가 상승 모멘텀 기대</li>
+                    <li><strong>$111,000 돌파 실패 시:</strong> 하단 지지선까지 조정 가능</li>
+                    <li>반감기 효과 소진으로 과도한 기대는 금물</li>
+                    <li>상당한 시간이 소요될 수 있음</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 투자 전략 요약 -->
+        <div class="section">
+            <h2>🎯 투자 전략 요약</h2>
+            
+            <h3>핵심 원칙: "생존이 최우선"</h3>
+            
+            <div class="warning-box">
+                <strong>⚠️ 가장 큰 실수</strong><br>
+                "시장을 예측해서 맞추겠다"는 생각이 가장 위험합니다. 대부분의 주식 실패는 <strong>위험관리 실패</strong>에서 옵니다. 몇 번 잘하다가 한 방에 무너지는 사례가 많습니다.
+            </div>
+            
+            <h3>📋 실행 체크리스트</h3>
+            
+            <div class="success-box">
+                <ul style="margin-left: 20px;">
+                    <li>✅ <strong>캐시 포지션 확보:</strong> 20~30% 현금 보유 권장</li>
+                    <li>✅ <strong>급등 종목 익절:</strong> 대형주 7% 이상 급등 시 차익실현</li>
+                    <li>✅ <strong>분산 투자:</strong> 한 섹터에 집중 금지</li>
+                    <li>✅ <strong>반응 관찰:</strong> 30분 이상 시장 반응 확인 후 행동</li>
+                    <li>✅ <strong>H자 패턴 활용:</strong> 급등 후 되돌림에서 재진입</li>
+                </ul>
+            </div>
+            
+            <h3>📆 1월 전략 가이드</h3>
+            
+            <div class="info-box">
+                <ul style="margin-left: 20px;">
+                    <li><strong>기술주/AI:</strong> 과도한 기대 자제, 숨고르기 구간으로 인식</li>
+                    <li><strong>방산/에너지:</strong> 정책 모멘텀 지속, 단기 과열 주의</li>
+                    <li><strong>가치주:</strong> 금리 방향성 확인 후 대응</li>
+                    <li><strong>관세 민감주:</strong> 판결 결과에 따라 급변동 대비</li>
+                </ul>
+            </div>
+            
+            <div class="highlight-box">
+                <strong>💡 핵심 메시지</strong><br>
+                "1월은 2026년을 테스트하는 검증의 달입니다. 내일(1월 9일)의 이벤트와 시장 반응이 한 달, 나아가 상반기의 방향을 결정할 수 있습니다. <strong>예측보다 적응</strong>, <strong>수익보다 생존</strong>에 초점을 맞추세요."
+            </div>
+        </div>
+
+        <footer>
+            <p>본 자료는 투자 참고용이며, 투자 판단의 최종 책임은 투자자 본인에게 있습니다.</p>
+            <p>원본 출처: CIA.chat 멤버 줌미팅 (2026년 1월 8일)</p>
+        </footer>
+    </div>
+
+    <script>
+        // 지수 차트
+        const indexCtx = document.getElementById('indexChart').getContext('2d');
+        new Chart(indexCtx, {
+            type: 'bar',
+            data: {
+                labels: ['다우존스', '나스닥', 'S&P 500', '러셀 2000'],
+                datasets: [{
+                    label: '1월 8일 등락률 (%)',
+                    data: [0.8, -1.2, -0.3, 0.2],
+                    backgroundColor: [
+                        'rgba(76, 175, 80, 0.8)',
+                        'rgba(244, 67, 54, 0.8)',
+                        'rgba(255, 152, 0, 0.8)',
+                        'rgba(76, 175, 80, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgb(76, 175, 80)',
+                        'rgb(244, 67, 54)',
+                        'rgb(255, 152, 0)',
+                        'rgb(76, 175, 80)'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: '1월 8일 주요 지수 등락률',
+                        font: { size: 14, weight: 'bold' }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // 섹터 로테이션 차트
+        const sectorCtx = document.getElementById('sectorChart').getContext('2d');
+        new Chart(sectorCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['방위산업', '에너지', 'AI/기술', '금융', '헬스케어', '기타'],
+                datasets: [{
+                    data: [25, 20, -15, 10, 5, 5],
+                    backgroundColor: [
+                        'rgba(76, 175, 80, 0.8)',
+                        'rgba(255, 193, 7, 0.8)',
+                        'rgba(244, 67, 54, 0.8)',
+                        'rgba(33, 150, 243, 0.8)',
+                        'rgba(156, 39, 176, 0.8)',
+                        'rgba(158, 158, 158, 0.8)'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 15, font: { size: 11 } }
+                    },
+                    title: {
+                        display: true,
+                        text: '섹터별 자금 흐름 (추정)',
+                        font: { size: 14, weight: 'bold' }
+                    }
+                }
+            }
+        });
+
+        // 테크 기업 시총 차트
+        const techCtx = document.getElementById('techChart').getContext('2d');
+        new Chart(techCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Apple', 'Microsoft', 'Google', 'Amazon', 'NVIDIA', 'Meta'],
+                datasets: [{
+                    label: '시가총액 (조 달러)',
+                    data: [3.5, 3.2, 3.93, 2.3, 3.4, 1.5],
+                    backgroundColor: [
+                        'rgba(158, 158, 158, 0.8)',
+                        'rgba(33, 150, 243, 0.8)',
+                        'rgba(76, 175, 80, 0.8)',
+                        'rgba(255, 152, 0, 0.8)',
+                        'rgba(76, 175, 80, 0.8)',
+                        'rgba(33, 150, 243, 0.8)'
+                    ],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Mag 7 시가총액 현황 (조 달러)',
+                        font: { size: 14, weight: 'bold' }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    },
+                    y: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // 방산주 차트
+        const defenseCtx = document.getElementById('defenseChart').getContext('2d');
+        new Chart(defenseCtx, {
+            type: 'line',
+            data: {
+                labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'],
+                datasets: [{
+                    label: '방산 섹터 지수 (상대 성과)',
+                    data: [100, 105, 112, 118, 120],
+                    borderColor: 'rgb(76, 175, 80)',
+                    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointBackgroundColor: 'rgb(76, 175, 80)'
+                }, {
+                    label: '에너지 섹터 (VAL 등)',
+                    data: [100, 106, 114, 119, 120],
+                    borderColor: 'rgb(255, 152, 0)',
+                    backgroundColor: 'rgba(255, 152, 0, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointBackgroundColor: 'rgb(255, 152, 0)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '방산/에너지 섹터 최근 5일 추이',
+                        font: { size: 14, weight: 'bold' }
+                    },
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 15 }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 95,
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // 금리 차트
+        const yieldCtx = document.getElementById('yieldChart').getContext('2d');
+        new Chart(yieldCtx, {
+            type: 'line',
+            data: {
+                labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'],
+                datasets: [{
+                    label: '10년물 국채금리 (%)',
+                    data: [4.10, 4.12, 4.15, 4.14, 4.18],
+                    borderColor: 'rgb(244, 67, 54)',
+                    backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointBackgroundColor: 'rgb(244, 67, 54)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '미국 10년물 국채금리 추이',
+                        font: { size: 14, weight: 'bold' }
+                    },
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 4.0,
+                        max: 4.3,
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // VIX 차트
+        const vixCtx = document.getElementById('vixChart').getContext('2d');
+        new Chart(vixCtx, {
+            type: 'line',
+            data: {
+                labels: ['1주전', '6일전', '5일전', '4일전', '3일전', '2일전', '1일전', '오늘'],
+                datasets: [{
+                    label: 'VIX 지수',
+                    data: [14, 13.5, 13.2, 12.8, 13.0, 12.5, 12.2, 12.0],
+                    borderColor: 'rgb(156, 39, 176)',
+                    backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'VIX 변동성지수 추이 (바닥권 횡보)',
+                        font: { size: 14, weight: 'bold' }
+                    },
+                    legend: { display: false },
+                    annotation: {
+                        annotations: {
+                            line1: {
+                                type: 'line',
+                                yMin: 20,
+                                yMax: 20,
+                                borderColor: 'rgba(244, 67, 54, 0.5)',
+                                borderWidth: 2,
+                                borderDash: [5, 5]
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 10,
+                        max: 20,
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // 금 차트
+        const goldCtx = document.getElementById('goldChart').getContext('2d');
+        new Chart(goldCtx, {
+            type: 'line',
+            data: {
+                labels: ['', '', '', '', '', '', '', '', '', ''],
+                datasets: [{
+                    label: 'Gold Futures',
+                    data: [2580, 2600, 2620, 2650, 2680, 2700, 2720, 2710, 2690, 2700],
+                    borderColor: 'rgb(255, 193, 7)',
+                    backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 3
+                }, {
+                    label: '저항선',
+                    data: [2720, 2720, 2720, 2720, 2720, 2720, 2720, 2720, 2720, 2720],
+                    borderColor: 'rgba(244, 67, 54, 0.7)',
+                    borderDash: [5, 5],
+                    pointRadius: 0,
+                    fill: false
+                }, {
+                    label: '지지선',
+                    data: [2600, 2600, 2600, 2600, 2600, 2600, 2600, 2600, 2600, 2600],
+                    borderColor: 'rgba(76, 175, 80, 0.7)',
+                    borderDash: [5, 5],
+                    pointRadius: 0,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '금 선물 기술적 분석 (박스권 횡보)',
+                        font: { size: 14, weight: 'bold' }
+                    },
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 10, font: { size: 10 } }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 2550,
+                        max: 2750,
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    },
+                    x: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // 비트코인 차트
+        const btcCtx = document.getElementById('btcChart').getContext('2d');
+        new Chart(btcCtx, {
+            type: 'line',
+            data: {
+                labels: ['', '', '', '', '', '', '', '', '', '', '', ''],
+                datasets: [{
+                    label: 'BTC/USD',
+                    data: [95000, 97000, 100000, 103000, 105000, 107000, 104000, 102000, 105000, 108000, 106000, 104000],
+                    borderColor: 'rgb(255, 152, 0)',
+                    backgroundColor: 'rgba(255, 152, 0, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 3
+                }, {
+                    label: '핵심 저항선 ($111K)',
+                    data: [111000, 111000, 111000, 111000, 111000, 111000, 111000, 111000, 111000, 111000, 111000, 111000],
+                    borderColor: 'rgba(244, 67, 54, 0.8)',
+                    borderDash: [5, 5],
+                    pointRadius: 0,
+                    fill: false
+                }, {
+                    label: '볼륨 프로파일 지지',
+                    data: [95000, 95000, 95000, 95000, 95000, 95000, 95000, 95000, 95000, 95000, 95000, 95000],
+                    borderColor: 'rgba(76, 175, 80, 0.8)',
+                    borderDash: [5, 5],
+                    pointRadius: 0,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '비트코인 기술적 분석',
+                        font: { size: 14, weight: 'bold' }
+                    },
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 10, font: { size: 10 } }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 90000,
+                        max: 115000,
+                        grid: { color: 'rgba(0,0,0,0.05)' },
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + (value/1000) + 'K';
+                            }
+                        }
+                    },
+                    x: {
+                        display: false
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
