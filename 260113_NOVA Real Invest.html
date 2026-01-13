@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>연준 흔들기에 흔들린 시장? 금값 폭등 & 지수 신고가 분석</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            line-height: 1.7;
+            background: #f8f9fa;
+            color: #333;
+            padding: 16px;
+            max-width: 100%;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 1.5rem;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+            border-left: 4px solid #e94560;
+            padding-left: 12px;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 1.25rem;
+            color: #16213e;
+            margin: 28px 0 14px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e94560;
+        }
+        h3 {
+            font-size: 1.1rem;
+            color: #0f3460;
+            margin: 20px 0 10px 0;
+        }
+        p {
+            margin-bottom: 14px;
+            text-align: justify;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px;
+            border-radius: 12px;
+            margin: 16px 0;
+        }
+        .highlight-box h3 {
+            color: white;
+            margin-top: 0;
+        }
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 14px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .danger-box {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 14px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 14px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #007bff;
+            padding: 14px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .chart-container {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .chart-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.9rem;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        th {
+            background: #16213e;
+            color: white;
+            padding: 12px 8px;
+            text-align: left;
+        }
+        td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #eee;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .up { color: #dc3545; font-weight: 600; }
+        .down { color: #007bff; font-weight: 600; }
+        .tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin: 2px;
+        }
+        .tag-red { background: #ffe6e6; color: #dc3545; }
+        .tag-green { background: #e6ffe6; color: #28a745; }
+        .tag-blue { background: #e6f0ff; color: #007bff; }
+        .tag-gold { background: #fff8e6; color: #b8860b; }
+        .key-point {
+            background: #f0f0f0;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+        .key-point strong {
+            color: #e94560;
+        }
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(to right, #e94560, transparent);
+            margin: 30px 0;
+        }
+        .summary-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .number-big {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #e94560;
+        }
+        .number-label {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        ul {
+            margin: 12px 0 12px 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .scenario-box {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 14px;
+            margin: 12px 0;
+        }
+        .scenario-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #888;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>연준 흔들기에 흔들린 시장? 금값 폭등 & 지수 신고가</h1>
+        <p class="meta">📅 2026년 1월 13일 | 📺 NOVA Real Invest</p>
+
+        <!-- 핵심 요약 -->
+        <div class="highlight-box">
+            <h3>📌 오늘의 핵심</h3>
+            <p style="margin-bottom:0">트럼프의 연준 압박으로 정책 리스크 부각 → 금 가격 폭등(+2.27%, $4,603) → 그러나 S&P 500·다우 신고가 기록. <strong>불안과 상승이 공존하는 이례적 시장</strong></p>
+        </div>
+
+        <!-- 시장 동향 요약 -->
+        <h2>📊 1. 시장 동향 요약</h2>
+        
+        <h3>주요 지수 현황</h3>
+        <table>
+            <tr>
+                <th>지수</th>
+                <th>상태</th>
+                <th>비고</th>
+            </tr>
+            <tr>
+                <td>S&P 500</td>
+                <td class="up">신고가 ↑</td>
+                <td>3거래일 연속 신고가</td>
+            </tr>
+            <tr>
+                <td>다우존스</td>
+                <td class="up">신고가 ↑</td>
+                <td>고점 기록 후 마감</td>
+            </tr>
+            <tr>
+                <td>나스닥</td>
+                <td class="up">상승 ↑</td>
+                <td>신고가는 아님</td>
+            </tr>
+            <tr>
+                <td>러셀 2000</td>
+                <td>-</td>
+                <td>중소형주 지수</td>
+            </tr>
+        </table>
+
+        <div class="chart-container">
+            <p class="chart-title">📈 주요 자산 일간 등락률</p>
+            <canvas id="assetChart"></canvas>
+        </div>
+
+        <div class="key-point">
+            <strong>💡 핵심 포인트:</strong> 시장의 불안(금 상승)과 지수 신고가가 동시에 나타나는 이례적 현상. 정책 리스크에도 "갈 것은 간다"는 시장 심리 반영.
+        </div>
+
+        <h3>금 가격 동향</h3>
+        <div class="summary-card">
+            <div class="number-big">$4,603</div>
+            <div class="number-label">금 현물 가격 (+2.27%)</div>
+            <p style="margin-top:12px">컵앤핸들(Cup & Handle) 패턴 완성 후 상승 추세. 정책 불확실성이 금 수요를 견인.</p>
+        </div>
+
+        <h3>채권 시장</h3>
+        <table>
+            <tr>
+                <th>만기</th>
+                <th>금리</th>
+                <th>동향</th>
+            </tr>
+            <tr>
+                <td>10년물</td>
+                <td><strong>4.18%</strong></td>
+                <td class="up">상승 (심각한 수준)</td>
+            </tr>
+            <tr>
+                <td>30년물</td>
+                <td>-</td>
+                <td class="down">하락 (이상 움직임)</td>
+            </tr>
+        </table>
+
+        <div class="warning-box">
+            ⚠️ <strong>주의:</strong> 10년물 금리가 4.18%까지 상승하며 시장에 부담. 30년물과의 역행은 채권 시장 불안정 신호.
+        </div>
+
+        <!-- 연준 독립성 위협 -->
+        <div class="section-divider"></div>
+        <h2>🏛️ 2. 연준 독립성 위협 - 핵심 이슈</h2>
+
+        <div class="danger-box">
+            🚨 <strong>트럼프 vs 연준:</strong> 트럼프 대통령이 법무부(DOJ)에 연준 빌딩 건설 관련 조사 의뢰. 월스트리트저널은 "경제를 망칠 수 있는 트리거"라고 경고.
+        </div>
+
+        <h3>사건 경과</h3>
+        <ul>
+            <li>트럼프 대통령: DOJ에 연준 빌딩 신축 조사 의뢰</li>
+            <li>전 연준 의장들(버냉키, 그린스펀, 옐런): "정치적 공격이다" 비판</li>
+            <li>제롬 파월: 즉각 성명서 발표로 대응</li>
+            <li>공화당 내부에서도 반발 의견 다수</li>
+        </ul>
+
+        <div class="chart-container">
+            <p class="chart-title">🔄 연준 독립성 위협 영향 경로</p>
+            <canvas id="fedChart"></canvas>
+        </div>
+
+        <h3>왜 연준 독립성이 중요한가?</h3>
+        <div class="info-box">
+            <p><strong>경제의 핵심 원칙:</strong> 정책은 <strong>일관성</strong>, <strong>예측 가능성</strong>, <strong>논리성</strong>을 가져야 함.</p>
+            <ul style="margin-top:10px">
+                <li>예측 불가 → 계획 불가 → 투자 불가</li>
+                <li>불확실성 증가 = 경제에 가장 안 좋은 요소</li>
+                <li><strong>터키 사례:</strong> 대통령의 금리 개입 → 물가 500% 상승</li>
+            </ul>
+        </div>
+
+        <h3>시나리오 분석</h3>
+        <div class="scenario-box">
+            <div class="scenario-title">📌 시나리오 1: 파월 의장 조기 사임</div>
+            <p>5월 15일 임기 전 사임 시 → 트럼프 인사 임명 → 연준 독립성 상실 → <span class="up">시장 불확실성 급증</span></p>
+        </div>
+        <div class="scenario-box">
+            <div class="scenario-title">📌 시나리오 2: 현상 유지</div>
+            <p>파월 버티기 → 정치적 갈등 지속 → <span class="tag tag-gold">금 가격 지속 상승</span></p>
+        </div>
+
+        <div class="key-point">
+            <strong>💡 투자 시사점:</strong> 정책 리스크 확대 시 <strong>금, 은, 구리, 우라늄</strong> 등 실물자산으로 자금 이동 가속화. 금융주는 타격.
+        </div>
+
+        <!-- 신용카드 이자율 상한 정책 -->
+        <div class="section-divider"></div>
+        <h2>💳 3. 신용카드 이자율 10% 상한 정책</h2>
+
+        <div class="warning-box">
+            ⚠️ <strong>1월 20일 데드라인:</strong> 트럼프 대통령이 은행들에게 신용카드 이자 10% 상한 요구. 미이행 시 제재 경고.
+        </div>
+
+        <h3>정책의 문제점</h3>
+        <table>
+            <tr>
+                <th>예상 부작용</th>
+                <th>내용</th>
+            </tr>
+            <tr>
+                <td>신용 경색</td>
+                <td>은행들이 대출 심사 강화, 크레딧 한도 축소</td>
+            </tr>
+            <tr>
+                <td>사금융 확대</td>
+                <td>은행 대출 거부 시 고금리 사채 시장으로 이동</td>
+            </tr>
+            <tr>
+                <td>금융주 하락</td>
+                <td>캐피탈원 -6.41%, 비자 -1.87%, 시티·JP모건 하락</td>
+            </tr>
+        </table>
+
+        <div class="chart-container">
+            <p class="chart-title">📉 금융주 일간 등락률</p>
+            <canvas id="financeChart"></canvas>
+        </div>
+
+        <div class="info-box">
+            <p><strong>아이러니:</strong> 트럼프 행정부는 "은행 규제 완화"를 공약했으나, 이번 조치는 오히려 강력한 개입. 자본주의 원칙과 상충.</p>
+        </div>
+
+        <h3>BNPL(후불결제) 업체 영향</h3>
+        <p>어펌(AFRM) 등 BNPL 업체는 장 전 상승 후 급락. 이유는 <strong>BNPL도 결국 이자 장사</strong>이기 때문. 은행에서 돈을 빌려 운영하는 구조상 동반 타격 불가피.</p>
+
+        <!-- 애플-구글 AI 협력 -->
+        <div class="section-divider"></div>
+        <h2>🤖 4. 애플, 구글 제미나이 선택</h2>
+
+        <div class="success-box">
+            ✅ <strong>확정:</strong> 애플이 AI 비서 시리(Siri)에 구글 제미나이(Gemini) 탑재 결정. 오픈AI, 퍼플렉시티 등 테스트 후 최종 선택.
+        </div>
+
+        <h3>구글에게 미치는 영향</h3>
+        <div class="summary-card">
+            <span class="tag tag-green">긍정적</span>
+            <ul style="margin-top:10px">
+                <li>아이폰 전체 사용자에게 제미나이 노출</li>
+                <li>AI 시장 점유율 확대</li>
+                <li>오픈AI와의 경쟁에서 우위 확보</li>
+                <li>구글 주가: 장중 불안 후 상승 마감, <strong>신고가 경신 중</strong></li>
+            </ul>
+        </div>
+
+        <h3>왜 구글이 선택됐나?</h3>
+        <ul>
+            <li><strong>데이터 우위:</strong> 지메일, 유튜브, 구글맵 등 방대한 사용자 데이터 보유</li>
+            <li><strong>제미나이 성능:</strong> 버전 업그레이드마다 성능 급상승</li>
+            <li><strong>실용성:</strong> 개인화된 AI 서비스 제공 가능</li>
+        </ul>
+
+        <div class="warning-box">
+            ⚠️ <strong>개인정보 우려:</strong> 맥 유저들 사이에서 구글의 데이터 수집에 대한 불안감 존재. 애플은 "잘 막겠다"고 주장하나 완전한 차단은 의문.
+        </div>
+
+        <div class="key-point">
+            <strong>💡 투자 시사점:</strong> 구글(GOOGL)은 AI 경쟁에서 확실한 우위 확보. 2024년 8월부터 지속 추천한 종목으로 신고가 행진 중.
+        </div>
+
+        <!-- 월마트 나스닥 편입 -->
+        <div class="section-divider"></div>
+        <h2>🛒 5. 월마트, 나스닥 100 편입</h2>
+
+        <div class="success-box">
+            ✅ <strong>금요일 발표:</strong> 월마트가 나스닥 100 지수에 편입. 당일 +2.99% 상승.
+        </div>
+
+        <h3>편입 배경</h3>
+        <ul>
+            <li><strong>온라인 매출 성장:</strong> 오프라인 넘버원에서 온라인 확장</li>
+            <li><strong>AI 도입:</strong> 구글 제미나이를 매장/온라인 쇼핑 도우미로 적용</li>
+            <li><strong>매출 규모:</strong> 리테일 매출 1위 (코스코의 약 2배)</li>
+        </ul>
+
+        <h3>지수 편입의 의미</h3>
+        <div class="info-box">
+            <p><strong>패시브 자금 유입:</strong></p>
+            <ul style="margin-top:8px">
+                <li>나스닥 100 추종 ETF/펀드에서 자동 매수</li>
+                <li>미국 401(k), 로스 IRA 등 연금 자금 유입</li>
+                <li>수급 개선으로 <strong>중장기 주가 지지</strong></li>
+            </ul>
+        </div>
+
+        <div class="key-point">
+            <strong>💡 투자 시사점:</strong> S&P, 나스닥, 다우 등 주요 지수 편입/제외 뉴스는 수급에 직접적 영향. 편입 종목은 단기 상승 후에도 패시브 매수 지속.
+        </div>
+
+        <!-- 엔비디아-일라이 릴리 협력 -->
+        <div class="section-divider"></div>
+        <h2>💊 6. 엔비디아 × 일라이 릴리 AI 신약 개발</h2>
+
+        <div class="highlight-box">
+            <h3>🤝 두 넘버원의 만남</h3>
+            <p style="margin-bottom:0">GPU AI 1위 엔비디아 + 제약업계 1위 일라이 릴리 = 5년간 <strong>$1B 투자</strong> 리서치 랩 설립</p>
+        </div>
+
+        <h3>협력 구조</h3>
+        <table>
+            <tr>
+                <th>항목</th>
+                <th>내용</th>
+            </tr>
+            <tr>
+                <td>투자 규모</td>
+                <td>$1B (5년간)</td>
+            </tr>
+            <tr>
+                <td>목적</td>
+                <td>AI 기반 신약 개발 리서치 랩 설립</td>
+            </tr>
+            <tr>
+                <td>일라이 릴리 추가 투자</td>
+                <td>프랑스 바이오 회사 $17.5B 인수</td>
+            </tr>
+        </table>
+
+        <h3>왜 바이오·제약이 중요한가?</h3>
+        <div class="chart-container">
+            <p class="chart-title">💰 AI 투자 ROI 비교 (개념도)</p>
+            <canvas id="roiChart"></canvas>
+        </div>
+
+        <div class="info-box">
+            <p><strong>캐펙스 우려 해소:</strong></p>
+            <ul style="margin-top:8px">
+                <li>바이오 AI는 ROI(투자수익률)가 매우 높음</li>
+                <li>빅테크의 캐펙스 우려 vs 제약사의 명확한 수익화 경로</li>
+                <li>성공 시 <strong>모든 제약사의 GPU 수요 폭발</strong></li>
+            </ul>
+        </div>
+
+        <h3>일라이 릴리 주가 동향</h3>
+        <ul>
+            <li>현재가: <strong>$1,081</strong></li>
+            <li>52주 최고가: $1,133</li>
+            <li>일간 등락: +1.6% (프랑스 인수 뉴스로 장중 하락 후 엔비디아 뉴스로 반등)</li>
+            <li><strong>분할 가능성:</strong> $1,000 이상에서 주식 분할 기대</li>
+        </ul>
+
+        <div class="key-point">
+            <strong>💡 투자 시사점:</strong> 엔비디아 입장에서는 "밑지지 않는 장사". 투자금의 상당 부분이 GPU 구매로 환류. AI 실용화의 상징적 사례가 될 전망.
+        </div>
+
+        <!-- 섹터 동향 -->
+        <div class="section-divider"></div>
+        <h2>📈 7. 섹터별 동향</h2>
+
+        <h3>상승 섹터</h3>
+        <div class="chart-container">
+            <p class="chart-title">🏆 금속 섹터 독주</p>
+            <canvas id="sectorChart"></canvas>
+        </div>
+
+        <table>
+            <tr>
+                <th>섹터/종목</th>
+                <th>동향</th>
+                <th>비고</th>
+            </tr>
+            <tr>
+                <td><span class="tag tag-gold">금·은</span></td>
+                <td class="up">급등 ↑</td>
+                <td>정책 불확실성 수혜</td>
+            </tr>
+            <tr>
+                <td><span class="tag tag-gold">구리</span></td>
+                <td class="up">상승 ↑</td>
+                <td>금속 전반 강세</td>
+            </tr>
+            <tr>
+                <td><span class="tag tag-green">우라늄</span></td>
+                <td class="up">지속 상승 ↑</td>
+                <td>에너지 전환 수혜</td>
+            </tr>
+            <tr>
+                <td><span class="tag tag-blue">반도체</span></td>
+                <td class="up">강세 ↑</td>
+                <td>AMD, IBM, MU 상승</td>
+            </tr>
+            <tr>
+                <td><span class="tag tag-blue">방산</span></td>
+                <td>변동</td>
+                <td>이란 시위 격화 영향</td>
+            </tr>
+        </table>
+
+        <h3>하락 섹터</h3>
+        <table>
+            <tr>
+                <th>섹터/종목</th>
+                <th>등락률</th>
+                <th>원인</th>
+            </tr>
+            <tr>
+                <td>캐피탈원</td>
+                <td class="down">-6.41%</td>
+                <td>신용카드 이자 상한 정책</td>
+            </tr>
+            <tr>
+                <td>비자</td>
+                <td class="down">-1.87%</td>
+                <td>금융 섹터 전반 약세</td>
+            </tr>
+            <tr>
+                <td>시티, JP모건</td>
+                <td class="down">하락</td>
+                <td>정책 리스크</td>
+            </tr>
+        </table>
+
+        <div class="key-point">
+            <strong>💡 현재 시장 테마:</strong> "금속 시대" - 금, 은, 구리, 우라늄 등 실물 자산이 주도. 허상(비트코인, 주식)보다 실물로 자금 이동.
+        </div>
+
+        <!-- CPI 발표 대응 전략 -->
+        <div class="section-divider"></div>
+        <h2>📅 8. CPI 발표 대응 전략</h2>
+
+        <div class="warning-box">
+            ⏰ <strong>발표 시간:</strong> 1월 14일(화) 오전 8:30 (미국 동부 시간)
+        </div>
+
+        <h3>시나리오별 대응</h3>
+
+        <div class="scenario-box" style="border-color:#28a745">
+            <div class="scenario-title" style="color:#28a745">✅ 시나리오 1: 예상치 하회 (물가 안정)</div>
+            <ul>
+                <li><strong>시장 반응:</strong> 금리 하락, 안도 랠리</li>
+                <li><strong>수혜 섹터:</strong> AI, 반도체, 빅테크, 홈빌더, 리테일</li>
+                <li><strong>전략:</strong> 콜옵션 진입, 현물 적극 매수</li>
+                <li><strong>주의:</strong> 급등 지속 여부 확인 필요</li>
+            </ul>
+        </div>
+
+        <div class="scenario-box" style="border-color:#ffc107">
+            <div class="scenario-title" style="color:#b8860b">⚖️ 시나리오 2: 예상치 부합 (가장 유력)</div>
+            <ul>
+                <li><strong>시장 반응:</strong> 안도 반, 의구심 반</li>
+                <li><strong>특징:</strong> 선택적 상승, 3~5일 소화 기간</li>
+                <li><strong>전략:</strong> 실적주·트럼프 정책 수혜주 집중</li>
+                <li><strong>포인트:</strong> "마사지 받은 숫자" 예상</li>
+            </ul>
+        </div>
+
+        <div class="scenario-box" style="border-color:#dc3545">
+            <div class="scenario-title" style="color:#dc3545">❌ 시나리오 3: 예상치 상회 (인플레이션 우려)</div>
+            <ul>
+                <li><strong>시장 반응:</strong> 금리 상승, 기술주 투매</li>
+                <li><strong>피해 섹터:</strong> 성장주, 기술주, AI</li>
+                <li><strong>수혜 섹터:</strong> 가치주, 방어주, 실물자산</li>
+                <li><strong>전략:</strong> 풋옵션, 현금 확보, 정해진 선 손절</li>
+            </ul>
+        </div>
+
+        <h3>실전 체크리스트</h3>
+        <table>
+            <tr>
+                <th>시점</th>
+                <th>행동</th>
+            </tr>
+            <tr>
+                <td>발표 전</td>
+                <td>현금 비중 확보, 과열 종목 익절</td>
+            </tr>
+            <tr>
+                <td>발표 직후</td>
+                <td><strong>30~50분 관망 필수</strong>, 오버슈팅 주의</td>
+            </tr>
+            <tr>
+                <td>방향 확인 후</td>
+                <td>10년물 금리 확인 → 리스크온/오프 결정</td>
+            </tr>
+        </table>
+
+        <div class="danger-box">
+            🚨 <strong>트레이더 주의:</strong> 첫 반응은 보통 오버슈팅. 눌림과 지지선 확인 후 진입. 오버슈팅에 속지 말 것.
+        </div>
+
+        <!-- 투자 전략 요약 -->
+        <div class="section-divider"></div>
+        <h2>💼 9. 투자 전략 요약</h2>
+
+        <h3>단기 트레이더</h3>
+        <div class="summary-card">
+            <ul>
+                <li>CPI 발표 전 현금 확보 (30% 이상)</li>
+                <li>발표 후 30~50분 관망</li>
+                <li>10년물 금리 방향 확인 후 진입</li>
+                <li>손절라인 타이트하게 설정</li>
+            </ul>
+        </div>
+
+        <h3>중장기 투자자</h3>
+        <div class="summary-card">
+            <ul>
+                <li><strong>CPI보다 정책 리스크가 더 중요</strong></li>
+                <li>연준 독립성 이슈 지속 모니터링</li>
+                <li>금융주 비중 축소 고려</li>
+                <li>실물자산(금, 은, 구리, 우라늄) 비중 확대</li>
+            </ul>
+        </div>
+
+        <h3>주목할 종목/섹터</h3>
+        <table>
+            <tr>
+                <th>구분</th>
+                <th>종목/섹터</th>
+            </tr>
+            <tr>
+                <td class="up">긍정</td>
+                <td>구글, 일라이 릴리, 월마트, 금/은 관련주, 반도체(AMD, MU)</td>
+            </tr>
+            <tr>
+                <td class="down">부정</td>
+                <td>금융주(캐피탈원, 비자, 시티, JP모건), BNPL(어펌)</td>
+            </tr>
+            <tr>
+                <td>관망</td>
+                <td>오라클(바닥 확인 필요), 방산(지정학 리스크)</td>
+            </tr>
+        </table>
+
+        <!-- 핵심 질문 -->
+        <div class="section-divider"></div>
+        <h2>❓ 10. 오늘의 핵심 질문</h2>
+
+        <div class="highlight-box">
+            <h3>🤔 금 신고가 + 지수 신고가, 왜 동시에?</h3>
+            <p>일반적으로 금(안전자산)과 주식(위험자산)은 역의 상관관계. 그러나 오늘은 동시 상승.</p>
+        </div>
+
+        <h3>분석 포인트</h3>
+        <ul>
+            <li><strong>원인:</strong> 정책 리스크(연준 압박) 외에 큰 악재 부재</li>
+            <li><strong>시장 판단:</strong> "트럼프의 공격은 타코(허세)"라는 해석</li>
+            <li><strong>자금 흐름:</strong> 불안하지만, 갈 곳이 없는 자금이 주식·금 모두 유입</li>
+        </ul>
+
+        <h3>향후 시나리오</h3>
+        <div class="scenario-box">
+            <div class="scenario-title">A안: 동조화 지속</div>
+            <p>정책 불확실성 지속 시 금·주식 모두 상승 가능. 단, 실물자산 선호 강화.</p>
+        </div>
+        <div class="scenario-box">
+            <div class="scenario-title">B안: 디커플링</div>
+            <p>CPI 쇼크 또는 연준 위기 심화 시 주식 급락, 금만 상승하는 전통적 패턴 복귀.</p>
+        </div>
+
+        <!-- 마무리 -->
+        <div class="section-divider"></div>
+        <h2>📝 결론</h2>
+
+        <div class="highlight-box">
+            <p><strong>오늘 시장의 메시지:</strong></p>
+            <p style="margin-bottom:0">"불안하지만 상승, 위험하지만 상승, 느리지만 상승"<br>
+            정책 리스크는 커지고 있으나, 시장은 아직 낙관적. <strong>CPI 결과와 연준 이슈가 향후 방향 결정</strong>.</p>
+        </div>
+
+        <div class="key-point">
+            <strong>핵심 체크포인트:</strong>
+            <ul style="margin-top:8px">
+                <li>1월 14일 CPI 발표 (8:30 동부시간)</li>
+                <li>1월 20일 트럼프 취임 & 신용카드 이자 상한 데드라인</li>
+                <li>연준 독립성 이슈 전개</li>
+                <li>10년물 국채 금리 동향</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>본 문서는 투자 참고용으로 작성되었으며, 투자 결정은 본인의 판단과 책임하에 이루어져야 합니다.</p>
+            <p>출처: NOVA Real Invest (2026.01.13)</p>
+        </footer>
+    </div>
+
+    <script>
+        // 주요 자산 등락률 차트
+        const assetCtx = document.getElementById('assetChart').getContext('2d');
+        new Chart(assetCtx, {
+            type: 'bar',
+            data: {
+                labels: ['금', '비트코인', 'S&P 500', '다우존스', '10년물 금리'],
+                datasets: [{
+                    label: '일간 등락률 (%)',
+                    data: [2.27, 1.5, 0.5, 0.4, 0.3],
+                    backgroundColor: [
+                        '#FFD700',
+                        '#F7931A',
+                        '#28a745',
+                        '#007bff',
+                        '#dc3545'
+                    ],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: '%' }
+                    }
+                }
+            }
+        });
+
+        // 연준 영향 경로 차트 (도넛)
+        const fedCtx = document.getElementById('fedChart').getContext('2d');
+        new Chart(fedCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['정책 불확실성', '금리 예측 불가', '투자 위축', '경제 불안'],
+                datasets: [{
+                    data: [30, 25, 25, 20],
+                    backgroundColor: ['#e94560', '#16213e', '#0f3460', '#1a1a2e'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // 금융주 등락률 차트
+        const financeCtx = document.getElementById('financeChart').getContext('2d');
+        new Chart(financeCtx, {
+            type: 'bar',
+            data: {
+                labels: ['캐피탈원', '비자', '시티', 'JP모건', '어펌(BNPL)'],
+                datasets: [{
+                    label: '등락률 (%)',
+                    data: [-6.41, -1.87, -1.5, -1.2, -2.0],
+                    backgroundColor: '#dc3545',
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        title: { display: true, text: '%' }
+                    }
+                }
+            }
+        });
+
+        // ROI 비교 차트
+        const roiCtx = document.getElementById('roiChart').getContext('2d');
+        new Chart(roiCtx, {
+            type: 'radar',
+            data: {
+                labels: ['ROI 명확성', '수익화 속도', '시장 영향력', '기술 장벽', '경쟁 우위'],
+                datasets: [{
+                    label: '바이오 AI',
+                    data: [90, 60, 95, 85, 80],
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.2)'
+                }, {
+                    label: '빅테크 AI',
+                    data: [50, 40, 70, 60, 65],
+                    borderColor: '#007bff',
+                    backgroundColor: 'rgba(0, 123, 255, 0.2)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        // 섹터 동향 차트
+        const sectorCtx = document.getElementById('sectorChart').getContext('2d');
+        new Chart(sectorCtx, {
+            type: 'polarArea',
+            data: {
+                labels: ['금/은', '구리', '우라늄', '반도체', '중국 관련'],
+                datasets: [{
+                    data: [95, 80, 75, 85, 70],
+                    backgroundColor: [
+                        'rgba(255, 215, 0, 0.7)',
+                        'rgba(184, 115, 51, 0.7)',
+                        'rgba(0, 255, 0, 0.7)',
+                        'rgba(0, 123, 255, 0.7)',
+                        'rgba(255, 0, 0, 0.7)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
