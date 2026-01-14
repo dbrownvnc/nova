@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>CPI OK vs 금융 붕괴? - 시험문제</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e8e8e8;
+            line-height: 1.8;
+            padding: 16px;
+            max-width: 100%;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border-radius: 16px;
+            padding: 24px 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .header .subtitle {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        .section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fbbf24;
+            margin-bottom: 16px;
+            text-align: center;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(251,191,36,0.3);
+        }
+        .question {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border-left: 4px solid #6366f1;
+        }
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .question-number {
+            font-weight: 700;
+            color: #a5b4fc;
+            font-size: 0.95rem;
+        }
+        .question-type {
+            font-size: 0.75rem;
+            background: rgba(99,102,241,0.3);
+            padding: 3px 8px;
+            border-radius: 4px;
+            color: #c4b5fd;
+        }
+        .difficulty {
+            font-size: 0.8rem;
+            margin-left: 8px;
+        }
+        .difficulty.easy { color: #4ade80; }
+        .difficulty.medium { color: #fbbf24; }
+        .difficulty.hard { color: #f87171; }
+        .question-text {
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            line-height: 1.7;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .option {
+            background: rgba(255,255,255,0.05);
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .option:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .blank-line {
+            border-bottom: 2px dotted rgba(255,255,255,0.3);
+            display: inline-block;
+            min-width: 100px;
+            margin: 0 4px;
+        }
+        .divider {
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+            margin: 30px 0;
+            border-radius: 2px;
+        }
+        .answer-section {
+            border-left: 4px solid #22c55e;
+        }
+        .answer-section .section-title {
+            color: #4ade80;
+            border-bottom-color: rgba(34,197,94,0.3);
+        }
+        .answer {
+            background: rgba(34,197,94,0.1);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border-left: 4px solid #22c55e;
+        }
+        .answer-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .answer-number {
+            font-weight: 700;
+            color: #4ade80;
+        }
+        .correct-answer {
+            background: rgba(34,197,94,0.3);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: 700;
+            color: #86efac;
+        }
+        .explanation {
+            font-size: 0.9rem;
+            color: #d1d5db;
+            line-height: 1.7;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 8px;
+        }
+        .explanation strong {
+            color: #a5b4fc;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+        .emoji { font-size: 1.1em; }
+        .ox-options {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .ox-option {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .short-answer-box {
+            background: rgba(255,255,255,0.05);
+            border: 1px dashed rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+            min-height: 40px;
+        }
+        .essay-box {
+            background: rgba(255,255,255,0.05);
+            border: 1px dashed rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+            min-height: 100px;
+        }
+        .print-btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        @media print {
+            body { background: white; color: black; }
+            .print-btn { display: none; }
+            .question, .answer { border-color: #333; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <div class="header">
+            <h1>📝 시험문제</h1>
+            <div class="subtitle">CPI OK vs 금융 붕괴? | 2026.01.13 미국 증시</div>
+        </div>
+
+        <button class="print-btn" onclick="window.print()">🖨️ 인쇄하기</button>
+
+        <!-- ============================================ -->
+        <!-- 문제지 섹션 -->
+        <!-- ============================================ -->
+        <div class="section">
+            <div class="section-title">📋 시험문제 (총 10문제)</div>
+
+            <!-- 문제 1 -->
+            <div class="question">
+                <div class="question-header">
+                    <span class="question-number">[문제 1]</span>
+                    <span>
+                        <span class="question-type">객관식</span>
+                        <span class="difficulty easy">⭐ 쉬움</span>
+                    </span>
+                </div>
+                <div class="question-text">
+                    연준(Fed)이 금리 조정 시 CPI보다 더 중시하는 물가 지표로, 변동성이 큰 에너지와 식품 가격을 제외한 지표는 무엇인가?
+                </div>
+                <div class="options">
+                    <div class="option">① 헤드라인 CPI</div>
+                    <div class="option">② 코어 CPI</div>
+                    <div class="option">③ GDP 디플레이터</div>
+                    <div class="option">④ 실업률</div>
+                </div>
+            </div>
+
+            <!-- 문제 2 -->
+            <div class="question">
+                <div class="question-header">
+                    <span class="question-number">[문제 2]</span>
+                    <span>
+                        <span class="question-type">단답형</span>
+                        <span class="difficulty easy">⭐ 쉬움</span>
+                    </span>
+                </div>
+                <div class="question-text">
+                    2026년 1월 13일 기준, 구글(GOOGL)이 달성한 시가총액은 몇 조 달러인가?
+                </div>
+                <div class="short-answer-box">
+                    정답: 
+                </div>
+            </div>
+
+            <!-- 문제 3 -->
+            <div class="question">
+                <div class="question-header">
+                    <span class="question-number">[문제 3]</span>
+                    <span>
+                        <span class="question-type">OX 문제</span>
+                        <span class="difficulty easy">⭐ 쉬움</span>
+                    </span>
+                </div>
+                <div class="question-text">
+                    JP모건의 제이미 다이먼 CEO는 신용카드 금리 10% 상한 정책이 소비자와 경제에 긍정적일 것이라고 발언했다.
+                </div>
+                <div class="ox-options">
+                    <div class="ox-option">O</div>
+                    <div class="ox-option">X</div>
+                </div>
+            </div>
+
+            <!-- 문제 4 -->
+            <div class="question">
+                <div class="question-header">
+                    <span class="question-number">[문제 4]</span>
+                    <span>
+                        <span class="question-type">객관식</span>
+                        <span class="difficulty medium">⭐⭐ 보통</span>
+                    </span>
+                </div>
+                <div class="question-text">
+                    CPI 발표 직후 시장에서 나타난 현상으로, 발표 후 약 30분 내에 되돌림이 발생한 과잉 반응을 무엇이라고 하는가?
+                </div>
+                <div class="options">
+                    <div class="option">① 데드캣 바운스</div>
+                    <div class="option">② 오버슈팅</div>
+                    <div class="option">③ 플래시 크래시</div>
+                    <div class="option">④ 숏 스퀴즈</div>
+                </div>
+            </div>
+
+            <!-- 문제 5 -->
+            <div class="question">
+                <div class="question-header">
+                    <span class="question-number">[문제 5]</span>
+                    <span>
+                        <span class="question-type">빈칸채우기</span>
+                        <span class="difficulty medium">⭐⭐ 보통</span>
+                    </span>
+                </div>
+                <div class="question-text">
+                    시장 분위기가 개선되려면 10년물 국채 금리가 <span class="blank-line"></span>% 이하로 하락해야 한다고 분석되었다. 현재 10년물 금리는 약 <span class="blank-line"></span>% 수준이다.
+                </div>
+                <div class="short-answer-box">
+                    정답: 첫 번째 빈칸(          ), 두 번째 빈칸(          )
+                </div>
+            </div>
+
+            <!-- 문제 6 -->
+            <div class="question">
+                <div class="question-header">
+                    <span class="question-number">[문제 6]</span>
+                    <span>
+                        <span class="question-type">객관식</span>
+                        <span class="difficulty medium">⭐⭐ 보통</span>
+                    </span>
+                </div>
+                <div class="question-text">
+                    신용카드 금리 상한 정책으로 인해 은행들이 보수적으로 운영하게 될 경우, 가장 부정적인 영향을 받을 것으로 예상되는 기업은?
+                </div>
+                <div class="options">
+                    <div class="option">① NVIDIA</div>
+                    <div class="option">② Google</div>
+                    <div class="option">③ Visa / Mastercard</div>
+                    <div class="option">④ Boeing</div>
+                </div>
+            </div>
+
+            <!-- 문제 7 -->
+            <div class="question">
+                <div class="question-header">
+                    <span class="question-number">[문제 7]</span>
+                    <span>
+                        <span class="question-type">객관식</span>
+                        <span class="difficulty medium">⭐⭐ 보통</span>
+                    </span>
+                </div>
+                <div class="question-text">
+                    12월 CPI에서 가장 큰 폭으로 하락한 항목으로, 유가 하락의 영향을 직접적으로 받은 것은?
+                </div>
+                <div class="options">
+                    <div class="option">① 주거비</div>
+                    <div class="option">② 의료비</div>
+                    <div class="option">③ 가솔린 및 연료유</div>
+                    <div class="option">④ 서비스</div>
+                </div>
+            </div>
+
+            <!-- 문제 8 -->
+            <div class="question">
+                <div class="question-header">
+                    <span class="question-number">[문제 8]</span>
+                    <span>
+                        <span class="question-type">OX 문제</span>
+                        <span class="difficulty medium">⭐⭐ 보통</span>
+                    </span>
+                </div>
+                <div class="question-text">
+                    미 국방부가 방산 기업에 대해 "주문"이 아닌 "투자"를 발표한 것은 투자자 입장에서 긍정적인 신호로 해석된다.
+                </div>
+                <div class="ox-options">
+                    <div class="ox-option">O</div>
+                    <div class="ox-option">X</div>
+                </div>
+            </div>
+
+            <!-- 문제 9 -->
+            <div class="question">
+                <div class="question-header">
+                    <span class="question-number">[문제 9]</span>
+                    <span>
+                        <span class="question-type">서술형</span>
+                        <span class="difficulty hard">⭐⭐⭐ 어려움</span>
+                    </span>
+                </div>
+                <div class="question-text">
+                    신용카드 금리 10% 상한 정책이 시행될 경우, 은행 → 소비자 → 경제 전반에 미치는 영향을 단계별로 설명하시오.
+                </div>
+                <div class="essay-box">
+                    
+                </div>
+            </div>
+
+            <!-- 문제 10 -->
+            <div class="question">
+                <div class="question-header">
+                    <span class="question-number">[문제 10]</span>
+                    <span>
+                        <span class="question-type">서술형</span>
+                        <span class="difficulty hard">⭐⭐⭐ 어려움</span>
+                    </span>
+                </div>
+                <div class="question-text">
+                    AI 기술 발전이 전통 소프트웨어 기업(CRM, Adobe 등)에 미치는 영향을 설명하고, 이러한 상황에서 투자자가 취해야 할 전략을 제시하시오.
+                </div>
+                <div class="essay-box">
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- 구분선 -->
+        <div class="divider"></div>
+
+        <!-- ============================================ -->
+        <!-- 정답 및 해설 섹션 -->
+        <!-- ============================================ -->
+        <div class="section answer-section">
+            <div class="section-title">📝 정답 및 해설</div>
+
+            <!-- 정답 1 -->
+            <div class="answer">
+                <div class="answer-header">
+                    <span class="answer-number">[문제 1]</span>
+                    <span class="correct-answer">정답: ②</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 코어 CPI는 변동성이 큰 에너지와 식품 가격을 제외한 물가지수입니다. 연준은 통화정책 결정 시 헤드라인 CPI보다 코어 CPI와 PCE(개인소비지출)를 더 중시합니다. 이는 일시적인 가격 변동을 배제하고 기저 인플레이션 추세를 더 정확히 파악할 수 있기 때문입니다.
+                </div>
+            </div>
+
+            <!-- 정답 2 -->
+            <div class="answer">
+                <div class="answer-header">
+                    <span class="answer-number">[문제 2]</span>
+                    <span class="correct-answer">정답: 4조 달러 (또는 4.05조 달러)</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 구글(GOOGL)은 2026년 1월 13일 기준 시가총액 4.05조 달러를 달성했습니다. 이는 애플-구글 간 제미나이 파트너십 공식화 등 AI 사업 확장에 대한 기대감이 반영된 결과입니다.
+                </div>
+            </div>
+
+            <!-- 정답 3 -->
+            <div class="answer">
+                <div class="answer-header">
+                    <span class="answer-number">[문제 3]</span>
+                    <span class="correct-answer">정답: X</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 제이미 다이먼은 신용카드 금리 10% 상한 정책이 <strong>"소비자와 경제에 해가 될 것"</strong>이라고 경고했습니다. 은행들이 마진 축소로 인해 신용 공급을 줄이고 비즈니스 모델을 변경해야 할 수 있다고 우려를 표명했습니다.
+                </div>
+            </div>
+
+            <!-- 정답 4 -->
+            <div class="answer">
+                <div class="answer-header">
+                    <span class="answer-number">[문제 4]</span>
+                    <span class="correct-answer">정답: ②</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 오버슈팅(Overshooting)은 경제 지표 발표 등 뉴스에 대해 시장이 과도하게 반응하는 현상입니다. CPI 발표 직후 시장이 급등했다가 30분도 안 되어 되돌림이 발생한 것이 대표적인 오버슈팅 사례입니다. 이러한 첫 번째 반응이 "페이크"일 수 있으므로 1시간 정도 관망 후 진입하는 것이 권장됩니다.
+                </div>
+            </div>
+
+            <!-- 정답 5 -->
+            <div class="answer">
+                <div class="answer-header">
+                    <span class="answer-number">[문제 5]</span>
+                    <span class="correct-answer">정답: 4.15 / 4.17</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 현재 10년물 국채 금리는 약 4.17% 수준이며, 시장 분위기가 개선되려면 4.15% 이하로 하락해야 한다고 분석되었습니다. 10년물 금리는 현재 미국 증시에서 가장 중요한 모니터링 지표 중 하나입니다.
+                </div>
+            </div>
+
+            <!-- 정답 6 -->
+            <div class="answer">
+                <div class="answer-header">
+                    <span class="answer-number">[문제 6]</span>
+                    <span class="correct-answer">정답: ③</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 신용카드 금리 상한 정책으로 은행이 보수적으로 운영하면, 카드 발급 축소와 크레딧 한도 감소가 예상됩니다. Visa와 Mastercard는 결제 네트워크 회사로서 카드 사용량 감소 시 직접적인 수익 감소가 발생합니다. JP모건의 경고 이후 실제로 이들 종목은 큰 폭으로 하락했습니다.
+                </div>
+            </div>
+
+            <!-- 정답 7 -->
+            <div class="answer">
+                <div class="answer-header">
+                    <span class="answer-number">[문제 7]</span>
+                    <span class="correct-answer">정답: ③</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 12월 CPI에서 가솔린과 연료유(Fuel Oil)가 마이너스를 기록하며 가장 큰 폭으로 하락했습니다. 이는 유가 하락의 직접적인 영향입니다. 반면 서비스 부문은 상승세를 유지했습니다.
+                </div>
+            </div>
+
+            <!-- 정답 8 -->
+            <div class="answer">
+                <div class="answer-header">
+                    <span class="answer-number">[문제 8]</span>
+                    <span class="correct-answer">정답: X</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 국방부의 "투자"는 "주문"과 다릅니다. 정부가 방산 기업에 투자한다는 것은 사실상 국영기업화되는 것을 의미할 수 있으며, 이 경우 정부에 더 많은 공급을 해야 하지만 투자자 입장에서는 수익성 악화가 우려됩니다. 실제로 LHX 등 방산주는 뉴스 발표 후 초반 급등했다가 장 개시와 함께 하락했습니다.
+                </div>
+            </div>
+
+            <!-- 정답 9 -->
+            <div class="answer">
+                <div class="answer-header">
+                    <span class="answer-number">[문제 9]</span>
+                    <span class="correct-answer">정답: 서술형</span>
+                </div>
+                <div class="explanation">
+                    <strong>모범답안:</strong><br><br>
+                    <strong>1단계 (은행):</strong> 금리 상한으로 마진 축소 → 보수적 운영 불가피 → 신용 기준 강화<br><br>
+                    <strong>2단계 (소비자):</strong> 신용점수 낮은 고객 카드 발급 거절 → 크레딧 한도 대폭 축소 (예: 2만 달러 → 1만 달러) → 제2금융권이나 사채 의존 증가<br><br>
+                    <strong>3단계 (경제 전반):</strong> 신용 경색(Credit Crunch) 발생 → 소비 위축 → 경기 둔화 가능성<br><br>
+                    <strong>추가 영향:</strong> 결제 네트워크(Visa, Mastercard)의 수익 감소, 소비재 기업 매출 하락 우려
+                </div>
+            </div>
+
+            <!-- 정답 10 -->
+            <div class="answer">
+                <div class="answer-header">
+                    <span class="answer-number">[문제 10]</span>
+                    <span class="correct-answer">정답: 서술형</span>
+                </div>
+                <div class="explanation">
+                    <strong>모범답안:</strong><br><br>
+                    <strong>AI의 영향:</strong><br>
+                    • AI가 전통 소프트웨어 기업의 시장 점유율을 잠식 중<br>
+                    • CRM(세일즈포스), Adobe 등은 AI 기반 대안에 고객을 빼앗기고 있음<br>
+                    • "노바의 저주"로 표현될 만큼 소프트웨어 섹터 약세 지속 예상<br><br>
+                    <strong>투자 전략:</strong><br>
+                    • <strong>회피:</strong> 전통 소프트웨어 기업(CRM, Adobe 등) 비중 축소<br>
+                    • <strong>주목:</strong> AI 인프라 기업(NVIDIA, AMD 등 반도체) 및 AI 플랫폼 기업(Google) 선호<br>
+                    • <strong>포트폴리오:</strong> "수요가 몰리는 곳"인 메모리 반도체 섹터에 집중<br>
+                    • <strong>장기 전략:</strong> 엔비디아 + 구글 조합으로 AI 성장에 간접 투자<br>
+                    • 가이던스와 FCF(잉여현금흐름)를 중심으로 기업 분석
+                </div>
+            </div>
+        </div>
+
+        <!-- 푸터 -->
+        <div class="footer">
+            <p>본 시험문제는 학습 목적으로 제작되었습니다.</p>
+            <p>출처: CIA.chat 미팅 (2026.01.13) | NOVA Real Invest</p>
+        </div>
+    </div>
+</body>
+</html>
