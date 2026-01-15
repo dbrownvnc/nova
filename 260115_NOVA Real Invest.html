@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>트럼프 반도체 25% 관세 & 은행주 실적 분석 | 2026.01.15</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+        
+        :root {
+            --primary: #1a237e;
+            --secondary: #c62828;
+            --accent: #ff6f00;
+            --success: #2e7d32;
+            --warning: #f57c00;
+            --bg-dark: #0d1421;
+            --bg-card: #1a2332;
+            --text-primary: #ffffff;
+            --text-secondary: #b0bec5;
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.8;
+            padding: 0;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 20px 16px;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 50%, #01579b 100%);
+            padding: 32px 20px;
+            text-align: center;
+            border-radius: 0 0 24px 24px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+        }
+        
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 8px;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header .date {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.8);
+            position: relative;
+        }
+        
+        .header .source {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.6);
+            margin-top: 4px;
+            position: relative;
+        }
+        
+        /* Alert Banner */
+        .alert-banner {
+            background: linear-gradient(90deg, #c62828, #d32f2f);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .alert-banner .icon {
+            font-size: 1.5rem;
+        }
+        
+        .alert-banner .text {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        /* Section */
+        .section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-title .emoji {
+            font-size: 1.3rem;
+        }
+        
+        /* Key Point Box */
+        .key-point {
+            background: linear-gradient(135deg, rgba(26, 35, 126, 0.3), rgba(13, 71, 161, 0.2));
+            border-left: 4px solid var(--accent);
+            padding: 16px;
+            border-radius: 0 12px 12px 0;
+            margin: 16px 0;
+        }
+        
+        .key-point-title {
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 16px 0;
+        }
+        
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 4px;
+        }
+        
+        .stat-value.up { color: #4caf50; }
+        .stat-value.down { color: #f44336; }
+        .stat-value.neutral { color: var(--text-secondary); }
+        .stat-value.gold { color: var(--gold); }
+        .stat-value.silver { color: var(--silver); }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Chart Container */
+        .chart-container {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        
+        .chart-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+        }
+        
+        /* Bar Chart */
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .bar-label {
+            width: 80px;
+            font-size: 0.8rem;
+            text-align: right;
+            flex-shrink: 0;
+        }
+        
+        .bar-wrapper {
+            flex: 1;
+            height: 24px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .bar {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .bar.negative {
+            background: linear-gradient(90deg, #c62828, #e53935);
+        }
+        
+        .bar.positive {
+            background: linear-gradient(90deg, #2e7d32, #43a047);
+        }
+        
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+            padding-left: 16px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 2px solid var(--bg-dark);
+        }
+        
+        .timeline-time {
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .timeline-content {
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+        
+        /* Warning Box */
+        .warning-box {
+            background: linear-gradient(135deg, rgba(198, 40, 40, 0.2), rgba(211, 47, 47, 0.1));
+            border: 1px solid rgba(198, 40, 40, 0.5);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        
+        .warning-box-title {
+            color: #ef5350;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Highlight Text */
+        .highlight {
+            background: linear-gradient(90deg, rgba(255, 111, 0, 0.3), rgba(255, 111, 0, 0.1));
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        .highlight-red {
+            background: linear-gradient(90deg, rgba(198, 40, 40, 0.3), rgba(198, 40, 40, 0.1));
+            color: #ef5350;
+        }
+        
+        .highlight-green {
+            background: linear-gradient(90deg, rgba(46, 125, 50, 0.3), rgba(46, 125, 50, 0.1));
+            color: #66bb6a;
+        }
+        
+        .highlight-gold {
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.3), rgba(255, 215, 0, 0.1));
+            color: var(--gold);
+        }
+        
+        /* Info List */
+        .info-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .info-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .info-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .info-value {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        /* Sector Table */
+        .sector-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.85rem;
+        }
+        
+        .sector-table th {
+            background: rgba(255,255,255,0.1);
+            padding: 12px 8px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .sector-table td {
+            padding: 12px 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .sector-table tr:hover {
+            background: rgba(255,255,255,0.03);
+        }
+        
+        /* Quote Box */
+        .quote-box {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px 0;
+            position: relative;
+        }
+        
+        .quote-box::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            left: 16px;
+            font-size: 3rem;
+            color: rgba(255,255,255,0.1);
+            font-family: Georgia, serif;
+        }
+        
+        .quote-text {
+            font-style: italic;
+            padding-left: 24px;
+            color: var(--text-secondary);
+        }
+        
+        .quote-author {
+            text-align: right;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: var(--accent);
+        }
+        
+        /* Summary Box */
+        .summary-box {
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            border-radius: 16px;
+            padding: 24px 20px;
+            margin: 24px 0;
+        }
+        
+        .summary-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            text-align: center;
+        }
+        
+        .summary-item {
+            padding: 12px 8px;
+        }
+        
+        .summary-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+        
+        .summary-label {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 4px;
+        }
+        
+        .summary-value {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 32px;
+        }
+        
+        /* Horizontal Bar for comparison */
+        .comparison-bar {
+            display: flex;
+            height: 32px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 12px 0;
+        }
+        
+        .comparison-segment {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: flex 0.5s ease;
+        }
+        
+        /* Gauge Chart */
+        .gauge-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .gauge {
+            width: 200px;
+            height: 100px;
+            position: relative;
+        }
+        
+        .gauge-bg {
+            width: 200px;
+            height: 100px;
+            background: conic-gradient(from 180deg, #4caf50 0deg, #ffeb3b 60deg, #ff9800 120deg, #f44336 180deg);
+            border-radius: 100px 100px 0 0;
+        }
+        
+        .gauge-center {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 70px;
+            background: var(--bg-card);
+            border-radius: 70px 70px 0 0;
+        }
+        
+        .gauge-needle {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            height: 80px;
+            background: white;
+            transform-origin: bottom center;
+            border-radius: 2px;
+        }
+        
+        .gauge-label {
+            text-align: center;
+            margin-top: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .bar-label {
+                width: 60px;
+                font-size: 0.75rem;
+            }
+        }
+        
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Divider */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            margin: 24px 0;
+        }
+        
+        p {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚨 트럼프 반도체 25% 관세 충격<br>은행주 가이던스 경고</h1>
+        <div class="date">2026년 1월 15일 (목)</div>
+        <div class="source">출처: NOVA Real Invest 유튜브</div>
+    </div>
+    
+    <div class="container">
+        <!-- 긴급 알림 -->
+        <div class="alert-banner">
+            <span class="icon">⚠️</span>
+            <span class="text">트럼프 대통령, 특정 반도체(H200, MI325X) 대상 25% 관세 행정명령 서명</span>
+        </div>
+        
+        <!-- 핵심 요약 -->
+        <div class="summary-box">
+            <div class="summary-title">📊 오늘의 시장 핵심 요약</div>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <div class="summary-icon">💻</div>
+                    <div class="summary-label">반도체</div>
+                    <div class="summary-value" style="color: #f44336;">관세 충격</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-icon">🏦</div>
+                    <div class="summary-label">은행</div>
+                    <div class="summary-value" style="color: #f44336;">가이던스 ↓</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-icon">🛢️</div>
+                    <div class="summary-label">에너지/금속</div>
+                    <div class="summary-value" style="color: #4caf50;">급등</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 시장 지수 현황 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="emoji">📈</span>
+                주요 지수 및 자산 현황
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value neutral">보합</div>
+                    <div class="stat-label">다우존스 (V자 반등)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value down">-1.18%</div>
+                    <div class="stat-label">SOX (반도체)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value up">+2.13%</div>
+                    <div class="stat-label">비트코인 ($97,000)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value gold">연속 상승</div>
+                    <div class="stat-label">금 (3일 연속)</div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-title">📊 오늘 주요 자산 등락률</div>
+                <div class="bar-chart">
+                    <div class="bar-item">
+                        <span class="bar-label">은 (Silver)</span>
+                        <div class="bar-wrapper">
+                            <div class="bar positive" style="width: 95%;">+7.58%</div>
+                        </div>
+                    </div>
+                    <div class="bar-item">
+                        <span class="bar-label">원유</span>
+                        <div class="bar-wrapper">
+                            <div class="bar positive" style="width: 30%;">+2.28%</div>
+                        </div>
+                    </div>
+                    <div class="bar-item">
+                        <span class="bar-label">비트코인</span>
+                        <div class="bar-wrapper">
+                            <div class="bar positive" style="width: 28%;">+2.13%</div>
+                        </div>
+                    </div>
+                    <div class="bar-item">
+                        <span class="bar-label">NVIDIA</span>
+                        <div class="bar-wrapper">
+                            <div class="bar negative" style="width: 18%;">-1.34%</div>
+                        </div>
+                    </div>
+                    <div class="bar-item">
+                        <span class="bar-label">시티</span>
+                        <div class="bar-wrapper">
+                            <div class="bar negative" style="width: 45%;">-3.37%</div>
+                        </div>
+                    </div>
+                    <div class="bar-item">
+                        <span class="bar-label">BofA</span>
+                        <div class="bar-wrapper">
+                            <div class="bar negative" style="width: 50%;">-3.71%</div>
+                        </div>
+                    </div>
+                    <div class="bar-item">
+                        <span class="bar-label">웰스파고</span>
+                        <div class="bar-wrapper">
+                            <div class="bar negative" style="width: 62%;">-4.61%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <ul class="info-list">
+                <li>
+                    <span class="info-label">10년물 국채 금리</span>
+                    <span class="info-value" style="color: #4caf50;">4.14% (-0.74%)</span>
+                </li>
+                <li>
+                    <span class="info-label">유가 (WTI)</span>
+                    <span class="info-value">$61+ (60불 돌파)</span>
+                </li>
+                <li>
+                    <span class="info-label">은 가격</span>
+                    <span class="info-value" style="color: var(--silver);">$84.56</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 반도체 관세 이슈 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="emoji">💻</span>
+                트럼프 반도체 25% 관세 상세 분석
+            </div>
+            
+            <div class="warning-box">
+                <div class="warning-box-title">
+                    ⚠️ 핵심 뉴스
+                </div>
+                <p>트럼프 대통령이 <span class="highlight highlight-red">특정 고성능 반도체에 25% 관세</span>를 부과하는 행정명령에 서명했습니다. 장 마감 직후 서명이 이루어졌으며, 아침부터 관련 뉴스가 시장에 영향을 미쳤습니다.</p>
+            </div>
+            
+            <div class="key-point">
+                <div class="key-point-title">🎯 관세 대상 제품</div>
+                <p>• NVIDIA <span class="highlight">H200</span> 칩</p>
+                <p>• AMD <span class="highlight">MI325X</span> 등 고성능 AI 칩</p>
+                <p style="margin-top: 12px; font-size: 0.85rem; color: var(--text-secondary);">
+                    ※ 예외: 공급망 기술 및 국내 제조 역량에 기여하는 제품
+                </p>
+            </div>
+            
+            <p><strong>NVIDIA 직격탄:</strong> AMD는 고성능 칩 비중이 상대적으로 낮아 피해가 적으나, NVIDIA는 주력 제품이 직접 관세 대상이 되어 <span class="highlight highlight-red">-1.34%</span> 하락했습니다.</p>
+            
+            <div class="key-point">
+                <div class="key-point-title">📉 투자 시사점</div>
+                <p>기술주의 <strong>실적보다 판매(Sales)</strong>가 핵심입니다. 아무리 실적이 좋아도 관세로 판매가 막히면 의미가 없습니다. 이 관세 리스크는 도미노처럼 데이터센터, GPU 공급망 전체로 확산될 수 있습니다.</p>
+            </div>
+            
+            <div class="quote-box">
+                <p class="quote-text">관세는 판매를 막는 것이고, 판매가 막히면 아무리 성장해도 의미가 없다. 기술주의 베이스는 세일즈다.</p>
+                <p class="quote-author">— 영상 분석</p>
+            </div>
+        </div>
+
+        <!-- 은행 섹터 분석 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="emoji">🏦</span>
+                은행 섹터 실적 발표 및 가이던스 경고
+            </div>
+            
+            <p>뱅크오브아메리카, 웰스파고, 시티 3대 은행이 실적을 발표했습니다. 실적 자체는 양호했으나, <span class="highlight highlight-red">미래 가이던스가 문제</span>입니다.</p>
+            
+            <div class="chart-container">
+                <div class="chart-title">🏦 주요 은행주 하락률</div>
+                <div class="bar-chart">
+                    <div class="bar-item">
+                        <span class="bar-label">웰스파고</span>
+                        <div class="bar-wrapper">
+                            <div class="bar negative" style="width: 92%;">-4.61%</div>
+                        </div>
+                    </div>
+                    <div class="bar-item">
+                        <span class="bar-label">BofA</span>
+                        <div class="bar-wrapper">
+                            <div class="bar negative" style="width: 74%;">-3.71%</div>
+                        </div>
+                    </div>
+                    <div class="bar-item">
+                        <span class="bar-label">시티</span>
+                        <div class="bar-wrapper">
+                            <div class="bar negative" style="width: 67%;">-3.37%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <div class="warning-box-title">
+                    💳 신용카드 금리 상한선 정책 리스크
+                </div>
+                <p>트럼프 대통령의 <span class="highlight highlight-red">신용카드 금리 10% 상한선</span> 정책이 은행 수익성에 큰 위협이 되고 있습니다.</p>
+            </div>
+            
+            <div class="key-point">
+                <div class="key-point-title">🔍 왜 위험한가?</div>
+                <p><strong>1. 수익성 악화:</strong> 마진이 줄어 은행들이 신용카드 발급을 꺼림</p>
+                <p><strong>2. 신용경색 우려:</strong> 신용점수에 따른 선별 발급 → 크레딧 리밋 축소</p>
+                <p><strong>3. 풍선효과:</strong> 자금이 사채(제3금융)로 이동 → 소비자 피해 확대</p>
+            </div>
+            
+            <div class="quote-box">
+                <p class="quote-text">우리가 미쳤다고 아무한테나 신용카드를 주겠니? 신용경색이 생기면 시장에 돈이 풀리지 않고, 경제가 완전히 얼어붙는다.</p>
+                <p class="quote-author">— 제이미 다이몬 (JP모건 CEO)</p>
+            </div>
+            
+            <p><strong>시한:</strong> 1월 20일까지 대응 요구 → 현실적으로 불가능에 가까움</p>
+        </div>
+
+        <!-- PPI/경제 지표 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="emoji">📊</span>
+                PPI 및 경제 지표 분석
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value neutral">0.0%</div>
+                    <div class="stat-label">코어 PPI (예상 0.2%)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value up">+0.5%</div>
+                    <div class="stat-label">코어 리테일 (예상 0.4%)</div>
+                </div>
+            </div>
+            
+            <div class="key-point">
+                <div class="key-point-title">⚠️ 숨겨진 의미</div>
+                <p><strong>PPI 0.0%의 함정:</strong> 12월 정부 셧다운 영향도 있지만, 더 중요한 것은 <span class="highlight">생산자가 관세 비용을 떠안고 있다</span>는 점입니다.</p>
+                <p style="margin-top: 8px;"><strong>베이지북 경고:</strong> 그동안 소비자에게 전가하지 못한 관세 비용을 <span class="highlight highlight-red">새해부터 전가</span>할 계획</p>
+            </div>
+            
+            <div class="key-point">
+                <div class="key-point-title">🛒 리테일 세일즈의 진실</div>
+                <p>0.5% 상승은 <strong>물건 판매량 증가가 아닌 가격 상승</strong>입니다. 즉, 100개 팔던 것을 90개 팔지만, 물가가 올라 금액은 증가한 것입니다.</p>
+            </div>
+            
+            <p><strong>결론:</strong> PPI와 리테일 데이터 모두 <span class="highlight">관세 인플레이션</span>이라는 공통된 메시지를 전달하고 있습니다. 2026년에는 이것이 본격적으로 소비자 물가에 반영될 전망입니다.</p>
+        </div>
+
+        <!-- 연준 동향 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="emoji">🏛️</span>
+                연준 정책 및 금리 전망
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-title">📉 1월 금리 동결 확률</div>
+                <div style="text-align: center; padding: 20px 0;">
+                    <div style="font-size: 3rem; font-weight: 900; color: #f44336;">95.6%</div>
+                    <div style="color: var(--text-secondary); margin-top: 8px;">사실상 만장일치 금리 동결 예상</div>
+                </div>
+            </div>
+            
+            <ul class="info-list">
+                <li>
+                    <span class="info-label">10년물 금리</span>
+                    <span class="info-value" style="color: #4caf50;">4.14% (양호)</span>
+                </li>
+                <li>
+                    <span class="info-label">중요 기준선</span>
+                    <span class="info-value">4.15% 이하 유지 필요</span>
+                </li>
+                <li>
+                    <span class="info-label">위험 수준</span>
+                    <span class="info-value" style="color: #f44336;">4.5% 돌파 시 경고</span>
+                </li>
+            </ul>
+            
+            <div class="warning-box">
+                <div class="warning-box-title">
+                    📢 미란 연준 위원 발언
+                </div>
+                <p>150bp 금리 인하 예상 발언 → 연준 의장 자리 노리는 것 아니냐는 해석</p>
+            </div>
+            
+            <p><strong>베이지북 시사점:</strong> 연준위원들 내부에서도 의견이 양분되어 있어 금리 정책 방향을 종잡기 어려운 상황입니다.</p>
+        </div>
+
+        <!-- 이란 지정학 리스크 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="emoji">🌍</span>
+                이란 지정학적 리스크
+            </div>
+            
+            <div class="warning-box">
+                <div class="warning-box-title">
+                    🛢️ 유가 상승 핵심 동인
+                </div>
+                <p>트럼프 대통령의 이란 관련 강경 발언으로 지정학적 긴장이 고조되고 있습니다.</p>
+            </div>
+            
+            <div class="key-point">
+                <div class="key-point-title">🎯 트럼프 발언 요약</div>
+                <p>• 이란 내 시위대/정적 처형 시 군사적 대응 경고</p>
+                <p>• 현재 처형 계획 없다는 통보 받음 → 상황 주시 중</p>
+                <p>• <span class="highlight highlight-red">군사 옵션은 테이블에서 내리지 않음</span></p>
+            </div>
+            
+            <div class="warning-box">
+                <div class="warning-box-title">
+                    ⚠️ 카타르 미군 철수 신호
+                </div>
+                <p>카타르 미군 기지에서 미군 200명 철수 → 이라크 전쟁 전에도 유사한 패턴이 있었음. <span class="highlight highlight-red">전쟁 준비 신호</span>로 해석 가능.</p>
+            </div>
+            
+            <p><strong>투자 시사점:</strong> 이란 군사 충돌 시 이란산 원유 공급 중단 → 유가 급등 예상. 에너지 섹터를 <span class="highlight highlight-green">헤지 포지션</span>으로 활용 가능.</p>
+        </div>
+
+        <!-- 금/은 급등 분석 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="emoji">🥇</span>
+                금·은·원자재 급등 분석
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value gold">3일 연속 ↑</div>
+                    <div class="stat-label">금 (Gold)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value silver">+7.58%</div>
+                    <div class="stat-label">은 ($84.56)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value up">상승세</div>
+                    <div class="stat-label">구리 (Copper)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value up">지속 상승</div>
+                    <div class="stat-label">우라늄 (URA)</div>
+                </div>
+            </div>
+            
+            <div class="key-point">
+                <div class="key-point-title">📈 은(Silver) 폭등 배경</div>
+                <p><strong>CME 선물상품 출시:</strong> 월요일부터 CME에서 은 선물/옵션 상품이 출시되며 폭발적 수요 발생</p>
+                <p style="margin-top: 8px;"><strong>전망:</strong> 현재 $84.56 → <span class="highlight highlight-gold">$100 도달</span> 예상</p>
+            </div>
+            
+            <div class="key-point">
+                <div class="key-point-title">❓ 왜 주식과 금이 동시에 오르는가?</div>
+                <p><strong>1. 트럼프 정책의 양면성:</strong> 법인세 감세 → 주가 상승 / 관세 정책 → 물가 상승 우려 → 금 수요</p>
+                <p><strong>2. 연준 독립성 논란:</strong> 정치적 압박 → 달러 가치 하락 우려 → 실물자산 선호</p>
+                <p><strong>3. 지정학적 리스크:</strong> 베네수엘라, 이란 등 분쟁 우려 → 안전자산 수요</p>
+            </div>
+            
+            <div class="warning-box">
+                <div class="warning-box-title">
+                    📚 역사적 참고: 1972년 닉슨 쇼크
+                </div>
+                <p>주식과 금이 2년간 동반 상승 → 이후 과도한 유동성이 스태그플레이션 초래 → 1974년 주가 폭락</p>
+            </div>
+        </div>
+
+        <!-- 그린랜드/덴마크 이슈 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="emoji">🌐</span>
+                그린랜드/덴마크 외교 긴장
+            </div>
+            
+            <p>트럼프 대통령이 덴마크를 패싱하고 <span class="highlight">그린랜드와 직접 협상</span>을 시도하고 있습니다.</p>
+            
+            <div class="key-point">
+                <div class="key-point-title">📍 배경 이해</div>
+                <p>그린랜드는 덴마크령이지만 높은 자치권 보유. 원주민과 덴마크 간 역사적 갈등이 있어 별도 정부 형태로 운영됩니다.</p>
+            </div>
+            
+            <p><strong>백악관 회담 결과:</strong> 덴마크-그린랜드 대표단이 화난 표정으로 빠르게 퇴장 → 협상 결렬 추정</p>
+            
+            <div class="warning-box">
+                <div class="warning-box-title">
+                    ⚠️ 나토(NATO) 리스크
+                </div>
+                <p>만약 덴마크에 대한 군사적 압박이 현실화되면 나토 체제 자체가 위협받을 수 있음 → 각자도생 시대 우려</p>
+            </div>
+        </div>
+
+        <!-- 섹터별 동향 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="emoji">📊</span>
+                섹터별 동향 및 ETF
+            </div>
+            
+            <table class="sector-table">
+                <thead>
+                    <tr>
+                        <th>섹터</th>
+                        <th>오늘</th>
+                        <th>주간</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>🛢️ 에너지</td>
+                        <td style="color: #4caf50;">강세</td>
+                        <td style="color: #4caf50;">급등</td>
+                    </tr>
+                    <tr>
+                        <td>🥫 컨슈머 디펜스</td>
+                        <td>-</td>
+                        <td style="color: #4caf50;">급등</td>
+                    </tr>
+                    <tr>
+                        <td>📡 통신 (XLC)</td>
+                        <td style="color: #4caf50;">강세</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>💻 빅테크</td>
+                        <td style="color: #f44336;">약세</td>
+                        <td>혼조</td>
+                    </tr>
+                    <tr>
+                        <td>📱 소프트웨어</td>
+                        <td style="color: #f44336;">약세</td>
+                        <td>약세</td>
+                    </tr>
+                    <tr>
+                        <td>🏦 금융 (은행)</td>
+                        <td style="color: #f44336;">급락</td>
+                        <td style="color: #f44336;">약세</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="key-point">
+                <div class="key-point-title">📈 주목 ETF</div>
+                <p>• <span class="highlight highlight-green">크립토 ETF</span> - 강세</p>
+                <p>• <span class="highlight highlight-green">실버 ETF</span> - 폭등</p>
+                <p>• <span class="highlight highlight-green">URA (우라늄)</span> - 지속 상승</p>
+                <p>• <span class="highlight highlight-red">인버스 ETF</span> - 활발한 움직임</p>
+            </div>
+        </div>
+
+        <!-- 투자 전략 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="emoji">💡</span>
+                투자 전략 및 시사점
+            </div>
+            
+            <div class="key-point">
+                <div class="key-point-title">🎯 핵심 전략</div>
+                <p><strong>"익절은 언제나 옳다"</strong> - 정책 리스크가 확대되는 구간에서 그때그때 익절이 중요합니다.</p>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-time">단기</div>
+                    <div class="timeline-content">정책 리스크 → 변동성 확대 예상. 현금 비중 확보 및 방어적 운용</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">중기</div>
+                    <div class="timeline-content">4월 중국 관세 협상, 5월 연준 의장 교체 주시. 시장 변곡점 가능성</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">장기</div>
+                    <div class="timeline-content">AI는 계속된다. 줍줍 기회 대비 캐시 준비. 주도주 지속 보유</div>
+                </div>
+            </div>
+            
+            <div class="key-point">
+                <div class="key-point-title">📌 주요 모니터링 지표</div>
+                <p>• <strong>10년물 금리:</strong> 4.15% 이하 유지 필요, 4.5% 돌파 시 위험 신호</p>
+                <p>• <strong>CPI/PCE:</strong> 인플레이션 추이 확인</p>
+                <p>• <strong>비트코인:</strong> 천장 형성 여부 관찰</p>
+                <p>• <strong>이란 뉴스:</strong> 군사행동 신호 주시</p>
+            </div>
+            
+            <div class="warning-box">
+                <div class="warning-box-title">
+                    ⚠️ 주의사항
+                </div>
+                <p>현재 시장은 <strong>"성장의 환희와 시스템의 공포가 공존"</strong>하는 구간입니다. 5년간 주식시장이 쉬지 않고 달려왔으며, 정책 리스크로 인한 조정 가능성을 항상 염두에 두어야 합니다.</p>
+            </div>
+        </div>
+
+        <!-- 희토류 이슈 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="emoji">⚙️</span>
+                희토류(Rare Earth) 이슈
+            </div>
+            
+            <p>25% 관세에 대한 중국의 대응 카드로 <span class="highlight">희토류 통제</span>가 있습니다.</p>
+            
+            <div class="key-point">
+                <div class="key-point-title">🇨🇳 중국의 희토류 독점 배경</div>
+                <p>• 환경오염을 감수하는 채굴 환경</p>
+                <p>• 저렴한 인건비 (열악한 노동 환경)</p>
+                <p>• 오랜 기간 축적된 기술과 노하우</p>
+            </div>
+            
+            <p><strong>시사점:</strong> 미국이 25% 관세를 부과해도 중국이 희토류 카드를 꺼내면 반도체/AI 산업 전체가 영향받을 수 있습니다.</p>
+        </div>
+
+        <!-- 내일 일정 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="emoji">📅</span>
+                내일(1/16) 주요 일정
+            </div>
+            
+            <ul class="info-list">
+                <li>
+                    <span class="info-label">📊 경제지표</span>
+                    <span class="info-value">주간 실업수당 청구건수</span>
+                </li>
+                <li>
+                    <span class="info-label">🏦 실적발표</span>
+                    <span class="info-value">골드만삭스, 모건스탠리, 블랙록</span>
+                </li>
+                <li>
+                    <span class="info-label">🌍 지정학</span>
+                    <span class="info-value">이란 관련 동향 모니터링</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 최종 요약 -->
+        <div class="summary-box">
+            <div class="summary-title">📋 최종 요약</div>
+            <div style="padding: 16px 0;">
+                <p style="text-align: center; margin-bottom: 16px;"><strong>오늘의 키워드:</strong> 관세 리스크 확대, 신용경색 우려, 안전자산 선호</p>
+                
+                <div class="summary-grid" style="margin-top: 16px;">
+                    <div class="summary-item">
+                        <div class="summary-icon">⚠️</div>
+                        <div class="summary-label">리스크</div>
+                        <div class="summary-value">정책 불확실성</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-icon">🛡️</div>
+                        <div class="summary-label">헤지</div>
+                        <div class="summary-value">금/은/에너지</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-icon">💰</div>
+                        <div class="summary-label">전략</div>
+                        <div class="summary-value">익절 + 현금확보</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>본 문서는 NOVA Real Invest 유튜브 채널의 2026년 1월 15일 방송을 기반으로 작성되었습니다.</p>
+            <p style="margin-top: 8px;">⚠️ 본 내용은 참고용이며, 투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다.</p>
+            <p style="margin-top: 16px; color: rgba(255,255,255,0.4);">© 2026 Market Analysis Report</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>시험문제 | 트럼프 반도체 관세 & 은행주 분석 | 2026.01.15</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+        
+        :root {
+            --primary: #1a237e;
+            --secondary: #c62828;
+            --accent: #ff6f00;
+            --success: #2e7d32;
+            --bg-dark: #0d1421;
+            --bg-card: #1a2332;
+            --text-primary: #ffffff;
+            --text-secondary: #b0bec5;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.8;
+            padding: 0;
+            max-width: 100%;
+        }
+        
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 20px 16px;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a237e 0%, #303f9f 100%);
+            padding: 28px 20px;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 24px;
+        }
+        
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+        
+        .header .subtitle {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        /* Section Divider */
+        .section-divider {
+            background: linear-gradient(90deg, var(--accent), #ff8f00);
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin: 32px 0 24px;
+            text-align: center;
+        }
+        
+        .section-divider h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        /* Question Card */
+        .question-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .question-number {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--accent);
+        }
+        
+        .question-meta {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .difficulty {
+            font-size: 0.85rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .difficulty.easy {
+            background: rgba(76, 175, 80, 0.2);
+            color: #81c784;
+        }
+        
+        .difficulty.medium {
+            background: rgba(255, 152, 0, 0.2);
+            color: #ffb74d;
+        }
+        
+        .difficulty.hard {
+            background: rgba(244, 67, 54, 0.2);
+            color: #ef5350;
+        }
+        
+        .question-type {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.1);
+            color: var(--text-secondary);
+        }
+        
+        .question-text {
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+        
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option {
+            background: rgba(255,255,255,0.03);
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .option:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.15);
+        }
+        
+        /* OX Options */
+        .ox-options {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .ox-option {
+            flex: 1;
+            text-align: center;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .ox-option.o {
+            background: rgba(76, 175, 80, 0.15);
+            border: 2px solid rgba(76, 175, 80, 0.3);
+            color: #81c784;
+        }
+        
+        .ox-option.x {
+            background: rgba(244, 67, 54, 0.15);
+            border: 2px solid rgba(244, 67, 54, 0.3);
+            color: #ef5350;
+        }
+        
+        /* Blank */
+        .blank {
+            display: inline-block;
+            min-width: 100px;
+            border-bottom: 2px solid var(--accent);
+            margin: 0 4px;
+        }
+        
+        /* Answer Section */
+        .answer-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--success);
+        }
+        
+        .answer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .answer-number {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--accent);
+        }
+        
+        .answer-value {
+            background: var(--success);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        
+        .explanation {
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+        
+        .explanation strong {
+            color: var(--text-primary);
+        }
+        
+        /* Page Break */
+        .page-break {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .page-break-line {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        }
+        
+        .page-break-text {
+            padding: 0 20px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 32px;
+        }
+        
+        /* Highlight */
+        .highlight {
+            background: rgba(255, 111, 0, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        /* Short answer box */
+        .short-answer-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px dashed rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 16px;
+            min-height: 60px;
+            margin-top: 12px;
+        }
+        
+        .short-answer-box::before {
+            content: '답: ';
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        
+        /* Essay box */
+        .essay-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px dashed rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 16px;
+            min-height: 120px;
+            margin-top: 12px;
+        }
+        
+        .essay-box::before {
+            content: '서술: ';
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📝 시험문제</h1>
+        <div class="subtitle">트럼프 반도체 25% 관세 & 은행주 실적 분석 | 2026.01.15</div>
+    </div>
+    
+    <div class="container">
+        <!-- 문제지 섹션 -->
+        <div class="section-divider">
+            <h2>📋 문제지 (총 10문제)</h2>
+        </div>
+        
+        <!-- 문제 1 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="question-number">[문제 1]</span>
+                <div class="question-meta">
+                    <span class="difficulty easy">⭐ 쉬움</span>
+                    <span class="question-type">객관식</span>
+                </div>
+            </div>
+            <div class="question-text">
+                트럼프 대통령이 서명한 행정명령에서 특정 반도체에 부과하기로 한 관세율은 얼마인가?
+            </div>
+            <div class="options">
+                <div class="option">① 10%</div>
+                <div class="option">② 15%</div>
+                <div class="option">③ 20%</div>
+                <div class="option">④ 25%</div>
+            </div>
+        </div>
+        
+        <!-- 문제 2 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="question-number">[문제 2]</span>
+                <div class="question-meta">
+                    <span class="difficulty easy">⭐ 쉬움</span>
+                    <span class="question-type">단답형</span>
+                </div>
+            </div>
+            <div class="question-text">
+                이번 반도체 관세에서 직격탄을 맞은 기업으로, H200 칩을 생산하는 회사의 이름을 쓰시오.
+            </div>
+            <div class="short-answer-box"></div>
+        </div>
+        
+        <!-- 문제 3 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="question-number">[문제 3]</span>
+                <div class="question-meta">
+                    <span class="difficulty medium">⭐⭐ 보통</span>
+                    <span class="question-type">객관식</span>
+                </div>
+            </div>
+            <div class="question-text">
+                1월 금리 동결 확률이 사실상 만장일치 수준인데, CME 페드워치에서 발표한 동결 확률은 얼마인가?
+            </div>
+            <div class="options">
+                <div class="option">① 85.2%</div>
+                <div class="option">② 90.3%</div>
+                <div class="option">③ 95.6%</div>
+                <div class="option">④ 99.1%</div>
+            </div>
+        </div>
+        
+        <!-- 문제 4 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="question-number">[문제 4]</span>
+                <div class="question-meta">
+                    <span class="difficulty medium">⭐⭐ 보통</span>
+                    <span class="question-type">O/X</span>
+                </div>
+            </div>
+            <div class="question-text">
+                베이지북에 따르면, 그동안 생산자들이 관세 비용을 소비자에게 전가하지 않고 자체적으로 흡수해왔으며, 새해부터는 이를 소비자에게 전가할 계획이라고 한다.
+            </div>
+            <div class="ox-options">
+                <div class="ox-option o">O</div>
+                <div class="ox-option x">X</div>
+            </div>
+        </div>
+        
+        <!-- 문제 5 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="question-number">[문제 5]</span>
+                <div class="question-meta">
+                    <span class="difficulty medium">⭐⭐ 보통</span>
+                    <span class="question-type">객관식</span>
+                </div>
+            </div>
+            <div class="question-text">
+                은행주 하락의 주요 원인으로 지목된 트럼프 대통령의 정책은 무엇인가?
+            </div>
+            <div class="options">
+                <div class="option">① 법인세 인상</div>
+                <div class="option">② 신용카드 금리 10% 상한선</div>
+                <div class="option">③ 예금 이자율 규제</div>
+                <div class="option">④ 은행 자본 요건 강화</div>
+            </div>
+        </div>
+        
+        <!-- 문제 6 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="question-number">[문제 6]</span>
+                <div class="question-meta">
+                    <span class="difficulty medium">⭐⭐ 보통</span>
+                    <span class="question-type">빈칸채우기</span>
+                </div>
+            </div>
+            <div class="question-text">
+                은(Silver) 가격이 하루에 7.58% 급등한 이유는 <span class="blank"></span>에서 은 선물/옵션 상품을 새로 출시했기 때문이다.
+            </div>
+            <div class="short-answer-box"></div>
+        </div>
+        
+        <!-- 문제 7 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="question-number">[문제 7]</span>
+                <div class="question-meta">
+                    <span class="difficulty medium">⭐⭐ 보통</span>
+                    <span class="question-type">객관식</span>
+                </div>
+            </div>
+            <div class="question-text">
+                다음 중 이란 지정학적 리스크와 관련하여 "전쟁 준비 신호"로 해석될 수 있는 사건은?
+            </div>
+            <div class="options">
+                <div class="option">① 이란 원유 수출 증가</div>
+                <div class="option">② 카타르 미군 기지에서 미군 철수</div>
+                <div class="option">③ 나토 회원국 군사 지원 확대</div>
+                <div class="option">④ 이란-미국 외교 대화 재개</div>
+            </div>
+        </div>
+        
+        <!-- 문제 8 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="question-number">[문제 8]</span>
+                <div class="question-meta">
+                    <span class="difficulty hard">⭐⭐⭐ 어려움</span>
+                    <span class="question-type">서술형</span>
+                </div>
+            </div>
+            <div class="question-text">
+                신용카드 금리 10% 상한선 정책이 시행될 경우 발생할 수 있는 "신용경색"의 메커니즘을 3단계로 설명하시오.
+            </div>
+            <div class="essay-box"></div>
+        </div>
+        
+        <!-- 문제 9 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="question-number">[문제 9]</span>
+                <div class="question-meta">
+                    <span class="difficulty hard">⭐⭐⭐ 어려움</span>
+                    <span class="question-type">객관식</span>
+                </div>
+            </div>
+            <div class="question-text">
+                주식과 금이 동시에 상승하는 기현상의 과거 사례로 언급된 역사적 이벤트와 그 결과로 올바른 것은?
+            </div>
+            <div class="options">
+                <div class="option">① 1987년 블랙먼데이 → 6개월 내 시장 회복</div>
+                <div class="option">② 1972년 닉슨 쇼크 → 2년간 동반 상승 후 1974년 주가 폭락</div>
+                <div class="option">③ 2000년 닷컴버블 → 금 가격 하락</div>
+                <div class="option">④ 2008년 금융위기 → 주식과 금 동반 상승</div>
+            </div>
+        </div>
+        
+        <!-- 문제 10 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="question-number">[문제 10]</span>
+                <div class="question-meta">
+                    <span class="difficulty medium">⭐⭐ 보통</span>
+                    <span class="question-type">O/X</span>
+                </div>
+            </div>
+            <div class="question-text">
+                10년물 국채 금리가 4.5%를 돌파하면 경제가 건전하다는 신호이므로 주식 투자에 긍정적이다.
+            </div>
+            <div class="ox-options">
+                <div class="ox-option o">O</div>
+                <div class="ox-option x">X</div>
+            </div>
+        </div>
+        
+        <!-- 페이지 브레이크 -->
+        <div class="page-break">
+            <div class="page-break-line"></div>
+            <div class="page-break-text">정답지</div>
+            <div class="page-break-line"></div>
+        </div>
+        
+        <!-- 정답지 섹션 -->
+        <div class="section-divider" style="background: linear-gradient(90deg, #2e7d32, #43a047);">
+            <h2>📝 정답 및 해설</h2>
+        </div>
+        
+        <!-- 정답 1 -->
+        <div class="answer-card">
+            <div class="answer-header">
+                <span class="answer-number">[문제 1]</span>
+                <span class="answer-value">정답: ④</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> 트럼프 대통령은 특정 반도체(H200, MI325X 등 고성능 AI 칩)에 대해 <strong>25%</strong> 관세를 부과하는 행정명령에 서명했습니다. 이는 아침부터 시장에 영향을 미쳤고, 장 마감 후 공식 서명이 이루어졌습니다.
+            </div>
+        </div>
+        
+        <!-- 정답 2 -->
+        <div class="answer-card">
+            <div class="answer-header">
+                <span class="answer-number">[문제 2]</span>
+                <span class="answer-value">정답: NVIDIA (엔비디아)</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> H200 칩을 생산하는 <strong>NVIDIA</strong>가 이번 관세의 직격탄을 맞았습니다. AMD는 고성능 칩 비중이 상대적으로 낮아 피해가 적었으나, NVIDIA는 주력 제품이 직접 타겟이 되어 -1.34% 하락했습니다.
+            </div>
+        </div>
+        
+        <!-- 정답 3 -->
+        <div class="answer-card">
+            <div class="answer-header">
+                <span class="answer-number">[문제 3]</span>
+                <span class="answer-value">정답: ③</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> CME 페드워치 기준 1월 금리 동결 확률은 <strong>95.6%</strong>로, 사실상 만장일치 수준입니다. 시장은 1월 금리 인하를 전혀 기대하지 않고 있습니다.
+            </div>
+        </div>
+        
+        <!-- 정답 4 -->
+        <div class="answer-card">
+            <div class="answer-header">
+                <span class="answer-number">[문제 4]</span>
+                <span class="answer-value">정답: O</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> 베이지북에 따르면 그동안 관세 관련 비용이 소비자에게 전달되지 않고 <strong>생산자가 흡수</strong>해왔습니다. 그러나 서베이 결과, 새해부터는 어쩔 수 없이 소비자에게 전가해야 할 것으로 예상한다고 밝혔습니다. 이는 2026년 인플레이션 상승 요인이 될 수 있습니다.
+            </div>
+        </div>
+        
+        <!-- 정답 5 -->
+        <div class="answer-card">
+            <div class="answer-header">
+                <span class="answer-number">[문제 5]</span>
+                <span class="answer-value">정답: ②</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> 트럼프 대통령의 <strong>신용카드 금리 10% 상한선</strong> 정책이 은행주 급락의 주요 원인입니다. 이 정책으로 은행의 수익성이 악화될 우려가 있으며, 뱅크오브아메리카(-3.71%), 웰스파고(-4.61%), 시티(-3.37%) 모두 가이던스에서 이를 경고했습니다.
+            </div>
+        </div>
+        
+        <!-- 정답 6 -->
+        <div class="answer-card">
+            <div class="answer-header">
+                <span class="answer-number">[문제 6]</span>
+                <span class="answer-value">정답: CME</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> <strong>CME(시카고상품거래소)</strong>에서 월요일부터 은 선물/옵션 상품을 새로 출시했습니다. 이로 인해 은에 대한 수요가 폭발적으로 증가하여 하루 만에 7.58% 급등했습니다. 과거 금도 디지털 선물 시장이 생기면서 폭등한 역사가 있습니다.
+            </div>
+        </div>
+        
+        <!-- 정답 7 -->
+        <div class="answer-card">
+            <div class="answer-header">
+                <span class="answer-number">[문제 7]</span>
+                <span class="answer-value">정답: ②</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> <strong>카타르 미군 기지에서 미군 200명이 철수</strong>한 것은 역사적으로 전쟁 준비의 신호로 해석됩니다. 이라크 전쟁 전에도 유사한 패턴이 있었으며, 중동 지역 군사 충돌 시 미군 기지가 타격 대상이 될 수 있어 사전에 인원을 철수시키는 것입니다.
+            </div>
+        </div>
+        
+        <!-- 정답 8 -->
+        <div class="answer-card">
+            <div class="answer-header">
+                <span class="answer-number">[문제 8]</span>
+                <span class="answer-value">정답: 서술형 (아래 참조)</span>
+            </div>
+            <div class="explanation">
+                <strong>모범 답안:</strong><br><br>
+                <strong>1단계 - 수익성 악화:</strong> 신용카드 금리가 10%로 제한되면 은행의 마진이 줄어들어 신용카드 발급에 대한 인센티브가 사라집니다.<br><br>
+                <strong>2단계 - 선별적 발급:</strong> 은행들은 신용점수가 높은 고객에게만 신용카드를 발급하고, 기존 고객의 크레딧 리밋도 축소합니다.<br><br>
+                <strong>3단계 - 풍선효과:</strong> 은행에서 자금을 조달하지 못한 소비자들이 제3금융(사채)으로 이동하며, 이는 더 높은 이자 부담과 소비자 피해로 이어지고, 결국 시장 전체에 돈이 풀리지 않는 신용경색 상태가 됩니다.
+            </div>
+        </div>
+        
+        <!-- 정답 9 -->
+        <div class="answer-card">
+            <div class="answer-header">
+                <span class="answer-number">[문제 9]</span>
+                <span class="answer-value">정답: ②</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> <strong>1972년 닉슨 쇼크</strong> 당시 주식과 금이 2년간 동반 상승하는 기현상이 있었습니다. 그러나 이후 과도한 유동성이 스태그플레이션을 불러왔고, 결국 <strong>1974년 주가 폭락</strong>으로 이어졌습니다. 현재 상황이 이와 유사하다는 분석이 있어 주의가 필요합니다.
+            </div>
+        </div>
+        
+        <!-- 정답 10 -->
+        <div class="answer-card">
+            <div class="answer-header">
+                <span class="answer-number">[문제 10]</span>
+                <span class="answer-value">정답: X</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> 10년물 국채 금리가 <strong>4.5%를 돌파하면 경제가 망가졌다는 신호</strong>로 봐도 거의 다름이 없습니다. 주식 시장이 건전하려면 금리가 <strong>4.15% 이하</strong>를 유지해야 하며, 4.5% 이상은 위험 신호입니다. 따라서 이 명제는 거짓(X)입니다.
+            </div>
+        </div>
+        
+        <!-- 난이도 분포 -->
+        <div class="question-card" style="background: linear-gradient(135deg, rgba(26, 35, 126, 0.3), rgba(13, 71, 161, 0.2));">
+            <div style="text-align: center; padding: 16px;">
+                <h3 style="margin-bottom: 16px;">📊 문제 난이도 분포</h3>
+                <div style="display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;">
+                    <div>
+                        <span class="difficulty easy">⭐ 쉬움</span>
+                        <div style="font-size: 1.5rem; font-weight: 700; margin-top: 8px;">2문제</div>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">20%</div>
+                    </div>
+                    <div>
+                        <span class="difficulty medium">⭐⭐ 보통</span>
+                        <div style="font-size: 1.5rem; font-weight: 700; margin-top: 8px;">6문제</div>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">60%</div>
+                    </div>
+                    <div>
+                        <span class="difficulty hard">⭐⭐⭐ 어려움</span>
+                        <div style="font-size: 1.5rem; font-weight: 700; margin-top: 8px;">2문제</div>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">20%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>본 시험문제는 NOVA Real Invest 유튜브 채널의 2026년 1월 15일 방송 내용을 기반으로 작성되었습니다.</p>
+            <p style="margin-top: 8px;">⚠️ 학습 및 복습 목적으로만 사용하시기 바랍니다.</p>
+            <p style="margin-top: 16px; color: rgba(255,255,255,0.4);">© 2026 Market Analysis Quiz</p>
+        </div>
+    </div>
+</body>
+</html>
