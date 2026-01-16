@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>TSMC 실적 발표와 반도체·AI 주식 분석 (2026.01.15)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            line-height: 1.7;
+            color: #1a1a1a;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 16px;
+            max-width: 100%;
+        }
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 24px 20px;
+        }
+        h1 {
+            font-size: 1.5rem;
+            color: #1a365d;
+            border-bottom: 3px solid #3182ce;
+            padding-bottom: 12px;
+            margin-top: 0;
+        }
+        h2 {
+            font-size: 1.25rem;
+            color: #2c5282;
+            margin-top: 32px;
+            padding-left: 12px;
+            border-left: 4px solid #4299e1;
+        }
+        h3 {
+            font-size: 1.1rem;
+            color: #2d3748;
+            margin-top: 24px;
+        }
+        .meta-info {
+            background: #e6f2ff;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+            border-left: 4px solid #e53e3e;
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .positive-box {
+            background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
+            border-left: 4px solid #38a169;
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .neutral-box {
+            background: linear-gradient(135deg, #fffaf0 0%, #feebc8 100%);
+            border-left: 4px solid #dd6b20;
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .key-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2b6cb0;
+        }
+        .key-label {
+            font-size: 0.85rem;
+            color: #718096;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9rem;
+        }
+        th {
+            background: #2c5282;
+            color: #fff;
+            padding: 12px 8px;
+            text-align: left;
+            font-weight: 600;
+        }
+        td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        tr:nth-child(even) {
+            background: #f7fafc;
+        }
+        .up { color: #c53030; font-weight: 600; }
+        .down { color: #2b6cb0; font-weight: 600; }
+        .chart-container {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .bar-label {
+            min-width: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .bar-track {
+            flex: 1;
+            height: 24px;
+            background: #edf2f7;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            font-size: 0.75rem;
+            color: #fff;
+            font-weight: 600;
+        }
+        .bar-fill.green { background: linear-gradient(90deg, #48bb78, #38a169); }
+        .bar-fill.blue { background: linear-gradient(90deg, #4299e1, #3182ce); }
+        .bar-fill.red { background: linear-gradient(90deg, #fc8181, #e53e3e); }
+        .summary-card {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .card {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+            margin: 20px 0;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #cbd5e0;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: #f7fafc;
+            border-radius: 8px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 16px;
+            width: 10px;
+            height: 10px;
+            background: #4299e1;
+            border-radius: 50%;
+        }
+        .sector-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin: 16px 0;
+        }
+        .sector-item {
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+        .sector-up { background: #fed7d7; }
+        .sector-down { background: #bee3f8; }
+        footer {
+            margin-top: 32px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 0.8rem;
+            color: #718096;
+            text-align: center;
+        }
+        .risk-meter {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+        .meter-bar {
+            height: 20px;
+            background: linear-gradient(90deg, #48bb78 0%, #ecc94b 50%, #e53e3e 100%);
+            border-radius: 10px;
+            position: relative;
+            margin: 12px 0;
+        }
+        .meter-indicator {
+            position: absolute;
+            top: -4px;
+            width: 28px;
+            height: 28px;
+            background: #fff;
+            border: 3px solid #2d3748;
+            border-radius: 50%;
+            transform: translateX(-50%);
+        }
+        .fed-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 16px 0;
+        }
+        .fed-tag {
+            background: #edf2f7;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        .fed-tag.hawkish { background: #fed7d7; color: #c53030; }
+        .fed-tag.dovish { background: #c6f6d5; color: #276749; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 TSMC 실적 발표와 반도체·AI 주식 분석</h1>
+        
+        <div class="meta-info">
+            <strong>📅 분석일:</strong> 2026년 1월 15일 (현지시간)<br>
+            <strong>📌 핵심 키워드:</strong> TSMC 4분기 실적, S&P 7000 목전, 반도체 랠리, 은행 실적, 연준 발언
+        </div>
+
+        <h2>1️⃣ 시장 개요: S&P 500 역대 최고치 근접</h2>
+        
+        <div class="summary-card">
+            <div class="card">
+                <div class="key-number">6,944.47</div>
+                <div class="key-label">S&P 500 종가</div>
+            </div>
+            <div class="card">
+                <div class="key-number">6,979</div>
+                <div class="key-label">당일 고점</div>
+            </div>
+            <div class="card">
+                <div class="key-number">6,986</div>
+                <div class="key-label">52주 최고치</div>
+            </div>
+            <div class="card">
+                <div class="key-number">+1.45%</div>
+                <div class="key-label">연초 대비 (10거래일)</div>
+            </div>
+        </div>
+
+        <div class="positive-box">
+            <strong>💡 시장 시사점:</strong> S&P 500이 <strong>7,000 포인트</strong> 돌파 직전입니다. 2026년 기관 전망치(7,000~7,500)의 하단에 불과 10거래일 만에 도달했습니다. 이는 AI/반도체 섹터의 강력한 실적이 지수 전체를 견인하고 있음을 보여줍니다.
+        </div>
+
+        <h2>2️⃣ 핵심 촉매: TSMC 4분기 실적 폭발</h2>
+
+        <h3>📈 TSMC 실적 하이라이트</h3>
+        
+        <table>
+            <tr>
+                <th>항목</th>
+                <th>실적</th>
+                <th>의미</th>
+            </tr>
+            <tr>
+                <td>주가 변동</td>
+                <td class="up">+4.44%</td>
+                <td>장비주 전반 동반 상승</td>
+            </tr>
+            <tr>
+                <td>매출(Revenue) 증가율</td>
+                <td class="up">+35% (QoQ)</td>
+                <td>AI 인프라 수요 폭발 증명</td>
+            </tr>
+            <tr>
+                <td>설비투자(CAPEX) 계획</td>
+                <td><strong>$500억+</strong></td>
+                <td>역대 최대 규모</td>
+            </tr>
+        </table>
+
+        <div class="chart-container">
+            <h4 style="margin-top:0;">🏭 반도체 관련주 당일 등락률</h4>
+            <div class="bar-chart">
+                <div class="bar-item">
+                    <span class="bar-label">ASML</span>
+                    <div class="bar-track">
+                        <div class="bar-fill green" style="width: 90%;">+5.37%</div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <span class="bar-label">TSM (TSMC)</span>
+                    <div class="bar-track">
+                        <div class="bar-fill green" style="width: 74%;">+4.44%</div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <span class="bar-label">NVDA</span>
+                    <div class="bar-track">
+                        <div class="bar-fill green" style="width: 18%;">+1.1%</div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <span class="bar-label">장비주 일부</span>
+                    <div class="bar-track">
+                        <div class="bar-fill green" style="width: 100%;">장전 +10% 이상</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <strong>🔥 TSMC 설비투자 $500억의 의미:</strong><br>
+            "AI 투자가 끝났다", "데이터센터 투자는 마무리 단계"라는 우려를 단번에 불식시켰습니다. 공급보다 수요가 여전히 앞서고 있으며, AI 인프라 확대는 <strong>현재 진행형</strong>입니다.
+        </div>
+
+        <h3>🇺🇸 미국-대만 관세 합의</h3>
+        <p>TSMC와 미국 정부 간 협의 결과, <strong>관세 15%</strong>로 확정되었으며, 그 대신 TSMC는 미국 내 대규모 공장 건설을 약속했습니다. 트럼프 행정부의 반도체 자국 생산 정책과 맞물려 중장기적으로 미국 반도체 생태계에 긍정적입니다.</p>
+
+        <h2>3️⃣ 반도체 밸류체인 확장 분석</h2>
+
+        <div class="neutral-box">
+            <strong>📌 투자 포인트:</strong> 반도체 랠리가 <strong>칩 설계(Design)</strong>에서 <strong>장비(Equipment) → 공정(Process) → 전력(Power) → 냉각(Cooling)</strong>으로 확장 중입니다. "대장주만 올라가는 장"이 아닙니다.
+        </div>
+
+        <div class="sector-grid">
+            <div class="sector-item sector-up">🔧 반도체 장비</div>
+            <div class="sector-item sector-up">💾 메모리</div>
+            <div class="sector-item sector-up">⚡ 전력 인프라</div>
+            <div class="sector-item sector-up">❄️ 냉각 시스템</div>
+        </div>
+
+        <h3>📊 NVIDIA 차트 분석</h3>
+        <p>엔비디아는 현재 <strong>$190</strong> 부근에서 삼각 수렴 패턴을 형성 중입니다. RBC는 목표가를 <strong>$240</strong>으로 상향했으며, 3월 전후로 돌파 가능성이 제기됩니다.</p>
+        
+        <div class="chart-container">
+            <h4 style="margin-top:0;">NVIDIA 기술적 분석 요약</h4>
+            <table>
+                <tr>
+                    <th>지표</th>
+                    <th>수치</th>
+                </tr>
+                <tr>
+                    <td>현재가</td>
+                    <td>$190 부근</td>
+                </tr>
+                <tr>
+                    <td>지지선</td>
+                    <td>삼각 수렴 하단</td>
+                </tr>
+                <tr>
+                    <td>RBC 목표가</td>
+                    <td class="up">$240</td>
+                </tr>
+                <tr>
+                    <td>예상 돌파 시점</td>
+                    <td>3월 전후</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2>4️⃣ 금융 섹터: 투자은행 실적 호조</h2>
+
+        <table>
+            <tr>
+                <th>종목</th>
+                <th>실적</th>
+                <th>특징</th>
+            </tr>
+            <tr>
+                <td>골드만삭스 (GS)</td>
+                <td class="up">기대 상회</td>
+                <td>자산운용 수익 증가</td>
+            </tr>
+            <tr>
+                <td>모건스탠리 (MS)</td>
+                <td class="up">기대 상회</td>
+                <td>투자은행 부문 호조</td>
+            </tr>
+            <tr>
+                <td>블랙락 (BLK)</td>
+                <td class="up">기대 상회</td>
+                <td>AUM $14조 돌파</td>
+            </tr>
+        </table>
+
+        <div class="positive-box">
+            <strong>💡 투자은행 vs 상업은행:</strong><br>
+            골드만삭스, 모건스탠리 등 <strong>투자은행</strong>은 금리 변동에 덜 민감합니다. 자산운용(Asset Management) 수익이 주 수입원이기 때문입니다. 반면 신용카드 10% 금리 상한 정책에 영향받는 <strong>상업은행</strong>과는 구분해야 합니다.
+        </div>
+
+        <h2>5️⃣ 경제 지표: 탄탄한 펀더멘털</h2>
+
+        <div class="chart-container">
+            <h4 style="margin-top:0;">📉 주요 경제지표 서프라이즈</h4>
+            <div class="bar-chart">
+                <div class="bar-item">
+                    <span class="bar-label">필라델피아 제조업</span>
+                    <div class="bar-track">
+                        <div class="bar-fill green" style="width: 85%;">+12.6% (예상 -1.6%)</div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <span class="bar-label">NY 엠파이어 지수</span>
+                    <div class="bar-track">
+                        <div class="bar-fill green" style="width: 52%;">+7.7</div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <span class="bar-label">주간 실업수당</span>
+                    <div class="bar-track">
+                        <div class="bar-fill blue" style="width: 40%;">예상 하회 (감소)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <table>
+            <tr>
+                <th>지표</th>
+                <th>결과</th>
+                <th>예상</th>
+                <th>해석</th>
+            </tr>
+            <tr>
+                <td>필라델피아 제조업</td>
+                <td class="up">+12.6%</td>
+                <td>-1.6%</td>
+                <td>제조업 회복 신호</td>
+            </tr>
+            <tr>
+                <td>뉴욕 엠파이어 지수</td>
+                <td class="up">+7.7</td>
+                <td>-</td>
+                <td>지역 제조업 활성화</td>
+            </tr>
+            <tr>
+                <td>주간 실업수당 청구</td>
+                <td class="up">예상 하회</td>
+                <td>-</td>
+                <td>고용시장 안정</td>
+            </tr>
+        </table>
+
+        <div class="positive-box">
+            <strong>📊 종합 판단:</strong> 경기 침체 신호 없음. 고용 안정 + 제조업 회복으로 <strong>연착륙(Soft Landing)</strong> 시나리오 유지.
+        </div>
+
+        <h2>6️⃣ 연준(Fed) 발언 분석: 금리 동결 기조 강화</h2>
+
+        <h3>🗣️ 연준위원별 발언 요약</h3>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <strong>굴스비 (Goolsbee)</strong> - 가장 날카로운 발언<br>
+                "인플레이션이 <strong>갑자기 상승</strong>할 가능성이 높다. 연준 독립성 훼손 시 시장 불안 → 물가 상승 불가피."
+            </div>
+            <div class="timeline-item">
+                <strong>슈미드 (Schmid)</strong><br>
+                "금리 인하 <strong>중단</strong>해야 한다."
+            </div>
+            <div class="timeline-item">
+                <strong>월러 (Waller)</strong><br>
+                "추가 인하 <strong>필요 없다</strong>."
+            </div>
+            <div class="timeline-item">
+                <strong>펄슨 (WSJ 인터뷰)</strong><br>
+                "금리 동결 결정은 적절. 노동시장 안정적."
+            </div>
+        </div>
+
+        <div class="fed-summary">
+            <span class="fed-tag hawkish">금리 인하 중단</span>
+            <span class="fed-tag hawkish">인플레 경계</span>
+            <span class="fed-tag hawkish">연준 독립성 강조</span>
+            <span class="fed-tag">고용 안정</span>
+            <span class="fed-tag">경기 탄탄</span>
+        </div>
+
+        <div class="highlight-box">
+            <strong>⚠️ 핵심 메시지:</strong><br>
+            2026년 금리 인하 기대치가 <strong>급격히 낮아지고</strong> 있습니다. 경제 호조 + 물가 하락 정체 + 고용 안정 = 금리 인하 명분 부재. 연준 독립성이 보장되면 <strong>"올해 금리 인하 없을 수도"</strong>라는 전망까지 나오고 있습니다.
+        </div>
+
+        <h2>7️⃣ 리스크 요인: 지정학적 긴장</h2>
+
+        <h3>🚢 미 항모 전단 이동</h3>
+        <p><strong>에이브러햄 링컨 항모전단</strong>이 남중국해를 떠나 중동으로 이동 중입니다. 위성사진으로 확인되었으며, <strong>1월 20~22일</strong> 중동 도착 예상입니다.</p>
+
+        <div class="risk-meter">
+            <h4 style="margin-top:0;">📊 지정학 리스크 수준</h4>
+            <div class="meter-bar">
+                <div class="meter-indicator" style="left: 65%;"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #718096;">
+                <span>낮음</span>
+                <span>보통</span>
+                <span>높음</span>
+            </div>
+        </div>
+
+        <table>
+            <tr>
+                <th>시나리오</th>
+                <th>예상 시점</th>
+                <th>시장 영향</th>
+            </tr>
+            <tr>
+                <td>평화적 해결 (이란 양보)</td>
+                <td>항모 도착 전후</td>
+                <td>리스크 해소 랠리</td>
+            </tr>
+            <tr>
+                <td>군사 행동</td>
+                <td>1/24 (안식일) 전후 가능성</td>
+                <td>단기 변동성 급등</td>
+            </tr>
+        </table>
+
+        <h2>8️⃣ 옵션 시장 신호: 장 막판 풋 옵션 급증</h2>
+
+        <div class="highlight-box">
+            <strong>⚠️ 이상 신호 감지:</strong><br>
+            장 마감 3시 이후 <strong>풋 옵션</strong>이 급격히 증가했습니다. 콜:풋 비율이 <strong>40:35</strong>로 거의 비슷해졌습니다 (통상 콜이 2배 이상).
+        </div>
+
+        <table>
+            <tr>
+                <th>항목</th>
+                <th>수치</th>
+                <th>통상 수준</th>
+            </tr>
+            <tr>
+                <td>콜 옵션 비중</td>
+                <td>40</td>
+                <td rowspan="2">콜이 2배 이상</td>
+            </tr>
+            <tr>
+                <td>풋 옵션 비중</td>
+                <td>35</td>
+            </tr>
+            <tr>
+                <td>Mag 7 자금 유출</td>
+                <td class="down">-$592M</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>NVIDIA 풋 옵션</td>
+                <td>오히려 감소</td>
+                <td>이례적</td>
+            </tr>
+        </table>
+
+        <div class="neutral-box">
+            <strong>📌 해석:</strong> 대형주(Mag 7)에서 자금이 빠졌지만, NVIDIA는 예외입니다. 단기 차익실현 vs 지정학 리스크 헤지 가능성 모두 열어둬야 합니다. <strong>1/16(금)은 옵션 만기일</strong>이므로 마감 1시간 전 변동성 확대 예상.
+        </div>
+
+        <h2>9️⃣ 기타 종목 동향</h2>
+
+        <table>
+            <tr>
+                <th>종목</th>
+                <th>등락</th>
+                <th>원인</th>
+            </tr>
+            <tr>
+                <td>일라이릴리 (LLY)</td>
+                <td class="down">-3.76%</td>
+                <td>FDA 바우처 심사 + 비만 치료제 먹는 약 일정 지연</td>
+            </tr>
+            <tr>
+                <td>스포티파이 (SPOT)</td>
+                <td class="down">-3.95%</td>
+                <td>미국 가격 인상 발표 + EU 규제 우려</td>
+            </tr>
+            <tr>
+                <td>엑손모빌 (XOM)</td>
+                <td>보합 (십자형)</td>
+                <td>추세 판단 보류, 관망 필요</td>
+            </tr>
+        </table>
+
+        <h2>🔟 투자 전략 요약</h2>
+
+        <h3>📈 투자자 (중장기)</h3>
+        <div class="positive-box">
+            <strong>✅ 유지 전략:</strong><br>
+            • <strong>AI 인프라</strong>: TSMC CAPEX $500억이 증명한 성장 스토리<br>
+            • <strong>반도체 밸류체인</strong>: 장비 → 메모리 → 전력 → 냉각으로 확장<br>
+            • <strong>주도 섹터</strong>: 커뮤니케이션, IT (1년 기준)
+        </div>
+
+        <h3>📊 트레이더 (단기)</h3>
+        <div class="neutral-box">
+            <strong>⚠️ 주의 전략:</strong><br>
+            • <strong>손절 라인</strong> 확실히 설정 (예측 불가 변수 다수)<br>
+            • <strong>지정학 뉴스</strong> 실시간 모니터링 (트럼프 발언, 중동 상황)<br>
+            • <strong>1/16 옵션 만기</strong>: 마감 30분~1시간 전 변동성 확대 예상<br>
+            • <strong>익절 타이밍</strong>: 시장이 "올라가면 팔고" 반복하는 패턴
+        </div>
+
+        <h3>📅 내일(1/16) 주요 일정</h3>
+        <table>
+            <tr>
+                <th>시간</th>
+                <th>이벤트</th>
+                <th>관전 포인트</th>
+            </tr>
+            <tr>
+                <td>장전</td>
+                <td>지방은행 실적 발표</td>
+                <td>금융 섹터 추가 모멘텀</td>
+            </tr>
+            <tr>
+                <td>10:00 ET</td>
+                <td>주택건설업 체감지수</td>
+                <td>빌더 관련주 방향성</td>
+            </tr>
+            <tr>
+                <td>10:00 ET</td>
+                <td>산업생산 지표</td>
+                <td>경기 둔화/탄탄 판단</td>
+            </tr>
+            <tr>
+                <td>종일</td>
+                <td>연준위원 추가 발언</td>
+                <td>금리 전망 변화</td>
+            </tr>
+            <tr>
+                <td>15:00~16:00</td>
+                <td>옵션 만기일</td>
+                <td>변동성 확대 구간</td>
+            </tr>
+        </table>
+
+        <h2>💡 핵심 결론</h2>
+
+        <div class="positive-box" style="background: linear-gradient(135deg, #ebf8ff 0%, #bee3f8 100%); border-left-color: #3182ce;">
+            <strong>🎯 Today's Takeaway:</strong><br><br>
+            1. <strong>TSMC 실적</strong>이 AI/반도체 스토리를 재점화 → 밸류체인 전반 수혜<br>
+            2. S&P 500 <strong>7,000 돌파</strong> 임박 → 기관 전망치 하단 조기 달성<br>
+            3. <strong>금리 인하 기대 후퇴</strong> → 연준 "올해 동결 가능" 시사<br>
+            4. <strong>지정학 리스크</strong> 부상 → 항모 중동 이동, 변동성 확대 가능성<br>
+            5. <strong>옵션 만기일(1/16)</strong> → 단기 트레이딩 주의
+        </div>
+
+        <footer>
+            📌 본 분석은 투자 권유가 아닌 정보 제공 목적입니다.<br>
+            출처: CIA.chat 멤버미팅 (2026.01.15) | 작성: Claude AI
+        </footer>
+    </div>
+</body>
+</html>
