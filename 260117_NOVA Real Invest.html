@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>트럼프 AI 전기비용 정책 & 마이크론 급등 분석</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            line-height: 1.7;
+            color: #1a1a1a;
+            background: #f8f9fa;
+            padding: 16px;
+            max-width: 100%;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 20px;
+        }
+        h1 {
+            font-size: 1.5rem;
+            color: #1a365d;
+            border-bottom: 3px solid #3182ce;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        h2 {
+            font-size: 1.2rem;
+            color: #2c5282;
+            margin: 28px 0 16px 0;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, #ebf8ff 0%, #bee3f8 100%);
+            border-radius: 8px;
+            border-left: 4px solid #3182ce;
+        }
+        h3 {
+            font-size: 1.1rem;
+            color: #2d3748;
+            margin: 20px 0 12px 0;
+            padding-left: 12px;
+            border-left: 3px solid #63b3ed;
+        }
+        p {
+            margin-bottom: 14px;
+            text-align: justify;
+        }
+        .highlight {
+            background: linear-gradient(180deg, transparent 60%, #fef3c7 60%);
+            font-weight: 600;
+        }
+        .important {
+            background: #fff5f5;
+            border: 1px solid #fc8181;
+            border-radius: 8px;
+            padding: 14px;
+            margin: 16px 0;
+        }
+        .important-title {
+            color: #c53030;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .positive {
+            color: #22543d;
+            background: #c6f6d5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .negative {
+            color: #742a2a;
+            background: #fed7d7;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .neutral {
+            color: #744210;
+            background: #fefcbf;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .info-box {
+            background: #ebf8ff;
+            border-radius: 8px;
+            padding: 14px;
+            margin: 16px 0;
+            border: 1px solid #90cdf4;
+        }
+        .chart-container {
+            background: #fff;
+            border-radius: 10px;
+            padding: 16px;
+            margin: 20px 0;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin: 16px 0;
+        }
+        th, td {
+            padding: 10px 8px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        th {
+            background: #2c5282;
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background: #f7fafc;
+        }
+        tr:hover {
+            background: #edf2f7;
+        }
+        .meta-info {
+            font-size: 0.85rem;
+            color: #718096;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #f7fafc;
+            border-radius: 6px;
+        }
+        ul, ol {
+            margin: 12px 0 12px 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .summary-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 18px;
+            margin: 20px 0;
+        }
+        .summary-box h3 {
+            color: white;
+            border-left: 3px solid #fff;
+            margin-top: 0;
+        }
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 16px 0;
+        }
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .bar-label {
+            min-width: 80px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .bar-wrapper {
+            flex: 1;
+            background: #e2e8f0;
+            border-radius: 4px;
+            height: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .bar {
+            height: 100%;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            font-size: 0.75rem;
+            color: white;
+            font-weight: 600;
+        }
+        .bar.positive-bar {
+            background: linear-gradient(90deg, #48bb78, #38a169);
+        }
+        .bar.negative-bar {
+            background: linear-gradient(90deg, #fc8181, #e53e3e);
+        }
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #cbd5e0, transparent);
+            margin: 24px 0;
+        }
+        .stock-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px;
+            margin: 12px 0;
+            background: #fff;
+        }
+        .stock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .stock-ticker {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #2d3748;
+        }
+        .stock-change {
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+        .up {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        .down {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+            font-size: 0.8rem;
+            color: #718096;
+            text-align: center;
+        }
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin: 2px;
+        }
+        .tag-policy {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .tag-fed {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .tag-sector {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .timeline {
+            border-left: 3px solid #3182ce;
+            padding-left: 16px;
+            margin: 16px 0;
+        }
+        .timeline-item {
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -22px;
+            top: 6px;
+            width: 10px;
+            height: 10px;
+            background: #3182ce;
+            border-radius: 50%;
+        }
+        .timeline-date {
+            font-size: 0.8rem;
+            color: #718096;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 트럼프 AI 전기비용 정책 & 마이크론 급등 분석</h1>
+        
+        <div class="meta-info">
+            📅 <strong>방송일:</strong> 2026년 1월 17일 (금) | 
+            📺 <strong>출처:</strong> NOVA Real Invest | 
+            🏷️ <span class="tag tag-policy">정책 리스크</span>
+            <span class="tag tag-fed">연준</span>
+            <span class="tag tag-sector">반도체</span>
+        </div>
+
+        <div class="summary-box">
+            <h3>📌 핵심 요약</h3>
+            <ul style="margin-left: 16px;">
+                <li><strong>10년물 국채금리</strong> 4.23% 돌파 (4개월 최고치)</li>
+                <li><strong>마이크론(MU)</strong> +7.76% 급등 - 내부자 매수</li>
+                <li><strong>트럼프 전력 정책</strong>: 빅테크에 발전소 건설비용 부담</li>
+                <li><strong>CEG/VST 급락</strong> vs <strong>GEV 급등</strong> - 정책 수혜 명암</li>
+                <li><strong>ASTS</strong> +14.32% - 미사일방어국 계약 수주</li>
+            </ul>
+        </div>
+
+        <h2>1️⃣ 시장 개요 - 옵션 만기일의 변동성</h2>
+        
+        <p>2026년 1월 17일은 <span class="highlight">세 번째 금요일(옵션 만기일)</span>로, 시장의 막판 움직임이 다음 주 방향성을 가늠하는 중요한 시점이었습니다. 전일 콜옵션과 풋옵션의 비율이 이례적으로 나타나면서 시장 하락을 예고했고, 실제로 장 막판 <span class="negative">급락</span>이 나타났습니다.</p>
+
+        <div class="chart-container">
+            <h4 style="margin-bottom: 12px; color: #2d3748;">📈 주요 지수 등락률</h4>
+            <div class="bar-chart">
+                <div class="bar-item">
+                    <span class="bar-label">S&P 500</span>
+                    <div class="bar-wrapper">
+                        <div class="bar positive-bar" style="width: 30%;">+0.06%</div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <span class="bar-label">NASDAQ</span>
+                    <div class="bar-wrapper">
+                        <div class="bar positive-bar" style="width: 30%;">+0.06%</div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <span class="bar-label">DOW</span>
+                    <div class="bar-wrapper">
+                        <div class="bar positive-bar" style="width: 45%;">+0.17%</div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <span class="bar-label">Russell 2000</span>
+                    <div class="bar-wrapper">
+                        <div class="bar positive-bar" style="width: 35%;">+0.09%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="important">
+            <div class="important-title">⚠️ 10년물 국채금리 4.23% 돌파</div>
+            <p style="margin-bottom: 0;"><strong>4개월 통계 기준 최고치</strong>를 기록하며 기술주와 소형주에 부담으로 작용. 금리 상승은 할인율 증가로 성장주 밸류에이션에 하방 압력을 가합니다.</p>
+        </div>
+
+        <h2>2️⃣ 연준 의장 인선 드라마 - 케빈 vs 케빈</h2>
+        
+        <p>트럼프 대통령이 연준 의장 후보와 관련해 시장에 혼란을 주는 발언을 했습니다.</p>
+
+        <div class="chart-container">
+            <table>
+                <tr>
+                    <th>구분</th>
+                    <th>케빈 해셋 (Kevin Hassett)</th>
+                    <th>케빈 워시 (Kevin Warsh)</th>
+                </tr>
+                <tr>
+                    <td><strong>현직</strong></td>
+                    <td>국가경제위원회 위원장</td>
+                    <td>前 연준 이사</td>
+                </tr>
+                <tr>
+                    <td><strong>금리 스탠스</strong></td>
+                    <td>200bp 인하 주장 (극도로 비둘기파)</td>
+                    <td>상대적 매파 (독립성 중시)</td>
+                </tr>
+                <tr>
+                    <td><strong>트럼프 발언</strong></td>
+                    <td>"현재 자리에 유임시키고 싶다"</td>
+                    <td>폴리마켓 예측 상승</td>
+                </tr>
+                <tr>
+                    <td><strong>시장 반응</strong></td>
+                    <td>충격 (금리 인하 기대 후퇴)</td>
+                    <td>연준 독립성 유지 기대</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="info-box">
+            <strong>💡 시장 해석</strong><br>
+            트럼프 대통령이 연준 의장 제롬 파월에 대해 법무부 조사를 지시(건물 리모델링 비용 문제)하는 등 <span class="highlight">정치적 압박</span>을 가하고 있습니다. 이는 시장에 불확실성을 주는 "길들이기" 전략으로 해석되며, 인선 결정 전까지 변동성이 지속될 전망입니다.
+        </div>
+
+        <h2>3️⃣ 마이크론(MU) 급등 - 내부자의 확신</h2>
+
+        <div class="stock-card">
+            <div class="stock-header">
+                <span class="stock-ticker">MU (마이크론)</span>
+                <span class="stock-change up">+7.76%</span>
+            </div>
+            <p style="font-size: 0.9rem; color: #4a5568;">장후 추가 +0.26% → 하루 총 약 <strong>+8%</strong> 상승</p>
+        </div>
+
+        <h3>📋 급등 배경</h3>
+        <ol>
+            <li><strong>기관 업그레이드:</strong> 지속적인 목표가 상향</li>
+            <li><strong>내부자 대량 매수:</strong> 마크 리우(Mark Liu) 이사의 $7.8M 매입</li>
+        </ol>
+
+        <div class="chart-container">
+            <h4 style="margin-bottom: 12px; color: #2d3748;">👤 마크 리우 (Mark Liu) 프로필</h4>
+            <table>
+                <tr>
+                    <th>항목</th>
+                    <th>내용</th>
+                </tr>
+                <tr>
+                    <td>현직</td>
+                    <td>마이크론 이사(Director)</td>
+                </tr>
+                <tr>
+                    <td>전직</td>
+                    <td><strong>TSMC CEO</strong></td>
+                </tr>
+                <tr>
+                    <td>매수 금액</td>
+                    <td>$7.8 Million (약 100억원)</td>
+                </tr>
+                <tr>
+                    <td>매수 기간</td>
+                    <td>1월 13일~14일 (2일간 분할 매수)</td>
+                </tr>
+                <tr>
+                    <td>매수 단가</td>
+                    <td>$336~$337</td>
+                </tr>
+                <tr>
+                    <td>공시일</td>
+                    <td>1월 15일</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="info-box">
+            <strong>💡 투자 시사점</strong><br>
+            TSMC CEO 출신의 반도체 업계 거물이 개인 자금으로 대량 매수했다는 것은 <span class="highlight">HBM(고대역폭메모리) 수요와 AI 반도체 병목현상</span>에 대한 내부자 확신을 보여줍니다. 이분조차 <strong>분할 매수</strong>를 했다는 점도 주목할 만합니다.
+        </div>
+
+        <h2>4️⃣ 트럼프 전력 정책 - AI 전기비용 폭탄</h2>
+
+        <div class="important">
+            <div class="important-title">🔌 핵심 정책</div>
+            <p style="margin-bottom: 0;"><strong>빅테크 기업들이 신규 발전소 건설 비용을 직접 부담</strong>해야 한다는 트럼프 행정부의 구상이 나왔습니다. 데이터센터의 폭증하는 전력 수요를 해결하기 위한 방안입니다.</p>
+        </div>
+
+        <h3>📊 정책 구조</h3>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-date">문제 인식</div>
+                <strong>전력 부족 심각</strong> - 데이터센터 1개 = 소도시 전체 전력 소비량
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">해결 방안</div>
+                <strong>IPP(민자발전소)</strong>가 10년간 전력 사용권을 경매로 판매
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">자금 조달</div>
+                <strong>빅테크(MS, Google, Amazon 등)</strong>가 선납금으로 발전소 건설비 부담
+            </div>
+        </div>
+
+        <h3>📈 섹터별 영향</h3>
+        <div class="chart-container">
+            <table>
+                <tr>
+                    <th>종목</th>
+                    <th>등락률</th>
+                    <th>영향</th>
+                </tr>
+                <tr>
+                    <td><strong>CEG</strong><br>(Constellation Energy)</td>
+                    <td class="negative">-9.79%</td>
+                    <td>전력 판매 수익 감소 우려</td>
+                </tr>
+                <tr>
+                    <td><strong>VST</strong><br>(Vistra)</td>
+                    <td class="negative">-7.50%</td>
+                    <td>빅테크 계약 불확실성</td>
+                </tr>
+                <tr>
+                    <td><strong>GEV</strong><br>(GE Vernova)</td>
+                    <td class="positive">+6.11%</td>
+                    <td>발전소 터빈 수요 증가 수혜</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="info-box">
+            <strong>💡 투자 포인트</strong><br>
+            <span class="highlight">GE Vernova(GEV)</span>는 발전소 터빈 제조업체로, 누가 발전소를 짓든 장비 수요는 증가합니다. <strong>정책 리스크에서 자유로운 "곡괭이 파는 기업"</strong> 전략의 대표 사례입니다.
+        </div>
+
+        <h2>5️⃣ ASTS 급등 - 방산 진출</h2>
+
+        <div class="stock-card">
+            <div class="stock-header">
+                <span class="stock-ticker">ASTS (AST SpaceMobile)</span>
+                <span class="stock-change up">+14.32%</span>
+            </div>
+            <p style="font-size: 0.9rem; color: #4a5568;">장후 추가 +0.52% → 약 <strong>+15%</strong> 상승</p>
+        </div>
+
+        <h3>📋 급등 배경</h3>
+        <p><strong>MDA(미사일방어국)</strong>의 SHIELD 프로그램 입찰 수주 소식이 호재로 작용했습니다.</p>
+
+        <div class="chart-container">
+            <table>
+                <tr>
+                    <th>항목</th>
+                    <th>내용</th>
+                </tr>
+                <tr>
+                    <td>계약 기관</td>
+                    <td>MDA (Missile Defense Agency)</td>
+                </tr>
+                <tr>
+                    <td>프로그램</td>
+                    <td>SHIELD</td>
+                </tr>
+                <tr>
+                    <td>예상 규모</td>
+                    <td>약 $1,510억 달러</td>
+                </tr>
+                <tr>
+                    <td>의미</td>
+                    <td>상업용 통신위성 → <strong>방산 시장 진출</strong></td>
+                </tr>
+            </table>
+        </div>
+
+        <h2>6️⃣ 주택시장 - 말과 행동의 괴리</h2>
+
+        <div class="chart-container">
+            <table>
+                <tr>
+                    <th>지표</th>
+                    <th>결과</th>
+                    <th>해석</th>
+                </tr>
+                <tr>
+                    <td>NAHB 빌더심리지수</td>
+                    <td><span class="negative">37</span> (부정적)</td>
+                    <td>"경기 안 좋다" 주장</td>
+                </tr>
+                <tr>
+                    <td>주택 착공 건수</td>
+                    <td><span class="positive">증가</span></td>
+                    <td>실제로는 계속 짓는 중</td>
+                </tr>
+                <tr>
+                    <td>건축 허가 건수</td>
+                    <td><span class="positive">증가</span></td>
+                    <td>신규 프로젝트 확대</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="info-box">
+            <strong>💡 해석</strong><br>
+            빌더들이 심리지수에서는 "불경기"를 외치지만, 실제 <strong>착공과 허가는 증가</strong>하는 모순된 양상. 이는 <span class="highlight">"말보다 행동(데이터)"을 봐야 한다</span>는 투자 원칙을 상기시킵니다.
+        </div>
+
+        <h2>7️⃣ 트럼프 정책 리스크 대응 전략</h2>
+
+        <h3>🎯 핵심 원칙</h3>
+        <p><strong>"정책이 바뀌어도 어느 쪽으로 움직이든 항상 돈이 이동하는 경로를 찾아라"</strong></p>
+
+        <div class="chart-container">
+            <table>
+                <tr>
+                    <th>전략</th>
+                    <th>비중</th>
+                    <th>특징</th>
+                </tr>
+                <tr>
+                    <td><strong>코어 안정축</strong><br>(MSFT, NVDA 등)</td>
+                    <td>40~50%</td>
+                    <td>정책 무관하게 성장</td>
+                </tr>
+                <tr>
+                    <td><strong>정책 수혜주</strong><br>(방산, 에너지, 원자재)</td>
+                    <td>20~30%</td>
+                    <td>정책 혼란 시 강세</td>
+                </tr>
+                <tr>
+                    <td><strong>변동성 대응</strong><br>(테마 ETF)</td>
+                    <td>10~20%</td>
+                    <td>로테이션 활용</td>
+                </tr>
+                <tr>
+                    <td><strong>헷지 자산</strong><br>(금, 은, 단기채)</td>
+                    <td>10%</td>
+                    <td>정책 실패 시 보호</td>
+                </tr>
+            </table>
+        </div>
+
+        <h3>⚠️ 정신건강을 지키는 투자 원칙</h3>
+        <ol>
+            <li><strong>정책 발언에 즉각 풀베팅 금지</strong> - 첫 반응은 항상 과잉</li>
+            <li><strong>믿음으로 보유하지 말 것</strong> - 지식이 중요</li>
+            <li><strong>자산을 바꾸지 말고 비중만 조절</strong></li>
+        </ol>
+
+        <h2>8️⃣ 다음 주 주요 일정</h2>
+
+        <div class="chart-container">
+            <table>
+                <tr>
+                    <th>날짜</th>
+                    <th>이벤트</th>
+                    <th>중요도</th>
+                </tr>
+                <tr>
+                    <td>1/20 (월)</td>
+                    <td>🇺🇸 <strong>미국 휴장</strong><br>(마틴 루터 킹 데이)</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>1/21~24</td>
+                    <td>🇨🇭 <strong>다보스 포럼</strong><br>(트럼프 연설 예정)</td>
+                    <td>⭐⭐⭐</td>
+                </tr>
+                <tr>
+                    <td>1/22 (수)</td>
+                    <td>📊 <strong>넷플릭스 실적 발표</strong></td>
+                    <td>⭐⭐⭐</td>
+                </tr>
+                <tr>
+                    <td>1/23 (목)</td>
+                    <td>📊 <strong>GDP 발표</strong></td>
+                    <td>⭐⭐⭐</td>
+                </tr>
+                <tr>
+                    <td>1/24 (금)</td>
+                    <td>📊 <strong>PMI 발표</strong></td>
+                    <td>⭐⭐</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2>9️⃣ 투자 시사점 종합</h2>
+
+        <div class="summary-box">
+            <h3>✅ 단기 전략</h3>
+            <ul style="margin-left: 16px;">
+                <li>기술주 움직임 모니터링 (금리 4.23% 부담)</li>
+                <li>소프트웨어 주식(CRM 등) 단기 피하기</li>
+                <li>무리한 배팅 자제 (넷플릭스 실적 변동성)</li>
+            </ul>
+        </div>
+
+        <div class="summary-box" style="background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);">
+            <h3>✅ 중장기 전략</h3>
+            <ul style="margin-left: 16px;">
+                <li><strong>GE Vernova</strong> 등 정책 리스크 자유 종목 주목</li>
+                <li><strong>한국 시장</strong> - KOSPI 5000 전망, SK하이닉스/삼성전자 HBM 수혜</li>
+                <li><strong>우주/방산 섹터</strong> - 지정학 리스크 시 강세</li>
+                <li>미국만 보지 말고 <strong>대체 투자처(한국)</strong> 고려</li>
+            </ul>
+        </div>
+
+        <div class="important">
+            <div class="important-title">⚠️ 리스크 요인</div>
+            <ul>
+                <li>연준 의장 인선 불확실성 지속</li>
+                <li>트럼프 다보스 포럼 연설 (추가 정책 발표 가능)</li>
+                <li>지정학 갈등 (이란, 그린란드, 미국 내 갈등)</li>
+                <li>10년물 금리 추가 상승 시 기술주 압박</li>
+            </ul>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="footer">
+            <p>📌 본 분석은 투자 권유가 아닌 정보 제공 목적입니다.</p>
+            <p>💡 투자 결정은 본인의 판단과 책임하에 이루어져야 합니다.</p>
+            <p>📅 작성일: 2026년 1월 17일</p>
+        </div>
+    </div>
+</body>
+</html>
