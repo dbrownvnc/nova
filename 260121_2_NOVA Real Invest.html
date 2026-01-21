@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>그린란드 관세 위협 → 시장 직격! VIX 20 공포 레벨 분석</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e8e8e8;
+            line-height: 1.7;
+            padding: 16px;
+            max-width: 100%;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #c0392b 0%, #8e44ad 100%);
+            border-radius: 16px;
+            padding: 24px 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .header .meta {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        .section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border-left: 4px solid #3498db;
+        }
+        .section-red { border-left-color: #e74c3c; }
+        .section-green { border-left-color: #27ae60; }
+        .section-yellow { border-left-color: #f1c40f; }
+        .section-purple { border-left-color: #9b59b6; }
+        .section h2 {
+            font-size: 1.15rem;
+            color: #3498db;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-red h2 { color: #e74c3c; }
+        .section-green h2 { color: #27ae60; }
+        .section-yellow h2 { color: #f1c40f; }
+        .section-purple h2 { color: #9b59b6; }
+        p {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+        .highlight {
+            background: rgba(231, 76, 60, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+        .highlight-green {
+            background: rgba(39, 174, 96, 0.2);
+            color: #2ecc71;
+        }
+        .highlight-yellow {
+            background: rgba(241, 196, 15, 0.2);
+            color: #f1c40f;
+        }
+        .chart-container {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .chart-title {
+            font-size: 0.9rem;
+            color: #bdc3c7;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .bar-label {
+            width: 100px;
+            font-size: 0.85rem;
+            text-align: right;
+        }
+        .bar-wrapper {
+            flex: 1;
+            height: 28px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        .bar {
+            height: 100%;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .bar-negative {
+            background: linear-gradient(90deg, #c0392b, #e74c3c);
+        }
+        .bar-positive {
+            background: linear-gradient(90deg, #27ae60, #2ecc71);
+        }
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, #e74c3c, #f39c12);
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+            padding: 12px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 16px;
+            width: 12px;
+            height: 12px;
+            background: #e74c3c;
+            border-radius: 50%;
+            border: 2px solid #1a1a2e;
+        }
+        .timeline-item:last-child::before {
+            background: #f39c12;
+        }
+        .timeline-date {
+            font-size: 0.8rem;
+            color: #e74c3c;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .timeline-item:last-child .timeline-date {
+            color: #f39c12;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .stat-box {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 14px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .stat-value.negative { color: #e74c3c; }
+        .stat-value.positive { color: #2ecc71; }
+        .stat-value.warning { color: #f1c40f; }
+        .stat-label {
+            font-size: 0.8rem;
+            color: #95a5a6;
+        }
+        .flow-diagram {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .flow-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+        }
+        .flow-item {
+            text-align: center;
+            flex: 1;
+        }
+        .flow-item .icon {
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+        }
+        .flow-item .label {
+            font-size: 0.75rem;
+            color: #95a5a6;
+        }
+        .flow-item .value {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .flow-arrow {
+            color: #95a5a6;
+            font-size: 1.2rem;
+        }
+        .quote-box {
+            background: linear-gradient(135deg, rgba(155, 89, 182, 0.2), rgba(142, 68, 173, 0.1));
+            border-left: 3px solid #9b59b6;
+            padding: 14px;
+            margin: 14px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 14px 0;
+            font-size: 0.85rem;
+        }
+        .compare-table th {
+            background: rgba(52, 152, 219, 0.3);
+            padding: 10px 8px;
+            text-align: left;
+            border-bottom: 2px solid #3498db;
+        }
+        .compare-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .compare-table tr:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .tag-buy { background: rgba(39, 174, 96, 0.3); color: #2ecc71; }
+        .tag-sell { background: rgba(231, 76, 60, 0.3); color: #e74c3c; }
+        .tag-hold { background: rgba(241, 196, 15, 0.3); color: #f1c40f; }
+        .insight-box {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.15), rgba(41, 128, 185, 0.1));
+            border: 1px solid rgba(52, 152, 219, 0.3);
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .insight-title {
+            font-size: 0.9rem;
+            color: #3498db;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.8rem;
+        }
+        .vix-meter {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .vix-scale {
+            height: 24px;
+            background: linear-gradient(90deg, #27ae60 0%, #f1c40f 40%, #e67e22 60%, #e74c3c 80%, #8e44ad 100%);
+            border-radius: 12px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+        .vix-marker {
+            position: absolute;
+            top: -8px;
+            width: 4px;
+            height: 40px;
+            background: white;
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+        .vix-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: #95a5a6;
+        }
+        .europe-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 14px 0;
+        }
+        .europe-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .europe-card .icon {
+            font-size: 1.5rem;
+            width: 40px;
+            text-align: center;
+        }
+        .europe-card .content {
+            flex: 1;
+        }
+        .europe-card .title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+        .europe-card .desc {
+            font-size: 0.8rem;
+            color: #95a5a6;
+        }
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇬🇱 그린란드 관세 위협 → 시장 직격!<br>VIX 20: 공포 레벨!</h1>
+            <div class="meta">📅 2026년 1월 20일 미국장 요약 | 안전자산 피난(금) vs 위험자산(주식)</div>
+        </div>
+
+        <!-- 핵심 요약 -->
+        <div class="section section-red">
+            <h2>🔥 핵심 이슈: 무슨 일이 있었나?</h2>
+            <p>트럼프 전 대통령이 소셜 미디어에 <span class="highlight">그린란드 매입 거래가 성사될 때까지 동맹국들에게 관세를 부과하겠다</span>고 발표했습니다. 이 한 문장이 글로벌 금융시장을 뒤흔들었습니다.</p>
+            
+            <div class="quote-box">
+                "그린란드를 완전히 사들이는 거래가 성사될 때까지 동맹국들한테 관세를 물리겠다"
+            </div>
+
+            <p>이번 발표가 충격적인 이유는 <strong>경제적 이유가 아닌 지정학적 목적</strong>으로 관세라는 경제 무기를 사용하겠다고 선언했기 때문입니다. 시장은 이러한 <span class="highlight">예측 불가능한 정책 불확실성</span>에 강하게 반응했습니다.</p>
+        </div>
+
+        <!-- 관세 2단계 계획 -->
+        <div class="section section-yellow">
+            <h2>⏰ 관세 부과 2단계 계획</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">1단계: 2026년 2월</div>
+                    <p><strong>나토 동맹국 8개국</strong>에 <span class="highlight">10% 관세</span> 부과 시작</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2단계: 2026년 6월</div>
+                    <p>거래 미성사 시 관세율 <span class="highlight-yellow">25%까지 인상</span> - 사실상 최후통첩</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 시장 반응 통계 -->
+        <div class="section section-red">
+            <h2>📉 시장 반응: 3대 지수 동반 급락</h2>
+            <p>미국을 대표하는 3대 지수가 모두 큰 폭으로 하락했습니다. 지난 <strong>10월 이후 최악의 하루</strong>로 기록되었습니다.</p>
+            
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="stat-value negative">-870.74</div>
+                    <div class="stat-label">다우존스 (포인트)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value warning">20.99</div>
+                    <div class="stat-label">VIX 공포지수</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">📊 주요 지수 하락폭 (2026.01.20)</div>
+                <div class="bar-chart">
+                    <div class="bar-item">
+                        <div class="bar-label">다우존스</div>
+                        <div class="bar-wrapper">
+                            <div class="bar bar-negative" style="width: 85%;">-870pt</div>
+                        </div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">S&P 500</div>
+                        <div class="bar-wrapper">
+                            <div class="bar bar-negative" style="width: 70%;">대폭 하락</div>
+                        </div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">나스닥</div>
+                        <div class="bar-wrapper">
+                            <div class="bar bar-negative" style="width: 75%;">대폭 하락</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIX 공포지수 -->
+        <div class="section section-yellow">
+            <h2>😰 VIX 공포지수 분석</h2>
+            <p><strong>VIX(Volatility Index)</strong>는 월가의 '공포 지수'로 불리며, 시장의 불안감을 수치로 보여줍니다.</p>
+            
+            <div class="vix-meter">
+                <div class="chart-title">VIX 지수 현황: 20.99</div>
+                <div class="vix-scale">
+                    <div class="vix-marker" style="left: 52%;"></div>
+                </div>
+                <div class="vix-labels">
+                    <span>0 안정</span>
+                    <span>15 보통</span>
+                    <span>20 경계⚠️</span>
+                    <span>30 공포</span>
+                    <span>40+ 극단</span>
+                </div>
+            </div>
+
+            <div class="insight-box">
+                <div class="insight-title">💡 VIX 해석 가이드</div>
+                <p style="font-size: 0.85rem;">VIX가 <strong>20을 넘어섰다</strong>는 것은 투자자들의 공포심이 상당히 높아졌음을 의미합니다. 일반적으로 VIX 20 이상은 시장 불안정의 신호로, 변동성이 커지고 급격한 가격 움직임이 예상됩니다.</p>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 자금 흐름 -->
+        <div class="section section-green">
+            <h2>💰 자금 흐름: 안전자산 선호 현상</h2>
+            <p>폭풍우가 몰아칠 때 배들이 안전한 항구로 피신하듯, 투자자들도 위험자산에서 안전자산으로 자금을 이동시켰습니다.</p>
+
+            <div class="flow-diagram">
+                <div class="chart-title">자산별 자금 흐름 변화</div>
+                <div class="flow-row">
+                    <div class="flow-item">
+                        <div class="icon">📈</div>
+                        <div class="label">미국 주식</div>
+                        <div class="value" style="color: #e74c3c;">↓ 하락</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-item">
+                        <div class="icon">💵</div>
+                        <div class="label">미국 달러</div>
+                        <div class="value" style="color: #e74c3c;">↓ 하락</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-item">
+                        <div class="icon">📄</div>
+                        <div class="label">미국 국채</div>
+                        <div class="value" style="color: #f39c12;">↓ 매도</div>
+                    </div>
+                </div>
+                <div class="flow-row" style="background: rgba(39, 174, 96, 0.1);">
+                    <div class="flow-item" style="flex: 2;">
+                        <div class="icon">🥇</div>
+                        <div class="label">금 (Gold)</div>
+                        <div class="value" style="color: #2ecc71; font-size: 1.1rem;">↑ +3.7% 급등</div>
+                    </div>
+                </div>
+            </div>
+
+            <p><span class="highlight-green">금이 +3.7% 급등</span>하며 진정한 안전자산의 면모를 보여주었습니다. 특히 주목할 점은 평소 안전자산으로 여겨지던 <strong>미국 국채마저 매도 대상</strong>이 되었다는 것입니다.</p>
+        </div>
+
+        <!-- Sell America Day -->
+        <div class="section section-red">
+            <h2>🏴 "Sell America Day" - 미국 자체를 팔아라</h2>
+            <p>월가에서는 이 날을 <span class="highlight">"셀 아메리카 데이(Sell America Day)"</span>라고 불렀습니다. 개별 주식이 아닌 <strong>미국이라는 시장 전체</strong>에서 발을 빼는 현상이 나타났습니다.</p>
+
+            <div class="insight-box">
+                <div class="insight-title">📌 상징적 사건: 덴마크 연기금 미국 국채 매도</div>
+                <p style="font-size: 0.85rem;">덴마크의 한 대형 연기금이 "미국 재정의 불안해서 못 믿겠다"며 <strong>1억 달러(약 1,000억 원 이상)</strong>의 미국 국채를 매도하겠다고 공식 발표했습니다. 'Sell America'가 구호가 아닌 현실이 된 순간이었습니다.</p>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 월가 의견 분열 -->
+        <div class="section section-purple">
+            <h2>⚔️ 월가 의견 분열: 기회 vs 위기</h2>
+            <p>시장이 급락하자 월가의 전문가들은 크게 두 진영으로 갈렸습니다.</p>
+
+            <table class="compare-table">
+                <tr>
+                    <th>📈 낙관론 (Buy the Dip)</th>
+                    <th>📉 비관론 (New Risk)</th>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>시티그룹</strong><br>
+                        "저가 매수 기회다"
+                    </td>
+                    <td>
+                        <strong>웰스파이어</strong><br>
+                        "새로운 종류의 위험"
+                    </td>
+                </tr>
+                <tr>
+                    <td>정치적 소음은 일시적</td>
+                    <td>예측 불가능한 시나리오</td>
+                </tr>
+                <tr>
+                    <td>기업 실적은 튼튼함</td>
+                    <td>경제 외 요인으로 관세 위협</td>
+                </tr>
+                <tr>
+                    <td><span class="tag tag-buy">BUY</span></td>
+                    <td><span class="tag tag-sell">CAUTION</span></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- TACO 이론 -->
+        <div class="section">
+            <h2>🌮 TACO 이론이란?</h2>
+            <p><strong>TACO 이론</strong>은 월가 베테랑들 사이에서 통용되는 비공식 이론입니다.</p>
+
+            <div class="quote-box">
+                <strong>T.A.C.O.</strong> = Trump Always Chickens Out<br>
+                "트럼프는 항상 마지막에 겁먹고 물러선다"
+            </div>
+
+            <p>이 이론에 따르면, 트럼프는 극단적인 카드로 상대를 위협하다가도 <span class="highlight-yellow">주식 시장이 진짜 위험해질 것 같으면</span> 결국 슬쩍 물러서는 패턴을 보여왔습니다. 과거 경험에서 나온 일종의 '생존 공식'입니다.</p>
+
+            <div class="insight-box">
+                <div class="insight-title">⚠️ 투자자 유의사항</div>
+                <p style="font-size: 0.85rem;">TACO 이론이 이번에도 적용될지는 미지수입니다. 이번 위협은 경제가 아닌 <strong>지정학적 목적</strong>이 명확하여, 기존 패턴과 다를 수 있습니다.</p>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 유럽의 대응 -->
+        <div class="section section-yellow">
+            <h2>🇪🇺 유럽의 대응 카드</h2>
+            <p>유럽도 가만히 당하고만 있지 않을 전망입니다. 유럽이 가진 '경제 바주카포'를 살펴봅니다.</p>
+
+            <div class="europe-cards">
+                <div class="europe-card">
+                    <div class="icon">🥃</div>
+                    <div class="content">
+                        <div class="title">1차 대응: 보복 관세</div>
+                        <div class="desc">버번 위스키, 할리 데이비슨 등 미국 상징 제품에 동일한 관세 부과</div>
+                    </div>
+                </div>
+                <div class="europe-card" style="border: 1px solid rgba(231, 76, 60, 0.3);">
+                    <div class="icon">💣</div>
+                    <div class="content">
+                        <div class="title" style="color: #e74c3c;">2차 대응: 반강합 수단 (진짜 무기)</div>
+                        <div class="desc">구글, 애플 등 미국 빅테크의 유럽 사업 제재 또는 대규모 벌금 부과</div>
+                    </div>
+                </div>
+            </div>
+
+            <p><strong>반강합 수단</strong>은 미국 빅테크 기업들의 유럽 사업을 직접 막거나 어마어마한 벌금을 부과할 수 있는 훨씬 더 강력한 카드입니다.</p>
+        </div>
+
+        <!-- 실물경제 영향 -->
+        <div class="section section-red">
+            <h2>🏭 실물경제에 미치는 영향</h2>
+            <p>이러한 정치적 줄다리기는 우리 실생활 경제에 직접적인 영향을 미칩니다.</p>
+
+            <div class="insight-box">
+                <div class="insight-title">📊 분석 자료 핵심 내용</div>
+                <p style="font-size: 0.85rem;">예측 불가능한 무역 정책 때문에 기업들이 <span class="highlight">신규 채용을 대폭 줄이고</span> 있습니다. 내일 무슨 일이 터질지 모르는 상황에서 투자 확대나 인력 채용을 결정하기 어렵기 때문입니다.</p>
+            </div>
+
+            <p><strong>불확실성의 비용</strong>: 하루하루의 주가 등락은 우리가 치러야 할 거대한 대가의 아주 작은 조각에 불과할 수 있습니다. 정책 불확실성은 기업 투자, 고용, 경제 성장 전반에 장기적인 영향을 미칩니다.</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 투자 시사점 -->
+        <div class="section section-green">
+            <h2>💡 투자 시사점 정리</h2>
+            
+            <table class="compare-table">
+                <tr>
+                    <th>구분</th>
+                    <th>시사점</th>
+                </tr>
+                <tr>
+                    <td><strong>단기</strong></td>
+                    <td>변동성 확대 예상, VIX 20+ 지속 시 리스크 관리 강화 필요</td>
+                </tr>
+                <tr>
+                    <td><strong>안전자산</strong></td>
+                    <td>금이 진정한 안전자산으로 부각, 미국 국채도 신뢰도 하락</td>
+                </tr>
+                <tr>
+                    <td><strong>섹터</strong></td>
+                    <td>유럽 노출도 높은 빅테크(GOOG, AAPL) 주의, 방어주 관심</td>
+                </tr>
+                <tr>
+                    <td><strong>전략</strong></td>
+                    <td>TACO 이론 고려하되 맹신 금물, 분할 매수/매도 전략 권장</td>
+                </tr>
+            </table>
+
+            <div class="insight-box">
+                <div class="insight-title">🎯 핵심 관전 포인트</div>
+                <p style="font-size: 0.85rem;">
+                    1️⃣ <strong>2월 관세 발효 여부</strong>: 실제 시행 vs 협상 카드<br>
+                    2️⃣ <strong>유럽의 대응 강도</strong>: 보복 관세 수준 결정<br>
+                    3️⃣ <strong>VIX 추이</strong>: 20 아래로 안정화 vs 상승 지속<br>
+                    4️⃣ <strong>금값 동향</strong>: 안전자산 선호 지속 여부
+                </p>
+            </div>
+        </div>
+
+        <!-- 용어 설명 -->
+        <div class="section">
+            <h2>📚 주요 용어 설명</h2>
+            <table class="compare-table">
+                <tr>
+                    <td><strong>VIX</strong></td>
+                    <td>변동성 지수(Volatility Index). S&P 500 옵션 가격에서 산출되며, 시장의 공포심을 나타냄</td>
+                </tr>
+                <tr>
+                    <td><strong>안전자산 선호</strong></td>
+                    <td>Risk-off. 불확실성 증가 시 위험자산(주식)에서 안전자산(금, 채권)으로 자금 이동</td>
+                </tr>
+                <tr>
+                    <td><strong>Buy the Dip</strong></td>
+                    <td>주가 하락 시 저가 매수하는 전략. "떨어질 때 사라"</td>
+                </tr>
+                <tr>
+                    <td><strong>반강합 수단</strong></td>
+                    <td>EU의 무역 보복 조치 중 하나로, 특정 기업의 유럽 내 사업 제재 가능</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="footer">
+            <p>📌 본 분석은 투자 권유가 아닌 정보 제공 목적입니다</p>
+            <p>원본 영상: YouTube @NOVA Real Invest</p>
+            <p>분석 일자: 2026년 1월 21일</p>
+        </div>
+    </div>
+</body>
+</html>
