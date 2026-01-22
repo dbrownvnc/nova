@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>그린란드 딜 & 관세 유예 랠리 분석 | 2026.01.21</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            line-height: 1.7;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e8e8e8;
+            padding: 16px;
+            max-width: 100%;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 1.5rem;
+            color: #00d4ff;
+            text-align: center;
+            margin-bottom: 8px;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+        .date {
+            text-align: center;
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 24px;
+        }
+        h2 {
+            font-size: 1.2rem;
+            color: #ffd700;
+            margin: 28px 0 16px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #ffd700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        h3 {
+            font-size: 1.05rem;
+            color: #00ff88;
+            margin: 20px 0 12px 0;
+        }
+        p {
+            margin-bottom: 14px;
+            text-align: justify;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 140, 0, 0.1) 100%);
+            border-left: 4px solid #ffd700;
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .alert-box {
+            background: linear-gradient(135deg, rgba(255, 77, 77, 0.2) 0%, rgba(255, 0, 0, 0.1) 100%);
+            border-left: 4px solid #ff4d4d;
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .success-box {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.15) 0%, rgba(0, 200, 100, 0.1) 100%);
+            border-left: 4px solid #00ff88;
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .info-box {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15) 0%, rgba(0, 150, 200, 0.1) 100%);
+            border-left: 4px solid #00d4ff;
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 20px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        .chart-title {
+            color: #00d4ff;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        canvas {
+            max-width: 100%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.9rem;
+        }
+        th, td {
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        th {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            font-weight: 600;
+        }
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .up { color: #ff4d4d; font-weight: 600; }
+        .down { color: #00ff88; font-weight: 600; }
+        .tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin: 2px;
+        }
+        .tag-red { background: rgba(255, 77, 77, 0.3); color: #ff6b6b; }
+        .tag-green { background: rgba(0, 255, 136, 0.3); color: #00ff88; }
+        .tag-blue { background: rgba(0, 212, 255, 0.3); color: #00d4ff; }
+        .tag-gold { background: rgba(255, 215, 0, 0.3); color: #ffd700; }
+        .key-point {
+            background: rgba(255, 215, 0, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #ffd700;
+            font-weight: 600;
+        }
+        .number {
+            color: #00d4ff;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+        }
+        ul {
+            margin: 12px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ffd700, transparent);
+            margin: 32px 0;
+        }
+        .summary-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .ticker {
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 212, 255, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #00d4ff;
+            font-weight: 600;
+        }
+        footer {
+            text-align: center;
+            color: #666;
+            font-size: 0.8rem;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🇺🇸 그린란드 딜 & 관세 유예 랠리 해부</h1>
+        <p class="date">📅 2026년 1월 21일 (수) 미국시간 | NOVA Real Invest</p>
+
+        <!-- 핵심 요약 -->
+        <div class="summary-card">
+            <h3 style="margin-top: 0;">📌 오늘의 핵심 포인트</h3>
+            <ul>
+                <li><strong>그린란드 프레임워크</strong> 발표 → 시장 안도 랠리</li>
+                <li>두 차례 상승 파동: ①군사작전 철회 ②관세 유예</li>
+                <li>금(Gold) <span class="number">$4,800</span> 돌파, <span class="number">$5,000</span> 목표</li>
+                <li>10년물 금리 <span class="number">4.25%</span> → <span class="number">4.1%</span> 이하 필요</li>
+                <li>반도체 섹터 강세: 인텔 <span class="up">+11%</span>, AMD <span class="up">+7.1%</span></li>
+            </ul>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- 1. 시장 개요 -->
+        <h2>📊 1. 시장 개요 - 두 차례 상승 파동</h2>
+        
+        <p>오늘 미국 증시는 <span class="key-point">그린란드 이슈</span>로 인해 두 차례의 상승 파동을 경험했습니다. 이는 트럼프 대통령의 연속적인 발언에 기인합니다.</p>
+
+        <div class="chart-container">
+            <div class="chart-title">📈 오늘의 시장 움직임 - 두 차례 상승 파동</div>
+            <canvas id="marketWaveChart"></canvas>
+        </div>
+
+        <div class="highlight-box">
+            <strong>🔹 1차 상승 (오전)</strong><br>
+            트럼프 대통령: "그린란드에 군사작전은 안 할 것" 발언<br>
+            → 지정학적 리스크 완화 기대감으로 상승
+        </div>
+
+        <div class="highlight-box">
+            <strong>🔹 2차 상승 (다보스 포럼)</strong><br>
+            트럼프 대통령: "관세 유예" + "그린란드 프레임워크 완성" 발표<br>
+            → 추가 안도 랠리 발생
+        </div>
+
+        <div class="alert-box">
+            <strong>⚠️ 주의사항</strong><br>
+            "프레임워크"는 <strong>컨셉 수준</strong>일 뿐, 실제 합의가 완료된 것이 아닙니다. 구체적인 내용은 아직 공개되지 않았으며, 덴마크와의 협상이 필요합니다.
+        </div>
+
+        <h3>프레임워크 예상 내용</h3>
+        <ul>
+            <li>광물에 대한 접근권 확보</li>
+            <li>미군 군사기지 추가 배치 (골든돔 미사일 방어)</li>
+            <li>영구 조약 형태로 체결 예상</li>
+        </ul>
+
+        <div class="section-divider"></div>
+
+        <!-- 2. 주요 자산 동향 -->
+        <h2>💰 2. 주요 자산 동향</h2>
+
+        <div class="chart-container">
+            <div class="chart-title">📊 주요 자산 일간 등락률</div>
+            <canvas id="assetChart"></canvas>
+        </div>
+
+        <h3>🥇 금(Gold) - $4,800 돌파</h3>
+        <div class="success-box">
+            <p style="margin-bottom: 8px;">현재가: <span class="number">$4,837</span> (<span class="up">+1.4%</span>)</p>
+            <p style="margin-bottom: 8px;">기존 저항선 <span class="number">$4,590</span> 돌파 성공</p>
+            <p style="margin-bottom: 0;"><strong>목표가: $5,000</strong> - 지정학적 긴장과 달러 약세가 상승 동력</p>
+        </div>
+
+        <p><strong>금 상승 배경:</strong></p>
+        <ul>
+            <li>지정학적 긴장 지속 → 안전자산 수요 증가</li>
+            <li>달러화 약세 지속</li>
+            <li>미국 채권 금리 상승으로 채권 매력도 하락</li>
+            <li>유럽의 미국 채권 매도 가능성 우려</li>
+        </ul>
+
+        <h3>⛽ 천연가스 - 이틀 만에 57% 급등</h3>
+        <div class="info-box">
+            <p style="margin-bottom: 0;">미국 전역 혹한 영향으로 <span class="ticker">UNG</span> 등 천연가스 ETF 급등</p>
+        </div>
+
+        <table>
+            <tr>
+                <th>티커</th>
+                <th>종목명</th>
+                <th>등락률</th>
+            </tr>
+            <tr>
+                <td><span class="ticker">UNG</span></td>
+                <td>United States Natural Gas Fund</td>
+                <td class="up">+20%+</td>
+            </tr>
+            <tr>
+                <td><span class="ticker">BOIL</span></td>
+                <td>ProShares Ultra Bloomberg NG (3x)</td>
+                <td class="up">+20.32%</td>
+            </tr>
+            <tr>
+                <td><span class="ticker">FCG</span></td>
+                <td>First Trust Natural Gas ETF</td>
+                <td class="up">+3.26%</td>
+            </tr>
+            <tr>
+                <td><span class="ticker">EQT</span></td>
+                <td>EQT Corporation</td>
+                <td class="up">+6.51%</td>
+            </tr>
+        </table>
+
+        <div class="alert-box">
+            <strong>⚠️ 레버리지 ETF 주의</strong><br>
+            BOIL, KOLD 같은 3배 레버리지는 <strong>2~3일 이내</strong> 단기 매매용입니다. 장기 보유 시 녹아 없어집니다!
+        </div>
+
+        <h3>📈 10년물 금리</h3>
+        <table>
+            <tr>
+                <th>지표</th>
+                <th>수치</th>
+                <th>평가</th>
+            </tr>
+            <tr>
+                <td>현재 금리</td>
+                <td class="number">4.25%</td>
+                <td><span class="tag tag-red">위험 구간</span></td>
+            </tr>
+            <tr>
+                <td>안전 기준선</td>
+                <td class="number">4.1%</td>
+                <td><span class="tag tag-green">목표</span></td>
+            </tr>
+            <tr>
+                <td>변화</td>
+                <td class="down">-0.98%</td>
+                <td><span class="tag tag-blue">소폭 하락</span></td>
+            </tr>
+        </table>
+
+        <div class="section-divider"></div>
+
+        <!-- 3. 섹터별 분석 -->
+        <h2>🔥 3. 섹터별 분석</h2>
+
+        <div class="chart-container">
+            <div class="chart-title">📊 반도체 섹터 일간 등락률</div>
+            <canvas id="semiChart"></canvas>
+        </div>
+
+        <h3>🔷 반도체 - 전체적 강세</h3>
+        <table>
+            <tr>
+                <th>종목</th>
+                <th>등락률</th>
+                <th>특이사항</th>
+            </tr>
+            <tr>
+                <td><span class="ticker">INTC</span> 인텔</td>
+                <td class="up">+11%</td>
+                <td>신규 데스크탑 CPU 발표</td>
+            </tr>
+            <tr>
+                <td><span class="ticker">AMD</span></td>
+                <td class="up">+7.1%</td>
+                <td>AI 수혜 기대</td>
+            </tr>
+            <tr>
+                <td><span class="ticker">MU</span> 마이크론</td>
+                <td class="up">+6.61%</td>
+                <td>메모리 수요 기대</td>
+            </tr>
+            <tr>
+                <td><span class="ticker">NVDA</span> 엔비디아</td>
+                <td class="up">+3%+</td>
+                <td>AI 리더 지위 유지</td>
+            </tr>
+        </table>
+
+        <div class="info-box">
+            <strong>인텔 급등 배경</strong><br>
+            신규 데스크탑 CPU 발표에 더해, 미국 유일의 파운드리 + 엔비디아/정부 투자 + TSMC 경쟁력 등 복합적 호재가 겹쳐 상승. 다만 대부분 기존 뉴스의 재활용 측면이 있음.
+        </div>
+
+        <h3>🍎 애플 - 구글과 AI 파트너십</h3>
+        <div class="success-box">
+            <p style="margin-bottom: 8px;"><span class="ticker">AAPL</span> 오래간만에 상승</p>
+            <p style="margin-bottom: 0;"><strong>캄포스(Camphor) 프로젝트</strong>: 구글 AI를 활용한 iOS/Mac OS 통합 추진</p>
+        </div>
+
+        <ul>
+            <li>2026년 하반기 iOS 27, Mac OS 27에 챗봇 OS 통합 예정</li>
+            <li>기존 Siri + OpenAI 조합의 한계 → 구글 AI로 전환</li>
+            <li>앱 단위가 아닌 <strong>OS 레벨 통합</strong>으로 사용성 개선 기대</li>
+        </ul>
+
+        <h3>📺 스트리밍 - 넷플릭스 불확실성</h3>
+        <table>
+            <tr>
+                <th>항목</th>
+                <th>내용</th>
+            </tr>
+            <tr>
+                <td>현재 주가</td>
+                <td class="number">$85.36</td>
+            </tr>
+            <tr>
+                <td>어제 저점</td>
+                <td class="number">$83</td>
+            </tr>
+            <tr>
+                <td>워너브라더스 인수 확률</td>
+                <td><span class="number">69%</span> (AI 분석)</td>
+            </tr>
+            <tr>
+                <td>넷플릭스 제안가</td>
+                <td>$27.75 (올캐시)</td>
+            </tr>
+            <tr>
+                <td>적대적 공개매수가</td>
+                <td>$30</td>
+            </tr>
+        </table>
+
+        <p><strong>리스크 요인:</strong> 독점금지법 규제 가능성 (31% 확률로 무산 가능)</p>
+
+        <div class="highlight-box">
+            <strong>💡 긍정적 시그널</strong><br>
+            트럼프 대통령이 넷플릭스 회사채를 대규모 매입 → 장기적 신뢰 표시
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- 4. 정책 리스크 -->
+        <h2>⚖️ 4. 정책 리스크 분석</h2>
+
+        <h3>🏛️ 연준 독립성 이슈</h3>
+        <div class="info-box">
+            <p style="margin-bottom: 8px;"><strong>리사 쿡 연준위원</strong> 해임 시도</p>
+            <p style="margin-bottom: 0;">재판부 판결: "이런 이유로 연준 독립성을 훼손할 수 없다"</p>
+        </div>
+
+        <p>트럼프 대통령의 해임 시도 명목은 모기지 대출 서류 허위 기재였으나, 실질적 이유는 <strong>금리 정책 불만</strong>으로 추정됩니다. 보수 성향 판사들도 연준 독립성 보호에 손을 들어줌.</p>
+
+        <h3>💳 신용카드 금리 10% 상한 정책</h3>
+        <div class="alert-box">
+            <strong>⚠️ 극도로 위험한 정책</strong><br>
+            제이미 다이먼(JP모건 CEO) 경고: "시행 시 신용도 낮은 80% 국민이 카드 발급 거절 위험"
+        </div>
+
+        <p><strong>문제점:</strong></p>
+        <ul>
+            <li>미국 GDP의 75%가 소비로 구성</li>
+            <li>소비 위축 → 내수 경제 타격</li>
+            <li>버몬트 주 시범 운영 예정 (실효성 의문)</li>
+        </ul>
+
+        <div class="section-divider"></div>
+
+        <!-- 5. 러셀 소형주 분석 -->
+        <h2>📈 5. 러셀 2000 (소형주) 동향</h2>
+
+        <div class="chart-container">
+            <div class="chart-title">📊 지수별 일간 등락률 비교</div>
+            <canvas id="indexChart"></canvas>
+        </div>
+
+        <div class="success-box">
+            <p style="margin-bottom: 8px;"><span class="ticker">IWM</span> 러셀 2000: <span class="up">+1.98%</span></p>
+            <p style="margin-bottom: 0;">13거래일간 S&P 500 대비 초과 수익 달성</p>
+        </div>
+
+        <h3>소형주 강세 분석</h3>
+        <table>
+            <tr>
+                <th>관점</th>
+                <th>분석</th>
+            </tr>
+            <tr>
+                <td>긍정적 해석</td>
+                <td>메가캡에서 충분히 수익 실현 → 저평가 소형주로 로테이션</td>
+            </tr>
+            <tr>
+                <td>부정적 해석</td>
+                <td>건전한 확산이 아닌 공격적 순환매, 헤지 성격 강함</td>
+            </tr>
+            <tr>
+                <td>리스크</td>
+                <td>10년물 금리 4.3% 돌파 시 이자비용 부담으로 급락 가능</td>
+            </tr>
+        </table>
+
+        <div class="section-divider"></div>
+
+        <!-- 6. 한국 시장 -->
+        <h2>🇰🇷 6. 한국 시장 시사점</h2>
+
+        <div class="success-box">
+            <p style="margin-bottom: 8px;"><span class="ticker">KORU</span> ETF: 2025년 4월 대비 <span class="up">+1,000%</span> (10배)</p>
+            <p style="margin-bottom: 0;"><span class="ticker">EWY</span>: <span class="up">+4.23%</span></p>
+        </div>
+
+        <p><strong>코스피 5,000 전망 배경:</strong></p>
+        <ul>
+            <li>법치 정상화 → 자본주의 시스템 정상 작동</li>
+            <li>정치적 불확실성 해소</li>
+            <li>글로벌 자금 유입 기대</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>💡 핵심 인사이트</strong><br>
+            "자본주의는 거의 완벽한 시스템이나, 법치가 무너지면 작동하지 않는다. 양아치만 제거하면 자동으로 상승한다."
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- 7. 투자 전략 -->
+        <h2>🎯 7. 투자 전략 제언</h2>
+
+        <div class="chart-container">
+            <div class="chart-title">🏆 추천 자산군 포트폴리오 구성</div>
+            <canvas id="portfolioChart"></canvas>
+        </div>
+
+        <h3>필수 보유 자산군 ("금은동 + 에너지 + 우라늄")</h3>
+        <table>
+            <tr>
+                <th>자산군</th>
+                <th>대표 티커</th>
+                <th>현황</th>
+            </tr>
+            <tr>
+                <td>🥇 금</td>
+                <td><span class="ticker">GLD</span>, <span class="ticker">IAU</span>, <span class="ticker">GDX</span></td>
+                <td>$5,000 목표</td>
+            </tr>
+            <tr>
+                <td>🥈 은</td>
+                <td><span class="ticker">SLV</span></td>
+                <td>금 대비 저평가</td>
+            </tr>
+            <tr>
+                <td>🥉 구리(동)</td>
+                <td><span class="ticker">COPX</span></td>
+                <td>산업 수요 증가</td>
+            </tr>
+            <tr>
+                <td>⚡ 에너지</td>
+                <td><span class="ticker">XLE</span>, <span class="ticker">USO</span></td>
+                <td>원유 $60 도달</td>
+            </tr>
+            <tr>
+                <td>☢️ 우라늄</td>
+                <td><span class="ticker">CCJ</span>, <span class="ticker">URA</span></td>
+                <td>원전 르네상스</td>
+            </tr>
+        </table>
+
+        <h3>트레이더 vs 장기투자자 전략</h3>
+        <div class="info-box">
+            <strong>🔹 트레이더</strong><br>
+            변동성 장세 = 기회. 스윙 폭이 커서 단기 수익 가능. "이익은 짧게, 손실은 더 짧게"
+        </div>
+
+        <div class="info-box">
+            <strong>🔹 장기투자자</strong><br>
+            강한 종목은 여전히 강함. 조정 시 분할 매수 전략. 뉴스 장세에서 하루짜리 악재로 판단하고 대응.
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- 8. 내일 체크포인트 -->
+        <h2>📅 8. 내일(1/22) 체크포인트</h2>
+
+        <h3>📊 주요 경제지표</h3>
+        <table>
+            <tr>
+                <th>시간</th>
+                <th>지표</th>
+                <th>중요도</th>
+            </tr>
+            <tr>
+                <td>08:30</td>
+                <td>주간 신규 실업수당 청구건수</td>
+                <td>⭐⭐⭐</td>
+            </tr>
+            <tr>
+                <td>08:30</td>
+                <td>GDP 예비치</td>
+                <td>⭐⭐⭐⭐</td>
+            </tr>
+            <tr>
+                <td>08:30</td>
+                <td>PCE 물가지수</td>
+                <td>⭐⭐⭐⭐⭐</td>
+            </tr>
+            <tr>
+                <td>10:00</td>
+                <td>노동 관련 통계</td>
+                <td>⭐⭐⭐</td>
+            </tr>
+        </table>
+
+        <h3>📈 실적 발표 예정 기업</h3>
+        <p><span class="ticker">PG</span> P&G, <span class="ticker">ABBV</span> 애브비, <span class="ticker">GE</span> GE 에어로스페이스, 지방은행들</p>
+
+        <h3>👀 주시 포인트</h3>
+        <ul>
+            <li>그린란드 프레임워크 구체적 내용 공개 여부</li>
+            <li>연준 의장 교체 관련 발표 (이번 주 예상)</li>
+            <li>원빅뷰티풀빌(One Big Beautiful Bill) 진행 상황</li>
+            <li>$2,000 지급 정책 구체화</li>
+        </ul>
+
+        <div class="section-divider"></div>
+
+        <!-- 9. 부동산 지표 -->
+        <h2>🏠 9. 부동산 시장 지표</h2>
+
+        <table>
+            <tr>
+                <th>지표</th>
+                <th>예상</th>
+                <th>실제</th>
+                <th>해석</th>
+            </tr>
+            <tr>
+                <td>Pending Home Sales</td>
+                <td>-0.3%</td>
+                <td class="down">-9.3%</td>
+                <td>거래 급감</td>
+            </tr>
+            <tr>
+                <td>Construction Spending</td>
+                <td>+0.1%</td>
+                <td class="up">+0.5%</td>
+                <td>예상 상회</td>
+            </tr>
+        </table>
+
+        <div class="info-box">
+            <strong>분석 포인트</strong><br>
+            Pending Home Sales 급감은 12월 겨울철 계절성 + 재고 부족 + 높은 모기지 금리(10년물 연동) 영향. 반면 Construction Spending 호조로 홈빌더 주가 상승.
+        </div>
+
+        <p><strong>소프트 데이터 vs 하드 데이터:</strong></p>
+        <ul>
+            <li><strong>소프트 데이터</strong> (서베이 기반): NAHB 빌더 심리지수 등 - 참고용</li>
+            <li><strong>하드 데이터</strong> (실제 수치): 착공, 퍼밋, 지출 등 - 실제 의사결정 기준</li>
+        </ul>
+
+        <div class="section-divider"></div>
+
+        <!-- 10. 신흥 테마 -->
+        <h2>🚀 10. 신흥 테마 모니터링</h2>
+
+        <h3>🛰️ 우주 산업</h3>
+        <div class="highlight-box">
+            <strong>2026년 대폭발 예상 섹터</strong><br>
+            아마존 블루오리진의 <strong>테라웨이브(Terawave)</strong> 발표 - 스타링크 대항마 (2027년 서비스 예정)
+        </div>
+
+        <h3>🤖 AI 스타트업</h3>
+        <table>
+            <tr>
+                <th>기업</th>
+                <th>밸류에이션</th>
+                <th>특징</th>
+            </tr>
+            <tr>
+                <td>OpenAI</td>
+                <td>최고 밸류</td>
+                <td>최근 성능 경쟁에서 밀림</td>
+            </tr>
+            <tr>
+                <td>Anthropic</td>
+                <td>$9B 매출</td>
+                <td>폭발적 성장세</td>
+            </tr>
+        </table>
+
+        <div class="section-divider"></div>
+
+        <!-- 결론 -->
+        <div class="summary-card">
+            <h2 style="margin-top: 0; border: none;">📝 결론 및 액션 플랜</h2>
+            
+            <p><strong>1. 시장 상황:</strong> 그린란드 프레임워크는 컨셉 수준. 진짜 딜이 아님에 주의.</p>
+            
+            <p><strong>2. 포트폴리오:</strong> 금은동 + 에너지 + 우라늄 필수 보유</p>
+            
+            <p><strong>3. 단기 전략:</strong> MOC 데이터 참고 - 어제 기관 매수, 오늘 기관 매도 → 내일 쉬어가는 날 가능</p>
+            
+            <p><strong>4. 리스크 관리:</strong> 10년물 금리 4.2% 이상 유지 시 소형주 주의</p>
+            
+            <p style="margin-bottom: 0;"><strong>5. 마인드셋:</strong> "이익은 짧게, 손실은 더 짧게" - 뉴스 장세에서 빠른 대응 필수</p>
+        </div>
+
+        <footer>
+            <p>📺 원본 영상: NOVA Real Invest YouTube</p>
+            <p>⚠️ 본 분석은 투자 조언이 아닌 정보 제공 목적입니다.</p>
+            <p>© 2026 Market Analysis Report</p>
+        </footer>
+    </div>
+
+    <script>
+        // Chart.js 공통 설정
+        Chart.defaults.color = '#e8e8e8';
+        Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
+
+        // 1. 시장 움직임 차트
+        new Chart(document.getElementById('marketWaveChart'), {
+            type: 'line',
+            data: {
+                labels: ['장전', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '장마감'],
+                datasets: [{
+                    label: 'S&P 500 흐름 (개념도)',
+                    data: [0, 0.8, 1.2, 0.9, 0.7, 1.5, 2.0, 2.2],
+                    borderColor: '#00d4ff',
+                    backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#00d4ff',
+                    pointRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true, position: 'top' },
+                    annotation: {
+                        annotations: {
+                            box1: {
+                                type: 'label',
+                                xValue: 1,
+                                yValue: 1.5,
+                                content: ['1차 상승', '군사작전 철회'],
+                                color: '#ffd700',
+                                font: { size: 11 }
+                            },
+                            box2: {
+                                type: 'label',
+                                xValue: 5,
+                                yValue: 2.3,
+                                content: ['2차 상승', '관세 유예'],
+                                color: '#00ff88',
+                                font: { size: 11 }
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        title: { display: true, text: '등락률 (%)' },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // 2. 주요 자산 차트
+        new Chart(document.getElementById('assetChart'), {
+            type: 'bar',
+            data: {
+                labels: ['금(Gold)', '천연가스', '원유', '비트코인', '10년물(역)'],
+                datasets: [{
+                    label: '일간 등락률 (%)',
+                    data: [1.4, 20, 0.53, 0.2, 0.98],
+                    backgroundColor: [
+                        'rgba(255, 215, 0, 0.7)',
+                        'rgba(255, 100, 100, 0.7)',
+                        'rgba(100, 100, 255, 0.7)',
+                        'rgba(255, 165, 0, 0.7)',
+                        'rgba(0, 200, 150, 0.7)'
+                    ],
+                    borderColor: [
+                        '#ffd700',
+                        '#ff6464',
+                        '#6464ff',
+                        '#ffa500',
+                        '#00c896'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        title: { display: true, text: '등락률 (%)' },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // 3. 반도체 섹터 차트
+        new Chart(document.getElementById('semiChart'), {
+            type: 'bar',
+            data: {
+                labels: ['인텔', 'AMD', '마이크론', '엔비디아', '장비섹터'],
+                datasets: [{
+                    label: '일간 등락률 (%)',
+                    data: [11, 7.1, 6.61, 3, 5],
+                    backgroundColor: 'rgba(0, 212, 255, 0.7)',
+                    borderColor: '#00d4ff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        title: { display: true, text: '등락률 (%)' },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // 4. 지수 비교 차트
+        new Chart(document.getElementById('indexChart'), {
+            type: 'bar',
+            data: {
+                labels: ['러셀 2000', 'S&P 500', '나스닥', '다우존스'],
+                datasets: [{
+                    label: '일간 등락률 (%)',
+                    data: [1.98, 1.5, 1.8, 1.2],
+                    backgroundColor: [
+                        'rgba(255, 77, 77, 0.7)',
+                        'rgba(0, 212, 255, 0.7)',
+                        'rgba(0, 255, 136, 0.7)',
+                        'rgba(255, 215, 0, 0.7)'
+                    ],
+                    borderColor: [
+                        '#ff4d4d',
+                        '#00d4ff',
+                        '#00ff88',
+                        '#ffd700'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        title: { display: true, text: '등락률 (%)' },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // 5. 포트폴리오 차트
+        new Chart(document.getElementById('portfolioChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['금', '은', '구리', '에너지', '우라늄'],
+                datasets: [{
+                    data: [30, 15, 15, 25, 15],
+                    backgroundColor: [
+                        'rgba(255, 215, 0, 0.8)',
+                        'rgba(192, 192, 192, 0.8)',
+                        'rgba(184, 115, 51, 0.8)',
+                        'rgba(0, 100, 200, 0.8)',
+                        'rgba(0, 255, 100, 0.8)'
+                    ],
+                    borderColor: '#1a1a2e',
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            font: { size: 12 }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

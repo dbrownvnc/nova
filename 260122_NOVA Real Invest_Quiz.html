@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>시험문제 - 그린란드 딜 & 관세 유예 랠리 | 2026.01.21</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            line-height: 1.8;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 100%);
+            color: #e8e8e8;
+            padding: 16px;
+            max-width: 100%;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 1.4rem;
+            color: #00d4ff;
+            text-align: center;
+            margin-bottom: 8px;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 24px;
+        }
+        h2 {
+            font-size: 1.2rem;
+            color: #ffd700;
+            margin: 32px 0 20px 0;
+            padding: 12px 16px;
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.2), transparent);
+            border-left: 4px solid #ffd700;
+            border-radius: 0 8px 8px 0;
+        }
+        .question-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .question-number {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: #000;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        .difficulty {
+            font-size: 0.8rem;
+        }
+        .easy { color: #00ff88; }
+        .medium { color: #ffd700; }
+        .hard { color: #ff6b6b; }
+        .question-type {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .question-text {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+        .options {
+            margin-left: 8px;
+        }
+        .option {
+            padding: 10px 14px;
+            margin: 8px 0;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .option:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+        .blank-line {
+            border-bottom: 2px dashed #666;
+            display: inline-block;
+            min-width: 100px;
+            margin: 0 4px;
+        }
+        .answer-box {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 200, 100, 0.05));
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px 0;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+        .answer-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .answer-badge {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #000;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        .correct-answer {
+            color: #00ff88;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .explanation {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ccc;
+            font-size: 0.95rem;
+        }
+        .explanation strong {
+            color: #ffd700;
+        }
+        .section-divider {
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ffd700, transparent);
+            margin: 40px 0;
+        }
+        .info-note {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            padding: 14px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9rem;
+        }
+        .ticker {
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 212, 255, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #00d4ff;
+            font-weight: 600;
+        }
+        .number {
+            color: #00d4ff;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+        }
+        footer {
+            text-align: center;
+            color: #666;
+            font-size: 0.8rem;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            .question-box, .answer-box {
+                border: 1px solid #ccc;
+                background: #f9f9f9;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 시험문제</h1>
+        <p class="subtitle">그린란드 딜 & 관세 유예 랠리 해부 | 2026.01.21</p>
+
+        <div class="info-note">
+            📌 <strong>난이도 안내</strong><br>
+            ⭐ 쉬움 (30%) | ⭐⭐ 보통 (50%) | ⭐⭐⭐ 어려움 (20%)<br>
+            총 10문제 | 문제 유형: 객관식, 단답형, OX, 빈칸채우기, 서술형
+        </div>
+
+        <!-- ==================== 문제지 ==================== -->
+        <h2>📋 문제지 (총 10문제)</h2>
+
+        <!-- 문제 1 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 1</span>
+                <span class="difficulty easy">⭐ 쉬움</span>
+                <span class="question-type">객관식</span>
+            </div>
+            <p class="question-text">2026년 1월 21일 미국 증시에서 두 차례의 상승 파동이 발생한 주된 원인은 무엇인가?</p>
+            <div class="options">
+                <div class="option">① 연준의 금리 인하 발표</div>
+                <div class="option">② 그린란드 관련 트럼프 대통령 발언</div>
+                <div class="option">③ 애플의 신제품 출시</div>
+                <div class="option">④ 중국과의 무역협정 체결</div>
+            </div>
+        </div>
+
+        <!-- 문제 2 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 2</span>
+                <span class="difficulty easy">⭐ 쉬움</span>
+                <span class="question-type">OX 문제</span>
+            </div>
+            <p class="question-text">"그린란드 프레임워크"는 덴마크와의 협상이 완전히 타결되어 구체적인 합의가 이루어진 상태를 의미한다.</p>
+            <div class="options">
+                <div class="option">○ 맞다</div>
+                <div class="option">✕ 틀리다</div>
+            </div>
+        </div>
+
+        <!-- 문제 3 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 3</span>
+                <span class="difficulty medium">⭐⭐ 보통</span>
+                <span class="question-type">단답형</span>
+            </div>
+            <p class="question-text">금(Gold) 가격이 돌파한 저항선은 <span class="number">$4,590</span>이었다. 영상에서 언급된 금 가격의 <strong>다음 목표가</strong>는 얼마인가?</p>
+            <p style="color: #888; font-size: 0.9rem; margin-top: 10px;">정답: $________</p>
+        </div>
+
+        <!-- 문제 4 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 4</span>
+                <span class="difficulty medium">⭐⭐ 보통</span>
+                <span class="question-type">객관식</span>
+            </div>
+            <p class="question-text">10년물 국채 금리가 어느 수준 이하로 내려가야 시장이 안심할 수 있다고 언급되었는가?</p>
+            <div class="options">
+                <div class="option">① 3.5%</div>
+                <div class="option">② 3.8%</div>
+                <div class="option">③ 4.1%</div>
+                <div class="option">④ 4.5%</div>
+            </div>
+        </div>
+
+        <!-- 문제 5 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 5</span>
+                <span class="difficulty medium">⭐⭐ 보통</span>
+                <span class="question-type">빈칸채우기</span>
+            </div>
+            <p class="question-text">미국 전역의 혹한으로 인해 천연가스 관련 ETF가 급등했다. 대표적인 천연가스 ETF인 <span class="ticker">UNG</span> 등은 이틀 만에 약 <span class="blank-line"></span>% 상승했다.</p>
+        </div>
+
+        <!-- 문제 6 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 6</span>
+                <span class="difficulty medium">⭐⭐ 보통</span>
+                <span class="question-type">객관식</span>
+            </div>
+            <p class="question-text">애플이 AI 기능 강화를 위해 파트너십을 체결한 기업은?</p>
+            <div class="options">
+                <div class="option">① OpenAI</div>
+                <div class="option">② Microsoft</div>
+                <div class="option">③ Google (알파벳)</div>
+                <div class="option">④ Meta</div>
+            </div>
+        </div>
+
+        <!-- 문제 7 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 7</span>
+                <span class="difficulty medium">⭐⭐ 보통</span>
+                <span class="question-type">단답형</span>
+            </div>
+            <p class="question-text">제이미 다이먼(JP모건 CEO)이 경고한 정책은 무엇인가? 이 정책이 시행되면 신용도가 낮은 <strong>80%의 국민</strong>이 카드 발급 거절 위험에 처한다고 했다.</p>
+            <p style="color: #888; font-size: 0.9rem; margin-top: 10px;">정답: ____________________________</p>
+        </div>
+
+        <!-- 문제 8 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 8</span>
+                <span class="difficulty hard">⭐⭐⭐ 어려움</span>
+                <span class="question-type">서술형</span>
+            </div>
+            <p class="question-text">영상에서 언급된 "소프트 데이터"와 "하드 데이터"의 차이점을 설명하고, 투자 의사결정 시 어떤 데이터를 더 중시해야 하는지 그 이유와 함께 서술하시오.</p>
+            <div style="background: rgba(255,255,255,0.03); padding: 16px; border-radius: 8px; margin-top: 12px; min-height: 100px;">
+                <p style="color: #666; font-size: 0.85rem;">[답안 작성란]</p>
+            </div>
+        </div>
+
+        <!-- 문제 9 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 9</span>
+                <span class="difficulty easy">⭐ 쉬움</span>
+                <span class="question-type">객관식</span>
+            </div>
+            <p class="question-text">영상에서 레버리지/인버스 ETF(예: BOIL, KOLD)를 보유할 때 권장되는 최대 기간은?</p>
+            <div class="options">
+                <div class="option">① 1주일</div>
+                <div class="option">② 2~3일</div>
+                <div class="option">③ 1개월</div>
+                <div class="option">④ 장기 보유 권장</div>
+            </div>
+        </div>
+
+        <!-- 문제 10 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 10</span>
+                <span class="difficulty hard">⭐⭐⭐ 어려움</span>
+                <span class="question-type">서술형</span>
+            </div>
+            <p class="question-text">영상에서 언급된 투자 포트폴리오 구성 원칙 "금은동 + 에너지 + 우라늄"을 기반으로, 현재 시장 상황에서 이러한 자산군에 투자해야 하는 이유를 <strong>지정학적 요인</strong>과 <strong>거시경제적 요인</strong> 두 가지 관점에서 각각 설명하시오.</p>
+            <div style="background: rgba(255,255,255,0.03); padding: 16px; border-radius: 8px; margin-top: 12px; min-height: 120px;">
+                <p style="color: #666; font-size: 0.85rem;">[답안 작성란]</p>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- ==================== 정답지 ==================== -->
+        <h2>📝 정답 및 해설</h2>
+
+        <!-- 정답 1 -->
+        <div class="answer-box">
+            <div class="answer-header">
+                <span class="answer-badge">문제 1</span>
+                <span class="correct-answer">정답: ②</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> 2026년 1월 21일 미국 증시는 그린란드 관련 트럼프 대통령의 발언으로 두 차례 상승했습니다. <strong>1차 상승</strong>은 "그린란드에 군사작전은 안 할 것"이라는 발언으로, <strong>2차 상승</strong>은 다보스 포럼에서의 "관세 유예" 및 "그린란드 프레임워크 완성" 발표로 발생했습니다.
+            </div>
+        </div>
+
+        <!-- 정답 2 -->
+        <div class="answer-box">
+            <div class="answer-header">
+                <span class="answer-badge">문제 2</span>
+                <span class="correct-answer">정답: ✕ (틀리다)</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> "프레임워크"는 <strong>컨셉(개념) 수준</strong>일 뿐, 실제 합의가 완료된 것이 아닙니다. 영상에서 명확히 "끝난 게 아니다", "컨셉 잡은 거다", "트럼프 행정부가 일방적으로 잡은 것"이라고 강조했습니다. 덴마크와의 실제 협상은 아직 진행되지 않은 상태입니다.
+            </div>
+        </div>
+
+        <!-- 정답 3 -->
+        <div class="answer-box">
+            <div class="answer-header">
+                <span class="answer-badge">문제 3</span>
+                <span class="correct-answer">정답: $5,000</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> 영상에서 금 가격이 <span class="number">$4,590</span> 저항선을 돌파하면 <span class="number">$5,000</span>까지 간다고 언급했습니다. 실제로 금 가격은 <span class="number">$4,800</span>을 넘어섰으며, 지정학적 긴장과 달러 약세가 상승 동력으로 작용하고 있습니다.
+            </div>
+        </div>
+
+        <!-- 정답 4 -->
+        <div class="answer-box">
+            <div class="answer-header">
+                <span class="answer-badge">문제 4</span>
+                <span class="correct-answer">정답: ③ 4.1%</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> 10년물 금리가 <span class="number">4.25%</span>까지 상승하여 공포의 대상이 되었으며, <span class="number">4.1%</span> 이하로 내려가야 시장이 안심할 수 있다고 언급했습니다. 금리 상승은 모기지 금리 상승, 소형주 이자비용 부담 증가 등의 부정적 영향을 미칩니다.
+            </div>
+        </div>
+
+        <!-- 정답 5 -->
+        <div class="answer-box">
+            <div class="answer-header">
+                <span class="answer-badge">문제 5</span>
+                <span class="correct-answer">정답: 57%</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> 미국 전역의 혹한으로 난방 수요가 급증하면서 천연가스 관련 ETF들이 <strong>이틀 만에 57%</strong> 급등했습니다. 대표적으로 <span class="ticker">UNG</span>(천연가스 ETF), <span class="ticker">BOIL</span>(3배 레버리지) 등이 있습니다.
+            </div>
+        </div>
+
+        <!-- 정답 6 -->
+        <div class="answer-box">
+            <div class="answer-header">
+                <span class="answer-badge">문제 6</span>
+                <span class="correct-answer">정답: ③ Google (알파벳)</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> 애플은 <strong>"캄포스(Camphor) 프로젝트"</strong>를 통해 구글(알파벳)과 AI 파트너십을 체결했습니다. 2026년 하반기 iOS 27, Mac OS 27에 구글 AI 기반 챗봇이 OS 레벨에서 통합될 예정입니다. 기존 OpenAI와의 협력은 성능 면에서 한계가 있었다고 합니다.
+            </div>
+        </div>
+
+        <!-- 정답 7 -->
+        <div class="answer-box">
+            <div class="answer-header">
+                <span class="answer-badge">문제 7</span>
+                <span class="correct-answer">정답: 신용카드 금리 10% 상한 정책</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> 트럼프 대통령이 추진하는 <strong>신용카드 금리 10% 상한 정책</strong>에 대해 제이미 다이먼 JP모건 CEO가 "시행 시 신용도 낮은 80% 국민이 카드 발급 거절 위험에 처한다"며 강력 경고했습니다. 미국 GDP의 75%가 소비로 구성되어 있어, 이 정책은 내수 경제에 심각한 타격을 줄 수 있습니다.
+            </div>
+        </div>
+
+        <!-- 정답 8 -->
+        <div class="answer-box">
+            <div class="answer-header">
+                <span class="answer-badge">문제 8</span>
+                <span class="correct-answer">정답 예시</span>
+            </div>
+            <div class="explanation">
+                <strong>모범답안:</strong><br><br>
+                <strong>1. 소프트 데이터:</strong> 서베이(설문조사) 기반의 심리 지표입니다. 예를 들어 NAHB 빌더 심리지수처럼 "기분이 어떠냐"를 물어보는 방식입니다. 주관적이며 실제 행동과 괴리가 있을 수 있습니다.<br><br>
+                <strong>2. 하드 데이터:</strong> 실제 계산 가능한 수치 데이터입니다. 신규 착공건수, 건설 퍼밋, 지출액 등 객관적으로 측정된 통계입니다.<br><br>
+                <strong>3. 투자 시 중시할 데이터:</strong> <strong>하드 데이터</strong>를 더 중시해야 합니다. 영상에서 언급한 것처럼 NAHB 빌더 심리지수는 부정적이었지만, 실제 건설 지출과 퍼밋은 증가했습니다. 실제 행동(하드 데이터)이 심리(소프트 데이터)보다 더 정확한 시장 신호를 제공합니다.
+            </div>
+        </div>
+
+        <!-- 정답 9 -->
+        <div class="answer-box">
+            <div class="answer-header">
+                <span class="answer-badge">문제 9</span>
+                <span class="correct-answer">정답: ② 2~3일</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> 레버리지/인버스 ETF는 <strong>2~3일 이내</strong> 단기 매매용입니다. 영상에서 "3일이 맥스", "장기 보유하면 녹아 없어진다"고 강조했습니다. 이는 레버리지 ETF의 구조적 특성(일일 복리 효과) 때문에 장기 보유 시 수익률이 기초자산과 괴리가 발생하기 때문입니다.
+            </div>
+        </div>
+
+        <!-- 정답 10 -->
+        <div class="answer-box">
+            <div class="answer-header">
+                <span class="answer-badge">문제 10</span>
+                <span class="correct-answer">정답 예시</span>
+            </div>
+            <div class="explanation">
+                <strong>모범답안:</strong><br><br>
+                <strong>1. 지정학적 요인:</strong><br>
+                - 그린란드 이슈, 러시아-우크라이나 갈등 등 글로벌 지정학적 긴장이 지속되고 있음<br>
+                - 유럽과 미국 간 갈등 고조 (미국 채권 매도 가능성 언급)<br>
+                - 이러한 불확실성으로 인해 안전자산인 금에 대한 수요 증가<br>
+                - 에너지 공급 불안정으로 원유, 천연가스 가격 상승 압력<br>
+                - 원전 르네상스와 에너지 안보 강화로 우라늄 수요 증가<br><br>
+                <strong>2. 거시경제적 요인:</strong><br>
+                - 달러화 약세 지속 → 달러 표시 원자재(금, 은, 구리) 가격 상승 요인<br>
+                - 미국 채권 금리 급등으로 채권 매력도 하락 → 대안 자산으로서 귀금속 선호<br>
+                - 인플레이션 헤지 수요 → 실물자산(금은동, 에너지) 선호<br>
+                - 미국 혹한으로 천연가스 수요 급증 (단기 요인)<br>
+                - 트럼프 대통령의 원전 친화 정책 발언 → 우라늄 상승 모멘텀<br><br>
+                따라서 "금은동 + 에너지 + 우라늄" 포트폴리오는 현재의 불확실한 시장 환경에서 <strong>위험 분산</strong>과 <strong>인플레이션 헤지</strong> 역할을 동시에 수행할 수 있습니다.
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- 점수 기준 -->
+        <div style="background: rgba(255, 215, 0, 0.1); border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 12px; padding: 20px; margin: 20px 0;">
+            <h3 style="color: #ffd700; margin-bottom: 16px;">📊 채점 기준</h3>
+            <table style="width: 100%; font-size: 0.9rem;">
+                <tr>
+                    <th style="text-align: left; padding: 8px; background: rgba(255,215,0,0.2);">문제 유형</th>
+                    <th style="text-align: center; padding: 8px; background: rgba(255,215,0,0.2);">배점</th>
+                </tr>
+                <tr>
+                    <td style="padding: 8px;">객관식 (1, 4, 6, 9번)</td>
+                    <td style="text-align: center; padding: 8px;">각 8점 (총 32점)</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px;">OX 문제 (2번)</td>
+                    <td style="text-align: center; padding: 8px;">8점</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px;">단답형 (3, 7번)</td>
+                    <td style="text-align: center; padding: 8px;">각 10점 (총 20점)</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px;">빈칸채우기 (5번)</td>
+                    <td style="text-align: center; padding: 8px;">10점</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px;">서술형 (8, 10번)</td>
+                    <td style="text-align: center; padding: 8px;">각 15점 (총 30점)</td>
+                </tr>
+                <tr style="background: rgba(255,215,0,0.1);">
+                    <td style="padding: 8px; font-weight: bold;">총점</td>
+                    <td style="text-align: center; padding: 8px; font-weight: bold;">100점</td>
+                </tr>
+            </table>
+        </div>
+
+        <footer>
+            <p>📺 원본 영상: NOVA Real Invest YouTube</p>
+            <p>⚠️ 본 시험문제는 학습 목적으로 제작되었습니다.</p>
+            <p>© 2026 Market Analysis Quiz</p>
+        </footer>
+    </div>
+</body>
+</html>
