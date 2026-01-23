@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>미국 증시 분석: 인텔 12% 폭락 vs 테슬라 상승 (2026.01.22)</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: #f8f9fa;
+            padding: 16px;
+            max-width: 100%;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: #fff;
+            padding: 24px 20px;
+        }
+        
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        
+        .header .meta {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 20px;
+        }
+        
+        h2 {
+            font-size: 1.15rem;
+            color: #1a237e;
+            margin: 28px 0 16px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e8eaf6;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        h2:first-of-type {
+            margin-top: 0;
+        }
+        
+        h3 {
+            font-size: 1rem;
+            color: #37474f;
+            margin: 20px 0 12px 0;
+        }
+        
+        p {
+            margin-bottom: 14px;
+            font-size: 0.95rem;
+        }
+        
+        .highlight-box {
+            background: #e3f2fd;
+            border-left: 4px solid #1976d2;
+            padding: 14px 16px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .highlight-box.warning {
+            background: #fff3e0;
+            border-left-color: #f57c00;
+        }
+        
+        .highlight-box.success {
+            background: #e8f5e9;
+            border-left-color: #43a047;
+        }
+        
+        .highlight-box.danger {
+            background: #ffebee;
+            border-left-color: #e53935;
+        }
+        
+        .highlight-box p {
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+        
+        .quote {
+            background: #fafafa;
+            border-left: 3px solid #9e9e9e;
+            padding: 12px 16px;
+            margin: 16px 0;
+            font-style: italic;
+            color: #616161;
+        }
+        
+        .quote .source {
+            font-style: normal;
+            font-size: 0.85rem;
+            color: #9e9e9e;
+            margin-top: 8px;
+        }
+        
+        .chart-container {
+            background: #fff;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            border: 1px solid #e0e0e0;
+        }
+        
+        .chart-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #37474f;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        
+        canvas {
+            max-width: 100%;
+            height: auto !important;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.9rem;
+        }
+        
+        th, td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background: #f5f5f5;
+            font-weight: 600;
+            color: #37474f;
+        }
+        
+        tr:hover {
+            background: #fafafa;
+        }
+        
+        .positive {
+            color: #2e7d32;
+            font-weight: 600;
+        }
+        
+        .negative {
+            color: #c62828;
+            font-weight: 600;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+            margin: 20px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e0e0e0;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -22px;
+            top: 6px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #1976d2;
+        }
+        
+        .timeline-item.fear::before {
+            background: #e53935;
+        }
+        
+        .timeline-item.relief::before {
+            background: #43a047;
+        }
+        
+        .timeline-date {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #757575;
+            margin-bottom: 4px;
+        }
+        
+        .timeline-content {
+            font-size: 0.9rem;
+        }
+        
+        .key-points {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        
+        .key-points li {
+            margin-bottom: 10px;
+            padding-left: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .key-points li:last-child {
+            margin-bottom: 0;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 16px 0;
+        }
+        
+        .comparison-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 14px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .comparison-card.winner {
+            border-color: #43a047;
+            background: #f1f8e9;
+        }
+        
+        .comparison-card.loser {
+            border-color: #e53935;
+            background: #ffebee;
+        }
+        
+        .comparison-card h4 {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+        
+        .comparison-card .change {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        
+        .comparison-card .reason {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 6px;
+        }
+        
+        .insight-box {
+            background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .insight-box h3 {
+            color: #1a237e;
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+        
+        .insight-box ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .insight-box li {
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .footer {
+            background: #37474f;
+            color: #fff;
+            padding: 20px;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        
+        .footer a {
+            color: #81d4fa;
+            text-decoration: none;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin: 2px;
+        }
+        
+        .tag.geopolitics {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        
+        .tag.earnings {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        
+        .tag.sector {
+            background: #e0f2f1;
+            color: #00695c;
+        }
+        
+        strong {
+            color: #1a237e;
+        }
+        
+        .summary-numbers {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 16px 0;
+        }
+        
+        .summary-num {
+            text-align: center;
+            padding: 14px 8px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+        
+        .summary-num .value {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        
+        .summary-num .label {
+            font-size: 0.75rem;
+            color: #757575;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔔 인텔 12% 폭락 충격! 테슬라 상승 모멘텀</h1>
+            <div class="meta">
+                📅 2026년 1월 22일 | 미국 증시 분석<br>
+                🎬 원본: NOVA Real Invest YouTube
+            </div>
+        </div>
+        
+        <div class="content">
+            <!-- 핵심 요약 -->
+            <h2>📊 시장 핵심 요약</h2>
+            
+            <div class="summary-numbers">
+                <div class="summary-num">
+                    <div class="value positive">+306.87</div>
+                    <div class="label">다우존스 (pt)</div>
+                </div>
+                <div class="summary-num">
+                    <div class="value positive">+0.50%</div>
+                    <div class="label">S&P 500</div>
+                </div>
+                <div class="summary-num">
+                    <div class="value positive">+0.91%</div>
+                    <div class="label">나스닥</div>
+                </div>
+            </div>
+            
+            <div class="quote">
+                "최악의 시나리오가 제거됐다"
+                <div class="source">— Evercore ISI 애널리스트</div>
+            </div>
+            
+            <p>지정학적 헤드라인 하나가 시장을 극심한 공포에서 안도감으로 급변시킨 변동성 높은 한 주였습니다. 그린란드 관세 위협 철회 소식에 시장이 급반등했지만, 개별 종목별 희비는 극명하게 갈렸습니다.</p>
+            
+            <!-- 주요 태그 -->
+            <div style="margin: 16px 0;">
+                <span class="tag geopolitics">🌍 지정학 리스크</span>
+                <span class="tag earnings">📈 실적 시즌</span>
+                <span class="tag sector">🔄 섹터 로테이션</span>
+            </div>
+            
+            <!-- 시장 타임라인 -->
+            <h2>📅 시장 변동 타임라인</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item fear">
+                    <div class="timeline-date">화요일</div>
+                    <div class="timeline-content">
+                        <strong>"Sell America" 심리 확산</strong><br>
+                        트럼프 대통령의 그린란드 관세 위협으로 10월 이후 최악의 하루 기록. 미국 주식과 달러 급락.
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">수요일</div>
+                    <div class="timeline-content">
+                        <strong>관세 위협 철회 발표</strong><br>
+                        그린란드 관련 합의안 프레임워크 발표. 세부 내용 불명확했으나 시장 안도.
+                    </div>
+                </div>
+                <div class="timeline-item relief">
+                    <div class="timeline-date">목요일</div>
+                    <div class="timeline-content">
+                        <strong>강력한 반등 랠리</strong><br>
+                        다우 +306pt, S&P +0.5%, 나스닥 +0.91%. 손실 전량 만회.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <p>💡 <strong>핵심 포인트:</strong> 그린란드 총리조차 합의 내용을 모른다고 발언했음에도 투자자들은 "최악의 시나리오 제거"라는 헤드라인 하나에 매수세로 전환했습니다.</p>
+            </div>
+            
+            <!-- 지수 차트 -->
+            <div class="chart-container">
+                <div class="chart-title">📈 목요일 주요 지수 등락률</div>
+                <canvas id="indexChart" height="200"></canvas>
+            </div>
+            
+            <!-- Sell America 분석 -->
+            <h2>🇺🇸 "Sell America" 현상 분석</h2>
+            
+            <p><strong>"Sell America"</strong>란 미국의 정치적 리스크가 과도하게 커지면서 투자자들이 미국 자산 전반을 매도하는 현상을 말합니다.</p>
+            
+            <div class="highlight-box warning">
+                <p>⚠️ <strong>배경:</strong> 트럼프 대통령의 그린란드 관세 위협이 단순한 무역 이슈가 아닌 <strong>미국 정치적 리스크의 확대</strong>로 해석되면서, 투자자들이 미국 주식과 달러를 동시에 매도하는 이례적 현상이 발생했습니다.</p>
+            </div>
+            
+            <h3>시장이 보인 반응</h3>
+            <ul style="margin-left: 20px; font-size: 0.9rem;">
+                <li>미국 주식 대량 매도</li>
+                <li>달러 약세 동반</li>
+                <li>안전자산 선호 증가</li>
+                <li>해외 자금 이탈 우려</li>
+            </ul>
+            
+            <!-- 승자와 패자 -->
+            <h2>🎯 하루의 승자와 패자</h2>
+            
+            <div class="comparison-grid">
+                <div class="comparison-card winner">
+                    <h4>🚀 테슬라 (TSLA)</h4>
+                    <div class="change positive">+4% 이상</div>
+                    <div class="reason">로보택시 무인 운행 성공 발표</div>
+                </div>
+                <div class="comparison-card loser">
+                    <h4>💔 인텔 (INTC)</h4>
+                    <div class="change negative">-12%</div>
+                    <div class="reason">실망스러운 가이던스 발표</div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-title">📊 테슬라 vs 인텔 주가 변동</div>
+                <canvas id="stockChart" height="180"></canvas>
+            </div>
+            
+            <!-- 인텔 상세 분석 -->
+            <h2>🔍 인텔 폭락 심층 분석</h2>
+            
+            <div class="highlight-box danger">
+                <p>🚨 <strong>충격:</strong> 실적 발표 후 시간외 거래에서 <strong>12% 급락</strong>. 데이터센터 수요 급증에 대한 기대가 산산조각났습니다.</p>
+            </div>
+            
+            <h3>폭락 원인</h3>
+            <table>
+                <tr>
+                    <th>항목</th>
+                    <th>내용</th>
+                </tr>
+                <tr>
+                    <td>매출 가이던스</td>
+                    <td class="negative">시장 기대치 하회</td>
+                </tr>
+                <tr>
+                    <td>EPS 전망</td>
+                    <td class="negative">손익분기점 수준</td>
+                </tr>
+                <tr>
+                    <td>생산 수율</td>
+                    <td class="negative">CEO "목표 미달" 인정</td>
+                </tr>
+            </table>
+            
+            <p>실적 발표 직전까지 애널리스트들은 데이터센터 수요 폭발로 인텔 서버 CPU 판매 호조를 예상했습니다. 그러나 실제 가이던스는 이러한 <strong>장밋빛 전망과 극명한 대조</strong>를 이뤘습니다.</p>
+            
+            <div class="insight-box">
+                <h3>💡 인텔 사태가 주는 교훈</h3>
+                <ul>
+                    <li><strong>기대 vs 현실:</strong> 과도한 기대는 실망으로 이어질 수 있음</li>
+                    <li><strong>가이던스의 중요성:</strong> 현재 실적보다 미래 전망이 주가에 더 큰 영향</li>
+                    <li><strong>생산 경쟁력:</strong> 반도체 제조 기술의 중요성 재확인</li>
+                </ul>
+            </div>
+            
+            <!-- 테슬라 분석 -->
+            <h2>🚗 테슬라 상승 모멘텀</h2>
+            
+            <div class="highlight-box success">
+                <p>✅ <strong>호재:</strong> 로보택시(Robotaxi)에서 <strong>인간 안전 요원 없이 운행 성공</strong>. 자율주행 기술의 중대한 이정표를 달성했습니다.</p>
+            </div>
+            
+            <p>이 발표는 테슬라의 완전자율주행(FSD) 기술이 상용화 단계에 한층 가까워졌음을 의미합니다. 투자자들은 이를 미래 수익원에 대한 긍정적 신호로 해석했습니다.</p>
+            
+            <!-- 섹터 로테이션 -->
+            <h2>🔄 섹터 로테이션 동향</h2>
+            
+            <p>지수 전체가 상승하는 와중에도 <strong>물밑에서는 중요한 자금 이동</strong>이 관찰되었습니다.</p>
+            
+            <div class="chart-container">
+                <div class="chart-title">💰 자금 흐름 방향</div>
+                <canvas id="rotationChart" height="160"></canvas>
+            </div>
+            
+            <table>
+                <tr>
+                    <th>섹터</th>
+                    <th>자금 흐름</th>
+                </tr>
+                <tr>
+                    <td>소프트웨어</td>
+                    <td class="negative">유출 ↓</td>
+                </tr>
+                <tr>
+                    <td>반도체</td>
+                    <td class="positive">유입 ↑</td>
+                </tr>
+            </table>
+            
+            <div class="highlight-box">
+                <p>💡 <strong>시사점:</strong> 시장 전체 움직임만으로는 파악하기 어려운 섹터별 자금 이동을 주시해야 합니다. AI/데이터센터 수혜주인 반도체로 자금이 집중되는 양상입니다.</p>
+            </div>
+            
+            <!-- 기타 이슈 -->
+            <h2>📰 기타 주요 뉴스</h2>
+            
+            <p>대규모 M&A 발표에도 시장 반응은 미온적이었습니다.</p>
+            
+            <table>
+                <tr>
+                    <th>기업</th>
+                    <th>내용</th>
+                    <th>주가 반응</th>
+                </tr>
+                <tr>
+                    <td>캐피탈원</td>
+                    <td>수십억 달러 인수합병</td>
+                    <td class="negative">하락</td>
+                </tr>
+                <tr>
+                    <td>클로락스</td>
+                    <td>대규모 M&A 발표</td>
+                    <td class="negative">하락</td>
+                </tr>
+            </table>
+            
+            <p>평소라면 주목받았을 뉴스들이 <strong>그린란드 이슈와 인텔 실적</strong>에 묻혀버린 형국입니다.</p>
+            
+            <!-- 투자 시사점 -->
+            <h2>💼 투자 시사점</h2>
+            
+            <div class="key-points">
+                <ol>
+                    <li><strong>지정학적 헤드라인의 영향력:</strong> 단기적으로 시장을 극심하게 흔들 수 있음</li>
+                    <li><strong>심리의 급변:</strong> 구체적 내용 없이도 "안도감"만으로 강력한 랠리 가능</li>
+                    <li><strong>개별 종목의 차별화:</strong> 시장 전체가 상승해도 개별 주식의 희비는 극명히 갈림</li>
+                    <li><strong>펀더멘털의 귀환:</strong> 장기적 가치는 결국 기업 실적(펀더멘털)이 결정</li>
+                    <li><strong>섹터 로테이션 주시:</strong> 수면 아래 자금 이동 흐름 파악 필요</li>
+                </ol>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-title">🎯 시장을 움직이는 두 가지 힘</div>
+                <canvas id="factorChart" height="200"></canvas>
+            </div>
+            
+            <!-- 최종 결론 -->
+            <h2>📝 결론</h2>
+            
+            <div class="insight-box">
+                <h3>🔑 오늘의 핵심 교훈</h3>
+                <ul>
+                    <li>시장은 <strong>두 개의 얼굴</strong>을 가짐 — 단기: 헤드라인 / 장기: 펀더멘털</li>
+                    <li><strong>인텔 사례:</strong> 아무리 좋은 매크로 환경도 기업 실적을 대체할 수 없음</li>
+                    <li><strong>테슬라 사례:</strong> 기술 혁신 이정표가 주가 모멘텀의 핵심</li>
+                    <li><strong>섹터 로테이션:</strong> 소프트웨어 → 반도체 자금 이동 진행 중</li>
+                </ul>
+            </div>
+            
+            <div class="quote" style="background: #e3f2fd; border-color: #1976d2;">
+                "온갖 헤드라인과 소음이 시장을 뒤흔들 때, 그 너머에 있는 진짜 가치를 찾아내는 것이 성공적인 투자의 시작입니다."
+            </div>
+        </div>
+        
+        <div class="footer">
+            📺 원본 영상: <a href="https://www.youtube.com/watch?v=rW3mK3fpvy0" target="_blank">NOVA Real Invest</a><br>
+            분석일: 2026년 1월 24일 | AI 분석 리포트
+        </div>
+    </div>
+    
+    <script>
+        // 지수 차트
+        new Chart(document.getElementById('indexChart'), {
+            type: 'bar',
+            data: {
+                labels: ['다우존스', 'S&P 500', '나스닥'],
+                datasets: [{
+                    label: '등락률 (%)',
+                    data: [0.70, 0.50, 0.91],
+                    backgroundColor: ['#4caf50', '#43a047', '#2e7d32'],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return '+' + context.raw + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '+' + value + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // 개별 주식 차트
+        new Chart(document.getElementById('stockChart'), {
+            type: 'bar',
+            data: {
+                labels: ['테슬라 (TSLA)', '인텔 (INTC)'],
+                datasets: [{
+                    label: '주가 변동률',
+                    data: [4.0, -12.0],
+                    backgroundColor: ['#43a047', '#e53935'],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const val = context.raw;
+                                return (val > 0 ? '+' : '') + val + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        min: -15,
+                        max: 10,
+                        ticks: {
+                            callback: function(value) {
+                                return (value > 0 ? '+' : '') + value + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // 섹터 로테이션 차트
+        new Chart(document.getElementById('rotationChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['반도체 (유입)', '소프트웨어 (유출)'],
+                datasets: [{
+                    data: [65, 35],
+                    backgroundColor: ['#43a047', '#ef5350'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 15 }
+                    }
+                },
+                cutout: '60%'
+            }
+        });
+        
+        // 시장 요인 차트
+        new Chart(document.getElementById('factorChart'), {
+            type: 'radar',
+            data: {
+                labels: ['지정학 이슈', '기업 실적', '투자 심리', '섹터 흐름', '거시경제'],
+                datasets: [{
+                    label: '단기 영향력',
+                    data: [95, 40, 90, 50, 60],
+                    backgroundColor: 'rgba(255, 152, 0, 0.2)',
+                    borderColor: '#ff9800',
+                    borderWidth: 2
+                }, {
+                    label: '장기 영향력',
+                    data: [30, 95, 50, 70, 80],
+                    backgroundColor: 'rgba(33, 150, 243, 0.2)',
+                    borderColor: '#2196f3',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 15 }
+                    }
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            stepSize: 20
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
