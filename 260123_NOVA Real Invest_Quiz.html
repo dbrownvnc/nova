@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>관세 공포 진정과 미국 증시 분석 - 시험문제</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: #f8f9fa;
+            padding: 16px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 1.4rem;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #4361ee;
+        }
+        .meta-info {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 1.2rem;
+            color: #2d3436;
+            margin: 30px 0 20px;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .question-box {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            margin: 16px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid #4361ee;
+        }
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .question-number {
+            background: #4361ee;
+            color: white;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        .difficulty {
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+        .easy { background: #d4edda; color: #155724; }
+        .medium { background: #fff3cd; color: #856404; }
+        .hard { background: #f8d7da; color: #721c24; }
+        .question-type {
+            font-size: 0.75rem;
+            color: #888;
+            background: #f0f0f0;
+            padding: 3px 8px;
+            border-radius: 8px;
+        }
+        .question-text {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #2d3436;
+            margin-bottom: 14px;
+        }
+        .options {
+            margin-left: 8px;
+        }
+        .option {
+            padding: 10px 14px;
+            margin: 6px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .option:hover {
+            background: #e3f2fd;
+        }
+        .blank-box {
+            display: inline-block;
+            min-width: 100px;
+            border-bottom: 2px solid #4361ee;
+            margin: 0 4px;
+            text-align: center;
+        }
+        .section-divider {
+            height: 3px;
+            background: linear-gradient(90deg, #4361ee, #7209b7, #f72585);
+            margin: 40px 0;
+            border-radius: 2px;
+        }
+        .answer-box {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            margin: 16px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid #28a745;
+        }
+        .answer-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .answer-number {
+            background: #28a745;
+            color: white;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        .correct-answer {
+            font-weight: 700;
+            color: #28a745;
+            font-size: 1.1rem;
+        }
+        .explanation {
+            margin-top: 12px;
+            padding: 12px;
+            background: #f0fff4;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #2d3436;
+        }
+        .explanation strong {
+            color: #28a745;
+        }
+        .print-hide {
+            background: #4361ee;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+        }
+        .print-hide:hover {
+            background: #3a0ca3;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #888;
+            font-size: 0.8rem;
+            border-top: 1px solid #eee;
+        }
+        @media print {
+            .print-hide { display: none; }
+            .answer-section { page-break-before: always; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 시험문제</h1>
+        <div class="meta-info">
+            📅 2026년 1월 22일 | 관세 공포 진정과 미국 증시 분석 | 총 10문제
+        </div>
+
+        <h2>━━━━━━━━━━━━━━━━━━━━━<br>📋 시험문제 (총 10문제)<br>━━━━━━━━━━━━━━━━━━━━━</h2>
+
+        <!-- 문제 1 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 1</span>
+                <span class="difficulty easy">⭐ 쉬움</span>
+                <span class="question-type">객관식</span>
+            </div>
+            <div class="question-text">
+                트럼프 대통령이 관세 철회를 발표한 지역은 어디인가?
+            </div>
+            <div class="options">
+                <div class="option">① 아시아 10개국</div>
+                <div class="option">② 유럽 8개국</div>
+                <div class="option">③ 남미 5개국</div>
+                <div class="option">④ 중동 6개국</div>
+            </div>
+        </div>
+
+        <!-- 문제 2 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 2</span>
+                <span class="difficulty easy">⭐ 쉬움</span>
+                <span class="question-type">단답형</span>
+            </div>
+            <div class="question-text">
+                2026년 4분기 미국 GDP 성장률(초벌) 발표치는 몇 %인가?
+            </div>
+            <p style="color:#888; font-size:0.9rem;">정답: ___________</p>
+        </div>
+
+        <!-- 문제 3 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 3</span>
+                <span class="difficulty medium">⭐⭐ 보통</span>
+                <span class="question-type">OX 문제</span>
+            </div>
+            <div class="question-text">
+                금(Gold) 가격이 급등하는 것은 시장의 위험이 완전히 사라졌다는 신호이다.
+            </div>
+            <div class="options">
+                <div class="option">⭕ 맞다</div>
+                <div class="option">❌ 틀리다</div>
+            </div>
+        </div>
+
+        <!-- 문제 4 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 4</span>
+                <span class="difficulty medium">⭐⭐ 보통</span>
+                <span class="question-type">객관식</span>
+            </div>
+            <div class="question-text">
+                에버코 ISI가 시장 분석에서 사용한 표현으로, 변동성 위험이 일시적으로 감소했음을 나타내는 용어는?
+            </div>
+            <div class="options">
+                <div class="option">① 우측골 위험 (Right-tail Risk)</div>
+                <div class="option">② 좌측골 위험 (Left-tail Risk)</div>
+                <div class="option">③ 중심부 위험 (Core Risk)</div>
+                <div class="option">④ 기저 위험 (Base Risk)</div>
+            </div>
+        </div>
+
+        <!-- 문제 5 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 5</span>
+                <span class="difficulty medium">⭐⭐ 보통</span>
+                <span class="question-type">빈칸채우기</span>
+            </div>
+            <div class="question-text">
+                현재 미국 경제 상황은 "<span class="blank-box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> + 고물가" 상태로, 스태그플레이션은 아닌 것으로 평가된다.
+            </div>
+        </div>
+
+        <!-- 문제 6 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 6</span>
+                <span class="difficulty medium">⭐⭐ 보통</span>
+                <span class="question-type">객관식</span>
+            </div>
+            <div class="question-text">
+                은(Silver)의 산업 수요가 급증하는 주요 분야가 아닌 것은?
+            </div>
+            <div class="options">
+                <div class="option">① 태양광 패널</div>
+                <div class="option">② 전기차 부품</div>
+                <div class="option">③ AI 데이터센터</div>
+                <div class="option">④ 건설 자재</div>
+            </div>
+        </div>
+
+        <!-- 문제 7 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 7</span>
+                <span class="difficulty hard">⭐⭐⭐ 어려움</span>
+                <span class="question-type">서술형</span>
+            </div>
+            <div class="question-text">
+                인텔(Intel)이 1분기 가이던스에서 -12%를 기록한 근본적인 원인을 공급망 관점에서 설명하시오.
+            </div>
+            <p style="color:#888; font-size:0.9rem; margin-top:10px;">
+                (힌트: 자체 공장, 하청, 우선순위 관련)
+            </p>
+        </div>
+
+        <!-- 문제 8 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 8</span>
+                <span class="difficulty medium">⭐⭐ 보통</span>
+                <span class="question-type">객관식</span>
+            </div>
+            <div class="question-text">
+                스페이스X IPO의 주관사로 선정된 금융기관이 아닌 것은?
+            </div>
+            <div class="options">
+                <div class="option">① Bank of America</div>
+                <div class="option">② Goldman Sachs</div>
+                <div class="option">③ Citigroup</div>
+                <div class="option">④ Morgan Stanley</div>
+            </div>
+        </div>
+
+        <!-- 문제 9 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 9</span>
+                <span class="difficulty easy">⭐ 쉬움</span>
+                <span class="question-type">단답형</span>
+            </div>
+            <div class="question-text">
+                일론 머스크가 다보스 포럼에서 발표한 옵티머스(휴머노이드 로봇)의 예상 출시 시기는 언제인가?
+            </div>
+            <p style="color:#888; font-size:0.9rem;">정답: ___________년 말</p>
+        </div>
+
+        <!-- 문제 10 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 10</span>
+                <span class="difficulty hard">⭐⭐⭐ 어려움</span>
+                <span class="question-type">서술형</span>
+            </div>
+            <div class="question-text">
+                메모리 반도체의 공급 부족이 2027년까지 지속될 것으로 예상되는 이유를 신규 공장 건설 및 양산 안정화 기간을 포함하여 설명하시오.
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- 정답 및 해설 -->
+        <div class="answer-section">
+            <h2>━━━━━━━━━━━━━━━━━━━━━<br>📝 정답 및 해설<br>━━━━━━━━━━━━━━━━━━━━━</h2>
+
+            <!-- 정답 1 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-number">문제 1</span>
+                    <span class="correct-answer">정답: ②</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 트럼프 대통령은 <strong>유럽 8개국</strong>에 대한 관세 철회를 발표했습니다. 이로 인해 "셀 아메리카(Sell America)" 매도세가 진정되고 변동성 리스크가 일시적으로 감소했습니다.
+                </div>
+            </div>
+
+            <!-- 정답 2 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-number">문제 2</span>
+                    <span class="correct-answer">정답: 4.4%</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 2026년 4분기 GDP 성장률 초벌(Preliminary) 발표치는 <strong>4.4%</strong>로 예상치(4.3%)를 상회했습니다. GDP는 초벌, 재벌, 파이널 3번에 걸쳐 발표됩니다.
+                </div>
+            </div>
+
+            <!-- 정답 3 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-number">문제 3</span>
+                    <span class="correct-answer">정답: ❌ 틀리다</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 금 가격 급등($4,943)은 오히려 <strong>"위험이 사라지지 않았다"는 경고 신호</strong>입니다. 금은 안전자산으로, 가격 상승은 투자자들이 여전히 리스크를 인지하고 헤지하고 있음을 의미합니다. "리스크는 사라진 게 아니라 잠시 숨은 것"이라는 분석과 일치합니다.
+                </div>
+            </div>
+
+            <!-- 정답 4 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-number">문제 4</span>
+                    <span class="correct-answer">정답: ②</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 에버코 ISI는 <strong>"좌측골 위험(Left-tail Risk)"</strong>이라는 표현을 사용했습니다. 이는 극단적인 하락 위험을 의미하며, 그린란드·이란 등 지정학적 이슈에 대한 위험도가 시장에서 일시적으로 제거된 것으로 해석됩니다. "꼬리(Tail)가 움직였지만 몸통은 그대로"라는 분석입니다.
+                </div>
+            </div>
+
+            <!-- 정답 5 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-number">문제 5</span>
+                    <span class="correct-answer">정답: 고성장</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 현재 미국 경제는 <strong>"고성장 + 고물가"</strong> 상태입니다. GDP 성장률 4.4%로 성장이 지속되고 있고, PCE도 0.2%로 물가 압력이 유지되고 있습니다. 다행히 스태그플레이션(저성장+고물가)은 아니지만, 고용 지표 악화에 주의가 필요합니다.
+                </div>
+            </div>
+
+            <!-- 정답 6 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-number">문제 6</span>
+                    <span class="correct-answer">정답: ④</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 은(Silver)의 산업 수요가 급증하는 분야는 <strong>태양광 패널, 전기차 부품, AI 데이터센터</strong>입니다. 건설 자재는 주요 수요처가 아닙니다. 은은 산업재 역할을 하기 때문에 경기에 민감하며, 경기 침체 시 급락할 수 있습니다.
+                </div>
+            </div>
+
+            <!-- 정답 7 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-number">문제 7</span>
+                    <span class="correct-answer">정답: 서술형</span>
+                </div>
+                <div class="explanation">
+                    <strong>모범답안:</strong><br>
+                    인텔은 <strong>자체 공장(팹)이 부족</strong>하여 TSMC 등에 생산을 하청하고 있습니다. 하청업체는 물량이 큰 고객(AMD, NVIDIA, Apple 등)을 우선적으로 처리하기 때문에, 인텔은 <strong>공급 우선순위에서 밀리게</strong> 됩니다. 결과적으로 인텔은 "팔고 싶어도 물건을 공급받지 못해 못 파는" 상황에 처하게 되어 가이던스가 -12%를 기록했습니다.
+                </div>
+            </div>
+
+            <!-- 정답 8 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-number">문제 8</span>
+                    <span class="correct-answer">정답: ③</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 스페이스X IPO 주관사로 선정된 4개사는 <strong>Bank of America, Goldman Sachs, JP Morgan, Morgan Stanley</strong>입니다. Citigroup은 포함되지 않았습니다. 예상 밸류에이션은 약 $400B(4,000억 달러)입니다.
+                </div>
+            </div>
+
+            <!-- 정답 9 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-number">문제 9</span>
+                    <span class="correct-answer">정답: 2027</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 일론 머스크는 다보스 포럼에서 옵티머스 출시 시기를 기존 2026년 말에서 <strong>2027년 말</strong>로 연기한다고 발표했습니다. 예상 가격은 $20,000~$30,000이며, "사이버트럭 패턴"(초기 화제 후 판매 부진) 반복 가능성이 제기됩니다.
+                </div>
+            </div>
+
+            <!-- 정답 10 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-number">문제 10</span>
+                    <span class="correct-answer">정답: 서술형</span>
+                </div>
+                <div class="explanation">
+                    <strong>모범답안:</strong><br>
+                    메모리 반도체 공급 부족이 2027년까지 지속되는 이유는 <strong>신규 공장 건설 및 양산 안정화에 필요한 시간</strong> 때문입니다.<br><br>
+                    1. <strong>공장 건설:</strong> 약 1년 소요<br>
+                    2. <strong>양산 안정화:</strong> 불량률을 낮추고 정상 생산에 이르기까지 약 6개월 소요<br>
+                    3. <strong>총 소요 기간:</strong> 최소 1년 6개월<br><br>
+                    부지가 없는 경우 2년 이상도 소요될 수 있습니다. AI 데이터센터의 기하급수적인 수요 증가로 인해 수요가 예상을 뛰어넘고 있어, 메모리 업체(마이크론, SK하이닉스, 삼성전자 등)와 장비 업체(NVMI, KLAC, AMAT 등)의 수혜가 예상됩니다.
+                </div>
+            </div>
+        </div>
+
+        <button class="print-hide" onclick="window.print()">🖨️ 인쇄하기</button>
+
+        <footer>
+            📺 원본: CIA.chat 멤버미팅 (2026-01-22)<br>
+            ⚠️ 본 자료는 학습 목적으로 제작되었습니다.
+        </footer>
+    </div>
+</body>
+</html>

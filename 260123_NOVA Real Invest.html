@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>관세 공포 진정과 미국 증시 분석 (2026-01-22)</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: #f8f9fa;
+            padding: 16px;
+            max-width: 100%;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 1.5rem;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #4361ee;
+        }
+        .meta-info {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 1.25rem;
+            color: #2d3436;
+            margin: 28px 0 16px;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+            color: white;
+            border-radius: 8px;
+        }
+        h3 {
+            font-size: 1.1rem;
+            color: #4361ee;
+            margin: 20px 0 12px;
+            padding-left: 12px;
+            border-left: 4px solid #4361ee;
+        }
+        p {
+            margin-bottom: 14px;
+            text-align: justify;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border-left: 4px solid #f39c12;
+            padding: 14px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .warning-box {
+            background: linear-gradient(135deg, #ffe6e6 0%, #ffcccc 100%);
+            border-left: 4px solid #e74c3c;
+            padding: 14px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .success-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-left: 4px solid #28a745;
+            padding: 14px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .info-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 4px solid #2196f3;
+            padding: 14px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .chart-container {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .chart-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #2d3436;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.9rem;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #4361ee;
+            color: white;
+            font-weight: 600;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        .tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin: 2px;
+        }
+        .tag-up { background: #d4edda; color: #155724; }
+        .tag-down { background: #f8d7da; color: #721c24; }
+        .tag-neutral { background: #e2e3e5; color: #383d41; }
+        .tag-hot { background: #fff3cd; color: #856404; }
+        .stock-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 16px 0;
+        }
+        .stock-item {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        .stock-ticker {
+            font-weight: 700;
+            color: #4361ee;
+            font-size: 1rem;
+        }
+        .stock-change {
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+        .positive { color: #28a745; }
+        .negative { color: #dc3545; }
+        strong {
+            color: #e74c3c;
+        }
+        .key-point {
+            background: #fff;
+            border: 2px solid #4361ee;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+        .key-point-title {
+            font-weight: 700;
+            color: #4361ee;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        ul {
+            margin: 12px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(90deg, #4361ee, #7209b7, #f72585);
+            margin: 30px 0;
+            border-radius: 2px;
+        }
+        .summary-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        .summary-card h3 {
+            color: white;
+            border-left: 4px solid white;
+            margin-bottom: 14px;
+        }
+        .quote {
+            font-style: italic;
+            color: #555;
+            padding: 12px 16px;
+            border-left: 3px solid #ddd;
+            margin: 16px 0;
+            background: #fafafa;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #888;
+            font-size: 0.8rem;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 관세 공포 진정과 미국 증시 분석</h1>
+        <div class="meta-info">
+            📅 2026년 1월 22일 (목) | 📺 CIA.chat 멤버미팅 분석 | 🇺🇸 미국 증시 관점
+        </div>
+
+        <!-- 핵심 요약 -->
+        <div class="summary-card">
+            <h3>📌 오늘의 핵심 메시지</h3>
+            <p><strong>"위험이 사라진 게 아니다. 잠시 숨은 것이다."</strong></p>
+            <p>트럼프 대통령의 유럽 8개국 관세 철회로 변동성 리스크가 일시적으로 감소했으나, 근본적인 지정학적 위험은 여전히 존재. 금 가격 급등이 이를 경고하고 있음.</p>
+        </div>
+
+        <h2>1️⃣ 시장 상황 개요</h2>
+        
+        <h3>트럼프 관세 정책 변화</h3>
+        <div class="success-box">
+            <strong>📢 유럽 8개국 관세 철회 발표</strong>
+            <p style="margin-top:8px; margin-bottom:0;">변동성 리스크 일시 감소, "셀 아메리카" 매도세 진정</p>
+        </div>
+        
+        <p>트럼프 대통령이 유럽 8개국에 대한 관세 철회를 발표하면서 시장의 불안감이 일시적으로 해소되었습니다. 그러나 이는 <strong>"꼬리 위험(Tail Risk)"</strong>만 감소한 것이며, 몸통(본질적 리스크)은 그대로 남아있습니다.</p>
+
+        <div class="highlight-box">
+            <strong>🔍 에버코 ISI 분석:</strong> "좌측골 위험(Left-tail Risk)" 표현 사용
+            <p style="margin-top:8px; margin-bottom:0;">그린란드, 이란 등 지정학적 이슈에 대한 위험도가 시장에서 일시적으로 제거된 것으로 인식</p>
+        </div>
+
+        <h3>경제지표 하이라이트</h3>
+        
+        <div class="chart-container">
+            <div class="chart-title">📈 4분기 GDP 성장률 추이</div>
+            <canvas id="gdpChart"></canvas>
+        </div>
+
+        <table>
+            <tr>
+                <th>지표</th>
+                <th>발표치</th>
+                <th>예상치</th>
+                <th>평가</th>
+            </tr>
+            <tr>
+                <td>4분기 GDP 성장률</td>
+                <td><strong>4.4%</strong></td>
+                <td>4.3%</td>
+                <td><span class="tag tag-up">상회</span></td>
+            </tr>
+            <tr>
+                <td>코어 PCE (MoM)</td>
+                <td><strong>0.2%</strong></td>
+                <td>0.2%</td>
+                <td><span class="tag tag-neutral">예상 부합</span></td>
+            </tr>
+        </table>
+
+        <div class="info-box">
+            <strong>📊 현재 미국 경제 상황:</strong>
+            <p style="margin-top:8px; margin-bottom:0;"><strong>"고성장 + 고물가"</strong> = 스태그플레이션이 아닌 것이 다행<br>
+            성장은 지속되고, 물가도 유지되는 상황. 다만 고용 지표 악화에 주목 필요.</p>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <h2>2️⃣ 금(Gold) 시장 경고 신호</h2>
+
+        <div class="warning-box">
+            <strong>⚠️ 금 가격: $4,943 (급등 중)</strong>
+            <p style="margin-top:8px; margin-bottom:0;">"위험이 사라지지 않았다"는 것을 금 시장이 경고하고 있음</p>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">🥇 금 vs 은 시가총액 비교 (조 달러)</div>
+            <canvas id="metalChart"></canvas>
+        </div>
+
+        <table>
+            <tr>
+                <th>자산</th>
+                <th>시가총액</th>
+                <th>특성</th>
+            </tr>
+            <tr>
+                <td>🥇 금(Gold)</td>
+                <td><strong>$34조</strong></td>
+                <td>SPY(S&P500) 역할</td>
+            </tr>
+            <tr>
+                <td>🥈 은(Silver)</td>
+                <td><strong>$5조+</strong></td>
+                <td>Russell(잡주) 역할</td>
+            </tr>
+            <tr>
+                <td>₿ 비트코인</td>
+                <td>$2조+</td>
+                <td>은보다 작아짐</td>
+            </tr>
+        </table>
+
+        <h3>은(Silver) 급등 배경</h3>
+        <p>은이 비트코인, 엔비디아 시총을 추월하며 <strong>$5조 돌파</strong>. 금과 은의 가격 비율이 약 <strong>50배</strong>로 크게 좁혀졌습니다.</p>
+
+        <div class="key-point">
+            <div class="key-point-title">🏭 은 수요 급증 요인</div>
+            <ul>
+                <li><strong>태양광(Solar)</strong> 패널 제조</li>
+                <li><strong>전기차(EV)</strong> 부품</li>
+                <li><strong>AI 데이터센터</strong> 장비</li>
+            </ul>
+            <p style="margin-bottom:0; margin-top:12px;">→ 산업재 역할로 인해 <strong>경기 민감도 높음</strong> (경기침체 시 급락 가능)</p>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <h2>3️⃣ 메모리 반도체 섹터 분석</h2>
+
+        <div class="success-box">
+            <strong>💾 핵심 전략: "소프트웨어 → 반도체로 자본 이동"</strong>
+            <p style="margin-top:8px; margin-bottom:0;">메모리 반도체는 2027년까지 공급 부족 지속 전망</p>
+        </div>
+
+        <h3>메모리 주식 퍼포먼스</h3>
+        
+        <div class="chart-container">
+            <div class="chart-title">📊 주요 메모리 주식 상승률 (5월 이후)</div>
+            <canvas id="memoryChart"></canvas>
+        </div>
+
+        <table>
+            <tr>
+                <th>종목</th>
+                <th>시작가</th>
+                <th>현재가</th>
+                <th>수익률</th>
+            </tr>
+            <tr>
+                <td><strong>SNDK</strong></td>
+                <td>$30</td>
+                <td>$503</td>
+                <td><span class="tag tag-up">+1,577%</span></td>
+            </tr>
+            <tr>
+                <td><strong>MU (마이크론)</strong></td>
+                <td>$80</td>
+                <td>$397</td>
+                <td><span class="tag tag-up">+396%</span></td>
+            </tr>
+        </table>
+
+        <h3>반도체 장비주 리스트</h3>
+        <div class="highlight-box">
+            <strong>🔧 주목해야 할 장비주 (최소 1~2년 수혜 전망)</strong>
+        </div>
+        
+        <div class="stock-list">
+            <div class="stock-item">
+                <div class="stock-ticker">NVMI</div>
+                <div class="stock-change positive">Nova Ltd</div>
+            </div>
+            <div class="stock-item">
+                <div class="stock-ticker">KLAC</div>
+                <div class="stock-change positive">KLA Corp</div>
+            </div>
+            <div class="stock-item">
+                <div class="stock-ticker">AMAT</div>
+                <div class="stock-change positive">Applied Materials</div>
+            </div>
+            <div class="stock-item">
+                <div class="stock-ticker">SIMO</div>
+                <div class="stock-change positive">Silicon Motion</div>
+            </div>
+            <div class="stock-item">
+                <div class="stock-ticker">ONTO</div>
+                <div class="stock-change positive">Onto Innovation</div>
+            </div>
+            <div class="stock-item">
+                <div class="stock-ticker">CAMT</div>
+                <div class="stock-change positive">Camtek Ltd</div>
+            </div>
+            <div class="stock-item">
+                <div class="stock-ticker">LRCX</div>
+                <div class="stock-change positive">Lam Research</div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <strong>📌 공급 부족 타임라인:</strong>
+            <ul style="margin-bottom:0;">
+                <li>신규 공장 건설: 약 <strong>1년</strong></li>
+                <li>양산 안정화: 약 <strong>6개월</strong></li>
+                <li>총 필요 기간: <strong>최소 1년 6개월</strong></li>
+            </ul>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <h2>4️⃣ 개별 종목 & 기업 뉴스</h2>
+
+        <h3>📱 META (메타)</h3>
+        <div class="stock-item" style="width:100%; text-align:left;">
+            <span class="stock-ticker">META</span> <span class="positive">+5.66%</span>
+        </div>
+        <ul>
+            <li>AI 기반 광고 매출 성장 기대감</li>
+            <li>대규모 캐펙스(CAPEX) 증가 발표 → 시장 긍정적 반응</li>
+            <li>메타버스 실패 경험에도 AI에 공격적 투자</li>
+        </ul>
+
+        <h3>🚗 TSLA (테슬라) - 다보스 연설</h3>
+        <div class="key-point">
+            <div class="key-point-title">일론 머스크 다보스 발언 요약</div>
+            <table>
+                <tr>
+                    <th>항목</th>
+                    <th>내용</th>
+                </tr>
+                <tr>
+                    <td>로보택시</td>
+                    <td>텍사스에서 <strong>완전 무인</strong> 운행 개시<br>2026년 말 서비스 공식 시작 목표</td>
+                </tr>
+                <tr>
+                    <td>옵티머스</td>
+                    <td>출시일 <strong>2027년 말</strong>로 연기<br>예상가격: $20,000~$30,000</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="warning-box">
+            <strong>⚠️ 옵티머스 전망:</strong> "사이버트럭 패턴 반복 가능성"
+            <p style="margin-top:8px; margin-bottom:0;">초기 화제성 후 판매 부진 우려. 장기 투자 시 주의 필요.</p>
+        </div>
+
+        <h3>🏦 Intel (인텔)</h3>
+        <div class="stock-item" style="width:100%; text-align:left;">
+            <span class="stock-ticker">INTC</span> <span class="negative">-12%</span> (1분기 가이던스)
+        </div>
+        <ul>
+            <li>자체 공장 없이 하청 의존 → 공급 우선순위 밀림</li>
+            <li>TSMC 하청 물량에서 AMD, NVIDIA, Apple에 밀림</li>
+            <li>팔고 싶어도 못 파는 상황</li>
+        </ul>
+
+        <h3>💳 캐피탈원 - Discover 인수</h3>
+        <ul>
+            <li>인수 규모: 현금 50% + 주식 50%</li>
+            <li>크레딧 카드 시장 통합 가속화</li>
+        </ul>
+
+        <div class="section-divider"></div>
+
+        <h2>5️⃣ 스페이스X IPO 동향</h2>
+
+        <div class="success-box">
+            <strong>🚀 IPO 주관사 선정 완료</strong>
+            <p style="margin-top:8px; margin-bottom:0;">Bank of America, Goldman Sachs, JP Morgan, Morgan Stanley (4개사)</p>
+        </div>
+
+        <table>
+            <tr>
+                <th>항목</th>
+                <th>내용</th>
+            </tr>
+            <tr>
+                <td>예상 밸류에이션</td>
+                <td><strong>$400B (약 4,000억 달러)</strong></td>
+            </tr>
+            <tr>
+                <td>관련 수혜주</td>
+                <td>SATS, ASTS (+12.43%), Echostar (+4.4%)</td>
+            </tr>
+        </table>
+
+        <div class="info-box">
+            <strong>📌 SATS 급등 이유:</strong>
+            <p style="margin-top:8px; margin-bottom:0;">주파수 매각 시 스페이스X 지분 확보 → IPO 시 가치 상승 기대<br>
+            "스페이스X IPO의 계기판 역할"</p>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <h2>6️⃣ 연준 의장 후보 동향</h2>
+
+        <div class="chart-container">
+            <div class="chart-title">🗳️ 연준 의장 후보 예측 시장</div>
+            <canvas id="fedChart"></canvas>
+        </div>
+
+        <table>
+            <tr>
+                <th>후보</th>
+                <th>소속</th>
+                <th>확률</th>
+            </tr>
+            <tr>
+                <td><strong>케빈 왓시</strong></td>
+                <td>前 연준 이사</td>
+                <td><span class="tag tag-hot">45%</span></td>
+            </tr>
+            <tr>
+                <td><strong>릭 라이더</strong></td>
+                <td>블랙록 CEO</td>
+                <td><span class="tag tag-neutral">33%</span></td>
+            </tr>
+        </table>
+
+        <div class="highlight-box">
+            <strong>💬 케빈 왓시 발언:</strong> "연준 의원은 독립성이 있어야 한다"
+            <p style="margin-top:8px; margin-bottom:0;">트럼프의 간섭에 대한 견제 의지 vs 본인 탈락 예상에 따른 발언?</p>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <h2>7️⃣ 섹터 로테이션 분석</h2>
+
+        <div class="chart-container">
+            <div class="chart-title">📊 1개월 섹터별 퍼포먼스</div>
+            <canvas id="sectorChart"></canvas>
+        </div>
+
+        <table>
+            <tr>
+                <th>순위</th>
+                <th>섹터</th>
+                <th>기간</th>
+            </tr>
+            <tr>
+                <td>🥇</td>
+                <td><strong>에너지 (Energy)</strong></td>
+                <td>1개월</td>
+            </tr>
+            <tr>
+                <td>🥈</td>
+                <td><strong>소재 (Materials)</strong></td>
+                <td>1개월</td>
+            </tr>
+            <tr>
+                <td>🥉</td>
+                <td><strong>필수소비재 (Staples)</strong></td>
+                <td>1개월</td>
+            </tr>
+        </table>
+
+        <div class="key-point">
+            <div class="key-point-title">📈 1년 기준 Top 섹터</div>
+            <ol>
+                <li><strong>커뮤니케이션 (Communication)</strong></li>
+                <li><strong>정보기술 (Info Tech)</strong></li>
+            </ol>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <h2>8️⃣ 투자 시사점 & 전략</h2>
+
+        <div class="summary-card">
+            <h3>🎯 핵심 투자 전략</h3>
+            <ul>
+                <li><strong>메모리 반도체:</strong> MU, SK하이닉스, 삼성전자, WDC, STX, SNDK - 2027년까지 수혜</li>
+                <li><strong>반도체 장비:</strong> NVMI, KLAC, AMAT, LRCX - 최소 1~2년 노나는 구간</li>
+                <li><strong>금/은:</strong> 리스크 헤지용 포지션 유지 권장</li>
+                <li><strong>우주 섹터:</strong> 스페이스X IPO 수혜주 주목 (SATS, ASTS)</li>
+            </ul>
+        </div>
+
+        <div class="warning-box">
+            <strong>⚠️ 리스크 요인</strong>
+            <ul style="margin-bottom:0;">
+                <li><strong>그린란드:</strong> 지정학적 위협 지속</li>
+                <li><strong>이란:</strong> 주말 추가 이슈 가능성</li>
+                <li><strong>트럼프 발언:</strong> 주말에 이벤트 발생 패턴</li>
+            </ul>
+        </div>
+
+        <div class="info-box">
+            <strong>📅 내일(1/23) 주요 일정</strong>
+            <ul style="margin-bottom:0;">
+                <li>S&P PMI 발표</li>
+                <li>미시간대학교 소비자심리 확정치</li>
+            </ul>
+        </div>
+
+        <div class="key-point">
+            <div class="key-point-title">💡 시장 전망</div>
+            <p style="margin-bottom:0;">"이상한 위험 요소만 없으면 시장은 계속 간다"<br>
+            트럼프 대통령의 말·행동만 없으면 상승 모멘텀 지속. 러셀 잡주들도 "우리 차례" 인식으로 상승 중.</p>
+        </div>
+
+        <div class="quote">
+            "잘하는 애들은 그냥 두고, 못하는 애들 걸 빼서 잘하는 애들한테 줘야 한다. 서울대 갈 수 있는 애한테 투자하지, 못 가는 애한테 투자할 이유가 없다."
+        </div>
+
+        <footer>
+            📺 원본: CIA.chat 멤버미팅 (2026-01-22)<br>
+            ⚠️ 본 자료는 투자 권유가 아닌 정보 제공 목적입니다.
+        </footer>
+    </div>
+
+    <script>
+        // GDP 차트
+        new Chart(document.getElementById('gdpChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+                datasets: [{
+                    label: 'GDP 성장률 (%)',
+                    data: [2.8, 3.2, 3.8, 4.4],
+                    backgroundColor: ['#74b9ff', '#74b9ff', '#74b9ff', '#00b894'],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 5,
+                        ticks: { callback: v => v + '%' }
+                    }
+                }
+            }
+        });
+
+        // 금/은 시가총액 차트
+        new Chart(document.getElementById('metalChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['금 (Gold)', '은 (Silver)', '비트코인', '엔비디아'],
+                datasets: [{
+                    data: [34, 5, 2, 3.5],
+                    backgroundColor: ['#ffd700', '#c0c0c0', '#f7931a', '#76b900']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // 메모리 주식 차트
+        new Chart(document.getElementById('memoryChart'), {
+            type: 'bar',
+            data: {
+                labels: ['SNDK', 'MU', 'SK하이닉스', '삼성전자'],
+                datasets: [{
+                    label: '상승률 (%)',
+                    data: [1577, 396, 280, 150],
+                    backgroundColor: ['#e74c3c', '#3498db', '#9b59b6', '#2ecc71'],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        ticks: { callback: v => v + '%' }
+                    }
+                }
+            }
+        });
+
+        // 연준 의장 후보 차트
+        new Chart(document.getElementById('fedChart'), {
+            type: 'pie',
+            data: {
+                labels: ['케빈 왓시 (45%)', '릭 라이더 (33%)', '기타 (22%)'],
+                datasets: [{
+                    data: [45, 33, 22],
+                    backgroundColor: ['#4361ee', '#7209b7', '#e0e0e0']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // 섹터 퍼포먼스 차트
+        new Chart(document.getElementById('sectorChart'), {
+            type: 'bar',
+            data: {
+                labels: ['에너지', '소재', '필수소비재', '산업재', '헬스케어', '기술'],
+                datasets: [{
+                    label: '1개월 수익률 (%)',
+                    data: [8.5, 7.2, 5.8, 5.2, 4.8, 3.5],
+                    backgroundColor: ['#e74c3c', '#f39c12', '#27ae60', '#3498db', '#9b59b6', '#1abc9c'],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { callback: v => v + '%' }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
