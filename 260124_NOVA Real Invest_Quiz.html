@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>시험문제 | 인텔 쇼크 & 반도체 제로섬 게임</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 20px 16px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 2px solid rgba(155, 89, 182, 0.3);
+            margin-bottom: 30px;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        
+        .meta {
+            font-size: 0.85rem;
+            color: #888;
+        }
+        
+        .section-title {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(41, 128, 185, 0.1));
+            border: 1px solid rgba(52, 152, 219, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin: 30px 0 25px;
+        }
+        
+        .section-title h2 {
+            font-size: 1.2rem;
+            color: #3498db;
+            margin: 0;
+        }
+        
+        .section-title p {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 8px;
+        }
+        
+        .question-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .q-number {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        
+        .q-meta {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .difficulty {
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 12px;
+        }
+        
+        .diff-easy {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+        }
+        
+        .diff-medium {
+            background: rgba(241, 196, 15, 0.2);
+            color: #f1c40f;
+        }
+        
+        .diff-hard {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+        
+        .q-type {
+            font-size: 0.75rem;
+            color: #888;
+            padding: 3px 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+        }
+        
+        .question-text {
+            font-size: 1rem;
+            color: #fff;
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option {
+            background: rgba(255,255,255,0.05);
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #ccc;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .option:hover {
+            background: rgba(52, 152, 219, 0.1);
+            border-color: rgba(52, 152, 219, 0.3);
+        }
+        
+        .blank-line {
+            border-bottom: 2px dashed rgba(255,255,255,0.3);
+            display: inline-block;
+            min-width: 100px;
+            margin: 0 5px;
+        }
+        
+        .ox-options {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .ox-options .option {
+            flex: 1;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .short-answer {
+            background: rgba(255,255,255,0.05);
+            border: 1px dashed rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 60px;
+        }
+        
+        .short-answer-hint {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        /* 정답 섹션 */
+        .answer-section {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 3px solid rgba(46, 204, 113, 0.3);
+        }
+        
+        .answer-section .section-title {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(39, 174, 96, 0.1));
+            border-color: rgba(46, 204, 113, 0.3);
+        }
+        
+        .answer-section .section-title h2 {
+            color: #2ecc71;
+        }
+        
+        .answer-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(46, 204, 113, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .answer-card .q-number {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+        }
+        
+        .answer-box {
+            background: rgba(46, 204, 113, 0.1);
+            border-left: 4px solid #2ecc71;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+        }
+        
+        .answer-label {
+            font-size: 0.8rem;
+            color: #2ecc71;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .answer-text {
+            font-size: 1.1rem;
+            color: #fff;
+            font-weight: 600;
+        }
+        
+        .explanation {
+            font-size: 0.9rem;
+            color: #bbb;
+            line-height: 1.7;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 8px;
+        }
+        
+        .explanation strong {
+            color: #3498db;
+        }
+        
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+            margin: 40px 0;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #666;
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 40px;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            .question-card, .answer-card {
+                break-inside: avoid;
+                border: 1px solid #ddd;
+            }
+            .answer-section {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="badge">📝 시험문제</div>
+            <h1>인텔 쇼크 & 반도체 제로섬 게임</h1>
+            <p class="meta">2026년 1월 24일 | 미국 증시 분석 기반</p>
+        </header>
+
+        <!-- ===== 문제지 섹션 ===== -->
+        <div class="section-title">
+            <h2>📋 시험문제 (총 10문제)</h2>
+            <p>난이도: ⭐ 쉬움 30% | ⭐⭐ 보통 50% | ⭐⭐⭐ 어려움 20%</p>
+        </div>
+
+        <!-- 문제 1 -->
+        <div class="question-card">
+            <div class="question-header">
+                <div class="q-number">1</div>
+                <div class="q-meta">
+                    <span class="difficulty diff-easy">⭐ 쉬움</span>
+                    <span class="q-type">객관식</span>
+                </div>
+            </div>
+            <div class="question-text">
+                인텔의 2026년 1월 24일 주가 하락폭은 얼마인가?
+            </div>
+            <div class="options">
+                <div class="option">① -8%</div>
+                <div class="option">② -13%</div>
+                <div class="option">③ -17%</div>
+                <div class="option">④ -25%</div>
+            </div>
+        </div>
+
+        <!-- 문제 2 -->
+        <div class="question-card">
+            <div class="question-header">
+                <div class="q-number">2</div>
+                <div class="q-meta">
+                    <span class="difficulty diff-easy">⭐ 쉬움</span>
+                    <span class="q-type">OX 문제</span>
+                </div>
+            </div>
+            <div class="question-text">
+                엔비디아는 자체 반도체 공장을 보유한 IDM(종합반도체회사)이다.
+            </div>
+            <div class="ox-options">
+                <div class="option">⭕ O</div>
+                <div class="option">❌ X</div>
+            </div>
+        </div>
+
+        <!-- 문제 3 -->
+        <div class="question-card">
+            <div class="question-header">
+                <div class="q-number">3</div>
+                <div class="q-meta">
+                    <span class="difficulty diff-medium">⭐⭐ 보통</span>
+                    <span class="q-type">객관식</span>
+                </div>
+            </div>
+            <div class="question-text">
+                중국 정부가 엔비디아 H200 칩 수입을 승인한 기업으로 <strong>옳지 않은</strong> 것은?
+            </div>
+            <div class="options">
+                <div class="option">① 알리바바</div>
+                <div class="option">② 텐센트</div>
+                <div class="option">③ 바이두</div>
+                <div class="option">④ 화웨이</div>
+            </div>
+        </div>
+
+        <!-- 문제 4 -->
+        <div class="question-card">
+            <div class="question-header">
+                <div class="q-number">4</div>
+                <div class="q-meta">
+                    <span class="difficulty diff-medium">⭐⭐ 보통</span>
+                    <span class="q-type">단답형</span>
+                </div>
+            </div>
+            <div class="question-text">
+                테슬라가 신규 모델 3/Y에서 제거하고 FSD 구독 모델로 전환하려는 기능의 이름은?
+            </div>
+            <div class="short-answer">
+                <span class="short-answer-hint">답: _________________</span>
+            </div>
+        </div>
+
+        <!-- 문제 5 -->
+        <div class="question-card">
+            <div class="question-header">
+                <div class="q-number">5</div>
+                <div class="q-meta">
+                    <span class="difficulty diff-medium">⭐⭐ 보통</span>
+                    <span class="q-type">빈칸 채우기</span>
+                </div>
+            </div>
+            <div class="question-text">
+                금 가격이 사상 최고치인 <span class="blank-line"></span>달러에 근접했으며, 목표가는 <span class="blank-line"></span>달러이다.
+            </div>
+        </div>
+
+        <!-- 문제 6 -->
+        <div class="question-card">
+            <div class="question-header">
+                <div class="q-number">6</div>
+                <div class="q-meta">
+                    <span class="difficulty diff-easy">⭐ 쉬움</span>
+                    <span class="q-type">객관식</span>
+                </div>
+            </div>
+            <div class="question-text">
+                다음 주 FOMC 발표가 예정된 요일은?
+            </div>
+            <div class="options">
+                <div class="option">① 월요일</div>
+                <div class="option">② 화요일</div>
+                <div class="option">③ 수요일</div>
+                <div class="option">④ 목요일</div>
+            </div>
+        </div>
+
+        <!-- 문제 7 -->
+        <div class="question-card">
+            <div class="question-header">
+                <div class="q-number">7</div>
+                <div class="q-meta">
+                    <span class="difficulty diff-medium">⭐⭐ 보통</span>
+                    <span class="q-type">객관식</span>
+                </div>
+            </div>
+            <div class="question-text">
+                JP모건 CEO 제이미 다이먼이 기업 파산 증가를 경고하며 언급한 이론은?
+            </div>
+            <div class="options">
+                <div class="option">① 나비 효과 (Butterfly Effect)</div>
+                <div class="option">② 바퀴벌레 이론 (Cockroach Theory)</div>
+                <div class="option">③ 깨진 유리창 이론 (Broken Window Theory)</div>
+                <div class="option">④ 도미노 이론 (Domino Theory)</div>
+            </div>
+        </div>
+
+        <!-- 문제 8 -->
+        <div class="question-card">
+            <div class="question-header">
+                <div class="q-number">8</div>
+                <div class="q-meta">
+                    <span class="difficulty diff-hard">⭐⭐⭐ 어려움</span>
+                    <span class="q-type">서술형</span>
+                </div>
+            </div>
+            <div class="question-text">
+                인텔의 파운드리 전략이 AMD와 비교하여 단기적으로 불리한 이유를 설명하시오. (제조 방식의 차이점을 중심으로)
+            </div>
+            <div class="short-answer" style="min-height: 100px;">
+                <span class="short-answer-hint">서술 답안:</span>
+            </div>
+        </div>
+
+        <!-- 문제 9 -->
+        <div class="question-card">
+            <div class="question-header">
+                <div class="q-number">9</div>
+                <div class="q-meta">
+                    <span class="difficulty diff-medium">⭐⭐ 보통</span>
+                    <span class="q-type">OX 문제</span>
+                </div>
+            </div>
+            <div class="question-text">
+                영상 분석에 따르면, 이번 주 상승은 "진정한 추세 전환"이 아닌 "리스크 완화형 숏커버 랠리"로 평가된다.
+            </div>
+            <div class="ox-options">
+                <div class="option">⭕ O</div>
+                <div class="option">❌ X</div>
+            </div>
+        </div>
+
+        <!-- 문제 10 -->
+        <div class="question-card">
+            <div class="question-header">
+                <div class="q-number">10</div>
+                <div class="q-meta">
+                    <span class="difficulty diff-hard">⭐⭐⭐ 어려움</span>
+                    <span class="q-type">서술형</span>
+                </div>
+            </div>
+            <div class="question-text">
+                영상에서 제시된 "이벤트 리스크가 큰 시기의 투자 전략"을 3가지 이상 서술하시오.
+            </div>
+            <div class="short-answer" style="min-height: 120px;">
+                <span class="short-answer-hint">서술 답안:</span>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ===== 정답 및 해설 섹션 ===== -->
+        <div class="answer-section">
+            <div class="section-title">
+                <h2>📝 정답 및 해설</h2>
+                <p>각 문제의 정답과 상세 해설</p>
+            </div>
+
+            <!-- 정답 1 -->
+            <div class="answer-card">
+                <div class="question-header">
+                    <div class="q-number">1</div>
+                    <div class="q-meta">
+                        <span class="difficulty diff-easy">⭐ 쉬움</span>
+                    </div>
+                </div>
+                <div class="answer-box">
+                    <div class="answer-label">정답</div>
+                    <div class="answer-text">③ -17%</div>
+                </div>
+                <div class="explanation">
+                    인텔은 실적 발표 후 장외에서 -13%를 기록했으나, 실제 장에서 추가 하락하여 <strong>총 -17%</strong>의 하락폭을 기록했습니다. 이는 <strong>2024년 8월 이후 최대 낙폭</strong>입니다.
+                </div>
+            </div>
+
+            <!-- 정답 2 -->
+            <div class="answer-card">
+                <div class="question-header">
+                    <div class="q-number">2</div>
+                    <div class="q-meta">
+                        <span class="difficulty diff-easy">⭐ 쉬움</span>
+                    </div>
+                </div>
+                <div class="answer-box">
+                    <div class="answer-label">정답</div>
+                    <div class="answer-text">❌ X (틀림)</div>
+                </div>
+                <div class="explanation">
+                    엔비디아는 <strong>팹리스(Fabless)</strong> 기업으로, 자체 공장 없이 설계만 하고 TSMC에 위탁 생산합니다. AMD, 애플도 마찬가지입니다. 반면 인텔은 자체 공장을 보유한 IDM을 지향하고 있으나, 이로 인해 단기적으로 경쟁력이 약화되고 있습니다.
+                </div>
+            </div>
+
+            <!-- 정답 3 -->
+            <div class="answer-card">
+                <div class="question-header">
+                    <div class="q-number">3</div>
+                    <div class="q-meta">
+                        <span class="difficulty diff-medium">⭐⭐ 보통</span>
+                    </div>
+                </div>
+                <div class="answer-box">
+                    <div class="answer-label">정답</div>
+                    <div class="answer-text">④ 화웨이</div>
+                </div>
+                <div class="explanation">
+                    중국 정부가 H200 칩 수입을 승인한 기업은 <strong>알리바바, 텐센트, 바이두(바이댄스)</strong>입니다. 화웨이는 미국의 수출 규제 대상으로, 엔비디아 칩을 공급받을 수 없습니다. 이번 승인 규모는 약 <strong>500억 달러</strong>에 달합니다.
+                </div>
+            </div>
+
+            <!-- 정답 4 -->
+            <div class="answer-card">
+                <div class="question-header">
+                    <div class="q-number">4</div>
+                    <div class="q-meta">
+                        <span class="difficulty diff-medium">⭐⭐ 보통</span>
+                    </div>
+                </div>
+                <div class="answer-box">
+                    <div class="answer-label">정답</div>
+                    <div class="answer-text">오토파일럿 (Autopilot)</div>
+                </div>
+                <div class="explanation">
+                    테슬라는 미국 내 신규 모델 3/Y에서 <strong>오토파일럿 기능을 제거</strong>하고, <strong>FSD(Full Self-Driving) 구독 모델</strong>로 소비자를 유도하는 전략을 채택했습니다. 이는 FSD 가입률이 저조했기 때문입니다.
+                </div>
+            </div>
+
+            <!-- 정답 5 -->
+            <div class="answer-card">
+                <div class="question-header">
+                    <div class="q-number">5</div>
+                    <div class="q-meta">
+                        <span class="difficulty diff-medium">⭐⭐ 보통</span>
+                    </div>
+                </div>
+                <div class="answer-box">
+                    <div class="answer-label">정답</div>
+                    <div class="answer-text">$4,990 / $5,000</div>
+                </div>
+                <div class="explanation">
+                    금 가격은 당일 최고치 <strong>$4,990</strong>를 기록하며 사상 최고가에 근접했습니다. 분석에서 제시한 목표가는 <strong>$5,000</strong>입니다. 은 역시 급등하여 목표가 $100를 돌파했습니다.
+                </div>
+            </div>
+
+            <!-- 정답 6 -->
+            <div class="answer-card">
+                <div class="question-header">
+                    <div class="q-number">6</div>
+                    <div class="q-meta">
+                        <span class="difficulty diff-easy">⭐ 쉬움</span>
+                    </div>
+                </div>
+                <div class="answer-box">
+                    <div class="answer-label">정답</div>
+                    <div class="answer-text">③ 수요일</div>
+                </div>
+                <div class="explanation">
+                    FOMC 성명서는 <strong>수요일 오후 2시</strong>에 발표되며, 이어서 제롬 파월 의장의 기자회견이 진행됩니다. CME FedWatch에 따르면 <strong>97% 확률로 금리 동결</strong>이 예상됩니다.
+                </div>
+            </div>
+
+            <!-- 정답 7 -->
+            <div class="answer-card">
+                <div class="question-header">
+                    <div class="q-number">7</div>
+                    <div class="q-meta">
+                        <span class="difficulty diff-medium">⭐⭐ 보통</span>
+                    </div>
+                </div>
+                <div class="answer-box">
+                    <div class="answer-label">정답</div>
+                    <div class="answer-text">② 바퀴벌레 이론 (Cockroach Theory)</div>
+                </div>
+                <div class="explanation">
+                    제이미 다이먼은 <strong>"바퀴벌레 한 마리가 발견되면 찬장 속에 300마리가 있다"</strong>는 바퀴벌레 이론을 언급하며, 현재 발생하는 기업 파산이 빙산의 일각일 수 있다고 경고했습니다. 신용카드 금리 10% 환경에서 중소기업 부도 리스크 확대를 우려한 것입니다.
+                </div>
+            </div>
+
+            <!-- 정답 8 -->
+            <div class="answer-card">
+                <div class="question-header">
+                    <div class="q-number">8</div>
+                    <div class="q-meta">
+                        <span class="difficulty diff-hard">⭐⭐⭐ 어려움</span>
+                    </div>
+                </div>
+                <div class="answer-box">
+                    <div class="answer-label">모범 답안</div>
+                    <div class="answer-text">제조 방식의 차이로 인한 시장 대응 속도 차이</div>
+                </div>
+                <div class="explanation">
+                    <strong>핵심 포인트:</strong><br><br>
+                    1. <strong>AMD (팹리스):</strong> 설계만 담당하고 TSMC에 위탁 생산 → 빠른 시장 대응 가능<br><br>
+                    2. <strong>인텔 (IDM 지향):</strong> 자체 공장 건설에 막대한 자금과 시간 투입 → 수익 창출까지 시간 소요<br><br>
+                    3. <strong>비유:</strong> AMD는 코스트코에서 완제품을 떼와 바로 판매하는 반면, 인텔은 "지금 만들고 있으니 기다려 달라"고 하는 상황<br><br>
+                    4. <strong>추가 문제:</strong> 미국의 높은 인건비, 반도체 제조 기술력(수율) 부족, 품질 문제(CPU 불량률 이슈) 등이 복합적으로 작용
+                </div>
+            </div>
+
+            <!-- 정답 9 -->
+            <div class="answer-card">
+                <div class="question-header">
+                    <div class="q-number">9</div>
+                    <div class="q-meta">
+                        <span class="difficulty diff-medium">⭐⭐ 보통</span>
+                    </div>
+                </div>
+                <div class="answer-box">
+                    <div class="answer-label">정답</div>
+                    <div class="answer-text">⭕ O (맞음)</div>
+                </div>
+                <div class="explanation">
+                    영상 분석에 따르면 이번 주 상승은 진정한 추세 전환이 아닙니다. 그 근거로:<br><br>
+                    • <strong>10년물 금리</strong>가 4.2% 이상 유지 (4.1% 이하로 하락해야 상승 신호)<br>
+                    • <strong>소형주</strong>가 대형주와 동반 상승하지 않음<br>
+                    • <strong>기관 순매수</strong>가 미미하고 개미 위주 거래<br>
+                    • <strong>채권 시장</strong>이 환호하지 않음
+                </div>
+            </div>
+
+            <!-- 정답 10 -->
+            <div class="answer-card">
+                <div class="question-header">
+                    <div class="q-number">10</div>
+                    <div class="q-meta">
+                        <span class="difficulty diff-hard">⭐⭐⭐ 어려움</span>
+                    </div>
+                </div>
+                <div class="answer-box">
+                    <div class="answer-label">모범 답안</div>
+                    <div class="answer-text">이벤트 리스크 대응 투자 전략</div>
+                </div>
+                <div class="explanation">
+                    <strong>핵심 전략 (3가지 이상):</strong><br><br>
+                    1. <strong>생존률 우선:</strong> 정확도보다 시장에서 살아남는 것이 우선<br><br>
+                    2. <strong>포지션 사이즈 조절:</strong> 이벤트 리스크를 견딜 수 있는 규모로 포지션 축소<br><br>
+                    3. <strong>몰빵 금지:</strong> 한 종목에 집중 투자 지양, 분산 투자 필수<br><br>
+                    4. <strong>분할 매수:</strong> 한 번에 올인하지 않고 나눠서 매수<br><br>
+                    5. <strong>헷지 준비:</strong> 이벤트 전 헷지 포지션 구축<br><br>
+                    6. <strong>종목 재배치:</strong> 전쟁 시 폭발할 종목 vs 폭락할 종목 구분하여 포트폴리오 조정<br><br>
+                    7. <strong>AI/메가캡 방패:</strong> 불안 시기에는 대형 우량주로 리스크 분산
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>본 시험문제는 NOVA Real Invest 유튜브 영상(2026.01.24) 분석을 기반으로 작성되었습니다.</p>
+            <p>교육 및 학습 목적으로만 활용하시기 바랍니다.</p>
+        </footer>
+    </div>
+</body>
+</html>
