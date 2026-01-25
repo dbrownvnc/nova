@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>시험문제 - 인텔 폭락 & 금/은 급등 분석</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e8e8e8;
+            line-height: 1.7;
+            padding: 16px;
+            max-width: 100%;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            border-radius: 16px;
+            padding: 24px 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .header .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .section-header {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .section-header.answer {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+        }
+        .section-header h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        .question-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border-left: 4px solid #3498db;
+        }
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .question-number {
+            font-weight: 700;
+            color: #3498db;
+            font-size: 1rem;
+        }
+        .question-meta {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .difficulty {
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.1);
+        }
+        .difficulty.easy {
+            color: #2ecc71;
+            border: 1px solid #2ecc71;
+        }
+        .difficulty.medium {
+            color: #f1c40f;
+            border: 1px solid #f1c40f;
+        }
+        .difficulty.hard {
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+        .question-type {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(155,89,182,0.3);
+            color: #bb8fce;
+        }
+        .question-text {
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .option {
+            background: rgba(255,255,255,0.05);
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .option:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .blank-box {
+            display: inline-block;
+            min-width: 100px;
+            border-bottom: 2px solid #3498db;
+            margin: 0 4px;
+        }
+        .answer-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border-left: 4px solid #2ecc71;
+        }
+        .answer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .answer-number {
+            font-weight: 700;
+            color: #2ecc71;
+        }
+        .answer-text {
+            background: rgba(46,204,113,0.2);
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .explanation {
+            font-size: 0.9rem;
+            color: #bbb;
+            line-height: 1.6;
+        }
+        .explanation strong {
+            color: #fff;
+        }
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            margin: 30px 0;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.8rem;
+            color: #888;
+        }
+        .page-break {
+            page-break-before: always;
+        }
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            .question-card, .answer-card {
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <div class="header">
+            <h1>📝 시험문제</h1>
+            <div class="subtitle">인텔 17% 폭락 & 금 5,000불·은 100불 돌파 분석</div>
+            <div class="subtitle" style="margin-top:8px; font-size:0.8rem;">총 10문제 | 제한시간: 20분</div>
+        </div>
+
+        <!-- 문제지 섹션 -->
+        <div class="section">
+            <div class="section-header">
+                <h2>📋 문제지 (총 10문제)</h2>
+            </div>
+
+            <!-- 문제 1 -->
+            <div class="question-card">
+                <div class="question-header">
+                    <span class="question-number">[문제 1]</span>
+                    <div class="question-meta">
+                        <span class="difficulty easy">⭐ 쉬움</span>
+                        <span class="question-type">객관식</span>
+                    </div>
+                </div>
+                <div class="question-text">
+                    금요일 미국 증시에서 인텔(INTC) 주가는 하루 만에 얼마나 하락했는가?
+                </div>
+                <div class="options">
+                    <div class="option">① -8%</div>
+                    <div class="option">② -12%</div>
+                    <div class="option">③ -17%</div>
+                    <div class="option">④ -20%</div>
+                </div>
+            </div>
+
+            <!-- 문제 2 -->
+            <div class="question-card">
+                <div class="question-header">
+                    <span class="question-number">[문제 2]</span>
+                    <div class="question-meta">
+                        <span class="difficulty easy">⭐ 쉬움</span>
+                        <span class="question-type">OX문제</span>
+                    </div>
+                </div>
+                <div class="question-text">
+                    인텔이 폭락한 같은 날, 경쟁사인 AMD는 9일 연속 상승을 기록하며 주가가 8% 올랐다. (O/X)
+                </div>
+            </div>
+
+            <!-- 문제 3 -->
+            <div class="question-card">
+                <div class="question-header">
+                    <span class="question-number">[문제 3]</span>
+                    <div class="question-meta">
+                        <span class="difficulty medium">⭐⭐ 보통</span>
+                        <span class="question-type">객관식</span>
+                    </div>
+                </div>
+                <div class="question-text">
+                    인텔의 폭락 원인으로 언급되지 <strong>않은</strong> 것은?
+                </div>
+                <div class="options">
+                    <div class="option">① 1분기 실적 전망 부진</div>
+                    <div class="option">② AI 붐으로 인한 공급 부족</div>
+                    <div class="option">③ 메모리 부품 가격 상승</div>
+                    <div class="option">④ TSMC와의 계약 파기</div>
+                </div>
+            </div>
+
+            <!-- 문제 4 -->
+            <div class="question-card">
+                <div class="question-header">
+                    <span class="question-number">[문제 4]</span>
+                    <div class="question-meta">
+                        <span class="difficulty medium">⭐⭐ 보통</span>
+                        <span class="question-type">단답형</span>
+                    </div>
+                </div>
+                <div class="question-text">
+                    다른 회사가 설계한 반도체를 대신 생산해주는 위탁 제조 사업을 무엇이라고 하는가? (영어로 답하시오)
+                </div>
+            </div>
+
+            <!-- 문제 5 -->
+            <div class="question-card">
+                <div class="question-header">
+                    <span class="question-number">[문제 5]</span>
+                    <div class="question-meta">
+                        <span class="difficulty medium">⭐⭐ 보통</span>
+                        <span class="question-type">빈칸채우기</span>
+                    </div>
+                </div>
+                <div class="question-text">
+                    대표적인 안전자산인 금 가격은 온스당 <span class="blank-box"></span>달러에 육박하며 사상 최고치를 기록했고, 은 가격은 사상 처음으로 온스당 <span class="blank-box"></span>달러를 돌파했다.
+                </div>
+            </div>
+
+            <!-- 문제 6 -->
+            <div class="question-card">
+                <div class="question-header">
+                    <span class="question-number">[문제 6]</span>
+                    <div class="question-meta">
+                        <span class="difficulty medium">⭐⭐ 보통</span>
+                        <span class="question-type">객관식</span>
+                    </div>
+                </div>
+                <div class="question-text">
+                    화요일에 시장이 약 2% 하락한 원인은 무엇인가?
+                </div>
+                <div class="options">
+                    <div class="option">① 연준의 금리 인상 발표</div>
+                    <div class="option">② 그린랜드 관세 위협</div>
+                    <div class="option">③ 빅테크 실적 부진</div>
+                    <div class="option">④ 중국과의 무역 갈등</div>
+                </div>
+            </div>
+
+            <!-- 문제 7 -->
+            <div class="question-card">
+                <div class="question-header">
+                    <span class="question-number">[문제 7]</span>
+                    <div class="question-meta">
+                        <span class="difficulty easy">⭐ 쉬움</span>
+                        <span class="question-type">OX문제</span>
+                    </div>
+                </div>
+                <div class="question-text">
+                    '매그니피센트 7(Magnificent 7)'은 시장을 이끄는 7개 거대 기술주를 지칭하며, 여기에는 Apple, Microsoft, Nvidia, Meta, Tesla가 포함된다. (O/X)
+                </div>
+            </div>
+
+            <!-- 문제 8 -->
+            <div class="question-card">
+                <div class="question-header">
+                    <span class="question-number">[문제 8]</span>
+                    <div class="question-meta">
+                        <span class="difficulty medium">⭐⭐ 보통</span>
+                        <span class="question-type">객관식</span>
+                    </div>
+                </div>
+                <div class="question-text">
+                    다음 주 '슈퍼위크'에서 수요일에 열리는 미국 중앙은행의 금리 결정 회의를 무엇이라고 하는가?
+                </div>
+                <div class="options">
+                    <div class="option">① FRB 회의</div>
+                    <div class="option">② FOMC 회의</div>
+                    <div class="option">③ SEC 회의</div>
+                    <div class="option">④ IMF 회의</div>
+                </div>
+            </div>
+
+            <!-- 문제 9 -->
+            <div class="question-card">
+                <div class="question-header">
+                    <span class="question-number">[문제 9]</span>
+                    <div class="question-meta">
+                        <span class="difficulty hard">⭐⭐⭐ 어려움</span>
+                        <span class="question-type">서술형</span>
+                    </div>
+                </div>
+                <div class="question-text">
+                    인텔과 AMD의 운명이 엇갈린 핵심 원인을 '생산 전략'의 관점에서 2~3문장으로 설명하시오.
+                </div>
+            </div>
+
+            <!-- 문제 10 -->
+            <div class="question-card">
+                <div class="question-header">
+                    <span class="question-number">[문제 10]</span>
+                    <div class="question-meta">
+                        <span class="difficulty hard">⭐⭐⭐ 어려움</span>
+                        <span class="question-type">서술형</span>
+                    </div>
+                </div>
+                <div class="question-text">
+                    지정학적 불확실성이 증가할 때 투자자들이 금, 은 같은 '안전자산'으로 자금을 이동시키는 이유를 설명하고, 이번 주 안전자산 급등의 구체적 배경을 2가지 이상 서술하시오.
+                </div>
+            </div>
+        </div>
+
+        <!-- 구분선 -->
+        <div class="divider"></div>
+
+        <!-- 정답지 섹션 -->
+        <div class="section page-break">
+            <div class="section-header answer">
+                <h2>📝 정답 및 해설</h2>
+            </div>
+
+            <!-- 정답 1 -->
+            <div class="answer-card">
+                <div class="answer-header">
+                    <span class="answer-number">[문제 1]</span>
+                </div>
+                <div class="answer-text">정답: ③ -17%</div>
+                <div class="explanation">
+                    인텔 주가는 금요일 하루 만에 <strong>-17%</strong> 폭락하며 지난 1년 반 동안 최악의 하루를 기록했습니다. 1분기 실적 전망 부진, AI 붐으로 인한 공급 부족, 메모리 부품 가격 상승, 파운드리 사업 손실 확대 등 복합적 악재가 원인이었습니다.
+                </div>
+            </div>
+
+            <!-- 정답 2 -->
+            <div class="answer-card">
+                <div class="answer-header">
+                    <span class="answer-number">[문제 2]</span>
+                </div>
+                <div class="answer-text">정답: O (맞음)</div>
+                <div class="explanation">
+                    인텔이 폭락한 같은 날, AMD는 주가가 <strong>8% 상승</strong>하며 <strong>9일 연속 상승</strong>이라는 놀라운 기록을 세웠습니다. 전문가는 "인텔의 실적 발표에서 말한 모든 것은 AMD에게는 엄청나게 좋은 소식"이라고 평가했습니다.
+                </div>
+            </div>
+
+            <!-- 정답 3 -->
+            <div class="answer-card">
+                <div class="answer-header">
+                    <span class="answer-number">[문제 3]</span>
+                </div>
+                <div class="answer-text">정답: ④ TSMC와의 계약 파기</div>
+                <div class="explanation">
+                    영상에서 언급된 인텔 폭락의 원인은 ①1분기 실적 전망 부진, ②AI 붐으로 인한 공급 부족, ③메모리 부품 가격 상승, ④파운드리 사업 손실 확대입니다. <strong>TSMC와의 계약 파기는 언급되지 않았습니다</strong>. 오히려 인텔은 자체 생산을 고집하고 있고, AMD가 TSMC에 위탁 생산을 맡기고 있습니다.
+                </div>
+            </div>
+
+            <!-- 정답 4 -->
+            <div class="answer-card">
+                <div class="answer-header">
+                    <span class="answer-number">[문제 4]</span>
+                </div>
+                <div class="answer-text">정답: Foundry (파운드리)</div>
+                <div class="explanation">
+                    <strong>파운드리(Foundry)</strong>는 다른 회사가 설계한 반도체를 대신 생산해주는 위탁 제조 사업입니다. 세계 최대 파운드리 기업은 대만의 <strong>TSMC</strong>이며, AMD는 TSMC에 생산을 위탁하여 AI 붐에 유연하게 대응할 수 있었습니다.
+                </div>
+            </div>
+
+            <!-- 정답 5 -->
+            <div class="answer-card">
+                <div class="answer-header">
+                    <span class="answer-number">[문제 5]</span>
+                </div>
+                <div class="answer-text">정답: 5,000 / 100</div>
+                <div class="explanation">
+                    금 가격은 온스당 <strong>5,000달러</strong>에 육박하며 사상 최고치를 기록했고, 은 가격은 사상 처음으로 온스당 <strong>100달러</strong>를 돌파했습니다. 은 가격은 <strong>1979년 이후</strong> 한 달 동안 가장 큰 폭으로 상승한 것입니다.
+                </div>
+            </div>
+
+            <!-- 정답 6 -->
+            <div class="answer-card">
+                <div class="answer-header">
+                    <span class="answer-number">[문제 6]</span>
+                </div>
+                <div class="answer-text">정답: ② 그린랜드 관세 위협</div>
+                <div class="explanation">
+                    화요일에 <strong>그린랜드 문제로 관세를 물리겠다는 위협</strong>이 나오자마자 시장이 약 <strong>2% 급락</strong>했습니다. 수요일에 관세 철회 소식이 나오면서 시장이 반등했지만, 금요일에 그린 총리가 합의 내용을 부인하면서 다시 혼란이 가중되었습니다.
+                </div>
+            </div>
+
+            <!-- 정답 7 -->
+            <div class="answer-card">
+                <div class="answer-header">
+                    <span class="answer-number">[문제 7]</span>
+                </div>
+                <div class="answer-text">정답: O (맞음)</div>
+                <div class="explanation">
+                    <strong>매그니피센트 7(Magnificent 7)</strong>은 시장을 이끄는 7개 거대 기술주로, <strong>Apple, Microsoft, Alphabet(Google), Amazon, Nvidia, Meta, Tesla</strong>가 포함됩니다. 이들의 실적 발표가 시장에 미치는 영향이 매우 큽니다.
+                </div>
+            </div>
+
+            <!-- 정답 8 -->
+            <div class="answer-card">
+                <div class="answer-header">
+                    <span class="answer-number">[문제 8]</span>
+                </div>
+                <div class="answer-text">정답: ② FOMC 회의</div>
+                <div class="explanation">
+                    <strong>FOMC(Federal Open Market Committee, 연방공개시장위원회)</strong>는 미국 중앙은행인 연준(Fed)이 기준금리를 결정하는 회의입니다. 다음 주 수요일 FOMC 회의가 열리며, 같은 날 테슬라, 마이크로소프트, 메타의 실적 발표도 예정되어 있습니다.
+                </div>
+            </div>
+
+            <!-- 정답 9 -->
+            <div class="answer-card">
+                <div class="answer-header">
+                    <span class="answer-number">[문제 9]</span>
+                </div>
+                <div class="answer-text">정답 예시:</div>
+                <div class="explanation">
+                    인텔은 <strong>자체 생산을 고집</strong>하는 전략을 취해 AI 붐으로 인한 폭발적인 수요에 유연하게 대응하지 못했고, 공급 부족의 직격탄을 맞았습니다. 반면 AMD는 세계 최고의 파운드리 기업인 <strong>TSMC에 생산을 위탁</strong>하여 급증하는 수요에 유연하게 대응할 수 있었습니다. 특히 서버 시장에서 AMD가 점유율을 빠르게 확대하면서 두 회사의 전략 차이가 극명한 결과로 나타났습니다.
+                </div>
+            </div>
+
+            <!-- 정답 10 -->
+            <div class="answer-card">
+                <div class="answer-header">
+                    <span class="answer-number">[문제 10]</span>
+                </div>
+                <div class="answer-text">정답 예시:</div>
+                <div class="explanation">
+                    <strong>안전자산 이동 이유:</strong> 금이나 은 같은 안전자산은 시장이 불안하고 혼란스러울 때 가치가 떨어지기는커녕 오히려 오를 것으로 기대되는 투자처입니다. 따라서 지정학적 불확실성이 증가하면 투자자들은 위험한 자산에서 돈을 빼내 안전자산으로 이동시킵니다.<br><br>
+                    <strong>이번 주 급등 배경:</strong><br>
+                    ① 그린랜드 관세 문제로 인한 <strong>예측 불가능한 정책 변화</strong><br>
+                    ② <strong>미국 달러</strong>가 8개월 만에 가장 큰 폭으로 하락<br>
+                    ③ <strong>이란 문제</strong>로 인한 중동 원유 공급 우려 증가<br>
+                    ④ 전반적인 <strong>지정학적 긴장감 고조</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- 푸터 -->
+        <div class="footer">
+            📝 시험문제 - 인텔 17% 폭락 & 금/은 급등 분석<br>
+            총 10문제 | 난이도: 쉬움 30% · 보통 50% · 어려움 20%
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>인텔 17% 폭락 & 금 5,000불·은 100불 돌파 분석</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e8e8e8;
+            line-height: 1.7;
+            padding: 16px;
+            max-width: 100%;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            border-radius: 16px;
+            padding: 24px 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .header .date {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        .source-info {
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 12px;
+            font-size: 0.8rem;
+        }
+        .section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .section-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .subsection {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 12px 0;
+        }
+        .subsection-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(231,76,60,0.2) 0%, rgba(192,57,43,0.2) 100%);
+            border-left: 4px solid #e74c3c;
+            border-radius: 8px;
+            padding: 14px;
+            margin: 12px 0;
+        }
+        .highlight-box.positive {
+            background: linear-gradient(135deg, rgba(46,204,113,0.2) 0%, rgba(39,174,96,0.2) 100%);
+            border-left-color: #2ecc71;
+        }
+        .highlight-box.warning {
+            background: linear-gradient(135deg, rgba(241,196,15,0.2) 0%, rgba(243,156,18,0.2) 100%);
+            border-left-color: #f1c40f;
+        }
+        .highlight-box.info {
+            background: linear-gradient(135deg, rgba(52,152,219,0.2) 0%, rgba(41,128,185,0.2) 100%);
+            border-left-color: #3498db;
+        }
+        .stat-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin: 8px 0;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            color: #bbb;
+        }
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        .stat-value.negative {
+            color: #e74c3c;
+        }
+        .stat-value.positive {
+            color: #2ecc71;
+        }
+        .stat-value.gold {
+            color: #f1c40f;
+        }
+        .chart-container {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .chart-title {
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #ddd;
+        }
+        canvas {
+            max-width: 100%;
+        }
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #3498db;
+        }
+        .timeline-item {
+            position: relative;
+            padding: 12px 0;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -22px;
+            top: 18px;
+            width: 10px;
+            height: 10px;
+            background: #3498db;
+            border-radius: 50%;
+        }
+        .timeline-day {
+            font-weight: 700;
+            color: #3498db;
+            font-size: 0.9rem;
+        }
+        .timeline-content {
+            margin-top: 4px;
+            font-size: 0.95rem;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 0.9rem;
+        }
+        .comparison-table th,
+        .comparison-table td {
+            padding: 12px 10px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .comparison-table th {
+            background: rgba(52,152,219,0.3);
+            font-weight: 600;
+        }
+        .comparison-table tr:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        .keyword {
+            display: inline-block;
+            background: rgba(52,152,219,0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin: 2px;
+        }
+        .event-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 14px;
+            margin: 10px 0;
+            border-left: 3px solid #9b59b6;
+        }
+        .event-date {
+            font-size: 0.85rem;
+            color: #9b59b6;
+            font-weight: 600;
+        }
+        .event-title {
+            font-weight: 600;
+            margin: 6px 0 4px;
+        }
+        .event-detail {
+            font-size: 0.9rem;
+            color: #bbb;
+        }
+        .summary-box {
+            background: linear-gradient(135deg, rgba(155,89,182,0.2) 0%, rgba(142,68,173,0.2) 100%);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .quote-box {
+            background: rgba(0,0,0,0.3);
+            border-left: 3px solid #f39c12;
+            padding: 14px;
+            margin: 12px 0;
+            font-style: italic;
+            border-radius: 0 8px 8px 0;
+        }
+        .term-box {
+            background: rgba(46,204,113,0.15);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+        .term-box strong {
+            color: #2ecc71;
+        }
+        ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+        li {
+            margin: 8px 0;
+            font-size: 0.95rem;
+        }
+        strong {
+            color: #fff;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.8rem;
+            color: #888;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <div class="header">
+            <h1>📉 인텔 17% 대폭락 vs AMD 8% 급등<br>금 5,000불·은 100불 돌파!</h1>
+            <div class="date">📅 2026년 1월 23일 (금) 시장 분석</div>
+            <div class="source-info">
+                📺 출처: YouTube 영상 분석<br>
+                🔗 원본: 20260123 인텔 17% 대폭락: 반도체 왕좌의 몰락?
+            </div>
+        </div>
+
+        <!-- 1. 시장 개요 -->
+        <div class="section">
+            <div class="section-title">📊 금요일 시장 개요: 두 개의 시장</div>
+            
+            <p>금요일 미국 증시는 마치 <strong>두 개의 다른 인격을 가진 시장</strong>처럼 움직였습니다. 전통 산업·중소기업 주식과 기술주가 정반대 방향으로 끌어당기는 힘겨루기가 펼쳐졌습니다.</p>
+
+            <div class="chart-container">
+                <div class="chart-title">주요 지수 등락 현황</div>
+                <canvas id="indexChart"></canvas>
+            </div>
+
+            <div class="stat-card">
+                <span class="stat-label">다우존스 / 러셀 2000</span>
+                <span class="stat-value negative">▼ 하락</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">나스닥 (기술주)</span>
+                <span class="stat-value positive">▲ 상승</span>
+            </div>
+
+            <div class="highlight-box info">
+                <strong>💡 핵심 포인트:</strong> 전통적 산업·중소기업 주식(다우, 러셀2000)은 하락한 반면, 기술주 중심의 나스닥은 홀로 상승하며 <strong>시장 분열</strong> 현상이 나타남
+            </div>
+        </div>
+
+        <!-- 2. 반도체 섹터 분석 -->
+        <div class="section">
+            <div class="section-title">💻 반도체 섹터: 인텔 vs AMD의 엇갈린 운명</div>
+
+            <div class="subsection">
+                <div class="subsection-title">🔴 인텔(INTC): 충격의 -17% 폭락</div>
+                
+                <div class="stat-card">
+                    <span class="stat-label">일일 주가 변동</span>
+                    <span class="stat-value negative">-17%</span>
+                </div>
+                <p style="margin-top:10px; font-size:0.9rem; color:#e74c3c;">※ 지난 1년 반 동안 최악의 하루</p>
+
+                <div class="highlight-box">
+                    <strong>📌 인텔 폭락의 복합적 악재:</strong>
+                    <ul>
+                        <li><strong>1분기 실적 전망</strong> 시장 기대에 크게 미달</li>
+                        <li><strong>AI 붐 = 공급 부족</strong> 직격탄</li>
+                        <li><strong>메모리 부품 가격</strong> 지속 상승</li>
+                        <li><strong>파운드리 사업</strong> 손실 눈덩이처럼 증가</li>
+                    </ul>
+                </div>
+
+                <div class="term-box">
+                    <strong>📖 파운드리(Foundry)란?</strong><br>
+                    다른 회사가 설계한 반도체를 대신 생산해주는 위탁 제조 사업. 대표적으로 TSMC가 세계 최대 파운드리 기업
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">🟢 AMD: 9일 연속 상승 신화</div>
+                
+                <div class="stat-card">
+                    <span class="stat-label">일일 주가 변동</span>
+                    <span class="stat-value positive">+8%</span>
+                </div>
+                <p style="margin-top:10px; font-size:0.9rem; color:#2ecc71;">※ 9일 연속 상승 기록 달성</p>
+
+                <div class="highlight-box positive">
+                    <strong>📌 AMD 상승 요인:</strong>
+                    <ul>
+                        <li><strong>TSMC 위탁 생산</strong>으로 유연한 공급 대응</li>
+                        <li><strong>서버 시장 점유율</strong> 빠르게 확대</li>
+                        <li>인텔의 위기가 곧 AMD의 기회로 전환</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">인텔 vs AMD 주가 변동 비교</div>
+                <canvas id="semiChart"></canvas>
+            </div>
+
+            <div class="quote-box">
+                💬 "인텔의 실적 발표에서 말한 모든 것은 AMD에게는 엄청나게 좋은 소식이다."<br>
+                <span style="font-size:0.85rem; color:#888;">— 시장 전문가 코멘트</span>
+            </div>
+
+            <!-- 전략 비교 테이블 -->
+            <table class="comparison-table">
+                <tr>
+                    <th>구분</th>
+                    <th>인텔</th>
+                    <th>AMD</th>
+                </tr>
+                <tr>
+                    <td>생산 전략</td>
+                    <td>자체 생산 고집</td>
+                    <td>TSMC 위탁 생산</td>
+                </tr>
+                <tr>
+                    <td>AI 붐 대응</td>
+                    <td>공급 부족 발목</td>
+                    <td>유연한 대응</td>
+                </tr>
+                <tr>
+                    <td>서버 시장</td>
+                    <td>점유율 하락</td>
+                    <td>점유율 급증</td>
+                </tr>
+                <tr>
+                    <td>금요일 주가</td>
+                    <td style="color:#e74c3c;">-17%</td>
+                    <td style="color:#2ecc71;">+8%</td>
+                </tr>
+            </table>
+
+            <div class="summary-box">
+                <strong>🎯 투자 시사점:</strong> 반도체 시장에서 <strong>한쪽의 위기는 다른 한쪽의 기회</strong>가 됨. 특히 AI 시대에는 공급망 유연성이 핵심 경쟁력으로 부상
+            </div>
+        </div>
+
+        <!-- 3. 지정학적 리스크 -->
+        <div class="section">
+            <div class="section-title">🌍 지정학적 롤러코스터: 예측 불가능한 한 주</div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-day">화요일</div>
+                    <div class="timeline-content">
+                        🔴 그린랜드 관세 위협 발표<br>
+                        <span style="color:#e74c3c; font-weight:600;">→ 시장 -2% 급락</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-day">수요일</div>
+                    <div class="timeline-content">
+                        🟢 관세 철회 소식<br>
+                        <span style="color:#2ecc71; font-weight:600;">→ 시장 극적 반등</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-day">목요일</div>
+                    <div class="timeline-content">
+                        🟢 상승 분위기 지속<br>
+                        <span style="color:#2ecc71; font-weight:600;">→ 손실 만회 분위기</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-day">금요일</div>
+                    <div class="timeline-content">
+                        🔴 그린 총리 "합의 내용 모른다" 발언<br>
+                        <span style="color:#e74c3c; font-weight:600;">→ 모든 것 원점으로</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box warning">
+                <strong>⚠️ 실질적 시장 충격:</strong>
+                <ul>
+                    <li><strong>미국 달러</strong>: 지난 8개월 만에 가장 큰 폭 하락</li>
+                    <li><strong>이란 문제</strong>: 미국의 위협 수위 상승 → 중동 원유 공급 우려</li>
+                    <li><strong>유가</strong>: 지정학적 긴장감으로 상승 압력</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 4. 안전자산 랠리 -->
+        <div class="section">
+            <div class="section-title">🥇 안전자산 대폭등: 역사적 신고가</div>
+
+            <div class="term-box">
+                <strong>📖 안전자산이란?</strong><br>
+                시장이 불안하고 혼란스러울 때 가치가 떨어지기는커녕 오히려 오를 것으로 기대되는 투자처. 금, 은 등 귀금속이 대표적
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">금·은 가격 급등 현황</div>
+                <canvas id="metalChart"></canvas>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">🥇 금(Gold): 사상 최고치 경신</div>
+                <div class="stat-card">
+                    <span class="stat-label">금 가격</span>
+                    <span class="stat-value gold">$5,000/온스 육박</span>
+                </div>
+                <p style="margin-top:10px; font-size:0.9rem;">불확실성을 피하려는 자금이 강력하게 유입</p>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">🥈 은(Silver): 역사적 이정표</div>
+                <div class="stat-card">
+                    <span class="stat-label">은 가격</span>
+                    <span class="stat-value" style="color:#c0c0c0;">$100/온스 돌파</span>
+                </div>
+                <p style="margin-top:10px; font-size:0.9rem;"><strong>1979년 이후</strong> 한 달 동안 가장 큰 폭의 상승률 기록</p>
+            </div>
+
+            <div class="highlight-box positive">
+                <strong>💰 안전자산 급등 배경:</strong>
+                <ul>
+                    <li>지정학적 불확실성 고조</li>
+                    <li>달러 가치 급락</li>
+                    <li>이란-중동 긴장 고조</li>
+                    <li>위험자산에서 안전자산으로 자금 이동</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 5. 다음 주 전망 -->
+        <div class="section">
+            <div class="section-title">📅 다음 주 전망: 슈퍼위크 도래</div>
+
+            <div class="highlight-box info">
+                <strong>🔥 슈퍼위크란?</strong><br>
+                연준의 금리 결정과 빅테크 실적 발표가 한 주에 집중되는 매우 중요한 주간
+            </div>
+
+            <div class="event-card">
+                <div class="event-date">수요일</div>
+                <div class="event-title">🏛️ FOMC 회의 (연준 금리 결정)</div>
+                <div class="event-detail">미국 중앙은행의 기준금리 방향 결정</div>
+            </div>
+
+            <div class="event-card" style="border-left-color:#e74c3c;">
+                <div class="event-date" style="color:#e74c3c;">수요일</div>
+                <div class="event-title">📊 빅테크 3사 실적 발표</div>
+                <div class="event-detail">
+                    <span class="keyword">테슬라</span>
+                    <span class="keyword">마이크로소프트</span>
+                    <span class="keyword">메타</span>
+                </div>
+            </div>
+
+            <div class="event-card" style="border-left-color:#2ecc71;">
+                <div class="event-date" style="color:#2ecc71;">목요일</div>
+                <div class="event-title">🍎 애플 실적 발표</div>
+                <div class="event-detail">매그니피센트 7 중 핵심 기업</div>
+            </div>
+
+            <div class="event-card" style="border-left-color:#f1c40f;">
+                <div class="event-date" style="color:#f1c40f;">금요일</div>
+                <div class="event-title">📈 생산자물가지수(PPI) 발표</div>
+                <div class="event-detail">인플레이션 방향을 가늠할 핵심 지표</div>
+            </div>
+
+            <div class="term-box">
+                <strong>📖 매그니피센트 7(Magnificent 7)이란?</strong><br>
+                시장을 이끄는 7개 거대 기술주: Apple, Microsoft, Alphabet(Google), Amazon, Nvidia, Meta, Tesla
+            </div>
+
+            <div class="quote-box">
+                💬 "매그니피센트 7 중 일부가 최근 주춤했는데, 이번 실적 발표가 새로운 성장 동력을 불어넣을 중요한 촉매제가 될 수 있다."<br>
+                <span style="font-size:0.85rem; color:#888;">— 시장 전문가 분석</span>
+            </div>
+        </div>
+
+        <!-- 6. 종합 투자 시사점 -->
+        <div class="section">
+            <div class="section-title">🎯 종합 투자 시사점</div>
+
+            <div class="subsection">
+                <div class="subsection-title">반도체 섹터</div>
+                <ul>
+                    <li><strong>인텔</strong>: 자체 생산 전략의 한계 노출, 구조적 문제 지속 가능성</li>
+                    <li><strong>AMD</strong>: 위탁 생산 전략의 우위 입증, 서버 시장 성장 주목</li>
+                    <li><strong>TSMC</strong>: 파운드리 수혜 지속 전망</li>
+                </ul>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">자산 배분 전략</div>
+                <ul>
+                    <li><strong>안전자산(금/은)</strong>: 지정학적 불확실성 지속 시 추가 상승 가능성</li>
+                    <li><strong>달러</strong>: 정책 불확실성으로 약세 압력 지속 가능</li>
+                    <li><strong>기술주</strong>: 다음 주 실적에 따라 방향 결정될 전망</li>
+                </ul>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">주요 리스크 요인</div>
+                <ul>
+                    <li>예측 불가능한 지정학적 정책 발표</li>
+                    <li>FOMC 금리 결정 불확실성</li>
+                    <li>빅테크 실적 기대치 대비 결과</li>
+                    <li>이란-중동 긴장 고조</li>
+                </ul>
+            </div>
+
+            <div class="summary-box">
+                <strong>📌 핵심 메시지:</strong><br>
+                다음 주는 연준의 금리 결정, 빅테크의 실적, 그리고 여전히 안개 속인 지정학적 긴장감까지 강력한 힘들이 모두 작용하는 상황. <strong>시장의 줄다리기가 어느 쪽으로 기울지 주목 필요</strong>
+            </div>
+        </div>
+
+        <!-- 푸터 -->
+        <div class="footer">
+            본 문서는 YouTube 영상 자막을 기반으로 작성된 분석 자료입니다.<br>
+            투자 결정 시 추가적인 검토와 전문가 상담을 권장합니다.<br><br>
+            📅 분석 기준일: 2026년 1월 23일
+        </div>
+    </div>
+
+    <script>
+        // 지수 차트
+        const indexCtx = document.getElementById('indexChart').getContext('2d');
+        new Chart(indexCtx, {
+            type: 'bar',
+            data: {
+                labels: ['다우존스', '러셀 2000', '나스닥'],
+                datasets: [{
+                    label: '등락률',
+                    data: [-0.5, -0.8, 0.6],
+                    backgroundColor: ['#e74c3c', '#e74c3c', '#2ecc71'],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.raw > 0 ? '+' + context.raw + '%' : context.raw + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#888' },
+                        grid: { color: 'rgba(255,255,255,0.1)' }
+                    },
+                    x: {
+                        ticks: { color: '#ddd' },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // 반도체 비교 차트
+        const semiCtx = document.getElementById('semiChart').getContext('2d');
+        new Chart(semiCtx, {
+            type: 'bar',
+            data: {
+                labels: ['인텔 (INTC)', 'AMD'],
+                datasets: [{
+                    label: '주가 변동률 (%)',
+                    data: [-17, 8],
+                    backgroundColor: ['#e74c3c', '#2ecc71'],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.raw > 0 ? '+' + context.raw + '%' : context.raw + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: '#888' },
+                        grid: { color: 'rgba(255,255,255,0.1)' }
+                    },
+                    y: {
+                        ticks: { color: '#ddd' },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // 금/은 차트
+        const metalCtx = document.getElementById('metalChart').getContext('2d');
+        new Chart(metalCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['금 $5,000/oz', '은 $100/oz'],
+                datasets: [{
+                    data: [5000, 100],
+                    backgroundColor: ['#f1c40f', '#bdc3c7'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#ddd', padding: 15 }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ' (사상 최고치)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
