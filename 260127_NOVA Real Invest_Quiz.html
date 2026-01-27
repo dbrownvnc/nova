@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>시험문제 - 엔비디아 AI 밸류체인 & 시장 분석 (2026.01.27)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            line-height: 1.7;
+            background: #f8f9fa;
+            color: #333;
+            padding: 16px;
+            max-width: 100%;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 1.4rem;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #4361ee;
+        }
+        .meta-info {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .section-header {
+            background: linear-gradient(135deg, #4361ee 0%, #6366f1 100%);
+            color: white;
+            padding: 16px;
+            border-radius: 12px;
+            margin: 24px 0 16px 0;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .question-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid #4361ee;
+        }
+        .question-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .question-number {
+            background: #4361ee;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .difficulty {
+            font-size: 0.8rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-right: 8px;
+        }
+        .easy {
+            background: #d4edda;
+            color: #155724;
+        }
+        .medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .hard {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .question-type {
+            font-size: 0.75rem;
+            color: #666;
+            background: #f1f3f4;
+            padding: 2px 8px;
+            border-radius: 8px;
+        }
+        .question-text {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: #1a1a2e;
+        }
+        .options {
+            margin-left: 8px;
+        }
+        .option {
+            padding: 8px 12px;
+            margin: 6px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            cursor: default;
+        }
+        .option:hover {
+            background: #e9ecef;
+        }
+        .blank {
+            display: inline-block;
+            min-width: 100px;
+            border-bottom: 2px solid #4361ee;
+            margin: 0 4px;
+        }
+        .ox-options {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .ox-option {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .divider {
+            height: 3px;
+            background: linear-gradient(90deg, #4361ee, #a855f7, #ec4899);
+            margin: 32px 0;
+            border-radius: 2px;
+        }
+        .answer-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid #28a745;
+        }
+        .answer-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .answer-number {
+            background: #28a745;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .answer-text {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #28a745;
+        }
+        .explanation {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 8px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .explanation strong {
+            color: #333;
+        }
+        .print-break {
+            page-break-before: always;
+        }
+        @media print {
+            .print-break {
+                page-break-before: always;
+            }
+            body {
+                background: white;
+            }
+            .question-card, .answer-card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+        .answer-line {
+            border-bottom: 1px solid #ddd;
+            min-height: 60px;
+            margin: 8px 0;
+        }
+        .short-answer-space {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px;
+            min-height: 40px;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 시험문제</h1>
+        <div class="meta-info">
+            📅 2026년 1월 27일 | 엔비디아 AI 밸류체인 & 시장 분석 | 총 10문제
+        </div>
+
+        <!-- ===================== 문제지 ===================== -->
+        <div class="section-header">
+            📋 문제지 (총 10문제)
+        </div>
+
+        <!-- 문제 1 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="question-number">문제 1</span>
+                <span class="difficulty easy">⭐ 쉬움</span>
+                <span class="question-type">객관식</span>
+            </div>
+            <div class="question-text">
+                2026년 1월 27일 기준, 금(Gold) 가격이 장중 도달한 최고치는 얼마인가?
+            </div>
+            <div class="options">
+                <div class="option">① $4,800</div>
+                <div class="option">② $5,000</div>
+                <div class="option">③ $5,107</div>
+                <div class="option">④ $5,500</div>
+            </div>
+        </div>
+
+        <!-- 문제 2 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="question-number">문제 2</span>
+                <span class="difficulty easy">⭐ 쉬움</span>
+                <span class="question-type">OX문제</span>
+            </div>
+            <div class="question-text">
+                이날 미국 주식시장에서 다우존스, 나스닥, S&P 500 지수가 모두 상승했지만, 실제로 RSP(S&P 500 동일가중 ETF)와 러셀 2000은 하락했다.
+            </div>
+            <div class="ox-options">
+                <div class="ox-option">⭕ O</div>
+                <div class="ox-option">❌ X</div>
+            </div>
+        </div>
+
+        <!-- 문제 3 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="question-number">문제 3</span>
+                <span class="difficulty medium">⭐⭐ 보통</span>
+                <span class="question-type">객관식</span>
+            </div>
+            <div class="question-text">
+                엔비디아가 코어위브(CoreWeave)에 20억 달러 이상을 추가 투자한 주된 목적은 무엇인가?
+            </div>
+            <div class="options">
+                <div class="option">① GPU 제조 설비 확충</div>
+                <div class="option">② 토지, 전력, 인력 등 AI 인프라 확보</div>
+                <div class="option">③ 경쟁사 AMD 인수 자금</div>
+                <div class="option">④ 비트코인 채굴 사업 진출</div>
+            </div>
+        </div>
+
+        <!-- 문제 4 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="question-number">문제 4</span>
+                <span class="difficulty medium">⭐⭐ 보통</span>
+                <span class="question-type">단답형</span>
+            </div>
+            <div class="question-text">
+                트럼프 대통령이 캐나다에 100% 관세를 위협한 이유는 캐나다가 어느 국가와 FTA(자유무역협정)를 추진하려 했기 때문인가?
+            </div>
+            <div class="short-answer-space">
+                정답: _______________________
+            </div>
+        </div>
+
+        <!-- 문제 5 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="question-number">문제 5</span>
+                <span class="difficulty medium">⭐⭐ 보통</span>
+                <span class="question-type">빈칸채우기</span>
+            </div>
+            <div class="question-text">
+                유나이티드헬스(-9%)와 휴머나(-12%) 등 보험주가 폭락한 이유는 정부가 메디케어 요율을 물가상승률(약 3%)에 훨씬 못 미치는 단 <span class="blank"></span>%만 인상했기 때문이다.
+            </div>
+            <div class="short-answer-space">
+                정답: _______________________
+            </div>
+        </div>
+
+        <!-- 문제 6 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="question-number">문제 6</span>
+                <span class="difficulty medium">⭐⭐ 보통</span>
+                <span class="question-type">객관식</span>
+            </div>
+            <div class="question-text">
+                다음 중 1개월 기준 섹터별 수익률 순위가 올바른 것은?
+            </div>
+            <div class="options">
+                <div class="option">① 기술 > 에너지 > 원자재</div>
+                <div class="option">② 에너지 > 원자재 > 커뮤니케이션</div>
+                <div class="option">③ 헬스케어 > 금융 > 에너지</div>
+                <div class="option">④ 원자재 > 커뮤니케이션 > 에너지</div>
+            </div>
+        </div>
+
+        <!-- 문제 7 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="question-number">문제 7</span>
+                <span class="difficulty easy">⭐ 쉬움</span>
+                <span class="question-type">OX문제</span>
+            </div>
+            <div class="question-text">
+                이번 주 수요일(1월 29일)에는 FOMC 금리 결정과 테슬라 실적 발표가 예정되어 있다.
+            </div>
+            <div class="ox-options">
+                <div class="ox-option">⭕ O</div>
+                <div class="ox-option">❌ X</div>
+            </div>
+        </div>
+
+        <!-- 문제 8 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="question-number">문제 8</span>
+                <span class="difficulty hard">⭐⭐⭐ 어려움</span>
+                <span class="question-type">객관식</span>
+            </div>
+            <div class="question-text">
+                트럼프 대통령이 한국에 25% 관세를 위협하면서 언급한 비준 지연의 원인으로 지목한 것은?
+            </div>
+            <div class="options">
+                <div class="option">① 한국 대통령의 서명 거부</div>
+                <div class="option">② 한국 국회의 비준 미이행</div>
+                <div class="option">③ 한국 헌법재판소의 위헌 판결</div>
+                <div class="option">④ 한국 기업들의 집단 반발</div>
+            </div>
+        </div>
+
+        <!-- 문제 9 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="question-number">문제 9</span>
+                <span class="difficulty medium">⭐⭐ 보통</span>
+                <span class="question-type">서술형</span>
+            </div>
+            <div class="question-text">
+                원자재(금, 은) 가격이 급등한 배경 3가지를 간략히 서술하시오.
+            </div>
+            <div class="answer-line"></div>
+            <div class="answer-line"></div>
+            <div class="answer-line"></div>
+        </div>
+
+        <!-- 문제 10 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="question-number">문제 10</span>
+                <span class="difficulty hard">⭐⭐⭐ 어려움</span>
+                <span class="question-type">서술형</span>
+            </div>
+            <div class="question-text">
+                "현금은 포지션이다(Cash is a position)"라는 개념이 의미하는 바를 설명하고, 시장 상황에 따라 현금 비중을 어떻게 조절해야 하는지 서술하시오.
+            </div>
+            <div class="answer-line"></div>
+            <div class="answer-line"></div>
+            <div class="answer-line"></div>
+            <div class="answer-line"></div>
+        </div>
+
+        <!-- ===================== 정답지 ===================== -->
+        <div class="divider print-break"></div>
+        
+        <div class="section-header" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
+            📝 정답 및 해설
+        </div>
+
+        <!-- 정답 1 -->
+        <div class="answer-card">
+            <div class="answer-header">
+                <span class="answer-number">문제 1</span>
+                <span class="answer-text">정답: ③ $5,107</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> 2026년 1월 27일 금 가격은 장중 <strong>$5,107</strong>까지 상승하며 신고가를 경신했습니다. 1개월 동안 약 11% 상승했으며, BMO는 연말까지 $6,000 도달을 전망하고 있습니다.
+            </div>
+        </div>
+
+        <!-- 정답 2 -->
+        <div class="answer-card">
+            <div class="answer-header">
+                <span class="answer-number">문제 2</span>
+                <span class="answer-text">정답: ⭕ O (맞음)</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> 이날 3대 지수(다우 +0.64%, 나스닥 +0.43%, S&P500 +0.50%)는 모두 상승했으나, 이는 빅테크/메가캡 기술주에 의한 <strong>착시 현상</strong>입니다. RSP(S&P 500 동일가중 ETF)와 러셀 2000은 하락했으며, 이는 시장 전반의 약세를 보여줍니다.
+            </div>
+        </div>
+
+        <!-- 정답 3 -->
+        <div class="answer-card">
+            <div class="answer-header">
+                <span class="answer-number">문제 3</span>
+                <span class="answer-text">정답: ② 토지, 전력, 인력 등 AI 인프라 확보</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> 엔비디아의 코어위브 투자는 단순한 GPU 판매를 넘어 <strong>AI 팩토리</strong> 완전 장악 전략의 일환입니다. 코어위브는 이 자금을 GPU 구매가 아닌 <strong>토지 확보, 전력 인프라 구축, 인력 확보</strong> 등에 사용합니다. 젠슨 황은 "검색=구글, 스트리밍=넷플릭스"처럼 "AI=엔비디아" 공식 확립을 목표로 합니다.
+            </div>
+        </div>
+
+        <!-- 정답 4 -->
+        <div class="answer-card">
+            <div class="answer-header">
+                <span class="answer-number">문제 4</span>
+                <span class="answer-text">정답: 중국</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> 캐나다 총리가 <strong>중국</strong>과 FTA(자유무역협정) 추진 의사를 밝히자, 트럼프 대통령은 즉각 "100% 관세"를 위협했습니다. 이후 캐나다 총리는 "중국과 FTA 의도가 없었다"고 후퇴했습니다. 캐나다는 중국에 카놀라유, 바닷가재, 게, 완두콩 등 농수산물을 수출하고 있었습니다.
+            </div>
+        </div>
+
+        <!-- 정답 5 -->
+        <div class="answer-card">
+            <div class="answer-header">
+                <span class="answer-number">문제 5</span>
+                <span class="answer-text">정답: 0.9</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> 정부가 메디케어 요율을 단 <strong>0.9%</strong>만 인상하면서 보험주가 폭락했습니다. 물가상승률이 약 3% 이상인 상황에서 0.9% 인상은 사실상 동결과 마찬가지입니다. 유나이티드헬스(-9%), 휴머나(-12%)가 급락했으며, 트럼프 행정부 기간 동안 헬스케어 섹터의 지속적인 압박이 예상됩니다.
+            </div>
+        </div>
+
+        <!-- 정답 6 -->
+        <div class="answer-card">
+            <div class="answer-header">
+                <span class="answer-number">문제 6</span>
+                <span class="answer-text">정답: ② 에너지 > 원자재 > 커뮤니케이션</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> 1개월 기준 섹터 순위는 <strong>1위 에너지, 2위 원자재(머티리얼), 3위 커뮤니케이션 서비스</strong>입니다. 겨울 폭풍으로 천연가스 등 에너지 섹터가 급등했고, 달러 약세로 원자재(금/은)가 강세를 보였습니다. 커뮤니케이션 서비스는 구글, 메타 주도로 급상승 중입니다.
+            </div>
+        </div>
+
+        <!-- 정답 7 -->
+        <div class="answer-card">
+            <div class="answer-header">
+                <span class="answer-number">문제 7</span>
+                <span class="answer-text">정답: ⭕ O (맞음)</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> 2026년 1월 29일(수요일)에는 <strong>FOMC 금리 결정 및 제롬 파월 의장 기자회견</strong>과 <strong>테슬라 실적 발표</strong>가 예정되어 있습니다. FOMC는 금리 동결이 예상되며, 테슬라는 실적 부진 우려로 발표 전까지 관망세가 지속될 전망입니다.
+            </div>
+        </div>
+
+        <!-- 정답 8 -->
+        <div class="answer-card">
+            <div class="answer-header">
+                <span class="answer-number">문제 8</span>
+                <span class="answer-text">정답: ② 한국 국회의 비준 미이행</span>
+            </div>
+            <div class="explanation">
+                <strong>해설:</strong> 트럼프 대통령은 2025년 10월 29일 방한 시 이재명 대통령과 합의한 내용을 <strong>한국 국회가 비준하지 않았다</strong>고 비판하며 25% 관세를 위협했습니다. 영상에서는 국민의힘이 "불공정 계약"을 이유로 비준에 반대하고 있다고 언급되었습니다. 영향받는 섹터로는 자동차, 목재, 제약 등이 있습니다.
+            </div>
+        </div>
+
+        <!-- 정답 9 -->
+        <div class="answer-card">
+            <div class="answer-header">
+                <span class="answer-number">문제 9</span>
+                <span class="answer-text">정답 예시:</span>
+            </div>
+            <div class="explanation">
+                원자재(금, 은) 급등 배경 3가지:<br><br>
+                <strong>① 달러 약세:</strong> 미국 달러가 유로화, 엔화 대비 지속적으로 하락하면서 달러 표시 자산인 금/은의 상대적 가치가 상승했습니다.<br><br>
+                <strong>② 지정학적 리스크 및 관세 전쟁:</strong> 트럼프의 캐나다/한국 관세 위협, 무역 갈등 심화로 안전자산 선호 심리가 강화되었습니다.<br><br>
+                <strong>③ 정부 셧다운 우려:</strong> 1월 30일 예산 마감을 앞두고 민주당과 공화당의 협상 난항으로 셧다운 가능성이 80% 이상으로 높아지면서 시스템 불안정성 우려가 커졌습니다.
+            </div>
+        </div>
+
+        <!-- 정답 10 -->
+        <div class="answer-card">
+            <div class="answer-header">
+                <span class="answer-number">문제 10</span>
+                <span class="answer-text">정답 예시:</span>
+            </div>
+            <div class="explanation">
+                <strong>"현금은 포지션이다(Cash is a position)"의 의미:</strong><br><br>
+                현금 보유는 단순히 투자를 하지 않는 상태가 아니라, <strong>시장에 대한 숏(Short) 포지션</strong>을 취하는 것과 유사한 전략적 선택입니다. 시장을 의심하거나 하락을 예상할 때 현금을 늘리는 것은 공매도를 치는 것과 같은 효과를 가집니다.<br><br>
+                <strong>현금 비중 조절 전략:</strong><br>
+                - 시장이 좋을 때: 현금 <strong>10%</strong> 유지<br>
+                - 시장이 불안해질 때: <strong>20~30%</strong>로 확대<br>
+                - 시장이 심각해질 때: <strong>40~50%</strong>까지 확대<br><br>
+                폭락 시 현금을 쏟아부어 저가 매수하면 큰 수익을 얻을 수 있습니다. 예시로 2025년 4월 폭락 시 적극 매수한 투자자들은 S&P 기준 <strong>2.5배</strong>의 수익을 기록했습니다.
+            </div>
+        </div>
+
+        <div style="margin-top: 32px; padding: 16px; background: #f1f3f4; border-radius: 8px; font-size: 0.85rem; color: #666; text-align: center;">
+            <strong>📚 학습 완료!</strong><br>
+            본 시험문제는 2026년 1월 27일 NOVA Real Invest 영상 내용을 바탕으로 작성되었습니다.
+        </div>
+    </div>
+</body>
+</html>

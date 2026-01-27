@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>엔비디아 AI 밸류체인 빅베팅 & 시장 분석 (2026.01.27)</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            line-height: 1.7;
+            background: #f8f9fa;
+            color: #333;
+            padding: 16px;
+            max-width: 100%;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 1.5rem;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #4361ee;
+        }
+        .meta-info {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 1.25rem;
+            color: #4361ee;
+            margin: 24px 0 12px 0;
+            padding: 8px 12px;
+            background: linear-gradient(90deg, #e8eeff 0%, transparent 100%);
+            border-left: 4px solid #4361ee;
+        }
+        h3 {
+            font-size: 1.1rem;
+            color: #2d3436;
+            margin: 16px 0 8px 0;
+        }
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border-left: 4px solid #f39c12;
+            padding: 12px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .alert-box {
+            background: linear-gradient(135deg, #ffe0e0 0%, #ffcccb 100%);
+            border-left: 4px solid #e74c3c;
+            padding: 12px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .positive-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-left: 4px solid #28a745;
+            padding: 12px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .info-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 4px solid #2196f3;
+            padding: 12px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 16px 0;
+        }
+        .stat-card {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 4px;
+        }
+        .positive { color: #28a745; }
+        .negative { color: #dc3545; }
+        .neutral { color: #6c757d; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.9rem;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        th, td {
+            padding: 10px 8px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #4361ee;
+            color: white;
+            font-weight: 600;
+        }
+        tr:hover {
+            background: #f8f9ff;
+        }
+        .chart-container {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            margin: 16px 0;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .chart-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        ul {
+            margin: 12px 0 12px 20px;
+        }
+        li {
+            margin-bottom: 6px;
+        }
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 4px;
+        }
+        .tag-red { background: #ffe0e0; color: #c0392b; }
+        .tag-green { background: #d4edda; color: #27ae60; }
+        .tag-blue { background: #e3f2fd; color: #2980b9; }
+        .tag-yellow { background: #fff3cd; color: #f39c12; }
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, #4361ee, #a855f7, #ec4899);
+            margin: 24px 0;
+            border-radius: 2px;
+        }
+        .key-point {
+            background: #fff;
+            border: 2px solid #4361ee;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 12px 0;
+        }
+        .key-point-title {
+            font-weight: bold;
+            color: #4361ee;
+            margin-bottom: 6px;
+        }
+        strong {
+            color: #1a1a2e;
+        }
+        .emoji-header {
+            font-size: 1.2rem;
+            margin-right: 6px;
+        }
+        .timeline {
+            border-left: 3px solid #4361ee;
+            padding-left: 16px;
+            margin: 16px 0;
+        }
+        .timeline-item {
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -22px;
+            top: 4px;
+            width: 12px;
+            height: 12px;
+            background: #4361ee;
+            border-radius: 50%;
+        }
+        .timeline-date {
+            font-weight: bold;
+            color: #4361ee;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 엔비디아 AI 밸류체인 빅베팅 & 시장 종합 분석</h1>
+        <div class="meta-info">
+            📅 2026년 1월 27일 | 📺 NOVA Real Invest | 🇺🇸 미국 증시 관점 분석
+        </div>
+
+        <h2><span class="emoji-header">📊</span>오늘의 시장 개요</h2>
+        
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-value positive">+0.64%</div>
+                <div class="stat-label">다우존스</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value positive">+0.43%</div>
+                <div class="stat-label">나스닥</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value positive">+0.50%</div>
+                <div class="stat-label">S&P 500</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value negative">하락</div>
+                <div class="stat-label">러셀 2000</div>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <strong>⚠️ 핵심 포인트:</strong> 지수는 상승했으나 실제 시장 전체는 부진. RSP(S&P 500 동일가중) 하락이 이를 증명. <strong>빅테크/메가캡 기술주만 상승</strong>한 착시 현상.
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">📈 주요 자산 현황</div>
+            <canvas id="assetChart"></canvas>
+        </div>
+
+        <h2><span class="emoji-header">🪙</span>원자재 시장 - 역대급 상승</h2>
+
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-value" style="color: #FFD700;">$5,107</div>
+                <div class="stat-label">금 (신고가)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" style="color: #C0C0C0;">$106~115</div>
+                <div class="stat-label">은 (폭등)</div>
+            </div>
+        </div>
+
+        <div class="positive-box">
+            <strong>📈 금 1개월 수익률: +11%</strong><br>
+            BMO 전망: 연말까지 <strong>$6,000</strong> 도달 예상
+        </div>
+
+        <p><strong>원자재 급등 요인:</strong></p>
+        <ul>
+            <li><strong>달러 약세:</strong> 유로화, 엔화 대비 지속적 하락</li>
+            <li><strong>지정학적 리스크:</strong> 관세 전쟁, 캐나다-한국 갈등</li>
+            <li><strong>정부 셧다운 우려:</strong> 1월 30일 이후 셧다운 가능성 80%+</li>
+            <li><strong>통화가치 하락 방어:</strong> 안전자산 선호 심화</li>
+        </ul>
+
+        <div class="info-box">
+            <strong>💡 짐 크레이머 효과:</strong> 크레이머가 "은 100불은 말이 안 된다"고 발언 직후 은 가격 <strong>+14% 급등</strong>. "진반꿀(짐반대로꿀빤다)" 현상 재확인.
+        </div>
+
+        <h2><span class="emoji-header">⚡</span>에너지 섹터 급등</h2>
+
+        <div class="alert-box">
+            <strong>🌨️ 겨울 폭풍 "펀(Fun)" 영향</strong><br>
+            텍사스 등 100만 가구 정전 / 천연가스 급등 / 이번 주말 추가 폭설 예보
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">📊 섹터별 1개월 수익률</div>
+            <canvas id="sectorChart"></canvas>
+        </div>
+
+        <table>
+            <tr>
+                <th>기간</th>
+                <th>1위</th>
+                <th>2위</th>
+                <th>3위</th>
+            </tr>
+            <tr>
+                <td><strong>1개월</strong></td>
+                <td class="positive">에너지</td>
+                <td class="positive">원자재</td>
+                <td class="positive">커뮤니케이션</td>
+            </tr>
+            <tr>
+                <td><strong>1주일</strong></td>
+                <td class="positive">원자재</td>
+                <td class="positive">에너지</td>
+                <td class="positive">커뮤니케이션 (+1.87%)</td>
+            </tr>
+        </table>
+
+        <div class="key-point">
+            <div class="key-point-title">⭐ 주목 섹터: 커뮤니케이션 서비스</div>
+            구글, 메타 주도로 급격히 상승 중. 테크 기운이 있는 섹터로 별표 5개 ⭐⭐⭐⭐⭐
+        </div>
+
+        <div class="divider"></div>
+
+        <h2><span class="emoji-header">🇺🇸</span>트럼프 관세 폭격</h2>
+
+        <h3>🇨🇦 캐나다 100% 관세 위협</h3>
+        <p>캐나다가 중국과 FTA 추진 의사를 밝히자 트럼프 대통령이 <strong>"100% 관세"</strong> 위협. 캐나다 총리 결국 후퇴하며 "중국과 FTA 의도 없었다"고 번복.</p>
+
+        <table>
+            <tr>
+                <th>캐나다 → 중국 수출</th>
+                <th>캐나다 → 미국 수출</th>
+            </tr>
+            <tr>
+                <td>카놀라유, 바닷가재, 게, 완두콩 등 농수산물</td>
+                <td>철강, 구리, 자동차 부품, 의약품</td>
+            </tr>
+        </table>
+
+        <h3>🇰🇷 한국 25% 관세 위협</h3>
+        <div class="alert-box">
+            <strong>⚡ 속보:</strong> 트럼프, 한국에 <strong>25% 관세</strong> 부과 예고<br>
+            - 2025년 10월 29일 방한 시 합의 내용을 국회가 비준 안 함<br>
+            - 이재명 대통령 이름 직접 언급하며 비난
+        </div>
+
+        <p><strong>영향 받는 섹터:</strong> <span class="tag tag-red">자동차</span> <span class="tag tag-red">목재</span> <span class="tag tag-red">제약</span></p>
+
+        <div class="info-box">
+            <strong>📉 시장 반응:</strong> 한국 코스피 장 초반 폭락 후 <strong>즉시 반등</strong>. 시장이 "트럼프 패턴"을 학습한 것으로 해석. 동맹국 압박 후 협상우위 점령 전술의 일환으로 분석.
+        </div>
+
+        <div class="divider"></div>
+
+        <h2><span class="emoji-header">🤖</span>엔비디아 AI 밸류체인 빅베팅</h2>
+
+        <div class="positive-box">
+            <strong>💰 코어위브(CoreWeave) 20억 달러 추가 투자</strong><br>
+            엔비디아가 코어위브 지분 추가 매입. 단순 GPU 판매를 넘어 <strong>AI 인프라 전체 장악</strong> 전략.
+        </div>
+
+        <div class="key-point">
+            <div class="key-point-title">🎯 코어위브 투자 목적</div>
+            <ul>
+                <li>GPU 구매가 <strong>아닌</strong> 인프라 확장 자금</li>
+                <li><strong>토지 확보</strong> - 데이터센터 부지</li>
+                <li><strong>전력 인프라</strong> - AI 연산의 핵심 병목</li>
+                <li><strong>인력 확보</strong> - 전문가 영입</li>
+            </ul>
+        </div>
+
+        <p><strong>젠슨 황의 비전:</strong> "AI 팩토리" 완전 장악 → 검색=구글, 스트리밍=넷플릭스처럼 <strong>"AI=엔비디아"</strong> 공식 확립 목표</p>
+
+        <h3>📱 삼성 HBM4 개발 소식</h3>
+        <p>삼성이 HBM4 개발 및 엔비디아 승인을 받았다는 소식. 그러나 <strong>메모리 양묵 현상</strong>이 심각해 삼성 단독 공급은 불가능. 향후 2년간 공급 부족 지속 전망.</p>
+
+        <div class="divider"></div>
+
+        <h2><span class="emoji-header">🏥</span>헬스케어 섹터 대폭락</h2>
+
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-value negative">-9%</div>
+                <div class="stat-label">유나이티드헬스</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value negative">-12%</div>
+                <div class="stat-label">휴머나</div>
+            </div>
+        </div>
+
+        <div class="alert-box">
+            <strong>📉 폭락 원인:</strong> 정부가 메디케어 요율을 단 <strong>0.9%</strong>만 인상 (물가상승률 3% 대비 사실상 동결). 보험사 수익성 악화 우려.
+        </div>
+
+        <p>트럼프 행정부의 의료비 절감 정책으로 헬스케어 섹터는 <strong>정권 교체 전까지 지속적 압박</strong> 예상. 유나이티드헬스 실적 발표(내일)에서 가이던스 하향 가능성 높음.</p>
+
+        <div class="divider"></div>
+
+        <h2><span class="emoji-header">🏛️</span>정부 셧다운 위기</h2>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-date">미네소타 ICE 사건</div>
+                비무장 간호사 알렉스 프레티 사망. 오바마 "선을 넘었다" 비판.
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">민주당 DHS 예산 거부</div>
+                ICE 관련 예산 전면 거부. 협상 난항.
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">1월 30일 마감</div>
+                예산 통과 실패 시 정부 셧다운 발생 (확률 80%+)
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <strong>💡 셧다운 시 영향:</strong><br>
+            - 경제 지표 발표 중단 (깜깜이 장세)<br>
+            - 달러 약세 심화 → 금/은 추가 상승 가능<br>
+            - 시스템 불안정성 우려 확산
+        </div>
+
+        <div class="divider"></div>
+
+        <h2><span class="emoji-header">📅</span>이번 주 주요 일정</h2>
+
+        <table>
+            <tr>
+                <th>일자</th>
+                <th>이벤트</th>
+                <th>중요도</th>
+            </tr>
+            <tr>
+                <td>1/28 (화)</td>
+                <td>신규주택판매, 소비자신뢰지수, 보잉/아메리칸항공 실적</td>
+                <td>⭐⭐</td>
+            </tr>
+            <tr>
+                <td>1/28 (화)</td>
+                <td>유나이티드헬스 실적</td>
+                <td>⭐⭐⭐</td>
+            </tr>
+            <tr>
+                <td>1/29 (수)</td>
+                <td><strong>FOMC 금리 결정 & 파월 기자회견</strong></td>
+                <td>⭐⭐⭐⭐⭐</td>
+            </tr>
+            <tr>
+                <td>1/29 (수)</td>
+                <td><strong>테슬라 실적 발표</strong></td>
+                <td>⭐⭐⭐⭐⭐</td>
+            </tr>
+            <tr>
+                <td>1/30 (금)</td>
+                <td>정부 예산 마감 (셧다운 분기점)</td>
+                <td>⭐⭐⭐⭐</td>
+            </tr>
+        </table>
+
+        <div class="divider"></div>
+
+        <h2><span class="emoji-header">🎯</span>투자 시사점 및 전략</h2>
+
+        <h3>📈 주목해야 할 섹터</h3>
+        <div class="stat-grid">
+            <div class="stat-card" style="border: 2px solid #28a745;">
+                <div class="stat-value" style="color: #28a745; font-size: 1rem;">에너지</div>
+                <div class="stat-label">겨울 폭풍 수혜</div>
+            </div>
+            <div class="stat-card" style="border: 2px solid #FFD700;">
+                <div class="stat-value" style="color: #DAA520; font-size: 1rem;">원자재</div>
+                <div class="stat-label">금/은 강세</div>
+            </div>
+            <div class="stat-card" style="border: 2px solid #4361ee;">
+                <div class="stat-value" style="color: #4361ee; font-size: 1rem;">커뮤니케이션</div>
+                <div class="stat-label">구글/메타 주도</div>
+            </div>
+            <div class="stat-card" style="border: 2px solid #9b59b6;">
+                <div class="stat-value" style="color: #9b59b6; font-size: 1rem;">AI 인프라</div>
+                <div class="stat-label">전력/데이터센터</div>
+            </div>
+        </div>
+
+        <h3>⚠️ 주의해야 할 섹터</h3>
+        <table>
+            <tr>
+                <th>섹터</th>
+                <th>리스크</th>
+            </tr>
+            <tr>
+                <td class="negative">헬스케어/보험</td>
+                <td>정책 리스크 (메디케어 요율 동결)</td>
+            </tr>
+            <tr>
+                <td class="negative">금융</td>
+                <td>신용카드 관련 트럼프 발언</td>
+            </tr>
+            <tr>
+                <td class="neutral">테슬라</td>
+                <td>수요일 실적 발표 전 관망세</td>
+            </tr>
+        </table>
+
+        <h3>💼 포지션 전략 예시</h3>
+        <div class="chart-container">
+            <div class="chart-title">📊 자산 배분 가이드</div>
+            <canvas id="allocationChart"></canvas>
+        </div>
+
+        <table>
+            <tr>
+                <th>구분</th>
+                <th>비중</th>
+                <th>내용</th>
+            </tr>
+            <tr>
+                <td><strong>현금</strong></td>
+                <td>40%</td>
+                <td>최강의 방패, 폭락 시 집중 매수용</td>
+            </tr>
+            <tr>
+                <td><strong>주력 주식</strong></td>
+                <td>40%</td>
+                <td>자원, 에너지 (전쟁/인플레이션 방어)</td>
+            </tr>
+            <tr>
+                <td><strong>헷지</strong></td>
+                <td>15%</td>
+                <td>쇼트 포지션 또는 추가 현금</td>
+            </tr>
+            <tr>
+                <td><strong>알파 플러스</strong></td>
+                <td>5%</td>
+                <td>고위험-고수익 종목 (밈주식 포함)</td>
+            </tr>
+        </table>
+
+        <div class="key-point">
+            <div class="key-point-title">💡 핵심 전략: 트럼프 사골 곰탕 레시피</div>
+            트럼프가 반복적으로 압박하는 섹터(매운맛)와 지원하는 섹터(단짠)를 파악하여 롱/숏 레시피 구성. 패턴이 반복되므로 학습하면 수익 기회.
+        </div>
+
+        <div class="divider"></div>
+
+        <h2><span class="emoji-header">📝</span>핵심 요약</h2>
+
+        <div class="positive-box">
+            <strong>✅ 긍정 요인</strong>
+            <ul>
+                <li>빅테크 실적 기대감으로 지수 상승</li>
+                <li>금/은 신고가 - 안전자산 강세</li>
+                <li>에너지/원자재 섹터 강세 지속</li>
+                <li>AI 인프라 투자 확대 (엔비디아-코어위브)</li>
+            </ul>
+        </div>
+
+        <div class="alert-box">
+            <strong>❌ 부정 요인</strong>
+            <ul>
+                <li>지수 착시 - 실제 시장 전반은 부진</li>
+                <li>한국/캐나다 관세 리스크</li>
+                <li>정부 셧다운 임박 (80%+ 확률)</li>
+                <li>헬스케어 섹터 정책 쇼크</li>
+                <li>국채금리 상단 유지 (달러 약세)</li>
+            </ul>
+        </div>
+
+        <div class="info-box">
+            <strong>🎯 주간 관전 포인트</strong>
+            <ol>
+                <li>FOMC 결정 및 파월 발언 (동결 예상)</li>
+                <li>테슬라 실적 - 기대치 하회 우려</li>
+                <li>빅테크 CAPEX 가이던스 - AI 투자 지속 여부</li>
+                <li>정부 셧다운 협상 결과</li>
+            </ol>
+        </div>
+
+        <div style="margin-top: 32px; padding: 16px; background: #f1f3f4; border-radius: 8px; font-size: 0.85rem; color: #666;">
+            <strong>⚠️ 면책조항:</strong> 본 자료는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다. 모든 투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다.
+        </div>
+    </div>
+
+    <script>
+        // 주요 자산 현황 차트
+        new Chart(document.getElementById('assetChart'), {
+            type: 'bar',
+            data: {
+                labels: ['다우', '나스닥', 'S&P500', '비트코인', '금', '은', '원유'],
+                datasets: [{
+                    label: '등락률 (%)',
+                    data: [0.64, 0.43, 0.50, -2.5, 2.1, 14, 1.5],
+                    backgroundColor: [
+                        '#28a745', '#28a745', '#28a745', 
+                        '#dc3545', '#FFD700', '#C0C0C0', '#8B4513'
+                    ],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#eee' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // 섹터별 수익률 차트
+        new Chart(document.getElementById('sectorChart'), {
+            type: 'horizontalBar',
+            data: {
+                labels: ['에너지', '원자재', '커뮤니케이션', '기술', '금융', '헬스케어'],
+                datasets: [{
+                    label: '1개월 수익률',
+                    data: [8.5, 7.2, 5.8, 4.2, -1.5, -8.5],
+                    backgroundColor: function(context) {
+                        return context.raw >= 0 ? '#28a745' : '#dc3545';
+                    },
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { color: '#eee' }
+                    },
+                    y: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // 자산 배분 파이 차트
+        new Chart(document.getElementById('allocationChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['현금 (방어)', '주력 주식 (에너지/자원)', '헷지 (쇼트)', '알파 플러스 (고위험)'],
+                datasets: [{
+                    data: [40, 40, 15, 5],
+                    backgroundColor: ['#6c757d', '#28a745', '#ffc107', '#dc3545'],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { 
+                            boxWidth: 12,
+                            padding: 12,
+                            font: { size: 11 }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
