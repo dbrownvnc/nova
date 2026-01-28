@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>시험문제 - S&P 신고가 vs 다우 붕괴 분석 (2026.01.27)</title>
+    <style>
+        :root {
+            --primary: #2c5282;
+            --secondary: #3182ce;
+            --accent: #ed8936;
+            --success: #38a169;
+            --bg: #f7fafc;
+            --card: #ffffff;
+            --text: #2d3748;
+            --text-light: #718096;
+            --border: #e2e8f0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            padding: 16px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 24px 20px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .meta {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        
+        .section {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        
+        .section-header {
+            background: var(--primary);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 12px 12px 0 0;
+            margin: -20px -20px 20px -20px;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        
+        .question-block {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 20px;
+            background: #fafafa;
+        }
+        
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .question-num {
+            background: var(--secondary);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        
+        .difficulty {
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        
+        .easy {
+            background: #c6f6d5;
+            color: #276749;
+        }
+        
+        .medium {
+            background: #feebc8;
+            color: #c05621;
+        }
+        
+        .hard {
+            background: #fed7d7;
+            color: #c53030;
+        }
+        
+        .question-type {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            background: var(--border);
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+        
+        .question-text {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 14px;
+            line-height: 1.7;
+        }
+        
+        .options {
+            padding-left: 8px;
+        }
+        
+        .option {
+            padding: 10px 12px;
+            margin: 6px 0;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .blank-line {
+            border-bottom: 2px solid var(--secondary);
+            display: inline-block;
+            width: 120px;
+            margin: 0 4px;
+        }
+        
+        .answer-section {
+            background: linear-gradient(135deg, #ebf8ff, #e6fffa);
+            border-left: 4px solid var(--success);
+        }
+        
+        .answer-block {
+            border: 1px solid #c6f6d5;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
+            background: white;
+        }
+        
+        .answer-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .answer-num {
+            background: var(--success);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        
+        .answer-text {
+            font-weight: 700;
+            color: var(--success);
+            font-size: 1rem;
+        }
+        
+        .explanation {
+            background: #f0fff4;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            line-height: 1.7;
+        }
+        
+        .explanation strong {
+            color: var(--primary);
+        }
+        
+        .divider {
+            height: 3px;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+            border-radius: 2px;
+            margin: 30px 0;
+        }
+        
+        .page-break {
+            page-break-before: always;
+            margin-top: 40px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+        
+        @media print {
+            .page-break {
+                page-break-before: always;
+            }
+            
+            body {
+                padding: 0;
+            }
+            
+            .section {
+                box-shadow: none;
+                border: 1px solid var(--border);
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📝 시험문제</h1>
+            <p class="meta">S&P 신고가 vs 다우 붕괴 분석 | 2026.01.27 | 총 10문제</p>
+        </header>
+
+        <!-- 문제지 섹션 -->
+        <div class="section">
+            <div class="section-header">📋 문제지 (총 10문제)</div>
+            
+            <!-- 문제 1 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <span class="question-num">1</span>
+                    <span class="difficulty easy">⭐ 쉬움</span>
+                    <span class="question-type">객관식</span>
+                </div>
+                <p class="question-text">
+                    2026년 1월 27일 S&P 500 지수의 움직임으로 옳은 것은?
+                </p>
+                <div class="options">
+                    <div class="option">① 전일 대비 하락</div>
+                    <div class="option">② 최고치 갱신</div>
+                    <div class="option">③ 보합세 유지</div>
+                    <div class="option">④ 급락 후 반등</div>
+                </div>
+            </div>
+            
+            <!-- 문제 2 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <span class="question-num">2</span>
+                    <span class="difficulty easy">⭐ 쉬움</span>
+                    <span class="question-type">단답형</span>
+                </div>
+                <p class="question-text">
+                    다우존스 지수가 하락한 주된 원인이 된 섹터는 무엇인가?
+                </p>
+                <p style="color: var(--text-light); font-size: 0.9rem;">정답: <span class="blank-line"></span></p>
+            </div>
+            
+            <!-- 문제 3 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <span class="question-num">3</span>
+                    <span class="difficulty medium">⭐⭐ 보통</span>
+                    <span class="question-type">객관식</span>
+                </div>
+                <p class="question-text">
+                    코닝(Corning)이 메타(Meta)와 체결한 광섬유 케이블 계약 규모는 얼마인가?
+                </p>
+                <div class="options">
+                    <div class="option">① 3억 달러 (3 billion)</div>
+                    <div class="option">② 6억 달러 (6 billion)</div>
+                    <div class="option">③ 60억 달러 (6 billion)</div>
+                    <div class="option">④ 100억 달러 (10 billion)</div>
+                </div>
+            </div>
+            
+            <!-- 문제 4 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <span class="question-num">4</span>
+                    <span class="difficulty medium">⭐⭐ 보통</span>
+                    <span class="question-type">OX 문제</span>
+                </div>
+                <p class="question-text">
+                    다음 설명의 참/거짓을 판단하시오.<br><br>
+                    "2026년 메디케어 보험수가 인상률은 4~5%로, 과거 평균 수준을 유지했다."
+                </p>
+                <div class="options">
+                    <div class="option">⭕ 참 (True)</div>
+                    <div class="option">❌ 거짓 (False)</div>
+                </div>
+            </div>
+            
+            <!-- 문제 5 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <span class="question-num">5</span>
+                    <span class="difficulty medium">⭐⭐ 보통</span>
+                    <span class="question-type">빈칸채우기</span>
+                </div>
+                <p class="question-text">
+                    애틀랜타 연방은행의 GDP Now 모델에 따르면, 2026년 1분기 GDP 성장률은 ( <span class="blank-line"></span> )%로 예상된다.
+                </p>
+            </div>
+            
+            <!-- 문제 6 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <span class="question-num">6</span>
+                    <span class="difficulty medium">⭐⭐ 보통</span>
+                    <span class="question-type">객관식</span>
+                </div>
+                <p class="question-text">
+                    빅테크 실적 발표 시 AI 모멘텀 지속 여부를 판단하는 핵심 지표는?
+                </p>
+                <div class="options">
+                    <div class="option">① EPS (주당순이익)</div>
+                    <div class="option">② 매출 성장률</div>
+                    <div class="option">③ CAPEX (자본지출)</div>
+                    <div class="option">④ 배당 수익률</div>
+                </div>
+            </div>
+            
+            <!-- 문제 7 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <span class="question-num">7</span>
+                    <span class="difficulty medium">⭐⭐ 보통</span>
+                    <span class="question-type">단답형</span>
+                </div>
+                <p class="question-text">
+                    당일 기준 10년물 미국 국채 수익률은 몇 %였는가?
+                </p>
+                <p style="color: var(--text-light); font-size: 0.9rem;">정답: <span class="blank-line"></span>%</p>
+            </div>
+            
+            <!-- 문제 8 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <span class="question-num">8</span>
+                    <span class="difficulty hard">⭐⭐⭐ 어려움</span>
+                    <span class="question-type">객관식</span>
+                </div>
+                <p class="question-text">
+                    소비자 신뢰지수(Consumer Confidence Index)와 소비자 심리지수(Consumer Sentiment Index)의 차이점으로 <strong>틀린</strong> 것은?
+                </p>
+                <div class="options">
+                    <div class="option">① 소비자 신뢰지수는 하드 데이터 기반이다</div>
+                    <div class="option">② 소비자 심리지수는 사람들의 기대와 불안 심리를 반영한다</div>
+                    <div class="option">③ 소비자 심리지수는 매사추세츠 대학에서 발표한다</div>
+                    <div class="option">④ 두 지수는 동일한 방법론으로 산출된다</div>
+                </div>
+            </div>
+            
+            <!-- 문제 9 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <span class="question-num">9</span>
+                    <span class="difficulty easy">⭐ 쉬움</span>
+                    <span class="question-type">OX 문제</span>
+                </div>
+                <p class="question-text">
+                    다음 설명의 참/거짓을 판단하시오.<br><br>
+                    "분석에 따르면, 시장의 양극화가 심한 상황에서도 메인 테마는 AI이다."
+                </p>
+                <div class="options">
+                    <div class="option">⭕ 참 (True)</div>
+                    <div class="option">❌ 거짓 (False)</div>
+                </div>
+            </div>
+            
+            <!-- 문제 10 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <span class="question-num">10</span>
+                    <span class="difficulty hard">⭐⭐⭐ 어려움</span>
+                    <span class="question-type">서술형</span>
+                </div>
+                <p class="question-text">
+                    분석 내용에서 언급된 "골드 온 스테로이드(Gold on Steroids)"가 의미하는 자산은 무엇이며, 해당 자산의 상승 요인 3가지를 서술하시오.
+                </p>
+                <div style="border: 1px dashed var(--border); padding: 20px; border-radius: 8px; min-height: 120px; background: white;">
+                    <p style="color: var(--text-light); font-size: 0.85rem;">서술 공간</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 구분선 -->
+        <div class="divider page-break"></div>
+
+        <!-- 정답지 섹션 -->
+        <div class="section answer-section">
+            <div class="section-header" style="background: var(--success);">📝 정답 및 해설</div>
+            
+            <!-- 정답 1 -->
+            <div class="answer-block">
+                <div class="answer-header">
+                    <span class="answer-num">1</span>
+                    <span class="answer-text">정답: ② 최고치 갱신</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 2026년 1월 27일 S&P 500은 역대 최고치를 갱신했습니다. 반면 다우존스는 헬스케어 섹터 붕괴로 하락했습니다. 이는 시장 내 양극화 현상을 보여주는 사례입니다.
+                </div>
+            </div>
+            
+            <!-- 정답 2 -->
+            <div class="answer-block">
+                <div class="answer-header">
+                    <span class="answer-num">2</span>
+                    <span class="answer-text">정답: 헬스케어 (Healthcare)</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 다우존스 하락의 주요 원인은 헬스케어 섹터의 급락이었습니다. 특히 메디케어 보험수가 인상률이 0.09%에 불과해 과거 평균(4~5%)에 크게 못 미쳤고, 이로 인해 유나이티드헬스 등 헬스케어 기업들이 큰 타격을 받았습니다.
+                </div>
+            </div>
+            
+            <!-- 정답 3 -->
+            <div class="answer-block">
+                <div class="answer-header">
+                    <span class="answer-num">3</span>
+                    <span class="answer-text">정답: ③ 60억 달러 (6 billion)</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 코닝은 메타와 6 billion 달러(약 60억 달러) 규모의 광섬유 케이블 계약을 체결했습니다. 이는 데이터센터 확장과 AI 인프라 구축의 필수 요소로, GPU에 이어 "부수적 액세서리"에 해당하는 투자가 확대되고 있음을 보여줍니다.
+                </div>
+            </div>
+            
+            <!-- 정답 4 -->
+            <div class="answer-block">
+                <div class="answer-header">
+                    <span class="answer-num">4</span>
+                    <span class="answer-text">정답: ❌ 거짓 (False)</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 2026년 메디케어 보험수가 인상률은 <strong>0.09%</strong>에 불과했습니다. 이는 과거 평균인 4~5%와 비교해 매우 낮은 수준이며, 물가상승률(2~3%)에도 못 미칩니다. 이러한 정책 변화가 헬스케어 섹터 붕괴의 직접적 원인이 되었습니다.
+                </div>
+            </div>
+            
+            <!-- 정답 5 -->
+            <div class="answer-block">
+                <div class="answer-header">
+                    <span class="answer-num">5</span>
+                    <span class="answer-text">정답: 5.4</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> GDP Now 모델은 2026년 1분기 GDP 성장률을 5.4%로 예상했습니다. 이는 매우 높은 성장률이지만, 동시에 소비자 신뢰지수(84.5)는 낮은 수준을 보여 거시경제 지표 간 괴리가 발생하고 있습니다.
+                </div>
+            </div>
+            
+            <!-- 정답 6 -->
+            <div class="answer-block">
+                <div class="answer-header">
+                    <span class="answer-num">6</span>
+                    <span class="answer-text">정답: ③ CAPEX (자본지출)</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 마이크로소프트, 메타 등 빅테크 기업의 <strong>CAPEX(자본지출)</strong> 규모는 AI 인프라 투자 의지를 보여주는 핵심 지표입니다. CAPEX가 높을수록 엔비디아 등 AI 관련 기업의 수혜가 지속되고, 기술주 전반의 낙관론이 강화됩니다.
+                </div>
+            </div>
+            
+            <!-- 정답 7 -->
+            <div class="answer-block">
+                <div class="answer-header">
+                    <span class="answer-num">7</span>
+                    <span class="answer-text">정답: 4.23%</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 당일 10년물 미국 국채 수익률은 4.23%였습니다. 이 수준은 기술적으로 중요한 분기점에 해당하며, 금리의 향후 방향에 따라 주식시장, 금, 은 가격이 모두 영향을 받게 됩니다.
+                </div>
+            </div>
+            
+            <!-- 정답 8 -->
+            <div class="answer-block">
+                <div class="answer-header">
+                    <span class="answer-num">8</span>
+                    <span class="answer-text">정답: ④ 두 지수는 동일한 방법론으로 산출된다</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 소비자 신뢰지수는 <strong>하드 데이터</strong>(실제 경제 활동 기반)에서 산출되고, 소비자 심리지수는 <strong>소프트 데이터</strong>(심리적 기대와 불안)를 반영합니다. 두 지수는 서로 다른 방법론을 사용하며, 심리지수는 매사추세츠 대학(미시간 대학)에서 발표합니다. ①②③은 모두 맞는 설명입니다.
+                </div>
+            </div>
+            
+            <!-- 정답 9 -->
+            <div class="answer-block">
+                <div class="answer-header">
+                    <span class="answer-num">9</span>
+                    <span class="answer-text">정답: ⭕ 참 (True)</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 분석에서 명확히 언급되었듯이, 시장의 극심한 양극화에도 불구하고 <strong>AI가 메인 테마</strong>입니다. 코닝의 광섬유 계약, 코어위브 상승, 세일즈포스의 미 육군 계약 등 주요 상승 종목이 모두 AI 관련입니다. 정부와 기업 모두 AI에 집중하고 있습니다.
+                </div>
+            </div>
+            
+            <!-- 정답 10 -->
+            <div class="answer-block">
+                <div class="answer-header">
+                    <span class="answer-num">10</span>
+                    <span class="answer-text">정답: 은(Silver) / 상승 요인 3가지</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong><br><br>
+                    "골드 온 스테로이드"는 <strong>은(Silver)</strong>을 의미합니다.<br><br>
+                    <strong>상승 요인 3가지:</strong><br>
+                    <strong>① 지정학적 불안 및 인플레이션 헤지:</strong> 이란 사태 등 지정학적 불안과 물가 상승 우려로 안전자산 수요 증가<br><br>
+                    <strong>② 산업재 수요:</strong> AI 반도체, 태양광 패널, 전자제품 등에서 은의 산업적 용도가 확대<br><br>
+                    <strong>③ 투자 수요 폭발:</strong> 개인 투자자들의 선물 시장 거래 및 SLV ETF 매수 급증 (SLV가 SPY 수준으로 성장)<br><br>
+                    <em>※ 위 3가지 외에 "달러 약세"도 정답으로 인정 가능</em>
+                </div>
+            </div>
+        </div>
+
+        <!-- 채점 기준 -->
+        <div class="section" style="background: #fffaf0;">
+            <h3 style="font-size: 1rem; color: var(--accent); margin-bottom: 12px;">📊 채점 기준</h3>
+            <table style="width: 100%; font-size: 0.9rem;">
+                <tr>
+                    <th style="background: var(--accent);">문제 유형</th>
+                    <th style="background: var(--accent);">배점</th>
+                    <th style="background: var(--accent);">문항</th>
+                </tr>
+                <tr>
+                    <td>객관식</td>
+                    <td>각 10점</td>
+                    <td>1, 3, 6, 8번</td>
+                </tr>
+                <tr>
+                    <td>단답형</td>
+                    <td>각 10점</td>
+                    <td>2, 7번</td>
+                </tr>
+                <tr>
+                    <td>OX 문제</td>
+                    <td>각 10점</td>
+                    <td>4, 9번</td>
+                </tr>
+                <tr>
+                    <td>빈칸채우기</td>
+                    <td>10점</td>
+                    <td>5번</td>
+                </tr>
+                <tr>
+                    <td>서술형</td>
+                    <td>10점</td>
+                    <td>10번 (자산명 2점 + 요인 각 2.67점)</td>
+                </tr>
+            </table>
+            <p style="margin-top: 12px; font-size: 0.85rem; color: var(--text-light);">
+                <strong>총점:</strong> 100점 | <strong>합격 기준:</strong> 60점 이상
+            </p>
+        </div>
+
+        <footer>
+            <p>원본 출처: CIA.chat (2026.01.27)</p>
+            <p>본 시험문제는 학습 목적으로 작성되었습니다.</p>
+        </footer>
+    </div>
+</body>
+</html>

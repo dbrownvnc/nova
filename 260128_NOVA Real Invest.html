@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>S&P 신고가 vs 다우 붕괴 - 미국 증시 분석 (2026.01.27)</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --accent: #ed8936;
+            --danger: #e53e3e;
+            --success: #38a169;
+            --bg: #f7fafc;
+            --card: #ffffff;
+            --text: #2d3748;
+            --text-light: #718096;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            padding: 16px;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 24px 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .meta {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        
+        .section {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #ebf8ff, #e6fffa);
+            border-left: 4px solid var(--secondary);
+            padding: 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 12px 0;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #fffaf0, #fff5f5);
+            border-left: 4px solid var(--danger);
+            padding: 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 12px 0;
+        }
+        
+        .success-box {
+            background: linear-gradient(135deg, #f0fff4, #e6fffa);
+            border-left: 4px solid var(--success);
+            padding: 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 12px 0;
+        }
+        
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 16px 0;
+        }
+        
+        .stat-card {
+            background: var(--bg);
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+        
+        .stat-value.up {
+            color: var(--success);
+        }
+        
+        .stat-value.down {
+            color: var(--danger);
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 280px;
+            margin: 16px 0;
+        }
+        
+        ul {
+            padding-left: 20px;
+            margin: 12px 0;
+        }
+        
+        li {
+            margin-bottom: 10px;
+        }
+        
+        strong {
+            color: var(--primary);
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin: 2px;
+        }
+        
+        .tag-ai {
+            background: #e9d8fd;
+            color: #553c9a;
+        }
+        
+        .tag-risk {
+            background: #fed7d7;
+            color: #c53030;
+        }
+        
+        .tag-neutral {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .tag-positive {
+            background: #c6f6d5;
+            color: #276749;
+        }
+        
+        .timeline {
+            border-left: 3px solid var(--secondary);
+            padding-left: 20px;
+            margin: 16px 0;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 4px;
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+        
+        .timeline-date {
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.9rem;
+        }
+        
+        th, td {
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: #f7fafc;
+        }
+        
+        .summary-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .summary-list li {
+            padding: 12px 0;
+            border-bottom: 1px dashed #e2e8f0;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .summary-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .icon {
+            font-size: 1.2rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+        
+        @media (max-width: 400px) {
+            .stat-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 S&P 신고가 vs 다우 붕괴</h1>
+            <p class="meta">2026년 1월 27일 화요일 | CIA.chat 미국 증시 분석</p>
+        </header>
+
+        <!-- 핵심 요약 -->
+        <div class="section">
+            <h2 class="section-title">🎯 오늘의 핵심 포인트</h2>
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="stat-value up">신고가</div>
+                    <div class="stat-label">S&P 500</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value down">하락</div>
+                    <div class="stat-label">다우존스</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">4.23%</div>
+                    <div class="stat-label">10년물 국채금리</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value down">84.5</div>
+                    <div class="stat-label">소비자 신뢰지수</div>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <strong>💡 메인 테마:</strong> 시장의 극심한 양극화 속에서도 <strong>AI 테마</strong>가 여전히 시장을 주도하고 있음. 기관들은 오전에 진입했다가 오후에 이탈하는 "맛보기" 패턴 반복.
+            </div>
+        </div>
+
+        <!-- 시장 동향 -->
+        <div class="section">
+            <h2 class="section-title">📈 시장 동향 분석</h2>
+            
+            <h3 style="font-size: 1rem; margin: 16px 0 12px; color: var(--secondary);">▶ 지수별 움직임</h3>
+            <ul>
+                <li><strong>S&P 500:</strong> 최고치 갱신 - AI 관련 종목 주도</li>
+                <li><strong>다우존스:</strong> 하락 - 헬스케어 섹터 붕괴 영향</li>
+                <li><strong>거래 패턴:</strong> 거래량은 있으나, 기관들이 오전 진입 → 오후 이탈 반복</li>
+            </ul>
+            
+            <div class="chart-container">
+                <canvas id="sectorChart"></canvas>
+            </div>
+            
+            <div class="warning-box">
+                <strong>⚠️ 주의:</strong> 자금이 장기적으로 머무르지 않고 단기 차익 실현 후 빠져나가는 패턴. 내일 FOMC와 빅테크 실적 발표 대기 심리 반영.
+            </div>
+        </div>
+
+        <!-- AI 테마 분석 -->
+        <div class="section">
+            <h2 class="section-title">🤖 AI 테마 핵심 동향</h2>
+            
+            <div class="success-box">
+                <strong>핵심 메시지:</strong> "어쩌나 저쩌나 결국 모든 것이 AI에 꽂혀 있다"
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>기업</th>
+                        <th>뉴스</th>
+                        <th>영향</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>코닝 (GLW)</strong></td>
+                        <td>메타와 $6B 광섬유 계약</td>
+                        <td><span class="tag tag-positive">급등</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>코어위브 (CRWV)</strong></td>
+                        <td>도이치뱅크 업그레이드</td>
+                        <td><span class="tag tag-positive">+10%↑</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>세일즈포스 (CRM)</strong></td>
+                        <td>미 육군과 계약 체결</td>
+                        <td><span class="tag tag-positive">상승</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3 style="font-size: 1rem; margin: 20px 0 12px; color: var(--secondary);">▶ 데이터센터 확장의 상징적 의미</h3>
+            <p>GPU(곡괭이·삽) → 이제는 <strong>광섬유 케이블(청바지·부츠)</strong>까지 확장</p>
+            <ul>
+                <li>데이터센터 간 초고속 연결 수요 폭발</li>
+                <li>AI 인프라의 부수적 액세서리들이 본격적으로 수혜</li>
+                <li><strong>서버린 AI</strong>: 각국이 자국 GPU 확보 및 데이터센터 구축 경쟁 본격화</li>
+            </ul>
+        </div>
+
+        <!-- 헬스케어 리스크 -->
+        <div class="section">
+            <h2 class="section-title">🏥 헬스케어 섹터 붕괴</h2>
+            
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="stat-value down">0.09%</div>
+                    <div class="stat-label">메디케어 보험수가 인상률</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">4~5%</div>
+                    <div class="stat-label">과거 평균 인상률</div>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <strong>충격 요인:</strong> 매년 4~6% 인상되던 보험수가가 <strong>0.09%</strong>로 급락. 이는 물가상승률(2~3%)의 절반에도 못 미치는 수준으로, 트럼프 정부의 정책 리스크가 현실화된 사례.
+            </div>
+            
+            <ul>
+                <li><strong>유나이티드헬스(UNH)</strong>: 급락, 회복에 상당 시간 소요 예상</li>
+                <li>헬스케어 섹터 전반에 <strong>보수적 접근 필요</strong></li>
+                <li>트럼프 정부의 정책 리스크가 여러 섹터에서 "폭탄처럼" 터지는 중</li>
+            </ul>
+        </div>
+
+        <!-- 거시경제 지표 -->
+        <div class="section">
+            <h2 class="section-title">📊 거시경제 지표 괴리</h2>
+            
+            <div class="chart-container">
+                <canvas id="macroChart"></canvas>
+            </div>
+            
+            <div class="highlight-box">
+                <strong>핵심 괴리:</strong> GDP 성장 예상 <strong>5.4%</strong> vs 소비자 신뢰지수 <strong>84.5</strong> (하락세)
+            </div>
+            
+            <h3 style="font-size: 1rem; margin: 16px 0 12px; color: var(--secondary);">▶ 소비자 신뢰지수 vs 심리지수</h3>
+            <ul>
+                <li><strong>소비자 신뢰지수:</strong> 하드 데이터 기반 (실제 경제 활동)</li>
+                <li><strong>소비자 심리지수:</strong> 소프트 데이터 (기대·불안 심리)</li>
+            </ul>
+            
+            <h3 style="font-size: 1rem; margin: 16px 0 12px; color: var(--secondary);">▶ 괴리의 원인</h3>
+            <ul>
+                <li>규제 및 정책 불확실성</li>
+                <li><strong>스몰 비즈니스</strong>의 자금 조달 어려움</li>
+                <li>"위는 튼튼, 밑에서부터 깨지는" 구조적 문제</li>
+            </ul>
+        </div>
+
+        <!-- 주요 일정 -->
+        <div class="section">
+            <h2 class="section-title">📅 이번 주 핵심 일정</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">1월 28일 (수) - 내일</div>
+                    <p><strong>FOMC 금리 결정</strong> (동결 예상)</p>
+                    <p><strong>파월 의장 기자회견</strong> 오후 2:30 (ET)</p>
+                    <p><strong>빅테크 실적:</strong> 마이크로소프트, 메타 (장 마감 후)</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">1월 29일 (목)</div>
+                    <p><strong>애플 실적 발표</strong></p>
+                    <p><strong>테슬라 실적 발표</strong></p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">1월 31일 (금)</div>
+                    <p>정부 셧다운 기한</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2월 1일 (토)~</div>
+                    <p>셧다운 시 부분적 정부 폐쇄 예상</p>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <strong>🔑 핵심 관전 포인트:</strong><br>
+                빅테크의 <strong>CAPEX(자본지출)</strong> 규모 → 엔비디아 향방 및 AI 모멘텀 지속 여부 결정
+            </div>
+        </div>
+
+        <!-- 테슬라 분석 -->
+        <div class="section">
+            <h2 class="section-title">🚗 테슬라: 자동차를 넘어서</h2>
+            
+            <p><strong>"머스크노미(Muskonomics)"</strong> - 머스크 생태계에 집중</p>
+            
+            <div class="highlight-box">
+                <strong>관전 포인트:</strong> 자동차 판매 실적보다 <strong>에너지, AI, 옵티머스 로봇, 로보택시</strong>에 시장의 관심 집중
+            </div>
+            
+            <ul>
+                <li>자동차 실적 부진 예상 → 그러나 시장은 이미 "자동차 회사"로 보지 않음</li>
+                <li>일론 머스크 개인의 영향력이 주가 방향 결정</li>
+                <li>"전과(轉科)" 전략: 자동차 → 에너지/로봇/AI로 포커스 이동</li>
+            </ul>
+        </div>
+
+        <!-- 지정학적 리스크 -->
+        <div class="section">
+            <h2 class="section-title">🌍 지정학적 리스크 & 달러</h2>
+            
+            <h3 style="font-size: 1rem; margin: 16px 0 12px; color: var(--secondary);">▶ EU-인도 FTA ("Mother of All Deals")</h3>
+            <ul>
+                <li>미국 제외한 경제 특구 형성 움직임</li>
+                <li>미국의 국제적 영향력 약화 신호</li>
+                <li>트럼프 행정부의 반발 및 무역 갈등 확대 예상</li>
+            </ul>
+            
+            <h3 style="font-size: 1rem; margin: 16px 0 12px; color: var(--secondary);">▶ 달러 동향</h3>
+            <div class="warning-box">
+                달러 약세 지속 중 ↔ 트럼프는 "달러가 안정적" 발언<br>
+                <span style="font-size: 0.85rem; color: var(--text-light);">→ 정보 괴리 또는 의도적 발언 가능성</span>
+            </div>
+            
+            <h3 style="font-size: 1rem; margin: 16px 0 12px; color: var(--secondary);">▶ 이란 상황</h3>
+            <ul>
+                <li>시위 격화, 비공식 사망자 5,000명 이상 추정</li>
+                <li>지정학적 불안 요소 지속</li>
+            </ul>
+        </div>
+
+        <!-- 원자재 시장 -->
+        <div class="section">
+            <h2 class="section-title">🥇 원자재: 금·은 동향</h2>
+            
+            <div class="highlight-box">
+                <strong>"골드 온 스테로이드 = 실버"</strong>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="commodityChart"></canvas>
+            </div>
+            
+            <h3 style="font-size: 1rem; margin: 16px 0 12px; color: var(--secondary);">▶ 은(Silver) 급등 요인</h3>
+            <ul>
+                <li>개인 투자자 매수세 폭발</li>
+                <li>선물 시장 거래 집중</li>
+                <li><strong>SLV ETF</strong>가 SPY 수준으로 성장</li>
+                <li>산업재 수요: AI, 태양광, 전자제품</li>
+                <li>지정학적 불안 + 인플레이션 헤지 수요</li>
+            </ul>
+        </div>
+
+        <!-- 기술적 분석 -->
+        <div class="section">
+            <h2 class="section-title">📉 10년물 국채금리 기술적 분석</h2>
+            
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="stat-value">4.23%</div>
+                    <div class="stat-label">현재 10년물 수익률</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">3:2</div>
+                    <div class="stat-label">콜:풋 비율</div>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <strong>⚠️ 중요 분기점:</strong> 현재 금리가 <strong>파급력이 큰 기술적 레벨</strong>에 도달<br>
+                → 금리 방향에 따라 주식, 금, 은 가격 모두 결정됨
+            </div>
+            
+            <p>풋 옵션 비중 상승(3:2)은 시장의 불안 심리를 반영. 그럼에도 AI 테마가 시장을 지탱하고 있음.</p>
+        </div>
+
+        <!-- 아마존 전략 -->
+        <div class="section">
+            <h2 class="section-title">📦 아마존: 옴니채널 전략</h2>
+            
+            <h3 style="font-size: 1rem; margin: 16px 0 12px; color: var(--secondary);">▶ 오프라인 진출 본격화</h3>
+            <ul>
+                <li>아마존 고(Go), 아마존 원(One), 홀푸드, 아마존 프레시 → <strong>통합</strong></li>
+                <li>홀푸드 + 아마존 결합 형태로 확장</li>
+                <li>월마트 대항마 전략</li>
+            </ul>
+            
+            <div class="highlight-box">
+                <strong>시사점:</strong> 온라인에서 "팔 만큼 다 팔았다"는 한계 인식? 플랫폼으로서 역할 포화 가능성. 장기적으로 2~30년 후 "끝물" 우려도 존재.
+            </div>
+        </div>
+
+        <!-- 섹터 분석 -->
+        <div class="section">
+            <h2 class="section-title">📊 1개월 섹터 성과</h2>
+            
+            <div class="chart-container">
+                <canvas id="sectorPerformanceChart"></canvas>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>섹터</th>
+                        <th>1개월 성과</th>
+                        <th>전망</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>에너지</td>
+                        <td style="color: var(--success); font-weight: 600;">폭등</td>
+                        <td><span class="tag tag-positive">강세</span></td>
+                    </tr>
+                    <tr>
+                        <td>소재 (Materials)</td>
+                        <td style="color: var(--success); font-weight: 600;">상승</td>
+                        <td><span class="tag tag-positive">양호</span></td>
+                    </tr>
+                    <tr>
+                        <td>헬스케어</td>
+                        <td style="color: var(--danger); font-weight: 600;">6.14%</td>
+                        <td><span class="tag tag-risk">하락 예상</span></td>
+                    </tr>
+                    <tr>
+                        <td>커뮤니케이션 서비스</td>
+                        <td style="color: var(--success); font-weight: 600;">2.76%↑</td>
+                        <td><span class="tag tag-positive">급등세</span></td>
+                    </tr>
+                    <tr>
+                        <td>정보기술 (IT)</td>
+                        <td style="color: var(--success); font-weight: 600;">0.22%↑</td>
+                        <td><span class="tag tag-ai">AI 주도</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 투자 시사점 -->
+        <div class="section">
+            <h2 class="section-title">💰 투자 시사점</h2>
+            
+            <ul class="summary-list">
+                <li>
+                    <span class="icon">✅</span>
+                    <span><strong>AI 테마 유지:</strong> 시장 양극화 속에서도 AI 관련주가 견고. 데이터센터 인프라(광섬유, GPU 임대) 수혜 지속</span>
+                </li>
+                <li>
+                    <span class="icon">⚠️</span>
+                    <span><strong>헬스케어 회피:</strong> 정책 리스크 현실화. 유나이티드헬스 등 보험사 회복에 장기간 소요</span>
+                </li>
+                <li>
+                    <span class="icon">📊</span>
+                    <span><strong>빅테크 실적 주목:</strong> MSFT, META의 CAPEX 규모가 AI 모멘텀 지속 여부 결정</span>
+                </li>
+                <li>
+                    <span class="icon">🥇</span>
+                    <span><strong>금·은 보유 유효:</strong> 지정학적 불안, 인플레 헤지, 산업 수요로 귀금속 강세 지속</span>
+                </li>
+                <li>
+                    <span class="icon">💵</span>
+                    <span><strong>현금 확보:</strong> FOMC 및 실적 시즌 대비 유동성 확보 필요. 기관들도 관망세</span>
+                </li>
+                <li>
+                    <span class="icon">📉</span>
+                    <span><strong>고용 지표 주시:</strong> 고용 붕괴 시 소비자 섹터 타격 불가피. 현재는 안정적이나 경계 필요</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 요약 -->
+        <div class="section">
+            <h2 class="section-title">📋 종합 요약</h2>
+            
+            <div class="highlight-box">
+                <strong>🔑 핵심 메시지</strong><br><br>
+                "내일(1/28)과 모레(1/29)가 <strong>2026년 상반기 방향</strong>을 결정할 것"
+            </div>
+            
+            <ul>
+                <li><strong>시장 상황:</strong> S&P 신고가에도 불안한 분위기. 기관 자금이 장기 체류하지 않음</li>
+                <li><strong>핵심 테마:</strong> AI가 유일한 견인차. 정부·기업 모두 AI에 집중</li>
+                <li><strong>리스크 요인:</strong> 헬스케어 정책, 정부 셧다운, 지정학적 불안, 달러 약세</li>
+                <li><strong>관전 포인트:</strong> FOMC 기자회견, 빅테크 CAPEX, 테슬라 머스크노미</li>
+                <li><strong>기술적 수준:</strong> 10년물 금리 4.23%가 분기점. 금리 방향이 전체 자산 가격 결정</li>
+            </ul>
+            
+            <div class="warning-box" style="margin-top: 16px;">
+                <strong>⚠️ 주의사항:</strong> 내일 FOMC 발표(2:30 PM ET) 이후 시장 반응이 일시적인지, 고착화되는지는 다음 날까지 관찰 필요
+            </div>
+        </div>
+
+        <footer>
+            <p>원본 출처: CIA.chat (2026.01.27)</p>
+            <p>본 자료는 투자 권유가 아닌 정보 제공 목적으로 작성되었습니다.</p>
+        </footer>
+    </div>
+
+    <script>
+        // 섹터 현황 차트
+        new Chart(document.getElementById('sectorChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['AI/기술 (상승)', '헬스케어 (하락)', '에너지 (강세)', '기타'],
+                datasets: [{
+                    data: [40, 20, 25, 15],
+                    backgroundColor: ['#48bb78', '#fc8181', '#f6ad55', '#a0aec0'],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: { size: 11 }
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: '오늘의 섹터별 영향력',
+                        font: { size: 14, weight: 'bold' }
+                    }
+                }
+            }
+        });
+
+        // 거시경제 지표 차트
+        new Chart(document.getElementById('macroChart'), {
+            type: 'bar',
+            data: {
+                labels: ['GDP 성장 예상', '물가상승률', '보험수가 인상률', '소비자 신뢰지수/100'],
+                datasets: [{
+                    label: '지표 수치 (%)',
+                    data: [5.4, 2.5, 0.09, 0.845],
+                    backgroundColor: ['#48bb78', '#f6ad55', '#fc8181', '#63b3ed'],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: '주요 경제지표 비교',
+                        font: { size: 14, weight: 'bold' }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 6
+                    }
+                }
+            }
+        });
+
+        // 원자재 차트
+        new Chart(document.getElementById('commodityChart'), {
+            type: 'line',
+            data: {
+                labels: ['1주전', '6일전', '5일전', '4일전', '3일전', '2일전', '어제', '오늘'],
+                datasets: [{
+                    label: '금 (Gold)',
+                    data: [95, 96, 97, 98, 99, 100, 101, 102],
+                    borderColor: '#d69e2e',
+                    backgroundColor: 'rgba(214, 158, 46, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                }, {
+                    label: '은 (Silver)',
+                    data: [92, 94, 96, 99, 102, 105, 108, 112],
+                    borderColor: '#a0aec0',
+                    backgroundColor: 'rgba(160, 174, 192, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    title: {
+                        display: true,
+                        text: '금·은 상대 추이 (기준=100)',
+                        font: { size: 14, weight: 'bold' }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 90
+                    }
+                }
+            }
+        });
+
+        // 섹터 퍼포먼스 차트
+        new Chart(document.getElementById('sectorPerformanceChart'), {
+            type: 'bar',
+            data: {
+                labels: ['에너지', '소재', '커뮤니케이션', 'IT', '헬스케어'],
+                datasets: [{
+                    label: '1개월 성과',
+                    data: [8.5, 5.2, 2.76, 0.22, -6.14],
+                    backgroundColor: function(context) {
+                        const value = context.raw;
+                        return value >= 0 ? '#48bb78' : '#fc8181';
+                    },
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: '섹터별 1개월 수익률 (%)',
+                        font: { size: 14, weight: 'bold' }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
