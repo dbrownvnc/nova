@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>시험문제 | 연준 정책 & S&P 7000 & 빅테크 실적</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.8;
+            color: #1a1a2e;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 16px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 28px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .header .meta {
+            font-size: 0.85rem;
+            opacity: 0.85;
+        }
+        .content {
+            padding: 24px 20px;
+        }
+        .section-divider {
+            background: linear-gradient(135deg, #e94560 0%, #c73659 100%);
+            color: white;
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-align: center;
+            margin: 0;
+        }
+        .question-block {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .question-number {
+            font-weight: 700;
+            color: #1a1a2e;
+            font-size: 1rem;
+        }
+        .difficulty {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .easy {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .medium {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        .hard {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .question-type {
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .question-text {
+            font-size: 1rem;
+            color: #1a1a2e;
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            transition: all 0.2s;
+        }
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        .blank-line {
+            display: block;
+            border-bottom: 2px dashed #667eea;
+            min-width: 150px;
+            margin: 0 4px;
+            display: inline-block;
+        }
+        .answer-section {
+            background: #1a1a2e;
+            color: white;
+        }
+        .answer-block {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #4CAF50;
+        }
+        .answer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .answer-label {
+            font-weight: 700;
+            color: #4CAF50;
+        }
+        .correct-answer {
+            background: #4CAF50;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+        .explanation {
+            color: rgba(255,255,255,0.9);
+            line-height: 1.7;
+        }
+        .explanation strong {
+            color: #FFD700;
+        }
+        .divider {
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            margin: 30px 0;
+        }
+        .ox-options {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+        .ox-option {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            border-radius: 50%;
+            border: 3px solid #e9ecef;
+            background: white;
+            cursor: pointer;
+        }
+        .ox-option.o {
+            color: #4CAF50;
+        }
+        .ox-option.x {
+            color: #f44336;
+        }
+        .short-answer {
+            background: white;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 16px;
+            min-height: 60px;
+            color: #6c757d;
+            font-style: italic;
+        }
+        .essay-answer {
+            background: white;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 16px;
+            min-height: 120px;
+            color: #6c757d;
+            font-style: italic;
+        }
+        .info-badge {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+        }
+        .score-guide {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .score-guide h4 {
+            margin-bottom: 12px;
+        }
+        .score-table {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .score-item {
+            background: rgba(255,255,255,0.2);
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .score-item .label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        .score-item .value {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        .footer {
+            background: #f1f3f4;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        @media (max-width: 480px) {
+            .question-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .ox-options {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 시험문제</h1>
+            <div class="meta">연준 정책 & S&P 7000 & 빅테크 실적 | 총 10문제</div>
+        </div>
+
+        <!-- 문제지 섹션 -->
+        <div class="section-divider">
+            📝 문제지 (총 10문제)
+        </div>
+
+        <div class="content">
+            <div class="info-badge">
+                난이도: ⭐ 쉬움 30% | ⭐⭐ 보통 50% | ⭐⭐⭐ 어려움 20%
+            </div>
+
+            <!-- 문제 1 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <span class="question-number">[문제 1]</span>
+                    <span class="difficulty easy">⭐ 쉬움</span>
+                    <span class="question-type">객관식</span>
+                </div>
+                <div class="question-text">
+                    이번 FOMC 회의에서 연준이 결정한 기준금리 조치는 무엇입니까?
+                </div>
+                <div class="options">
+                    <div class="option">① 25bp 인하</div>
+                    <div class="option">② 50bp 인하</div>
+                    <div class="option">③ 금리 동결</div>
+                    <div class="option">④ 25bp 인상</div>
+                </div>
+            </div>
+
+            <!-- 문제 2 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <span class="question-number">[문제 2]</span>
+                    <span class="difficulty easy">⭐ 쉬움</span>
+                    <span class="question-type">OX 문제</span>
+                </div>
+                <div class="question-text">
+                    S&P 500 지수가 사상 처음으로 7,000선을 돌파했다.
+                </div>
+                <div class="ox-options">
+                    <div class="ox-option o">O</div>
+                    <div class="ox-option x">X</div>
+                </div>
+            </div>
+
+            <!-- 문제 3 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <span class="question-number">[문제 3]</span>
+                    <span class="difficulty medium">⭐⭐ 보통</span>
+                    <span class="question-type">단답형</span>
+                </div>
+                <div class="question-text">
+                    이번 FOMC 회의 투표 결과는 몇 대 몇으로 금리 동결이 결정되었습니까?<br>
+                    (형식: ○ 대 ○)
+                </div>
+                <div class="short-answer">
+                    정답을 작성하세요...
+                </div>
+            </div>
+
+            <!-- 문제 4 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <span class="question-number">[문제 4]</span>
+                    <span class="difficulty medium">⭐⭐ 보통</span>
+                    <span class="question-type">객관식</span>
+                </div>
+                <div class="question-text">
+                    제롬 파월 연준 의장이 현재 통화정책의 성격에 대해 언급한 내용으로 올바른 것은?
+                </div>
+                <div class="options">
+                    <div class="option">① 매우 긴축적이다</div>
+                    <div class="option">② 긴축적이지 않다 (중립적)</div>
+                    <div class="option">③ 완화적이다</div>
+                    <div class="option">④ 매우 완화적이다</div>
+                </div>
+            </div>
+
+            <!-- 문제 5 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <span class="question-number">[문제 5]</span>
+                    <span class="difficulty medium">⭐⭐ 보통</span>
+                    <span class="question-type">빈칸채우기</span>
+                </div>
+                <div class="question-text">
+                    메타(META)는 2026년 CAPEX 목표를 <span class="blank-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> 달러로 설정했으며, 이는 2025년의 72억 달러 대비 크게 증가한 수치이다.
+                </div>
+                <div class="short-answer">
+                    정답을 작성하세요...
+                </div>
+            </div>
+
+            <!-- 문제 6 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <span class="question-number">[문제 6]</span>
+                    <span class="difficulty medium">⭐⭐ 보통</span>
+                    <span class="question-type">객관식</span>
+                </div>
+                <div class="question-text">
+                    마이크로소프트와 메타의 실적 발표 후 주가 반응이 갈린 핵심 이유는 무엇입니까?
+                </div>
+                <div class="options">
+                    <div class="option">① CAPEX 규모의 차이</div>
+                    <div class="option">② AI 투자 대비 실제 매출 창출 여부 (ROI)</div>
+                    <div class="option">③ CEO의 발언 내용</div>
+                    <div class="option">④ 직원 수 감소 발표</div>
+                </div>
+            </div>
+
+            <!-- 문제 7 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <span class="question-number">[문제 7]</span>
+                    <span class="difficulty easy">⭐ 쉬움</span>
+                    <span class="question-type">OX 문제</span>
+                </div>
+                <div class="question-text">
+                    테슬라는 이번 실적 발표에서 자동차 매출이 전년 대비 11% 증가했다고 발표했다.
+                </div>
+                <div class="ox-options">
+                    <div class="ox-option o">O</div>
+                    <div class="ox-option x">X</div>
+                </div>
+            </div>
+
+            <!-- 문제 8 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <span class="question-number">[문제 8]</span>
+                    <span class="difficulty medium">⭐⭐ 보통</span>
+                    <span class="question-type">객관식</span>
+                </div>
+                <div class="question-text">
+                    금(Gold) 가격과 10년물 국채 금리가 동시에 상승하는 현상은 주식시장에 어떤 의미를 갖습니까?
+                </div>
+                <div class="options">
+                    <div class="option">① 매우 긍정적 신호</div>
+                    <div class="option">② 긍정적 신호</div>
+                    <div class="option">③ 중립적 신호</div>
+                    <div class="option">④ 부정적(주의) 신호</div>
+                </div>
+            </div>
+
+            <!-- 문제 9 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <span class="question-number">[문제 9]</span>
+                    <span class="difficulty hard">⭐⭐⭐ 어려움</span>
+                    <span class="question-type">단답형</span>
+                </div>
+                <div class="question-text">
+                    미국 정부가 예산 부족을 이유로 철회한 희토류 관련 정책의 이름은 무엇입니까?<br>
+                    (영어 또는 한글로 답하세요)
+                </div>
+                <div class="short-answer">
+                    정답을 작성하세요...
+                </div>
+            </div>
+
+            <!-- 문제 10 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <span class="question-number">[문제 10]</span>
+                    <span class="difficulty hard">⭐⭐⭐ 어려움</span>
+                    <span class="question-type">서술형</span>
+                </div>
+                <div class="question-text">
+                    트럼프 대통령이 달러 약세에 대해 "전혀 신경 쓰지 않는다"고 밝힌 이유와, 이것이 <strong>장기적</strong>으로 미국 경제에 미칠 수 있는 위험을 설명하세요.
+                </div>
+                <div class="essay-answer">
+                    답변을 작성하세요...
+                </div>
+            </div>
+
+            <div class="score-guide">
+                <h4>📊 채점 기준</h4>
+                <div class="score-table">
+                    <div class="score-item">
+                        <div class="label">객관식/OX</div>
+                        <div class="value">각 10점</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="label">단답형/빈칸</div>
+                        <div class="value">각 10점</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="label">서술형</div>
+                        <div class="value">10점</div>
+                    </div>
+                </div>
+                <p style="margin-top:12px; font-size:0.9rem;">총점: 100점 | 합격: 70점 이상</p>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 정답지 섹션 -->
+        <div class="section-divider">
+            ✅ 정답 및 해설
+        </div>
+
+        <div class="content answer-section">
+
+            <!-- 정답 1 -->
+            <div class="answer-block">
+                <div class="answer-header">
+                    <span class="answer-label">[문제 1] 정답</span>
+                    <span class="correct-answer">③</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 연준은 이번 FOMC 회의에서 기준금리를 <strong>동결</strong>했습니다. 투표 결과는 8대 2로, 8명이 동결을 지지했고 2명만이 25bp 인하를 주장했습니다. 현재 인플레이션이 목표치(2%)보다 높은 3%대를 유지하고 있어 금리 인하에 신중한 태도를 보이고 있습니다.
+                </div>
+            </div>
+
+            <!-- 정답 2 -->
+            <div class="answer-block">
+                <div class="answer-header">
+                    <span class="answer-label">[문제 2] 정답</span>
+                    <span class="correct-answer">O</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> S&P 500 지수가 사상 처음으로 <strong>7,000선을 돌파</strong>했습니다. 이는 역사상 두 번째로 빠른 속도(302일)로 1,000포인트를 올린 것입니다. 주로 AI 관련 빅테크 기업들의 강세가 지수 상승을 견인했습니다.
+                </div>
+            </div>
+
+            <!-- 정답 3 -->
+            <div class="answer-block">
+                <div class="answer-header">
+                    <span class="answer-label">[문제 3] 정답</span>
+                    <span class="correct-answer">8 대 2</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> FOMC 투표 결과는 <strong>8대 2</strong>로 금리 동결이 결정되었습니다. 8명의 위원이 동결을 지지했고, 2명(미란, 원론가로 추정)이 25bp 인하를 주장했습니다. 이는 연준 내부에서도 통화정책 방향에 대한 의견이 갈리고 있음을 보여줍니다.
+                </div>
+            </div>
+
+            <!-- 정답 4 -->
+            <div class="answer-block">
+                <div class="answer-header">
+                    <span class="answer-label">[문제 4] 정답</span>
+                    <span class="correct-answer">②</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 제롬 파월 의장은 현재 통화정책이 <strong>"긴축적(Restrictive)이지 않다"</strong>고 명확히 밝혔습니다. 이는 시장에서 우려하던 것보다 덜 매파적(hawkish)인 입장으로, 중립적 스탠스를 유지하겠다는 신호입니다. 이 발언은 시장에 중요한 시사점을 제공했습니다.
+                </div>
+            </div>
+
+            <!-- 정답 5 -->
+            <div class="answer-block">
+                <div class="answer-header">
+                    <span class="answer-label">[문제 5] 정답</span>
+                    <span class="correct-answer">1,350억 (또는 135B, $135 billion)</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 메타는 2026년 CAPEX 목표를 <strong>1,350억 달러(135 billion)</strong>로 설정했습니다. 이는 2025년의 720억 달러 대비 거의 2배 가까이 증가한 수치입니다. 메타는 AI 투자가 실제 광고 매출 증가로 이어지고 있어 공격적인 투자를 지속하고 있습니다.
+                </div>
+            </div>
+
+            <!-- 정답 6 -->
+            <div class="answer-block">
+                <div class="answer-header">
+                    <span class="answer-label">[문제 6] 정답</span>
+                    <span class="correct-answer">②</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 핵심 차이는 <strong>AI 투자 대비 실제 매출 창출 여부(ROI)</strong>입니다. 메타는 AI 투자가 광고 매출 증가로 직접 연결되어 비용 증가보다 매출 증가 속도가 더 빠릅니다. 반면 마이크로소프트는 Azure 성장이 둔화되고 OpenAI 의존도가 높아지면서, 높은 CAPEX 대비 매출 성장이 기대에 미치지 못했습니다.
+                </div>
+            </div>
+
+            <!-- 정답 7 -->
+            <div class="answer-block">
+                <div class="answer-header">
+                    <span class="answer-label">[문제 7] 정답</span>
+                    <span class="correct-answer">X</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 테슬라의 자동차 매출은 전년 대비 <strong>11% 감소</strong>했습니다(증가가 아닙니다). 테슬라는 자동차 사업보다 에너지, AI, 로보택시 사업에 집중하겠다는 방향을 제시했으며, 모델 S와 X의 단종을 발표하고 모델 3, Y, 사이버트럭만 생산하기로 했습니다.
+                </div>
+            </div>
+
+            <!-- 정답 8 -->
+            <div class="answer-block">
+                <div class="answer-header">
+                    <span class="answer-label">[문제 8] 정답</span>
+                    <span class="correct-answer">④</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 금 가격과 10년물 국채 금리가 동시에 상승하는 것은 주식시장에 <strong>부정적(주의) 신호</strong>입니다. 이는 다음을 의미합니다: (1) 미국의 신용도(Credit) 하락, (2) 달러 약세, (3) 인플레이션 우려, (4) 안전자산 선호 증가. 이러한 환경에서는 기업들의 자금 조달 비용이 높아지고 주식시장에 부담이 됩니다.
+                </div>
+            </div>
+
+            <!-- 정답 9 -->
+            <div class="answer-block">
+                <div class="answer-header">
+                    <span class="answer-label">[문제 9] 정답</span>
+                    <span class="correct-answer">Mineral Price Floor (광물 가격 하한제)</span>
+                </div>
+                <div class="explanation">
+                    <strong>해설:</strong> 미국 정부가 예산 부족을 이유로 철회한 정책은 <strong>Mineral Price Floor(광물 가격 하한제)</strong>입니다. 이 정책은 미국 내 희토류 생산 기업들에게 최소 매입가를 보장해 경제성을 확보해주는 것이었습니다. 이 정책 철회 소식에 희토류 관련주들이 장후에 폭락했습니다. 미국 내 희토류 생산은 인건비와 환경 규제로 인해 이러한 정부 지원 없이는 경제성을 갖추기 어렵습니다.
+                </div>
+            </div>
+
+            <!-- 정답 10 -->
+            <div class="answer-block">
+                <div class="answer-header">
+                    <span class="answer-label">[문제 10] 정답 예시</span>
+                    <span class="correct-answer">서술형</span>
+                </div>
+                <div class="explanation">
+                    <strong>모범 답안:</strong><br><br>
+                    
+                    <strong>[달러 약세 용인 이유]</strong><br>
+                    트럼프 대통령은 달러가 약해지면 미국 제품의 가격이 상대적으로 저렴해져 수출 경쟁력이 높아진다고 생각합니다. 예를 들어, 과거에 1,500원을 내야 했던 미국 제품을 1,400원에 살 수 있게 되면 다른 나라들이 미국 제품을 더 많이 구매할 것이라는 논리입니다.<br><br>
+                    
+                    <strong>[장기적 위험]</strong><br>
+                    1) <strong>국제통화 위상 약화:</strong> 달러가 지속적으로 약해지면 기축통화로서의 달러 위상이 흔들립니다. 각국이 달러 대신 다른 통화나 자산을 보유하려 할 수 있습니다.<br><br>
+                    2) <strong>미국 신용도 하락:</strong> 미국 정부 부채가 급증하고 있는 상황에서 달러 약세는 미국 채권의 매력을 떨어뜨려 자금 조달 비용을 높입니다.<br><br>
+                    3) <strong>글로벌 분열 심화:</strong> 강력한 달러가 뒷받침하던 미국 중심의 국제질서가 약해지면, 각국이 자국 우선주의로 블록화되어 글로벌 경제 협력이 어려워질 수 있습니다.<br><br>
+                    4) <strong>지정학적 불안정:</strong> 경제적·군사적 힘의 균형이 무너지면 국제 분쟁 가능성이 높아집니다.<br><br>
+                    
+                    <strong>[채점 기준]</strong> 이유 설명 3점 + 장기적 위험 2가지 이상 설명 7점
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <p>본 시험문제는 교육 및 학습 목적으로 제작되었습니다.</p>
+            <p>출처: NOVA Real Invest YouTube | 2026년 1월 29일</p>
+        </div>
+    </div>
+</body>
+</html>

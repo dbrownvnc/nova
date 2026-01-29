@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>연준 "긴축 아니다" 중립신호 | S&P 7000 돌파 | 빅테크 실적 분석</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7;
+            color: #1a1a2e;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            padding: 16px;
+            max-width: 100%;
+        }
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 28px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+        .header .meta {
+            font-size: 0.85rem;
+            opacity: 0.85;
+        }
+        .content {
+            padding: 24px 20px;
+        }
+        .section {
+            margin-bottom: 32px;
+        }
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #e94560;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title .icon {
+            font-size: 1.3rem;
+        }
+        .subsection {
+            margin-bottom: 20px;
+        }
+        .subsection-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #16213e;
+            margin-bottom: 10px;
+            padding-left: 12px;
+            border-left: 4px solid #0f3460;
+        }
+        p {
+            margin-bottom: 14px;
+            text-align: justify;
+            word-break: keep-all;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 4px solid #ff9800;
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .alert-box {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border-left: 4px solid #f44336;
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .success-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-left: 4px solid #4caf50;
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .info-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 4px solid #2196f3;
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .key-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #e94560 0%, #c73659 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+        .key-stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .key-stat .label {
+            font-weight: 500;
+            color: #495057;
+        }
+        .key-stat .value {
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+        .positive { color: #2e7d32 !important; }
+        .negative { color: #c62828 !important; }
+        .neutral { color: #f57c00 !important; }
+        .chart-container {
+            background: #fafbfc;
+            border-radius: 16px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+        .chart-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.9rem;
+        }
+        th, td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+        th {
+            background: #1a1a2e;
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        tr:hover {
+            background: #e3f2fd;
+        }
+        .tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .tag-up {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .tag-down {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .tag-hold {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+            margin: 16px 0;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #e94560;
+            border-radius: 2px;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 16px;
+            width: 10px;
+            height: 10px;
+            background: #e94560;
+            border-radius: 50%;
+        }
+        .summary-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin: 20px 0;
+        }
+        .summary-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            color: #e94560;
+        }
+        .summary-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        .summary-card li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        .summary-card li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #e94560;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .grid-item {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .grid-item .number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+        .grid-item .label {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 4px;
+        }
+        .footer {
+            background: #f1f3f4;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #e94560, transparent);
+            margin: 24px 0;
+        }
+        strong {
+            color: #c73659;
+        }
+        em {
+            color: #0f3460;
+            font-style: normal;
+            font-weight: 600;
+        }
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏛️ 연준 "긴축 아니다" 중립신호<br>S&P 7000 돌파 & 빅테크 실적 분석</h1>
+            <div class="meta">📅 2026년 1월 29일 | 미국 증시 심층 분석</div>
+        </div>
+
+        <div class="content">
+            <!-- 핵심 요약 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">📊</span> 오늘의 핵심 요약
+                </div>
+                
+                <div class="grid-2">
+                    <div class="grid-item">
+                        <div class="number positive">7,000</div>
+                        <div class="label">S&P 500 돌파</div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="number neutral">동결</div>
+                        <div class="label">기준금리 유지</div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="number positive">$5,507</div>
+                        <div class="label">금 가격 (장후)</div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="number">8:2</div>
+                        <div class="label">FOMC 투표 결과</div>
+                    </div>
+                </div>
+
+                <div class="key-stat">
+                    <span class="label">다우존스</span>
+                    <span class="value positive">+0.02%</span>
+                </div>
+                <div class="key-stat">
+                    <span class="label">나스닥</span>
+                    <span class="value positive">+0.17%</span>
+                </div>
+                <div class="key-stat">
+                    <span class="label">S&P 500</span>
+                    <span class="value positive">+0.01%</span>
+                </div>
+                <div class="key-stat">
+                    <span class="label">러셀 2000</span>
+                    <span class="value positive">+0.54%</span>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 연준 정책 분석 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">🏛️</span> 연준(FOMC) 정책 결정 분석
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">금리 동결 및 투표 결과</div>
+                    <p>연준은 이번 FOMC 회의에서 기준금리를 <strong>동결</strong>했습니다. 투표 결과는 <span class="key-number">8대 2</span>로, 8명은 동결을 지지했고 2명은 25bp 인하를 주장했습니다.</p>
+                    
+                    <div class="highlight-box">
+                        <strong>⚡ 핵심 발언:</strong> 제롬 파월 의장은 "현재 통화정책이 <em>긴축적(Restrictive)이지 않다</em>"고 명확히 밝혔습니다. 이는 시장에 중요한 신호입니다.
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">연준 성명서 핵심 내용</div>
+                    
+                    <table>
+                        <tr>
+                            <th>항목</th>
+                            <th>평가</th>
+                        </tr>
+                        <tr>
+                            <td>경제 성장</td>
+                            <td><span class="tag tag-up">견조함</span></td>
+                        </tr>
+                        <tr>
+                            <td>고용 시장</td>
+                            <td><span class="tag tag-hold">안정화</span></td>
+                        </tr>
+                        <tr>
+                            <td>인플레이션</td>
+                            <td><span class="tag tag-down">다소 높음 (3%대)</span></td>
+                        </tr>
+                        <tr>
+                            <td>불확실성</td>
+                            <td><span class="tag tag-down">높음</span></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">이례적인 "장기 목표" 별도 성명서</div>
+                    <p>이번 회의에서는 매우 <strong>이례적으로 성명서가 2개</strong> 발표되었습니다. 추가로 발표된 "장기적 목표와 통화정책 전략(Statement on Longer-Run Goals and Monetary Policy Strategy)"은 연준의 독립성과 목표를 재확인한 것입니다.</p>
+                    
+                    <div class="alert-box">
+                        <strong>🎯 핵심 메시지:</strong>
+                        <ul style="margin-top:10px; padding-left:20px;">
+                            <li>장기 목표: <strong>최대 고용 + 물가 안정</strong></li>
+                            <li>인플레이션 목표: <strong>2%</strong> 유지</li>
+                            <li>정책: 미리 정해진 경로 없이 <strong>데이터 의존적</strong></li>
+                        </ul>
+                    </div>
+
+                    <p>이는 트럼프 대통령과 일부 세력의 연준 독립성 공격에 대한 <em>명확한 경고</em>로 해석됩니다. 파월 의장은 "이런 조사를 받은 적이 없다"며 현 상황의 심각성을 언급했습니다.</p>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">관세와 인플레이션</div>
+                    <p>파월 의장은 현재 인플레이션 상승이 <strong>"임시적(Temporal)"</strong>이라고 언급했습니다. 이는 관세 정책으로 인한 물가 상승이 법적 도전(재판)으로 인해 곧 해소될 수 있다는 뉘앙스를 담고 있습니다.</p>
+                    
+                    <div class="info-box">
+                        <strong>📌 투자 시사점:</strong> 하반기까지 금리 인하는 1회 정도만 예상됩니다. 통화정책 불확실성이 장기화될 가능성이 높으며, 이에 대한 포트폴리오 조정이 필요합니다.
+                    </div>
+                </div>
+
+                <!-- 연준 정책 전망 차트 -->
+                <div class="chart-container">
+                    <div class="chart-title">📈 2026년 금리 전망 시나리오</div>
+                    <canvas id="rateChart"></canvas>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 시장 동향 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">📈</span> 주요 자산 동향
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">금(Gold) - 사상 최고가 경신</div>
+                    <p>금 가격이 <span class="key-number">$5,507</span>까지 상승하며 역대 최고치를 기록했습니다. 장중 +6.39% 상승 후 장후에도 갭 상승이 이어졌습니다.</p>
+                    
+                    <div class="alert-box">
+                        <strong>⚠️ 경고 신호:</strong> 금 가격과 10년물 국채금리(4.25%)가 동시에 상승하는 것은 주식시장에 <em>부정적 신호</em>입니다. 이는 미국의 신용도 하락과 달러 약세를 반영합니다.
+                    </div>
+
+                    <p><strong>금 상승 배경:</strong></p>
+                    <ul style="padding-left: 20px; margin: 10px 0;">
+                        <li>트럼프 대통령의 달러 약세 용인 ("오히려 좋아")</li>
+                        <li>미 정부 부채 급증 → 미국 신용도(Credit) 하락</li>
+                        <li>국채 매도 (덴마크 연금펀드, 중국 등)</li>
+                        <li>지정학적 리스크 (이란 긴장)</li>
+                    </ul>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">10년물 국채 금리</div>
+                    <p>10년물 국채 금리는 <span class="key-number">4.25%</span>를 유지하며 여전히 높은 수준입니다. 이는 장기적으로 주식시장에 부담 요인입니다.</p>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">비트코인</div>
+                    <p>비트코인은 한 달간 <strong>제자리 걸음</strong>을 하고 있습니다. 특이한 점은 이전에 QQQ(나스닥 100)와 동조화되던 비트코인이 현재는 <em>러셀 2000</em>과 비슷하게 움직이고 있다는 것입니다. 이는 비트코인이 심리지수의 역할을 하고 있음을 시사합니다.</p>
+                </div>
+
+                <!-- 자산 동향 차트 -->
+                <div class="chart-container">
+                    <div class="chart-title">📊 주요 자산 1개월 수익률</div>
+                    <canvas id="assetChart"></canvas>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 섹터 분석 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">🏭</span> 섹터별 동향
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">📊 섹터별 퍼포먼스 (1개월 기준)</div>
+                    <canvas id="sectorChart"></canvas>
+                </div>
+
+                <table>
+                    <tr>
+                        <th>순위</th>
+                        <th>섹터</th>
+                        <th>동향</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>에너지</td>
+                        <td><span class="tag tag-up">강세</span></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>원자재 (Basic Materials)</td>
+                        <td><span class="tag tag-up">강세</span></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>테크놀로지</td>
+                        <td><span class="tag tag-up">반등 가속</span></td>
+                    </tr>
+                </table>
+
+                <div class="success-box">
+                    <strong>✅ 핵심 관찰:</strong> 최근 15일 기준 테크놀로지 섹터의 반등 속도가 매우 빠릅니다. AI 관련 인프라, 스토리지, 장비주가 주도하고 있습니다.
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 주요 실적 분석 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">💼</span> 빅테크 실적 발표 분석
+                </div>
+
+                <!-- ASML -->
+                <div class="subsection">
+                    <div class="subsection-title">🇳🇱 ASML - 사상 최대 수주</div>
+                    <p>네덜란드의 반도체 장비 기업 ASML이 <strong>사상 최대 수주</strong>를 기록했습니다. 이 소식에 전체 AI 인프라 및 장비 섹터가 급등했습니다.</p>
+                    
+                    <div class="success-box">
+                        <strong>📈 영향:</strong> 마이크론, 인텔, 텍사스 인스트루먼트 등 반도체 관련 종목 전반 상승
+                    </div>
+                </div>
+
+                <!-- 시게이트 -->
+                <div class="subsection">
+                    <div class="subsection-title">💾 시게이트(Seagate) - 스토리지 대장주</div>
+                    <div class="grid-2">
+                        <div class="grid-item">
+                            <div class="number positive">+19.14%</div>
+                            <div class="label">장중 상승률</div>
+                        </div>
+                        <div class="grid-item">
+                            <div class="number positive">+1.56%</div>
+                            <div class="label">장후 추가 상승</div>
+                        </div>
+                    </div>
+                    <p>스토리지 섹터가 AI 데이터센터 수요 급증으로 <strong>폭발적 성장</strong>을 기록했습니다. 1개월 만에 약 $140 상승, 거의 <em>3배</em> 수준의 상승률을 보였습니다.</p>
+                </div>
+
+                <!-- 인텔 -->
+                <div class="subsection">
+                    <div class="subsection-title">🔵 인텔(Intel) - 파운드리 기대감</div>
+                    <div class="key-stat">
+                        <span class="label">일간 상승률</span>
+                        <span class="value positive">+11%</span>
+                    </div>
+                    <p>대만 반도체 매체에서 <strong>엔비디아와 애플이 인텔에 파운드리 물량을 줄 것</strong>이라는 루머가 나왔습니다. 이에 따라 TSM(TSMC)에 대한 경고와 함께 인텔 주가가 급등했습니다.</p>
+                    
+                    <div class="highlight-box">
+                        <strong>⚠️ 주의:</strong> 루머 기반 상승이므로 실적과 숫자 검증 필요. 단기 트레이딩 관점에서는 먹을 수 있을 때 먹고 나오는 전략 권장.
+                    </div>
+                </div>
+
+                <!-- 마이크로소프트 -->
+                <div class="subsection">
+                    <div class="subsection-title">🟦 마이크로소프트(MSFT) - 혼조세</div>
+                    
+                    <table>
+                        <tr>
+                            <th>항목</th>
+                            <th>결과</th>
+                            <th>평가</th>
+                        </tr>
+                        <tr>
+                            <td>EPS</td>
+                            <td>양호</td>
+                            <td><span class="tag tag-up">긍정</span></td>
+                        </tr>
+                        <tr>
+                            <td>매출</td>
+                            <td>예상치 수준</td>
+                            <td><span class="tag tag-hold">보통</span></td>
+                        </tr>
+                        <tr>
+                            <td>Azure 성장률</td>
+                            <td>둔화</td>
+                            <td><span class="tag tag-down">부정</span></td>
+                        </tr>
+                        <tr>
+                            <td>CAPEX</td>
+                            <td>$37.5B (+66%)</td>
+                            <td><span class="tag tag-hold">부담</span></td>
+                        </tr>
+                    </table>
+
+                    <div class="alert-box">
+                        <strong>🔍 핵심 이슈:</strong>
+                        <ul style="margin-top:10px; padding-left:20px;">
+                            <li>Azure 클라우드 성장 <strong>둔화</strong></li>
+                            <li>OpenAI에 대한 의존도 <strong>심화</strong></li>
+                            <li>CAPEX 대비 매출 성장 의문</li>
+                        </ul>
+                    </div>
+
+                    <p>시장은 "이만큼 투자(CAPEX)해서 얼마나 버는가(ROI)"를 따지기 시작했습니다. 매출이 인상적이지 않았던 점이 부담입니다.</p>
+                </div>
+
+                <!-- 메타 -->
+                <div class="subsection">
+                    <div class="subsection-title">🟡 메타(META) - AI 광고 엔진의 위력</div>
+                    
+                    <div class="grid-2">
+                        <div class="grid-item">
+                            <div class="number">$72B</div>
+                            <div class="label">2025년 CAPEX</div>
+                        </div>
+                        <div class="grid-item">
+                            <div class="number positive">$135B</div>
+                            <div class="label">2026년 CAPEX 목표</div>
+                        </div>
+                    </div>
+
+                    <div class="key-stat">
+                        <span class="label">장후 상승률</span>
+                        <span class="value positive">+6.67%</span>
+                    </div>
+
+                    <div class="success-box">
+                        <strong>✅ 마이크로소프트와의 차이:</strong> 메타는 AI 투자가 <em>실제 광고 매출</em>로 이어지고 있습니다. 비용 증가보다 <strong>매출 증가 속도가 더 빠른</strong> 것이 핵심입니다.
+                    </div>
+
+                    <p>AI가 <strong>광고 세일즈 엔진</strong> 역할을 하면서 투자 대비 수익이 명확하게 나타나고 있습니다. 이것이 시장에서 메타를 긍정적으로 평가하는 이유입니다.</p>
+                </div>
+
+                <!-- 테슬라 -->
+                <div class="subsection">
+                    <div class="subsection-title">🚗 테슬라(TSLA) - 자동차에서 AI 기업으로</div>
+                    
+                    <div class="key-stat">
+                        <span class="label">자동차 매출</span>
+                        <span class="value negative">-11% (YoY)</span>
+                    </div>
+
+                    <p>테슬라는 자동차 매출이 감소했지만, <strong>에너지, AI, 로보택시</strong>에 집중하겠다는 의지를 보였습니다.</p>
+
+                    <div class="highlight-box">
+                        <strong>📢 주요 발표 사항:</strong>
+                        <ul style="margin-top:10px; padding-left:20px;">
+                            <li><strong>모델 S, X 단종</strong> → 모델 3, Y, 사이버트럭만 생산</li>
+                            <li><strong>사이버캡(로보택시)</strong>: 2026년 출시 예정</li>
+                            <li><strong>반도체 공장</strong> 건설 검토 (자율주행용)</li>
+                            <li><strong>xAI 투자</strong> 선호 의향 표명</li>
+                        </ul>
+                    </div>
+
+                    <div class="alert-box">
+                        <strong>⚠️ 리스크 요인:</strong>
+                        <ul style="margin-top:10px; padding-left:20px;">
+                            <li>일정 준수 이력 불안 (사이버트럭도 4-5년 지연)</li>
+                            <li>프리캐시플로우 상황 심각</li>
+                            <li>내러티브(스토리)에 의존한 주가</li>
+                        </ul>
+                    </div>
+
+                    <p>테슬라는 더 이상 <strong>전기차 회사가 되고 싶어하지 않는 것</strong>으로 보입니다. "머스크노미스(Musknomics)"라 불리는 머스크의 비전에 의존한 투자가 계속되고 있습니다.</p>
+                </div>
+
+                <!-- 실적 비교 차트 -->
+                <div class="chart-container">
+                    <div class="chart-title">📊 빅테크 CAPEX 비교</div>
+                    <canvas id="capexChart"></canvas>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 한국 시장 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">🇰🇷</span> 한국 시장 동향
+                </div>
+
+                <div class="success-box">
+                    <strong>🎉 전 세계 주식시장 1위!</strong><br>
+                    한국 증시가 현재 전 세계에서 가장 강한 상승세를 보이고 있습니다.
+                </div>
+
+                <div class="grid-2">
+                    <div class="grid-item">
+                        <div class="number positive">5,000+</div>
+                        <div class="label">코스피 돌파</div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="number positive">$63</div>
+                        <div class="label">EWY(한국 ETF)</div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">SK하이닉스 미국 상장 의향</div>
+                    <p>SK하이닉스가 어닝콜에서 <strong>미국 상장</strong> 의향을 밝혔습니다. 메모리 반도체 슈퍼사이클이 최소 2년 이상 지속될 것으로 전망됩니다.</p>
+                    
+                    <div class="info-box">
+                        <strong>💡 메모리 시장 현황:</strong> 현재 메모리가 GPU보다 비쌉니다. 64GB 메모리(32GB x 2)가 GPU 한 장보다 더 비싼 상황입니다.
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">삼성전자 실적</div>
+                    <p>삼성전자도 "어마무시한" 실적을 발표했습니다. 한국 반도체 섹터 전반이 강세를 보이고 있습니다.</p>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 정책 리스크 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">⚠️</span> 정책 리스크 & 히토류
+                </div>
+
+                <div class="alert-box">
+                    <strong>🚨 속보: 히토류 가격 하한제 폐기</strong><br>
+                    로이터 보도에 따르면, 미국 정부가 <strong>예산 부족</strong>으로 희토류 광물 가격 하한선(Mineral Price Floor) 정책을 철회합니다.
+                </div>
+
+                <p>이 소식에 희토류 관련주들이 <strong>장후에 폭락</strong>했습니다. 정부가 하한가를 보장해주는 정책 덕분에 미국 내 희토류 생산이 경제성을 가질 수 있었는데, 이 정책이 사라지면서 관련 기업들의 전망이 급격히 악화되었습니다.</p>
+
+                <div class="highlight-box">
+                    <strong>📌 트럼프 정책 투자 패턴:</strong>
+                    <ol style="margin-top:10px; padding-left:20px;">
+                        <li>정책 발표 시 급등 → <strong>매도 타이밍</strong></li>
+                        <li>눌림목(하락) 대기</li>
+                        <li>구체적 법안/계약 확정 시 재진입</li>
+                    </ol>
+                    <p style="margin-top:10px;">뉴스가 나올 때 팔고 떠나는 것이 아니라, <em>눌림목마다 다음 에피소드를 기다리며 모아가는 "Buy the Dip" 전략</em>이 유효합니다.</p>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 달러 약세와 미국 신용도 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">💵</span> 달러 약세와 미국 신용도
+                </div>
+
+                <p>트럼프 대통령은 달러 약세에 대해 <strong>"전혀 신경 쓰지 않는다"</strong>는 입장입니다. 달러가 내려가면 미국 제품이 저렴해져서 수출에 유리하다는 논리입니다.</p>
+
+                <div class="alert-box">
+                    <strong>⚠️ 장기적 위험:</strong>
+                    <ul style="margin-top:10px; padding-left:20px;">
+                        <li>미국 정부 부채: 하루 이자만 <strong>수조 달러</strong></li>
+                        <li>국제통화로서의 <strong>달러 위상 약화</strong></li>
+                        <li>글로벌 분열 시대 진입 가능성</li>
+                        <li>강력한 리더십 부재 시 <strong>지정학적 불안정</strong> 증가</li>
+                    </ul>
+                </div>
+
+                <p>단기적으로는 미국 제품 경쟁력 상승으로 긍정적일 수 있으나, 장기적으로는 미국의 <em>패권 약화</em>를 의미할 수 있습니다.</p>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 시나리오 분석 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">🔮</span> 향후 시나리오 분석
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <strong>시나리오 1: 낙관적 (AI 랠리 지속)</strong><br>
+                        AI 및 AI 액세서리 강세 지속, 메가캡 실적 호조로 상승 추세 유지. 반도체 인프라, 스토리지, 아날로그/전력 부품 섹터 주목.
+                    </div>
+                    <div class="timeline-item">
+                        <strong>시나리오 2: 매크로 충격</strong><br>
+                        예상치 못한 경제 데이터로 금리 급등락. 잡주 및 자금 필요 기업 타격. 변동성 확대.
+                    </div>
+                    <div class="timeline-item">
+                        <strong>시나리오 3: 애플 실적 리스크</strong><br>
+                        애플 실적이 부진할 경우 지수 전체에 악영향. 기술주 전반 조정 가능성.
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <h4>📋 투자 체크리스트</h4>
+                    <ul>
+                        <li>금리 동결 장기화에 대비한 포트폴리오 조정</li>
+                        <li>금/은/동 등 귀금속 헤지 포지션 유지</li>
+                        <li>AI 인프라 (스토리지, 장비, 메모리) 눌림목 매수</li>
+                        <li>정책 뉴스에 급등 시 일부 차익 실현</li>
+                        <li>애플 실적 발표 (목요일 장후) 주시</li>
+                        <li>정부 셧다운 가능성 모니터링</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 핵심 종목 요약 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">🎯</span> 핵심 종목 요약
+                </div>
+
+                <table>
+                    <tr>
+                        <th>종목</th>
+                        <th>등락</th>
+                        <th>핵심 포인트</th>
+                    </tr>
+                    <tr>
+                        <td>ASML</td>
+                        <td><span class="positive">상승</span></td>
+                        <td>사상 최대 수주</td>
+                    </tr>
+                    <tr>
+                        <td>시게이트(STX)</td>
+                        <td><span class="positive">+20%</span></td>
+                        <td>AI 스토리지 수요 폭발</td>
+                    </tr>
+                    <tr>
+                        <td>인텔(INTC)</td>
+                        <td><span class="positive">+11%</span></td>
+                        <td>파운드리 루머</td>
+                    </tr>
+                    <tr>
+                        <td>마이크론(MU)</td>
+                        <td><span class="positive">상승</span></td>
+                        <td>메모리 강세</td>
+                    </tr>
+                    <tr>
+                        <td>MSFT</td>
+                        <td><span class="negative">하락</span></td>
+                        <td>Azure 성장 둔화</td>
+                    </tr>
+                    <tr>
+                        <td>META</td>
+                        <td><span class="positive">+6.67%</span></td>
+                        <td>AI 광고 매출 증가</td>
+                    </tr>
+                    <tr>
+                        <td>TSLA</td>
+                        <td><span class="neutral">혼조</span></td>
+                        <td>자동차 매출↓, AI 전환</td>
+                    </tr>
+                    <tr>
+                        <td>금(GLD)</td>
+                        <td><span class="positive">$5,507</span></td>
+                        <td>사상 최고가</td>
+                    </tr>
+                    <tr>
+                        <td>EWY(한국)</td>
+                        <td><span class="positive">$63</span></td>
+                        <td>글로벌 1위 상승</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 결론 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">📝</span> 결론 및 투자 전략
+                </div>
+
+                <div class="summary-card">
+                    <h4>🔑 오늘의 핵심 메시지</h4>
+                    <ul>
+                        <li>연준은 "긴축적이지 않다"며 <strong>중립적 입장</strong> 표명</li>
+                        <li>금리 인하 연내 1회 정도로 제한적 전망</li>
+                        <li>AI 인프라/장비/스토리지 섹터 <strong>슈퍼 강세</strong></li>
+                        <li>메타 vs 마이크로소프트: <strong>ROI가 갈라놓은 명암</strong></li>
+                        <li>금 가격 + 10년물 동시 상승 = <strong>주의 신호</strong></li>
+                        <li>한국 증시 <strong>세계 1위</strong> 상승률</li>
+                        <li>정책 리스크 (희토류 등) <strong>수시 점검</strong> 필요</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <strong>💡 전략 요약:</strong><br>
+                    매크로가 시장에 스트레스를 주고 있지만, <em>AI 및 AI 액세서리</em>와 <em>금/은/동 헤지</em>로 포트폴리오를 구성하면 현 환경에서도 좋은 성과를 낼 수 있습니다. 지수만 올라간 것이지 시장 전체가 좋은 것은 아니므로 <strong>종목 선별</strong>이 핵심입니다.
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>본 분석은 투자 참고 자료이며, 투자 결정은 본인의 책임입니다.</p>
+            <p>출처: NOVA Real Invest YouTube | 2026년 1월 29일</p>
+        </div>
+    </div>
+
+    <script>
+        // 금리 전망 차트
+        const rateCtx = document.getElementById('rateChart').getContext('2d');
+        new Chart(rateCtx, {
+            type: 'line',
+            data: {
+                labels: ['1월', '3월', '5월', '6월', '9월', '12월'],
+                datasets: [{
+                    label: '기준금리 전망 (%)',
+                    data: [5.25, 5.25, 5.25, 5.00, 5.00, 5.00],
+                    borderColor: '#e94560',
+                    backgroundColor: 'rgba(233, 69, 96, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointBackgroundColor: '#e94560'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        min: 4.5,
+                        max: 5.5,
+                        ticks: { callback: value => value + '%' }
+                    }
+                }
+            }
+        });
+
+        // 자산 수익률 차트
+        const assetCtx = document.getElementById('assetChart').getContext('2d');
+        new Chart(assetCtx, {
+            type: 'bar',
+            data: {
+                labels: ['금', '은', '구리', 'S&P500', '비트코인', '10년물'],
+                datasets: [{
+                    label: '1개월 수익률 (%)',
+                    data: [15, 12, 18, 8, 0, 2],
+                    backgroundColor: [
+                        '#FFD700',
+                        '#C0C0C0',
+                        '#B87333',
+                        '#4CAF50',
+                        '#FF9800',
+                        '#f44336'
+                    ],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { callback: value => value + '%' }
+                    }
+                }
+            }
+        });
+
+        // 섹터 차트
+        const sectorCtx = document.getElementById('sectorChart').getContext('2d');
+        new Chart(sectorCtx, {
+            type: 'horizontalBar',
+            data: {
+                labels: ['에너지', '원자재', '테크놀로지', '금융', '헬스케어', '소비재'],
+                datasets: [{
+                    label: '1개월 수익률',
+                    data: [12, 10, 8, -2, 3, 4],
+                    backgroundColor: [
+                        '#4CAF50',
+                        '#8BC34A',
+                        '#2196F3',
+                        '#f44336',
+                        '#9C27B0',
+                        '#FF9800'
+                    ],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        ticks: { callback: value => value + '%' }
+                    }
+                }
+            }
+        });
+
+        // CAPEX 비교 차트
+        const capexCtx = document.getElementById('capexChart').getContext('2d');
+        new Chart(capexCtx, {
+            type: 'bar',
+            data: {
+                labels: ['마이크로소프트', '메타 (2025)', '메타 (2026 목표)'],
+                datasets: [{
+                    label: 'CAPEX (십억 달러)',
+                    data: [37.5, 72, 135],
+                    backgroundColor: ['#0078D4', '#1877F2', '#1877F2'],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { callback: value => '$' + value + 'B' }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
