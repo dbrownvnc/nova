@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>CIA.chat 멤버 미팅 시험문제 (2026-01-29)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7;
+            color: #1a1a1a;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 16px;
+            background: #f8f9fa;
+        }
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        h1 {
+            font-size: 1.5rem;
+            color: #0d47a1;
+            border-bottom: 3px solid #0d47a1;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        h2 {
+            font-size: 1.25rem;
+            color: #1565c0;
+            margin-top: 28px;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: 8px;
+            border-left: 4px solid #1565c0;
+        }
+        
+        .divider {
+            border: none;
+            border-top: 2px dashed #1565c0;
+            margin: 30px 0;
+        }
+        
+        .question-box {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 18px;
+            margin: 20px 0;
+        }
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .question-number {
+            background: #1565c0;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .difficulty {
+            font-size: 0.85rem;
+        }
+        .difficulty-easy { color: #4caf50; }
+        .difficulty-medium { color: #ff9800; }
+        .difficulty-hard { color: #f44336; }
+        .question-type {
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .question-text {
+            font-size: 1rem;
+            margin: 12px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border-left: 3px solid #1565c0;
+        }
+        .options {
+            margin-top: 12px;
+            padding-left: 10px;
+        }
+        .option {
+            padding: 8px 12px;
+            margin: 6px 0;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+        .option:hover {
+            background: #e3f2fd;
+            border-color: #90caf9;
+        }
+        
+        .blank {
+            display: inline-block;
+            min-width: 120px;
+            border-bottom: 2px solid #1565c0;
+            margin: 0 4px;
+        }
+        
+        /* 정답지 스타일 */
+        .answer-section {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 40px;
+        }
+        .answer-section h2 {
+            background: linear-gradient(135deg, #2e7d32 0%, #388e3c 100%);
+            color: white;
+            border-left: none;
+        }
+        .answer-box {
+            background: white;
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0;
+            border-left: 4px solid #4caf50;
+        }
+        .answer-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .answer-number {
+            background: #4caf50;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .correct-answer {
+            background: #c8e6c9;
+            color: #2e7d32;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .explanation {
+            margin-top: 10px;
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            color: #424242;
+        }
+        .explanation strong {
+            color: #1565c0;
+        }
+        
+        .meta-info {
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .score-guide {
+            background: #fff3e0;
+            border: 1px solid #ffcc80;
+            border-radius: 10px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+        .score-guide h3 {
+            margin: 0 0 12px 0;
+            color: #e65100;
+        }
+        .score-guide table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .score-guide td {
+            padding: 8px;
+            border-bottom: 1px solid #ffe0b2;
+        }
+        
+        footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 0.8rem;
+            color: #666;
+            text-align: center;
+        }
+        
+        @media print {
+            .answer-section {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 CIA.chat 멤버 미팅 시험문제</h1>
+        
+        <div class="meta-info">
+            <strong>📅 기준일:</strong> 2026년 1월 29일<br>
+            <strong>⏱️ 문항 수:</strong> 총 10문제 | <strong>배점:</strong> 각 10점 (총 100점)
+        </div>
+        
+        <div class="score-guide">
+            <h3>📊 난이도 안내</h3>
+            <table>
+                <tr>
+                    <td>⭐ 쉬움</td>
+                    <td>3문제 (30%)</td>
+                </tr>
+                <tr>
+                    <td>⭐⭐ 보통</td>
+                    <td>5문제 (50%)</td>
+                </tr>
+                <tr>
+                    <td>⭐⭐⭐ 어려움</td>
+                    <td>2문제 (20%)</td>
+                </tr>
+            </table>
+        </div>
+
+        <hr class="divider">
+        
+        <h2>📋 시험문제 (총 10문제)</h2>
+
+        <!-- 문제 1 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 1</span>
+                <span class="difficulty difficulty-easy">⭐ 쉬움</span>
+                <span class="question-type">객관식</span>
+            </div>
+            <div class="question-text">
+                2026년 1월 29일, 마이크로소프트 주가는 하루 만에 약 얼마나 하락했는가?
+            </div>
+            <div class="options">
+                <div class="option">① 약 3%</div>
+                <div class="option">② 약 5%</div>
+                <div class="option">③ 약 10%</div>
+                <div class="option">④ 약 15%</div>
+            </div>
+        </div>
+
+        <!-- 문제 2 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 2</span>
+                <span class="difficulty difficulty-easy">⭐ 쉬움</span>
+                <span class="question-type">OX 문제</span>
+            </div>
+            <div class="question-text">
+                2026년 1월 29일 미국 증시에서 마이크로소프트와 메타는 모두 하락했다.<br><br>
+                <strong>O / X</strong>
+            </div>
+        </div>
+
+        <!-- 문제 3 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 3</span>
+                <span class="difficulty difficulty-medium">⭐⭐ 보통</span>
+                <span class="question-type">단답형</span>
+            </div>
+            <div class="question-text">
+                중국 딥시크(DeepSeek)가 발표한 AI 효율화 기술의 영문 약자를 쓰시오.<br>
+                (힌트: Manifold Constrained Hyper Connections)
+            </div>
+        </div>
+
+        <!-- 문제 4 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 4</span>
+                <span class="difficulty difficulty-medium">⭐⭐ 보통</span>
+                <span class="question-type">객관식</span>
+            </div>
+            <div class="question-text">
+                다우존스 지수가 나스닥과 달리 상승한 주된 이유는 무엇인가?
+            </div>
+            <div class="options">
+                <div class="option">① 애플의 실적 호조</div>
+                <div class="option">② 캐터필라(CAT)의 강세</div>
+                <div class="option">③ 메타의 10% 상승</div>
+                <div class="option">④ 금리 동결 발표</div>
+            </div>
+        </div>
+
+        <!-- 문제 5 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 5</span>
+                <span class="difficulty difficulty-medium">⭐⭐ 보통</span>
+                <span class="question-type">빈칸 채우기</span>
+            </div>
+            <div class="question-text">
+                영상에서 언급된 AI 투자에 대한 새로운 패러다임을 한 문장으로 표현하면:<br><br>
+                "AI = <span class="blank"></span>"<br><br>
+                위 빈칸에 들어갈 한 글자 영어 단어를 쓰시오.
+            </div>
+        </div>
+
+        <!-- 문제 6 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 6</span>
+                <span class="difficulty difficulty-medium">⭐⭐ 보통</span>
+                <span class="question-type">객관식</span>
+            </div>
+            <div class="question-text">
+                마이크로소프트와 메타의 주가가 정반대로 움직인 핵심 이유로 가장 적절한 것은?
+            </div>
+            <div class="options">
+                <div class="option">① 마이크로소프트의 매출이 감소했기 때문</div>
+                <div class="option">② 메타가 AI 투자를 중단했기 때문</div>
+                <div class="option">③ 마이크로소프트는 캐펙스 대비 수익 증명이 부족했고, 메타는 즉각적인 ROI를 보여줬기 때문</div>
+                <div class="option">④ 중국 시장에서의 점유율 차이 때문</div>
+            </div>
+        </div>
+
+        <!-- 문제 7 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 7</span>
+                <span class="difficulty difficulty-easy">⭐ 쉬움</span>
+                <span class="question-type">객관식</span>
+            </div>
+            <div class="question-text">
+                애플의 어닝 서프라이즈를 이끈 주요 제품과 핵심 시장의 조합으로 옳은 것은?
+            </div>
+            <div class="options">
+                <div class="option">① 맥북 + 유럽</div>
+                <div class="option">② 아이폰 + 중국</div>
+                <div class="option">③ 아이패드 + 미국</div>
+                <div class="option">④ 애플워치 + 일본</div>
+            </div>
+        </div>
+
+        <!-- 문제 8 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 8</span>
+                <span class="difficulty difficulty-hard">⭐⭐⭐ 어려움</span>
+                <span class="question-type">서술형</span>
+            </div>
+            <div class="question-text">
+                모건스탠리 분석에 따르면, 나스닥이 2% 하락할 때 금과 비트코인은 약 10% 하락할 수 있다고 한다. 이러한 현상이 발생하는 원인을 영상 내용을 바탕으로 설명하시오. (2~3문장)
+            </div>
+        </div>
+
+        <!-- 문제 9 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 9</span>
+                <span class="difficulty difficulty-medium">⭐⭐ 보통</span>
+                <span class="question-type">객관식</span>
+            </div>
+            <div class="question-text">
+                영상에서 언급된 "바이브 코딩(Vibe Coding)"의 등장으로 타격을 받은 섹터로 가장 적절한 것은?
+            </div>
+            <div class="options">
+                <div class="option">① 반도체 하드웨어</div>
+                <div class="option">② 소프트웨어/클라우드</div>
+                <div class="option">③ 에너지/유틸리티</div>
+                <div class="option">④ 금융/은행</div>
+            </div>
+        </div>
+
+        <!-- 문제 10 -->
+        <div class="question-box">
+            <div class="question-header">
+                <span class="question-number">문제 10</span>
+                <span class="difficulty difficulty-hard">⭐⭐⭐ 어려움</span>
+                <span class="question-type">서술형</span>
+            </div>
+            <div class="question-text">
+                영상에서 강조한 "세 가지 구조적 변화" 중 <strong>"소프트웨어에서 인프라로의 로테이션"</strong>을 뒷받침하는 종목 사례를 2개 이상 들고, 이들이 상승한 이유를 AI 데이터센터와 연관지어 설명하시오. (3~4문장)
+            </div>
+        </div>
+
+        <hr class="divider">
+        
+        <!-- 정답지 섹션 -->
+        <div class="answer-section">
+            <h2>📝 정답 및 해설</h2>
+
+            <!-- 정답 1 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-number">문제 1</span>
+                    <span class="correct-answer">정답: ③</span>
+                </div>
+                <div class="explanation">
+                    마이크로소프트 주가는 2026년 1월 29일 하루 만에 <strong>-9.99% (약 10%)</strong> 하락하며 시가총액 약 <strong>$3,500억</strong>이 증발했습니다. 이는 AI 캐펙스(자본지출)에 대한 시장의 우려가 반영된 결과입니다.
+                </div>
+            </div>
+
+            <!-- 정답 2 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-number">문제 2</span>
+                    <span class="correct-answer">정답: X</span>
+                </div>
+                <div class="explanation">
+                    마이크로소프트는 약 10% <strong>하락</strong>했지만, 메타는 같은 날 약 10% <strong>상승</strong>했습니다. 두 기업이 정반대로 움직인 것이 이 날의 핵심 특징이었습니다.
+                </div>
+            </div>
+
+            <!-- 정답 3 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-number">문제 3</span>
+                    <span class="correct-answer">정답: MHC</span>
+                </div>
+                <div class="explanation">
+                    <strong>MHC(Manifold Constrained Hyper Connections)</strong>는 중국 딥시크가 발표한 기술로, 기존처럼 많은 GPU가 필요하지 않고 수학적 알고리즘을 "레시피"처럼 미리 만들어 효율적으로 AI를 구동할 수 있다고 주장합니다.
+                </div>
+            </div>
+
+            <!-- 정답 4 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-number">문제 4</span>
+                    <span class="correct-answer">정답: ②</span>
+                </div>
+                <div class="explanation">
+                    다우존스는 <strong>가격가중치 지수</strong>로, 고가 종목의 등락이 지수에 큰 영향을 미칩니다. 이날 <strong>캐터필라(CAT)</strong>가 AI 데이터센터 건설 및 발전기 수요 증가로 크게 상승하면서 다우 지수를 끌어올렸습니다.
+                </div>
+            </div>
+
+            <!-- 정답 5 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-number">문제 5</span>
+                    <span class="correct-answer">정답: Money (머니/돈)</span>
+                </div>
+                <div class="explanation">
+                    영상의 핵심 메시지는 <strong>"AI = Money(돈)"</strong>입니다. 더 이상 AI에 투자한다는 스토리만으로 주가가 오르지 않으며, <strong>실제로 AI로 돈을 벌고 있음</strong>을 증명해야 하는 시대가 되었습니다.
+                </div>
+            </div>
+
+            <!-- 정답 6 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-number">문제 6</span>
+                    <span class="correct-answer">정답: ③</span>
+                </div>
+                <div class="explanation">
+                    두 회사의 실적 성장률은 비율로 보면 비슷했습니다. 그러나 마이크로소프트는 막대한 캐펙스 대비 <strong>수익 증가가 기대에 못 미쳤고</strong>("밑빠진 독에 물 붓기"), 메타는 AI 투자가 바로 <strong>매출 증가로 연결</strong>됨을 보여주었기 때문입니다.
+                </div>
+            </div>
+
+            <!-- 정답 7 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-number">문제 7</span>
+                    <span class="correct-answer">정답: ②</span>
+                </div>
+                <div class="explanation">
+                    애플의 어닝 서프라이즈는 <strong>아이폰 판매</strong>가 주도했으며, 특히 <strong>중국</strong>에서 전례 없는 수요가 발생했습니다. 또한 맥 미니가 AI 에이전트 서버용으로 인기를 끌며 일부 매장에서 품절 사태가 발생했습니다.
+                </div>
+            </div>
+
+            <!-- 정답 8 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-number">문제 8</span>
+                    <span class="correct-answer">정답: 서술형 (모범 답안)</span>
+                </div>
+                <div class="explanation">
+                    그동안 금과 비트코인 가격이 크게 상승했는데, 이 상승분의 상당 부분이 <strong>마진(레버리지) 자금</strong>으로 이루어졌습니다. 기술주가 하락하면 투자자들에게 <strong>마진콜</strong>이 발생하고, 이로 인해 금과 비트코인을 <strong>강제 청산</strong>해야 하는 상황이 발생합니다. 따라서 나스닥의 하락폭보다 약 5배 더 큰 변동성이 나타나는 것입니다.
+                </div>
+            </div>
+
+            <!-- 정답 9 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-number">문제 9</span>
+                    <span class="correct-answer">정답: ②</span>
+                </div>
+                <div class="explanation">
+                    바이브 코딩은 코딩을 모르는 사람도 AI 에이전트를 통해 앱을 만들 수 있게 해주는 트렌드입니다. 이로 인해 <strong>서비스나우, 세일즈포스, 마이크로소프트, 어도비</strong> 등 전통적인 <strong>소프트웨어/클라우드 기업</strong>들의 비즈니스 모델에 위협이 가해지면서 주가가 하락했습니다.
+                </div>
+            </div>
+
+            <!-- 정답 10 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-number">문제 10</span>
+                    <span class="correct-answer">정답: 서술형 (모범 답안)</span>
+                </div>
+                <div class="explanation">
+                    소프트웨어에서 인프라로의 로테이션을 보여주는 대표 종목으로 <strong>캐터필라(CAT), 하니웰(HON), IBM, 샌드디스크(WDC)</strong> 등이 있습니다.<br><br>
+                    <strong>캐터필라</strong>는 AI 데이터센터 건설에 필요한 장비와 비상 발전기를 공급하며 수혜를 받았습니다. <strong>하니웰</strong>은 데이터센터의 냉각 시스템을 제공합니다. <strong>IBM</strong>은 서버 하드웨어 공급 업체로 +5.13% 상승했습니다. <strong>샌드디스크</strong>는 장후 +18% 상승하며 어닝이 2배 증가했는데, 이는 AI 데이터센터의 저장장치 수요 급증 때문입니다. 이처럼 AI 인프라를 <strong>"손으로 만질 수 있는"</strong> 하드웨어로 공급하는 기업들이 실질적인 수익을 거두고 있습니다.
+                </div>
+            </div>
+        </div>
+
+        <div class="score-guide" style="margin-top:30px;">
+            <h3>📊 채점 기준</h3>
+            <table>
+                <tr>
+                    <td><strong>90~100점</strong></td>
+                    <td>🏆 AI 투자 마스터</td>
+                </tr>
+                <tr>
+                    <td><strong>70~89점</strong></td>
+                    <td>👍 시장 흐름 파악 양호</td>
+                </tr>
+                <tr>
+                    <td><strong>50~69점</strong></td>
+                    <td>📚 복습 필요</td>
+                </tr>
+                <tr>
+                    <td><strong>50점 미만</strong></td>
+                    <td>🔄 영상 다시 시청 권장</td>
+                </tr>
+            </table>
+        </div>
+
+        <footer>
+            <p>📝 CIA.chat 멤버 미팅 시험문제 | 2026년 1월 29일</p>
+            <p>본 시험문제는 학습 목적으로 작성되었습니다.</p>
+        </footer>
+    </div>
+</body>
+</html>

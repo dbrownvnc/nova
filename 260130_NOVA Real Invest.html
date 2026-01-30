@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>CIA.chat 멤버 미팅 분석 (2026-01-29)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7;
+            color: #1a1a1a;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 16px;
+            background: #f8f9fa;
+        }
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        h1 {
+            font-size: 1.5rem;
+            color: #0d47a1;
+            border-bottom: 3px solid #0d47a1;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 1.25rem;
+            color: #1565c0;
+            margin-top: 28px;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: 8px;
+            border-left: 4px solid #1565c0;
+        }
+        h3 {
+            font-size: 1.1rem;
+            color: #1976d2;
+            margin-top: 20px;
+            padding-left: 12px;
+            border-left: 3px solid #42a5f5;
+        }
+        p {
+            margin: 12px 0;
+            text-align: justify;
+        }
+        .highlight {
+            background: linear-gradient(to bottom, transparent 60%, #fff59d 60%);
+            font-weight: 600;
+        }
+        .key-point {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 12px 16px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .warning {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 12px 16px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .positive {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 12px 16px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .chart-container {
+            margin: 20px 0;
+            padding: 16px;
+            background: #fafafa;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .bar-label {
+            width: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-align: right;
+        }
+        .bar-wrapper {
+            flex: 1;
+            background: #e0e0e0;
+            border-radius: 4px;
+            height: 28px;
+            overflow: hidden;
+        }
+        .bar {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding-left: 8px;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 4px;
+        }
+        .bar.positive-bar { background: linear-gradient(90deg, #4caf50, #66bb6a); }
+        .bar.negative-bar { background: linear-gradient(90deg, #ef5350, #f44336); }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.9rem;
+        }
+        th {
+            background: #1565c0;
+            color: white;
+            padding: 12px 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+        td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: center;
+        }
+        tr:nth-child(even) {
+            background: #f5f5f5;
+        }
+        .up { color: #d32f2f; font-weight: 600; }
+        .down { color: #1976d2; font-weight: 600; }
+        
+        .summary-box {
+            background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        .summary-box h3 {
+            color: #fff;
+            border-left: 3px solid #fff;
+            margin-top: 0;
+        }
+        .summary-box ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .summary-box li {
+            margin: 8px 0;
+        }
+        
+        .quote {
+            font-style: italic;
+            color: #555;
+            padding: 12px 20px;
+            border-left: 3px solid #9e9e9e;
+            background: #fafafa;
+            margin: 16px 0;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin: 2px;
+        }
+        .tag-red { background: #ffcdd2; color: #c62828; }
+        .tag-green { background: #c8e6c9; color: #2e7d32; }
+        .tag-blue { background: #bbdefb; color: #1565c0; }
+        .tag-orange { background: #ffe0b2; color: #e65100; }
+        
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 16px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+        .flow-box {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+        .flow-arrow {
+            font-size: 1.2rem;
+            color: #757575;
+        }
+        
+        .meta-info {
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+        
+        .sector-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .sector-card {
+            padding: 14px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .sector-card.bullish {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border: 1px solid #a5d6a7;
+        }
+        .sector-card.bearish {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            border: 1px solid #ef9a9a;
+        }
+        .sector-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .sector-stocks {
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: 6px;
+        }
+        
+        footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 0.8rem;
+            color: #666;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 CIA.chat 멤버 미팅 분석</h1>
+        
+        <div class="meta-info">
+            <strong>📅 날짜:</strong> 2026년 1월 29일 (목요일)<br>
+            <strong>📺 출처:</strong> CIA.chat 멤버 미팅 유튜브 라이브<br>
+            <strong>🎯 핵심 키워드:</strong> 
+            <span class="tag tag-red">선별</span>
+            <span class="tag tag-blue">AI=돈</span>
+            <span class="tag tag-green">하드웨어</span>
+            <span class="tag tag-orange">딥시크 MHC</span>
+        </div>
+        
+        <div class="summary-box">
+            <h3>💡 오늘의 핵심 메시지</h3>
+            <ul>
+                <li><strong>"AI에 대한 환상은 끝났다"</strong> - 이제는 실적으로 증명해야 하는 시대</li>
+                <li>마이크로소프트 -10% vs 메타 +10% → 시장의 <strong>냉혹한 선별</strong> 시작</li>
+                <li>소프트웨어에서 <strong>하드웨어/인프라</strong>로 로테이션 진행 중</li>
+                <li>딥시크 MHC 발표로 AI 과잉투자 우려 재점화</li>
+            </ul>
+        </div>
+
+        <h2>1️⃣ 시장 개요 - 냉혹한 선별의 시작</h2>
+        
+        <p>2026년 1월 29일 미국 증시는 <span class="highlight">역사적인 분기점</span>을 맞이했습니다. 나스닥이 0.72% 하락한 가운데, 마이크로소프트와 메타의 극명한 대조가 시장의 새로운 방향성을 보여주었습니다.</p>
+        
+        <h3>📉 주요 지수 동향</h3>
+        <div class="chart-container">
+            <div class="bar-chart">
+                <div class="bar-item">
+                    <span class="bar-label">다우존스</span>
+                    <div class="bar-wrapper">
+                        <div class="bar positive-bar" style="width: 30%;">+0.3%</div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <span class="bar-label">S&P 500</span>
+                    <div class="bar-wrapper">
+                        <div class="bar negative-bar" style="width: 25%;">-0.5%</div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <span class="bar-label">나스닥</span>
+                    <div class="bar-wrapper">
+                        <div class="bar negative-bar" style="width: 36%;">-0.72%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="key-point">
+            <strong>🔑 핵심 포인트:</strong> 다우가 상승한 것은 <strong>캐터필라(CAT)</strong>의 강세 때문. 다우는 가격가중치 지수로, 고가 종목의 등락이 지수에 큰 영향을 미침.
+        </div>
+        
+        <h3>📊 종목별 명암</h3>
+        <table>
+            <tr>
+                <th>종목</th>
+                <th>등락률</th>
+                <th>시가총액 변화</th>
+                <th>비고</th>
+            </tr>
+            <tr>
+                <td><strong>마이크로소프트</strong></td>
+                <td class="down">-9.99%</td>
+                <td>-$3,500억</td>
+                <td>AI 캐펙스 우려</td>
+            </tr>
+            <tr>
+                <td><strong>메타</strong></td>
+                <td class="up">+10%</td>
+                <td>대폭 상승</td>
+                <td>AI ROI 입증</td>
+            </tr>
+            <tr>
+                <td><strong>엔비디아</strong></td>
+                <td class="down">-3~4%</td>
+                <td>-</td>
+                <td>딥시크 우려 후 반등</td>
+            </tr>
+            <tr>
+                <td><strong>캐터필라</strong></td>
+                <td class="up">+5%+</td>
+                <td>-</td>
+                <td>데이터센터 수혜</td>
+            </tr>
+            <tr>
+                <td><strong>IBM</strong></td>
+                <td class="up">+5.13%</td>
+                <td>-</td>
+                <td>서버 하드웨어</td>
+            </tr>
+            <tr>
+                <td><strong>하니웰</strong></td>
+                <td class="up">+상승</td>
+                <td>-</td>
+                <td>데이터센터 냉각</td>
+            </tr>
+        </table>
+        
+        <h3>📈 거래소별 등락 종목 현황</h3>
+        <table>
+            <tr>
+                <th>거래소</th>
+                <th>상승</th>
+                <th>하락</th>
+                <th>특징</th>
+            </tr>
+            <tr>
+                <td>NYSE</td>
+                <td class="up">1,578</td>
+                <td class="down">1,164</td>
+                <td>상승 우위</td>
+            </tr>
+            <tr>
+                <td>NASDAQ</td>
+                <td class="up">1,438</td>
+                <td class="down">1,940</td>
+                <td>기술주 약세</td>
+            </tr>
+        </table>
+
+        <h2>2️⃣ 마이크로소프트 vs 메타 - 왜 정반대로 움직였나?</h2>
+        
+        <p>실적 자체만 보면 두 회사 모두 <span class="highlight">비율로는 비슷한 성장</span>을 보였습니다. 그러나 시장의 반응은 정반대였습니다.</p>
+        
+        <div class="flow-diagram">
+            <div class="flow-box" style="background:#ffcdd2;">마이크로소프트<br>AI에 투자</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box" style="background:#ffecb3;">막대한 캐펙스</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box" style="background:#ffcdd2;">회수기간 불확실<br>❌ -10%</div>
+        </div>
+        
+        <div class="flow-diagram">
+            <div class="flow-box" style="background:#c8e6c9;">메타<br>AI에 투자</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box" style="background:#dcedc8;">적절한 캐펙스</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box" style="background:#c8e6c9;">즉각적인 매출 증가<br>✅ +10%</div>
+        </div>
+        
+        <div class="warning">
+            <strong>⚠️ 시장의 냉정한 평가:</strong><br>
+            • 마이크로소프트: "밑빠진 독에 물 붓기 아니냐? 세일즈 증가도 크지 않은데..."<br>
+            • 메타: "AI 투자 대비 매출이 바로바로 나오고 있다"<br><br>
+            <strong>결론:</strong> 덩치가 큰 만큼 더 많이 벌어야 하는데, 기대치를 충족하지 못함
+        </div>
+        
+        <div class="quote">
+            "메타는 구멍가게에서 쓰는 돈이었고, 마이크로소프트는 재벌가에서 쓰는 돈이다. 재벌가에서 쓰는 돈이 엄청나다 보니까 사람들이 겁을 먹은 것이다."
+        </div>
+
+        <h2>3️⃣ 딥시크 MHC - AI 패러다임의 변화?</h2>
+        
+        <p>중국 딥시크(DeepSeek)가 발표한 <strong>MHC(Manifold Constrained Hyper Connections)</strong>가 시장에 충격을 주었습니다.</p>
+        
+        <h3>🍝 파스타 비유로 이해하는 MHC</h3>
+        
+        <div class="chart-container">
+            <table>
+                <tr>
+                    <th style="width:50%">기존 AI 방식</th>
+                    <th style="width:50%">딥시크 MHC 방식</th>
+                </tr>
+                <tr>
+                    <td style="text-align:left; padding:16px;">
+                        "봉골레 파스타 만드는 법 알려줘"<br><br>
+                        → 여러 셰프들에게 전화<br>
+                        → 레시피 수집<br>
+                        → 종합해서 답변<br><br>
+                        <strong style="color:#d32f2f;">⏱️ 많은 GPU 필요, 시간 소요</strong>
+                    </td>
+                    <td style="text-align:left; padding:16px;">
+                        "봉골레 파스타 만드는 법 알려줘"<br><br>
+                        → 미리 만들어둔 레시피북에서<br>
+                        → 바로 찾아서 제공<br><br>
+                        <strong style="color:#2e7d32;">⚡ GPU 적게 필요, 즉시 응답</strong>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="key-point">
+            <strong>💡 MHC의 핵심:</strong><br>
+            • 수학적 알고리즘을 "레시피"처럼 미리 만들어 놓음<br>
+            • 매번 연산하는 것이 아니라 패턴화된 답을 제공<br>
+            • <strong>결과:</strong> 고성능 GPU 대량 보유 필요성에 의문 제기
+        </div>
+        
+        <h3>📉 엔비디아에 미친 영향</h3>
+        <p>딥시크 뉴스로 엔비디아는 장 초반 급락했으나, 이후 반등에 성공했습니다.</p>
+        
+        <div class="positive">
+            <strong>🎯 투자 기회로 활용:</strong><br>
+            "딥시크가 어쩌고 저쩌고? 웃기지 마. 나는 산다." - 장중 급락 시 매수 진입하여 수익 실현 성공. 앞으로도 이런 뉴스로 하락할 때마다 "눕줍(눕혀서 줍기)" 기회.
+        </div>
+        
+        <div class="warning">
+            <strong>⚠️ 냉정한 시각:</strong><br>
+            하드웨어가 전부가 아니라고 해서, 하드웨어가 필요 없다는 것은 아님. 인간도 아무리 똑똑해도 몸(하드웨어)이 건강해야 능력을 발휘하듯, <strong>하드웨어와 소프트웨어는 같이 발전</strong>해야 함.
+        </div>
+
+        <h2>4️⃣ 바이브 코딩(Vibe Coding) - 소프트웨어 업계의 위기</h2>
+        
+        <p><strong>몰투버스(Moltubut)</strong> - 전 클라우드버스에서 이름 변경 - 가 보여주는 AI 에이전틱의 충격적인 발전상이 소프트웨어 기업들의 주가를 끌어내렸습니다.</p>
+        
+        <h3>🤖 AI 에이전트가 하는 일</h3>
+        <div class="chart-container">
+            <ul style="margin:0; padding-left:20px;">
+                <li>자율적으로 코딩 수행 (인스타그램 클론 제작 등)</li>
+                <li>이메일 발송 및 약속 잡기</li>
+                <li>관련 강의/서비스 <strong>자동 결제</strong>까지 진행</li>
+                <li>24시간 작업 가능</li>
+            </ul>
+        </div>
+        
+        <div class="warning">
+            <strong>⚠️ 피해 종목들:</strong><br>
+            서비스나우, 세일즈포스, 마이크로소프트, 어도비 등 소프트웨어 기업들이 "바이브 코딩" 트렌드로 인해 일제히 하락.
+            <br><br>
+            <strong>보안 우려:</strong> 구글 부사장 경고 - "해킹 피해 사례 수천 건, 사용 자제 권고"
+        </div>
+        
+        <div class="key-point">
+            <strong>💡 시사점:</strong> 개인이 비서를 10-15명 두는 것과 같은 효과. 코딩을 몰라도 앱을 만들 수 있는 시대가 도래. 전통적인 소프트웨어 기업의 비즈니스 모델에 근본적인 위협.
+        </div>
+
+        <h2>5️⃣ 하드웨어 르네상스 - 진짜 돈 버는 곳</h2>
+        
+        <h3>🏗️ AI 인프라 수혜주</h3>
+        <div class="sector-grid">
+            <div class="sector-card bullish">
+                <div class="sector-name">캐터필라 (CAT)</div>
+                <div class="sector-stocks">데이터센터 건설, 발전기</div>
+            </div>
+            <div class="sector-card bullish">
+                <div class="sector-name">하니웰 (HON)</div>
+                <div class="sector-stocks">데이터센터 냉각 시스템</div>
+            </div>
+            <div class="sector-card bullish">
+                <div class="sector-name">IBM</div>
+                <div class="sector-stocks">서버 하드웨어 (+5.13%)</div>
+            </div>
+            <div class="sector-card bullish">
+                <div class="sector-name">샌드디스크 (WDC)</div>
+                <div class="sector-stocks">장후 +18%, 어닝 2배</div>
+            </div>
+        </div>
+        
+        <div class="key-point">
+            <strong>💡 12월 31일 예측 적중:</strong><br>
+            "소프트웨어가 아니다, 하드웨어다" - 약 한 달 전 예측이 정확히 맞아떨어짐. 손으로 만져지는 것, 딱딱한 것, 하드웨어를 만드는 기업들이 실제로 돈을 벌고 있음.
+        </div>
+
+        <h2>6️⃣ 애플 실적 - 중국과 아이폰의 힘</h2>
+        
+        <p>애플의 <span class="highlight">어닝 서프라이즈</span>가 장후에 발표되었습니다.</p>
+        
+        <h3>📱 핵심 성과</h3>
+        <table>
+            <tr>
+                <th>항목</th>
+                <th>내용</th>
+            </tr>
+            <tr>
+                <td>주요 매출원</td>
+                <td><strong>아이폰 판매 급증</strong></td>
+            </tr>
+            <tr>
+                <td>핵심 시장</td>
+                <td><strong>중국</strong> - 전례 없는 수요</td>
+            </tr>
+            <tr>
+                <td>히트 상품</td>
+                <td><strong>맥 미니</strong> - AI 서버용으로 인기</td>
+            </tr>
+        </table>
+        
+        <div class="positive">
+            <strong>🖥️ 맥 미니 품절 사태:</strong><br>
+            AI 에이전트(몰투버스 등)를 24시간 돌리기 위한 개인 서버로 활용. 가격 대비 성능, 열관리, 안정성이 뛰어나 일부 매장에서 솔드아웃 발생.
+        </div>
+
+        <h2>7️⃣ 거시경제 리스크 요인</h2>
+        
+        <h3>💰 미국 재정적자 심화</h3>
+        <div class="warning">
+            <strong>⚠️ 구조적 문제:</strong><br>
+            • 법인세 인하 정책 → 세수 감소 → 재정적자 확대<br>
+            • 부채 증가 → 국채 발행 증가 → 달러 가치 하락 압력<br>
+            • CFTC에서 장기 부채 리스크 논의 중<br>
+            • <strong>화폐개혁 논의까지 등장</strong> (역사적으로 성공 사례 적음)
+        </div>
+        
+        <h3>🛢️ 유가 및 지정학적 리스크</h3>
+        <table>
+            <tr>
+                <th>이슈</th>
+                <th>영향</th>
+            </tr>
+            <tr>
+                <td>이란 관련 긴장</td>
+                <td>유가 상승</td>
+            </tr>
+            <tr>
+                <td>관세 정책</td>
+                <td>무역적자 오히려 확대</td>
+            </tr>
+            <tr>
+                <td>유가 상승</td>
+                <td>물가 상승 → 금리인상 압력</td>
+            </tr>
+            <tr>
+                <td>달러 약세</td>
+                <td>국채 가치 하락 우려</td>
+            </tr>
+        </table>
+        
+        <div class="quote">
+            "관세를 올리면 수출이 많아지겠거니 했는데, 오히려 중국이 미국 물건을 안 사주면서 무역적자가 더 커졌다. 관세 때문에 지금 망하게 생겼다."
+        </div>
+
+        <h2>8️⃣ 금/비트코인 폭락의 원인</h2>
+        
+        <p>금과 비트코인이 60분 만에 약 <span class="highlight">10% 급락</span>하는 현상이 발생했습니다.</p>
+        
+        <h3>📊 모건스탠리 분석</h3>
+        <div class="chart-container">
+            <table>
+                <tr>
+                    <th>나스닥 하락폭</th>
+                    <th>금/BTC 하락폭</th>
+                    <th>배율</th>
+                </tr>
+                <tr>
+                    <td>-2%</td>
+                    <td>-10%</td>
+                    <td><strong>5배</strong></td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="warning">
+            <strong>⚠️ 원인: 과도한 마진 레버리지</strong><br>
+            • 그동안 금/비트코인이 너무 많이 상승<br>
+            • 상승분 대부분이 마진(레버리지) 자금<br>
+            • 기술주 하락 시 마진콜 → 강제 청산 → 폭락<br><br>
+            <strong>결론:</strong> "안전자산"이라는 이름이 무색한 변동성. 실제로는 <strong>고위험 자산</strong>처럼 움직임.
+        </div>
+
+        <h2>9️⃣ 세 가지 구조적 변화</h2>
+        
+        <div class="chart-container">
+            <h3 style="margin-top:0; border:none; padding:0;">1. AI = 실적 (스토리 → 숫자)</h3>
+            <p>더 이상 "AI에 투자합니다"로 주가가 오르지 않음. <strong>"AI로 돈을 벌고 있습니다"</strong>를 증명해야 함.</p>
+            
+            <h3 style="border:none; padding:0;">2. 소프트웨어 → 인프라 로테이션</h3>
+            <p>처음 하드웨어 → 소프트웨어 → <strong>다시 하드웨어</strong>. 순환이 반복됨.</p>
+            
+            <h3 style="border:none; padding:0;">3. 하드웨어 헤게모니의 진화</h3>
+            <p>칼의 비유: 칼을 처음 만들고 → 용도 확장 → 더 좋은 칼 경쟁. GPU/하드웨어도 마찬가지로 진화 중.</p>
+        </div>
+
+        <h2>🔟 투자 전략 및 시사점</h2>
+        
+        <h3>📋 관전 포인트 (2월)</h3>
+        <table>
+            <tr>
+                <th>일정</th>
+                <th>내용</th>
+                <th>주목점</th>
+            </tr>
+            <tr>
+                <td>다음 주</td>
+                <td>알파벳, 아마존 실적</td>
+                <td>AI로 돈 벌고 있는가?</td>
+            </tr>
+            <tr>
+                <td>2월 초</td>
+                <td>고용보고서</td>
+                <td>셧다운 영향 확인</td>
+            </tr>
+            <tr>
+                <td>상시</td>
+                <td>지정학적 이슈</td>
+                <td>이란, 유가 동향</td>
+            </tr>
+        </table>
+        
+        <h3>💡 핵심 투자 원칙</h3>
+        <div class="summary-box">
+            <ul>
+                <li><strong>AI = 돈:</strong> AI로 실제 수익을 내는 기업만 보유</li>
+                <li><strong>선별 투자:</strong> AI 붙으면 무조건 오르는 시대는 끝</li>
+                <li><strong>저점 매수 테스트:</strong> "이 종목이 15% 빠져도 추매할 수 있는가?"</li>
+                <li><strong>52주 신고가:</strong> 신고가 찍는 종목이 계속 신고가</li>
+            </ul>
+        </div>
+        
+        <h3>🎯 추천 ETF 및 종목</h3>
+        <div class="chart-container">
+            <p><strong>SMH (반도체 ETF) 구성 순위:</strong></p>
+            <ol style="margin:0; padding-left:20px;">
+                <li>엔비디아 (NVDA) - 돈 적으면 이것만</li>
+                <li>TSMC (TSM) - 조금 더 있으면 추가</li>
+                <li>브로드컴 (AVGO)</li>
+                <li>마이크론 (MU)</li>
+                <li>램리서치 (LRCX)</li>
+                <li>ASML</li>
+            </ol>
+        </div>
+        
+        <h3>📈 52주 신고가 종목 리스트</h3>
+        <div class="positive">
+            구글(GOOGL), 엑슨모빌(XOM), ASML, 존슨앤존슨(JNJ), 마이크론(MU), BHP, 쉐브론(CVX), 캐터필라(CAT), 램리서치(LRCX), 어플라이드머티리얼즈(AMAT)
+        </div>
+        
+        <div class="key-point">
+            <strong>💰 자금 규모별 전략:</strong><br>
+            • <strong>$10만 이상:</strong> 분산투자 (10~40개 종목)<br>
+            • <strong>$10만 미만:</strong> 초집중 투자, 손절라인 10%, 상승 추세 종목만
+        </div>
+
+        <h2>📌 테슬라 분석</h2>
+        
+        <div class="warning">
+            <strong>⚠️ 우려 사항:</strong><br>
+            • 차트 패턴: 비트코인과 유사한 헤드앤숄더 가능성<br>
+            • 어닝콜: "더 이상 자동차 회사가 아니다" 선언<br>
+            • 마진 압박: 관세로 인한 수익성 악화<br>
+            • 펌핑 의존: 스토리(떡밥)가 떨어지면 위험
+        </div>
+        
+        <div class="chart-container">
+            <p><strong>테슬라의 새로운 방향:</strong></p>
+            <ul style="margin:0; padding-left:20px;">
+                <li>로봇(옵티머스): $5만 가격대, 자동차보다 마진 기대</li>
+                <li>에너지 사업: 신규 계약 체결 중</li>
+                <li>xAI 연계: SpaceX와 합병 후 IPO 가능성</li>
+            </ul>
+        </div>
+
+        <h2>🏁 결론</h2>
+        
+        <div class="summary-box">
+            <h3>💎 오늘의 교훈</h3>
+            <ul>
+                <li><strong>"AI = 돈"</strong> - 실적으로 증명하는 기업만 살아남는다</li>
+                <li><strong>"선별의 시대"</strong> - 시장 붕괴가 아닌 냉혹한 선택</li>
+                <li><strong>"하드웨어의 귀환"</strong> - 만져지는 것이 돈을 번다</li>
+                <li><strong>"흔들려도 중심을"</strong> - 제대로 된 포트폴리오는 시장과 무관하게 상승</li>
+            </ul>
+        </div>
+        
+        <div class="quote">
+            "시장이 흔들려도 중심을 잡고 있으면, 우리의 포트폴리오는 계속 상승한다."
+        </div>
+
+        <footer>
+            <p>📊 CIA.chat 멤버 미팅 | 2026년 1월 29일</p>
+            <p>본 문서는 투자 권유가 아닌 정보 제공 목적으로 작성되었습니다.</p>
+        </footer>
+    </div>
+</body>
+</html>
