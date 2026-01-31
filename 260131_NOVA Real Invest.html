@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>은값 -30% 대폭락과 케빈 워시 연준 의장 지명 분석</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: #f5f5f5;
+            padding: 16px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #dc3545;
+            margin-bottom: 24px;
+        }
+        .header h1 {
+            font-size: 1.4rem;
+            color: #dc3545;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        .header .date {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .alert-box {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .alert-box h2 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        .alert-box p {
+            font-size: 0.95rem;
+            opacity: 0.95;
+        }
+        .section {
+            margin-bottom: 28px;
+        }
+        .section-title {
+            font-size: 1.15rem;
+            color: #2c3e50;
+            padding: 12px 0;
+            border-bottom: 2px solid #3498db;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title .icon {
+            font-size: 1.3rem;
+        }
+        .key-point {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px 16px;
+            margin: 12px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .key-point strong {
+            color: #856404;
+        }
+        .danger-box {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 12px 16px;
+            margin: 12px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .danger-box strong {
+            color: #721c24;
+        }
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 12px 16px;
+            margin: 12px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 12px 16px;
+            margin: 12px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+        .chart-container {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .chart-title {
+            font-size: 0.95rem;
+            color: #495057;
+            text-align: center;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 0.9rem;
+        }
+        th, td {
+            padding: 10px 8px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        th {
+            background: #343a40;
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .red {
+            color: #dc3545;
+            font-weight: 600;
+        }
+        .green {
+            color: #28a745;
+            font-weight: 600;
+        }
+        .blue {
+            color: #007bff;
+            font-weight: 600;
+        }
+        ul {
+            margin: 12px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .svg-chart {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+        }
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #3498db;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 16px;
+            width: 10px;
+            height: 10px;
+            background: #3498db;
+            border-radius: 50%;
+        }
+        .timeline-item .date {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-bottom: 4px;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #dee2e6;
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.85rem;
+        }
+        .strategy-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px;
+            border-radius: 10px;
+            margin: 12px 0;
+        }
+        .strategy-card h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .badge-danger {
+            background: #dc3545;
+            color: white;
+        }
+        .badge-warning {
+            background: #ffc107;
+            color: #333;
+        }
+        .badge-success {
+            background: #28a745;
+            color: white;
+        }
+        .person-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 10px;
+            margin: 12px 0;
+        }
+        .person-avatar {
+            width: 60px;
+            height: 60px;
+            background: #3498db;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            flex-shrink: 0;
+        }
+        .person-info h3 {
+            font-size: 1rem;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+        .person-info p {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔻 은값 -30% 대폭락!<br>케빈 워시가 쏘아올린 '강제청산'의 비밀</h1>
+            <div class="date">📅 2026년 1월 31일 | 미국 증시 분석</div>
+        </div>
+
+        <div class="alert-box">
+            <h2>⚠️ 핵심 요약</h2>
+            <p>트럼프 대통령의 케빈 워시 차기 연준 의장 지명으로 달러 강세 전환 → 금·은 역사적 폭락 → 마진콜 연쇄 청산 발생. 1980년 '실버 Thursday' 이후 46년 만의 은 시장 붕괴.</p>
+        </div>
+
+        <!-- 시장 상황 요약 -->
+        <div class="section">
+            <h2 class="section-title"><span class="icon">📊</span> 오늘의 시장 상황</h2>
+            
+            <div class="chart-container">
+                <div class="chart-title">주요 자산 등락률 (2026.01.31)</div>
+                <svg class="svg-chart" viewBox="0 0 400 220">
+                    <!-- 배경 -->
+                    <rect x="0" y="0" width="400" height="220" fill="#f8f9fa"/>
+                    
+                    <!-- 그리드 라인 -->
+                    <line x1="100" y1="30" x2="380" y2="30" stroke="#e0e0e0" stroke-dasharray="3"/>
+                    <line x1="100" y1="70" x2="380" y2="70" stroke="#e0e0e0" stroke-dasharray="3"/>
+                    <line x1="100" y1="110" x2="380" y2="110" stroke="#e0e0e0" stroke-dasharray="3"/>
+                    <line x1="100" y1="150" x2="380" y2="150" stroke="#e0e0e0" stroke-dasharray="3"/>
+                    <line x1="100" y1="190" x2="380" y2="190" stroke="#e0e0e0" stroke-dasharray="3"/>
+                    
+                    <!-- Y축 레이블 -->
+                    <text x="95" y="35" fill="#666" font-size="10" text-anchor="end">+10%</text>
+                    <text x="95" y="75" fill="#666" font-size="10" text-anchor="end">0%</text>
+                    <text x="95" y="115" fill="#666" font-size="10" text-anchor="end">-10%</text>
+                    <text x="95" y="155" fill="#666" font-size="10" text-anchor="end">-20%</text>
+                    <text x="95" y="195" fill="#666" font-size="10" text-anchor="end">-30%</text>
+                    
+                    <!-- 기준선 (0%) -->
+                    <line x1="100" y1="70" x2="380" y2="70" stroke="#333" stroke-width="1"/>
+                    
+                    <!-- 바 차트 -->
+                    <!-- 은 (Silver) -30% -->
+                    <rect x="115" y="70" width="35" height="120" fill="#dc3545" rx="3"/>
+                    <text x="132" y="205" fill="#333" font-size="9" text-anchor="middle">은(Silver)</text>
+                    <text x="132" y="85" fill="white" font-size="9" text-anchor="middle" font-weight="bold">-30%</text>
+                    
+                    <!-- 금 (Gold) -10% -->
+                    <rect x="165" y="70" width="35" height="40" fill="#e74c3c" rx="3"/>
+                    <text x="182" y="205" fill="#333" font-size="9" text-anchor="middle">금(Gold)</text>
+                    <text x="182" y="85" fill="white" font-size="9" text-anchor="middle" font-weight="bold">-10%</text>
+                    
+                    <!-- 비트코인 -8% -->
+                    <rect x="215" y="70" width="35" height="32" fill="#f39c12" rx="3"/>
+                    <text x="232" y="205" fill="#333" font-size="9" text-anchor="middle">BTC</text>
+                    <text x="232" y="85" fill="white" font-size="9" text-anchor="middle" font-weight="bold">-8%</text>
+                    
+                    <!-- 나스닥 -2% -->
+                    <rect x="265" y="70" width="35" height="8" fill="#f0ad4e" rx="3"/>
+                    <text x="282" y="205" fill="#333" font-size="9" text-anchor="middle">나스닥</text>
+                    <text x="282" y="65" fill="#333" font-size="9" text-anchor="middle" font-weight="bold">-2%</text>
+                    
+                    <!-- 달러인덱스 +2% -->
+                    <rect x="315" y="62" width="35" height="8" fill="#28a745" rx="3"/>
+                    <text x="332" y="205" fill="#333" font-size="9" text-anchor="middle">달러</text>
+                    <text x="332" y="55" fill="#333" font-size="9" text-anchor="middle" font-weight="bold">+2%</text>
+                    
+                    <!-- 버라이즌 +12% -->
+                    <rect x="355" y="22" width="25" height="48" fill="#27ae60" rx="3"/>
+                    <text x="367" y="205" fill="#333" font-size="9" text-anchor="middle">VZ</text>
+                    <text x="367" y="17" fill="#333" font-size="9" text-anchor="middle" font-weight="bold">+12%</text>
+                </svg>
+            </div>
+
+            <table>
+                <tr>
+                    <th>구분</th>
+                    <th>내용</th>
+                    <th>영향</th>
+                </tr>
+                <tr>
+                    <td>🔻 은(Silver)</td>
+                    <td>하루 만에 약 <span class="red">-30%</span> 폭락</td>
+                    <td>46년 만의 역사적 붕괴</td>
+                </tr>
+                <tr>
+                    <td>🔻 금(Gold)</td>
+                    <td>약 <span class="red">-10%</span> 하락</td>
+                    <td>귀금속 투매 동반</td>
+                </tr>
+                <tr>
+                    <td>📈 달러 인덱스</td>
+                    <td><span class="green">상승</span></td>
+                    <td>매파 연준 기대</td>
+                </tr>
+                <tr>
+                    <td>🔻 나스닥</td>
+                    <td>하락 (예견된 조정)</td>
+                    <td>기술주 약세</td>
+                </tr>
+                <tr>
+                    <td>📈 버라이즌(VZ)</td>
+                    <td><span class="green">+11.83%</span></td>
+                    <td>방어주 강세</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- 케빈 워시 분석 -->
+        <div class="section">
+            <h2 class="section-title"><span class="icon">👤</span> 케빈 워시(Kevin Warsh) - 핵심 인물</h2>
+            
+            <div class="person-card">
+                <div class="person-avatar">KW</div>
+                <div class="person-info">
+                    <h3>케빈 워시 (Kevin Warsh)</h3>
+                    <p>트럼프 대통령이 지명한 차기 연준 의장 후보</p>
+                    <p style="margin-top: 8px;"><span class="badge badge-danger">강력 매파</span> <span class="badge badge-warning">인플레이션 파이터</span></p>
+                </div>
+            </div>
+
+            <div class="key-point">
+                <strong>📌 과거 이력:</strong> 전 연준 위원 출신. '인플레이션 파이터', '인플레이션 갱스터'라는 별명을 가진 <strong>극강의 매파</strong>. 양적완화에 대해 항상 비판적 목소리를 냈던 인물.
+            </div>
+
+            <div class="danger-box">
+                <strong>⚠️ 시장의 해석:</strong> "이지머니(Easy Money) 시대의 종말이 올 수 있다" → 달러 강세 → 금·은 폭락 촉발
+            </div>
+
+            <div class="info-box">
+                <strong>💡 주의사항:</strong> 아직 <strong>지명(Nomination)</strong> 단계. 의회 청문회를 거쳐 <strong>임명(Confirmation)</strong>되어야 함. 공화당·민주당 모두 반대 의원이 있어 통과 여부 불확실.
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">케빈 워시 지명의 연쇄 반응</div>
+                <svg class="svg-chart" viewBox="0 0 400 280">
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#3498db"/>
+                        </marker>
+                    </defs>
+                    
+                    <!-- 배경 -->
+                    <rect x="0" y="0" width="400" height="280" fill="#f8f9fa" rx="8"/>
+                    
+                    <!-- 시작점: 트럼프 -->
+                    <rect x="150" y="15" width="100" height="40" fill="#e74c3c" rx="8"/>
+                    <text x="200" y="40" fill="white" font-size="11" text-anchor="middle" font-weight="bold">트럼프 대통령</text>
+                    
+                    <!-- 화살표 1 -->
+                    <line x1="200" y1="55" x2="200" y2="75" stroke="#3498db" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- 케빈 워시 지명 -->
+                    <rect x="130" y="80" width="140" height="40" fill="#9b59b6" rx="8"/>
+                    <text x="200" y="100" fill="white" font-size="10" text-anchor="middle">케빈 워시</text>
+                    <text x="200" y="112" fill="white" font-size="9" text-anchor="middle">연준 의장 지명</text>
+                    
+                    <!-- 화살표 2 -->
+                    <line x1="200" y1="120" x2="200" y2="140" stroke="#3498db" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- 시장 해석 -->
+                    <rect x="110" y="145" width="180" height="35" fill="#f39c12" rx="8"/>
+                    <text x="200" y="163" fill="white" font-size="10" text-anchor="middle">"매파 = 금리인하 기대 축소"</text>
+                    <text x="200" y="175" fill="white" font-size="9" text-anchor="middle">이지머니 시대 종말?</text>
+                    
+                    <!-- 분기 화살표 -->
+                    <line x1="140" y1="180" x2="80" y2="210" stroke="#3498db" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <line x1="200" y1="180" x2="200" y2="210" stroke="#3498db" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <line x1="260" y1="180" x2="320" y2="210" stroke="#3498db" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- 결과 박스들 -->
+                    <rect x="20" y="215" width="120" height="50" fill="#27ae60" rx="8"/>
+                    <text x="80" y="235" fill="white" font-size="10" text-anchor="middle" font-weight="bold">달러 강세</text>
+                    <text x="80" y="250" fill="white" font-size="9" text-anchor="middle">인덱스 상승</text>
+                    
+                    <rect x="145" y="215" width="110" height="50" fill="#e74c3c" rx="8"/>
+                    <text x="200" y="235" fill="white" font-size="10" text-anchor="middle" font-weight="bold">금·은 폭락</text>
+                    <text x="200" y="250" fill="white" font-size="9" text-anchor="middle">마진콜 연쇄</text>
+                    
+                    <rect x="260" y="215" width="120" height="50" fill="#e67e22" rx="8"/>
+                    <text x="320" y="235" fill="white" font-size="10" text-anchor="middle" font-weight="bold">주식시장 혼란</text>
+                    <text x="320" y="250" fill="white" font-size="9" text-anchor="middle">섹터 로테이션</text>
+                </svg>
+            </div>
+        </div>
+
+        <!-- 1980년 실버 Thursday와 비교 -->
+        <div class="section">
+            <h2 class="section-title"><span class="icon">📜</span> 역사적 관점: 1980년 실버 Thursday</h2>
+            
+            <p><strong>1980년 3월 27일</strong>, 헌트 형제(Hunt Brothers)의 은 매집 실패로 은 가격이 폭락한 '실버 Thursday' 사건이 있었습니다. <span class="highlight">46년 만에 유사한 규모의 폭락</span>이 발생한 것입니다.</p>
+
+            <table>
+                <tr>
+                    <th>구분</th>
+                    <th>1980년 실버 Thursday</th>
+                    <th>2026년 현재</th>
+                </tr>
+                <tr>
+                    <td>원인</td>
+                    <td>헌트 형제 마진콜</td>
+                    <td>케빈 워시 지명 충격</td>
+                </tr>
+                <tr>
+                    <td>본질</td>
+                    <td>과도한 레버리지</td>
+                    <td>과도한 레버리지 + 쏠림</td>
+                </tr>
+                <tr>
+                    <td>결과</td>
+                    <td>은 가격 급락</td>
+                    <td>은 -30%, 금 -10%</td>
+                </tr>
+                <tr>
+                    <td>교훈</td>
+                    <td colspan="2" style="text-align:center;">과도한 투기는 언제나 고통스러운 청산 과정을 거침</td>
+                </tr>
+            </table>
+
+            <div class="key-point">
+                <strong>📌 핵심 포인트:</strong> CME가 은 선물시장을 만들면서 레버리지 투자가 급증 → 단기간 급등 → 조정 시 <strong>마진콜 연쇄 청산</strong>으로 낙폭 확대
+            </div>
+        </div>
+
+        <!-- 금은 폭락 원인 분석 -->
+        <div class="section">
+            <h2 class="section-title"><span class="icon">💰</span> 금·은 폭락 원인 상세 분석</h2>
+            
+            <div class="chart-container">
+                <div class="chart-title">금·은 급등의 배경과 붕괴 원인</div>
+                <svg class="svg-chart" viewBox="0 0 400 200">
+                    <rect x="0" y="0" width="400" height="200" fill="#f8f9fa" rx="8"/>
+                    
+                    <!-- 상승 요인 박스 -->
+                    <rect x="20" y="20" width="170" height="160" fill="#e8f5e9" rx="8" stroke="#4caf50" stroke-width="2"/>
+                    <text x="105" y="45" fill="#2e7d32" font-size="11" text-anchor="middle" font-weight="bold">📈 급등 배경</text>
+                    <line x1="40" y1="55" x2="170" y2="55" stroke="#4caf50"/>
+                    
+                    <text x="30" y="75" fill="#333" font-size="9">• 미국 정부 부채 급증</text>
+                    <text x="30" y="92" fill="#333" font-size="9">• 달러 가치 하락 베팅</text>
+                    <text x="30" y="109" fill="#333" font-size="9">• CME 은 선물시장 개설</text>
+                    <text x="30" y="126" fill="#333" font-size="9">• 트럼프 완화정책 기대</text>
+                    <text x="30" y="143" fill="#333" font-size="9">• 레버리지 투자 급증</text>
+                    <text x="30" y="160" fill="#333" font-size="9">• 인플레이션 헤지 수요</text>
+                    
+                    <!-- 하락 요인 박스 -->
+                    <rect x="210" y="20" width="170" height="160" fill="#ffebee" rx="8" stroke="#f44336" stroke-width="2"/>
+                    <text x="295" y="45" fill="#c62828" font-size="11" text-anchor="middle" font-weight="bold">📉 폭락 원인</text>
+                    <line x1="230" y1="55" x2="360" y2="55" stroke="#f44336"/>
+                    
+                    <text x="220" y="75" fill="#333" font-size="9">• 케빈 워시 지명 충격</text>
+                    <text x="220" y="92" fill="#333" font-size="9">• 달러 강세 전환</text>
+                    <text x="220" y="109" fill="#333" font-size="9">• 마진콜 연쇄 발생</text>
+                    <text x="220" y="126" fill="#333" font-size="9">• 강제청산 투매</text>
+                    <text x="220" y="143" fill="#333" font-size="9">• 알고리즘 매도 확대</text>
+                    <text x="220" y="160" fill="#333" font-size="9">• 이지머니 기대 붕괴</text>
+                </svg>
+            </div>
+
+            <div class="info-box">
+                <strong>💡 분석:</strong> 펀더멘털 붕괴가 아닌 <strong>수급 붕괴</strong>. 레버리지 청산으로 인한 투매. 역사적으로 이런 투매 후에는 <strong>기술적 반등(데드캣 바운스)</strong>이 발생.
+            </div>
+        </div>
+
+        <!-- 정부 셧다운 -->
+        <div class="section">
+            <h2 class="section-title"><span class="icon">🏛️</span> 정부 셧다운(Shutdown) 위기</h2>
+            
+            <div class="danger-box">
+                <strong>⚠️ 긴급:</strong> 오늘 밤(1월 31일) 자정 이후 <strong>부분 폐쇄(Partial Shutdown)</strong> 돌입 예정
+            </div>
+
+            <p>민주당이 <strong>국토안보부(DHS)</strong>와 <strong>이민세관단속국(ICE)</strong> 예산을 거부. 공화당 강경파도 "DHS 예산 없으면 통과 불가" 입장으로 교착 상태.</p>
+
+            <table>
+                <tr>
+                    <th>영향 분야</th>
+                    <th>예상 결과</th>
+                </tr>
+                <tr>
+                    <td>경제지표</td>
+                    <td>2월 고용보고서 등 주요 지표 발표 지연 가능</td>
+                </tr>
+                <tr>
+                    <td>연준 정책</td>
+                    <td>3월 FOMC에서 데이터 부재 상태로 결정 필요</td>
+                </tr>
+                <tr>
+                    <td>암호화폐</td>
+                    <td><strong>클래리티(CLARITY) 법안</strong> 통과 지연 → 하반기로 연기 전망</td>
+                </tr>
+                <tr>
+                    <td>시장 심리</td>
+                    <td>불확실성 증가 → 안전자산·방어주 선호</td>
+                </tr>
+            </table>
+
+            <div class="key-point">
+                <strong>📌 투자 시사점:</strong> 경제지표 깜깜이 상태에서 시장은 "안개 속 운전" 모드. 변동성 확대 대비 필요.
+            </div>
+        </div>
+
+        <!-- 비트코인 분석 -->
+        <div class="section">
+            <h2 class="section-title"><span class="icon">₿</span> 비트코인 하락 요인</h2>
+            
+            <div class="chart-container">
+                <div class="chart-title">비트코인 약세 요인 종합</div>
+                <svg class="svg-chart" viewBox="0 0 400 180">
+                    <rect x="0" y="0" width="400" height="180" fill="#f8f9fa" rx="8"/>
+                    
+                    <!-- 중앙 BTC -->
+                    <circle cx="200" cy="90" r="35" fill="#f7931a"/>
+                    <text x="200" y="85" fill="white" font-size="12" text-anchor="middle" font-weight="bold">BTC</text>
+                    <text x="200" y="100" fill="white" font-size="9" text-anchor="middle">하락 압력</text>
+                    
+                    <!-- 요인 1 -->
+                    <rect x="20" y="20" width="100" height="45" fill="#e74c3c" rx="6"/>
+                    <text x="70" y="40" fill="white" font-size="9" text-anchor="middle">클래리티 법안</text>
+                    <text x="70" y="55" fill="white" font-size="8" text-anchor="middle">통과 지연</text>
+                    <line x1="120" y1="42" x2="165" y2="70" stroke="#e74c3c" stroke-width="2"/>
+                    
+                    <!-- 요인 2 -->
+                    <rect x="280" y="20" width="100" height="45" fill="#9b59b6" rx="6"/>
+                    <text x="330" y="40" fill="white" font-size="9" text-anchor="middle">러시아 규제</text>
+                    <text x="330" y="55" fill="white" font-size="8" text-anchor="middle">연 4천불 제한</text>
+                    <line x1="280" y1="42" x2="235" y2="70" stroke="#9b59b6" stroke-width="2"/>
+                    
+                    <!-- 요인 3 -->
+                    <rect x="20" y="115" width="100" height="45" fill="#3498db" rx="6"/>
+                    <text x="70" y="135" fill="white" font-size="9" text-anchor="middle">ETF 자금</text>
+                    <text x="70" y="150" fill="white" font-size="8" text-anchor="middle">유출 지속</text>
+                    <line x1="120" y1="137" x2="165" y2="110" stroke="#3498db" stroke-width="2"/>
+                    
+                    <!-- 요인 4 -->
+                    <rect x="280" y="115" width="100" height="45" fill="#27ae60" rx="6"/>
+                    <text x="330" y="135" fill="white" font-size="9" text-anchor="middle">달러 강세</text>
+                    <text x="330" y="150" fill="white" font-size="8" text-anchor="middle">위험자산 회피</text>
+                    <line x1="280" y1="137" x2="235" y2="110" stroke="#27ae60" stroke-width="2"/>
+                </svg>
+            </div>
+
+            <ul>
+                <li><strong>클래리티(CLARITY) 법안:</strong> 암호화폐 규제 프레임워크 법안. 셧다운으로 의회 불능 → 하반기로 연기 전망</li>
+                <li><strong>러시아 규제안:</strong> 개인 투자 연간 4,000달러(5만 루블) 제한 제안. 러시아는 암호화폐 시장의 주요 수요처</li>
+                <li><strong>ETF 자금 유출:</strong> 비트코인 ETF에서 자금 이탈 지속</li>
+                <li><strong>케빈 워시 역설:</strong> 비트코인 지지자들은 그가 친비트코인일 것으로 기대했으나, 시장은 달러 강세로 해석</li>
+            </ul>
+        </div>
+
+        <!-- 섹터 로테이션 -->
+        <div class="section">
+            <h2 class="section-title"><span class="icon">🔄</span> 섹터 로테이션: 방어주 부상</h2>
+            
+            <p>AI·기술주에서 실현한 이익을 방어주로 이동하는 흐름이 뚜렷합니다. 경기 불확실성 증가 시 전형적인 패턴입니다.</p>
+
+            <div class="chart-container">
+                <div class="chart-title">섹터별 자금 흐름</div>
+                <svg class="svg-chart" viewBox="0 0 400 160">
+                    <rect x="0" y="0" width="400" height="160" fill="#f8f9fa" rx="8"/>
+                    
+                    <!-- 자금 유출 섹터 -->
+                    <text x="100" y="25" fill="#333" font-size="11" text-anchor="middle" font-weight="bold">자금 유출 ↓</text>
+                    
+                    <rect x="30" y="35" width="140" height="25" fill="#ffcdd2" rx="4"/>
+                    <text x="100" y="52" fill="#c62828" font-size="10" text-anchor="middle">AI 소프트웨어</text>
+                    
+                    <rect x="30" y="65" width="120" height="25" fill="#ffcdd2" rx="4"/>
+                    <text x="90" y="82" fill="#c62828" font-size="10" text-anchor="middle">반도체</text>
+                    
+                    <rect x="30" y="95" width="100" height="25" fill="#ffcdd2" rx="4"/>
+                    <text x="80" y="112" fill="#c62828" font-size="10" text-anchor="middle">메가캡 기술주</text>
+                    
+                    <rect x="30" y="125" width="80" height="25" fill="#ffcdd2" rx="4"/>
+                    <text x="70" y="142" fill="#c62828" font-size="10" text-anchor="middle">원자재</text>
+                    
+                    <!-- 화살표 -->
+                    <path d="M 190 80 L 210 80" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- 자금 유입 섹터 -->
+                    <text x="300" y="25" fill="#333" font-size="11" text-anchor="middle" font-weight="bold">자금 유입 ↑</text>
+                    
+                    <rect x="230" y="35" width="150" height="25" fill="#c8e6c9" rx="4"/>
+                    <text x="305" y="52" fill="#2e7d32" font-size="10" text-anchor="middle">필수소비재 (Staples)</text>
+                    
+                    <rect x="230" y="65" width="140" height="25" fill="#c8e6c9" rx="4"/>
+                    <text x="300" y="82" fill="#2e7d32" font-size="10" text-anchor="middle">통신 (Telecom)</text>
+                    
+                    <rect x="230" y="95" width="130" height="25" fill="#c8e6c9" rx="4"/>
+                    <text x="295" y="112" fill="#2e7d32" font-size="10" text-anchor="middle">보험 (Insurance)</text>
+                    
+                    <rect x="230" y="125" width="120" height="25" fill="#c8e6c9" rx="4"/>
+                    <text x="290" y="142" fill="#2e7d32" font-size="10" text-anchor="middle">가치주 (Value)</text>
+                </svg>
+            </div>
+
+            <div class="success-box">
+                <strong>✅ 주목 사례 - 버라이즌(VZ):</strong> 이틀간 <span class="green">+11.83%</span> 급등. 실적 호조 + 방어주 수요 동시 작용. 갭상승(Power Earnings Gap) 패턴 형성.
+            </div>
+
+            <div class="key-point">
+                <strong>📌 투자 시사점:</strong> 당분간 방어주(필수소비재, 통신, 보험) 강세 예상. 브루마블 게임의 "한 번 쉬기" 시즌. 현금 비중 확대 + 방어주 비중 조절 권장.
+            </div>
+        </div>
+
+        <!-- 애플 실적 분석 -->
+        <div class="section">
+            <h2 class="section-title"><span class="icon">🍎</span> 애플 실적과 중국 시장의 위력</h2>
+            
+            <div class="info-box">
+                <strong>📊 애플 실적 하이라이트:</strong> 아이폰 매출 <span class="green">+23%</span> 증가. 팀 쿡 CEO "페노메나(Phenomenal, 경이로운 현상)"라고 평가.
+            </div>
+
+            <p>1년 전 중국의 '아이폰 금지령'과 '애국 소비' 운동에도 불구하고, <strong>중국 시장이 애플 매출의 약 40%</strong>를 담당. 아이폰 17 슈퍼사이클 진입 확인.</p>
+
+            <div class="chart-container">
+                <div class="chart-title">애플 매출 지역별 비중</div>
+                <svg class="svg-chart" viewBox="0 0 400 180">
+                    <rect x="0" y="0" width="400" height="180" fill="#f8f9fa" rx="8"/>
+                    
+                    <!-- 파이 차트 (간소화된 버전) -->
+                    <circle cx="150" cy="95" r="65" fill="#e0e0e0"/>
+                    
+                    <!-- 중국 40% -->
+                    <path d="M 150 95 L 150 30 A 65 65 0 0 1 209 127 Z" fill="#e74c3c"/>
+                    
+                    <!-- 기타 60% -->
+                    <path d="M 150 95 L 209 127 A 65 65 0 1 1 150 30 Z" fill="#3498db"/>
+                    
+                    <!-- 레이블 -->
+                    <text x="175" y="60" fill="white" font-size="11" font-weight="bold">중국</text>
+                    <text x="175" y="75" fill="white" font-size="10">40%</text>
+                    
+                    <text x="100" y="120" fill="white" font-size="11" font-weight="bold">기타</text>
+                    <text x="100" y="135" fill="white" font-size="10">60%</text>
+                    
+                    <!-- 범례 -->
+                    <rect x="250" y="50" width="15" height="15" fill="#e74c3c" rx="2"/>
+                    <text x="270" y="62" fill="#333" font-size="10">중국 (~40%)</text>
+                    
+                    <rect x="250" y="75" width="15" height="15" fill="#3498db" rx="2"/>
+                    <text x="270" y="87" fill="#333" font-size="10">미국/기타 (~60%)</text>
+                    
+                    <!-- 시사점 -->
+                    <text x="325" y="130" fill="#666" font-size="9" text-anchor="middle">→ 엔비디아도</text>
+                    <text x="325" y="145" fill="#666" font-size="9" text-anchor="middle">중국 매출 중요</text>
+                </svg>
+            </div>
+
+            <div class="danger-box">
+                <strong>⚠️ 역설:</strong> 이런 호실적에도 불구하고 주가는 <span class="red">+0.46%</span>에 그침. <strong>셀 더 뉴스(Sell the News)</strong> 패턴 + 매크로 공포로 현금 확보 우선 심리.
+            </div>
+
+            <div class="key-point">
+                <strong>📌 투자 시사점:</strong> 중국 시장을 무시하고는 대형 기술주 분석 불가. 엔비디아 등 AI 반도체도 중국 매출 비중 높음 → 미중 관계 리스크 지속 모니터링 필요.
+            </div>
+        </div>
+
+        <!-- 투자 전략 제안 -->
+        <div class="section">
+            <h2 class="section-title"><span class="icon">🎯</span> 투자 전략 제안</h2>
+            
+            <div class="strategy-card">
+                <h3>🏃 단기 트레이더를 위한 전략</h3>
+                <ul style="margin: 0; padding-left: 20px;">
+                    <li>변동성 경계: 청문회·셧다운 이슈 해결 전까지 롤러코스터 예상</li>
+                    <li>현금 비중: 현재보다 <strong>+10% 추가 확보</strong> 권장</li>
+                    <li>데드캣 바운스 활용: 급락 종목의 기술적 반등 노리기</li>
+                    <li>지지선 확인: 테크니컬 분석으로 1차·2차 매수선 설정</li>
+                </ul>
+            </div>
+
+            <div class="strategy-card" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                <h3>📈 중장기 투자자를 위한 전략</h3>
+                <ul style="margin: 0; padding-left: 20px;">
+                    <li>올원베팅 금지: 분할 매수 원칙 준수</li>
+                    <li>2026년 S&P 500 전망: 골드만삭스 기준 약 <strong>+11%</strong> 예상</li>
+                    <li>조정 활용: -10% 조정 시 매수 → 20%+ 수익 목표</li>
+                    <li>실적 중심: 단기 노이즈 무시, 펀더멘털 강한 종목 스택킹</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <strong>⚖️ 바벨 전략 권장:</strong> 포트폴리오가 기술주 90%라면 위험. AI/성장주와 필수소비재/통신/보험을 균형 있게 배치하여 리스크 분산.
+            </div>
+
+            <table>
+                <tr>
+                    <th>항목</th>
+                    <th>예시 (AAPL 기준)</th>
+                </tr>
+                <tr>
+                    <td>현재가</td>
+                    <td>$259.07</td>
+                </tr>
+                <tr>
+                    <td>1차 지지선 (매수)</td>
+                    <td>$253</td>
+                </tr>
+                <tr>
+                    <td>2차 지지선 (매수)</td>
+                    <td>$248</td>
+                </tr>
+                <tr>
+                    <td>전략</td>
+                    <td>지지선에서 양봉 확인 후 진입</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- 다음 주 관전 포인트 -->
+        <div class="section">
+            <h2 class="section-title"><span class="icon">📅</span> 다음 주 관전 포인트</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item" style="background: #fff3cd;">
+                    <div class="date">월요일 (2/3)</div>
+                    <strong>팔란티어(PLTR)</strong> - AI 소프트웨어 방향성 확인<br>
+                    <strong>월트디즈니(DIS)</strong> - CEO 교체 가능성<br>
+                    <strong>ISM 제조업 PMI</strong> 발표
+                </div>
+                <div class="timeline-item" style="background: #d1ecf1;">
+                    <div class="date">화요일 (2/4)</div>
+                    <strong>AMD</strong> - AI 반도체 향방 결정<br>
+                    <strong>SMCI</strong> - 서버 수요 확인<br>
+                    <strong>JOLTS</strong> (구직현황) - 셧다운 시 미발표 가능
+                </div>
+                <div class="timeline-item" style="background: #d4edda;">
+                    <div class="date">수요일 (2/5)</div>
+                    <strong>알파벳(GOOGL)</strong>, <strong>ARM</strong>, <strong>퀄컴</strong><br>
+                    <strong>우버</strong> - 로보택시 언급 예상<br>
+                    <strong>ADP 민간고용</strong> (고용보고서 예고편)
+                </div>
+                <div class="timeline-item" style="background: #f8d7da;">
+                    <div class="date">목요일 (2/6)</div>
+                    <strong>아마존(AMZN)</strong> - 핵심 실적<br>
+                    <strong>챌린저스 잡컷</strong> (대기업 해고 현황)
+                </div>
+                <div class="timeline-item" style="background: #e2e3e5;">
+                    <div class="date">금요일 (2/7)</div>
+                    <strong>⭐ 고용보고서</strong> - 가장 중요한 지표<br>
+                    (셧다운 시 미발표 또는 지연 가능)
+                </div>
+            </div>
+
+            <div class="danger-box">
+                <strong>⚠️ 주의:</strong> 정부 셧다운 지속 시 JOLTS, ADP, 고용보고서 등 주요 경제지표 발표 불가. 연준 3월 FOMC에도 데이터 부재로 영향.
+            </div>
+        </div>
+
+        <!-- 핵심 3가지 정리 -->
+        <div class="section">
+            <h2 class="section-title"><span class="icon">✨</span> 오늘의 핵심 3가지</h2>
+            
+            <div class="chart-container">
+                <svg class="svg-chart" viewBox="0 0 400 200">
+                    <rect x="0" y="0" width="400" height="200" fill="#f8f9fa" rx="8"/>
+                    
+                    <!-- 박스 1 -->
+                    <rect x="20" y="20" width="110" height="160" fill="#3498db" rx="10"/>
+                    <text x="75" y="50" fill="white" font-size="28" text-anchor="middle">1</text>
+                    <text x="75" y="80" fill="white" font-size="11" text-anchor="middle" font-weight="bold">정책 전환</text>
+                    <line x1="40" y1="90" x2="110" y2="90" stroke="rgba(255,255,255,0.5)"/>
+                    <text x="75" y="110" fill="white" font-size="9" text-anchor="middle">케빈 워시 지명</text>
+                    <text x="75" y="125" fill="white" font-size="9" text-anchor="middle">이지머니 종말?</text>
+                    <text x="75" y="140" fill="white" font-size="9" text-anchor="middle">달러·금리 방향</text>
+                    <text x="75" y="155" fill="white" font-size="9" text-anchor="middle">전환 가능성</text>
+                    
+                    <!-- 박스 2 -->
+                    <rect x="145" y="20" width="110" height="160" fill="#e74c3c" rx="10"/>
+                    <text x="200" y="50" fill="white" font-size="28" text-anchor="middle">2</text>
+                    <text x="200" y="80" fill="white" font-size="11" text-anchor="middle" font-weight="bold">거품 해소</text>
+                    <line x1="165" y1="90" x2="235" y2="90" stroke="rgba(255,255,255,0.5)"/>
+                    <text x="200" y="110" fill="white" font-size="9" text-anchor="middle">금·은 폭락</text>
+                    <text x="200" y="125" fill="white" font-size="9" text-anchor="middle">AI 주식 조정</text>
+                    <text x="200" y="140" fill="white" font-size="9" text-anchor="middle">쏠림 현상</text>
+                    <text x="200" y="155" fill="white" font-size="9" text-anchor="middle">트림 과정</text>
+                    
+                    <!-- 박스 3 -->
+                    <rect x="270" y="20" width="110" height="160" fill="#27ae60" rx="10"/>
+                    <text x="325" y="50" fill="white" font-size="28" text-anchor="middle">3</text>
+                    <text x="325" y="80" fill="white" font-size="11" text-anchor="middle" font-weight="bold">실적의 힘</text>
+                    <line x1="290" y1="90" x2="360" y2="90" stroke="rgba(255,255,255,0.5)"/>
+                    <text x="325" y="110" fill="white" font-size="9" text-anchor="middle">애플 호실적에도</text>
+                    <text x="325" y="125" fill="white" font-size="9" text-anchor="middle">버텨준 주가</text>
+                    <text x="325" y="140" fill="white" font-size="9" text-anchor="middle">AI = 돈이 되느냐</text>
+                    <text x="325" y="155" fill="white" font-size="9" text-anchor="middle">실적 중심 투자</text>
+                </svg>
+            </div>
+
+            <div class="key-point">
+                <strong>🔑 결론:</strong> 셧다운, 원자재 폭락 등은 노이즈. 진짜 중요한 것은 <strong>기업 실적</strong>. "AI = Money"가 되는 기업인지 확인하고 스택킹.
+            </div>
+        </div>
+
+        <!-- 구글 게임 AI 관련 추가 정보 -->
+        <div class="section">
+            <h2 class="section-title"><span class="icon">🎮</span> 추가 이슈: 구글 게임 AI 발표</h2>
+            
+            <p>구글이 현실 세계의 물리법칙이 그대로 적용되는 시뮬레이션 공간을 발표. 이로 인해 <strong>유니티(Unity)</strong> 등 게임 엔진 주식이 폭락.</p>
+
+            <div class="info-box">
+                <strong>💡 시사점:</strong> AI가 기존 산업을 disruption하는 속도가 빨라지고 있음. 게임 개발 도구 시장에도 AI 기반 경쟁 격화 예상.
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>📌 본 자료는 투자 참고용이며 투자의 책임은 본인에게 있습니다.</p>
+            <p>원본: NOVA Real Invest 유튜브 | 분석일: 2026년 1월 31일</p>
+        </div>
+    </div>
+</body>
+</html>
