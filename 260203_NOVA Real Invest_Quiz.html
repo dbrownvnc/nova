@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>시험문제 | 트럼프-모디 빅딜과 미국 증시 분석</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e8e8e8;
+            line-height: 1.8;
+            padding: 16px;
+            max-width: 100%;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        .header .subtitle {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.8);
+        }
+        .section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(102,126,234,0.3);
+        }
+        .question-box {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .question-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        .difficulty {
+            font-size: 0.85rem;
+        }
+        .difficulty.easy {
+            color: #4CAF50;
+        }
+        .difficulty.medium {
+            color: #FFC107;
+        }
+        .difficulty.hard {
+            color: #F44336;
+        }
+        .question-type {
+            background: rgba(255,255,255,0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: #aaa;
+        }
+        .question-text {
+            font-size: 1rem;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        .options {
+            padding-left: 8px;
+        }
+        .option {
+            padding: 8px 12px;
+            margin: 6px 0;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+        .option:hover {
+            background: rgba(102,126,234,0.2);
+        }
+        .blank {
+            display: inline-block;
+            min-width: 80px;
+            border-bottom: 2px solid #667eea;
+            margin: 0 4px;
+        }
+        .divider {
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            margin: 40px 0;
+            border-radius: 2px;
+        }
+        
+        /* 정답지 스타일 */
+        .answer-section {
+            background: rgba(76,175,80,0.05);
+            border: 1px solid rgba(76,175,80,0.3);
+        }
+        .answer-section .section-title {
+            color: #4CAF50;
+            border-bottom-color: rgba(76,175,80,0.3);
+        }
+        .answer-box {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border-left: 4px solid #4CAF50;
+        }
+        .answer-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .answer-badge {
+            background: #4CAF50;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        .answer-text {
+            color: #4CAF50;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+        .explanation {
+            font-size: 0.9rem;
+            color: #ccc;
+            padding: 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+        }
+        .explanation strong {
+            color: #FFC107;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.8rem;
+            color: #888;
+        }
+        .print-break {
+            page-break-before: always;
+        }
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            .section {
+                background: white;
+                border: 1px solid #ddd;
+            }
+            .question-box, .answer-box {
+                background: #f9f9f9;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 문제지 헤더 -->
+        <div class="header">
+            <h1>📋 시험문제</h1>
+            <div class="subtitle">트럼프-모디 빅딜과 미국 증시 분석 | 2026.02.03</div>
+        </div>
+
+        <!-- 문제지 섹션 -->
+        <div class="section">
+            <div class="section-title">━━━ 📋 시험문제 (총 10문제) ━━━</div>
+
+            <!-- 문제 1 -->
+            <div class="question-box">
+                <div class="question-header">
+                    <span class="question-number">문제 1</span>
+                    <span class="difficulty easy">⭐ 쉬움</span>
+                    <span class="question-type">객관식</span>
+                </div>
+                <div class="question-text">
+                    ISM 제조업 PMI 지수가 몇 이상이면 경기 확장을 의미하는가?
+                </div>
+                <div class="options">
+                    <div class="option">① 40</div>
+                    <div class="option">② 45</div>
+                    <div class="option">③ 50</div>
+                    <div class="option">④ 55</div>
+                </div>
+            </div>
+
+            <!-- 문제 2 -->
+            <div class="question-box">
+                <div class="question-header">
+                    <span class="question-number">문제 2</span>
+                    <span class="difficulty easy">⭐ 쉬움</span>
+                    <span class="question-type">단답형</span>
+                </div>
+                <div class="question-text">
+                    2026년 2월 3일 발표된 ISM 제조업 PMI 실제 수치는 얼마인가?<br>
+                    (예상치: 48.5)
+                </div>
+            </div>
+
+            <!-- 문제 3 -->
+            <div class="question-box">
+                <div class="question-header">
+                    <span class="question-number">문제 3</span>
+                    <span class="difficulty medium">⭐⭐ 보통</span>
+                    <span class="question-type">OX 문제</span>
+                </div>
+                <div class="question-text">
+                    트럼프-모디 빅딜에서 인도는 러시아산 원유 구매를 중단하고 미국산 원유를 구매하기로 합의했다.
+                </div>
+                <div class="options">
+                    <div class="option">○ 맞다</div>
+                    <div class="option">✕ 틀리다</div>
+                </div>
+            </div>
+
+            <!-- 문제 4 -->
+            <div class="question-box">
+                <div class="question-header">
+                    <span class="question-number">문제 4</span>
+                    <span class="difficulty medium">⭐⭐ 보통</span>
+                    <span class="question-type">객관식</span>
+                </div>
+                <div class="question-text">
+                    팔란티어(PLTR)의 커머셜 매출 YoY 성장률은 얼마인가?
+                </div>
+                <div class="options">
+                    <div class="option">① 70%</div>
+                    <div class="option">② 100%</div>
+                    <div class="option">③ 137%</div>
+                    <div class="option">④ 150%</div>
+                </div>
+            </div>
+
+            <!-- 문제 5 -->
+            <div class="question-box">
+                <div class="question-header">
+                    <span class="question-number">문제 5</span>
+                    <span class="difficulty medium">⭐⭐ 보통</span>
+                    <span class="question-type">빈칸채우기</span>
+                </div>
+                <div class="question-text">
+                    ISM 제조업 지수에서 제조 고용이 48.1로 50 미만을 기록한 이유는 <span class="blank"></span>와(과) 자동화 때문이다. 이는 기업의 마진에 호재로 작용한다.
+                </div>
+            </div>
+
+            <!-- 문제 6 -->
+            <div class="question-box">
+                <div class="question-header">
+                    <span class="question-number">문제 6</span>
+                    <span class="difficulty medium">⭐⭐ 보통</span>
+                    <span class="question-type">객관식</span>
+                </div>
+                <div class="question-text">
+                    애플(AAPL)이 당일 4% 급등한 주요 원인과 가장 거리가 먼 것은?
+                </div>
+                <div class="options">
+                    <div class="option">① 인도 시장 점유율 증가</div>
+                    <div class="option">② 트럼프-모디 빅딜로 인한 관세 인하</div>
+                    <div class="option">③ 인도 내 생산 공장 확대</div>
+                    <div class="option">④ 새로운 AI 칩 발표</div>
+                </div>
+            </div>
+
+            <!-- 문제 7 -->
+            <div class="question-box">
+                <div class="question-header">
+                    <span class="question-number">문제 7</span>
+                    <span class="difficulty medium">⭐⭐ 보통</span>
+                    <span class="question-type">단답형</span>
+                </div>
+                <div class="question-text">
+                    일론 머스크가 공식 확인한, 스페이스X와 합병을 추진 중인 AI 회사의 이름은?
+                </div>
+            </div>
+
+            <!-- 문제 8 -->
+            <div class="question-box">
+                <div class="question-header">
+                    <span class="question-number">문제 8</span>
+                    <span class="difficulty hard">⭐⭐⭐ 어려움</span>
+                    <span class="question-type">서술형</span>
+                </div>
+                <div class="question-text">
+                    영상에서 제시한 '바벨(Barbell) 전략'이란 무엇이며, 구체적으로 어떤 유형의 종목들을 양쪽에 배치해야 하는지 설명하시오.
+                </div>
+            </div>
+
+            <!-- 문제 9 -->
+            <div class="question-box">
+                <div class="question-header">
+                    <span class="question-number">문제 9</span>
+                    <span class="difficulty hard">⭐⭐⭐ 어려움</span>
+                    <span class="question-type">객관식</span>
+                </div>
+                <div class="question-text">
+                    은(Silver) 가격이 46년 만에 대폭락한 주요 원인으로 적절하지 않은 것은?
+                </div>
+                <div class="options">
+                    <div class="option">① 케빈 워시 차기 연준 의장 지명</div>
+                    <div class="option">② 레버리지/마진 투자 과다</div>
+                    <div class="option">③ 중국 개인투자자들의 마진콜 발생</div>
+                    <div class="option">④ ISM 제조업 지수 부진</div>
+                </div>
+            </div>
+
+            <!-- 문제 10 -->
+            <div class="question-box">
+                <div class="question-header">
+                    <span class="question-number">문제 10</span>
+                    <span class="difficulty easy">⭐ 쉬움</span>
+                    <span class="question-type">OX 문제</span>
+                </div>
+                <div class="question-text">
+                    미국 정부 부분 셧다운으로 인해 금요일 예정된 고용통계 발표가 불발될 가능성이 있다. 이에 대한 대안으로 수요일 발표되는 ADP 고용보고서를 주목해야 한다.
+                </div>
+                <div class="options">
+                    <div class="option">○ 맞다</div>
+                    <div class="option">✕ 틀리다</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 구분선 -->
+        <div class="divider"></div>
+        <div class="print-break"></div>
+
+        <!-- 정답지 헤더 -->
+        <div class="header" style="background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);">
+            <h1>📝 정답 및 해설</h1>
+            <div class="subtitle">트럼프-모디 빅딜과 미국 증시 분석 | 2026.02.03</div>
+        </div>
+
+        <!-- 정답지 섹션 -->
+        <div class="section answer-section">
+            <div class="section-title">━━━ 📝 정답 및 해설 ━━━</div>
+
+            <!-- 정답 1 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-badge">문제 1</span>
+                </div>
+                <div class="answer-text">정답: ③ 50</div>
+                <div class="explanation">
+                    ISM(Institute for Supply Management) 제조업 PMI(구매관리자지수)는 <strong>50을 기준선</strong>으로 사용합니다. 50 이상이면 경기 확장(expansion), 50 미만이면 경기 수축(contraction)을 의미합니다. 이번 발표에서 26개월 만에 처음으로 50을 넘어섰습니다.
+                </div>
+            </div>
+
+            <!-- 정답 2 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-badge">문제 2</span>
+                </div>
+                <div class="answer-text">정답: 52.6</div>
+                <div class="explanation">
+                    예상치 48.5를 크게 상회하는 <strong>52.6</strong>이 발표되었습니다. 이는 26개월 만에 처음으로 50을 넘긴 수치로, 월가에서는 "경기침체라는 단어를 폐기처분해야 할 시점"이라는 평가가 나왔습니다. 신규 주문(57.1)과 생산(55.9)도 매우 강한 모습을 보였습니다.
+                </div>
+            </div>
+
+            <!-- 정답 3 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-badge">문제 3</span>
+                </div>
+                <div class="answer-text">정답: ○ 맞다</div>
+                <div class="explanation">
+                    트럼프 대통령과 모디 총리의 통화에서 인도는 <strong>러시아산 원유 구매를 중단하고 미국산 원유를 구매</strong>하기로 합의했습니다. 대신 미국은 인도에 대한 관세를 25%에서 18%로 인하하기로 했습니다. 다만 아직 최종 서명은 이루어지지 않은 협상 단계입니다.
+                </div>
+            </div>
+
+            <!-- 정답 4 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-badge">문제 4</span>
+                </div>
+                <div class="answer-text">정답: ③ 137%</div>
+                <div class="explanation">
+                    팔란티어의 전체 매출은 YoY 70% 성장했고, 특히 <strong>커머셜(민간 기업) 매출은 137% 성장</strong>했습니다. 이는 기존 정부/정보기관 위주에서 벗어나 민간 기업들의 AI 플랫폼 도입이 가속화되고 있음을 보여주는 중요한 지표입니다.
+                </div>
+            </div>
+
+            <!-- 정답 5 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-badge">문제 5</span>
+                </div>
+                <div class="answer-text">정답: AI (인공지능)</div>
+                <div class="explanation">
+                    제조업이 개선되는데 고용이 줄어드는 현상은 <strong>AI와 자동화</strong> 기술의 도입 때문입니다. 이는 기업 입장에서 생산량을 늘리면서도 인건비를 절감할 수 있어 마진 개선에 호재로 작용합니다. 임금 인상 압박 없이 매출을 늘릴 수 있는 "골디락스" 상황의 핵심 요소입니다.
+                </div>
+            </div>
+
+            <!-- 정답 6 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-badge">문제 6</span>
+                </div>
+                <div class="answer-text">정답: ④ 새로운 AI 칩 발표</div>
+                <div class="explanation">
+                    애플 주가 4% 급등의 주요 원인은 <strong>트럼프-모디 빅딜</strong>과 관련이 있습니다. ① 인도에서 삼성폰에서 애플로 전환 가속, ② 관세 인하(25%→18%)로 수익성 개선, ③ 인도 내 폭스콘 생산 공장 확대 등이 실제 원인입니다. 새로운 AI 칩 발표는 언급되지 않았습니다.
+                </div>
+            </div>
+
+            <!-- 정답 7 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-badge">문제 7</span>
+                </div>
+                <div class="answer-text">정답: XAI (xAI)</div>
+                <div class="explanation">
+                    일론 머스크는 <strong>스페이스X와 XAI의 합병</strong>을 공식 확인했습니다. 합병 후 연내 IPO를 추진할 계획이며, 예상 기업가치는 약 1.25조 달러입니다. 이 합병의 핵심 개념은 "스페이스 클라우드"로, 우주에서 태양광 발전과 극저온 환경을 활용한 데이터센터 운영입니다.
+                </div>
+            </div>
+
+            <!-- 정답 8 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-badge">문제 8</span>
+                </div>
+                <div class="answer-text">정답: (서술형 모범답안)</div>
+                <div class="explanation">
+                    <strong>바벨(Barbell) 전략</strong>이란 역기처럼 포트폴리오의 양 끝에 무게중심을 두는 투자 전략입니다.<br><br>
+                    <strong>한쪽 끝:</strong> AI 증명주/실적주 (예: 샌디스크, 웨스턴디지털, 마이크론, 팔란티어)<br>
+                    - 실제로 AI로 돈을 벌고 있는 기업<br>
+                    - 수요 多, 공급 不足으로 2년 이상 안정적<br><br>
+                    <strong>반대쪽 끝:</strong> 산업재/제조 회복주 (예: 캐터필라, 디어, 산업재 중소형주)<br>
+                    - ISM 제조업 지수 개선 수혜<br>
+                    - 데이터센터 건설, 희토류/인프라 관련<br><br>
+                    핵심은 한쪽으로 쏠리지 않고 균형을 유지하는 것입니다.
+                </div>
+            </div>
+
+            <!-- 정답 9 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-badge">문제 9</span>
+                </div>
+                <div class="answer-text">정답: ④ ISM 제조업 지수 부진</div>
+                <div class="explanation">
+                    은 가격 폭락의 원인으로 ① 케빈 워시 차기 연준 의장 지명(인플레 파이터, 달러 강세 기대), ② 레버리지/마진 투자 과다, ③ 특히 중국 개인투자자들의 마진콜 발생으로 인한 강제 청산이 언급되었습니다. <strong>ISM 제조업 지수는 오히려 좋게 나왔으므로(52.6)</strong> 은 폭락의 원인이 아닙니다. 조지 소로스의 "반사적 심리" 이론처럼 공포감이 공포를 부르는 악순환이 발생한 것입니다.
+                </div>
+            </div>
+
+            <!-- 정답 10 -->
+            <div class="answer-box">
+                <div class="answer-header">
+                    <span class="answer-badge">문제 10</span>
+                </div>
+                <div class="answer-text">정답: ○ 맞다</div>
+                <div class="explanation">
+                    미국 정부가 부분적으로 셧다운(Partial Shutdown)되면서 정부 기관의 지표 발표가 지연되거나 중단될 수 있습니다. 금요일 예정된 고용통계 발표가 불발될 가능성이 있어, <strong>사기업인 ADP에서 발표하는 수요일 고용보고서</strong>의 중요성이 높아졌습니다. 영상에서는 이를 "노이즈 캔슬링" 효과라고 표현하며, 역설적으로 시장에 긍정적일 수 있다고 언급했습니다.
+                </div>
+            </div>
+        </div>
+
+        <!-- 난이도 배분 요약 -->
+        <div class="section">
+            <div class="section-title">📊 난이도 배분 요약</div>
+            <div style="text-align:center; padding: 20px;">
+                <div style="display:inline-block; margin: 10px 20px;">
+                    <span style="color:#4CAF50; font-size:1.5rem; font-weight:700;">3문제</span><br>
+                    <span style="color:#4CAF50;">⭐ 쉬움 (30%)</span>
+                </div>
+                <div style="display:inline-block; margin: 10px 20px;">
+                    <span style="color:#FFC107; font-size:1.5rem; font-weight:700;">5문제</span><br>
+                    <span style="color:#FFC107;">⭐⭐ 보통 (50%)</span>
+                </div>
+                <div style="display:inline-block; margin: 10px 20px;">
+                    <span style="color:#F44336; font-size:1.5rem; font-weight:700;">2문제</span><br>
+                    <span style="color:#F44336;">⭐⭐⭐ 어려움 (20%)</span>
+                </div>
+            </div>
+            <div style="text-align:center; font-size:0.9rem; color:#aaa;">
+                문제 유형: 객관식 4문제, 단답형 2문제, OX 2문제, 빈칸채우기 1문제, 서술형 1문제
+            </div>
+        </div>
+
+        <!-- 푸터 -->
+        <div class="footer">
+            <div>출처: NOVA Real Invest | 작성일: 2026.02.03</div>
+        </div>
+    </div>
+</body>
+</html>

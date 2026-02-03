@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>트럼프-모디 빅딜과 미국 증시 분석 | 2026.02.03</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e8e8e8;
+            line-height: 1.7;
+            padding: 16px;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        .header .date {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.8);
+        }
+        .header .source {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.6);
+            margin-top: 4px;
+        }
+        .section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(102,126,234,0.2), rgba(118,75,162,0.2));
+            border-left: 4px solid #667eea;
+            padding: 16px;
+            border-radius: 0 12px 12px 0;
+            margin: 12px 0;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+        .stat-card.positive {
+            border: 1px solid rgba(76, 175, 80, 0.5);
+        }
+        .stat-card.negative {
+            border: 1px solid rgba(244, 67, 54, 0.5);
+        }
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .stat-value.up {
+            color: #4CAF50;
+        }
+        .stat-value.down {
+            color: #F44336;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-top: 4px;
+        }
+        .chart-container {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .chart-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ccc;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .key-point {
+            background: rgba(255,193,7,0.1);
+            border: 1px solid rgba(255,193,7,0.3);
+            border-radius: 12px;
+            padding: 14px;
+            margin: 12px 0;
+        }
+        .key-point-title {
+            color: #FFC107;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+        .warning-box {
+            background: rgba(244,67,54,0.1);
+            border: 1px solid rgba(244,67,54,0.3);
+            border-radius: 12px;
+            padding: 14px;
+            margin: 12px 0;
+        }
+        .warning-title {
+            color: #F44336;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+        .success-box {
+            background: rgba(76,175,80,0.1);
+            border: 1px solid rgba(76,175,80,0.3);
+            border-radius: 12px;
+            padding: 14px;
+            margin: 12px 0;
+        }
+        .success-title {
+            color: #4CAF50;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+        ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+        li {
+            margin: 8px 0;
+            font-size: 0.95rem;
+        }
+        strong {
+            color: #fff;
+        }
+        .emphasis {
+            color: #FFC107;
+            font-weight: 600;
+        }
+        .stock-tag {
+            display: inline-block;
+            background: rgba(102,126,234,0.3);
+            color: #a8b4ff;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 2px;
+        }
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            margin: 20px 0;
+        }
+        .strategy-box {
+            background: linear-gradient(135deg, rgba(76,175,80,0.15), rgba(33,150,243,0.15));
+            border: 2px solid rgba(76,175,80,0.4);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+        .strategy-title {
+            color: #4CAF50;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .col-box {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 14px;
+        }
+        .col-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .col-title.left {
+            color: #64B5F6;
+        }
+        .col-title.right {
+            color: #81C784;
+        }
+        .table-container {
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        th, td {
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        th {
+            background: rgba(102,126,234,0.2);
+            color: #a8b4ff;
+            font-weight: 600;
+        }
+        tr:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.8rem;
+            color: #888;
+        }
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+        }
+        .timeline-item {
+            position: relative;
+            padding: 12px 0;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 16px;
+            width: 10px;
+            height: 10px;
+            background: #667eea;
+            border-radius: 50%;
+        }
+        .number-highlight {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .pe-warning {
+            color: #FF9800;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <div class="header">
+            <h1>🇺🇸 트럼프-모디 빅딜과 미국 증시</h1>
+            <div class="date">2026년 2월 3일 (화)</div>
+            <div class="source">출처: NOVA Real Invest</div>
+        </div>
+
+        <!-- 핵심 요약 -->
+        <div class="section">
+            <div class="section-title">📌 오늘의 핵심 포인트</div>
+            <div class="highlight-box">
+                <strong>25년 미국 주식 경력 중 손에 꼽을 정도로 기이하고 충격적인 하루</strong><br>
+                불안 요소들이 많음에도 불구하고 시장이 상승 — "세상이 많이 바뀌었다"
+            </div>
+            
+            <div class="stat-grid">
+                <div class="stat-card positive">
+                    <div class="stat-value up">+1.1%</div>
+                    <div class="stat-label">다우지수</div>
+                    <div style="font-size:0.8rem;color:#4CAF50;">+515pt</div>
+                </div>
+                <div class="stat-card positive">
+                    <div class="stat-value up">+0.54%</div>
+                    <div class="stat-label">S&P 500</div>
+                </div>
+                <div class="stat-card negative">
+                    <div class="stat-value down">-4.5%</div>
+                    <div class="stat-label">원유 (WTI)</div>
+                    <div style="font-size:0.8rem;color:#F44336;">$62.20</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">4.28%</div>
+                    <div class="stat-label">10년물 국채</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ISM 제조업 지수 -->
+        <div class="section">
+            <div class="section-title">🏭 ISM 제조업 PMI - 대반전</div>
+            
+            <div class="success-box">
+                <div class="success-title">💡 핵심 수치</div>
+                <strong>ISM 제조업 PMI: 52.6</strong> (예상치 48.5 대비 대폭 상회)<br>
+                50 이상 = 경기 확장 신호
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">ISM 제조업 PMI 추이</div>
+                <canvas id="ismChart" height="200"></canvas>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>세부 항목</th>
+                        <th>수치</th>
+                        <th>의미</th>
+                    </tr>
+                    <tr>
+                        <td>신규 주문</td>
+                        <td style="color:#4CAF50;font-weight:700;">57.1</td>
+                        <td>수요 폭발</td>
+                    </tr>
+                    <tr>
+                        <td>생산</td>
+                        <td style="color:#4CAF50;font-weight:700;">55.9</td>
+                        <td>22년 이후 최고</td>
+                    </tr>
+                    <tr>
+                        <td>제조 고용</td>
+                        <td style="color:#FF9800;font-weight:700;">48.1</td>
+                        <td>채용 둔화</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="key-point">
+                <div class="key-point-title">🤖 고용 48.1의 의미</div>
+                제조업이 개선되는데 고용은 줄어드는 현상<br>
+                → <strong>AI와 자동화</strong>로 인한 효율성 증대<br>
+                → 임금 인상 압박 없이 매출 증가 가능<br>
+                → 기업 마진에 <span class="emphasis">호재</span>
+            </div>
+
+            <div class="highlight-box">
+                <strong>월가의 해석:</strong> "골디락스(Goldilocks)" 상황<br>
+                • 인플레이션 걱정 ❌<br>
+                • 리세션 걱정 ❌<br>
+                • 26개월 만에 50 이상 돌파 → "경기침체 단어 폐기처분 시점"
+            </div>
+        </div>
+
+        <!-- 트럼프-모디 빅딜 -->
+        <div class="section">
+            <div class="section-title">🤝 트럼프-모디 빅딜 (인도)</div>
+            
+            <div class="success-box">
+                <div class="success-title">🇮🇳 미-인도 대타협 주요 내용</div>
+                <ul>
+                    <li><strong>인도:</strong> 러시아산 원유 구매 중단 → 미국산 구매 합의</li>
+                    <li><strong>미국:</strong> 대인도 관세 인하 (25% → 18%)</li>
+                </ul>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">주요 수혜 분석</div>
+                <canvas id="benefitChart" height="180"></canvas>
+            </div>
+
+            <div class="key-point">
+                <div class="key-point-title">🍎 애플(AAPL) +4% 급등 배경</div>
+                • 인도 시장 점유율 급증 (삼성 → 애플 전환 가속)<br>
+                • 인도 내 생산 확대 (폭스콘 공장)<br>
+                • 관세 인하 = 수익성 개선
+            </div>
+
+            <div class="warning-box">
+                <div class="warning-title">⚠️ 유의 사항</div>
+                아직 협상 단계 — 최종 서명 미완료<br>
+                트럼프 대통령 포스팅 기준 내용
+            </div>
+        </div>
+
+        <!-- 유가 급락 -->
+        <div class="section">
+            <div class="section-title">🛢️ 유가 급락의 의미</div>
+            
+            <div class="stat-grid">
+                <div class="stat-card negative">
+                    <div class="stat-value down">$62.20</div>
+                    <div class="stat-label">WTI 현재가</div>
+                </div>
+                <div class="stat-card negative">
+                    <div class="stat-value down">-4.5%</div>
+                    <div class="stat-label">일일 변동</div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <strong>유가 하락 요인:</strong><br>
+                1️⃣ 트럼프-모디 딜 (인도의 러시아산 원유 중단)<br>
+                2️⃣ 이란과의 협상 진전 (군함 파견 → 이란 협상 태세)<br>
+                3️⃣ 지정학적 긴장 완화
+            </div>
+
+            <div class="key-point">
+                <div class="key-point-title">📊 인플레이션 영향</div>
+                유가 = 인플레이션의 핵심 변수<br>
+                유가 하락 → CPI 안정 → 연준 금리 인하 기대감 ↑<br>
+                <span class="emphasis">목표: $60 이하로 추가 하락 필요</span>
+            </div>
+        </div>
+
+        <!-- 팔란티어 실적 -->
+        <div class="section">
+            <div class="section-title">🚀 팔란티어(PLTR) - AI 증명의 시간</div>
+            
+            <div class="success-box">
+                <div class="success-title">📈 어닝 서프라이즈</div>
+                시간외 거래 <strong style="color:#4CAF50;">+7% 폭등</strong>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">팔란티어 실적 하이라이트</div>
+                <canvas id="pltrChart" height="200"></canvas>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>항목</th>
+                        <th>성장률 (YoY)</th>
+                    </tr>
+                    <tr>
+                        <td>전체 매출</td>
+                        <td style="color:#4CAF50;font-weight:700;">+70%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>커머셜 매출</strong></td>
+                        <td style="color:#4CAF50;font-weight:700;">+137%</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="highlight-box">
+                <strong>CEO 알렉스 카프:</strong><br>
+                "지난 10년간 기술업계에서 본 적 없는, <span class="emphasis">논란의 여지가 없는 최고의 실적</span>"
+            </div>
+
+            <div class="key-point">
+                <div class="key-point-title">💡 커머셜 매출 137% 성장의 의미</div>
+                • 기존: 정부/정보기관 계약이 대부분 (CIA, FBI 등)<br>
+                • 현재: <strong>민간 기업들이 AI 플랫폼 도입 가속</strong><br>
+                → B2B AI 시장 확대의 증거
+            </div>
+
+            <div class="warning-box">
+                <div class="warning-title">⚠️ 밸류에이션 주의</div>
+                <div class="number-highlight">P/E 343배</div>
+                (참고: 엔비디아 P/E 46배)<br>
+                <strong class="pe-warning">투자보다는 트레이딩 접근 권장</strong>
+            </div>
+        </div>
+
+        <!-- 메모리 반도체 -->
+        <div class="section">
+            <div class="section-title">💾 메모리 반도체 - AI의 숨겨진 승자</div>
+            
+            <div class="stat-grid">
+                <div class="stat-card positive">
+                    <div class="stat-value up">+15.4%</div>
+                    <div class="stat-label">샌디스크</div>
+                </div>
+                <div class="stat-card positive">
+                    <div class="stat-value up">+8%</div>
+                    <div class="stat-label">웨스턴디지털</div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <strong>AI 병목현상의 이동:</strong><br>
+                연산(GPU) → <span class="emphasis">저장(SSD/메모리)</span><br><br>
+                • AI 학습 데이터 폭발적 증가<br>
+                • 초고속 SSD(Enterprise SSD) 동락 시작<br>
+                • 개인용 PC/노트북도 품귀 현상
+            </div>
+
+            <div class="key-point">
+                <div class="key-point-title">🔮 전망</div>
+                <strong>메모리 반도체 슈퍼사이클 = 이제 시작</strong><br>
+                수요 多 + 공급 不足 = 2년 이상 지속 전망
+            </div>
+        </div>
+
+        <!-- 산업재 섹터 -->
+        <div class="section">
+            <div class="section-title">🏗️ 산업재 섹터 강세</div>
+            
+            <div class="chart-container">
+                <div class="chart-title">오늘의 섹터별 수익률</div>
+                <canvas id="sectorChart" height="220"></canvas>
+            </div>
+
+            <div class="success-box">
+                <div class="success-title">🚜 캐터필라(CAT) +5% 급등</div>
+                • 지난주 양호한 실적 발표<br>
+                • 데이터센터 건설 수혜<br>
+                • ISM 제조업 지수 호조<br>
+                • 유가 하락 = 비용 절감
+            </div>
+
+            <div class="key-point">
+                <div class="key-point-title">🔑 데이터센터 + 희토류</div>
+                트럼프 대통령: 희토류 비축(Stockpile) 계획 발표<br>
+                → "땅을 파는 주식들" 주목<br>
+                <span class="stock-tag">CAT</span>
+                <span class="stock-tag">DE</span>
+                <span class="stock-tag">산업재 ETF</span>
+            </div>
+        </div>
+
+        <!-- 횡보디아와 오라클 -->
+        <div class="section">
+            <div class="section-title">📉 빅테크 AI 기업들의 고민</div>
+            
+            <div class="two-col">
+                <div class="col-box">
+                    <div class="col-title left">엔비디아(NVDA)</div>
+                    <div style="font-size:0.9rem;">
+                        • "횡보디아" 지속<br>
+                        • 오픈AI 관계 긴장<br>
+                        • 헤드앤숄더 패턴 우려<br>
+                        • 오픈AI 1000억$ 투자 계획 교착
+                    </div>
+                </div>
+                <div class="col-box">
+                    <div class="col-title right">오라클(ORCL)</div>
+                    <div style="font-size:0.9rem;">
+                        • 500억$ 자금 조달 계획 발표<br>
+                        • 장전 +5% → 장중 하락<br>
+                        • "투자 대비 수익이 부족하다"는 시장 평가
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <div class="warning-title">💭 샘 알트먼 트윗 (긴급)</div>
+                "We love working with NVIDIA and they make the best AI chip in the world."<br>
+                → 오픈AI, 엔비디아와의 관계 회복 시도
+            </div>
+
+            <div class="highlight-box">
+                <strong>AI 투자의 게임 규칙 변화:</strong><br>
+                <span style="color:#888;">과거:</span> "우리도 AI 한다, GPU 확보했다" 만으로 상승<br>
+                <span style="color:#4CAF50;">현재:</span> <strong>"AI로 돈 얼마나 벌었니?"</strong> = 실적 증명 필수
+            </div>
+        </div>
+
+        <!-- 스페이스X + XAI 합병 -->
+        <div class="section">
+            <div class="section-title">🚀 스페이스X + XAI 합병</div>
+            
+            <div class="highlight-box">
+                <strong>일론 머스크 공식 확인</strong><br>
+                스페이스X와 XAI 합병 → 연내 IPO 추진<br>
+                예상 기업가치: <span class="number-highlight">$1.25조</span>
+            </div>
+
+            <div class="key-point">
+                <div class="key-point-title">🌌 스페이스 클라우드(Space Cloud) 개념</div>
+                <strong>우주 기반 데이터센터</strong><br><br>
+                • 전력 문제 해결: 태양광 발전 (태양과 근접)<br>
+                • 냉각 문제 해결: 우주의 극저온 환경<br>
+                → 데이터센터의 2대 과제 동시 해결
+            </div>
+
+            <div class="warning-box">
+                <div class="warning-title">⚠️ 테슬라(TSLA) 주주 주의</div>
+                테슬라 -2% 하락 (합병에서 제외)<br>
+                • 머스크의 관심이 우주로 이동<br>
+                • 유럽 딜리버리 부진 (-88% 국가들 다수)<br>
+                • "자동차 사업에 대한 관심 저하" 우려
+            </div>
+        </div>
+
+        <!-- 원자재 폭락 -->
+        <div class="section">
+            <div class="section-title">📉 금/은 폭락 - 마진콜의 공포</div>
+            
+            <div class="stat-grid">
+                <div class="stat-card negative">
+                    <div class="stat-value down">폭락</div>
+                    <div class="stat-label">은(Silver)</div>
+                    <div style="font-size:0.75rem;color:#aaa;">46년 만의 대폭락</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">+6.77%</div>
+                    <div class="stat-label">은 반등(오늘)</div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <div class="warning-title">폭락 원인</div>
+                1️⃣ <strong>케빈 워시</strong> 차기 연준 의장 지명 (인플레 파이터)<br>
+                2️⃣ 레버리지/마진 투자 과다 (특히 중국 개인투자자)<br>
+                3️⃣ 마진콜 → 강제 청산 → 하락이 하락을 부르는 악순환
+            </div>
+
+            <div class="highlight-box">
+                <strong>조지 소로스 "반사적 심리(Reflexive Psychology)":</strong><br>
+                펀더멘탈과 관계없이, 기대감/공포감만으로 자산 가격 급변동 가능<br>
+                → 밈주식화된 원자재의 위험성
+            </div>
+
+            <div class="key-point">
+                <div class="key-point-title">📅 케빈 워시 관련 일정</div>
+                • 상원/하원 청문회 통과 필요<br>
+                • 약 5개월간 불확실성 지속 전망<br>
+                • 관망 필요, 단 급락 지속 가능성은 낮음
+            </div>
+        </div>
+
+        <!-- 정부 셧다운 -->
+        <div class="section">
+            <div class="section-title">🏛️ 미국 정부 부분 셧다운</div>
+            
+            <div class="warning-box">
+                <div class="warning-title">📊 고용통계 발표 불확실</div>
+                • 금요일 예정 고용통계 발표 <strong>불발 가능성</strong><br>
+                • 정부 기관 지표 발표 지연/중단
+            </div>
+
+            <div class="highlight-box">
+                <strong>시장 영향:</strong> "노이즈 캔슬링"<br>
+                불확실한 지표가 없으면 시장 변동성 감소<br>
+                → 역설적으로 긍정적 영향 가능
+            </div>
+
+            <div class="key-point">
+                <div class="key-point-title">📌 대안 지표</div>
+                <strong>수요일 ADP 고용보고서</strong> 주목<br>
+                사기업(ADP) 발표 지표의 중요성 증가
+            </div>
+        </div>
+
+        <!-- 투자 전략 -->
+        <div class="section">
+            <div class="section-title">🎯 투자 전략: 바벨(Barbell) 전략</div>
+            
+            <div class="strategy-box">
+                <div class="strategy-title">⚖️ 양 끝에 무게중심을 두어라</div>
+                
+                <div class="two-col">
+                    <div class="col-box">
+                        <div class="col-title left">🤖 AI 증명주 (실적주)</div>
+                        <span class="stock-tag">PLTR</span>
+                        <span class="stock-tag">SNDK</span>
+                        <span class="stock-tag">WDC</span>
+                        <span class="stock-tag">MU</span>
+                        <div style="margin-top:8px;font-size:0.85rem;color:#aaa;">
+                            • 돈 되는 AI<br>
+                            • 수요 多 / 공급 不足<br>
+                            • 2년 이상 안정적
+                        </div>
+                    </div>
+                    <div class="col-box">
+                        <div class="col-title right">🏗️ 산업재/제조 회복주</div>
+                        <span class="stock-tag">CAT</span>
+                        <span class="stock-tag">DE</span>
+                        <span class="stock-tag">산업재 중소형주</span>
+                        <div style="margin-top:8px;font-size:0.85rem;color:#aaa;">
+                            • ISM 개선 수혜<br>
+                            • 데이터센터 건설<br>
+                            • 희토류/인프라
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <div class="warning-title">❌ 피해야 할 것</div>
+                • 한쪽으로 쏠린 포트폴리오<br>
+                • 뜬구름 잡는 AI 스토리주 (실적 없는 하이프)<br>
+                • 레버리지/마진 과다 사용
+            </div>
+        </div>
+
+        <!-- 최종 결론 -->
+        <div class="section">
+            <div class="section-title">📝 최종 결론</div>
+            
+            <div class="highlight-box" style="background: linear-gradient(135deg, rgba(76,175,80,0.2), rgba(33,150,243,0.2));">
+                <div style="font-size:1.1rem;font-weight:700;margin-bottom:12px;color:#4CAF50;">
+                    "증명의 시대가 도래했다"
+                </div>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <strong>Hype(기대) → Execution(증명)</strong><br>
+                        스토리/내러티브만으로 오르던 시대 종료
+                    </div>
+                    <div class="timeline-item">
+                        <strong>AI = Money</strong><br>
+                        AI로 실제 수익 창출 증명 필수
+                    </div>
+                    <div class="timeline-item">
+                        <strong>팩트/숫자/실적에만 집중</strong><br>
+                        뉴스 헤드라인에 휘둘리지 말 것
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-point">
+                <div class="key-point-title">💡 오늘의 교훈</div>
+                <ul>
+                    <li>제조업 살아남 → 경기침체 우려 완화</li>
+                    <li>유가 하락 → 인플레이션 압력 감소</li>
+                    <li>팔란티어 폭등 → AI 수익화 증명의 힘</li>
+                    <li>금/은 폭락 → 레버리지의 위험성</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 주요 종목 정리 -->
+        <div class="section">
+            <div class="section-title">📊 오늘의 주요 종목</div>
+            
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>종목</th>
+                        <th>등락</th>
+                        <th>포인트</th>
+                    </tr>
+                    <tr>
+                        <td><span class="stock-tag">PLTR</span></td>
+                        <td style="color:#4CAF50;">+7% (시간외)</td>
+                        <td>커머셜 매출 137%↑</td>
+                    </tr>
+                    <tr>
+                        <td><span class="stock-tag">CAT</span></td>
+                        <td style="color:#4CAF50;">+5%</td>
+                        <td>ISM 호조, 데이터센터</td>
+                    </tr>
+                    <tr>
+                        <td><span class="stock-tag">AAPL</span></td>
+                        <td style="color:#4CAF50;">+4%</td>
+                        <td>인도 딜 수혜</td>
+                    </tr>
+                    <tr>
+                        <td><span class="stock-tag">SNDK</span></td>
+                        <td style="color:#4CAF50;">+15.4%</td>
+                        <td>AI 메모리 수요</td>
+                    </tr>
+                    <tr>
+                        <td><span class="stock-tag">WDC</span></td>
+                        <td style="color:#4CAF50;">+8%</td>
+                        <td>AI 메모리 수요</td>
+                    </tr>
+                    <tr>
+                        <td><span class="stock-tag">GOOGL</span></td>
+                        <td style="color:#4CAF50;">+1.6%</td>
+                        <td>오픈AI 대안 부각</td>
+                    </tr>
+                    <tr>
+                        <td><span class="stock-tag">TSLA</span></td>
+                        <td style="color:#F44336;">-2%</td>
+                        <td>SpaceX 합병 제외</td>
+                    </tr>
+                    <tr>
+                        <td><span class="stock-tag">에너지섹터</span></td>
+                        <td style="color:#F44336;">하락</td>
+                        <td>유가 급락 영향</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- 푸터 -->
+        <div class="footer">
+            <div style="margin-bottom:8px;">
+                ⚠️ 본 자료는 투자 참고용이며, 투자 판단의 책임은 본인에게 있습니다.
+            </div>
+            <div>
+                출처: NOVA Real Invest | 정리일: 2026.02.03
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ISM 제조업 PMI 차트
+        const ismCtx = document.getElementById('ismChart').getContext('2d');
+        new Chart(ismCtx, {
+            type: 'line',
+            data: {
+                labels: ['22년', '23년 상', '23년 하', '24년 상', '24년 하', '25년', '현재'],
+                datasets: [{
+                    label: 'ISM 제조업 PMI',
+                    data: [48, 47, 46, 47, 48, 49, 52.6],
+                    borderColor: '#4CAF50',
+                    backgroundColor: 'rgba(76,175,80,0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#4CAF50',
+                    pointRadius: 4
+                }, {
+                    label: '기준선 (50)',
+                    data: [50, 50, 50, 50, 50, 50, 50],
+                    borderColor: '#FFC107',
+                    borderDash: [5, 5],
+                    pointRadius: 0,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: { color: '#ccc', font: { size: 11 } }
+                    }
+                },
+                scales: {
+                    y: {
+                        min: 42,
+                        max: 56,
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        ticks: { color: '#aaa' }
+                    },
+                    x: {
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#aaa' }
+                    }
+                }
+            }
+        });
+
+        // 수혜 분석 차트
+        const benefitCtx = document.getElementById('benefitChart').getContext('2d');
+        new Chart(benefitCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['미국 에너지 수출↑', '애플 인도 시장↑', '관세 인하 수혜', '지정학 안정'],
+                datasets: [{
+                    data: [30, 35, 20, 15],
+                    backgroundColor: ['#667eea', '#4CAF50', '#FFC107', '#64B5F6'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#ccc', font: { size: 10 }, padding: 12 }
+                    }
+                }
+            }
+        });
+
+        // 팔란티어 실적 차트
+        const pltrCtx = document.getElementById('pltrChart').getContext('2d');
+        new Chart(pltrCtx, {
+            type: 'bar',
+            data: {
+                labels: ['전체 매출', '커머셜 매출'],
+                datasets: [{
+                    label: 'YoY 성장률 (%)',
+                    data: [70, 137],
+                    backgroundColor: ['#667eea', '#4CAF50'],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        ticks: { 
+                            color: '#aaa',
+                            callback: function(value) { return value + '%'; }
+                        }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { color: '#ccc' }
+                    }
+                }
+            }
+        });
+
+        // 섹터별 수익률 차트
+        const sectorCtx = document.getElementById('sectorChart').getContext('2d');
+        new Chart(sectorCtx, {
+            type: 'bar',
+            data: {
+                labels: ['필수소비재', '금융', '산업재', '기술', '에너지', '원자재'],
+                datasets: [{
+                    label: '일일 수익률 (%)',
+                    data: [1.8, 1.5, 2.2, 0.3, -3.5, -2.8],
+                    backgroundColor: function(context) {
+                        const value = context.dataset.data[context.dataIndex];
+                        return value >= 0 ? '#4CAF50' : '#F44336';
+                    },
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        ticks: { 
+                            color: '#aaa',
+                            callback: function(value) { return value + '%'; }
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#ccc', font: { size: 10 } }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
