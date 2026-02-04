@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>2026년 시장 대전환: 소프트웨어의 공포와 실물의 귀환 - 미국 증시 분석</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7;
+            color: #1a1a2e;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8ecf3 100%);
+            padding: 16px;
+            max-width: 100%;
+        }
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 24px 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        .header .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.85;
+            margin-bottom: 12px;
+        }
+        .header .date {
+            font-size: 0.8rem;
+            background: rgba(255,255,255,0.15);
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title .icon {
+            font-size: 1.4rem;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 4px solid #ff9800;
+            padding: 16px;
+            border-radius: 0 12px 12px 0;
+            margin: 16px 0;
+        }
+        .highlight-box.red {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border-left-color: #f44336;
+        }
+        .highlight-box.green {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-left-color: #4caf50;
+        }
+        .highlight-box.blue {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left-color: #2196f3;
+        }
+        .highlight-box.purple {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            border-left-color: #9c27b0;
+        }
+        .key-point {
+            font-weight: 600;
+            color: #d84315;
+        }
+        .positive {
+            color: #2e7d32;
+            font-weight: 600;
+        }
+        .negative {
+            color: #c62828;
+            font-weight: 600;
+        }
+        .stock-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin: 8px 0;
+        }
+        .stock-card .name {
+            font-weight: 600;
+        }
+        .stock-card .change {
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 8px;
+        }
+        .stock-card .change.up {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .stock-card .change.down {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .chart-container {
+            position: relative;
+            margin: 20px 0;
+            padding: 16px;
+            background: #fafbfc;
+            border-radius: 12px;
+        }
+        .chart-container.sector-chart {
+            height: 320px;
+        }
+        .chart-container.pepsi-chart {
+            height: 220px;
+        }
+        .chart-container.asset-chart {
+            height: 200px;
+        }
+        .chart-container.strategy-chart {
+            height: 260px;
+        }
+        .chart-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 12px;
+            color: #444;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.9rem;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #f5f6fa;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+        tr:hover {
+            background: #f9f9f9;
+        }
+        .quote-box {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            font-style: italic;
+            position: relative;
+        }
+        .quote-box::before {
+            content: '"';
+            font-size: 3rem;
+            color: #ddd;
+            position: absolute;
+            top: -5px;
+            left: 10px;
+        }
+        .quote-box p {
+            padding-left: 30px;
+        }
+        .quote-box .author {
+            text-align: right;
+            font-style: normal;
+            font-weight: 600;
+            color: #666;
+            margin-top: 8px;
+        }
+        .tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin: 2px;
+        }
+        .tag.warning {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        .tag.danger {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .tag.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .tag.info {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ddd, transparent);
+            margin: 20px 0;
+        }
+        ul {
+            padding-left: 20px;
+            margin: 12px 0;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .summary-item {
+            background: #f8f9fa;
+            padding: 14px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .summary-item .label {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 4px;
+        }
+        .summary-item .value {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        .conclusion-box {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 24px;
+            border-radius: 16px;
+            margin-top: 20px;
+        }
+        .conclusion-box h3 {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+        }
+        .conclusion-box ul {
+            padding-left: 20px;
+        }
+        .conclusion-box li {
+            margin: 10px 0;
+            opacity: 0.95;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 0.8rem;
+        }
+        @media (max-width: 480px) {
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <div class="header">
+            <h1>🔄 2026년 시장 대전환</h1>
+            <div class="subtitle">소프트웨어의 공포와 실물의 귀환<br>코드에서 콘크리트로 자본 이동</div>
+            <div class="date">📅 2026년 2월 3일 (화) 뉴욕시간</div>
+        </div>
+
+        <!-- 핵심 요약 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">📊</span>
+                오늘의 시장 핵심 요약
+            </div>
+            
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <div class="label">S&P 500</div>
+                    <div class="value negative">-0.84%</div>
+                </div>
+                <div class="summary-item">
+                    <div class="label">나스닥</div>
+                    <div class="value negative">-1.43%</div>
+                </div>
+                <div class="summary-item">
+                    <div class="label">VIX 공포지수</div>
+                    <div class="value" style="color:#e65100;">+17% (19근접)</div>
+                </div>
+                <div class="summary-item">
+                    <div class="label">콜/풋 비율</div>
+                    <div class="value">43:37 (4:3)</div>
+                </div>
+            </div>
+
+            <div class="highlight-box red">
+                <strong>⚠️ 시장 핵심 메시지:</strong> 기술주가 아니라 <span class="key-point">"손으로 만져지는 것들"</span>이 각광받는 시대. 소프트웨어 대학살 vs 하드웨어·실물자산 강세. 기대감이 아니라 <strong>실적</strong>, 내러티브가 아니라 <strong>숫자</strong>가 중요해진 장세.
+            </div>
+        </div>
+
+        <!-- AI의 역설 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">🤖</span>
+                AI의 역설 (AI Paradox)
+            </div>
+
+            <p>오늘 <strong>Anthropic(엔트로픽)</strong>에서 충격적인 발표가 있었습니다. Claude AI에 <strong>에이전트(Agentic) 기능</strong>이 탑재되어, 컴퓨터에 심어져 사용자와 함께 일하는 완전한 비서 역할을 수행하게 되었습니다.</p>
+
+            <div class="highlight-box purple">
+                <strong>🔮 Anthropic Claude 코워크(Cowork) 기능:</strong>
+                <ul>
+                    <li>법률 플러그인으로 <strong>계약서 검토·작성</strong> 자동화</li>
+                    <li>판례 분석 및 <strong>소송 전략</strong> 수립</li>
+                    <li>변호사가 며칠 걸리던 일을 <strong>몇 분 만에</strong> 처리</li>
+                    <li>비용: 거의 <strong>무료</strong>에 가까운 수준</li>
+                </ul>
+            </div>
+
+            <div class="quote-box">
+                <p>기술과 관련된 모든 것에서 위험신호가 터지고 있다.</p>
+                <div class="author">— 조시 브라운 (CNBC)</div>
+            </div>
+
+            <p><strong>2년 전 예상:</strong> AI가 소프트웨어 기업의 생산성을 높여 더 큰 수익 창출</p>
+            <p><strong>2026년 현실:</strong> AI가 소프트웨어 기업 자체를 <span class="negative">파괴(Destroy)</span>하는 상황</p>
+
+            <div class="divider"></div>
+
+            <h4 style="margin: 16px 0 12px;">💀 소프트웨어 대학살 현황</h4>
+
+            <div class="stock-card">
+                <div>
+                    <div class="name">PayPal (PYPL)</div>
+                    <div style="font-size:0.8rem; color:#666;">결제 플랫폼</div>
+                </div>
+                <div class="change down">-20%</div>
+            </div>
+            <div class="stock-card">
+                <div>
+                    <div class="name">Gartner (IT)</div>
+                    <div style="font-size:0.8rem; color:#666;">IT 컨설팅</div>
+                </div>
+                <div class="change down">급락</div>
+            </div>
+            <div class="stock-card">
+                <div>
+                    <div class="name">LegalZoom (LZ)</div>
+                    <div style="font-size:0.8rem; color:#666;">법률 서비스 플랫폼</div>
+                </div>
+                <div class="change down">급락</div>
+            </div>
+
+            <div class="highlight-box red">
+                <strong>⚠️ 위험 신호:</strong> 구독형 SaaS 비즈니스 모델이 위기. <strong>바이브 코딩(Vibe Coding)</strong>으로 기업들이 직접 인하우스 소프트웨어를 커스터마이징해서 제작 가능. 어도비 포토샵 같은 전문 소프트웨어 사용 빈도도 급감 추세.
+            </div>
+
+            <p><span class="tag danger">핵심 통찰</span> AI로 대체 가능한 비즈니스 모델을 가진 <strong>모든 기업</strong>은 앞으로 밸류에이션 파괴 위험. 현재 돈을 잘 벌고 있어도 미래 가치 평가는 급락할 수밖에 없음.</p>
+        </div>
+
+        <!-- 소프트웨어 vs 하드웨어 차트 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">📈</span>
+                섹터별 명암: 소프트웨어 vs 하드웨어
+            </div>
+
+            <div class="chart-container sector-chart">
+                <div class="chart-title">2026.02.03 주요 종목 등락률 비교</div>
+                <canvas id="sectorChart"></canvas>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>종목</th>
+                        <th>섹터</th>
+                        <th>등락</th>
+                        <th>비고</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Palantir (PLTR)</strong></td>
+                        <td>AI 플랫폼</td>
+                        <td class="positive">상승</td>
+                        <td>컨버전 매출 급증</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SMCI</strong></td>
+                        <td>서버 하드웨어</td>
+                        <td class="positive">+6.67% (장후)</td>
+                        <td>매출 +123%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>USA Rare Earths</strong></td>
+                        <td>희토류</td>
+                        <td class="positive">+17%</td>
+                        <td>프로젝트 볼트</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Walmart (WMT)</strong></td>
+                        <td>필수 소비재</td>
+                        <td class="positive">+$131</td>
+                        <td>시총 $1T 달성</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PepsiCo (PEP)</strong></td>
+                        <td>필수 소비재</td>
+                        <td class="positive">+4.93%</td>
+                        <td>15% 가격 인하</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PayPal (PYPL)</strong></td>
+                        <td>핀테크</td>
+                        <td class="negative">-20%</td>
+                        <td>실적 부진+AI 위협</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Novo Nordisk</strong></td>
+                        <td>제약</td>
+                        <td class="negative">-15%</td>
+                        <td>약가 정책 타격</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AMD</strong></td>
+                        <td>반도체</td>
+                        <td class="negative">하락</td>
+                        <td>가이던스 약세</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 팔란티어와 SMCI -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">⭐</span>
+                AI 수혜주: 팔란티어 & SMCI
+            </div>
+
+            <div class="highlight-box green">
+                <strong>✅ 팔란티어(Palantir) - 소프트웨어 대학살 속 생존자</strong>
+                <p style="margin-top:10px;">AI를 통해 고객에게 <strong>실제로 돈을 벌어주는</strong> 기업만 살아남음</p>
+            </div>
+
+            <p><strong>팔란티어 AIP(인공지능 플랫폼)</strong>가 실제로 해내고 있는 일:</p>
+            <ul>
+                <li>고객사의 <strong>비용 절감</strong> 실현 (인원 감축 가능)</li>
+                <li><strong>매출 증대</strong> 지원 ("100만원 → 1000만원")</li>
+                <li>각 기업별 <strong>커스터마이징</strong> 솔루션 제공</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <div class="highlight-box blue">
+                <strong>🔧 SMCI(Super Micro Computer)</strong>
+                <ul>
+                    <li>매출: <span class="positive">+123%</span> 상승</li>
+                    <li>장후 주가: <span class="positive">+6.67%</span></li>
+                    <li>⚠️ 단, 마진율 하락 중</li>
+                </ul>
+            </div>
+
+            <p><strong>SMCI 마진율 하락 원인:</strong></p>
+            <ul>
+                <li>서버 하드웨어 시장 <strong>경쟁 심화</strong> (엔비디아가 다양한 파트너 확대)</li>
+                <li>부품·파트 가격 상승을 고객에게 전가하지 못함</li>
+            </ul>
+
+            <p><span class="tag warning">투자 시사점</span> 하드웨어 기업들도 경쟁 심화로 마진 압박을 받을 수 있으므로, <strong>마진율 추이</strong>를 주시해야 함.</p>
+        </div>
+
+        <!-- 필수 소비재 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">🛒</span>
+                필수 소비재의 부상
+            </div>
+
+            <div class="highlight-box green">
+                <strong>🏆 월마트(Walmart) - 역사적 이정표</strong>
+                <p style="margin-top:10px;">시가총액 <span class="positive">$1 Trillion(1조 달러)</span> 달성!</p>
+                <p style="margin-top:8px; font-size:0.9rem;">기술주가 아닌 기업이 $1T를 달성한 <strong>최초</strong> 사례</p>
+            </div>
+
+            <p><strong>월마트 성공 요인:</strong></p>
+            <ul>
+                <li><strong>디지털 전환</strong> 성공</li>
+                <li>압도적인 <strong>가격 경쟁력</strong>으로 소비자 확보</li>
+                <li>불확실성 시대에 "월마트 없이 못 사는" 필수재 지위</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <h4 style="margin: 16px 0 12px;">🥤 펩시코(PepsiCo) +4.93%</h4>
+
+            <div class="chart-container pepsi-chart">
+                <div class="chart-title">펩시코 5년 주가 추이 및 전환점</div>
+                <canvas id="pepsiChart"></canvas>
+            </div>
+
+            <p><strong>2023년부터 하락했던 이유:</strong> 위고비(Wegovy) 등 비만 치료제 등장으로 탄산음료·과자 소비 감소 우려</p>
+
+            <p><strong>오늘 반등 이유:</strong></p>
+            <ul>
+                <li>제품 가격 <span class="positive">최대 15% 인하</span> 발표</li>
+                <li>식품 물가 상승세 완화로 가격 인하 여력 확보</li>
+                <li>경쟁사 대비 우위 확보 전략</li>
+            </ul>
+        </div>
+
+        <!-- 금/은 & 비트코인 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">💰</span>
+                금/은 상승 vs 비트코인 급락
+            </div>
+
+            <div class="summary-grid">
+                <div class="summary-item" style="background:#fff8e1;">
+                    <div class="label">🥇 금(Gold)</div>
+                    <div class="value positive">+6%</div>
+                </div>
+                <div class="summary-item" style="background:#f5f5f5;">
+                    <div class="label">🥈 은(Silver)</div>
+                    <div class="value positive">+7~10%</div>
+                </div>
+                <div class="summary-item" style="background:#fff3e0;">
+                    <div class="label">₿ 비트코인</div>
+                    <div class="value negative">$73K→$76K</div>
+                </div>
+                <div class="summary-item" style="background:#ffebee;">
+                    <div class="label">BTC 4개월</div>
+                    <div class="value negative">최저치</div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <strong>🔑 금/은 상승 배경:</strong>
+                <ul>
+                    <li><strong>실물 자산 선호:</strong> "만져지는 것"에 대한 신뢰 증가</li>
+                    <li><strong>지정학적 리스크:</strong> 미 해군, 이란 드론 격추 (준전시 상태)</li>
+                    <li><strong>화폐 가치 의심:</strong> 기술주 흔들림 속 안전자산 회귀</li>
+                </ul>
+            </div>
+
+            <div class="chart-container asset-chart">
+                <div class="chart-title">실물자산 vs 디지털자산 흐름</div>
+                <canvas id="assetChart"></canvas>
+            </div>
+
+            <div class="highlight-box red">
+                <strong>⚠️ 비트코인 급락 원인:</strong>
+                <ul>
+                    <li>트럼프 당선 후 상승분 <strong>전부 소멸</strong></li>
+                    <li>비트코인 ETF에서 <strong>자금 유출</strong> 지속</li>
+                    <li>엘살바도르(공식 통화 지정국)에서도 <strong>실사용 급감</strong></li>
+                    <li>가격 변동성으로 <strong>통화로서의 가치 상실</strong></li>
+                </ul>
+            </div>
+
+            <p><span class="tag danger">결론</span> 비트코인은 "디지털 금"이 아니라 <strong>고위험 센티멘트 지표</strong>로 재평가. 당분간 혹독한 겨울 예상.</p>
+        </div>
+
+        <!-- 지정학적 리스크 & 정책 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">🌍</span>
+                지정학적 리스크 & 정책 변수
+            </div>
+
+            <div class="highlight-box red">
+                <strong>🚨 미 해군, 이란 드론 격추</strong>
+                <p style="margin-top:8px;">이란과의 회담 진행 중 드론 접근 → 격추. "준전시 상태" 우려.</p>
+                <p style="margin-top:8px;">→ 유가 상승 압력, 인플레이션 자극 가능성</p>
+            </div>
+
+            <h4 style="margin: 20px 0 12px;">🏗️ USA Rare Earths +17% (프로젝트 볼트)</h4>
+            <p>트럼프 대통령의 <strong>프로젝트 볼트(Project Vault)</strong> 서명으로 희토류 기업 급등. 중국과의 갈등 속 미국의 자원 비축 전략 가시화. 약 <strong>$120억 달러</strong> 규모의 비밀 프로젝트로 알려짐.</p>
+
+            <div class="divider"></div>
+
+            <h4 style="margin: 20px 0 12px;">🏠 트럼프 홈스(Trump Homes) - 임대주택 정책</h4>
+            <p><strong>Rent-to-Own(임대 후 구매)</strong> 방식의 주택 정책 발표로 주택건설주 +7% 급등.</p>
+            <p style="color:#666; font-size:0.9rem; margin-top:8px;">※ 다만 임대주택의 한계: 오너십 부재로 커뮤니티 치안·관리 문제 우려</p>
+
+            <div class="divider"></div>
+
+            <h4 style="margin: 20px 0 12px;">💊 노보 노디스크(Novo Nordisk) -15%</h4>
+
+            <div class="highlight-box red">
+                <strong>정책 한 방의 파괴력</strong>
+                <ul>
+                    <li>메디케어 약가 협상으로 <strong>오젠픽·위고비</strong> 가격 인하 현실화</li>
+                    <li>2026년 매출 가이던스: <span class="negative">-5% → -13%</span>로 하향</li>
+                    <li>수익성 급격 악화 전망</li>
+                </ul>
+            </div>
+
+            <p><span class="tag danger">핵심 교훈</span> 아무리 기술이 뛰어나고 돈을 잘 벌어도, <strong>정책 한 방</strong>으로 기업 가치가 녹아내릴 수 있음. 정치가 모든 것이 된 시대.</p>
+        </div>
+
+        <!-- 정부 셧다운 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">🏛️</span>
+                정부 셧다운 종료
+            </div>
+
+            <p>트럼프 대통령이 예산안에 서명하면서 <strong>셧다운 종료</strong>. 시장은 안도감을 보였으나, 이는 <strong>일시적(Temporal)</strong> 해결책에 불과. 향후 또 다른 예산 협상 시점에 재발 가능성 상존.</p>
+        </div>
+
+        <!-- 내일 주요 일정 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">📅</span>
+                내일 주요 일정 (2월 4일)
+            </div>
+
+            <div class="highlight-box blue">
+                <strong>🎯 핵심 실적 발표</strong>
+                <ul>
+                    <li><strong>Alphabet(구글)</strong> - 기술주 평가의 분수령</li>
+                    <li><strong>Amazon</strong> - AI 캐펙스·수익성 검증</li>
+                    <li>Uber, Eli Lilly, ARM</li>
+                    <li>MicroStrategy, Roblox</li>
+                </ul>
+            </div>
+
+            <p><strong>왜 중요한가?</strong></p>
+            <ul>
+                <li>마이크로소프트, 엔비디아 등 기술주 흔들림 속</li>
+                <li>"AI가 거품인가, 실적으로 증명되는가"의 <strong>분기점</strong></li>
+                <li>구글·아마존 실적에 따라 기술주 방향성 결정</li>
+            </ul>
+
+            <p style="margin-top:12px;"><span class="tag info">참고</span> 고용보고서 연기로 민간 데이터(ADP 등)에 대한 의존도 증가</p>
+        </div>
+
+        <!-- 투자 전략 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">🎯</span>
+                투자 전략 시사점
+            </div>
+
+            <div class="chart-container strategy-chart">
+                <div class="chart-title">투자 매력도: 실물 vs 무형 자산</div>
+                <canvas id="strategyChart"></canvas>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>구분</th>
+                        <th>유망 섹터</th>
+                        <th>주의 섹터</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>기준</strong></td>
+                        <td>손으로 만져지는 것</td>
+                        <td>손으로 안 만져지는 것</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AI</strong></td>
+                        <td>하드웨어 인프라</td>
+                        <td>SaaS, 구독 소프트웨어</td>
+                    </tr>
+                    <tr>
+                        <td><strong>원자재</strong></td>
+                        <td>금, 은, 희토류</td>
+                        <td>비트코인, 암호화폐</td>
+                    </tr>
+                    <tr>
+                        <td><strong>소비재</strong></td>
+                        <td>필수 소비재 (월마트, 펩시)</td>
+                        <td>고가 재량 소비재</td>
+                    </tr>
+                    <tr>
+                        <td><strong>방산</strong></td>
+                        <td>방산주 (지정학 리스크)</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="highlight-box">
+                <strong>52주 신고가 종목 추적:</strong> 52주 신고가를 달성하는 종목들이 계속 상승하는 경향. 월마트, 팔란티어 등 주시 필요.
+            </div>
+        </div>
+
+        <!-- 결론 -->
+        <div class="conclusion-box">
+            <h3>📌 오늘의 핵심 결론</h3>
+            <ul>
+                <li><strong>"코드에서 콘크리트로"</strong> - 자본이 소프트웨어에서 실물로 이동 중</li>
+                <li><strong>AI의 역설:</strong> AI가 소프트웨어 기업을 살리는 게 아니라 파괴</li>
+                <li><strong>실적 검증 시대:</strong> 기대감이 아닌 숫자, 내러티브가 아닌 실적</li>
+                <li><strong>정책 리스크:</strong> 정치가 기업 운명을 좌우하는 시대</li>
+                <li><strong>안전자산 회귀:</strong> 금·은 상승, 비트코인 하락으로 실물 선호 확인</li>
+                <li><strong>내일 분수령:</strong> 구글·아마존 실적이 기술주의 방향 결정</li>
+            </ul>
+        </div>
+
+        <!-- 푸터 -->
+        <div class="footer">
+            <p>본 자료는 투자 참고용이며, 투자 판단의 책임은 본인에게 있습니다.</p>
+            <p style="margin-top:8px;">원본 출처: CIA.chat 멤버미팅 | 분석일: 2026.02.03</p>
+        </div>
+    </div>
+
+    <script>
+        // 섹터별 등락률 차트
+        new Chart(document.getElementById('sectorChart'), {
+            type: 'bar',
+            data: {
+                labels: ['USA Rare Earths', 'SMCI(장후)', 'Walmart', 'PepsiCo', 'AMD', 'Novo Nordisk', 'PayPal'],
+                datasets: [{
+                    label: '등락률 (%)',
+                    data: [17, 6.67, 2.5, 4.93, -3, -15, -20],
+                    backgroundColor: [
+                        '#4caf50', '#4caf50', '#4caf50', '#4caf50',
+                        '#f44336', '#f44336', '#f44336'
+                    ],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { callback: v => v + '%' }
+                    },
+                    y: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // 펩시코 차트
+        new Chart(document.getElementById('pepsiChart'), {
+            type: 'line',
+            data: {
+                labels: ['2021', '2022', '2023 (위고비)', '2024', '2025', '2026'],
+                datasets: [{
+                    label: '주가 추이',
+                    data: [150, 175, 190, 160, 145, 165],
+                    borderColor: '#1976d2',
+                    backgroundColor: 'rgba(25, 118, 210, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: ['#1976d2', '#1976d2', '#f44336', '#f44336', '#f44336', '#4caf50']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    annotation: {
+                        annotations: {
+                            line1: {
+                                type: 'line',
+                                xMin: 2,
+                                xMax: 2,
+                                borderColor: '#f44336',
+                                borderWidth: 2,
+                                borderDash: [5, 5]
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: { beginAtZero: false }
+                }
+            }
+        });
+
+        // 자산 흐름 차트
+        new Chart(document.getElementById('assetChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['금 (+6%)', '은 (+8%)', '비트코인 (-15%)'],
+                datasets: [{
+                    data: [40, 35, 25],
+                    backgroundColor: ['#ffd700', '#c0c0c0', '#ff6b6b'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 15 }
+                    }
+                }
+            }
+        });
+
+        // 투자 전략 레이더 차트
+        new Chart(document.getElementById('strategyChart'), {
+            type: 'radar',
+            data: {
+                labels: ['AI 하드웨어', '금/은', '필수 소비재', '방산/희토류', 'SaaS', '암호화폐'],
+                datasets: [{
+                    label: '투자 매력도',
+                    data: [90, 85, 80, 75, 30, 20],
+                    backgroundColor: 'rgba(25, 118, 210, 0.2)',
+                    borderColor: '#1976d2',
+                    pointBackgroundColor: '#1976d2'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
