@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>시험문제 - 2026년 시장 대전환: 소프트웨어의 공포와 실물의 귀환</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.8;
+            color: #1a1a2e;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8ecf3 100%);
+            padding: 16px;
+        }
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+            color: white;
+            padding: 24px 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .header .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e0e0e0;
+            text-align: center;
+        }
+        .question {
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+        .question:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .q-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .q-number {
+            background: #1a1a2e;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .q-type {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+        .q-type.multiple {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        .q-type.short {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        .q-type.ox {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+        .q-type.blank {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        .q-type.essay {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .difficulty {
+            font-size: 0.8rem;
+            color: #ff9800;
+        }
+        .q-text {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 14px;
+            line-height: 1.6;
+        }
+        .options {
+            margin-left: 8px;
+        }
+        .option {
+            padding: 10px 14px;
+            margin: 6px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            font-size: 0.95rem;
+        }
+        .blank-line {
+            display: inline-block;
+            border-bottom: 2px solid #1a1a2e;
+            min-width: 120px;
+            margin: 0 4px;
+        }
+        .answer-header {
+            background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+        }
+        .answer-section .section-title {
+            color: #c62828;
+        }
+        .answer {
+            margin-bottom: 24px;
+            padding: 16px;
+            background: #fafafa;
+            border-radius: 12px;
+            border-left: 4px solid #4caf50;
+        }
+        .answer:last-child {
+            margin-bottom: 0;
+        }
+        .a-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .a-number {
+            background: #4caf50;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        .a-answer {
+            font-weight: 700;
+            color: #2e7d32;
+            font-size: 1rem;
+        }
+        .a-explanation {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.7;
+            margin-top: 8px;
+            padding-left: 38px;
+        }
+        .page-break {
+            page-break-before: always;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 3px double #ccc;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 0.8rem;
+        }
+        @media print {
+            .page-break {
+                page-break-before: always;
+            }
+            body {
+                background: white;
+                padding: 0;
+            }
+            .section {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 문제지 헤더 -->
+        <div class="header">
+            <h1>📋 시험문제</h1>
+            <div class="subtitle">2026년 시장 대전환: 소프트웨어의 공포와 실물의 귀환<br>총 10문제 | 제한시간: 20분</div>
+        </div>
+
+        <!-- 문제지 -->
+        <div class="section">
+            <div class="section-title">━━━ 📋 시험문제 (총 10문제) ━━━</div>
+
+            <!-- 문제 1 -->
+            <div class="question">
+                <div class="q-header">
+                    <div class="q-number">1</div>
+                    <span class="q-type multiple">객관식</span>
+                    <span class="difficulty">⭐ 쉬움</span>
+                </div>
+                <div class="q-text">2026년 2월 3일, 기술주가 아닌 기업 최초로 시가총액 1조 달러($1 Trillion)를 달성한 기업은?</div>
+                <div class="options">
+                    <div class="option">① 아마존 (Amazon)</div>
+                    <div class="option">② 월마트 (Walmart)</div>
+                    <div class="option">③ 코스트코 (Costco)</div>
+                    <div class="option">④ 펩시코 (PepsiCo)</div>
+                </div>
+            </div>
+
+            <!-- 문제 2 -->
+            <div class="question">
+                <div class="q-header">
+                    <div class="q-number">2</div>
+                    <span class="q-type short">단답형</span>
+                    <span class="difficulty">⭐ 쉬움</span>
+                </div>
+                <div class="q-text">Anthropic에서 개발한 AI 모델 '클라우드(Claude)'에 새롭게 탑재된, 컴퓨터에 심어져 사용자와 함께 일하는 완전한 비서 역할을 수행하는 기능의 이름은 무엇인가?</div>
+            </div>
+
+            <!-- 문제 3 -->
+            <div class="question">
+                <div class="q-header">
+                    <div class="q-number">3</div>
+                    <span class="q-type ox">O/X 문제</span>
+                    <span class="difficulty">⭐ 쉬움</span>
+                </div>
+                <div class="q-text">비트코인은 트럼프 대통령 당선 이후 상승분을 모두 유지하며 '디지털 금'으로서의 가치를 입증했다. (O/X)</div>
+            </div>
+
+            <!-- 문제 4 -->
+            <div class="question">
+                <div class="q-header">
+                    <div class="q-number">4</div>
+                    <span class="q-type multiple">객관식</span>
+                    <span class="difficulty">⭐⭐ 보통</span>
+                </div>
+                <div class="q-text">SMCI(Super Micro Computer)의 매출이 123% 상승했음에도 불구하고 마진율이 하락한 주요 원인으로 가장 적절한 것은?</div>
+                <div class="options">
+                    <div class="option">① AI 수요 급감으로 인한 재고 적체</div>
+                    <div class="option">② 서버 하드웨어 시장 경쟁 심화 및 부품 가격 상승 전가 실패</div>
+                    <div class="option">③ 엔비디아와의 독점 계약 해지</div>
+                    <div class="option">④ 중국 시장 철수로 인한 매출 감소</div>
+                </div>
+            </div>
+
+            <!-- 문제 5 -->
+            <div class="question">
+                <div class="q-header">
+                    <div class="q-number">5</div>
+                    <span class="q-type blank">빈칸채우기</span>
+                    <span class="difficulty">⭐⭐ 보통</span>
+                </div>
+                <div class="q-text">오늘 시장의 핵심 메시지는 "(<span class="blank-line"></span>)에서 (<span class="blank-line"></span>)로" 자본이 이동하고 있다는 것이다. 이는 무형의 소프트웨어보다 손으로 만져지는 실물 자산이 더 각광받는 시대가 되었음을 의미한다.</div>
+            </div>
+
+            <!-- 문제 6 -->
+            <div class="question">
+                <div class="q-header">
+                    <div class="q-number">6</div>
+                    <span class="q-type multiple">객관식</span>
+                    <span class="difficulty">⭐⭐ 보통</span>
+                </div>
+                <div class="q-text">노보 노디스크(Novo Nordisk)의 주가가 15% 급락한 주요 원인은?</div>
+                <div class="options">
+                    <div class="option">① 오젠픽·위고비 약효 부작용 보고</div>
+                    <div class="option">② 메디케어 약가 협상으로 인한 수익성 악화 전망</div>
+                    <div class="option">③ 경쟁 제약사의 신약 출시</div>
+                    <div class="option">④ 임상시험 실패 발표</div>
+                </div>
+            </div>
+
+            <!-- 문제 7 -->
+            <div class="question">
+                <div class="q-header">
+                    <div class="q-number">7</div>
+                    <span class="q-type short">단답형</span>
+                    <span class="difficulty">⭐⭐ 보통</span>
+                </div>
+                <div class="q-text">펩시코(PepsiCo)가 2023년부터 주가 하락세를 보인 원인으로 지목된, 2023년에 등장한 비만 치료제의 이름은 무엇인가?</div>
+            </div>
+
+            <!-- 문제 8 -->
+            <div class="question">
+                <div class="q-header">
+                    <div class="q-number">8</div>
+                    <span class="q-type multiple">객관식</span>
+                    <span class="difficulty">⭐⭐ 보통</span>
+                </div>
+                <div class="q-text">팔란티어(Palantir)가 '소프트웨어 대학살' 속에서도 살아남을 수 있었던 핵심 이유로 가장 적절한 것은?</div>
+                <div class="options">
+                    <div class="option">① 정부 계약 비중이 높아 민간 시장 영향을 받지 않음</div>
+                    <div class="option">② AI를 통해 고객에게 실제로 비용 절감과 매출 증대를 실현해줌</div>
+                    <div class="option">③ 경쟁사 대비 저렴한 구독료 정책</div>
+                    <div class="option">④ 비트코인 보유로 인한 자산 가치 상승</div>
+                </div>
+            </div>
+
+            <!-- 문제 9 -->
+            <div class="question">
+                <div class="q-header">
+                    <div class="q-number">9</div>
+                    <span class="q-type ox">O/X 문제</span>
+                    <span class="difficulty">⭐⭐⭐ 어려움</span>
+                </div>
+                <div class="q-text">USA Rare Earths의 주가가 17% 급등한 것은 트럼프 대통령의 '프로젝트 볼트(Project Vault)' 서명으로, 이는 미국의 희토류 자원 비축 전략이 본격화되었음을 의미한다. (O/X)</div>
+            </div>
+
+            <!-- 문제 10 -->
+            <div class="question">
+                <div class="q-header">
+                    <div class="q-number">10</div>
+                    <span class="q-type essay">서술형</span>
+                    <span class="difficulty">⭐⭐⭐ 어려움</span>
+                </div>
+                <div class="q-text">'AI의 역설(AI Paradox)'이란 무엇인지 설명하고, 이것이 소프트웨어 기업(특히 SaaS 기업)에 미치는 영향과 투자자가 주의해야 할 점을 서술하시오.</div>
+            </div>
+        </div>
+
+        <!-- 페이지 구분 -->
+        <div class="page-break"></div>
+
+        <!-- 정답지 헤더 -->
+        <div class="header answer-header">
+            <h1>📝 정답 및 해설</h1>
+            <div class="subtitle">2026년 시장 대전환 시험문제 해설</div>
+        </div>
+
+        <!-- 정답지 -->
+        <div class="section answer-section">
+            <div class="section-title">━━━ 📝 정답 및 해설 ━━━</div>
+
+            <!-- 정답 1 -->
+            <div class="answer">
+                <div class="a-header">
+                    <div class="a-number">1</div>
+                    <span class="a-answer">정답: ② 월마트 (Walmart)</span>
+                </div>
+                <div class="a-explanation">
+                    월마트는 2026년 2월 3일 시가총액 1조 달러를 달성하며, <strong>기술주가 아닌 기업 최초로</strong> 이 이정표를 세웠습니다. 이는 디지털 전환 성공과 압도적인 가격 경쟁력으로 소비자를 확보한 결과입니다. 불확실성의 시대에 필수 소비재의 가치가 재조명된 사례입니다.
+                </div>
+            </div>
+
+            <!-- 정답 2 -->
+            <div class="answer">
+                <div class="a-header">
+                    <div class="a-number">2</div>
+                    <span class="a-answer">정답: 에이전트(Agentic) 기능 / 코워크(Cowork) 기능</span>
+                </div>
+                <div class="a-explanation">
+                    Anthropic의 Claude AI에 탑재된 '에이전트(Agentic)' 또는 '코워크(Cowork)' 기능은 컴퓨터에 심어져 사용자의 화면을 보며 함께 일하는 완전한 비서 역할을 수행합니다. 법률 플러그인을 통해 계약서 검토, 판례 분석 등 변호사의 업무를 대체할 수 있게 되었습니다.
+                </div>
+            </div>
+
+            <!-- 정답 3 -->
+            <div class="answer">
+                <div class="a-header">
+                    <div class="a-number">3</div>
+                    <span class="a-answer">정답: X</span>
+                </div>
+                <div class="a-explanation">
+                    비트코인은 트럼프 대통령 당선 후 상승분을 <strong>전부 소멸</strong>했습니다. 4개월 최저치인 $73,000까지 하락하며, ETF에서의 자금 유출이 지속되고 있습니다. 공식 통화로 지정된 엘살바도르에서도 가격 변동성으로 인해 실사용이 급감하여, '디지털 금'이 아닌 고위험 센티멘트 지표로 재평가되고 있습니다.
+                </div>
+            </div>
+
+            <!-- 정답 4 -->
+            <div class="answer">
+                <div class="a-header">
+                    <div class="a-number">4</div>
+                    <span class="a-answer">정답: ② 서버 하드웨어 시장 경쟁 심화 및 부품 가격 상승 전가 실패</span>
+                </div>
+                <div class="a-explanation">
+                    SMCI의 마진율 하락은 두 가지 요인 때문입니다. 첫째, 엔비디아가 SMCI뿐 아니라 다양한 파트너로 확대하면서 <strong>경쟁이 심화</strong>되었습니다. 둘째, 부품 및 파트 가격이 상승했으나 이를 <strong>고객에게 전가하지 못해</strong> 마진이 압박받고 있습니다.
+                </div>
+            </div>
+
+            <!-- 정답 5 -->
+            <div class="answer">
+                <div class="a-header">
+                    <div class="a-number">5</div>
+                    <span class="a-answer">정답: "코드(Code)"에서 "콘크리트(Concrete)"로</span>
+                </div>
+                <div class="a-explanation">
+                    이 표현은 무형의 소프트웨어(코드)에서 실물 자산(콘크리트)으로 자본이 이동하는 현상을 상징합니다. 손으로 만져지는 하드웨어, 금, 필수 소비재 등 실물이 각광받고, SaaS, 암호화폐 등 무형 자산은 약세를 보이는 시장 구조 변화를 의미합니다.
+                </div>
+            </div>
+
+            <!-- 정답 6 -->
+            <div class="answer">
+                <div class="a-header">
+                    <div class="a-number">6</div>
+                    <span class="a-answer">정답: ② 메디케어 약가 협상으로 인한 수익성 악화 전망</span>
+                </div>
+                <div class="a-explanation">
+                    노보 노디스크의 주력 제품인 오젠픽(Ozempic)과 위고비(Wegovy)가 메디케어 약가 협상 대상이 되면서 <strong>가격 인하가 현실화</strong>되었습니다. 이에 따라 2026년 매출 가이던스를 -5%에서 <strong>-13%로 대폭 하향</strong> 조정했으며, 이는 정책 한 방으로 기업 가치가 급락할 수 있음을 보여주는 사례입니다.
+                </div>
+            </div>
+
+            <!-- 정답 7 -->
+            <div class="answer">
+                <div class="a-header">
+                    <div class="a-number">7</div>
+                    <span class="a-answer">정답: 위고비(Wegovy) / 오젠픽(Ozempic)</span>
+                </div>
+                <div class="a-explanation">
+                    2023년 위고비(Wegovy), 오젠픽(Ozempic) 등 비만 치료제가 등장하면서 탄산음료와 과자 소비가 감소할 것이라는 우려가 확산되었습니다. 일론 머스크 등 유명인들이 이 약을 복용하고 체중 감량에 성공하면서, 펩시코 등 음료·스낵 기업의 주가가 2023년부터 하락세를 보였습니다.
+                </div>
+            </div>
+
+            <!-- 정답 8 -->
+            <div class="answer">
+                <div class="a-header">
+                    <div class="a-number">8</div>
+                    <span class="a-answer">정답: ② AI를 통해 고객에게 실제로 비용 절감과 매출 증대를 실현해줌</span>
+                </div>
+                <div class="a-explanation">
+                    팔란티어의 AIP(인공지능 플랫폼)는 단순한 AI 도입이 아니라 <strong>실제로 고객사의 비용을 절감</strong>하고 <strong>매출을 증대</strong>시키는 결과를 만들어내고 있습니다. 각 기업에 필요한 커스터마이징 솔루션을 제공하여, AI가 "좋아요"가 아니라 "돈"을 벌어주는 것을 증명했기에 소프트웨어 대학살 속에서도 살아남았습니다.
+                </div>
+            </div>
+
+            <!-- 정답 9 -->
+            <div class="answer">
+                <div class="a-header">
+                    <div class="a-number">9</div>
+                    <span class="a-answer">정답: O</span>
+                </div>
+                <div class="a-explanation">
+                    USA Rare Earths의 +17% 급등은 트럼프 대통령의 '프로젝트 볼트' 서명에 따른 것입니다. 이는 미국이 중국과의 갈등 속에서 <strong>희토류 자원을 비축</strong>하려는 전략이 본격화되었음을 의미합니다. 약 <strong>$120억 달러</strong> 규모의 비밀 프로젝트로 알려져 있으며, 방산 및 희토류 섹터에 대한 정부 자금 투입이 지속될 전망입니다.
+                </div>
+            </div>
+
+            <!-- 정답 10 -->
+            <div class="answer">
+                <div class="a-header">
+                    <div class="a-number">10</div>
+                    <span class="a-answer">정답 예시 (서술형)</span>
+                </div>
+                <div class="a-explanation">
+                    <strong>1. AI의 역설이란:</strong><br>
+                    2년 전 AI가 등장했을 때, 소프트웨어 기업들은 AI가 코딩을 도와 생산성을 높이고 더 큰 수익을 창출할 것으로 기대했습니다. 그러나 2026년 현실은 정반대입니다. AI가 소프트웨어 기업의 생산성을 높이는 것이 아니라, <strong>소프트웨어 기업 자체를 대체(파괴)</strong>하고 있습니다. 이것이 'AI의 역설(AI Paradox)'입니다.<br><br>
+                    <strong>2. SaaS 기업에 미치는 영향:</strong><br>
+                    - 바이브 코딩(Vibe Coding)으로 기업들이 직접 인하우스 소프트웨어를 커스터마이징해서 제작 가능<br>
+                    - 구독형 SaaS 비즈니스 모델의 존재 가치 상실<br>
+                    - LegalZoom, Gartner 등 중개 역할을 하던 서비스 기업들의 급락<br><br>
+                    <strong>3. 투자자 주의사항:</strong><br>
+                    - AI로 대체 가능한 비즈니스 모델을 가진 기업은 현재 수익성과 관계없이 미래 밸류에이션 파괴 위험<br>
+                    - '사(師)' 자 붙은 직업(변호사, 의사, 컨설턴트 등)을 대체하는 서비스 기업 주의<br>
+                    - 실제로 고객에게 비용 절감·매출 증대를 실현해주는 기업(팔란티어 등)만 생존 가능
+                </div>
+            </div>
+        </div>
+
+        <!-- 푸터 -->
+        <div class="footer">
+            <p>※ 본 시험문제는 학습 목적으로 제작되었습니다.</p>
+            <p style="margin-top:8px;">원본 출처: CIA.chat 멤버미팅 (2026.02.03) 기반 분석</p>
+        </div>
+    </div>
+</body>
+</html>
