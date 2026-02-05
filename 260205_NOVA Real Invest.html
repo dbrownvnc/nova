@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>2월 4일 테크주 폭락 분석</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: #f8f9fa;
+            padding: 16px;
+            max-width: 100%;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 24px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        .header .date {
+            font-size: 0.85rem;
+            opacity: 0.85;
+        }
+        .header .source {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+        .content {
+            padding: 20px;
+        }
+        h2 {
+            font-size: 1.15rem;
+            color: #1a1a2e;
+            margin: 24px 0 12px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e94560;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        h2:first-child {
+            margin-top: 0;
+        }
+        h3 {
+            font-size: 1rem;
+            color: #16213e;
+            margin: 18px 0 10px 0;
+        }
+        p {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            text-align: justify;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe6e6 100%);
+            border-left: 4px solid #e94560;
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .highlight-box.blue {
+            background: linear-gradient(135deg, #f0f7ff 0%, #e3f0ff 100%);
+            border-left-color: #0066cc;
+        }
+        .highlight-box.green {
+            background: linear-gradient(135deg, #f0fff4 0%, #e6ffec 100%);
+            border-left-color: #28a745;
+        }
+        .highlight-box.yellow {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border-left-color: #f59e0b;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .stat-card {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .stat-card .label {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 4px;
+        }
+        .stat-card .value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+        .stat-card .value.red {
+            color: #dc3545;
+        }
+        .stat-card .value.green {
+            color: #28a745;
+        }
+        .chart-container {
+            background: #fff;
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0;
+            border: 1px solid #eee;
+        }
+        .chart-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.85rem;
+        }
+        th, td {
+            padding: 10px 8px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #1a1a2e;
+            color: white;
+            font-weight: 600;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .tag.buy {
+            background: #d4edda;
+            color: #155724;
+        }
+        .tag.hold {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .tag.sell {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .tag.reduce {
+            background: #ffeaa7;
+            color: #6c5ce7;
+        }
+        ul {
+            margin: 12px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        .key-point {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .key-point .icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .key-point .text {
+            font-size: 0.9rem;
+        }
+        strong {
+            color: #e94560;
+        }
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #ddd, transparent);
+            margin: 24px 0;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 16px 20px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #666;
+            border-top: 1px solid #eee;
+        }
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 14px;
+            margin: 16px 0;
+            font-size: 0.9rem;
+        }
+        .warning-box strong {
+            color: #856404;
+        }
+        .sector-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+            background: #f0f7ff;
+            border-radius: 10px;
+            margin: 16px 0;
+            flex-wrap: wrap;
+        }
+        .sector-box {
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .sector-box.from {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .sector-box.to {
+            background: #d4edda;
+            color: #155724;
+        }
+        .arrow {
+            font-size: 1.2rem;
+            color: #666;
+        }
+        .quote-box {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+            font-style: italic;
+            position: relative;
+        }
+        .quote-box::before {
+            content: '"';
+            font-size: 3rem;
+            color: #e94560;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            opacity: 0.3;
+        }
+        .risk-meter {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .risk-bar {
+            height: 20px;
+            background: linear-gradient(to right, #28a745, #ffc107, #dc3545);
+            border-radius: 10px;
+            position: relative;
+            margin-top: 8px;
+        }
+        .risk-indicator {
+            position: absolute;
+            top: -5px;
+            width: 4px;
+            height: 30px;
+            background: #1a1a2e;
+            border-radius: 2px;
+        }
+        .risk-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📉 2월 4일 테크주 폭락 분석</h1>
+            <div class="date">2026년 2월 5일 | 번개 멤버온리 방송</div>
+            <div class="source">출처: NOVA Real Invest</div>
+        </div>
+        
+        <div class="content">
+            <h2>📊 시장 상황 개요</h2>
+            
+            <p>2월 4일 미국 증시에서 <strong>테크주 중심의 급락</strong>이 발생했습니다. 특히 반도체 섹터가 집중적으로 하락하며 투자자들의 우려가 커졌습니다. 그러나 이번 하락은 <strong>펀더멘탈 문제가 아닌 심리적 과잉반응</strong>으로 분석됩니다.</p>
+            
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="label">AMD 하락률</div>
+                    <div class="value red">-17%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">MU(마이크론) 하락</div>
+                    <div class="value red">-10%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">구글 매출 성장</div>
+                    <div class="value green">+18%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">팔란티어 연간 상승</div>
+                    <div class="value green">+340%</div>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <strong>🎯 핵심 메시지:</strong> 펀더멘탈 리스크가 없으므로 패닉셀은 금물. 변동성이 큰 시장에서 정신적 고통을 감내해야 자산을 늘릴 수 있음.
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-title">주요 테크주 당일 등락률</div>
+                <canvas id="techStockChart"></canvas>
+            </div>
+            
+            <h2>🔍 폭락 원인 분석</h2>
+            
+            <h3>1. 일자리 지표 발표</h3>
+            <p>미국 일자리 수가 <strong>예상보다 많이 늘어난 것</strong>이 직접적인 하락 원인입니다. 역설적이지만, 고용 지표 호조는 연준의 금리 인하 지연을 의미하기 때문에 IT 섹터에 부정적으로 작용했습니다.</p>
+            
+            <div class="key-point">
+                <div class="icon">💡</div>
+                <div class="text">금리 인하를 위해서는 일자리 수가 줄어들어야 합니다. 일자리 증가 → 금리 인하 지연 → IT 섹터 부담</div>
+            </div>
+            
+            <h3>2. 시스테믹 리스크 아닌 심리적 과잉반응</h3>
+            <p>현재 시장은 <strong>심리적으로 과잉반응하는 상태</strong>입니다. AI 알고리즘 트레이딩과 공매도 세력이 하락을 가속화시켰습니다.</p>
+            
+            <ul>
+                <li>ETF 섹터별 연동 매도로 반도체 전체 하락</li>
+                <li>자동 매도 주문(손절매) 대량 체결</li>
+                <li>300~400% 상승 종목의 기술적 조정</li>
+            </ul>
+            
+            <h3>3. 트럼프 리스크</h3>
+            <p>정치적 불확실성이 시장 변동성을 키우고 있습니다. 관세 정책의 변칙적 운영, 정부 셧다운 리스크 등이 투자심리를 악화시키고 있습니다.</p>
+            
+            <div class="warning-box">
+                <strong>⚠️ 트럼프 리스크 요인</strong><br>
+                • 관세 정책 불확실성 (10% → 25% 변경 등)<br>
+                • 정부 셧다운 가능성<br>
+                • 연준 독립성 침해 우려<br>
+                • 외교 정책 변동성
+            </div>
+            
+            <div class="risk-meter">
+                <strong>현재 시장 리스크 수준</strong>
+                <div class="risk-bar">
+                    <div class="risk-indicator" style="left: 65%;"></div>
+                </div>
+                <div class="risk-labels">
+                    <span>낮음</span>
+                    <span>보통</span>
+                    <span>높음</span>
+                </div>
+            </div>
+            
+            <h2>📈 섹터 로테이션 전략</h2>
+            
+            <p>1월부터 본격화된 <strong>섹터 로테이션</strong>에 주목해야 합니다. IT 섹터 비중을 줄이고 방어적 섹터로 이동하는 것이 권장됩니다.</p>
+            
+            <div class="sector-flow">
+                <div class="sector-box from">IT 섹터</div>
+                <div class="arrow">➜</div>
+                <div class="sector-box to">에너지</div>
+                <div class="sector-box to">인더스트리얼</div>
+                <div class="sector-box to">머터리얼</div>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-title">권장 섹터 비중 조정 방향</div>
+                <canvas id="sectorChart"></canvas>
+            </div>
+            
+            <table>
+                <tr>
+                    <th>섹터</th>
+                    <th>방향</th>
+                    <th>이유</th>
+                </tr>
+                <tr>
+                    <td>에너지</td>
+                    <td><span class="tag buy">비중 확대</span></td>
+                    <td>천연가스, 태양광 등</td>
+                </tr>
+                <tr>
+                    <td>인더스트리얼</td>
+                    <td><span class="tag buy">비중 확대</span></td>
+                    <td>기관 자금 유입</td>
+                </tr>
+                <tr>
+                    <td>머터리얼</td>
+                    <td><span class="tag buy">비중 확대</span></td>
+                    <td>원자재 수요 증가</td>
+                </tr>
+                <tr>
+                    <td>금융(Financial)</td>
+                    <td><span class="tag buy">2~3% 추가</span></td>
+                    <td>트럼프 리스크만 아니면 유망</td>
+                </tr>
+                <tr>
+                    <td>컨슈머 스테이플</td>
+                    <td><span class="tag hold">유지</span></td>
+                    <td>방어적 특성</td>
+                </tr>
+                <tr>
+                    <td>IT (소프트웨어)</td>
+                    <td><span class="tag reduce">비중 축소</span></td>
+                    <td>변동성 큼</td>
+                </tr>
+                <tr>
+                    <td>카지노/앱 소프트웨어</td>
+                    <td><span class="tag sell">회피</span></td>
+                    <td>리스크 높음</td>
+                </tr>
+            </table>
+            
+            <h2>💰 종목별 투자 시사점</h2>
+            
+            <h3>AMD (Advanced Micro Devices)</h3>
+            <div class="highlight-box blue">
+                <strong>목표가: $300</strong> (애널리스트 컨센서스)<br><br>
+                • 기관 보유 비율: <strong>66%</strong><br>
+                • 현재 PER: 약 <strong>30배</strong> (성장주 치고 높지 않음)<br>
+                • 17% 하락은 <strong>과매도(Oversold)</strong> 상태<br>
+                • 펀더멘탈 문제 없음 → <strong>매수 기회</strong>
+            </div>
+            
+            <h3>마이크론(MU)</h3>
+            <div class="highlight-box green">
+                • 동반 하락으로 기회<br>
+                • 1년간 88% 상승 후 10% 조정<br>
+                • 추가 매수 권장 (강연자 본인도 추가 매수)
+            </div>
+            
+            <h3>구글(GOOG/GOOGL)</h3>
+            <div class="highlight-box blue">
+                <strong>실적 발표 결과:</strong><br>
+                • 매출 <strong>18% 성장</strong><br>
+                • 유튜브 유료 구독자 급증<br>
+                • CAPEX 상승했으나 성장률 대비 적정<br>
+                • 변동성 ±5~6% 예상됐으나 펀더멘탈 문제 없음
+            </div>
+            
+            <h3>마이크로소프트(MSFT)</h3>
+            <div class="highlight-box" style="background: #f8d7da; border-left-color: #dc3545;">
+                <strong>⚠️ 30대 추천 종목에서 제외</strong><br><br>
+                • 구글, 아마존 대비 <strong>경쟁력 하락</strong><br>
+                • 소프트웨어 섹터 전반 약세<br>
+                • 매도 시 <strong>Tax Loss Harvesting</strong> 활용 가능
+            </div>
+            
+            <h3>팔란티어(PLTR)</h3>
+            <p>1년간 <strong>340% 상승</strong> 후 조정 중. 30대 그룹 중 일부 종목 교체 예정.</p>
+            
+            <div class="chart-container">
+                <div class="chart-title">주요 종목 PER 비교</div>
+                <canvas id="perChart"></canvas>
+            </div>
+            
+            <h2>📅 시장 계절성</h2>
+            
+            <div class="highlight-box yellow">
+                <strong>📊 역사적 데이터:</strong> 70~80년간의 통계상 <strong>2월과 9월</strong>은 주식시장이 좋지 않은 달입니다. 이는 잘 알려진 패턴이며 현재 상황과 부합합니다.
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-title">월별 평균 수익률 (역사적 데이터)</div>
+                <canvas id="seasonalChart"></canvas>
+            </div>
+            
+            <h2>🎯 투자 전략 권고</h2>
+            
+            <div class="key-point">
+                <div class="icon">1️⃣</div>
+                <div class="text"><strong>패닉셀 금지:</strong> 펀더멘탈 리스크 없음. 팔면 손해가 확정됨.</div>
+            </div>
+            
+            <div class="key-point">
+                <div class="icon">2️⃣</div>
+                <div class="text"><strong>3-3-3-3 법칙 적용:</strong> 이미 보유 중이라면 그대로 유지. 분할 매수 원칙 준수.</div>
+            </div>
+            
+            <div class="key-point">
+                <div class="icon">3️⃣</div>
+                <div class="text"><strong>낙폭과대 종목 매수:</strong> AMD, MU 등 과매도 종목은 오히려 매수 기회.</div>
+            </div>
+            
+            <div class="key-point">
+                <div class="icon">4️⃣</div>
+                <div class="text"><strong>섹터 로테이션:</strong> IT 비중 줄이고 에너지/인더스트리얼/머터리얼로 분산.</div>
+            </div>
+            
+            <div class="key-point">
+                <div class="icon">5️⃣</div>
+                <div class="text"><strong>리스크 관리:</strong> 변동성 싫으면 천천히 오르는 방어주 비중 확대.</div>
+            </div>
+            
+            <div class="section-divider"></div>
+            
+            <h2>🔮 향후 전망</h2>
+            
+            <h3>단기 (1~2일)</h3>
+            <p>내일(2/5)은 <strong>반등 가능성</strong>이 높음. 아마존 실적 발표 예정으로 추가 변동성 예상.</p>
+            
+            <h3>중기 (여름 전)</h3>
+            <p>연준의 금리 인하가 <strong>1~2회</strong> 예상됨. 금리 0.25% 인하 시 IT 섹터에 유리.</p>
+            
+            <h3>장기</h3>
+            <p>현재보다 <strong>30% 이상</strong> 상승 여력. 장기 투자자에게 현재 조정은 매수 기회.</p>
+            
+            <div class="quote-box">
+                "컴퓨터에 찍힌 숫자는 그냥 허수다. 팔면 진수가 되는 것이다. AMD 20% 떨어졌는데 팔았다? 그럼 그 가격이 여러분의 가격이 되는 것이다."
+            </div>
+            
+            <h2>📋 핵심 요약</h2>
+            
+            <table>
+                <tr>
+                    <th>항목</th>
+                    <th>내용</th>
+                </tr>
+                <tr>
+                    <td>폭락 원인</td>
+                    <td>일자리 지표 호조 → 금리인하 지연 우려 + 심리적 과잉반응</td>
+                </tr>
+                <tr>
+                    <td>펀더멘탈</td>
+                    <td>문제 없음 (실적 양호)</td>
+                </tr>
+                <tr>
+                    <td>대응 전략</td>
+                    <td>패닉셀 금지, 낙폭과대 종목 매수</td>
+                </tr>
+                <tr>
+                    <td>섹터 전략</td>
+                    <td>IT↓ / 에너지·인더스트리얼·머터리얼↑</td>
+                </tr>
+                <tr>
+                    <td>주요 리스크</td>
+                    <td>트럼프 정책 불확실성, 2월 계절성</td>
+                </tr>
+                <tr>
+                    <td>전망</td>
+                    <td>단기 반등, 중장기 상승 예상</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="footer">
+            <p>본 문서는 투자 참고용이며, 투자 결정의 책임은 투자자 본인에게 있습니다.</p>
+            <p>작성일: 2026년 2월 5일</p>
+        </div>
+    </div>
+    
+    <script>
+        // 테크주 등락률 차트
+        new Chart(document.getElementById('techStockChart'), {
+            type: 'bar',
+            data: {
+                labels: ['AMD', 'MU', '구글', '팔란티어', '아마존'],
+                datasets: [{
+                    label: '당일 등락률 (%)',
+                    data: [-17, -10, -6, -5, -3],
+                    backgroundColor: function(context) {
+                        return context.raw < 0 ? 'rgba(220, 53, 69, 0.8)' : 'rgba(40, 167, 69, 0.8)';
+                    },
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#eee' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+        
+        // 섹터 비중 조정 차트
+        new Chart(document.getElementById('sectorChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['에너지', '인더스트리얼', '머터리얼', '금융', '컨슈머 스테이플', 'IT', '기타'],
+                datasets: [{
+                    data: [18, 15, 12, 15, 10, 20, 10],
+                    backgroundColor: [
+                        '#28a745', '#17a2b8', '#6f42c1', 
+                        '#fd7e14', '#ffc107', '#dc3545', '#6c757d'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { boxWidth: 12, font: { size: 11 } }
+                    }
+                }
+            }
+        });
+        
+        // PER 비교 차트
+        new Chart(document.getElementById('perChart'), {
+            type: 'bar',
+            data: {
+                labels: ['AMD', '구글', '아마존', '메타', '마이크로소프트'],
+                datasets: [{
+                    label: 'PER (배)',
+                    data: [30, 25, 45, 28, 35],
+                    backgroundColor: ['#e94560', '#4285f4', '#ff9900', '#1877f2', '#00a4ef'],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        grid: { color: '#eee' }
+                    },
+                    y: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+        
+        // 월별 수익률 차트
+        new Chart(document.getElementById('seasonalChart'), {
+            type: 'line',
+            data: {
+                labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+                datasets: [{
+                    label: '평균 수익률 (%)',
+                    data: [1.2, -0.3, 1.1, 1.5, 0.4, 0.2, 1.0, -0.1, -0.8, 0.9, 1.5, 1.3],
+                    borderColor: '#e94560',
+                    backgroundColor: 'rgba(233, 69, 96, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: function(context) {
+                        const index = context.dataIndex;
+                        return (index === 1 || index === 8) ? '#dc3545' : '#e94560';
+                    },
+                    pointRadius: function(context) {
+                        const index = context.dataIndex;
+                        return (index === 1 || index === 8) ? 8 : 4;
+                    }
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            afterLabel: function(context) {
+                                if (context.dataIndex === 1) return '⚠️ 역사적으로 약세';
+                                if (context.dataIndex === 8) return '⚠️ 역사적으로 약세';
+                                return '';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        grid: { color: '#eee' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
