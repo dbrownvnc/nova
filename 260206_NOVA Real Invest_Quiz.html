@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>아마존 -10% 대폭락 분석 — 시험문제</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap');
+
+  :root {
+    --bg: #0a0e17;
+    --bg-card: #111827;
+    --bg-card-alt: #1a2234;
+    --text: #e8ecf4;
+    --text2: #94a3b8;
+    --text3: #64748b;
+    --red: #ef4444;
+    --green: #22c55e;
+    --blue: #3b82f6;
+    --yellow: #f59e0b;
+    --purple: #a855f7;
+    --border: #1e293b;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { max-width: 680px; margin: 0 auto; padding: 0 16px 60px; }
+
+  .header {
+    background: linear-gradient(135deg, #1a0a2e 0%, #0f172a 50%, #0a1628 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 16px 28px;
+    margin-bottom: 24px;
+  }
+  .header-inner { max-width: 680px; margin: 0 auto; }
+  .header-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(168,85,247,0.15); color: #c4b5fd;
+    font-size: 11px; font-weight: 700; padding: 4px 10px;
+    border-radius: 4px; letter-spacing: 0.5px; margin-bottom: 14px;
+  }
+  .header h1 {
+    font-size: 22px; font-weight: 900; line-height: 1.35;
+    background: linear-gradient(135deg, #fff 60%, #94a3b8);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .header-meta { margin-top: 12px; font-size: 12px; color: var(--text3); }
+
+  /* Dividers */
+  .big-divider {
+    border: none;
+    border-top: 3px solid var(--purple);
+    margin: 40px 0;
+    position: relative;
+  }
+  .big-divider::after {
+    content: attr(data-label);
+    position: absolute; top: -12px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg); padding: 0 16px;
+    font-size: 13px; font-weight: 700; color: #c4b5fd;
+    letter-spacing: 1px;
+  }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+  /* Question Card */
+  .q-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .q-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 12px;
+  }
+  .q-num {
+    font-size: 13px; font-weight: 800; color: var(--blue);
+    background: rgba(59,130,246,0.12);
+    padding: 3px 10px; border-radius: 4px;
+    white-space: nowrap;
+  }
+  .q-diff {
+    font-size: 11px; font-weight: 600;
+    padding: 3px 8px; border-radius: 3px;
+  }
+  .diff-easy { background: rgba(34,197,94,0.12); color: #86efac; }
+  .diff-mid { background: rgba(245,158,11,0.12); color: #fcd34d; }
+  .diff-hard { background: rgba(239,68,68,0.12); color: #fca5a5; }
+  .q-type {
+    font-size: 11px; color: var(--text3);
+    margin-left: auto;
+  }
+  .q-text {
+    font-size: 15px; color: var(--text);
+    font-weight: 500; margin-bottom: 12px;
+    line-height: 1.7;
+  }
+  .q-options {
+    display: grid; gap: 8px;
+  }
+  .q-opt {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 14px; color: var(--text2);
+  }
+  .q-opt-num {
+    font-weight: 700; color: var(--blue); margin-right: 8px;
+  }
+  .q-blank {
+    display: inline-block;
+    border-bottom: 2px dashed var(--blue);
+    min-width: 120px; height: 24px;
+    margin: 0 4px;
+  }
+
+  /* Answer Card */
+  .a-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .a-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 10px;
+  }
+  .a-num {
+    font-size: 13px; font-weight: 800; color: var(--green);
+    background: rgba(34,197,94,0.12);
+    padding: 3px 10px; border-radius: 4px;
+  }
+  .a-answer {
+    font-size: 15px; font-weight: 700; color: var(--green);
+  }
+  .a-explain {
+    font-size: 14px; color: var(--text2);
+    line-height: 1.7; margin-top: 6px;
+    padding-left: 12px;
+    border-left: 2px solid rgba(34,197,94,0.2);
+  }
+
+  .section-banner {
+    text-align: center; padding: 20px;
+    font-size: 18px; font-weight: 900;
+    color: #fff;
+  }
+
+  .footer {
+    text-align: center; padding: 32px 16px;
+    font-size: 11px; color: var(--text3);
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-badge">📝 QUIZ</div>
+    <h1>아마존 -10% 대폭락!<br>월가가 쓸어 담는 섹터 — 시험문제</h1>
+    <div class="header-meta">📅 2026.02.05 | CIA.chat 멤버미팅 | 총 10문제</div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ============================================ -->
+<!-- 문제지 -->
+<!-- ============================================ -->
+<div class="section-banner">
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br>
+  📋 시험문제 (총 10문제)<br>
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+</div>
+
+<!-- Q1 -->
+<div class="q-card">
+  <div class="q-header">
+    <span class="q-num">문제 1</span>
+    <span class="q-diff diff-easy">⭐ 쉬움</span>
+    <span class="q-type">객관식</span>
+  </div>
+  <div class="q-text">아마존이 2026년에 발표한 자본지출(CapEx) 규모는 얼마인가?</div>
+  <div class="q-options">
+    <div class="q-opt"><span class="q-opt-num">①</span> $75 Billion</div>
+    <div class="q-opt"><span class="q-opt-num">②</span> $125 Billion</div>
+    <div class="q-opt"><span class="q-opt-num">③</span> $200 Billion</div>
+    <div class="q-opt"><span class="q-opt-num">④</span> $350 Billion</div>
+  </div>
+</div>
+
+<!-- Q2 -->
+<div class="q-card">
+  <div class="q-header">
+    <span class="q-num">문제 2</span>
+    <span class="q-diff diff-easy">⭐ 쉬움</span>
+    <span class="q-type">OX 문제</span>
+  </div>
+  <div class="q-text">2026년 1월 Challenger Job Cuts가 2009년 1월 이후 최대치를 기록했다. (O / X)</div>
+</div>
+
+<!-- Q3 -->
+<div class="q-card">
+  <div class="q-header">
+    <span class="q-num">문제 3</span>
+    <span class="q-diff diff-mid">⭐⭐ 보통</span>
+    <span class="q-type">객관식</span>
+  </div>
+  <div class="q-text">"소프트웨어 아마겟돈"의 직접적 원인으로 언급된 AI 기업은?</div>
+  <div class="q-options">
+    <div class="q-opt"><span class="q-opt-num">①</span> OpenAI</div>
+    <div class="q-opt"><span class="q-opt-num">②</span> Anthropic (엔트로픽)</div>
+    <div class="q-opt"><span class="q-opt-num">③</span> DeepMind</div>
+    <div class="q-opt"><span class="q-opt-num">④</span> Mistral AI</div>
+  </div>
+</div>
+
+<!-- Q4 -->
+<div class="q-card">
+  <div class="q-header">
+    <span class="q-num">문제 4</span>
+    <span class="q-diff diff-mid">⭐⭐ 보통</span>
+    <span class="q-type">빈칸 채우기</span>
+  </div>
+  <div class="q-text">미국 고용시장은 "No Hiring, No Firing" → "Low Hiring, Low Firing" 단계를 거쳐 현재 <span class="q-blank"></span> 단계로 진입한 것으로 분석된다.</div>
+</div>
+
+<!-- Q5 -->
+<div class="q-card">
+  <div class="q-header">
+    <span class="q-num">문제 5</span>
+    <span class="q-diff diff-mid">⭐⭐ 보통</span>
+    <span class="q-type">객관식</span>
+  </div>
+  <div class="q-text">Hims & Hers가 출시한 비만약 복제약의 월 가격은 기존 대형 제약사 대비 어느 정도 수준인가?</div>
+  <div class="q-options">
+    <div class="q-opt"><span class="q-opt-num">①</span> 1/5 수준</div>
+    <div class="q-opt"><span class="q-opt-num">②</span> 1/10 수준</div>
+    <div class="q-opt"><span class="q-opt-num">③</span> 1/20 수준</div>
+    <div class="q-opt"><span class="q-opt-num">④</span> 1/50 수준</div>
+  </div>
+</div>
+
+<!-- Q6 -->
+<div class="q-card">
+  <div class="q-header">
+    <span class="q-num">문제 6</span>
+    <span class="q-diff diff-easy">⭐ 쉬움</span>
+    <span class="q-type">단답형</span>
+  </div>
+  <div class="q-text">2026년 YTD 기준으로 가장 좋은 성과를 보인 두 가지 섹터는 무엇인가?</div>
+</div>
+
+<!-- Q7 -->
+<div class="q-card">
+  <div class="q-header">
+    <span class="q-num">문제 7</span>
+    <span class="q-diff diff-mid">⭐⭐ 보통</span>
+    <span class="q-type">객관식</span>
+  </div>
+  <div class="q-text">SaaS 기업의 우량성을 판단하는 "Rule of 45"의 의미는?</div>
+  <div class="q-options">
+    <div class="q-opt"><span class="q-opt-num">①</span> PER이 45 이하인 기업</div>
+    <div class="q-opt"><span class="q-opt-num">②</span> 매출 성장률 + 영업이익률이 45 이상인 기업</div>
+    <div class="q-opt"><span class="q-opt-num">③</span> 시가총액이 $45B 이상인 기업</div>
+    <div class="q-opt"><span class="q-opt-num">④</span> 직원 1인당 매출이 $45K 이상인 기업</div>
+  </div>
+</div>
+
+<!-- Q8 -->
+<div class="q-card">
+  <div class="q-header">
+    <span class="q-num">문제 8</span>
+    <span class="q-diff diff-mid">⭐⭐ 보통</span>
+    <span class="q-type">OX 문제</span>
+  </div>
+  <div class="q-text">AI 인프라 관련 에너지 수혜주로는 원자력 발전 기업이 유틸리티 기업보다 단기적으로 더 유리하다. (O / X)</div>
+</div>
+
+<!-- Q9 -->
+<div class="q-card">
+  <div class="q-header">
+    <span class="q-num">문제 9</span>
+    <span class="q-diff diff-hard">⭐⭐⭐ 어려움</span>
+    <span class="q-type">서술형</span>
+  </div>
+  <div class="q-text">"닻(Anchor)과 추진체(Propeller)" 전략을 설명하고, 현재 시장 상황에서 각각에 해당하는 종목 유형을 2가지씩 제시하시오.</div>
+</div>
+
+<!-- Q10 -->
+<div class="q-card">
+  <div class="q-header">
+    <span class="q-num">문제 10</span>
+    <span class="q-diff diff-hard">⭐⭐⭐ 어려움</span>
+    <span class="q-type">서술형</span>
+  </div>
+  <div class="q-text">연준 정책의 불확실성이 현재 시장에 미치는 영향을 케빈 워시 변수와 연결지어 설명하고, 왜 "금리 인하 = 호재"라는 단순 공식이 성립하지 않는지 논하시오.</div>
+</div>
+
+<!-- ============================================ -->
+<!-- 정답지 -->
+<!-- ============================================ -->
+<hr class="big-divider" data-label="정답 및 해설">
+
+<div class="section-banner">
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br>
+  📝 정답 및 해설<br>
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+</div>
+
+<!-- A1 -->
+<div class="a-card">
+  <div class="a-header">
+    <span class="a-num">문제 1</span>
+    <span class="a-answer">정답: ③ $200 Billion</span>
+  </div>
+  <div class="a-explain">아마존은 2026년 자본지출로 $200 Billion(약 270조 원)을 발표했다. 이는 대한민국 1년 예산의 약 절반에 해당하는 규모로, 구글의 $125B보다도 $75B 많은 역대급 투자 계획이다.</div>
+</div>
+
+<!-- A2 -->
+<div class="a-card">
+  <div class="a-header">
+    <span class="a-num">문제 2</span>
+    <span class="a-answer">정답: O</span>
+  </div>
+  <div class="a-explain">2026년 1월 Challenger Job Cuts는 231,000건으로, 전월 대비 117% 급증했으며, 2009년 1월(서브프라임 사태 직후) 이후 최대치를 기록했다. 이는 고용시장이 단순한 "채용 둔화"를 넘어 본격적인 "해고" 국면에 진입했을 가능성을 시사한다.</div>
+</div>
+
+<!-- A3 -->
+<div class="a-card">
+  <div class="a-header">
+    <span class="a-num">문제 3</span>
+    <span class="a-answer">정답: ② Anthropic (엔트로픽)</span>
+  </div>
+  <div class="a-explain">엔트로픽(Anthropic)의 AI 모델이 법률 서비스, 마케팅 소프트웨어(어도비 등), 3D 설계 등 기존 소프트웨어 산업을 대체하기 시작하면서 "소프트웨어 아마겟돈"이라는 표현이 등장했다.</div>
+</div>
+
+<!-- A4 -->
+<div class="a-card">
+  <div class="a-header">
+    <span class="a-num">문제 4</span>
+    <span class="a-answer">정답: Firing (해고)</span>
+  </div>
+  <div class="a-explain">"No Hiring/No Firing" → "Low Hiring/Low Firing" → "Firing" 단계로의 전환이 Challenger Job Cuts, JOLTS 감소, 주간 실업수당 증가 등 복합적 데이터로 확인되었다. 이는 단순한 채용 감소가 아닌 적극적 인력 감축 국면을 의미한다.</div>
+</div>
+
+<!-- A5 -->
+<div class="a-card">
+  <div class="a-header">
+    <span class="a-num">문제 5</span>
+    <span class="a-answer">정답: ③ 1/20 수준</span>
+  </div>
+  <div class="a-explain">Hims & Hers가 비만약 복제약을 월 $49에 출시했다. 노보 노디스크, 일라이 릴리의 오리지널 약 대비 약 1/20 수준의 가격이다. 이는 FDA 승인을 받은 합법적 복제약이며, 대형 제약사는 소송을 예고한 상태다.</div>
+</div>
+
+<!-- A6 -->
+<div class="a-card">
+  <div class="a-header">
+    <span class="a-num">문제 6</span>
+    <span class="a-answer">정답: 은행(금융) / 필수소비재</span>
+  </div>
+  <div class="a-explain">2026년 초 YTD 기준으로 은행/금융 섹터와 필수소비재 섹터가 가장 양호한 성과를 기록했다. 은행은 금리 인하 기대에 따른 NIM 개선 전망, 필수소비재는 허시 등 식품 기업의 실적 개선과 원가 부담 완화가 배경이다.</div>
+</div>
+
+<!-- A7 -->
+<div class="a-card">
+  <div class="a-header">
+    <span class="a-num">문제 7</span>
+    <span class="a-answer">정답: ② 매출 성장률 + 영업이익률이 45 이상인 기업</span>
+  </div>
+  <div class="a-explain">Rule of 45(또는 Rule of 40)는 SaaS 기업의 건전성을 판단하는 지표로, 매출 성장률과 영업이익률의 합이 45(40) 이상이면 우량 기업으로 분류한다. 로블록스가 이 기준에 근접한 40을 달성한 것은 단순 지출이 아닌 수익 창출 능력을 증명한 것이다.</div>
+</div>
+
+<!-- A8 -->
+<div class="a-card">
+  <div class="a-header">
+    <span class="a-num">문제 8</span>
+    <span class="a-answer">정답: X</span>
+  </div>
+  <div class="a-explain">원자력은 건설에 5년 이상 소요되고 실현 가능성이 불투명한 반면, 기존 전력 인프라를 보유한 유틸리티 기업(NEE, FANG 등)은 즉각적으로 전력을 공급하여 수익을 창출하고 있다. 프리 캐시플로우 기준으로도 유틸리티 기업이 단기적으로 훨씬 유리하다.</div>
+</div>
+
+<!-- A9 -->
+<div class="a-card">
+  <div class="a-header">
+    <span class="a-num">문제 9</span>
+    <span class="a-answer">정답: 서술형 (모범답안)</span>
+  </div>
+  <div class="a-explain">
+    <strong>닻(Anchor, 60%):</strong> 시장 하락 시 포트폴리오를 지탱하는 안정 자산. 대형 은행(JPMorgan, Citi, Wells Fargo), 필수소비재(Walmart), 헬스케어 유통 등 다우 구성 종목 중심.<br><br>
+    <strong>추진체(Propeller, 40%):</strong> 시장 상승 시 초과수익을 추구하는 성장 자산. 사이버보안(Fortinet), AI 인프라/에너지 기업, 프리 캐시플로우가 검증된 플랫폼 기업 등.<br><br>
+    바벨 전략의 변형으로, 폭풍(하락장)에는 닻이 방어하고, 순풍(상승장)에는 추진체가 수익을 극대화하는 양면 전략이다.
+  </div>
+</div>
+
+<!-- A10 -->
+<div class="a-card">
+  <div class="a-header">
+    <span class="a-num">문제 10</span>
+    <span class="a-answer">정답: 서술형 (모범답안)</span>
+  </div>
+  <div class="a-explain">
+    <strong>불확실성의 본질:</strong> 시장이 가장 싫어하는 것은 금리의 방향 자체가 아니라 "예측 불가능성"이다. 케빈 워시는 본래 매파 성향이지만, 트럼프 대통령의 1%대 저금리 요구에 순응할 수도 있다. 이 양방향의 가능성이 시장의 예측을 불가능하게 만든다.<br><br>
+    <strong>"금리 인하 ≠ 호재"인 이유:</strong> 정치적 압박에 의한 금리 인하는 인플레이션을 재점화시킬 위험이 있다. 또한 연준이 "금리는 내리면서 대차대조표는 축소(양적긴축 유지)"하는 모순적 정책을 취할 수도 있어, 유동성 방향을 예측할 수 없다. 제롬 파월에 대한 조사·고소, 워시의 인준 불확실성까지 겹치며, 채권·금·은 시장 모두 "발작" 상태에 놓여 있다.
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  분석 기준일: 2026년 2월 5일 | 출처: CIA.chat 멤버미팅<br>
+  본 문서는 교육 목적의 시험문제입니다.
+</div>
+
+</div><!-- /container -->
+</body>
+</html>
