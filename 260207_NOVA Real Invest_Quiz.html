@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>시험문제 - 엔비디아 젠슨황 AI & 다우 5만 돌파 vs 힌덴버그 오멘</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e1a;
+  --surface: #111827;
+  --surface2: #1a2236;
+  --border: #1e293b;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --red: #ef4444;
+  --gold: #f59e0b;
+  --purple: #a855f7;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+}
+.container { max-width: 680px; margin: 0 auto; padding: 0 16px; }
+
+.header {
+  background: linear-gradient(135deg, #0f172a, #1e1b4b);
+  border-bottom: 1px solid var(--border);
+  padding: 32px 16px 24px;
+  text-align: center;
+}
+.header h1 {
+  font-size: 20px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #e2e8f0, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+}
+.header-sub { font-size: 13px; color: var(--muted); }
+
+.divider {
+  text-align: center;
+  padding: 28px 0 20px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--gold);
+}
+.divider-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin-bottom: 8px;
+}
+
+/* Question Card */
+.q-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 14px;
+}
+.q-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.q-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue);
+}
+.q-diff {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.q-diff.easy { background: rgba(34,197,94,0.15); color: var(--green); }
+.q-diff.mid { background: rgba(245,158,11,0.15); color: var(--gold); }
+.q-diff.hard { background: rgba(239,68,68,0.15); color: var(--red); }
+.q-type {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(59,130,246,0.12);
+  color: var(--blue);
+  font-weight: 500;
+}
+.q-text {
+  font-size: 14.5px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.q-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.q-opt {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  color: #cbd5e1;
+}
+.q-blank {
+  display: inline-block;
+  min-width: 120px;
+  border-bottom: 2px dashed var(--gold);
+  margin: 0 4px;
+  padding: 0 4px;
+}
+
+/* Answer Card */
+.a-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--green);
+  border-radius: 0 12px 12px 0;
+  padding: 16px 18px;
+  margin-bottom: 12px;
+}
+.a-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.a-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue);
+}
+.a-answer {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--green);
+}
+.a-explain {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+}
+
+.footer {
+  padding: 24px 16px;
+  text-align: center;
+  font-size: 11px;
+  color: #475569;
+  border-top: 1px solid var(--border);
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📋 시험문제 (총 10문제)</h1>
+  <div class="header-sub">엔비디아 젠슨황 AI 확언 & 다우 5만 돌파 vs 힌덴버그 오멘 | 2026.02.07</div>
+</div>
+
+<div class="container">
+
+<!-- ━━━━ 문제지 ━━━━ -->
+<div class="divider">
+  <div class="divider-line"></div>
+  📋 문 제 지
+</div>
+
+<!-- Q1 -->
+<div class="q-card">
+  <div class="q-header">
+    <span class="q-num">[문제 1]</span>
+    <span class="q-diff easy">⭐ 쉬움</span>
+    <span class="q-type">객관식</span>
+  </div>
+  <div class="q-text">2026년 2월 7일, 사상 처음으로 50,000포인트를 돌파한 미국 주가지수는?</div>
+  <div class="q-options">
+    <div class="q-opt">① S&P 500</div>
+    <div class="q-opt">② 나스닥 종합지수</div>
+    <div class="q-opt">③ 다우존스 산업평균지수</div>
+    <div class="q-opt">④ 러셀 2000</div>
+  </div>
+</div>
+
+<!-- Q2 -->
+<div class="q-card">
+  <div class="q-header">
+    <span class="q-num">[문제 2]</span>
+    <span class="q-diff easy">⭐ 쉬움</span>
+    <span class="q-type">OX 문제</span>
+  </div>
+  <div class="q-text">엔비디아 CEO 젠슨 황은 CNBC 인터뷰에서 AI 칩 수요가 "Sky High(하늘을 뚫는 수준)"라고 표현했다. (O/X)</div>
+</div>
+
+<!-- Q3 -->
+<div class="q-card">
+  <div class="q-header">
+    <span class="q-num">[문제 3]</span>
+    <span class="q-diff mid">⭐⭐ 보통</span>
+    <span class="q-type">객관식</span>
+  </div>
+  <div class="q-text">2026년 빅테크 AI 자본지출(CapEx) 계획에서 가장 큰 금액을 발표한 기업과 그 금액으로 올바른 것은?</div>
+  <div class="q-options">
+    <div class="q-opt">① 알파벳(Alphabet) — $200B</div>
+    <div class="q-opt">② 아마존(Amazon) — $200B</div>
+    <div class="q-opt">③ 메타(Meta) — $185B</div>
+    <div class="q-opt">④ 마이크로소프트(Microsoft) — $200B</div>
+  </div>
+</div>
+
+<!-- Q4 -->
+<div class="q-card">
+  <div class="q-header">
+    <span class="q-num">[문제 4]</span>
+    <span class="q-diff mid">⭐⭐ 보통</span>
+    <span class="q-type">빈칸채우기</span>
+  </div>
+  <div class="q-text">빅테크의 공격적 AI 투자는 단순한 투자가 아니라, 경쟁자가 따라올 수 없게 만드는 "<span class="q-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>(Physical Moat)"를 구축하기 위한 것이다.</div>
+</div>
+
+<!-- Q5 -->
+<div class="q-card">
+  <div class="q-header">
+    <span class="q-num">[문제 5]</span>
+    <span class="q-diff mid">⭐⭐ 보통</span>
+    <span class="q-type">객관식</span>
+  </div>
+  <div class="q-text">힌덴버그 오멘(Hindenburg Omen)에 대한 설명으로 <strong>틀린</strong> 것은?</div>
+  <div class="q-options">
+    <div class="q-opt">① 52주 신고가 종목과 52주 신저가 종목의 비율을 기반으로 산출한다</div>
+    <div class="q-opt">② 최근 6일간 3회 발동되었다</div>
+    <div class="q-opt">③ 과거 발동 시 10~20% 수준의 하락이 나타난 사례가 있다</div>
+    <div class="q-opt">④ 52주 신고가 종목 수가 신저가 종목 수의 3배 이상일 때 발동된다</div>
+  </div>
+</div>
+
+<!-- Q6 -->
+<div class="q-card">
+  <div class="q-header">
+    <span class="q-num">[문제 6]</span>
+    <span class="q-diff mid">⭐⭐ 보통</span>
+    <span class="q-type">단답형</span>
+  </div>
+  <div class="q-text">방송에서 "반도체 칩 병목보다 더 심각한 다음 병목"으로 지목된 분야는? 또한 ETN(Eaton)에 대형 변압기를 주문했을 때 예상 대기 기간은 몇 년인가?</div>
+</div>
+
+<!-- Q7 -->
+<div class="q-card">
+  <div class="q-header">
+    <span class="q-num">[문제 7]</span>
+    <span class="q-diff mid">⭐⭐ 보통</span>
+    <span class="q-type">객관식</span>
+  </div>
+  <div class="q-text">AI 전력 인프라 밸류체인에서 "냉각(Cooling)" 분야의 글로벌 1위 기업으로, 수주 잔고 $9.5B 이상을 보유한 기업은?</div>
+  <div class="q-options">
+    <div class="q-opt">① ETN (Eaton)</div>
+    <div class="q-opt">② VRT (Vertiv)</div>
+    <div class="q-opt">③ VST (Vistra)</div>
+    <div class="q-opt">④ PWR (Quanta Services)</div>
+  </div>
+</div>
+
+<!-- Q8 -->
+<div class="q-card">
+  <div class="q-header">
+    <span class="q-num">[문제 8]</span>
+    <span class="q-diff easy">⭐ 쉬움</span>
+    <span class="q-type">OX 문제</span>
+  </div>
+  <div class="q-text">앤트로픽(Anthropic)이 출시한 AI 에이전트 '클라우드 코워크(Claude Cowork)'의 등장은 전통 SaaS 비즈니스 모델(직원 1인당 라이선스 과금)에 위협이 된다. (O/X)</div>
+</div>
+
+<!-- Q9 -->
+<div class="q-card">
+  <div class="q-header">
+    <span class="q-num">[문제 9]</span>
+    <span class="q-diff hard">⭐⭐⭐ 어려움</span>
+    <span class="q-type">서술형</span>
+  </div>
+  <div class="q-text">방송에서 제시한 투자 플레이북의 핵심 전략은 "금광을 캐러 가는 사람에게 청바지와 곡괭이를 팔아라"이다. 이 원칙을 현재 AI 시장에 적용하여, (1) "돈을 쓰는 기업"과 (2) "돈을 버는 기업"을 각각 예시와 함께 설명하고, 왜 후자에 투자해야 하는지 논리를 서술하시오.</div>
+</div>
+
+<!-- Q10 -->
+<div class="q-card">
+  <div class="q-header">
+    <span class="q-num">[문제 10]</span>
+    <span class="q-diff hard">⭐⭐⭐ 어려움</span>
+    <span class="q-type">서술형</span>
+  </div>
+  <div class="q-text">다음 주(2월 12일, 13일) 예정된 두 가지 핵심 경제 지표를 각각 명시하고, 각 지표가 "시장에 부정적"으로 작용하는 시나리오를 설명하시오. 또한 이 상황에서 방송이 권고하는 투자 전략은 무엇인가?</div>
+</div>
+
+
+<!-- ━━━━ 정답지 ━━━━ -->
+<div class="divider">
+  <div class="divider-line"></div>
+  📝 정 답 및 해 설
+</div>
+
+<!-- A1 -->
+<div class="a-card">
+  <div class="a-header">
+    <span class="a-num">[문제 1]</span>
+    <span class="a-answer">정답: ③ 다우존스 산업평균지수</span>
+  </div>
+  <div class="a-explain">2026년 2월 7일, 다우존스 산업평균지수가 역사상 처음으로 50,000포인트를 돌파했다. 다우지수는 가격가중방식(Price-Weighted)으로 산출되어, 고가 종목의 등락이 지수에 더 큰 영향을 미친다.</div>
+</div>
+
+<!-- A2 -->
+<div class="a-card">
+  <div class="a-header">
+    <span class="a-num">[문제 2]</span>
+    <span class="a-answer">정답: O</span>
+  </div>
+  <div class="a-explain">젠슨 황은 CNBC 인터뷰에서 AI 칩 수요가 "Sky High"라고 표현하며, 빅테크의 CapEx 투자를 두 배로 하면 수익은 네 배로 돌아온다고 자신감을 피력했다.</div>
+</div>
+
+<!-- A3 -->
+<div class="a-card">
+  <div class="a-header">
+    <span class="a-num">[문제 3]</span>
+    <span class="a-answer">정답: ② 아마존(Amazon) — $200B</span>
+  </div>
+  <div class="a-explain">아마존이 $200B로 가장 높은 CapEx를 발표했고, 알파벳 $185B, 메타 $125B, 마이크로소프트 $117B, 테슬라 $20B, 애플 $13B 순이다. 아마존은 이 투자로 인해 FCF 적자 전환 가능성이 제기된다.</div>
+</div>
+
+<!-- A4 -->
+<div class="a-card">
+  <div class="a-header">
+    <span class="a-num">[문제 4]</span>
+    <span class="a-answer">정답: 물리적 해자</span>
+  </div>
+  <div class="a-explain">"물리적 해자(Physical Moat)"란 데이터센터 부지, 전력 인프라, 칩 공급 등 물리적 자원을 선점하여 후발주자가 진입하지 못하게 만드는 장벽을 의미한다. 데이터센터 입지(안전 지역 한정), 전력 확보, TSMC 생산 라인 선점 등이 이에 해당한다.</div>
+</div>
+
+<!-- A5 -->
+<div class="a-card">
+  <div class="a-header">
+    <span class="a-num">[문제 5]</span>
+    <span class="a-answer">정답: ④</span>
+  </div>
+  <div class="a-explain">힌덴버그 오멘은 52주 신고가 종목과 신저가 종목이 동시에 일정 비율(약 2.2%) 이상일 때 발동된다. 즉, 신고가와 신저가가 "대등하게" 많을 때 발동되는 것이지, 신고가가 3배 이상 많을 때가 아니다. 시장 내부의 극단적 양극화를 나타내는 신호다.</div>
+</div>
+
+<!-- A6 -->
+<div class="a-card">
+  <div class="a-header">
+    <span class="a-num">[문제 6]</span>
+    <span class="a-answer">정답: 전력(Power) / 2~3년</span>
+  </div>
+  <div class="a-explain">"No Power, No AI" — 메모리 반도체는 약 2년 내 해결 가능하지만, 전력 인프라(발전·송배전·냉각)는 구조적으로 더 오래 걸린다. ETN(Eaton)의 대형 변압기는 현재 2~3년 대기해야 하며, 이는 반도체 쇼티지보다 심각한 수준이다.</div>
+</div>
+
+<!-- A7 -->
+<div class="a-card">
+  <div class="a-header">
+    <span class="a-num">[문제 7]</span>
+    <span class="a-answer">정답: ② VRT (Vertiv)</span>
+  </div>
+  <div class="a-explain">버티브(Vertiv, VRT)는 데이터센터 액침냉각 기술에서 글로벌 1위이며, 수주 잔고가 $9.5B을 넘는다. 블랙웰 GPU의 높은 발열량으로 기존 공냉식 에어컨만으로는 감당 불가능해, 액체냉각이 필수가 되면서 독점적 지위를 확보하고 있다.</div>
+</div>
+
+<!-- A8 -->
+<div class="a-card">
+  <div class="a-header">
+    <span class="a-num">[문제 8]</span>
+    <span class="a-answer">정답: O</span>
+  </div>
+  <div class="a-explain">AI 에이전트가 직원의 역할을 대체하면서 기업들은 인력을 감축하고, 그에 따라 1인당 과금(per-seat) 기반의 SaaS 라이선스 수요도 줄어든다. 또한 AI가 맞춤형 소프트웨어를 직접 생성할 수 있어 범용 SaaS 제품의 필요성이 감소한다.</div>
+</div>
+
+<!-- A9 -->
+<div class="a-card">
+  <div class="a-header">
+    <span class="a-num">[문제 9]</span>
+    <span class="a-answer">정답: (모범답안)</span>
+  </div>
+  <div class="a-explain">
+    <strong>(1) 돈을 쓰는 기업:</strong> Amazon($200B), Alphabet($185B), Meta($125B) 등 빅테크. AI 인프라 구축에 천문학적 CapEx를 투입하고 있으나, FCF 악화·ROI 미증명으로 주가 압박을 받는다.<br><br>
+    <strong>(2) 돈을 버는 기업:</strong> NVIDIA(GPU), Broadcom(네트워킹 칩), Micron/WDC(메모리), VST·CEG(발전), ETN·PWR(송배전), VRT(냉각), CAT(건설장비) 등 인프라 공급 기업.<br><br>
+    <strong>투자 논리:</strong> 자본주의의 원리상 누군가 돈을 쓰면 누군가는 번다. 금광을 찾아 헤매는 자(빅테크)보다, 곡괭이와 청바지를 파는 자(인프라 공급자)가 확실한 수익을 얻는다. 빅테크의 투자 성공 여부는 불확실하지만, 인프라 공급자는 투자 자체가 실행되는 한 확정적으로 매출이 발생하기 때문이다.
+  </div>
+</div>
+
+<!-- A10 -->
+<div class="a-card">
+  <div class="a-header">
+    <span class="a-num">[문제 10]</span>
+    <span class="a-answer">정답: (모범답안)</span>
+  </div>
+  <div class="a-explain">
+    <strong>① 2/12(수) 1월 고용보고서:</strong> 고용이 너무 약하게 나오면 → 경기침체(Recession) 공포가 재발하며 시장 급락 가능. (적당히 약해야 금리 인하 기대 유지)<br><br>
+    <strong>② 2/13(금) CPI(소비자물가지수):</strong> CPI가 높게 나오면 → "금리 인하 물 건너갔다"는 인식 확산으로 시장 급락 가능. 특히 트럼프 관세의 물가 반영 여부가 관건.<br><br>
+    <strong>권고 전략:</strong> 힌덴버그 오멘 3회 발동 + 이중 이벤트 리스크를 감안해, ①주 초반 공격적 매수 자제, ②현금 비중 확보, ③데이터 확인 후 대응하는 관망 전략. 기관이 개미를 이기는 가장 큰 이유가 위험 헤지(Risk Hedge)이므로, 기관처럼 리스크 관리를 우선시해야 한다.
+  </div>
+</div>
+
+</div><!-- container end -->
+
+<div class="footer">
+  본 시험문제는 NOVA Real Invest 유튜브 방송(2026.02.07) 분석 내용 기반으로 작성되었습니다.<br>
+  © 2026 Market Analysis Quiz
+</div>
+
+</body>
+</html>

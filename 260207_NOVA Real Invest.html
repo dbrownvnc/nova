@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>엔비디아 젠슨황 AI 확언 & 다우 5만 돌파 vs 힌덴버그 오멘 - 미국증시 분석</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e1a;
+  --surface: #111827;
+  --surface2: #1a2236;
+  --border: #1e293b;
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+  --accent-green: #22c55e;
+  --accent-red: #ef4444;
+  --accent-gold: #f59e0b;
+  --accent-blue: #3b82f6;
+  --accent-purple: #a855f7;
+  --accent-cyan: #06b6d4;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+.container { max-width: 680px; margin: 0 auto; padding: 0 16px; }
+
+/* Header */
+.hero {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 40px 16px 32px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(59,130,246,0.15) 0%, transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(168,85,247,0.1) 0%, transparent 50%);
+}
+.hero-content { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; }
+.hero-badge {
+  display: inline-block;
+  background: rgba(59,130,246,0.15);
+  border: 1px solid rgba(59,130,246,0.3);
+  color: var(--accent-blue);
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.4;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #e2e8f0, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-meta {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.hero-meta span { margin: 0 6px; }
+
+/* Section */
+.section {
+  padding: 28px 0;
+  border-bottom: 1px solid var(--border);
+}
+.section:last-child { border-bottom: none; }
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--accent-blue);
+  margin-bottom: 10px;
+}
+.section-tag.red { color: var(--accent-red); }
+.section-tag.green { color: var(--accent-green); }
+.section-tag.gold { color: var(--accent-gold); }
+.section-tag.purple { color: var(--accent-purple); }
+.section-tag.cyan { color: var(--accent-cyan); }
+
+h2 {
+  font-size: 19px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  line-height: 1.4;
+}
+h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 18px 0 10px;
+  color: #f1f5f9;
+}
+p { margin-bottom: 12px; font-size: 14.5px; color: #cbd5e1; }
+
+/* Stat Cards */
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 16px 0;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+}
+.stat-card.full { grid-column: 1 / -1; }
+.stat-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.stat-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 20px;
+  font-weight: 600;
+}
+.stat-value.up { color: var(--accent-green); }
+.stat-value.down { color: var(--accent-red); }
+.stat-value.gold { color: var(--accent-gold); }
+.stat-value.blue { color: var(--accent-blue); }
+.stat-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+/* Alert Box */
+.alert {
+  background: rgba(239,68,68,0.08);
+  border: 1px solid rgba(239,68,68,0.25);
+  border-left: 3px solid var(--accent-red);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 16px 0;
+}
+.alert.warn {
+  background: rgba(245,158,11,0.08);
+  border-color: rgba(245,158,11,0.25);
+  border-left-color: var(--accent-gold);
+}
+.alert.info {
+  background: rgba(59,130,246,0.08);
+  border-color: rgba(59,130,246,0.25);
+  border-left-color: var(--accent-blue);
+}
+.alert.green {
+  background: rgba(34,197,94,0.08);
+  border-color: rgba(34,197,94,0.25);
+  border-left-color: var(--accent-green);
+}
+.alert-title {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.alert p { font-size: 13px; margin-bottom: 6px; }
+.alert p:last-child { margin-bottom: 0; }
+
+/* Chart containers */
+.chart-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+  overflow-x: auto;
+}
+.chart-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+/* Bar chart */
+.bar-chart { display: flex; flex-direction: column; gap: 8px; }
+.bar-row { display: flex; align-items: center; gap: 8px; }
+.bar-label {
+  font-size: 12px;
+  font-weight: 500;
+  min-width: 80px;
+  text-align: right;
+  color: #94a3b8;
+}
+.bar-track {
+  flex: 1;
+  height: 24px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  color: #fff;
+  min-width: 50px;
+  transition: width 0.6s ease;
+}
+
+/* Table */
+.table-wrap {
+  overflow-x: auto;
+  margin: 16px 0;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+thead { background: var(--surface2); }
+th {
+  padding: 10px 12px;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  text-align: left;
+  white-space: nowrap;
+}
+td {
+  padding: 10px 12px;
+  border-top: 1px solid var(--border);
+  white-space: nowrap;
+}
+tr:hover { background: rgba(255,255,255,0.02); }
+.mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+.green { color: var(--accent-green); }
+.red { color: var(--accent-red); }
+.gold { color: var(--accent-gold); }
+
+/* Highlight Box */
+.highlight-box {
+  background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(168,85,247,0.08));
+  border: 1px solid rgba(245,158,11,0.2);
+  border-radius: 12px;
+  padding: 18px;
+  margin: 16px 0;
+}
+.highlight-box h3 { margin-top: 0; color: var(--accent-gold); }
+
+/* Quote */
+.quote {
+  border-left: 3px solid var(--accent-purple);
+  padding: 12px 16px;
+  margin: 16px 0;
+  background: rgba(168,85,247,0.06);
+  border-radius: 0 8px 8px 0;
+  font-size: 14px;
+  font-style: italic;
+  color: #c4b5fd;
+}
+.quote-author { font-size: 12px; color: var(--text-muted); font-style: normal; margin-top: 6px; }
+
+/* Key Point List */
+.key-points {
+  list-style: none;
+  margin: 12px 0;
+}
+.key-points li {
+  position: relative;
+  padding: 8px 0 8px 24px;
+  font-size: 14px;
+  color: #cbd5e1;
+}
+.key-points li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent-blue);
+  font-weight: 700;
+}
+
+/* Flow diagram */
+.flow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin: 16px 0;
+}
+.flow-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 20px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+  width: 100%;
+  max-width: 320px;
+}
+.flow-arrow {
+  font-size: 18px;
+  color: var(--accent-gold);
+  padding: 4px 0;
+}
+
+/* Playbook */
+.playbook-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 16px 0;
+}
+.playbook-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+}
+.playbook-card.long { border-top: 3px solid var(--accent-green); }
+.playbook-card.avoid { border-top: 3px solid var(--accent-red); }
+.playbook-card h4 {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.playbook-card.long h4 { color: var(--accent-green); }
+.playbook-card.avoid h4 { color: var(--accent-red); }
+.playbook-item {
+  font-size: 12.5px;
+  padding: 3px 0;
+  color: #94a3b8;
+}
+
+/* Timeline */
+.timeline {
+  margin: 16px 0;
+  padding-left: 20px;
+  border-left: 2px solid var(--border);
+}
+.timeline-item {
+  position: relative;
+  padding: 0 0 20px 16px;
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -25px;
+  top: 5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-blue);
+  border: 2px solid var(--bg);
+}
+.timeline-item.danger::before { background: var(--accent-red); }
+.timeline-date {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-blue);
+  margin-bottom: 4px;
+}
+.timeline-item.danger .timeline-date { color: var(--accent-red); }
+.timeline-text { font-size: 13px; color: #94a3b8; }
+
+/* Footer */
+.footer {
+  padding: 24px 16px;
+  text-align: center;
+  font-size: 11px;
+  color: #475569;
+  border-top: 1px solid var(--border);
+}
+
+/* SVG Chart Styles */
+svg text { font-family: 'Noto Sans KR', sans-serif; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+<div class="hero-content">
+  <div class="hero-badge">📊 US MARKET ANALYSIS</div>
+  <h1>엔비디아 젠슨황 AI 수요 "Sky High" 확언<br>다우 5만 돌파 vs 힌덴버그 오멘 경고</h1>
+  <div class="hero-meta">
+    2026.02.07 <span>|</span> NOVA Real Invest 방송 분석
+  </div>
+</div>
+</div>
+
+<div class="container">
+
+<!-- 1. 시장 개요 -->
+<div class="section">
+  <div class="section-tag green">● MARKET PULSE</div>
+  <h2>다우존스 사상 첫 50,000 돌파 — 역사적 이정표</h2>
+  
+  <p>2026년 2월 7일, <strong>다우존스 산업평균지수가 사상 최초로 50,000포인트를 돌파</strong>했다. 불과 몇 년 전만 해도 상상하기 어려웠던 수준이며, 시장 전반의 강세를 상징하는 이정표다.</p>
+  
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-label">다우존스</div>
+      <div class="stat-value up">50,000+</div>
+      <div class="stat-sub">사상 최초 돌파</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">S&P 500</div>
+      <div class="stat-value up">6,932.3</div>
+      <div class="stat-sub">+1.97%</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">나스닥</div>
+      <div class="stat-value up">+2%↑</div>
+      <div class="stat-sub">강한 상승</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">엔비디아(NVDA)</div>
+      <div class="stat-value up">+7.92%</div>
+      <div class="stat-sub">$185.41 고점</div>
+    </div>
+  </div>
+  
+  <p>상승의 핵심 원동력은 <strong>엔비디아(NVDA)</strong>로, 시가총액 1위 기업의 8% 가까운 급등이 다우·S&P·나스닥 전체를 견인했다. 브로드컴(AVGO)도 +7%대 상승을 기록했다.</p>
+
+  <div class="alert warn">
+    <div class="alert-title">⚠️ MOC(Market on Close) 이상 신호</div>
+    <p>장 마감 직전 45분간 <strong>빅테크에서 대규모 자금 유출</strong>이 포착됐다. 스마트 머니(기관)가 차익 실현 후 위험 회피 모드에 진입한 것으로, 겉보기 축제 분위기와 대조적인 움직임이다.</p>
+    <p>배경: 중국이 이란 내 자국민에게 <strong>긴급 철수 명령</strong>을 내린 것으로 전해져, 중동 지정학적 리스크가 급부상했다.</p>
+  </div>
+</div>
+
+<!-- 2. 힌덴버그 오멘 -->
+<div class="section">
+  <div class="section-tag red">● WARNING SIGNAL</div>
+  <h2>힌덴버그 오멘(Hindenburg Omen) — 6일간 3회 발동</h2>
+  
+  <p>겉으로 화려한 랠리 이면에 <strong>힌덴버그 오멘 신호가 최근 6일 동안 3회 발동</strong>되었다. 이 지표는 시장 내부의 심각한 괴리를 경고하는 기술적 신호다.</p>
+
+  <div class="chart-box">
+    <div class="chart-title">힌덴버그 오멘 산출 원리</div>
+    <div class="flow">
+      <div class="flow-item">NYSE 상장 종목 중 52주 신고가 종목 수 집계</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-item">NYSE 상장 종목 중 52주 신저가 종목 수 집계</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-item">신고가·신저가 비율이 각각 전체의 <strong style="color:#ef4444">2.2% 이상</strong>일 때</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-item" style="border-color: rgba(239,68,68,0.4); background: rgba(239,68,68,0.05);">
+        <strong style="color:#ef4444">🚨 힌덴버그 오멘 발동</strong><br>
+        <span style="font-size:12px; color:#94a3b8;">→ 시장 내부 극단적 양극화 신호</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>현재 시장의 양극화 구조</h3>
+  
+  <div class="playbook-grid">
+    <div class="playbook-card long">
+      <h4>52주 신고가 그룹</h4>
+      <div class="playbook-item">에너지 섹터 📈</div>
+      <div class="playbook-item">반도체/칩 섹터</div>
+      <div class="playbook-item">유틸리티/전력</div>
+      <div class="playbook-item">산업재(캐터필러 등)</div>
+    </div>
+    <div class="playbook-card avoid">
+      <h4>52주 신저가 그룹</h4>
+      <div class="playbook-item">소프트웨어(SaaS) 📉</div>
+      <div class="playbook-item">세일즈포스 기반 기술주</div>
+      <div class="playbook-item">서비스나우 등</div>
+      <div class="playbook-item">IGV(소프트웨어 ETF)</div>
+    </div>
+  </div>
+
+  <div class="alert">
+    <div class="alert-title">📉 과거 힌덴버그 오멘 발동 후 결과</div>
+    <p>역사적으로 힌덴버그 오멘 반복 발생 시, 이후 <strong>10~20% 수준의 하락</strong>이 나타난 사례가 있다. 2025년에도 유사한 경고 후 의미 있는 조정이 발생했다.</p>
+  </div>
+</div>
+
+<!-- 3. 빅테크 CapEx 전쟁 -->
+<div class="section">
+  <div class="section-tag gold">● CAPEX WAR</div>
+  <h2>빅테크 자본지출(CapEx) 전쟁 — 2026년 합산 $700B+</h2>
+  
+  <p>빅테크 기업들이 2026년 AI 인프라에 쏟아붓겠다고 발표한 투자 규모가 충격적이다. 상위 3사(아마존+구글+메타)만 합산해도 약 <strong>$510B(≒700조원+)</strong>에 달하며, 이는 미국 국방예산 1년치와 맞먹는 수준이다.</p>
+
+  <div class="chart-box">
+    <div class="chart-title">2026년 빅테크 AI 자본지출(CapEx) 계획</div>
+    <svg viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
+      <!-- Background -->
+      <defs>
+        <linearGradient id="bar1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#f97316"/></linearGradient>
+        <linearGradient id="bar2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/></linearGradient>
+        <linearGradient id="bar3" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#06b6d4"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+        <linearGradient id="bar4" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#6366f1"/></linearGradient>
+        <linearGradient id="bar5" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#f97316"/></linearGradient>
+        <linearGradient id="bar6" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#64748b"/><stop offset="100%" stop-color="#94a3b8"/></linearGradient>
+      </defs>
+      
+      <!-- Grid lines -->
+      <line x1="130" y1="30" x2="130" y2="290" stroke="#1e293b" stroke-width="1"/>
+      <line x1="130" y1="290" x2="580" y2="290" stroke="#1e293b" stroke-width="1"/>
+      <line x1="242" y1="30" x2="242" y2="290" stroke="#1e293b" stroke-width="0.5" stroke-dasharray="4"/>
+      <line x1="355" y1="30" x2="355" y2="290" stroke="#1e293b" stroke-width="0.5" stroke-dasharray="4"/>
+      <line x1="467" y1="30" x2="467" y2="290" stroke="#1e293b" stroke-width="0.5" stroke-dasharray="4"/>
+      <line x1="580" y1="30" x2="580" y2="290" stroke="#1e293b" stroke-width="0.5" stroke-dasharray="4"/>
+      
+      <!-- Scale -->
+      <text x="130" y="305" font-size="10" fill="#64748b" text-anchor="middle">$0B</text>
+      <text x="242" y="305" font-size="10" fill="#64748b" text-anchor="middle">$50B</text>
+      <text x="355" y="305" font-size="10" fill="#64748b" text-anchor="middle">$100B</text>
+      <text x="467" y="305" font-size="10" fill="#64748b" text-anchor="middle">$150B</text>
+      <text x="580" y="305" font-size="10" fill="#64748b" text-anchor="middle">$200B</text>
+      
+      <!-- Bars -->
+      <!-- Amazon $200B -->
+      <text x="125" y="55" font-size="12" fill="#e2e8f0" text-anchor="end" font-weight="600">Amazon</text>
+      <rect x="130" y="40" width="450" height="28" rx="4" fill="url(#bar1)" opacity="0.9"/>
+      <text x="570" y="59" font-size="11" fill="#fff" text-anchor="end" font-weight="600">$200B</text>
+      
+      <!-- Alphabet $185B -->
+      <text x="125" y="98" font-size="12" fill="#e2e8f0" text-anchor="end" font-weight="600">Alphabet</text>
+      <rect x="130" y="83" width="416" height="28" rx="4" fill="url(#bar2)" opacity="0.9"/>
+      <text x="536" y="102" font-size="11" fill="#fff" text-anchor="end" font-weight="600">$185B</text>
+      
+      <!-- Meta $125B -->
+      <text x="125" y="141" font-size="12" fill="#e2e8f0" text-anchor="end" font-weight="600">Meta</text>
+      <rect x="130" y="126" width="281" height="28" rx="4" fill="url(#bar3)" opacity="0.9"/>
+      <text x="401" y="145" font-size="11" fill="#fff" text-anchor="end" font-weight="600">$125B</text>
+      
+      <!-- Microsoft $117B -->
+      <text x="125" y="184" font-size="12" fill="#e2e8f0" text-anchor="end" font-weight="600">Microsoft</text>
+      <rect x="130" y="169" width="263" height="28" rx="4" fill="url(#bar4)" opacity="0.9"/>
+      <text x="383" y="188" font-size="11" fill="#fff" text-anchor="end" font-weight="600">$117B</text>
+      
+      <!-- Tesla $20B -->
+      <text x="125" y="227" font-size="12" fill="#e2e8f0" text-anchor="end" font-weight="600">Tesla</text>
+      <rect x="130" y="212" width="45" height="28" rx="4" fill="url(#bar5)" opacity="0.9"/>
+      <text x="185" y="231" font-size="11" fill="#f87171" font-weight="600">$20B</text>
+      
+      <!-- Apple $13B -->
+      <text x="125" y="270" font-size="12" fill="#e2e8f0" text-anchor="end" font-weight="600">Apple</text>
+      <rect x="130" y="255" width="29" height="28" rx="4" fill="url(#bar6)" opacity="0.9"/>
+      <text x="170" y="274" font-size="11" fill="#94a3b8" font-weight="600">$13B</text>
+    </svg>
+  </div>
+
+  <h3>왜 이토록 공격적인 투자를 하는가?</h3>
+  <p>이것은 단순 투자가 아니라 <strong>"물리적 해자(Physical Moat)"를 구축하기 위한 전쟁</strong>이다. 핵심 논리는 다음과 같다:</p>
+  
+  <ul class="key-points">
+    <li><strong>선점 경쟁:</strong> 후발주자가 절대 따라올 수 없게 데이터센터 부지·전력·칩을 선점</li>
+    <li><strong>토지의 유한성:</strong> 데이터센터는 아무 곳에나 건설 불가 — 지진·태풍·홍수 위험 없는 안전한 지역, 충분한 전력 인프라 필수</li>
+    <li><strong>칩 공급망 독점:</strong> TSMC 생산 라인이 엔비디아 물량에 집중되어, AMD·인텔 등은 주문해도 제조 못하는 상황</li>
+  </ul>
+
+  <div class="alert warn">
+    <div class="alert-title">💰 Free Cash Flow 적자 전환 우려</div>
+    <p><strong>아마존:</strong> 이 수준의 투자 시 FCF 적자 전환 예상 (약 -$280M)</p>
+    <p><strong>알파벳:</strong> FCF $80.2B으로 대폭 감소 전망 (적자는 면하나 큰 폭 하락)</p>
+    <p>시장의 핵심 질문: <em>"ROI를 언제 증명할 것인가?"</em> — 증명 못하면 주가로 응징당한다.</p>
+  </div>
+</div>
+
+<!-- 4. 젠슨 황 발언 -->
+<div class="section">
+  <div class="section-tag purple">● NVIDIA CEO</div>
+  <h2>젠슨 황 "AI 칩 수요, Sky High" — CNBC 인터뷰</h2>
+  
+  <div class="quote">
+    "수요가 스카이 하이(Sky High)다. 이 회사들이 돈을 두 배로 쓰면, 돈을 네 배로 벌 수 있다."
+    <div class="quote-author">— 젠슨 황(Jensen Huang), 엔비디아 CEO | CNBC 인터뷰</div>
+  </div>
+
+  <p>젠슨 황은 CNBC에 출연해 빅테크의 공격적 CapEx에 대한 시장 우려를 일축했다. 핵심 메시지는 <strong>"더 많이 사는 기업이 더 많이 번다"</strong>는 것으로, 투자 대비 수익의 레버리지 효과를 강조했다.</p>
+
+  <h3>돈의 흐름: 누가 쓰고, 누가 버는가?</h3>
+  
+  <div class="chart-box">
+    <div class="chart-title">AI 자본지출의 수혜 구조</div>
+    <div class="flow">
+      <div class="flow-item" style="border-color: rgba(239,68,68,0.3);">
+        <strong>💸 돈을 쓰는 기업</strong><br>
+        <span style="font-size:12px; color:#94a3b8;">Amazon, Alphabet, Meta, Microsoft</span>
+      </div>
+      <div class="flow-arrow">⬇ $700B+ ⬇</div>
+      <div class="flow-item" style="border-color: rgba(34,197,94,0.4); background: rgba(34,197,94,0.05);">
+        <strong style="color:#22c55e;">💰 돈을 버는 기업</strong><br>
+        <span style="font-size:12px; color:#94a3b8;">NVIDIA, Broadcom, Micron, WDC, 장비주</span>
+      </div>
+    </div>
+  </div>
+
+  <p><strong>투자 원칙:</strong> "금광을 캐러 가는 사람들에게 청바지와 곡괭이를 팔아라" — 지금 AI 인프라를 공급하는 기업들이 가장 확실한 수혜자다.</p>
+</div>
+
+<!-- 5. 병목 현상 이동 -->
+<div class="section">
+  <div class="section-tag cyan">● BOTTLENECK SHIFT</div>
+  <h2>병목 현상의 대이동: 칩 → 전력(Power)</h2>
+  
+  <p>AI 인프라의 병목 현상이 빠르게 이동하고 있다. 메모리 반도체는 약 <strong>2년 내 해결 전망</strong>이나, 진짜 일급 병목은 <strong>전력(Power)</strong>이다.</p>
+
+  <div class="highlight-box">
+    <h3>🔌 "No Power, No AI"</h3>
+    <p style="font-size:15px; color:#fbbf24; margin-bottom: 8px;"><strong>데이터센터 1개의 전력 소비 = 인구 50만 도시 1개와 동일</strong></p>
+    <p>빅테크가 지금 가장 절박하게 찾아다니는 것은 AI 전문가도, 개발자도 아닌 — <strong>전기(유틸리티)</strong>다. 어떻게 하면 전력을 싸게 대량 확보할 수 있는가가 최대 현안이다.</p>
+  </div>
+
+  <h3>전력 인프라 "그리드 3요소" 투자 테마</h3>
+  
+  <div class="chart-box">
+    <div class="chart-title">AI 전력 인프라 밸류체인</div>
+    <div class="flow">
+      <div class="flow-item" style="border-color: rgba(245,158,11,0.4);">
+        <strong>① 발전(Generation)</strong><br>
+        <span style="font-size:12px; color:#f59e0b;">VST(Vistra) · CEG(Constellation Energy)</span><br>
+        <span style="font-size:11px; color:#94a3b8;">VST 타겟가 $205 | 다수 전력 계약 체결</span>
+      </div>
+      <div class="flow-arrow">⚡</div>
+      <div class="flow-item" style="border-color: rgba(59,130,246,0.4);">
+        <strong>② 송배전(Transmission)</strong><br>
+        <span style="font-size:12px; color:#3b82f6;">ETN(Eaton) · PWR(Quanta Services)</span><br>
+        <span style="font-size:11px; color:#94a3b8;">ETN 대형 변압기 주문 시 <strong style="color:#ef4444;">2~3년 대기</strong></span>
+      </div>
+      <div class="flow-arrow">❄️</div>
+      <div class="flow-item" style="border-color: rgba(168,85,247,0.4);">
+        <strong>③ 냉각(Cooling)</strong><br>
+        <span style="font-size:12px; color:#a855f7;">VRT(Vertiv) — 글로벌 1위</span><br>
+        <span style="font-size:11px; color:#94a3b8;">수주 잔고 $9.5B+ | 액침냉각 기술 독점적 지위</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert info">
+    <div class="alert-title">🔧 변압기 쇼티지 — 반도체보다 더 심각</div>
+    <p>ETN(Eaton)에 대형 변압기를 주문하면 <strong>2~3년 대기</strong>해야 한다. 메모리 반도체가 2년 내 해결 가능한 것과 달리, 전력 인프라 부족은 더 오래 지속될 구조적 병목이다.</p>
+  </div>
+
+  <h3>추가 수혜: 산업재(Industrials)</h3>
+  <p><strong>캐터필러(CAT)</strong>가 대표적이다. 데이터센터 건설에 필요한 굴착기뿐 아니라 <strong>비상용 발전기</strong>까지 공급한다. "AI는 노가다이자 건축업" — 물리적 인프라를 짓는 기업이 돈을 번다.</p>
+</div>
+
+<!-- 6. SaaS 위기 -->
+<div class="section">
+  <div class="section-tag red">● SAAS CRISIS</div>
+  <h2>소프트웨어(SaaS) 비즈니스 모델 붕괴 위기</h2>
+  
+  <p>AI 에이전트의 급속한 발전이 전통 SaaS 기업의 존립 기반을 위협하고 있다. <strong>앤트로픽(Anthropic)이 출시한 '클라우드 코워크(Claude Cowork)'</strong>가 상징적 사례다.</p>
+
+  <div class="chart-box">
+    <div class="chart-title">AI의 역할 진화 (3년 단위)</div>
+    <div class="flow">
+      <div class="flow-item">
+        <strong>🔧 코파일럿 시대 (~2023)</strong><br>
+        <span style="font-size:12px; color:#94a3b8;">AI = 나의 도구(Tool)</span>
+      </div>
+      <div class="flow-arrow">→ 3년 →</div>
+      <div class="flow-item" style="border-color: rgba(59,130,246,0.3);">
+        <strong>🤝 코워크 시대 (현재)</strong><br>
+        <span style="font-size:12px; color:#3b82f6;">AI = 나의 동료(Coworker)</span>
+      </div>
+      <div class="flow-arrow">→ 3년 →</div>
+      <div class="flow-item" style="border-color: rgba(239,68,68,0.3);">
+        <strong>👔 매니저 시대 (2029~?)</strong><br>
+        <span style="font-size:12px; color:#ef4444;">AI = 나의 상사(Manager)?</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>SaaS 모델이 위험한 이유</h3>
+  <ul class="key-points">
+    <li>전통 SaaS = "직원 1인당 라이선스 과금(Per-seat)" 모델</li>
+    <li>AI가 직원 절반을 대체 → 라이선스 수요 절반 감소</li>
+    <li>AI가 커스터마이즈된 소프트웨어를 직접 생성 → 범용 SaaS 필요성 하락</li>
+    <li>세일즈포스(CRM), 서비스나우(NOW) 등 52주 신저가 갱신 중</li>
+  </ul>
+</div>
+
+<!-- 7. 소비자 심리 & K자형 양극화 -->
+<div class="section">
+  <div class="section-tag gold">● ECONOMIC DIVIDE</div>
+  <h2>소비자 심리지수 67.8 — K자형 양극화의 실체</h2>
+  
+  <p>미시간대 소비자심리지수가 <strong>67.8</strong>로 깜짝 상승했으나, 내부를 뜯어보면 <strong>K자형 양극화</strong>가 극명하다.</p>
+
+  <div class="chart-box">
+    <div class="chart-title">소비자 심리의 양극화 (K-Shaped Divergence)</div>
+    <svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
+      <!-- K-shape diagram -->
+      <line x1="100" y1="100" x2="200" y2="100" stroke="#94a3b8" stroke-width="3"/>
+      
+      <!-- Upper arm -->
+      <line x1="200" y1="100" x2="400" y2="30" stroke="#22c55e" stroke-width="3"/>
+      <text x="410" y="35" font-size="12" fill="#22c55e" font-weight="600">자산 보유층</text>
+      <text x="410" y="52" font-size="10" fill="#94a3b8">주식, 부동산 보유자</text>
+      <text x="410" y="67" font-size="10" fill="#94a3b8">심리지수 ~100 근접</text>
+      
+      <!-- Lower arm -->
+      <line x1="200" y1="100" x2="400" y2="170" stroke="#ef4444" stroke-width="3"/>
+      <text x="410" y="165" font-size="12" fill="#ef4444" font-weight="600">임금 노동자층</text>
+      <text x="410" y="182" font-size="10" fill="#94a3b8">블루칼라, 해고 불안</text>
+      <text x="410" y="197" font-size="10" fill="#94a3b8">심리지수 매우 낮음</text>
+      
+      <!-- Label -->
+      <text x="140" y="92" font-size="11" fill="#64748b">종합 67.8</text>
+      <circle cx="200" cy="100" r="4" fill="#f59e0b"/>
+    </svg>
+  </div>
+
+  <ul class="key-points">
+    <li><strong>1월 감원(Layoff) 10만 명+</strong> — 2009년 금융위기 이후 최대치</li>
+    <li>상위 1%가 미국 자산의 약 <strong>80%</strong> 보유 (과거 상위 20%가 80%이던 시절과 대비)</li>
+    <li>유동성이 자산시장 내에서만 순환 — 실물경제·노동계급으로 흘러가지 않음</li>
+    <li>자산 보유자는 역대 최고 수혜, 노동자는 고용 불안 심화</li>
+  </ul>
+</div>
+
+<!-- 8. 연준 위원 발언 -->
+<div class="section">
+  <div class="section-tag blue">● FED WATCH</div>
+  <h2>연준 위원 2인의 엇갈린 시그널</h2>
+  
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>구분</th>
+          <th>제퍼슨 (부의장)</th>
+          <th>데일리 (SF연준)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>경제 진단</strong></td>
+          <td>정책이 잘 자리잡았다</td>
+          <td>노동시장이 위태롭다</td>
+        </tr>
+        <tr>
+          <td><strong>물가</strong></td>
+          <td class="gold">관세로 물가 불안</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><strong>금리 전망</strong></td>
+          <td>데이터 확인 필요</td>
+          <td class="green">1~2회 인하 가능성 언급</td>
+        </tr>
+        <tr>
+          <td><strong>시장 반응</strong></td>
+          <td style="color:#94a3b8">기존 스탠스 유지</td>
+          <td class="green">긍정적 — 이쪽 선택</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>시장은 <strong>데일리 SF연준 총재의 비둘기파 발언</strong>에 무게를 실었다. "노동시장이 무너지고 있으니 금리 인하가 필요하다"는 메시지는 현재 시장의 가장 큰 희망인 금리 인하 기대를 강화했다.</p>
+</div>
+
+<!-- 9. 다음 주 일정 -->
+<div class="section">
+  <div class="section-tag red">● NEXT WEEK</div>
+  <h2>⚠️ 다음 주 핵심 일정 — 고용·CPI 이중 리스크</h2>
+
+  <div class="timeline">
+    <div class="timeline-item danger">
+      <div class="timeline-date">2/12 (수) — 1월 고용보고서</div>
+      <div class="timeline-text">정부 고용 포함 데이터. 너무 약하면 → 경기침체 공포 재발. 적당히 약해야 금리 인하 기대 유지.</div>
+    </div>
+    <div class="timeline-item danger">
+      <div class="timeline-date">2/13 (금) — CPI (소비자물가지수)</div>
+      <div class="timeline-text">CPI가 높게 나오면 → "금리 인하 물건너갔다"로 시장 발작 가능. 관세 영향이 물가에 반영되기 시작했는지가 관건.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">연준 위원 다수 발언 예정</div>
+      <div class="timeline-text">데이터 발표에 맞춰 연준 위원들의 코멘트가 이어질 예정. 실시간 모니터링 필요.</div>
+    </div>
+  </div>
+
+  <div class="alert">
+    <div class="alert-title">🛡️ 다음 주 전략: 현금 비중 확보 + 관망</div>
+    <p>힌덴버그 오멘 3회 발동 + 고용·CPI 이중 이벤트를 앞두고, <strong>주 초반 공격적 매수는 자제</strong>하고 현금 비중을 유지하며 기관처럼 데이터를 확인한 후 대응하는 것이 상책이다.</p>
+  </div>
+</div>
+
+<!-- 10. 투자 플레이북 -->
+<div class="section">
+  <div class="section-tag green">● PLAYBOOK</div>
+  <h2>투자 플레이북: "Great Recalibration(위대한 재조정)"</h2>
+  
+  <p>시장은 <strong>"꿈꾸는 기업"에서 "실제로 돈 버는 기업"으로 자금이 대이동</strong>하는 구조적 재조정(Great Recalibration) 과정에 있다.</p>
+
+  <div class="playbook-grid">
+    <div class="playbook-card long">
+      <h4>✅ Long (매수/보유)</h4>
+      <div class="playbook-item">🟢 NVDA (엔비디아)</div>
+      <div class="playbook-item">🟢 AVGO (브로드컴)</div>
+      <div class="playbook-item">🟢 MU (마이크론)</div>
+      <div class="playbook-item">🟢 WDC (웨스턴디지털)</div>
+      <div class="playbook-item">🟢 VST, CEG (발전)</div>
+      <div class="playbook-item">🟢 ETN, PWR (송배전)</div>
+      <div class="playbook-item">🟢 VRT (냉각)</div>
+      <div class="playbook-item">🟢 CAT (산업재)</div>
+    </div>
+    <div class="playbook-card avoid">
+      <h4>🚫 Avoid (회피/관망)</h4>
+      <div class="playbook-item">🔴 빅테크 CapEx 과다 지출</div>
+      <div class="playbook-item">🔴 CRM (세일즈포스)</div>
+      <div class="playbook-item">🔴 NOW (서비스나우)</div>
+      <div class="playbook-item">🔴 SaaS/소프트웨어 전반</div>
+      <div class="playbook-item">🔴 "꿈" 기반 AI 기업</div>
+      <div class="playbook-item">🔴 FCF 없는 고밸류 종목</div>
+      <div class="playbook-item" style="color:#f59e0b; margin-top:8px;">⚠ 어닝시즌 충격 경계</div>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <h3>💡 핵심 투자 원칙 요약</h3>
+    <ul class="key-points">
+      <li><strong>"AI는 디지털이 아니라 물리적 현실"</strong> — 건축·노가다·전기의 세계</li>
+      <li><strong>"No Power, No AI"</strong> — 전력이 다음 최대 병목</li>
+      <li><strong>"금광 캐는 사람 말고, 곡괭이·청바지 파는 회사를 사라"</strong></li>
+      <li><strong>"머니머니해도 머니"</strong> — 실제 수익을 내는 기업에 집중</li>
+      <li><strong>기관처럼 위험 헤지</strong> — 개미가 지는 이유는 리스크 관리 부재</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 11. 종합 전망 -->
+<div class="section">
+  <div class="section-tag gold">● OUTLOOK</div>
+  <h2>종합 시장 전망</h2>
+  
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-label">단기 (1~2주)</div>
+      <div class="stat-value gold">⚠ 경계</div>
+      <div class="stat-sub">힌덴버그+CPI+고용</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">중기 (3~6개월)</div>
+      <div class="stat-value blue">선별적 강세</div>
+      <div class="stat-sub">인프라 수혜주 집중</div>
+    </div>
+    <div class="stat-card full">
+      <div class="stat-label">구조적 테마 (1~3년)</div>
+      <div class="stat-value up">전력 인프라 → 최대 수혜 섹터</div>
+      <div class="stat-sub">변압기 쇼티지 2~3년 / 발전·송배전·냉각 중장기 성장</div>
+    </div>
+  </div>
+
+  <p><strong>단기:</strong> 힌덴버그 오멘 3회 발동, 다음 주 고용·CPI 이중 이벤트, 중동 지정학 리스크가 겹쳐 <strong>변동성 확대 불가피</strong>. 현금 비중 유지가 핵심.</p>
+  <p><strong>중기:</strong> 빅테크의 $700B+ CapEx가 실제 집행되면서 칩(반도체)·전력·산업재 순서로 수혜 흐름이 이동. SaaS는 구조적 위험 지속.</p>
+  <p><strong>장기:</strong> "AI = 물리적 인프라" 패러다임이 정착되며, 발전·송배전·냉각·산업재가 메가 사이클의 핵심 수혜주로 부상. 향후 AI에서 스페이스(우주) 테마로의 전환 시점도 주시할 필요.</p>
+</div>
+
+</div><!-- container end -->
+
+<div class="footer">
+  본 문서는 NOVA Real Invest 유튜브 방송(2026.02.07) 내용을 미국 증시 관점에서 분석·정리한 것입니다.<br>
+  투자 판단의 참고자료이며, 투자의 최종 결정과 책임은 투자자 본인에게 있습니다.<br>
+  © 2026 Market Analysis Report
+</div>
+
+</body>
+</html>
