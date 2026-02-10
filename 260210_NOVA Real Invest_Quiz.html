@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA Real Invest 시험 문제 - HALO 자산과 다우 5만 시대</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface2: #1c2333;
+  --border: #30363d;
+  --gold: #e8b931;
+  --gold-dim: #b8941f;
+  --text: #e6edf3;
+  --text-dim: #8b949e;
+  --accent-green: #3fb950;
+  --accent-red: #f85149;
+  --accent-blue: #58a6ff;
+  --accent-purple: #bc8cff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+.header {
+  background: linear-gradient(135deg, #0d1117 0%, #1a1e2e 50%, #0d1117 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 3rem 1.5rem 2.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(232,185,49,0.08) 0%, transparent 70%);
+}
+
+.header-tag {
+  display: inline-block;
+  background: rgba(232,185,49,0.12);
+  border: 1px solid rgba(232,185,49,0.3);
+  color: var(--gold);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 1.2rem;
+  position: relative;
+}
+
+.header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: -0.5px;
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.header h2 {
+  font-size: clamp(0.85rem, 2.5vw, 1.05rem);
+  font-weight: 400;
+  color: var(--text-dim);
+  position: relative;
+}
+
+.header .date {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-top: 1rem;
+  position: relative;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* Difficulty legend */
+.legend {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+  padding: 1rem 1.2rem;
+  background: var(--surface);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.legend-dot.easy { background: var(--accent-green); }
+.legend-dot.medium { background: var(--accent-blue); }
+.legend-dot.hard { background: var(--accent-purple); }
+
+/* Section titles */
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--gold);
+  margin-bottom: 2rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 2px solid var(--gold-dim);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.section-title .icon {
+  font-size: 1.3rem;
+}
+
+/* Question card */
+.q-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  transition: border-color 0.2s;
+}
+
+.q-card:hover {
+  border-color: rgba(232,185,49,0.3);
+}
+
+.q-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.q-number {
+  background: var(--gold);
+  color: var(--bg);
+  font-weight: 900;
+  font-size: 0.85rem;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.q-meta {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.q-type, .q-diff {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.q-type {
+  background: rgba(88,166,255,0.12);
+  color: var(--accent-blue);
+  border: 1px solid rgba(88,166,255,0.25);
+}
+
+.q-diff.easy {
+  background: rgba(63,185,80,0.1);
+  color: var(--accent-green);
+  border: 1px solid rgba(63,185,80,0.25);
+}
+
+.q-diff.medium {
+  background: rgba(88,166,255,0.1);
+  color: var(--accent-blue);
+  border: 1px solid rgba(88,166,255,0.25);
+}
+
+.q-diff.hard {
+  background: rgba(188,140,255,0.1);
+  color: var(--accent-purple);
+  border: 1px solid rgba(188,140,255,0.25);
+}
+
+.q-text {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 1rem;
+  line-height: 1.8;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.option {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.6;
+  transition: all 0.15s;
+}
+
+.option:hover {
+  border-color: var(--gold-dim);
+  background: rgba(232,185,49,0.04);
+}
+
+.option-label {
+  font-weight: 700;
+  color: var(--gold);
+  margin-right: 6px;
+}
+
+.ox-hint {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  font-style: italic;
+  margin-top: 0.3rem;
+}
+
+.answer-box {
+  display: inline-block;
+  background: var(--surface2);
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+  padding: 4px 16px;
+  min-width: 120px;
+  height: 28px;
+  vertical-align: middle;
+}
+
+/* Divider */
+.divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border), transparent);
+  margin: 3rem 0;
+}
+
+/* Answer section */
+.answer-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 10px 10px 0;
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.answer-card .a-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.a-num {
+  font-weight: 900;
+  color: var(--gold);
+  font-size: 0.9rem;
+}
+
+.a-answer {
+  font-weight: 700;
+  color: var(--accent-green);
+  font-size: 0.9rem;
+}
+
+.a-explain {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  line-height: 1.8;
+  padding-left: 0.5rem;
+  border-left: 2px solid rgba(232,185,49,0.15);
+  margin-top: 0.4rem;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  border-top: 1px solid var(--border);
+  margin-top: 2rem;
+}
+
+@media print {
+  body { background: #fff; color: #111; }
+  .q-card, .answer-card { border-color: #ccc; background: #fafafa; }
+  .header { background: #f5f5f5; }
+  .header h1, .section-title, .q-number, .a-num { color: #333; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-tag">NOVA Real Invest · 시험 문제지</div>
+  <h1>HALO 자산과 다우 5만 시대</h1>
+  <h2>지금 SaaS 버리고 HALO 자산 담아야 할 이유</h2>
+  <div class="date">2026년 02월 10일 · 총 10문제</div>
+</div>
+
+<div class="container">
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot easy"></div> 쉬움 (3문제)</div>
+    <div class="legend-item"><div class="legend-dot medium"></div> 보통 (5문제)</div>
+    <div class="legend-item"><div class="legend-dot hard"></div> 어려움 (2문제)</div>
+  </div>
+
+  <!-- ==================== 문제지 섹션 ==================== -->
+  <div class="section-title"><span class="icon">📝</span> 문제지</div>
+
+  <!-- Q1 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-number">01</div>
+      <div class="q-meta">
+        <span class="q-type">객관식</span>
+        <span class="q-diff easy">쉬움</span>
+      </div>
+    </div>
+    <div class="q-text">다우존스 지수가 돌파한 역사적 수치는?</div>
+    <div class="options">
+      <div class="option"><span class="option-label">①</span> 30,000 포인트</div>
+      <div class="option"><span class="option-label">②</span> 40,000 포인트</div>
+      <div class="option"><span class="option-label">③</span> 50,000 포인트</div>
+      <div class="option"><span class="option-label">④</span> 60,000 포인트</div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-number">02</div>
+      <div class="q-meta">
+        <span class="q-type">단답형</span>
+        <span class="q-diff easy">쉬움</span>
+      </div>
+    </div>
+    <div class="q-text">월가에서 "무거운 자산을 가지고 있고, 도태(진부화) 가능성이 낮은" 기업을 가리키는 약어(영문 4글자)를 쓰시오.</div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-number">03</div>
+      <div class="q-meta">
+        <span class="q-type">OX 퀴즈</span>
+        <span class="q-diff easy">쉬움</span>
+      </div>
+    </div>
+    <div class="q-text">방송에서 "SaaS 종말론(SaaSPocalypse)"이라는 용어가 언급되었다. 이 용어는 생성형 AI의 발전으로 기존 SaaS 기업의 비즈니스 모델이 위협받고 있다는 의미이다.</div>
+    <div class="ox-hint">O 또는 X로 답하시오.</div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-number">04</div>
+      <div class="q-meta">
+        <span class="q-type">객관식</span>
+        <span class="q-diff medium">보통</span>
+      </div>
+    </div>
+    <div class="q-text">오라클(ORCL)이 SaaS 기업들과 달리 주가가 상승한 핵심 이유로 가장 적절한 것은?</div>
+    <div class="options">
+      <div class="option"><span class="option-label">①</span> 자사주 매입 규모가 업계 최대였기 때문</div>
+      <div class="option"><span class="option-label">②</span> AI 인프라(데이터센터) 구축이라는 핵심 인프라를 제공하고 있기 때문</div>
+      <div class="option"><span class="option-label">③</span> 전기차 관련 반도체 매출이 급증했기 때문</div>
+      <div class="option"><span class="option-label">④</span> 비트코인 관련 사업을 새로 시작했기 때문</div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-number">05</div>
+      <div class="q-meta">
+        <span class="q-type">객관식</span>
+        <span class="q-diff medium">보통</span>
+      </div>
+    </div>
+    <div class="q-text">킨드릴(Kyndryl) 주가가 하루 만에 약 55% 폭락한 직접적 원인은?</div>
+    <div class="options">
+      <div class="option"><span class="option-label">①</span> 대규모 해킹 사고로 고객 데이터가 유출됨</div>
+      <div class="option"><span class="option-label">②</span> CFO 및 법무팀장의 사임과 회계 장부 이상 발표</div>
+      <div class="option"><span class="option-label">③</span> AI 인프라 투자 실패로 거액의 손실 발생</div>
+      <div class="option"><span class="option-label">④</span> 주요 고객사인 아마존과의 계약 해지</div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-number">06</div>
+      <div class="q-meta">
+        <span class="q-type">OX 퀴즈</span>
+        <span class="q-diff medium">보통</span>
+      </div>
+    </div>
+    <div class="q-text">방송에 따르면, 빅테크 기업(아마존·구글·메타 등)이 올해 AI에 투자하겠다고 밝힌 총 규모는 한국 돈으로 약 "천조 원"으로, 이는 미국의 1년 국방비와 맞먹는 수준이다.</div>
+    <div class="ox-hint">O 또는 X로 답하시오.</div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-number">07</div>
+      <div class="q-meta">
+        <span class="q-type">단답형</span>
+        <span class="q-diff medium">보통</span>
+      </div>
+    </div>
+    <div class="q-text">알파벳(구글)이 AI 인프라 투자 자금 조달을 위해 발행한 채권의 만기는 몇 년인지 쓰시오.</div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-number">08</div>
+      <div class="q-meta">
+        <span class="q-type">객관식</span>
+        <span class="q-diff medium">보통</span>
+      </div>
+    </div>
+    <div class="q-text">STM(STMicroelectronics)의 주가가 약 8% 이상 상승한 이유로 가장 적절한 것은?</div>
+    <div class="options">
+      <div class="option"><span class="option-label">①</span> 전기차 칩 수요가 급증하여 매출이 폭발적으로 증가</div>
+      <div class="option"><span class="option-label">②</span> AWS(아마존)와 차세대 데이터센터 칩 공급 계약 및 신주인수권 확보</div>
+      <div class="option"><span class="option-label">③</span> 엔비디아에 의한 인수합병 발표</div>
+      <div class="option"><span class="option-label">④</span> 애플의 신규 스마트폰 칩 독점 공급 계약 체결</div>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-number">09</div>
+      <div class="q-meta">
+        <span class="q-type">객관식</span>
+        <span class="q-diff hard">어려움</span>
+      </div>
+    </div>
+    <div class="q-text">방송에서 제시한 이번 주 거시경제 관전 포인트와 관련하여 <b>틀린</b> 설명을 고르시오.</div>
+    <div class="options">
+      <div class="option"><span class="option-label">①</span> 고용보고서가 예상보다 나쁘게 나오면 경기침체(리세션) 공포가 부각될 수 있다</div>
+      <div class="option"><span class="option-label">②</span> CPI가 예상치를 상회하면 금리 인하 기대가 후퇴할 수 있다</div>
+      <div class="option"><span class="option-label">③</span> 백악관 측에서 고용수치가 높게 나올 수 있다고 사전 경고했다</div>
+      <div class="option"><span class="option-label">④</span> 기관들은 이런 불확실성 구간에서 현금 비중 조절과 레버리지 축소를 한다</div>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-number">10</div>
+      <div class="q-meta">
+        <span class="q-type">단답형</span>
+        <span class="q-diff hard">어려움</span>
+      </div>
+    </div>
+    <div class="q-text">방송에서 제시한 투자 전략의 핵심을 요약하면, "AI _____ 를 구축하는 기업에 집중하고, SaaS·정책 리스크가 높은 종목은 피하며, 다우 5만 시대가 의미하는 _____ 자산(HALO)에 주목하라"이다. 두 빈칸에 들어갈 단어를 각각 쓰시오.</div>
+  </div>
+
+  <!-- ==================== 구분선 ==================== -->
+  <div class="divider"></div>
+
+  <!-- ==================== 정답 및 해설 섹션 ==================== -->
+  <div class="section-title"><span class="icon">✅</span> 정답 및 해설</div>
+
+  <!-- A1 -->
+  <div class="answer-card">
+    <div class="a-header">
+      <span class="a-num">01번</span>
+      <span class="a-answer">정답: ③ 50,000 포인트</span>
+    </div>
+    <div class="a-explain">다우존스가 지난주 5만을 찍었고, 이날도 50,135.87을 기록하며 5만 선을 지켜냄. 방송 전체의 키워드인 "다우 오만 시대"의 근거가 되는 수치이다.</div>
+  </div>
+
+  <!-- A2 -->
+  <div class="answer-card">
+    <div class="a-header">
+      <span class="a-num">02번</span>
+      <span class="a-answer">정답: HALO</span>
+    </div>
+    <div class="a-explain">HALO = Heavy Asset, Low Obsolescence. 무거운(실물) 자산을 보유하면서 AI 등에 의한 도태 가능성이 낮은 기업을 뜻한다. 에너지, 인프라, 해양시추 등 AI가 대체하기 어려운 산업이 해당된다.</div>
+  </div>
+
+  <!-- A3 -->
+  <div class="answer-card">
+    <div class="a-header">
+      <span class="a-num">03번</span>
+      <span class="a-answer">정답: O</span>
+    </div>
+    <div class="a-explain">방송에서 "사스포칼립스(SaaSPocalypse)"는 생성형 AI·에이전트 AI가 발전하면서, 기업과 개인이 스스로 소프트웨어를 만들 수 있게 되어 기존 SaaS(사용자 수 과금 모델)의 존재 의미가 위협받는 상황을 가리킨다.</div>
+  </div>
+
+  <!-- A4 -->
+  <div class="answer-card">
+    <div class="a-header">
+      <span class="a-num">04번</span>
+      <span class="a-answer">정답: ②</span>
+    </div>
+    <div class="a-explain">오라클은 단순 소프트웨어 회사가 아니라, OpenAI 파트너십·데이터센터 계약 등 AI 핵심 인프라를 제공하는 기업으로 재평가받고 있다. 데이비슨(투자은행)이 중립→매수로 상향하며 목표가 180달러를 제시한 것도 이 때문이다.</div>
+  </div>
+
+  <!-- A5 -->
+  <div class="answer-card">
+    <div class="a-header">
+      <span class="a-num">05번</span>
+      <span class="a-answer">정답: ②</span>
+    </div>
+    <div class="a-explain">킨드릴은 IBM에서 분사한 IT 서비스 회사로, CFO와 법무팀장의 동시 사임 및 "회계 장부 이상" 공시가 폭락의 직접 원인이었다. 방송에서는 자본주의에서 가장 치명적인 리스크로 '거짓(회계 부정)'을 꼽으며, 거버넌스 문제가 있는 기업은 절대 저가 매수하지 말라고 경고했다.</div>
+  </div>
+
+  <!-- A6 -->
+  <div class="answer-card">
+    <div class="a-header">
+      <span class="a-num">06번</span>
+      <span class="a-answer">정답: O</span>
+    </div>
+    <div class="a-explain">아마존·구글·메타 등이 올해 AI 캐펙스(CAPEX)로 약 7,000억 달러(한화 약 천조 원)를 투자하겠다고 밝혔으며, 방송에서는 이를 "미국 1년 국방비와 동일한 규모를 민간기업이 쓰겠다는 것"이라고 설명했다.</div>
+  </div>
+
+  <!-- A7 -->
+  <div class="answer-card">
+    <div class="a-header">
+      <span class="a-num">07번</span>
+      <span class="a-answer">정답: 100년</span>
+    </div>
+    <div class="a-explain">알파벳이 100년 만기 채권을 발행한 것은 AI가 단기 유행이 아닌 초장기 사업임을 시사한다. 방송에서는 이를 "AI는 100년짜리 사업"이라는 메시지로 해석하며, 그레이트 로테이션(Great Rotation)의 증거로 제시했다.</div>
+  </div>
+
+  <!-- A8 -->
+  <div class="answer-card">
+    <div class="a-header">
+      <span class="a-num">08번</span>
+      <span class="a-answer">정답: ②</span>
+    </div>
+    <div class="a-explain">STM은 AWS(아마존)와 차세대 데이터센터 칩 공급 계약을 체결하고, 아마존이 2,480만 주의 신주인수권을 확보했다. 이는 단순 공급 계약을 넘어 빅테크가 반도체 공급망을 직접 확보(수직계열화)하려는 움직임을 보여준다.</div>
+  </div>
+
+  <!-- A9 -->
+  <div class="answer-card">
+    <div class="a-header">
+      <span class="a-num">09번</span>
+      <span class="a-answer">정답: ③</span>
+    </div>
+    <div class="a-explain">백악관(헷셋)은 고용수치가 "낮게" 나올 수 있다고 사전 경고했지, "높게" 나올 것이라고 한 적이 없다. 나머지 ①②④는 방송 내용과 일치하는 설명이다. 수요일 고용보고서, 금요일 CPI 발표를 앞두고 기관들은 wait and see 스탠스를 취하고 있다.</div>
+  </div>
+
+  <!-- A10 -->
+  <div class="answer-card">
+    <div class="a-header">
+      <span class="a-num">10번</span>
+      <span class="a-answer">정답: 인프라(Infrastructure) / 실물(또는 피지컬, 물리적)</span>
+    </div>
+    <div class="a-explain">방송의 핵심 투자 전략은 ① AI 인프라를 구축하는 기업(오라클, STM, 에너지 등)에 집중, ② SaaS·정책 리스크 종목 회피, ③ 다우 5만이 상징하는 "손에 잡히는(Physical)" 실물 자산, 즉 HALO(Heavy Asset, Low Obsolescence) 기업에 주목하라는 것이다. 다우 상승은 눈에 보이지 않는 소프트웨어가 아닌, 공장·에너지·인프라 같은 실체 있는 기업이 주도하고 있음을 의미한다.</div>
+  </div>
+
+</div>
+
+<div class="footer">
+  NOVA Real Invest 방송 기반 학습 자료 · 2026.02.10 · 투자 판단의 책임은 본인에게 있습니다
+</div>
+
+</body>
+</html>

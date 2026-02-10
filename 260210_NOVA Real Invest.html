@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA Real Invest - HALO 자산 시대 & 다우 5만 분석 (2026.02.09)</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #0a0e17;
+  --card: #111827;
+  --card-alt: #1a2236;
+  --accent: #f59e0b;
+  --accent2: #3b82f6;
+  --accent3: #10b981;
+  --red: #ef4444;
+  --text: #e5e7eb;
+  --text-dim: #9ca3af;
+  --border: #1e293b;
+  --up: #10b981;
+  --down: #ef4444;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 16px;
+}
+/* Header */
+.header {
+  text-align: center;
+  padding: 32px 16px 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+  position: relative;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+}
+.badge {
+  display: inline-block;
+  background: rgba(245,158,11,0.15);
+  color: var(--accent);
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+.header h1 {
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.4;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.header .meta {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+/* Market Strip */
+.market-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.market-item {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 12px 8px;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+.market-item .label {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+.market-item .value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+.market-item .change {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  margin-top: 2px;
+}
+.green { color: var(--up); }
+.red { color: var(--down); }
+
+/* Section */
+section {
+  margin-bottom: 28px;
+}
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+}
+h2 {
+  font-size: 19px;
+  font-weight: 900;
+  margin-bottom: 14px;
+  line-height: 1.4;
+}
+h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 18px 0 10px;
+  color: #fff;
+}
+p {
+  font-size: 14.5px;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+/* Highlight Box */
+.highlight-box {
+  background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(59,130,246,0.08));
+  border-left: 3px solid var(--accent);
+  border-radius: 0 10px 10px 0;
+  padding: 16px;
+  margin: 16px 0;
+}
+.highlight-box.blue {
+  border-left-color: var(--accent2);
+  background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(16,185,129,0.05));
+}
+.highlight-box.green {
+  border-left-color: var(--accent3);
+  background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(59,130,246,0.05));
+}
+.highlight-box.red {
+  border-left-color: var(--red);
+  background: linear-gradient(135deg, rgba(239,68,68,0.1), rgba(245,158,11,0.05));
+}
+.highlight-box p {
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+.highlight-box p:last-child { margin-bottom: 0; }
+.highlight-box strong { color: #fff; }
+
+/* HALO Box */
+.halo-box {
+  background: var(--card);
+  border: 2px solid var(--accent);
+  border-radius: 14px;
+  padding: 20px;
+  margin: 20px 0;
+  text-align: center;
+}
+.halo-title {
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: 8px;
+  color: var(--accent);
+  margin-bottom: 8px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.halo-expand {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 14px;
+}
+.halo-item {
+  background: rgba(245,158,11,0.08);
+  border-radius: 8px;
+  padding: 10px;
+}
+.halo-letter {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--accent);
+}
+.halo-word {
+  font-size: 13px;
+  color: var(--text);
+  margin-top: 2px;
+}
+.halo-desc {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+/* Compare card */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 16px 0;
+}
+.compare-card {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 14px;
+  border: 1px solid var(--border);
+}
+.compare-card.bad {
+  border-color: rgba(239,68,68,0.3);
+}
+.compare-card.good {
+  border-color: rgba(16,185,129,0.3);
+}
+.compare-card .comp-label {
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.compare-card .comp-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+.compare-card .comp-change {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 4px 0;
+}
+.compare-card .comp-reason {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+/* Ticker strip */
+.ticker-card {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 14px;
+  margin: 10px 0;
+  border: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ticker-info .tk-name {
+  font-weight: 700;
+  color: #fff;
+  font-size: 15px;
+}
+.ticker-info .tk-desc {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.ticker-data {
+  text-align: right;
+}
+.ticker-data .tk-price {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 15px;
+}
+.ticker-data .tk-change {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+}
+
+/* Key Insight */
+.key-insight {
+  background: linear-gradient(135deg, var(--card), var(--card-alt));
+  border-radius: 12px;
+  padding: 18px;
+  margin: 16px 0;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.key-insight::before {
+  content: '💡';
+  position: absolute;
+  top: 12px; right: 14px;
+  font-size: 20px;
+  opacity: 0.5;
+}
+.key-insight .ki-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+/* Chart container */
+.chart-container {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+  border: 1px solid var(--border);
+}
+.chart-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+canvas { max-width: 100%; }
+
+/* Strategy box */
+.strategy-box {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 18px;
+  margin: 16px 0;
+  border: 1px solid var(--border);
+}
+.strat-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+.strat-row:last-child { margin-bottom: 0; }
+.strat-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.strat-icon.buy { background: rgba(16,185,129,0.15); }
+.strat-icon.sell { background: rgba(239,68,68,0.15); }
+.strat-icon.watch { background: rgba(245,158,11,0.15); }
+.strat-text {
+  font-size: 14px;
+}
+.strat-text strong { color: #fff; }
+
+/* Warning box */
+.warning-box {
+  background: rgba(239,68,68,0.08);
+  border: 1px solid rgba(239,68,68,0.25);
+  border-radius: 10px;
+  padding: 16px;
+  margin: 16px 0;
+}
+.warning-box .wb-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--red);
+  margin-bottom: 6px;
+}
+
+/* Calendar */
+.calendar-item {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin: 8px 0;
+  border: 1px solid var(--border);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.cal-date {
+  background: var(--card-alt);
+  border-radius: 8px;
+  padding: 6px 10px;
+  text-align: center;
+  min-width: 52px;
+}
+.cal-day { font-size: 11px; color: var(--text-dim); }
+.cal-num { font-size: 16px; font-weight: 900; color: #fff; }
+.cal-info .cal-title { font-weight: 700; font-size: 14px; color: #fff; }
+.cal-info .cal-desc { font-size: 12px; color: var(--text-dim); }
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 24px 0;
+  border-top: 1px solid var(--border);
+  margin-top: 32px;
+}
+.footer p {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Header -->
+<div class="header">
+  <div class="badge">NOVA REAL INVEST</div>
+  <h1>SaaS 버리고 HALO 자산 담아야 할 이유<br>다우 5만 시대의 투자 전략</h1>
+  <div class="meta">2026년 2월 9일(월) 뉴욕 현지 방송 | 미국 증시 분석</div>
+</div>
+
+<!-- Market Overview -->
+<div class="market-strip">
+  <div class="market-item">
+    <div class="label">다우</div>
+    <div class="value" style="color:var(--accent);">50,135</div>
+    <div class="change green">+0.04%</div>
+  </div>
+  <div class="market-item">
+    <div class="label">S&P 500</div>
+    <div class="value">—</div>
+    <div class="change green">+0.5%</div>
+  </div>
+  <div class="market-item">
+    <div class="label">나스닥</div>
+    <div class="value">—</div>
+    <div class="change green">+0.9%</div>
+  </div>
+  <div class="market-item">
+    <div class="label">러셀</div>
+    <div class="value">—</div>
+    <div class="change green">+0.7%</div>
+  </div>
+</div>
+
+<!-- Core Theme: HALO -->
+<section>
+  <div class="section-label">핵심 테마</div>
+  <h2>🏗️ "가짜는 죽고 진짜만 살아남는다" — HALO 자산의 시대</h2>
+  
+  <p>다우존스가 <strong>50,135.87</strong>로 장중 내내 5만 선을 지켜내며 역사적 이정표를 확인했다. 하지만 지수 이면에는 <strong>극단적 차별화</strong>가 진행 중이다. 메가캡이 지수를 끌어올리는 가운데, 수많은 종목이 동시에 큰 하락을 기록했다.</p>
+
+  <p>시장을 관통하는 키워드는 <strong>"실체(Physical Asset)"</strong>. 지난 10년간 소프트웨어·인터넷 등 무형자산이 시장을 이끌었다면, 이제는 공장, 에너지 인프라, 데이터센터 등 <strong>눈에 보이고 손에 잡히는 자산</strong>이 폭등하고 있다.</p>
+
+  <div class="halo-box">
+    <div class="halo-title">H A L O</div>
+    <p style="font-size:13px; color:var(--text-dim); margin-bottom:0;">월가의 새로운 투자 키워드</p>
+    <div class="halo-expand">
+      <div class="halo-item">
+        <div class="halo-letter">H</div>
+        <div class="halo-word">Heavy Asset</div>
+        <div class="halo-desc">무거운 실물 자산</div>
+      </div>
+      <div class="halo-item">
+        <div class="halo-letter">A</div>
+        <div class="halo-word">Asset</div>
+        <div class="halo-desc">유형 자산 보유</div>
+      </div>
+      <div class="halo-item">
+        <div class="halo-letter">L</div>
+        <div class="halo-word">Low</div>
+        <div class="halo-desc">낮은</div>
+      </div>
+      <div class="halo-item">
+        <div class="halo-letter">O</div>
+        <div class="halo-word">Obsolescence</div>
+        <div class="halo-desc">도태·진부화 위험 없음</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <p><strong>핵심 의미:</strong> AI가 대체할 수 없는 산업 — 해양시추, 발전소, 데이터센터 건설 등 물리적 인프라를 보유한 기업이 재평가 받는 시대. AI가 코딩은 할 수 있지만, 바다에서 석유를 퍼올리거나 데이터센터를 물리적으로 건설할 수는 없다.</p>
+  </div>
+</section>
+
+<!-- SaaS vs AI Infra -->
+<section>
+  <div class="section-label">섹터 분화</div>
+  <h2>💥 SaaSpocalypse vs AI 인프라 — 극과 극의 시장</h2>
+
+  <p>지난주 "SaaS 종말론(SaaSpocalypse)"이 시장을 뒤흔들었다. 생성형 AI·에이전트 AI가 발전하면서 <strong>기업이 자체 AI로 소프트웨어를 만들 수 있는 시대</strong>가 되자, 유저 수(시트) 기반 과금 모델의 SaaS 기업 존재 가치에 의문이 제기된 것이다.</p>
+
+  <p>그러나 주말 사이 시장 내러티브가 미묘하게 전환됐다. <strong>"소프트웨어가 망한다"가 아니라 "AI를 돌리는 인프라에 돈이 몰린다"</strong>로 톤이 바뀌었다.</p>
+
+  <div class="compare-grid">
+    <div class="compare-card bad">
+      <div class="comp-label red">☔ SaaS 공포</div>
+      <div class="comp-name">Monday.com</div>
+      <div class="comp-change red">-21%</div>
+      <div class="comp-reason">매출 +25%, 이익 상회에도 가이던스 실망 → AI 대체 공포</div>
+    </div>
+    <div class="compare-card good">
+      <div class="comp-label green">🚀 AI 인프라</div>
+      <div class="comp-name">Oracle (ORCL)</div>
+      <div class="comp-change green">+10%</div>
+      <div class="comp-reason">데이비슨 매수 상향, TP $180 → AI 인프라 건설사 재평가</div>
+    </div>
+  </div>
+
+  <h3>Monday.com 폭락의 교훈</h3>
+  <p>실적 자체는 매출 25% 성장, 이익 서프라이즈. 그런데도 폭락한 이유는 <strong>가이던스에 담긴 AI 대체 공포</strong>. AI가 매일 빠르게 발전하면서, 개인·기업이 자체 소프트웨어를 AI로 직접 만들어내는 세상이 되어가고 있다는 인식이 확산됐다.</p>
+
+  <h3>Oracle 폭등의 의미</h3>
+  <p>Oracle은 단순 소프트웨어 기업이 아닌 <strong>핵심 AI 인프라 제공자</strong>로 재평가 받고 있다.</p>
+  
+  <div class="highlight-box blue">
+    <p>✦ OpenAI 파트너십 → 데이터센터 운영 노하우 축적</p>
+    <p>✦ 데이터센터 계약 지속 유입 (수요를 따라가지 못할 정도)</p>
+    <p>✦ 데이비슨 투자은행: 중립 → <strong>매수 상향, 목표가 $180</strong> (현재 $156)</p>
+    <p>✦ "AI 시대의 건설사"로 포지셔닝 — 어마어마한 CapEx 수혜</p>
+  </div>
+</section>
+
+<!-- Big Tech CapEx -->
+<section>
+  <div class="section-label">빅테크 자본지출</div>
+  <h2>💰 "미국 국방비 = 빅테크 AI 투자" — $700B CapEx의 행방</h2>
+
+  <p>아마존, 구글, 메타 등 빅테크가 올해 AI 인프라에 쏟아부는 금액은 약 <strong>$700 Billion(한국 돈 천조 원)</strong>으로, 미국 1년 국방비와 맞먹는 규모다. 민간기업이 국방비급 자본지출을 한다는 것의 의미를 이해해야 한다.</p>
+
+  <div class="chart-container">
+    <div class="chart-title">이 돈이 어디로 가는가?</div>
+    <canvas id="capexChart" height="220"></canvas>
+  </div>
+
+  <div class="key-insight">
+    <div class="ki-title">구글 100년 만기 채권 발행</div>
+    <p style="font-size:14px;">알파벳(구글)이 <strong>100년 만기 회사채</strong>를 발행해 자금을 조성 중. 5~10년이 아닌 100년 만기는 AI가 "100년짜리 사업"임을 선언하는 것과 같다. 아마존도 프리캐시플로가 마이너스가 될 것을 각오하고 있으며, 유사한 대규모 자금 조달이 예상된다.</p>
+  </div>
+</section>
+
+<!-- STM & Supply Chain -->
+<section>
+  <div class="section-label">반도체 공급망</div>
+  <h2>🔗 STM + 아마존 — "을이 을이 아닌 시대"</h2>
+
+  <p>STM(STMicroelectronics)이 오늘 실적 발표 후 <strong>약 8% 상승</strong>. 핵심 이유는 <strong>AWS와 차세대 데이터센터 칩 공급 계약</strong>과 함께, 아마존의 <strong>신주인수권(2,480만 주)</strong> 확보 소식이다.</p>
+
+  <div class="highlight-box green">
+    <p><strong>단순 부품 공급 계약이 아닌 전략적 확보:</strong></p>
+    <p>아마존이 "일도 줄게, 주식도 살게"라며 STM의 주인 노릇을 하겠다는 것. 반도체 기업이 빅테크의 <strong>"멱살을 잡고 있는"</strong> 상황 — TSMC가 갑(甲) 위치에서 물량을 통제하고 있어, 빅테크들이 반도체 기업 확보에 사활을 걸고 있다.</p>
+  </div>
+
+  <h3>마이크론(MU) 하락 배경</h3>
+  <p>삼성전자가 마이크론의 물량을 빼앗을 수 있다는 불안감으로 하락했으나, 방송에서는 <strong>"지나친 우려"</strong>로 평가. 삼성·SK하이닉스·마이크론 모두 일(주문)이 넘쳐나고 있고, 메모리 시장의 병목현상이 극심한 상태라 모든 업체에 기회가 있다는 판단이다.</p>
+</section>
+
+<!-- Energy: Transocean + Valaris -->
+<section>
+  <div class="section-label">에너지 섹터</div>
+  <h2>🛢️ Transocean + Valaris 합병 — 에너지 슈퍼사이클 건재</h2>
+
+  <div class="ticker-card">
+    <div class="ticker-info">
+      <div class="tk-name">Valaris (VAL)</div>
+      <div class="tk-desc">해양시추 기업, 합병 발표</div>
+    </div>
+    <div class="ticker-data">
+      <div class="tk-change green" style="font-size:18px; font-weight:900;">+34%</div>
+      <div style="font-size:11px; color:var(--text-dim);">전액 주식교환 합병</div>
+    </div>
+  </div>
+
+  <p>Transocean과 Valaris의 합병으로 <strong>시추 선박(리그) 73척</strong>을 보유한 글로벌 1위 해양시추 기업이 탄생한다. 에너지 업계에서 규모의 경제를 위한 <strong>합종연횡</strong>이 본격화되고 있다.</p>
+
+  <div class="highlight-box">
+    <p><strong>왜 에너지가 HALO인가?</strong></p>
+    <p>AI 데이터센터 가동에는 막대한 전력이 필요하고, 그 전력은 결국 가스·석유에서 나온다. AI가 아무리 발전해도 바다 한가운데서 석유를 시추하는 작업은 대체할 수 없다. 에너지 안보(Sovereign Energy)가 더욱 중요해지면서, 에너지 슈퍼사이클은 계속된다.</p>
+  </div>
+
+  <div class="chart-container">
+    <div class="chart-title">최근 1개월 섹터별 수익률</div>
+    <canvas id="sectorChart" height="260"></canvas>
+  </div>
+</section>
+
+<!-- Hims & Hers: Regulation Risk -->
+<section>
+  <div class="section-label">개별 종목 리스크</div>
+  <h2>⚖️ Hims & Hers 규제 쇼크 — 모래성 비즈니스 모델</h2>
+
+  <div class="ticker-card" style="border-color: rgba(239,68,68,0.3);">
+    <div class="ticker-info">
+      <div class="tk-name">Hims & Hers (HIMS)</div>
+      <div class="tk-desc">복제약 플랫폼</div>
+    </div>
+    <div class="ticker-data">
+      <div class="tk-change red" style="font-size:18px; font-weight:900;">급락</div>
+      <div style="font-size:11px; color:var(--text-dim);">FDA + Novo Nordisk 소송</div>
+    </div>
+  </div>
+
+  <p>Hims & Hers는 특허 만료·규제 완화된 약품의 <strong>복제약(Compounded Drug)</strong>을 저렴하게 판매하는 "약품 플랫폼" 기업. 바이아그라 복제약으로 성공한 뒤, 비만 치료제(GLP-1) 복제약까지 확장했다.</p>
+
+  <p>그러나 오늘 <strong>두 가지 악재</strong>가 동시에 발생했다:</p>
+  
+  <div class="warning-box">
+    <div class="wb-title">🔻 이중 악재</div>
+    <p style="font-size:14px;"><strong>1) FDA 판단:</strong> 정품(Novo Nordisk) 물량이 충분한데 복제약을 만들어 파는 것은 부적절</p>
+    <p style="font-size:14px;"><strong>2) Novo Nordisk 소송:</strong> 즉각적인 법적 대응 개시</p>
+    <p style="font-size:14px;">장 마감 후, HIMS 측이 Novo Nordisk에 해당 약품 판매 중단 의사를 공식 루트로 전달했다는 루머 발생. 내일 아침 공식 확인 가능성 높음.</p>
+  </div>
+
+  <div class="key-insight">
+    <div class="ki-title">투자 교훈: 규제 리스크의 치명성</div>
+    <p style="font-size:14px;">자체 기술·특허 없이 남의 것을 합법적으로 복제하는 비즈니스 모델은 <strong>규제(FDA) 또는 정책(트럼프) 하나로 순식간에 무너질 수 있다.</strong> "합법적 짝퉁"은 방어막이 없는 대표적 사례. 본인의 IP 없는 플랫폼형 제약사는 구조적 취약성을 내재하고 있다.</p>
+  </div>
+</section>
+
+<!-- Kyndryl -->
+<section>
+  <div class="section-label">거버넌스 리스크</div>
+  <h2>🚨 Kyndryl -55% — 회계 의혹 + 경영진 이탈</h2>
+
+  <div class="ticker-card" style="border-color: rgba(239,68,68,0.5);">
+    <div class="ticker-info">
+      <div class="tk-name">Kyndryl (KD)</div>
+      <div class="tk-desc">IBM 분사 IT 서비스 기업</div>
+    </div>
+    <div class="ticker-data">
+      <div class="tk-change red" style="font-size:22px; font-weight:900;">-55%</div>
+      <div style="font-size:11px; color:var(--text-dim);">장중 반토막</div>
+    </div>
+  </div>
+
+  <p>IBM에서 분사한 IT 서비스 기업 Kyndryl이 하루 만에 <strong>주가 반토막</strong>. 핵심 원인:</p>
+
+  <div class="highlight-box red">
+    <p>✦ <strong>CFO(최고재무책임자) 사임</strong></p>
+    <p>✦ <strong>법무팀장(Legal Head) 사임</strong></p>
+    <p>✦ 회사 스스로 <strong>"회계 장부에 이상이 있다"</strong>고 발표, 재검토(Review) 착수</p>
+  </div>
+
+  <div class="key-insight">
+    <div class="ki-title">자본주의가 가장 싫어하는 것 = "거짓"</div>
+    <p style="font-size:14px;">CFO가 스스로 퇴임하면 무조건 의심해야 한다. 회계 문제 + 경영진 이탈은 <strong>교과서적 위험 신호</strong>. 아무리 강세장이라도 거버넌스·회계 문제가 발생한 기업은 한순간에 나락으로 갈 수 있다. <strong style="color:var(--red);">저가 매수 금지 — 절대 손대지 말 것.</strong></p>
+  </div>
+</section>
+
+<!-- Fed: Waller vs Miran -->
+<section>
+  <div class="section-label">거시경제</div>
+  <h2>🏛️ 연준 내부의 엇갈린 시그널</h2>
+
+  <div class="compare-grid">
+    <div class="compare-card" style="border-color: rgba(59,130,246,0.3);">
+      <div class="comp-label" style="color:var(--accent2);">비둘기파 기조</div>
+      <div class="comp-name" style="font-size:14px;">스티브 미란</div>
+      <div class="comp-reason" style="margin-top:8px;">• 관세는 인플레이션에 큰 영향 없다<br>• 감세·규제 완화로 GDP +1% 추가 성장 기대</div>
+    </div>
+    <div class="compare-card" style="border-color: rgba(239,68,68,0.3);">
+      <div class="comp-label" style="color:var(--red);">매파/경계 기조</div>
+      <div class="comp-name" style="font-size:14px;">크리스토퍼 월러</div>
+      <div class="comp-reason" style="margin-top:8px;">• 금융 시스템 리스크 관리 중요<br>• 고용시장 성장? 실질적으로 제로 수준<br>• 크립토 흥분은 끝났다<br>• 규제 불확실성 → 시장 변동성 경계</div>
+    </div>
+  </div>
+
+  <h3>미국 경제의 숨겨진 균열들</h3>
+  
+  <p><strong>1) 고용 시장:</strong> 표면적 통계와 달리, 실제 현장에서는 레이오프가 급증 중. ADP와 Challenger Cut 데이터에서 해고(Firing)가 크게 증가. "No-Hire No-Fire"에서 <strong>"Low-Hire, High-Fire"</strong>로 전환되고 있다는 관측.</p>
+
+  <p><strong>2) 스몰 비즈니스 위기:</strong> 이민법 강화로 3D 업종(어렵고·힘들고·더러운 일) 인력이 씨가 마름. 식당 등에서 버스보이 시급이 $20까지 치솟는 상황. 인력 부족이 소기업 경영을 압박.</p>
+
+  <p><strong>3) 상업용 부동산:</strong> 팬데믹 이후 회복 기대와 달리 <strong>공실 고착화</strong> 진행 중. 대형 쇼핑몰에서도 빈 매장이 급증하는 현상이 목격됨. 해결 기미가 보이지 않고 오히려 악화되는 추세.</p>
+
+  <p><strong>4) 재정건전성:</strong> "작은 정부"를 표방하는 트럼프 정부이지만, 세금은 올리지 않으면서 지출은 막대. 정부 부채가 심각한 수준이며, 다음 정권에 패닉 상태를 물려줄 가능성.</p>
+</section>
+
+<!-- Bitcoin -->
+<section>
+  <div class="section-label">크립토</div>
+  <h2>₿ 비트코인 — $70K 돌파 실패, 흥분은 끝났다</h2>
+
+  <p>주식시장(나스닥·S&P·러셀)이 모두 상승한 가운데, <strong>비트코인은 $70,000을 넘기지 못하고 부진</strong>. 크리스토퍼 월러 연준 이사가 "크립토 시장의 흥분은 끝났다"고 발언하며 하락 압력을 가중시켰다.</p>
+
+  <div class="highlight-box red">
+    <p><strong>비트코인 약세 요인 정리:</strong></p>
+    <p>✦ 의회 규제법안이 정부 셧다운 사태에 묻히며 <strong>입법 진전 없음</strong></p>
+    <p>✦ 은행들의 크립토 채택 <strong>전혀 진전 없음</strong> (리플 등 포함)</p>
+    <p>✦ 소프트웨어 ETF(IGV)와 비트코인의 가격 움직임이 동조화 → 위험자산으로서의 한계</p>
+    <p>✦ 월러 이사: "은행들은 여전히 크립토에 대한 관리를 강화 중"</p>
+  </div>
+</section>
+
+<!-- Technical Analysis -->
+<section>
+  <div class="section-label">기술적 분석</div>
+  <h2>📉 S&P 500 시나리오 분석 — 헤드앤숄더 경계</h2>
+
+  <p>S&P 500에 <strong>잠재적 헤드앤숄더 패턴</strong>이 형성될 수 있다는 경고. 이번 주 고용·CPI 데이터에 따라 세 가지 시나리오가 펼쳐질 수 있다:</p>
+
+  <div class="chart-container">
+    <div class="chart-title">S&P 500 시나리오 (개념도)</div>
+    <canvas id="scenarioChart" height="250"></canvas>
+  </div>
+
+  <div class="strategy-box">
+    <div class="strat-row">
+      <div class="strat-icon" style="background:rgba(16,185,129,0.15);">🟢</div>
+      <div class="strat-text"><strong>시나리오 A (낙관):</strong> 고용·CPI 양호 → 현재 추세선 지지, 상승 지속</div>
+    </div>
+    <div class="strat-row">
+      <div class="strat-icon" style="background:rgba(245,158,11,0.15);">🟡</div>
+      <div class="strat-text"><strong>시나리오 B (중립부정):</strong> 데이터 부진 → 볼륨 프로파일 지지선까지 조정 후 반등</div>
+    </div>
+    <div class="strat-row">
+      <div class="strat-icon" style="background:rgba(239,68,68,0.15);">🔴</div>
+      <div class="strat-text"><strong>시나리오 C (최악):</strong> 헤드앤숄더 완성 + 넥라인 하방 이탈 → 약 3년치 상승분 반납 가능성. 리세션 공포 현실화.</div>
+    </div>
+  </div>
+</section>
+
+<!-- This Week Calendar -->
+<section>
+  <div class="section-label">이번 주 관전 포인트</div>
+  <h2>📅 핵심 일정: 고용 + CPI — "Wait and See"</h2>
+
+  <p>정부 셧다운으로 밀렸던 경제 지표들이 이번 주 집중 발표된다. 백악관(헤셋)이 미리 <strong>"고용 수치가 낮게 나올 수 있다"</strong>고 밑밥을 깔아둔 상태.</p>
+
+  <div class="calendar-item">
+    <div class="cal-date">
+      <div class="cal-day">수</div>
+      <div class="cal-num">12</div>
+    </div>
+    <div class="cal-info">
+      <div class="cal-title">🔴 고용보고서 (지연 발표)</div>
+      <div class="cal-desc">예상보다 부진 시 → 리세션 공포 재점화 가능</div>
+    </div>
+  </div>
+
+  <div class="calendar-item">
+    <div class="cal-date">
+      <div class="cal-day">금</div>
+      <div class="cal-num">14</div>
+    </div>
+    <div class="cal-info">
+      <div class="cal-title">🔴 CPI (소비자물가지수)</div>
+      <div class="cal-desc">예상치 상회 시 → 금리 인하 기대 소멸, 하반기로 연기</div>
+    </div>
+  </div>
+
+  <div class="warning-box">
+    <div class="wb-title">⚠️ 변동성 경고</div>
+    <p style="font-size:14px;">수요일·금요일 장 변동성이 클 수 있으므로 <strong>현금 비중 조절, 레버리지 자제</strong> 권장. 기관들은 이미 평균 비중(Average Weight)을 조절하며 관망 모드에 진입.</p>
+  </div>
+</section>
+
+<!-- EV Market -->
+<section>
+  <div class="section-label">어닝 시즌 스냅샷</div>
+  <h2>🚗 전기차(EV) 시장 — "완전히 맛이 갔다"</h2>
+
+  <p>ON Semi(온세미) 실적 부진의 배경도 동일하다. 자동차 반도체 비중이 큰 기업인데, <strong>미국 전기차 시장이 사실상 붕괴</strong>하고 있기 때문이다.</p>
+
+  <div class="highlight-box red">
+    <p>✦ GM, 포드, 스텔란티스, BMW 등 → <strong>전기차 사업 축소·포기</strong></p>
+    <p>✦ 테슬라: Model S, X 판매 부진으로 단종, 가격 지속 인하 중</p>
+    <p>✦ 하이브리드로 선회하는 추세, EV 신규 투자 동결</p>
+    <p>✦ STM도 자동차 칩 수요 둔화로 고생 → AWS 계약으로 탈출구 확보</p>
+  </div>
+</section>
+
+<!-- Investment Strategy -->
+<section>
+  <div class="section-label">투자 전략</div>
+  <h2>🎯 "The Great Rotation" 시대의 포트폴리오</h2>
+
+  <div class="strategy-box">
+    <div class="strat-row">
+      <div class="strat-icon buy">✅</div>
+      <div class="strat-text"><strong>BUY — AI 인프라:</strong> Oracle, STM, 에너지 기업 등 AI를 물리적으로 구축하는 기업에 집중. 데이터센터·반도체·전력 인프라.</div>
+    </div>
+    <div class="strat-row">
+      <div class="strat-icon buy">✅</div>
+      <div class="strat-text"><strong>BUY — HALO 자산:</strong> 무거운 실물 자산 + AI 대체 불가능한 산업. 에너지, 인프라, 해양시추 등 도태 위험이 없는 기업.</div>
+    </div>
+    <div class="strat-row">
+      <div class="strat-icon buy">✅</div>
+      <div class="strat-text"><strong>주목 — 러셀 중소형주:</strong> 52주 신고가 갱신 종목 중 실물경제·AI 인프라 관련 중소형주가 다수 포진. 대장 섹터 1주·1개월·3개월 수익률로 추세 파악.</div>
+    </div>
+    <div class="strat-row">
+      <div class="strat-icon sell">❌</div>
+      <div class="strat-text"><strong>AVOID — 순수 SaaS:</strong> 돈이 가지 않는 곳에 투자도 가지 않는다. Monday.com, Workday 류 전통 SaaS 모델은 AI 대체 리스크 상존.</div>
+    </div>
+    <div class="strat-row">
+      <div class="strat-icon sell">❌</div>
+      <div class="strat-text"><strong>AVOID — 규제·정책 리스크:</strong> 트럼프 정책과 부딪히는 헬스케어·크립토 등. HIMS 같은 규제 취약 비즈니스 모델 경계.</div>
+    </div>
+    <div class="strat-row">
+      <div class="strat-icon sell">❌</div>
+      <div class="strat-text"><strong>AVOID — 거버넌스 문제:</strong> CFO 사임, 회계 의혹 등 경영 투명성 이슈 → Kyndryl 사례처럼 절대 저가매수 금지.</div>
+    </div>
+    <div class="strat-row">
+      <div class="strat-icon watch">⏳</div>
+      <div class="strat-text"><strong>WATCH — 매크로:</strong> 수요일 고용보고서, 금요일 CPI 발표 → "보고 가도 늦지 않다." 무리한 레버리지 금지, 현금 비중 확보.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Key Takeaway -->
+<section>
+  <div class="section-label">핵심 메시지</div>
+  <h2>🏛️ 다우 5만 시대의 메시지: "단단한 것에 꽂혀라"</h2>
+
+  <div class="halo-box" style="border-color: var(--accent2);">
+    <p style="font-size:15px; font-weight:700; color:#fff; margin-bottom:10px;">The Great Rotation</p>
+    <p style="font-size:14px; color:var(--text); margin-bottom:0;">다우 5만 돌파는 단순한 숫자가 아니다. <strong>"손에 잡히는 자산(Physical Asset)"</strong>이 시장의 중심으로 돌아왔다는 시그널이다. 보이지 않는 것(소프트웨어)에서 보이는 것(인프라·에너지·반도체)으로의 대전환이 진행 중이다. 구글이 100년 만기 채권을 발행하는 이유는 AI가 100년짜리 사업이기 때문이고, 그 AI를 움직이는 것은 결국 물리적 인프라다.</p>
+  </div>
+</section>
+
+<!-- Footer -->
+<div class="footer">
+  <p>📺 NOVA Real Invest 방송 분석 | 2026.02.09</p>
+  <p style="margin-top:4px;">본 문서는 YouTube 방송 내용을 정리·분석한 것이며, 투자 권유가 아닙니다.</p>
+</div>
+
+</div>
+
+<script>
+// CapEx Flow Chart
+const capexCtx = document.getElementById('capexChart').getContext('2d');
+new Chart(capexCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['데이터센터 건설', '서버/GPU 구매', '전력 인프라', '토지 매입', '반도체 공급 확보', '기타'],
+    datasets: [{
+      data: [30, 25, 18, 10, 12, 5],
+      backgroundColor: [
+        '#f59e0b', '#3b82f6', '#10b981', '#8b5cf6', '#ec4899', '#6b7280'
+      ],
+      borderColor: '#111827',
+      borderWidth: 2
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          color: '#9ca3af',
+          font: { size: 11, family: 'Noto Sans KR' },
+          padding: 12,
+          usePointStyle: true,
+          pointStyleWidth: 8
+        }
+      }
+    }
+  }
+});
+
+// Sector Returns Chart
+const sectorCtx = document.getElementById('sectorChart').getContext('2d');
+new Chart(sectorCtx, {
+  type: 'bar',
+  data: {
+    labels: ['에너지', 'IT', '산업재', '금융', '소재', '헬스케어', '필수소비', '유틸리티', '임의소비', '부동산', '통신'],
+    datasets: [{
+      label: '1개월 수익률(%)',
+      data: [16.16, 8.5, 6.2, 5.1, 4.3, 2.1, 1.8, 1.5, 0.9, -0.5, -1.2],
+      backgroundColor: function(context) {
+        const value = context.dataset.data[context.dataIndex];
+        return value >= 10 ? '#f59e0b' : value >= 0 ? '#10b981' : '#ef4444';
+      },
+      borderRadius: 4,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: {
+      legend: { display: false }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(255,255,255,0.05)' },
+        ticks: { color: '#9ca3af', font: { size: 11, family: 'JetBrains Mono' },
+          callback: v => v + '%'
+        }
+      },
+      y: {
+        grid: { display: false },
+        ticks: { color: '#e5e7eb', font: { size: 11, family: 'Noto Sans KR' } }
+      }
+    }
+  }
+});
+
+// Scenario Chart (simplified conceptual)
+const scenCtx = document.getElementById('scenarioChart').getContext('2d');
+const baseData = [100, 102, 104, 106, 108, 107, 109, 111, 110, 112, 111, 113];
+const scenA = [null,null,null,null,null,null,null,null,null,null,null,113, 115, 117, 119];
+const scenB = [null,null,null,null,null,null,null,null,null,null,null,113, 110, 108, 111];
+const scenC = [null,null,null,null,null,null,null,null,null,null,null,113, 108, 103, 97];
+
+new Chart(scenCtx, {
+  type: 'line',
+  data: {
+    labels: ['','','','','','','','','','','','현재','','',''],
+    datasets: [
+      {
+        label: '과거 추이',
+        data: baseData,
+        borderColor: '#6b7280',
+        backgroundColor: 'rgba(107,114,128,0.1)',
+        borderWidth: 2,
+        fill: false,
+        pointRadius: 0,
+        tension: 0.3
+      },
+      {
+        label: 'A: 낙관',
+        data: scenA,
+        borderColor: '#10b981',
+        borderWidth: 2,
+        borderDash: [6,3],
+        fill: false,
+        pointRadius: 0,
+        tension: 0.3
+      },
+      {
+        label: 'B: 조정후 반등',
+        data: scenB,
+        borderColor: '#f59e0b',
+        borderWidth: 2,
+        borderDash: [6,3],
+        fill: false,
+        pointRadius: 0,
+        tension: 0.3
+      },
+      {
+        label: 'C: 최악 (H&S)',
+        data: scenC,
+        borderColor: '#ef4444',
+        borderWidth: 2,
+        borderDash: [6,3],
+        fill: false,
+        pointRadius: 0,
+        tension: 0.3
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          color: '#9ca3af',
+          font: { size: 11, family: 'Noto Sans KR' },
+          padding: 12,
+          usePointStyle: true
+        }
+      },
+      annotation: {}
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(255,255,255,0.05)' },
+        ticks: { color: '#9ca3af', font: { size: 10 } }
+      },
+      y: {
+        grid: { color: 'rgba(255,255,255,0.05)' },
+        ticks: { display: false }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
