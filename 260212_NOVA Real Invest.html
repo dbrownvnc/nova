@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>고용 쇼크와 AI 대장주 분석 | 2026.02.12</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e17;
+  --surface: #111827;
+  --surface2: #1a2236;
+  --accent: #f59e0b;
+  --accent2: #ef4444;
+  --accent3: #10b981;
+  --text: #e5e7eb;
+  --text-dim: #9ca3af;
+  --border: #1f2937;
+  --blue: #3b82f6;
+  --purple: #8b5cf6;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 16px;
+  -webkit-font-smoothing: antialiased;
+}
+.hero {
+  padding: 48px 0 32px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 50%, rgba(245,158,11,0.06) 0%, transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(239,68,68,0.04) 0%, transparent 50%);
+  z-index: 0;
+}
+.hero > * { position: relative; z-index: 1; }
+.badge {
+  display: inline-block;
+  background: rgba(245,158,11,0.15);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1.3;
+  color: #fff;
+  margin-bottom: 12px;
+}
+.hero h1 span { color: var(--accent); }
+.meta {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+.meta strong { color: var(--text); font-weight: 500; }
+
+/* Sections */
+.section {
+  margin-bottom: 36px;
+}
+.section-title {
+  font-size: 18px;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 16px;
+  padding-left: 12px;
+  border-left: 3px solid var(--accent);
+  line-height: 1.4;
+}
+.section-title.red { border-left-color: var(--accent2); }
+.section-title.green { border-left-color: var(--accent3); }
+.section-title.blue { border-left-color: var(--blue); }
+.section-title.purple { border-left-color: var(--purple); }
+
+p { font-size: 14px; margin-bottom: 12px; color: var(--text); font-weight: 300; }
+strong { font-weight: 700; color: #fff; }
+
+/* Alert Box */
+.alert {
+  background: rgba(239,68,68,0.08);
+  border: 1px solid rgba(239,68,68,0.2);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+.alert.warn {
+  background: rgba(245,158,11,0.08);
+  border-color: rgba(245,158,11,0.2);
+}
+.alert.info {
+  background: rgba(59,130,246,0.08);
+  border-color: rgba(59,130,246,0.2);
+}
+.alert.green {
+  background: rgba(16,185,129,0.08);
+  border-color: rgba(16,185,129,0.2);
+}
+.alert-title {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.alert p { font-size: 13px; margin-bottom: 4px; }
+.alert p:last-child { margin-bottom: 0; }
+
+/* Data Card */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+.card-header {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+/* Stat Grid */
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.stat {
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 14px;
+  text-align: center;
+}
+.stat-value {
+  font-size: 22px;
+  font-weight: 900;
+  color: #fff;
+}
+.stat-value.up { color: var(--accent3); }
+.stat-value.down { color: var(--accent2); }
+.stat-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+/* Bar Chart */
+.bar-chart { margin: 16px 0; }
+.bar-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+.bar-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  min-width: 80px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.bar-track {
+  flex: 1;
+  height: 24px;
+  background: var(--surface2);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  transition: width 1s ease;
+}
+.bar-fill.green { background: linear-gradient(90deg, #059669, #10b981); }
+.bar-fill.red { background: linear-gradient(90deg, #dc2626, #ef4444); }
+.bar-fill.blue { background: linear-gradient(90deg, #2563eb, #3b82f6); }
+.bar-fill.amber { background: linear-gradient(90deg, #d97706, #f59e0b); }
+
+/* Timeline */
+.timeline { margin: 16px 0; }
+.tl-item {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-left: 4px;
+}
+.tl-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: 7px;
+  flex-shrink: 0;
+}
+.tl-dot.red { background: var(--accent2); }
+.tl-dot.green { background: var(--accent3); }
+.tl-dot.blue { background: var(--blue); }
+.tl-content {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Stock Pill */
+.pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--surface2);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.pill .ticker { font-weight: 700; color: #fff; }
+.pill .change { font-weight: 700; }
+.pill .change.up { color: var(--accent3); }
+.pill .change.down { color: var(--accent2); }
+
+/* Table */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 12px 0;
+}
+.data-table th {
+  text-align: left;
+  font-weight: 700;
+  color: var(--accent);
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.data-table td {
+  padding: 8px 6px;
+  border-bottom: 1px solid rgba(31,41,55,0.5);
+  color: var(--text);
+}
+.data-table tr:last-child td { border-bottom: none; }
+
+/* Comparison */
+.vs-box {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 8px;
+  align-items: center;
+  margin: 16px 0;
+}
+.vs-side {
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 14px;
+  text-align: center;
+}
+.vs-name { font-size: 12px; color: var(--text-dim); margin-bottom: 4px; }
+.vs-val { font-size: 20px; font-weight: 900; color: #fff; }
+.vs-label { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+.vs-divider {
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--accent);
+}
+
+/* Divider */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 32px 0;
+}
+
+/* Footer */
+.footer {
+  padding: 32px 0;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-dim);
+  border-top: 1px solid var(--border);
+  margin-top: 24px;
+}
+
+/* Quote */
+.quote {
+  border-left: 2px solid var(--purple);
+  padding-left: 14px;
+  margin: 16px 0;
+  font-style: italic;
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+/* Keypoint */
+.keypoint {
+  background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(139,92,246,0.05));
+  border-radius: 10px;
+  padding: 18px;
+  margin: 16px 0;
+  border: 1px solid rgba(245,158,11,0.15);
+}
+.keypoint-title {
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+/* CME Chart */
+.cme-chart { margin: 16px 0; }
+.cme-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+.cme-month {
+  min-width: 48px;
+  font-weight: 700;
+  color: var(--text-dim);
+}
+.cme-bar-track {
+  flex: 1;
+  height: 20px;
+  background: var(--surface2);
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 0 8px;
+}
+.cme-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #1e40af, #3b82f6);
+}
+.cme-val {
+  min-width: 45px;
+  text-align: right;
+  font-weight: 600;
+  color: var(--text);
+}
+.cme-bar-fill.hot { background: linear-gradient(90deg, #b91c1c, #ef4444); }
+.cme-bar-fill.warm { background: linear-gradient(90deg, #92400e, #f59e0b); }
+.cme-bar-fill.cool { background: linear-gradient(90deg, #1e40af, #3b82f6); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="badge">NOVA Real Invest 분석</div>
+  <h1>고용 쇼크로 증발한 <span>3,000억불</span>!<br>올해 살아남을 AI 대장주</h1>
+  <div class="meta">
+    📅 2026년 02월 12일 &nbsp;|&nbsp; <strong>채널:</strong> NOVA Real Invest &nbsp;|&nbsp; <strong>분석:</strong> 미국 증시·경제
+  </div>
+</div>
+
+<!-- 1. 핵심 요약 -->
+<div class="section">
+  <h2 class="section-title">📌 핵심 3줄 요약</h2>
+  <div class="alert">
+    <div class="alert-title">🔴 고용 통계 쇼크</div>
+    <p>비농업 고용 <strong>+13만 명</strong>(예상 5.5만), 실업률 <strong>4.3%</strong>로 하락 → 겉으로는 호황이지만 2025년 고용 데이터 <strong>40만 명 하향 조정(리바이스)</strong>으로 실체는 '빈 고용'</p>
+  </div>
+  <div class="alert warn">
+    <div class="alert-title">⚠️ 연준 금리 인하 후퇴</div>
+    <p>CME 기준 3~4월 금리 인하 <strong>사실상 소멸</strong>, 7월에도 45.3%에 불과 → 연내 금리 인하 1~2회 수준으로 축소</p>
+  </div>
+  <div class="alert green">
+    <div class="alert-title">✅ AI 피지컬리티(Physical AI) 독주</div>
+    <p>버티브(VRT) 매출 YOY <strong>+252%</strong>, 제너랙(GNRC) <strong>+17.9%</strong> 급등 → 소프트웨어가 아닌 <strong>하드웨어·인프라</strong>가 AI 투자의 핵심</p>
+  </div>
+</div>
+
+<!-- 2. 고용 통계 상세 분석 -->
+<div class="section">
+  <h2 class="section-title red">🔴 고용 통계의 진실: "13만 명의 함정"</h2>
+
+  <div class="stat-grid">
+    <div class="stat">
+      <div class="stat-value up">+143K</div>
+      <div class="stat-label">비농업 고용 (발표)</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">55K</div>
+      <div class="stat-label">시장 예상치</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value down">4.3%</div>
+      <div class="stat-label">실업률</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value down">-400K</div>
+      <div class="stat-label">2025년 리바이스 규모</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">2025년 고용 리바이스 (하향 수정)</div>
+    <p><strong>발표 당시:</strong> 2025년 신규 고용 약 <strong>58만 명</strong></p>
+    <p><strong>리바이스 후:</strong> 실제 약 <strong>18만 명</strong></p>
+    <p>→ <strong>40만 명이 과대 계상</strong>된 것으로 드러남</p>
+    <div class="quote">
+      연준 이사 월러(Waller): "Zero, Zilch, Nada" — 2025년 고용은 사실상 없었다
+    </div>
+    <p>트럼프 대통령이 수일 전부터 "리바이스가 될 것"이라며 밑밥을 깔았고, 실제로 2025년 연간 고용 통계가 대폭 하향 조정됨</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">1월 고용 업종별 분해</div>
+    <div class="bar-chart">
+      <div class="bar-row">
+        <div class="bar-label">헬스케어</div>
+        <div class="bar-track"><div class="bar-fill green" style="width:85%">+124,000</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">건설업</div>
+        <div class="bar-track"><div class="bar-fill blue" style="width:28%">+33,000</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">기타 업종</div>
+        <div class="bar-track"><div class="bar-fill red" style="width:15%">감소</div></div>
+      </div>
+    </div>
+    <p><strong>헬스케어 증가 원인:</strong> 미국 고령화 사회 가속 (중간 나이 37세)</p>
+    <p><strong>건설업 증가 원인:</strong> AI 데이터센터 인프라 확장에 따른 건설 수요 급증</p>
+    <p>⚠️ IT/기술직은 오히려 <strong>감원 가속</strong> → 프로그래머, 소프트웨어 엔지니어 대량 해고 진행 중</p>
+  </div>
+</div>
+
+<!-- 3. 금리·연준 -->
+<div class="section">
+  <h2 class="section-title">📊 연준 금리 인하 전망 급변</h2>
+
+  <div class="card">
+    <div class="card-header">CME FedWatch 금리 인하 확률</div>
+    <div class="cme-chart">
+      <div class="cme-row">
+        <div class="cme-month">3월</div>
+        <div class="cme-bar-track"><div class="cme-bar-fill hot" style="width:3%"></div></div>
+        <div class="cme-val" style="color:var(--accent2)">≈0%</div>
+      </div>
+      <div class="cme-row">
+        <div class="cme-month">4월</div>
+        <div class="cme-bar-track"><div class="cme-bar-fill hot" style="width:5%"></div></div>
+        <div class="cme-val" style="color:var(--accent2)">≈5%</div>
+      </div>
+      <div class="cme-row">
+        <div class="cme-month">6월</div>
+        <div class="cme-bar-track"><div class="cme-bar-fill warm" style="width:25%"></div></div>
+        <div class="cme-val" style="color:var(--accent)">~25%</div>
+      </div>
+      <div class="cme-row">
+        <div class="cme-month">7월</div>
+        <div class="cme-bar-track"><div class="cme-bar-fill cool" style="width:45%"></div></div>
+        <div class="cme-val">45.3%</div>
+      </div>
+      <div class="cme-row">
+        <div class="cme-month">9월</div>
+        <div class="cme-bar-track"><div class="cme-bar-fill cool" style="width:55%"></div></div>
+        <div class="cme-val" style="color:var(--accent3)">~55%</div>
+      </div>
+    </div>
+    <p>※ 50% 이상이 되어야 실제 인하 가능성이 유의미. 현재 <strong>9월</strong>에야 겨우 50% 근접</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">주요 인물 발언 정리</div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot red"></div>
+        <div class="tl-content"><strong>로건 & 해맥</strong> (2026년 투표권 보유 위원)<br>→ "인플레이션 우려 여전, 금리 인하 서두를 필요 없다"</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content"><strong>월러</strong> (연준 이사)<br>→ "Zero, Zilch, Nada" — 2025년 고용 데이터에 극도의 불신 표명, 데이터 신중론</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot blue"></div>
+        <div class="tl-content"><strong>케빈 워시</strong><br>→ 생산성 기반 접근 주장</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot green"></div>
+        <div class="tl-content"><strong>시티은행</strong> 전망 변경<br>→ 첫 인하 시점: 3월 → <strong>5월로 후퇴</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat">
+      <div class="stat-value down">4.17%</div>
+      <div class="stat-label">10년물 국채금리 (급등)</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">4.20%</div>
+      <div class="stat-label">경계선 (위험 기준)</div>
+    </div>
+  </div>
+  <p>10년물 국채금리가 <strong>4.2%</strong>를 돌파하면 주식시장에 추가 충격 가능. 금요일 <strong>CPI 발표</strong>가 분수령이 될 전망.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- 4. AI 피지컬리티 -->
+<div class="section">
+  <h2 class="section-title green">💎 AI 피지컬리티(Physical AI): "딱딱한 것이 AI다"</h2>
+
+  <div class="keypoint">
+    <div class="keypoint-title">핵심 테제: "비트에서 원자로"</div>
+    <p style="margin:0">AI 투자의 핵심은 소프트웨어가 아닌 <strong>물리적 인프라</strong> — 데이터센터 건설, 냉각, 전력, 반도체 장비 등 <strong>"딱딱한 것(하드웨어)"</strong>에 돈이 몰리고 있다.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">AI 인프라 대장주 실적</div>
+    <table class="data-table">
+      <tr><th>종목</th><th>당일 변동</th><th>핵심 포인트</th></tr>
+      <tr>
+        <td><strong>버티브(VRT)</strong></td>
+        <td style="color:var(--accent3)">폭등</td>
+        <td>매출 YOY +252%, 냉각솔루션</td>
+      </tr>
+      <tr>
+        <td><strong>제너랙(GNRC)</strong></td>
+        <td style="color:var(--accent3)">+17.9%</td>
+        <td>데이터센터 백업 발전기, 브레이크아웃</td>
+      </tr>
+      <tr>
+        <td><strong>이튼(ETN)</strong></td>
+        <td style="color:var(--accent3)">상승</td>
+        <td>전력 인프라, 52주 신고가</td>
+      </tr>
+      <tr>
+        <td><strong>캐터필라(CAT)</strong></td>
+        <td style="color:var(--accent3)">2주 연속↑</td>
+        <td>건설장비, 데이터센터 착공 수요</td>
+      </tr>
+      <tr>
+        <td><strong>마이크론(MU)</strong></td>
+        <td style="color:var(--accent3)">+9.94%</td>
+        <td>HBM4 양산 1년 앞당김</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-header">제너랙(GNRC) — 발전기에서 AI 인프라주로</div>
+    <p>원래 가정용 발전기(코스트코에서 $700~800) 제조사 → 사업 전환하여 <strong>데이터센터 백업용 발전기</strong> 생산</p>
+    <p>24시간 운영되는 데이터센터의 <strong>무중단 전력</strong> 필수 → 백업 발전 수요 폭발</p>
+    <p>차트상 <strong>$200 기준 브레이크아웃</strong> 달성, 5년 차트 기준으로는 아직 상승 여력 충분</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">마이크론(MU) — HBM4 서프라이즈</div>
+    <p>삼성 HBM 엔비디아 승인 소식에 급락했으나, CFO가 <strong>"HBM4 양산·출하를 예상보다 1년 앞당겼다"</strong>고 발표하면서 반등</p>
+    <p><strong>HBM 쉽게 이해하기:</strong> 메모리 반도체의 물리적 소형화 한계 도달 → 위로 층을 쌓아 올리는 기술 (아파트처럼). HBM4 = 4층짜리 메모리 → 열 관리, 층간 연결이 핵심 기술</p>
+  </div>
+</div>
+
+<!-- 5. 빅머니 동향 -->
+<div class="section">
+  <h2 class="section-title purple">🧠 빅머니 투자 동향</h2>
+
+  <div class="vs-box">
+    <div class="vs-side">
+      <div class="vs-name">빌 애크먼</div>
+      <div class="vs-val" style="color:var(--accent3)">META</div>
+      <div class="vs-label">지분 10% 확보</div>
+    </div>
+    <div class="vs-divider">VS</div>
+    <div class="vs-side">
+      <div class="vs-name">데이비 아이혼</div>
+      <div class="vs-val" style="color:var(--blue)">금리+금</div>
+      <div class="vs-label">단기채 롱 + 골드</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">빌 애크먼의 메타 베팅 논리</div>
+    <p>메타 PE 레이시오 <strong>22배</strong> — AI를 실제 광고 수익과 연결해 수익을 뽑아내는 기업으로 평가</p>
+    <p>비교: 테슬라 PE <strong>~400배</strong>, 팔란티어도 유사하게 고평가 상태</p>
+    <p>→ "소프트웨어가 죽어도, AI를 <strong>매출로 전환</strong>하는 기업은 다르다"는 판단</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">데이비 아이혼의 헤지 전략</div>
+    <p>고용 통계에도 불구, 트럼프 의지 + 케빈 워시 임명 등 고려 시 <strong>연내 2회 금리 인하</strong> 예상</p>
+    <p>포지션: <strong>단기 금리선물 롱</strong> + <strong>골드 매수</strong> → 인플레이션 헤지와 금리 인하 동시 대비</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 6. SaaSpocalypse -->
+<div class="section">
+  <h2 class="section-title red">💀 SaaS 아마겟돈(SaaSpocalypse)</h2>
+
+  <p>엔트로픽(Anthropic) 공동창업자 퇴사하며 <strong>"The world is in peril"</strong> 경고 — AI가 인간의 지혜를 넘어서는 시점이 '현재'라고 주장</p>
+
+  <div class="alert">
+    <div class="alert-title">🔴 위기의 업종들</div>
+    <p>• <strong>소프트웨어 기업:</strong> 유니티 등 -30% 급락</p>
+    <p>• <strong>"사(士)자" 직업군:</strong> 컨설팅, 법률, 금융 등 AI 대체 가속</p>
+    <p>• <strong>AI의 역할 진화:</strong> Co-pilot(도구) → Co-worker(동료) → Co-manager(관리자) 단계로 이동 중</p>
+  </div>
+
+  <div class="alert green">
+    <div class="alert-title">✅ 단, 모든 소프트웨어가 죽는 것은 아님</div>
+    <p>AI가 물리적 세계로 확장하는 데 <strong>반드시 필요한 소프트웨어</strong>는 살아남을 것 → 새로운 사이클의 가능성</p>
+  </div>
+</div>
+
+<!-- 7. 트럼프 정책 리스크 -->
+<div class="section">
+  <h2 class="section-title">⚡ 정책 리스크: 에너지·관세·바이오</h2>
+
+  <div class="card">
+    <div class="card-header">🪨 석탄 행정명령</div>
+    <p>트럼프 대통령, <strong>미군 시설 석탄전력 사용 의무화</strong> 행정명령 서명</p>
+    <p>논리: AI 데이터센터 전력 수요 → 친환경만으로는 부족 → 석탄까지 동원하여 <strong>"에너지 안보 자산"</strong> 확보</p>
+    <div class="pill-row">
+      <div class="pill"><span class="ticker">BTU</span> 피바디 <span class="change up">+9%↑</span> (장중+장후)</div>
+    </div>
+    <p>오늘 섹터 리더: <strong>에너지가 1위</strong>로 복귀</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">🏛️ 관세 동향</div>
+    <p>1월 관세 수입 YOY <strong>+304%</strong> 증가 — 정부 수입에는 기여</p>
+    <p>미 하원에서 <strong>캐나다 관세 불법화 법안 통과</strong> (공화당 일부 협조), 그러나 대통령 거부권으로 실효성 낮음</p>
+    <p>⚠️ <strong>대법원 판결</strong>이 나올 경우 관세 무효화·환급 가능성 → 관세 수혜주 급변동 가능</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">💊 바이오 섹터 규제 리스크</div>
+    <p>모더나 백신 FDA 거부, RFK Jr.(보건부) 반백신 기조 → 바이오 섹터 <strong>단기 3년간 고위험</strong></p>
+    <p>장기적으로는 AI 덕분에 바이오 성장 가능하나, 규제 리스크가 너무 큼</p>
+    <p>생존 가능 종목: <strong>일라이 릴리(LLY)</strong> — 시장 지배력, 최다 약품 판매, AI 적극 활용</p>
+  </div>
+</div>
+
+<!-- 8. 실적·개별 종목 -->
+<div class="section">
+  <h2 class="section-title blue">📋 개별 종목 이슈</h2>
+
+  <div class="card">
+    <div class="card-header">시스코(CSCO) — "덜 딱딱한" AI의 한계</div>
+    <p>실적은 양호했으나 <strong>가이던스 부진</strong> → 장후 <strong>-7% 이상</strong> 하락</p>
+    <p>이더넷·라우터 기반 네트워킹은 AI 업계가 원하는 속도를 충족시키지 못함 → AI 업계는 더 빠른 통신(라우터 우회, 무선 등) 탐색 중</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">마텔(MAT) — 소비 양극화의 피해자</div>
+    <p>바비인형 제조사, <strong>-24%</strong> 폭락</p>
+    <p>원인: ① 리테일 세일즈 부진 ② 관세 리스크(해외 생산 의존) ③ 소비 양극화</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">맥도날드(MCD) — 중산층 몰락의 수혜자</div>
+    <p>어닝 양호, <strong>객단가 상승</strong></p>
+    <p>원인: 중산층이 고급 레스토랑 대신 맥도날드에서 소비 → <strong>"하향 평준화"</strong>의 증거</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 9. 투자 전략 정리 -->
+<div class="section">
+  <h2 class="section-title">🎯 투자 전략 총정리</h2>
+
+  <div class="alert green">
+    <div class="alert-title">✅ 매수 관심 영역 (피지컬 AI)</div>
+    <p>• <strong>데이터센터 인프라:</strong> 버티브(VRT), 이튼(ETN), 제너랙(GNRC)</p>
+    <p>• <strong>건설장비:</strong> 캐터필라(CAT)</p>
+    <p>• <strong>반도체 장비·메모리:</strong> 마이크론(MU), 반도체 장비주</p>
+    <p>• <strong>에너지:</strong> 석탄·가스 관련주(피바디 등)</p>
+    <p>• <strong>저평가 빅테크:</strong> 메타(META) — PE 22배</p>
+    <p>→ 핵심: <strong>"주문 잔고(Backlog)가 넘치는 기업"</strong>을 찾아라</p>
+  </div>
+
+  <div class="alert warn">
+    <div class="alert-title">⚠️ 관망 / 헤지 영역</div>
+    <p>• <strong>안전자산:</strong> 금(Gold), 단기 국채 — 정책 불확실성 헤지</p>
+    <p>• <strong>달러:</strong> 약세 기조 지속 전망</p>
+    <p>• 금리 인하 기대는 "있으면 좋지만 없어도 되는 것(극가위꺼)"으로 마인드 전환 필요</p>
+  </div>
+
+  <div class="alert">
+    <div class="alert-title">🔴 주의 / 회피 영역</div>
+    <p>• <strong>SaaS·순수 소프트웨어:</strong> AI 대체 가속</p>
+    <p>• <strong>바이오:</strong> 규제 리스크 (일라이 릴리 제외)</p>
+    <p>• <strong>관세 직격 소비재:</strong> 해외 생산 의존 기업</p>
+    <p>• <strong>고PE 종목:</strong> 테슬라·팔란티어 등 PE 400배급</p>
+  </div>
+
+  <div class="keypoint">
+    <div class="keypoint-title">🔑 핵심 투자 원칙</div>
+    <p style="margin-bottom:8px"><strong>① 숫자가 증명하는 곳으로 이동하라</strong> — 기대가 아니라 실적(어닝)으로 증명</p>
+    <p style="margin-bottom:8px"><strong>② 딱딱한 것(피지컬)을 담아라</strong> — 물리적 인프라 > 소프트웨어</p>
+    <p style="margin-bottom:8px"><strong>③ 병목(Backlog)을 사라</strong> — 주문 잔고가 넘치는 기업이 진짜</p>
+    <p style="margin-bottom:0"><strong>④ 페어 트레이딩</strong> — 대장주의 짝꿍(동종 후발주)을 한 박자 늦게 매수</p>
+  </div>
+</div>
+
+<!-- 10. 금요일 CPI 프리뷰 -->
+<div class="section">
+  <h2 class="section-title">📅 다음 이벤트: 금요일 CPI</h2>
+  <div class="card">
+    <div class="card-header">시나리오 분석</div>
+    <table class="data-table">
+      <tr><th>시나리오</th><th>결과</th><th>영향</th></tr>
+      <tr>
+        <td>물가 재상승</td>
+        <td>10년물 4.2% 돌파</td>
+        <td style="color:var(--accent2)">주식시장 충격</td>
+      </tr>
+      <tr>
+        <td>물가 안정</td>
+        <td>금리 인하 기대 회복</td>
+        <td style="color:var(--accent3)">기술주 안도 랠리</td>
+      </tr>
+    </table>
+    <p>⚠️ 어플라이드 머티리얼즈(AMAT) 실적 발표 + 에어비앤비(ABNB) 실적도 예정</p>
+  </div>
+</div>
+
+<div class="footer">
+  ⚠️ 본 자료는 NOVA Real Invest 방송 내용을 정리·분석한 것으로, 투자 권유가 아닙니다.<br>
+  투자 판단은 본인의 책임하에 이루어져야 합니다.<br><br>
+  분석일: 2026.02.12 | 원본: NOVA Real Invest YouTube
+</div>
+
+</body>
+</html>

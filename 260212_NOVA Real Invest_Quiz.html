@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시험문제 10선 | 고용 쇼크와 AI 대장주</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e17;
+  --surface: #111827;
+  --surface2: #1a2236;
+  --accent: #f59e0b;
+  --accent2: #ef4444;
+  --accent3: #10b981;
+  --text: #e5e7eb;
+  --text-dim: #9ca3af;
+  --border: #1f2937;
+  --blue: #3b82f6;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+.header {
+  padding: 40px 0 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 28px;
+}
+.header h1 {
+  font-size: 22px;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.header p { font-size: 13px; color: var(--text-dim); }
+
+.q-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 16px;
+  position: relative;
+}
+.q-num {
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 11px;
+  font-weight: 900;
+  padding: 2px 10px;
+  border-radius: 10px;
+}
+.q-num.easy { background: var(--accent3); }
+.q-num.hard { background: var(--accent2); }
+.q-diff {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  margin-top: 4px;
+}
+.q-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.q-options {
+  list-style: none;
+  padding: 0;
+}
+.q-options li {
+  font-size: 13px;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  background: var(--surface2);
+  border-radius: 6px;
+  cursor: default;
+}
+.q-options li:last-child { margin-bottom: 0; }
+.q-type {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  background: rgba(59,130,246,0.15);
+  color: var(--blue);
+}
+.q-type.ox { background: rgba(139,92,246,0.15); color: #8b5cf6; }
+.q-type.short { background: rgba(16,185,129,0.15); color: var(--accent3); }
+
+/* Answer Section */
+.answer-section {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 3px solid var(--accent);
+}
+.answer-section h2 {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--accent);
+  margin-bottom: 24px;
+  text-align: center;
+}
+.a-card {
+  background: var(--surface);
+  border-left: 3px solid var(--accent3);
+  border-radius: 0 8px 8px 0;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+.a-num {
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.a-answer {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent3);
+  margin-bottom: 6px;
+}
+.a-explain {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+.footer {
+  padding: 32px 0;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-dim);
+  border-top: 1px solid var(--border);
+  margin-top: 32px;
+}
+.spoiler-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--accent), #d97706);
+  color: var(--bg);
+  font-size: 15px;
+  font-weight: 900;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 32px 0;
+  text-align: center;
+}
+.spoiler-btn:hover { opacity: 0.9; }
+.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📝 시험문제 10선</h1>
+  <p>고용 쇼크와 AI 대장주 | 2026.02.12 NOVA 방송 기반</p>
+  <p style="margin-top:4px">난이도: 🟢 쉬움 3문제 · 🟡 보통 5문제 · 🔴 어려움 2문제</p>
+</div>
+
+<!-- Q1 -->
+<div class="q-card">
+  <div class="q-num easy">Q1</div>
+  <div class="q-diff">🟢 쉬움</div>
+  <div class="q-type ox">OX 문제</div>
+  <div class="q-text">2026년 2월 발표된 미국 비농업 고용은 예상치(5.5만 명)를 크게 하회하여 시장에 충격을 주었다.</div>
+</div>
+
+<!-- Q2 -->
+<div class="q-card">
+  <div class="q-num easy">Q2</div>
+  <div class="q-diff">🟢 쉬움</div>
+  <div class="q-type">객관식</div>
+  <div class="q-text">노바가 강조한 AI 투자의 핵심 키워드 "딱딱한 것"은 무엇을 의미하는가?</div>
+  <ul class="q-options">
+    <li>① 소프트웨어 플랫폼</li>
+    <li>② SaaS 구독 서비스</li>
+    <li>③ 물리적 하드웨어·인프라</li>
+    <li>④ 암호화폐·블록체인</li>
+  </ul>
+</div>
+
+<!-- Q3 -->
+<div class="q-card">
+  <div class="q-num easy">Q3</div>
+  <div class="q-diff">🟢 쉬움</div>
+  <div class="q-type short">단답형</div>
+  <div class="q-text">연준 이사 월러(Waller)가 2025년 고용 데이터를 평가하며 사용한 표현 세 단어는?</div>
+</div>
+
+<!-- Q4 -->
+<div class="q-card">
+  <div class="q-num">Q4</div>
+  <div class="q-diff">🟡 보통</div>
+  <div class="q-type">객관식</div>
+  <div class="q-text">2025년 고용 리바이스(하향 수정)에서 드러난 실제 신규 고용과 기존 발표치의 차이는 약 몇 명인가?</div>
+  <ul class="q-options">
+    <li>① 약 10만 명</li>
+    <li>② 약 20만 명</li>
+    <li>③ 약 40만 명</li>
+    <li>④ 약 60만 명</li>
+  </ul>
+</div>
+
+<!-- Q5 -->
+<div class="q-card">
+  <div class="q-num">Q5</div>
+  <div class="q-diff">🟡 보통</div>
+  <div class="q-type">객관식</div>
+  <div class="q-text">1월 고용 통계에서 가장 많이 증가한 두 업종의 조합으로 올바른 것은?</div>
+  <ul class="q-options">
+    <li>① IT·제조업</li>
+    <li>② 헬스케어·건설업</li>
+    <li>③ 금융·서비스업</li>
+    <li>④ 에너지·유통업</li>
+  </ul>
+</div>
+
+<!-- Q6 -->
+<div class="q-card">
+  <div class="q-num">Q6</div>
+  <div class="q-diff">🟡 보통</div>
+  <div class="q-type">객관식</div>
+  <div class="q-text">빌 애크먼이 메타(META) 지분 10%를 확보한 근거로 언급된 것은?</div>
+  <ul class="q-options">
+    <li>① 메타버스 사업의 성장 기대</li>
+    <li>② PE 레이시오 22배로 AI 잠재력 대비 저평가</li>
+    <li>③ 인스타그램 사용자 수 급증</li>
+    <li>④ 엔비디아와의 제휴 발표</li>
+  </ul>
+</div>
+
+<!-- Q7 -->
+<div class="q-card">
+  <div class="q-num">Q7</div>
+  <div class="q-diff">🟡 보통</div>
+  <div class="q-type ox">OX 문제</div>
+  <div class="q-text">CME FedWatch 기준, 2026년 3월과 4월의 금리 인하 확률은 사실상 소멸했으며, 9월에 가서야 약 50% 수준에 근접한다.</div>
+</div>
+
+<!-- Q8 -->
+<div class="q-card">
+  <div class="q-num">Q8</div>
+  <div class="q-diff">🟡 보통</div>
+  <div class="q-type short">단답형</div>
+  <div class="q-text">마이크론(MU) 주가가 삼성 HBM 승인 소식에 급락한 뒤 다시 +9.94% 반등한 이유는 무엇인가? (핵심 키워드 포함하여 한 문장으로)</div>
+</div>
+
+<!-- Q9 -->
+<div class="q-card">
+  <div class="q-num hard">Q9</div>
+  <div class="q-diff">🔴 어려움</div>
+  <div class="q-type">객관식</div>
+  <div class="q-text">트럼프 대통령의 석탄 행정명령, 맥도날드 실적, 마텔 폭락을 종합하면 현재 미국 경제의 어떤 구조적 변화를 시사하는가?</div>
+  <ul class="q-options">
+    <li>① 기술 혁신 주도의 균형 성장</li>
+    <li>② 에너지 안보 강화와 소비 양극화(K경제) 심화</li>
+    <li>③ 친환경 에너지 전환 가속</li>
+    <li>④ 저소득층 소비 회복</li>
+  </ul>
+</div>
+
+<!-- Q10 -->
+<div class="q-card">
+  <div class="q-num hard">Q10</div>
+  <div class="q-diff">🔴 어려움</div>
+  <div class="q-type short">서술형</div>
+  <div class="q-text">시스코(CSCO)는 실적이 양호했음에도 장후 -7% 하락했다. 같은 '하드웨어' 기업인 버티브(VRT)와의 차이를 "AI 인프라 내 가치 사슬에서의 위치" 관점에서 설명하시오.</div>
+</div>
+
+<!-- ANSWER TOGGLE -->
+<button class="spoiler-btn" onclick="document.getElementById('answers').classList.toggle('hidden'); this.textContent = this.textContent.includes('보기') ? '🔒 정답 숨기기' : '🔓 정답 및 해설 보기';">🔓 정답 및 해설 보기</button>
+
+<!-- ANSWERS -->
+<div id="answers" class="answer-section hidden">
+  <h2>📋 정답 및 해설</h2>
+
+  <div class="a-card">
+    <div class="a-num">Q1</div>
+    <div class="a-answer">❌ X (틀림)</div>
+    <div class="a-explain">비농업 고용은 +13만 명으로 예상치 5.5만 명을 크게 <strong>상회</strong>했다. 하회가 아니라 상회한 것이 오히려 "Good news is bad news" 논리에 의해 시장에 부정적으로 작용한 것이다. 강한 고용 → 금리 인하 지연 → 주식시장 하락.</div>
+  </div>
+
+  <div class="a-card">
+    <div class="a-num">Q2</div>
+    <div class="a-answer">③ 물리적 하드웨어·인프라</div>
+    <div class="a-explain">노바는 AI 투자의 방향이 소프트웨어에서 물리적 하드웨어(데이터센터 건설, 냉각, 전력설비, 반도체 장비 등)로 이동하고 있다고 강조. "비트에서 원자로" 가는 흐름을 "딱딱한 것"이라는 키워드로 표현했다.</div>
+  </div>
+
+  <div class="a-card">
+    <div class="a-num">Q3</div>
+    <div class="a-answer">Zero, Zilch, Nada</div>
+    <div class="a-explain">각각 영어·영어 속어·스페인어로 "0, 무(無), 없음"을 의미. 월러는 이 표현을 통해 2025년 실질 고용이 사실상 없었다는 점을 강조했다.</div>
+  </div>
+
+  <div class="a-card">
+    <div class="a-num">Q4</div>
+    <div class="a-answer">③ 약 40만 명</div>
+    <div class="a-explain">기존 발표: 2025년 신규 고용 약 58만 명 → 리바이스 후: 약 18만 명. 차이는 약 40만 명으로, 원래 발표의 약 70%가 과대 계상된 셈이다.</div>
+  </div>
+
+  <div class="a-card">
+    <div class="a-num">Q5</div>
+    <div class="a-answer">② 헬스케어·건설업</div>
+    <div class="a-explain">헬스케어 +124,000명(고령화), 건설업 +33,000명(데이터센터 인프라 확장). 나머지 업종은 전반적으로 감소. IT/기술직은 오히려 감원이 가속되고 있는 상황.</div>
+  </div>
+
+  <div class="a-card">
+    <div class="a-num">Q6</div>
+    <div class="a-answer">② PE 레이시오 22배로 AI 잠재력 대비 저평가</div>
+    <div class="a-explain">빌 애크먼은 메타의 PE 22배가 AI를 실제 광고 수익으로 전환하는 능력에 비해 과소평가되어 있다고 판단. 비교로 테슬라(~400배), 팔란티어 등 고PE 종목과의 격차를 근거로 제시.</div>
+  </div>
+
+  <div class="a-card">
+    <div class="a-num">Q7</div>
+    <div class="a-answer">⭕ O (맞음)</div>
+    <div class="a-explain">CME FedWatch 기준 3월은 ≈0%, 4월도 약 5% 수준. 7월에 45.3%로 50%에 미달하며, 9월에 가서야 약 55%로 50%를 넘긴다. 50% 이상이 되어야 실제 인하 가능성이 유의미.</div>
+  </div>
+
+  <div class="a-card">
+    <div class="a-num">Q8</div>
+    <div class="a-answer">마이크론 CFO가 HBM4 양산 및 출하를 예상보다 1년 앞당겼다고 발표했기 때문이다.</div>
+    <div class="a-explain">삼성의 HBM 엔비디아 승인으로 경쟁 심화 우려에 급락했으나, 마이크론이 차세대 HBM4를 1년 조기 양산한다고 발표하면서 엔비디아 최대 벤더로서의 지위를 재확인. "물리적 생산능력이 뒷받침되어야 기업이 살아남는다"는 테제를 증명.</div>
+  </div>
+
+  <div class="a-card">
+    <div class="a-num">Q9</div>
+    <div class="a-answer">② 에너지 안보 강화와 소비 양극화(K경제) 심화</div>
+    <div class="a-explain">석탄 행정명령은 AI 전력 수요 급증에 대응한 에너지 안보 정책, 맥도날드 객단가 상승은 중산층의 하향 소비 이동, 마텔 폭락은 저소득·중산층의 비필수 소비 위축을 보여준다. 이 세 가지를 종합하면 에너지 확보 경쟁 + K형 경제(부유층↑, 나머지↓)로의 구조적 전환을 시사.</div>
+  </div>
+
+  <div class="a-card">
+    <div class="a-num">Q10</div>
+    <div class="a-answer">모범답안 (아래)</div>
+    <div class="a-explain">
+      시스코는 이더넷·라우터 등 네트워크 장비를 판매하는 기업으로, AI 인프라 가치 사슬에서 "통신 계층"에 위치한다. 반면 버티브는 데이터센터 냉각 솔루션이라는 "물리적 필수 인프라 계층"에 위치한다.<br><br>
+      AI 업계는 더 빠른 통신 속도를 위해 기존 라우터 기반 네트워킹을 우회하는 방식(직접 연결, 무선 등)을 탐색하고 있어, 시스코의 제품은 <strong>대체 가능성</strong>이 존재한다. 반면 데이터센터의 냉각·전력은 AI 연산이 물리법칙에 의해 발생시키는 열을 처리해야 하므로 <strong>대체 불가능</strong>하다.<br><br>
+      즉, 같은 하드웨어라도 AI가 "반드시" 필요로 하는 물리적 병목(냉각, 전력, 건설)에 위치한 기업과, 기술적으로 우회 가능한 계층에 위치한 기업은 시장의 평가가 다르다. 이것이 "덜 딱딱한" 시스코와 "진짜 딱딱한" 버티브의 차이다.
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  ⚠️ 본 시험문제는 학습 목적으로 제작되었습니다.<br>
+  2026.02.12 | NOVA Real Invest 방송 기반
+</div>
+
+</body>
+</html>
