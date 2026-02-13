@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시험문제 10선 | 2026.02.12 시장분석</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=IBM+Plex+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --surface: #12121a;
+  --surface2: #1a1a26;
+  --red: #ff3b5c;
+  --green: #00d68f;
+  --gold: #ffd866;
+  --blue: #5b9aff;
+  --text: #e8e8f0;
+  --text-dim: #8888a0;
+  --border: #2a2a3a;
+  --purple: #b48eff;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 16px;
+}
+.mono { font-family: 'IBM Plex Mono', monospace; }
+
+.header {
+  padding: 32px 0 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+.header h1 { font-size: 22px; font-weight: 900; margin-bottom: 6px; }
+.header .meta { font-size: 13px; color: var(--text-dim); }
+
+.section-title {
+  font-size: 17px;
+  font-weight: 900;
+  margin-bottom: 20px;
+  padding-left: 12px;
+}
+.section-title.q { color: var(--blue); border-left: 3px solid var(--blue); }
+.section-title.a { color: var(--green); border-left: 3px solid var(--green); }
+
+/* Question card */
+.q-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 16px;
+  position: relative;
+}
+.q-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.q-num .type {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+.type-mc { background: #5b9aff22; color: var(--blue); }
+.type-ox { background: #b48eff22; color: var(--purple); }
+.type-sa { background: #ffd86622; color: var(--gold); }
+
+.difficulty {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-left: 6px;
+}
+.diff-easy { background: #00d68f22; color: var(--green); }
+.diff-mid { background: #ffd86622; color: var(--gold); }
+.diff-hard { background: #ff3b5c22; color: var(--red); }
+
+.q-text {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.options { padding-left: 4px; }
+.options li {
+  list-style: none;
+  font-size: 14px;
+  padding: 6px 0;
+  padding-left: 28px;
+  position: relative;
+}
+.options li::before {
+  position: absolute;
+  left: 0;
+  font-weight: 700;
+  color: var(--text-dim);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+}
+.options li:nth-child(1)::before { content: '①'; }
+.options li:nth-child(2)::before { content: '②'; }
+.options li:nth-child(3)::before { content: '③'; }
+.options li:nth-child(4)::before { content: '④'; }
+
+/* Answer card */
+.a-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 16px;
+  border-left: 3px solid var(--green);
+}
+.a-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green);
+  margin-bottom: 6px;
+}
+.a-answer {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--green);
+  margin-bottom: 8px;
+}
+.a-explain {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.8;
+}
+
+.divider {
+  border: none;
+  border-top: 2px dashed var(--border);
+  margin: 40px 0;
+}
+.divider-label {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 32px;
+  letter-spacing: 2px;
+}
+
+.footer {
+  text-align: center;
+  padding: 24px 0;
+  font-size: 12px;
+  color: var(--text-dim);
+  border-top: 1px solid var(--border);
+  margin-top: 24px;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📝 시험문제 10선</h1>
+  <div class="meta">2026.02.12 CIA.chat 멤버미팅 분석 기반 | 쉬움 30% · 보통 50% · 어려움 20%</div>
+</div>
+
+<!-- ══════════════════════════════════ -->
+<!--          문 제 영 역              -->
+<!-- ══════════════════════════════════ -->
+
+<div class="section-title q">문제</div>
+
+<!-- Q1 -->
+<div class="q-card">
+  <div class="q-num">
+    <span>Q01 <span class="type type-mc">객관식</span> <span class="difficulty diff-easy">쉬움</span></span>
+  </div>
+  <div class="q-text">2026년 2월 12일 미국 옵션 시장에서 풋(Put) 옵션 규모는 얼마였는가?</div>
+  <ul class="options">
+    <li>38.50 밀리언</li>
+    <li>40.99 밀리언</li>
+    <li>42.26 밀리언</li>
+    <li>45.00 밀리언</li>
+  </ul>
+</div>
+
+<!-- Q2 -->
+<div class="q-card">
+  <div class="q-num">
+    <span>Q02 <span class="type type-ox">O/X</span> <span class="difficulty diff-easy">쉬움</span></span>
+  </div>
+  <div class="q-text">CBRE와 JLL의 2월 12일 주가 폭락은 2020년 코로나 팬데믹 이후 최대 낙폭이다. (O/X)</div>
+</div>
+
+<!-- Q3 -->
+<div class="q-card">
+  <div class="q-num">
+    <span>Q03 <span class="type type-mc">객관식</span> <span class="difficulty diff-mid">보통</span></span>
+  </div>
+  <div class="q-text">Algorithm Holdings가 발표한 AI 물류 플랫폼 Semicap의 생산성 향상 수치와 Empty Mile 감소율로 올바른 조합은?</div>
+  <ul class="options">
+    <li>생산성 200% 향상 / Empty Mile 50% 감소</li>
+    <li>생산성 400% 향상 / Empty Mile 70% 감소</li>
+    <li>생산성 300% 향상 / Empty Mile 80% 감소</li>
+    <li>생산성 500% 향상 / Empty Mile 60% 감소</li>
+  </ul>
+</div>
+
+<!-- Q4 -->
+<div class="q-card">
+  <div class="q-num">
+    <span>Q04 <span class="type type-sa">단답형</span> <span class="difficulty diff-easy">쉬움</span></span>
+  </div>
+  <div class="q-text">시장 하락기에 가장 먼저 자금이 유입되는 방어 섹터 1등과 2등을 순서대로 쓰시오.</div>
+</div>
+
+<!-- Q5 -->
+<div class="q-card">
+  <div class="q-num">
+    <span>Q05 <span class="type type-mc">객관식</span> <span class="difficulty diff-mid">보통</span></span>
+  </div>
+  <div class="q-text">Apple이 2월 12일 약 -5% 하락한 두 가지 이유로 올바른 것은?</div>
+  <ul class="options">
+    <li>iPhone 리콜 + 중국 수출 금지</li>
+    <li>Siri AI 업데이트 5월 연기 + FTC 뉴스 편향성 조사</li>
+    <li>아이패드 판매 부진 + EU 독점 과징금</li>
+    <li>맥북 품질 이슈 + 인도 공장 폐쇄</li>
+  </ul>
+</div>
+
+<!-- Q6 -->
+<div class="q-card">
+  <div class="q-num">
+    <span>Q06 <span class="type type-ox">O/X</span> <span class="difficulty diff-mid">보통</span></span>
+  </div>
+  <div class="q-text">트럼프 행정부의 EPA 온실가스 위험 판정 폐지로 Tesla는 수혜를 입고, GM과 Ford는 피해를 입었다. (O/X)</div>
+</div>
+
+<!-- Q7 -->
+<div class="q-card">
+  <div class="q-num">
+    <span>Q07 <span class="type type-mc">객관식</span> <span class="difficulty diff-mid">보통</span></span>
+  </div>
+  <div class="q-text">2026년 2월 13일 CPI 컨센서스(YoY)와, 이보다 높게 나올 경우 예상되는 시장 반응으로 옳은 것은?</div>
+  <ul class="options">
+    <li>컨센서스 3.0% / 금리인하 기대 상승</li>
+    <li>컨센서스 2.5% / 금리인하 기대 소멸 + 기술주 추가 하락</li>
+    <li>컨센서스 2.0% / 안도 랠리 발생</li>
+    <li>컨센서스 2.5% / 달러 약세 + 금 폭락</li>
+  </ul>
+</div>
+
+<!-- Q8 -->
+<div class="q-card">
+  <div class="q-num">
+    <span>Q08 <span class="type type-sa">단답형</span> <span class="difficulty diff-mid">보통</span></span>
+  </div>
+  <div class="q-text">FHA론 대출자의 연체율은 몇 %이며, 이는 몇 년 이후 최고치인가?</div>
+</div>
+
+<!-- Q9 -->
+<div class="q-card">
+  <div class="q-num">
+    <span>Q09 <span class="type type-mc">객관식</span> <span class="difficulty diff-hard">어려움</span></span>
+  </div>
+  <div class="q-text">방송에서 제시한 투자 전략 3가지의 포트폴리오 배분 비율과, 전략 ②의 핵심 키워드로 올바른 조합은?</div>
+  <ul class="options">
+    <li>AI 인프라 50% + 방어주 50% / 전략②: 성장주 매수</li>
+    <li>AI 인프라 70~80% + 방어주 20~30% / 전략②: 미들맨(중개자) 회피</li>
+    <li>방어주 80% + AI 인프라 20% / 전략②: 채권 매수</li>
+    <li>AI 인프라 60% + 방어주 40% / 전략②: 현금 확보</li>
+  </ul>
+</div>
+
+<!-- Q10 -->
+<div class="q-card">
+  <div class="q-num">
+    <span>Q10 <span class="type type-sa">단답형</span> <span class="difficulty diff-hard">어려움</span></span>
+  </div>
+  <div class="q-text">Matt Schumer의 에세이가 X(구 트위터)에서 기록한 조회수는 몇 밀리언이며, 이 에세이의 핵심 주장을 한 문장으로 요약하시오.</div>
+</div>
+
+<!-- ══════════════════════════════════ -->
+<hr class="divider">
+<div class="divider-label">▼ 정 답 및 해 설 ▼</div>
+<!-- ══════════════════════════════════ -->
+
+<div class="section-title a">정답 및 해설</div>
+
+<!-- A1 -->
+<div class="a-card">
+  <div class="a-num">A01</div>
+  <div class="a-answer">정답: ③ 42.26 밀리언</div>
+  <div class="a-explain">2월 12일 기준 풋 옵션은 42.26밀리언, 콜 옵션은 40.99밀리언이었다. 그동안 콜이 항상 리드했으나, 이날 처음으로 풋이 콜을 추월하면서 시장의 비관적 심리 전환을 보여주었다.</div>
+</div>
+
+<!-- A2 -->
+<div class="a-card">
+  <div class="a-num">A02</div>
+  <div class="a-answer">정답: X (틀림)</div>
+  <div class="a-explain">CBRE(-12.8%)와 JLL(-11.1%)의 낙폭은 <strong>2008년 금융위기 이후 최대 낙폭</strong>이다. 코로나 팬데믹(2020년) 때의 하락과 동급 수준이었으나, 기준점은 2008년 금융위기 이후이다.</div>
+</div>
+
+<!-- A3 -->
+<div class="a-card">
+  <div class="a-num">A03</div>
+  <div class="a-answer">정답: ② 생산성 400% 향상 / Empty Mile 70% 감소</div>
+  <div class="a-explain">Semicap AI 플랫폼의 생산성 테스트 결과 기존 대비 400% 생산성 향상, Empty Mile(빈 트럭 운행 거리)은 70% 감소를 기록했다. 이 수치가 발표되며 물류 중개 기업들이 일제히 약 20% 폭락했다.</div>
+</div>
+
+<!-- A4 -->
+<div class="a-card">
+  <div class="a-num">A04</div>
+  <div class="a-answer">정답: 1등 유틸리티(Utilities), 2등 필수소비재(Consumer Staples)</div>
+  <div class="a-explain">시장 하락기에 자금은 먼저 유틸리티(+4.01%)로 유입되고, 그다음 필수소비재(Staples)로 이동한다. 월마트, 코카콜라, 맥도날드, 헬스케어 등 "먹고 마시고 약 먹는" 필수 소비 영역이 해당된다.</div>
+</div>
+
+<!-- A5 -->
+<div class="a-card">
+  <div class="a-num">A05</div>
+  <div class="a-answer">정답: ② Siri AI 업데이트 5월 연기 + FTC 뉴스 편향성 조사</div>
+  <div class="a-explain">Apple의 Siri AI 업데이트가 원래 연초 예정이었으나 5월로 연기되면서 기술적 난항이 시사되었고, FTC가 Apple News의 좌편향 뉴스 편향성 조사를 착수한다는 소식이 겹쳤다. 후자는 슈퍼볼 하프타임쇼(Apple Music 스폰서) 관련 정치적 보복 가능성이 제기되었다.</div>
+</div>
+
+<!-- A6 -->
+<div class="a-card">
+  <div class="a-num">A06</div>
+  <div class="a-answer">정답: X (틀림, 반대)</div>
+  <div class="a-explain">EPA 온실가스 위험 판정 폐지로 전기차 의무화 규제의 법적 근거가 사라졌다. 이에 따라 내연기관 중심의 GM과 Ford는 고마진 SUV·트럭 생산 확대 기대로 상승했고, 전기차 크레딧에 의존하던 Tesla는 오히려 -2.62% 하락했다.</div>
+</div>
+
+<!-- A7 -->
+<div class="a-card">
+  <div class="a-num">A07</div>
+  <div class="a-answer">정답: ② 컨센서스 2.5% / 금리인하 기대 소멸 + 기술주 추가 하락</div>
+  <div class="a-explain">CPI 컨센서스는 YoY 2.5%, MoM 0.3%이다. 2.5% 이상 나올 경우 금리인하 기대가 소멸되면서 기술주 추가 하락 가능. 2.4% 이하 나올 경우 골디락스 안도감으로 저가매수세 유입 기대. 2.6% 이상이면 투매 가능성까지 제기되었다.</div>
+</div>
+
+<!-- A8 -->
+<div class="a-card">
+  <div class="a-num">A08</div>
+  <div class="a-answer">정답: 13%, 2017년 이후 최고치</div>
+  <div class="a-explain">FHA론(연방주택관리국 저소득층 대출) 대출자의 연체율은 13%로, 2017년 이후 최고치이다. 전체 가계부채 연체율은 4.8%이며, 퍼스널론(생존형 대출)의 주요 고객층이 연봉 $40K에서 $70K까지 확대되어 중산층의 재정 압박이 심화되고 있음을 시사한다.</div>
+</div>
+
+<!-- A9 -->
+<div class="a-card">
+  <div class="a-num">A09</div>
+  <div class="a-answer">정답: ② AI 인프라 70~80% + 방어주 20~30% / 전략②: 미들맨(중개자) 회피</div>
+  <div class="a-explain">3가지 전략: ①AI 리얼리티 체크(실제 돈 버는 AI 인프라에 압축, 70~80%), ②미들맨 회피(자동화에 취약한 중계 비즈니스 모델 매도/숏), ③Flight to Quality(필수소비재·유틸리티 방어주 20~30%). 전략 ①과 ③의 조합(7:3 또는 8:2)이 핵심 권장 배분이다.</div>
+</div>
+
+<!-- A10 -->
+<div class="a-card">
+  <div class="a-num">A10</div>
+  <div class="a-answer">정답: 76밀리언(7,600만) 뷰</div>
+  <div class="a-explain"><strong>핵심 주장 요약:</strong> "AI는 소프트웨어 산업뿐 아니라 물류·부동산·법률 등 모든 전통 산업의 비즈니스 모델을 근본적으로 파괴하고 있으며, 기존 산업구조 전체가 재편될 것이다." Matt Schumer(Other Side AI CEO)의 이 에세이는 블로그에서 약 30밀리언, X에서 76밀리언 뷰를 기록하며 시장 패닉의 촉매 역할을 했다.</div>
+</div>
+
+<div class="footer">
+  CIA.chat 멤버미팅 시험문제 | 2026.02.12 기반<br>
+  난이도: 쉬움 3문제(Q1, Q2, Q4) · 보통 5문제(Q3, Q5, Q6, Q7, Q8) · 어려움 2문제(Q9, Q10)
+</div>
+
+</body>
+</html>
