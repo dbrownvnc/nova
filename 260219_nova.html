@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA Real Invest 분석 | AI 거품 속 생존 포트폴리오 & 이란 전쟁 리스크</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg-primary: #0a0e17;
+  --bg-card: #111827;
+  --bg-card-alt: #1a2235;
+  --accent-red: #ef4444;
+  --accent-orange: #f97316;
+  --accent-amber: #f59e0b;
+  --accent-green: #22c55e;
+  --accent-blue: #3b82f6;
+  --accent-cyan: #06b6d4;
+  --accent-purple: #a855f7;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-color: #1e293b;
+  --gradient-fire: linear-gradient(135deg, #ef4444, #f97316);
+  --gradient-gold: linear-gradient(135deg, #f59e0b, #eab308);
+  --gradient-ice: linear-gradient(135deg, #3b82f6, #06b6d4);
+  --gradient-purple: linear-gradient(135deg, #7c3aed, #a855f7);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* Header */
+.hero {
+  position: relative;
+  padding: 48px 16px 36px;
+  background: linear-gradient(180deg, #1a0a0a 0%, var(--bg-primary) 100%);
+  border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -30%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-red);
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+}
+
+.hero-title {
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #fff 0%, #e2e8f0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-sub {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.hero-meta span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Alert Banner */
+.alert-banner {
+  margin: 20px 16px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border-left: 4px solid;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.alert-critical {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: var(--accent-red);
+  color: #fca5a5;
+}
+
+.alert-warning {
+  background: rgba(249, 115, 22, 0.1);
+  border-color: var(--accent-orange);
+  color: #fed7aa;
+}
+
+.alert-info {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: var(--accent-blue);
+  color: #93c5fd;
+}
+
+.alert-label {
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  display: block;
+}
+
+/* Section Styles */
+.section {
+  padding: 28px 0;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 0 16px;
+}
+
+.section-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+}
+
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+  margin: 0 16px;
+}
+
+/* Cards */
+.card {
+  background: var(--bg-card);
+  border-radius: 14px;
+  padding: 20px;
+  margin: 0 16px 14px;
+  border: 1px solid var(--border-color);
+  transition: border-color 0.2s;
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.card p, .card li {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+
+.card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.card li {
+  position: relative;
+  padding-left: 18px;
+  margin-bottom: 8px;
+}
+
+.card li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent-amber);
+  font-weight: 700;
+}
+
+/* Data Grid */
+.data-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 0 16px 14px;
+}
+
+.data-cell {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+}
+
+.data-cell.full {
+  grid-column: 1 / -1;
+}
+
+.data-value {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.data-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.up { color: var(--accent-green); }
+.down { color: var(--accent-red); }
+.amber { color: var(--accent-amber); }
+.blue { color: var(--accent-blue); }
+.purple { color: var(--accent-purple); }
+.cyan { color: var(--accent-cyan); }
+
+/* Highlight Box */
+.highlight-box {
+  background: var(--bg-card-alt);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 12px 0;
+  border-left: 3px solid;
+}
+
+.highlight-box.fire { border-color: var(--accent-red); }
+.highlight-box.gold { border-color: var(--accent-amber); }
+.highlight-box.ice { border-color: var(--accent-blue); }
+.highlight-box.green { border-color: var(--accent-green); }
+
+.highlight-box p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.highlight-box strong {
+  color: var(--text-primary);
+}
+
+/* Tag */
+.tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  margin: 2px 4px 2px 0;
+}
+
+.tag-red { background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
+.tag-green { background: rgba(34, 197, 94, 0.15); color: #86efac; }
+.tag-blue { background: rgba(59, 130, 246, 0.15); color: #93c5fd; }
+.tag-amber { background: rgba(245, 158, 11, 0.15); color: #fcd34d; }
+.tag-purple { background: rgba(168, 85, 247, 0.15); color: #d8b4fe; }
+
+/* Stock Table */
+.stock-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 12px;
+}
+
+.stock-table th {
+  text-align: left;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.stock-table td {
+  padding: 10px;
+  border-bottom: 1px solid rgba(30, 41, 59, 0.5);
+  color: var(--text-secondary);
+}
+
+.stock-table tr:last-child td {
+  border-bottom: none;
+}
+
+.stock-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Chart Container */
+.chart-container {
+  position: relative;
+  margin: 16px 0;
+  padding: 10px 0;
+  height: 260px;
+}
+
+/* Portfolio Bar */
+.portfolio-bar {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 32px;
+  margin: 16px 0;
+}
+
+.portfolio-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+/* Timeline */
+.timeline {
+  position: relative;
+  padding-left: 24px;
+  margin: 12px 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  background: var(--border-color);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 16px;
+  padding-bottom: 4px;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -21px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-amber);
+  border: 2px solid var(--bg-card);
+}
+
+.timeline-date {
+  font-size: 11px;
+  color: var(--accent-amber);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.timeline-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Key Point */
+.key-point {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(30, 41, 59, 0.4);
+}
+
+.key-point:last-child { border-bottom: none; }
+
+.key-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  flex-shrink: 0;
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+}
+
+.key-content {
+  flex: 1;
+}
+
+.key-content h4 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+
+.key-content p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Bottom Summary */
+.bottom-summary {
+  background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-card-alt) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 24px 20px;
+  margin: 20px 16px 40px;
+  text-align: center;
+}
+
+.bottom-summary h3 {
+  font-size: 17px;
+  font-weight: 800;
+  margin-bottom: 14px;
+}
+
+.bottom-summary p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* Footer */
+footer {
+  padding: 24px 16px;
+  text-align: center;
+  border-top: 1px solid var(--border-color);
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+/* Responsive tweaks */
+@media (max-width: 400px) {
+  .hero-title { font-size: 22px; }
+  .data-grid { grid-template-columns: 1fr; }
+  .data-value { font-size: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-badge">🔴 LIVE 분석 리포트</div>
+    <h1 class="hero-title">AI 거품 붕괴에도 아랑곳 않는 엔비디아!<br>생존을 위한 필승 포트폴리오</h1>
+    <p class="hero-sub">FOMC 의사록 충격, 이란 전쟁 징조, 소프트웨어→하드웨어 대전환 속 자산배분 전략</p>
+    <div class="hero-meta">
+      <span>📺 NOVA Real Invest</span>
+      <span>📅 2026.02.18 (뉴욕시간)</span>
+      <span>🏷️ 미국 증시 관점 분석</span>
+    </div>
+  </div>
+</header>
+
+<!-- KEY ALERTS -->
+<div class="alert-banner alert-critical">
+  <span class="alert-label">⚠️ 핵심 경고</span>
+  벤스 부통령: "이란이 핵협상 레드라인을 지키지 않았다. 군사적 옵션은 여전히 테이블 위에 있다." → 유가 $65+ 돌파. <strong>3월 중순~말 전쟁 발발 가능성</strong> 경고.
+</div>
+
+<div class="alert-banner alert-warning">
+  <span class="alert-label">📌 FOMC 의사록 핵심</span>
+  연준위원 분열 심화 — 일부 위원은 <strong>금리 인상 검토</strong>까지 언급. CME FedWatch 금리인하 기대 6월→7월로 후퇴.
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 1: 거시경제 & FOMC -->
+<!-- ═══════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon" style="background: rgba(59,130,246,0.15);">🏛️</div>
+    <h2 class="section-title">거시경제 & FOMC 의사록</h2>
+  </div>
+
+  <div class="card" style="margin-bottom: 14px;">
+    <div class="card-title">📊 당일 경제지표 — 오전 강세 요인</div>
+    <p>장 오전 발표된 거시경제 데이터가 예상보다 양호하여 S&P 500은 +1% 수준의 상승 출발했으나, 오후 2시 FOMC 의사록 공개 후 상승분을 전부 반납.</p>
+    <table class="stock-table" style="margin-top: 12px;">
+      <tr><th>지표</th><th>결과</th><th>시그널</th></tr>
+      <tr><td class="stock-name">내구재 주문(Durable Goods)</td><td>예상치 상회</td><td class="up">▲ 긍정</td></tr>
+      <tr><td class="stock-name">코어 내구재(Core Durable)</td><td>상당히 양호</td><td class="up">▲ 강한 긍정</td></tr>
+      <tr><td class="stock-name">건축 허가(Building Permits)</td><td>대폭 증가</td><td class="up">▲ 긍정</td></tr>
+      <tr><td class="stock-name">주택 착공(Housing Starts)</td><td>더 큰 폭 증가</td><td class="up">▲ 강한 긍정</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🗒️ FOMC 의사록 핵심 — 분열된 연준</div>
+    <p style="margin-bottom: 12px;">오후 2시 발표된 FOMC 의사록(Minutes)이 시장 분위기를 급반전시킴. 연준 내부 의견이 극명하게 갈림:</p>
+    
+    <div class="highlight-box fire">
+      <p><strong>🦅 매파(Hawkish):</strong> 인플레이션이 목표 수준에 도달하지 못했다. <strong>금리 인상도 검토해야 한다</strong>는 경고 메시지까지 등장. 단순한 '동결 고착화'가 아닌 인상 가능성 시사.</p>
+    </div>
+    
+    <div class="highlight-box ice">
+      <p><strong>🕊️ 비둘기파(Dovish):</strong> 월러(Waller), 미란(Miran) 등이 인플레이션이 크게 걱정할 수준은 아니라는 입장. 금리 인하 여지 주장.</p>
+    </div>
+  </div>
+
+  <div class="data-grid">
+    <div class="data-cell">
+      <div class="data-value amber">4.08%</div>
+      <div class="data-label">10년물 국채금리</div>
+    </div>
+    <div class="data-cell">
+      <div class="data-value down">7월 →</div>
+      <div class="data-label">CME 금리인하 기대 후퇴</div>
+    </div>
+    <div class="data-cell">
+      <div class="data-value down">$65+</div>
+      <div class="data-label">WTI 유가 상승</div>
+    </div>
+    <div class="data-cell">
+      <div class="data-value amber">약세 지속</div>
+      <div class="data-label">달러 인덱스</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💡 미국 증시 시사점</div>
+    <p>FOMC 의사록은 <strong>"2026년 상반기 금리인하는 없다"</strong>는 메시지로 해석 가능. 일부 위원의 금리 인상 검토 발언은 시장에 냉각 효과. 인플레이션 재가속 시 성장주 밸류에이션에 직격탄.</p>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 2: 이란 지정학적 리스크 -->
+<!-- ═══════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon" style="background: rgba(239,68,68,0.15);">⚔️</div>
+    <h2 class="section-title">이란 전쟁 리스크 & 유가</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🛢️ 유가-재고 역전 패턴 — 전쟁 전조 신호</div>
+    <p>과거 러시아-우크라이나 전쟁(2022) 발발 5개월 전, 유가가 상승하면서 동시에 미국 원유 재고도 증가하는 <strong>비정상적 역상관관계</strong>가 나타남. 현재 동일한 패턴이 재현 중.</p>
+    
+    <div class="highlight-box fire">
+      <p><strong>핵심 논리:</strong> 정상적으로 유가와 미국 비축유는 반비례 관계. 유가↑ + 재고↑ 동시 발생은 <strong>군사 작전을 위한 대규모 유류 비축</strong>을 의미. 탱크·폭격기·중장비의 막대한 연료 소비량을 사전에 확보하는 과정.</p>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="oilPatternChart"></canvas>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📅 전쟁 시나리오 타임라인</div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-date">2026년 2월 중순 (현재)</div>
+        <div class="timeline-text">벤스 부통령 경고 발언. 미국 전력(함대) 중동 집결 중. 이란에 대한 압박 프로모션 기간.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2026년 2월 말 ~ 3월 초</div>
+        <div class="timeline-text">이란과의 협상 시간(Window). 전쟁 없이 이기는 것이 트럼프의 선호 옵션. 베네수엘라 마두로 정권 제거 방식의 가능성.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date" style="color: var(--accent-red);">2026년 3월 중순 ~ 말 ⚠️</div>
+        <div class="timeline-text"><strong>이란이 끝까지 버틸 경우, 전쟁 발발 가능성이 상당히 높은 시점.</strong> 유가 급등 → 성장주 밸류에이션 직격탄. 에너지·원자재·방산주 급등 예상.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📌 전쟁 전·중·후 투자 전략 차이</div>
+    <p>과거 사례를 참고하면 <strong>전쟁 전(비축기), 전쟁 중(충격기), 전쟁 후(안정기)</strong>에 유리한 자산군이 다름:</p>
+    <ul style="margin-top: 10px;">
+      <li><strong>전쟁 전:</strong> 원유 관련주, 방산주, 금·은 사전 포지셔닝</li>
+      <li><strong>전쟁 발발 시:</strong> 유가·금 급등, 성장주 급락, 안전자산 수요 폭증</li>
+      <li><strong>전쟁 후 안정기:</strong> 저평가된 성장주 반등 기회, 인프라 재건 수요</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 3: AI 하드웨어 vs 소프트웨어 -->
+<!-- ═══════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon" style="background: rgba(168,85,247,0.15);">🔧</div>
+    <h2 class="section-title">AI 하드웨어 승리 — "딱딱한 것"의 시대</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🧠 딥시크 쇼크 이후의 전략 전환</div>
+    <p>중국 딥시크의 R1 모델은 <strong>제한된 GPU로 효율을 극대화</strong>하는 전략. 이에 대한 미국의 답: <strong>"물량 공세(Hardware Dominance)"</strong>.</p>
+    
+    <div class="highlight-box gold">
+      <p>중국이 할 수 있는 것 = 제한된 하드웨어로 알고리즘 최적화<br>
+      미국이 할 수 있는 것 = <strong>압도적 GPU·인프라 물량 공세</strong><br>
+      → AI 알고리즘/소프트웨어의 가치 하락, 물리적 인프라의 가치 상승</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏢 메타 × 엔비디아 — 올인 계약</div>
+    <p>메타가 2026년 <strong>$65B(650억 달러)</strong>를 엔비디아에 투자하겠다고 선언. 단순 GPU 구매가 아닌 <strong>CPU, 네트워크, 서버 전 영역에 엔비디아 올인</strong>.</p>
+    <ul style="margin-top: 10px;">
+      <li>GPU → 엔비디아</li>
+      <li>CPU → 엔비디아</li>
+      <li>네트워크 장비 → 엔비디아</li>
+      <li>서버 전체 → 엔비디아</li>
+    </ul>
+    <p style="margin-top: 10px;">이 소식이 엔비디아의 연이은 상승 토대를 마련.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎯 핵심 투자 논리: 소프트웨어 ↓, 하드웨어 ↑</div>
+    <div class="chart-container" style="height: 220px;">
+      <canvas id="hwSwChart"></canvas>
+    </div>
+    <p style="margin-top: 8px;">소프트웨어·앱·AI 모델이 <strong>흔해질수록</strong> → 이를 돌릴 <strong>물리적 인프라가 귀해진다</strong>. 소프트웨어는 무한 복제 가능하지만, 물리적 인프라(GPU, 메모리, 전선, 냉각, 토지)의 확장 속도는 한정적.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">✅ 실적으로 증명된 위너 vs 루저</div>
+    <table class="stock-table">
+      <tr><th>종목</th><th>구분</th><th>핵심 포인트</th></tr>
+      <tr>
+        <td class="stock-name">피그마(Figma)</td>
+        <td><span class="tag tag-green">위너</span></td>
+        <td>매출 40%↑. 순수 AI 툴로 생존. 템플릿 기반 캔바와 차별화. "진짜 AI냐 vs AI 흉내 소프트웨어냐"가 핵심.</td>
+      </tr>
+      <tr>
+        <td class="stock-name">팔로알토(PANW)</td>
+        <td><span class="tag tag-red">루저</span></td>
+        <td>미래 가이던스 부진. AI 해킹 방어를 위한 투자 필요 → 비용 부담 증가.</td>
+      </tr>
+      <tr>
+        <td class="stock-name">도어대시(DASH)</td>
+        <td><span class="tag tag-red">루저</span></td>
+        <td>매출 증가에도 비용 동시 증가. 물가 상승에 따른 저소득층 소비 위축 타격.</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 4: 데이터센터 병목 & 인프라 -->
+<!-- ═══════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon" style="background: rgba(249,115,22,0.15);">🏗️</div>
+    <h2 class="section-title">데이터센터 물리적 병목 현상</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏠 토지 쟁탈전 — 사람 집 vs 컴퓨터 집</div>
+    <p>버지니아 북부(세계 최대 데이터센터 밀집지역)에서 <strong>토지 가격 비이성적 폭등</strong>이 진행 중.</p>
+
+    <div class="data-grid" style="margin: 16px 0 12px; padding: 0;">
+      <div class="data-cell" style="margin: 0;">
+        <div class="data-value down">$240K</div>
+        <div class="data-label">에이커당 기존 가격</div>
+      </div>
+      <div class="data-cell" style="margin: 0;">
+        <div class="data-value up">$3M</div>
+        <div class="data-label">에이커당 현재 가격</div>
+      </div>
+    </div>
+
+    <p style="font-size: 13px; color: var(--text-secondary);">주택건설사(스탠리 마틴, 톨브라더스 등)가 미래 주택 건설용으로 확보한 토지를 빅테크에 매각. "거절할 수 없는 제안"으로 12배 이상 가격 점핑.</p>
+    
+    <div class="highlight-box fire">
+      <p><strong>패러다임 전환:</strong> 사람이 살 집보다 <strong>컴퓨터가 살 집</strong>이 더 높은 부가가치를 창출하는 시대. 토지의 가치가 완전히 재정의되고 있음. 버지니아 주거 공급 부족 <strong>7.5만 호+</strong>.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚡ 4대 물리적 병목 현상</div>
+    <div class="key-point">
+      <div class="key-num">1</div>
+      <div class="key-content">
+        <h4>구리 전선 부족</h4>
+        <p>데이터센터 1동의 전선 소요량 = 주택 수백 채 분량. 주택 건설까지 차질 발생.</p>
+      </div>
+    </div>
+    <div class="key-point">
+      <div class="key-num">2</div>
+      <div class="key-content">
+        <h4>콘크리트 부족</h4>
+        <p>대규모 데이터센터 건설 수요가 건자재 시장 전체를 압박.</p>
+      </div>
+    </div>
+    <div class="key-point">
+      <div class="key-num">3</div>
+      <div class="key-content">
+        <h4>숙련공 이탈</h4>
+        <p>주택 건설 현장의 전기·콘크리트 숙련공들이 데이터센터 건설로 이탈 → 주택 완공 리스크.</p>
+      </div>
+    </div>
+    <div class="key-point">
+      <div class="key-num">4</div>
+      <div class="key-content">
+        <h4>전력난 & 전기료 폭등</h4>
+        <p>버지니아 전기료 전년대비 <strong>17% 상승</strong>. 데이터센터 전력 수요를 일반 주민이 부담하는 구조. 텍사스·미주리 등도 두 자릿수 전기료 인상.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🗳️ 정치적 리스크 — MAGA 지지율 하락 요인</div>
+    <p>트럼프 지지 기반(MAGA 지역)인 텍사스·미주리·오하이오·위스콘신 등에서 데이터센터 건설로 인한 주민 피해 확산:</p>
+    <ul style="margin-top: 8px;">
+      <li>전기료 폭등(연간 두 자릿수 인상)</li>
+      <li>땅값 폭등에 따른 주거 불안정</li>
+      <li>냉각팬 소음으로 주거 가치 훼손</li>
+      <li>저학력 주민들은 데이터센터 고급 일자리 접근 불가</li>
+      <li>공화당 주정부의 친기업 규제완화가 역으로 지지층 피해</li>
+    </ul>
+    <p style="margin-top: 10px; font-size: 13px;">데이비드 섹스(AI 짜르)의 환경·안전 규제 무시 방침이 이를 가속화.</p>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 5: 핵심 종목 & 메모리 -->
+<!-- ═══════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon" style="background: rgba(34,197,94,0.15);">💾</div>
+    <h2 class="section-title">핵심 종목 분석 — 메모리·인프라·방어주</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔥 메모리 주식 — 2028년까지 완판(매진)</div>
+    <p>2025년과 2026년 YTD 모두 XLK 내 수익률 1위·3위를 메모리 기업이 차지.</p>
+    
+    <table class="stock-table">
+      <tr><th>종목</th><th>YTD 수익률</th><th>핵심 포인트</th></tr>
+      <tr>
+        <td class="stock-name">샌디스크(SNDK)</td>
+        <td class="up" style="font-weight: 700;">+142%</td>
+        <td>NAND/SSD 시장 독점적 지위. 2026 EPS <strong>1,153% 폭증</strong> 전망. 2028년까지 물량 매진.</td>
+      </tr>
+      <tr>
+        <td class="stock-name">웨스턴디지털(WDC)</td>
+        <td class="up" style="font-weight: 700;">+69%</td>
+        <td>2026년 올해 물량 완전 매진. 주문해도 공급 불가 상태.</td>
+      </tr>
+    </table>
+
+    <div class="highlight-box gold" style="margin-top: 14px;">
+      <p><strong>투자 논리:</strong> AI 알고리즘·소프트웨어는 무한 생산 가능하지만, 이를 저장할 물리적 저장장치(NAND, SSD, HBM)는 공급이 제한적. 데이터센터 = 저장장치가 필수 → 메모리 수요 폭증은 <strong>최소 2년(~2028년)</strong> 지속 전망.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🌡️ 열관리 & 전력 인프라 — 52주 최고가 갱신 중</div>
+    <table class="stock-table">
+      <tr><th>종목/섹터</th><th>테마</th><th>상태</th></tr>
+      <tr>
+        <td class="stock-name">GNRC (제너렉)</td>
+        <td>비상발전기·제너레이터</td>
+        <td class="up">52주 최고가 갱신 중. 주문 후 1년 대기.</td>
+      </tr>
+      <tr>
+        <td class="stock-name">냉각/에어컨 업체</td>
+        <td>데이터센터 열관리</td>
+        <td class="up">H100 GPU의 막대한 발열 → 냉각 수요 폭증</td>
+      </tr>
+      <tr>
+        <td class="stock-name">SEI 등 전력망</td>
+        <td>변전기·전력 인프라</td>
+        <td class="up">변전기도 1년 이상 납기 대기</td>
+      </tr>
+      <tr>
+        <td class="stock-name">TPL (텍사스 퍼시픽 랜드)</td>
+        <td>토지 임대·솔라 에너지</td>
+        <td class="up">토지 판매+임대+태양열 → 인플레이션 헤지</td>
+      </tr>
+    </table>
+    <p style="margin-top: 12px; font-size: 13px; color: var(--text-muted);">원래 주택건설 자재 공급업체들이 데이터센터 시장으로 전환 중. 더 높은 수익성 확인.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🍎 애플 — 유일한 캐펙스 안전지대</div>
+    <p>구글·아마존의 문제는 <strong>캐펙스(CAPEX) 부담</strong>. 아마존은 $200B 투자 시 프리캐시플로우가 마이너스 전환 가능.</p>
+    
+    <div class="highlight-box green">
+      <p><strong>애플의 차별점:</strong> 무분별한 AI 캐펙스 경쟁에서 제외된 <strong>유일한 빅테크</strong>. "니네끼리 좀 해봐" 전략. 캐시 여력이 풍부하고, 5년 주봉 차트 기준 꾸준한 상승 추세 유지. 변동성 장세에서 최고의 방어주.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 6: K경제 & 빈부격차 투자 -->
+<!-- ═══════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon" style="background: rgba(245,158,11,0.15);">📊</div>
+    <h2 class="section-title">K경제 — 빈부격차 투자 전략</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-title">소비 이분화 — 위아래가 갈라지는 K자 경제</div>
+    
+    <div class="chart-container" style="height: 240px;">
+      <canvas id="kEconomyChart"></canvas>
+    </div>
+
+    <p>부유층은 프리미엄 소비를 확대하고, 중하위층은 허리띠를 졸라매는 <strong>극단적 소비 양극화</strong>가 실적으로 확증됨.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">실적으로 본 소비 양극화</div>
+    <table class="stock-table">
+      <tr><th>종목</th><th>방향</th><th>시사점</th></tr>
+      <tr>
+        <td class="stock-name">부킹홀딩스(BKNG)</td>
+        <td class="up">사상 최대 실적</td>
+        <td>프리미엄 여행 수요 폭발. 25:1 주식분할 발표(4월~). 주가 $4,269.</td>
+      </tr>
+      <tr>
+        <td class="stock-name">크루즈·항공사</td>
+        <td class="up">해외 라인 호실적</td>
+        <td>고소득층 해외여행 수요 견고. 비즈니스석 매출 증가.</td>
+      </tr>
+      <tr>
+        <td class="stock-name">페라리</td>
+        <td class="up">주가 급등</td>
+        <td>초고소득층 소비 건재. 럭셔리 수요 지속.</td>
+      </tr>
+      <tr>
+        <td class="stock-name">월마트(WMT)</td>
+        <td class="up">꾸준한 상승</td>
+        <td>저소득층의 소비 하향 이동(프리미엄→할인점). 역설적 수혜.</td>
+      </tr>
+      <tr>
+        <td class="stock-name">카바나(CVNA)</td>
+        <td class="down">부진</td>
+        <td>중고차조차 구매 어려운 소비자층 증가.</td>
+      </tr>
+      <tr>
+        <td class="stock-name">도어대시(DASH)</td>
+        <td class="down">비용 압박</td>
+        <td>음식 배달 수요 감소. 중산층 소비 위축 반영.</td>
+      </tr>
+    </table>
+
+    <div class="highlight-box gold" style="margin-top: 14px;">
+      <p><strong>"빈부격차 투자" 전략:</strong> 물가 상승(관세+인플레이션) → 중산층 붕괴 가속 → 고소득층 대상 기업(럭셔리, 프리미엄 여행)과 저소득층 필수소비(월마트) 양쪽에 투자해야 하는 시대.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔑 관세 & 인플레이션 이슈</div>
+    <p>뉴욕 연준 리포트에 따르면 관세의 가격 부담을 <strong>소비자가 90% 부담</strong>. 헬셋(백악관)이 강하게 반발했으나, 실질적으로 물가 상승이 소비자에게 전가되고 있는 현실은 부정하기 어려움.</p>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 7: 신흥국 & 자본이동 -->
+<!-- ═══════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon" style="background: rgba(6,182,212,0.15);">🌏</div>
+    <h2 class="section-title">자본 이동 — 신흥국 시장 주목</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔄 달러 약세 → 신흥국 자금 유입</div>
+    <p>미국 내에서는 실물 인프라(메모리·콘크리트 등)로 자금 쏠림, 나머지 성장주는 하방 압력. 동시에 <strong>달러 약세가 지속</strong>되면서 신흥국으로 자본 이동 중.</p>
+    
+    <table class="stock-table">
+      <tr><th>대상</th><th>포인트</th><th>성과</th></tr>
+      <tr>
+        <td class="stock-name">한국(KOSPI)</td>
+        <td>정치 정상화 + 반도체</td>
+        <td class="up">코스피 5,000 돌파</td>
+      </tr>
+      <tr>
+        <td class="stock-name">EWY (한국 ETF)</td>
+        <td>노바 2025.4월 추천</td>
+        <td class="up">$24 → $451 (약 1,800%)</td>
+      </tr>
+      <tr>
+        <td class="stock-name">대만 반도체</td>
+        <td>TSMC 중심 AI 수혜</td>
+        <td class="up">강세 지속</td>
+      </tr>
+      <tr>
+        <td class="stock-name">일본</td>
+        <td>아시아 자금 유입</td>
+        <td class="up">상승 추세</td>
+      </tr>
+      <tr>
+        <td class="stock-name">EWI (이탈리아 ETF)</td>
+        <td>아팔로사 13F 보유 확인</td>
+        <td class="up">$50 → $132 (약 164%)</td>
+      </tr>
+    </table>
+
+    <div class="highlight-box ice" style="margin-top: 14px;">
+      <p><strong>한국 시장 촉매:</strong> "법치가 살아야 자본주의는 움직인다." 윤석열 구속 이후 정치 정상화 → 외국인 자금 유입 가속. SK하이닉스 미국 상장 가능성도 언급. 사형선고 시 코스피 만(10,000) 전망까지 제시.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 8: 포트폴리오 배분 제안 -->
+<!-- ═══════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon" style="background: rgba(245,158,11,0.15);">🎯</div>
+    <h2 class="section-title">포트폴리오 배분 전략 제안</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 2026년 생존형 포트폴리오 구성</div>
+    
+    <div class="portfolio-bar">
+      <div class="portfolio-segment" style="width: 40%; background: var(--gradient-fire);">AI 인프라 40%</div>
+      <div class="portfolio-segment" style="width: 30%; background: var(--gradient-purple);">K경제 30%</div>
+      <div class="portfolio-segment" style="width: 20%; background: var(--gradient-gold);">매크로 헤지 20%</div>
+      <div class="portfolio-segment" style="width: 10%; background: var(--gradient-ice);">캐시 10%</div>
+    </div>
+
+    <div class="key-point">
+      <div class="key-num" style="background: rgba(239,68,68,0.15); color: var(--accent-red);">1</div>
+      <div class="key-content">
+        <h4>코어 AI 인프라 (~40%)</h4>
+        <p>메모리(SNDK, WDC), 냉각·열관리, 발전기(GNRC), 변전기·전력(SEI), 구리·전선, 토지(TPL). 2028년까지 매진 상태 = 최소 2년 실적 보장.</p>
+      </div>
+    </div>
+    <div class="key-point">
+      <div class="key-num" style="background: rgba(168,85,247,0.15); color: var(--accent-purple);">2</div>
+      <div class="key-content">
+        <h4>K경제 빈부격차 투자 (~30%)</h4>
+        <p><strong>고소득층 수혜:</strong> BKNG(프리미엄 여행), 페라리, 크루즈, 항공(해외 라인) <br><strong>저소득층 필수소비:</strong> 월마트(WMT) <br><strong>방어형:</strong> 애플(AAPL) — 캐펙스 안전지대</p>
+      </div>
+    </div>
+    <div class="key-point">
+      <div class="key-num" style="background: rgba(245,158,11,0.15); color: var(--accent-amber);">3</div>
+      <div class="key-content">
+        <h4>매크로 헤지 (~20%)</h4>
+        <p><strong>지정학적 리스크 대비:</strong> 금, 은, 원유 관련주. 이란 전쟁 시 유가·금값 급등 대비. 토지 관련 자산으로 인플레이션 헤지.</p>
+      </div>
+    </div>
+    <div class="key-point">
+      <div class="key-num" style="background: rgba(59,130,246,0.15); color: var(--accent-blue);">4</div>
+      <div class="key-content">
+        <h4>신흥국 노출 (추가 고려)</h4>
+        <p>한국(반도체 + 정치 정상화), 대만(TSMC), 일본. 달러 약세 수혜. 3배 레버리지(KORU 등)는 3일 이내 단기 보유 원칙.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-container" style="height: 280px; margin: 0 16px;">
+    <canvas id="portfolioChart"></canvas>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- BOTTOM LINE -->
+<!-- ═══════════════════════════════════ -->
+<div class="bottom-summary">
+  <h3>📌 핵심 결론 (Bottom Line)</h3>
+  <p style="text-align: left;">
+    <strong>1.</strong> FOMC 의사록은 2026년 상반기 금리인하 기대를 사실상 소멸시킴. 일부 위원의 금리 인상 검토까지 언급.<br><br>
+    <strong>2.</strong> 이란 전쟁 리스크는 현실적 위협. 유가-재고 역전 패턴이 2022년 우크라이나 전쟁 전과 동일. <strong>3월 중순~말</strong>이 결정적 시점.<br><br>
+    <strong>3.</strong> AI는 디지털이 아니라 <strong>실물 경제</strong>에 속한다. "딱딱한 것"(GPU, 메모리, 구리, 콘크리트, 냉각, 토지)이 진정한 가치.<br><br>
+    <strong>4.</strong> 소비의 K자 양극화가 심화. 부킹·페라리(고소득층) ↑, 카바나·도어대시(중하위층) ↓. <strong>빈부격차 투자가 핵심 전략.</strong><br><br>
+    <strong>5.</strong> 달러 약세 + 정치 정상화로 한국·대만 등 신흥국 반도체 시장에 자금 유입 가속. 포트폴리오에 물리적 인프라를 최우선으로 배치할 것.
+  </p>
+</div>
+
+<footer>
+  <p>본 분석은 NOVA Real Invest 방송(2026.02.18) 내용을 미국 증시 관점에서 정리한 것입니다.<br>
+  투자 판단의 최종 책임은 본인에게 있으며, 본 자료는 투자 권유가 아닙니다.<br>
+  📺 원본 채널: NOVA Real Invest | 분석 작성일: 2026.02.19</p>
+</footer>
+
+<script>
+// Chart.js defaults
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.font.family = "'IBM Plex Sans', 'Noto Sans KR', sans-serif";
+Chart.defaults.font.size = 11;
+
+// 1. Oil Pattern Chart
+new Chart(document.getElementById('oilPatternChart'), {
+  type: 'line',
+  data: {
+    labels: ['10월', '11월', '12월', '1월', '2월', '3월(예상)'],
+    datasets: [
+      {
+        label: 'WTI 유가 ($)',
+        data: [52, 55, 58, 60, 65, 72],
+        borderColor: '#ef4444',
+        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+        fill: true,
+        tension: 0.4,
+        borderWidth: 2,
+        pointRadius: 3,
+        yAxisID: 'y'
+      },
+      {
+        label: '미국 원유 재고 (M배럴)',
+        data: [410, 418, 425, 432, 440, 448],
+        borderColor: '#3b82f6',
+        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        fill: true,
+        tension: 0.4,
+        borderWidth: 2,
+        pointRadius: 3,
+        yAxisID: 'y1'
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { intersect: false, mode: 'index' },
+    plugins: {
+      legend: { position: 'top', labels: { boxWidth: 12, padding: 12, font: { size: 11 } } },
+      title: { display: true, text: '유가↑ + 재고↑ 동시 상승 = 전쟁 비축 신호', color: '#f59e0b', font: { size: 12, weight: '600' }, padding: { bottom: 10 } }
+    },
+    scales: {
+      x: { grid: { color: 'rgba(30,41,59,0.5)' }, ticks: { font: { size: 10 } } },
+      y: { position: 'left', grid: { color: 'rgba(30,41,59,0.3)' }, title: { display: true, text: 'WTI ($)', font: { size: 10 } }, ticks: { font: { size: 10 } } },
+      y1: { position: 'right', grid: { display: false }, title: { display: true, text: '재고 (M배럴)', font: { size: 10 } }, ticks: { font: { size: 10 } } }
+    }
+  }
+});
+
+// 2. Hardware vs Software Chart
+new Chart(document.getElementById('hwSwChart'), {
+  type: 'bar',
+  data: {
+    labels: ['소프트웨어\n(앱/SaaS)', '순수 AI\n(피그마 등)', '반도체\n(GPU/메모리)', '물리 인프라\n(전력/냉각)', '토지\n(데이터센터)'],
+    datasets: [{
+      label: '2026 투자 매력도',
+      data: [25, 60, 95, 88, 82],
+      backgroundColor: ['rgba(239,68,68,0.6)', 'rgba(168,85,247,0.6)', 'rgba(34,197,94,0.7)', 'rgba(59,130,246,0.7)', 'rgba(245,158,11,0.7)'],
+      borderColor: ['#ef4444', '#a855f7', '#22c55e', '#3b82f6', '#f59e0b'],
+      borderWidth: 1,
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    indexAxis: 'y',
+    plugins: {
+      legend: { display: false },
+      title: { display: true, text: '섹터별 투자 매력도 (방송 관점)', color: '#94a3b8', font: { size: 11 } }
+    },
+    scales: {
+      x: { grid: { color: 'rgba(30,41,59,0.3)' }, max: 100, ticks: { font: { size: 10 } } },
+      y: { grid: { display: false }, ticks: { font: { size: 10 } } }
+    }
+  }
+});
+
+// 3. K-Economy Chart
+new Chart(document.getElementById('kEconomyChart'), {
+  type: 'line',
+  data: {
+    labels: ['Q1\'25', 'Q2\'25', 'Q3\'25', 'Q4\'25', 'Q1\'26(E)'],
+    datasets: [
+      {
+        label: '고소득층 소비 (BKNG, 크루즈, 페라리)',
+        data: [100, 115, 130, 148, 165],
+        borderColor: '#22c55e',
+        backgroundColor: 'rgba(34,197,94,0.1)',
+        fill: true,
+        tension: 0.4,
+        borderWidth: 2,
+        pointRadius: 4
+      },
+      {
+        label: '중하위층 소비 (카바나, 도어대시)',
+        data: [100, 95, 88, 80, 72],
+        borderColor: '#ef4444',
+        backgroundColor: 'rgba(239,68,68,0.1)',
+        fill: true,
+        tension: 0.4,
+        borderWidth: 2,
+        pointRadius: 4
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { intersect: false },
+    plugins: {
+      legend: { position: 'top', labels: { boxWidth: 12, padding: 10, font: { size: 10 } } },
+      title: { display: true, text: 'K자 경제: 소비 양극화 추이 (지수화)', color: '#f59e0b', font: { size: 12, weight: '600' } }
+    },
+    scales: {
+      x: { grid: { color: 'rgba(30,41,59,0.3)' } },
+      y: { grid: { color: 'rgba(30,41,59,0.3)' }, ticks: { callback: v => v } }
+    }
+  }
+});
+
+// 4. Portfolio Allocation Chart
+new Chart(document.getElementById('portfolioChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['코어 AI 인프라', 'K경제 (빈부격차)', '매크로 헤지 (금/유가)', '캐시 & 방어'],
+    datasets: [{
+      data: [40, 30, 20, 10],
+      backgroundColor: ['#ef4444', '#a855f7', '#f59e0b', '#3b82f6'],
+      borderColor: '#111827',
+      borderWidth: 3,
+      hoverOffset: 8
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '55%',
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { boxWidth: 12, padding: 14, font: { size: 11 }, color: '#e2e8f0' }
+      },
+      title: {
+        display: true,
+        text: '2026 생존형 포트폴리오 배분',
+        color: '#f1f5f9',
+        font: { size: 13, weight: '700' },
+        padding: { bottom: 8 }
+      }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
