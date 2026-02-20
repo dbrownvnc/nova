@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사모 신용 뱅크런 리스크 & 시장 분열 분석 | 2026.02.19</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap');
+
+  :root {
+    --bg: #0a0e17;
+    --surface: #111827;
+    --surface2: #1a2236;
+    --border: #1e2d4a;
+    --text: #e2e8f0;
+    --text-dim: #8b9dc3;
+    --accent: #f59e0b;
+    --red: #ef4444;
+    --green: #22c55e;
+    --blue: #3b82f6;
+    --purple: #a78bfa;
+    --cyan: #06b6d4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 20px 16px 60px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 32px 0 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 28px;
+  }
+  .header .date {
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 900;
+    line-height: 1.4;
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+  }
+  .header .subtitle {
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  .header .source {
+    margin-top: 12px;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .header .source a {
+    color: var(--blue);
+    text-decoration: none;
+  }
+
+  /* Alert Banner */
+  .alert-banner {
+    background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(245,158,11,0.15));
+    border: 1px solid rgba(239,68,68,0.3);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 28px;
+    text-align: center;
+  }
+  .alert-banner .icon { font-size: 24px; margin-bottom: 6px; }
+  .alert-banner .title {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--red);
+    margin-bottom: 4px;
+  }
+  .alert-banner .desc {
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 32px;
+  }
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-size: 19px;
+    font-weight: 800;
+    margin-bottom: 14px;
+    line-height: 1.4;
+  }
+  .section h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 20px 0 10px;
+    color: var(--accent);
+  }
+  .section p {
+    color: var(--text-dim);
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  /* Card */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 14px;
+  }
+  .card-title {
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Stat Grid */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .stat-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+  }
+  .stat-box .label {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+  .stat-box .value {
+    font-size: 20px;
+    font-weight: 800;
+  }
+  .stat-box .sub {
+    font-size: 11px;
+    margin-top: 2px;
+  }
+  .stat-box.red .value { color: var(--red); }
+  .stat-box.green .value { color: var(--green); }
+  .stat-box.blue .value { color: var(--blue); }
+  .stat-box.amber .value { color: var(--accent); }
+
+  /* Key Point */
+  .key-point {
+    background: var(--surface2);
+    border-left: 3px solid var(--accent);
+    padding: 14px 16px;
+    margin: 14px 0;
+    border-radius: 0 10px 10px 0;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .key-point.danger {
+    border-left-color: var(--red);
+  }
+  .key-point.info {
+    border-left-color: var(--blue);
+  }
+  .key-point.success {
+    border-left-color: var(--green);
+  }
+
+  /* Timeline */
+  .timeline-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+    padding-left: 4px;
+  }
+  .timeline-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+  .timeline-dot.red { background: var(--red); }
+  .timeline-dot.green { background: var(--green); }
+  .timeline-dot.blue { background: var(--blue); }
+  .timeline-content {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+  .timeline-content strong {
+    color: var(--text);
+  }
+
+  /* Chart Container */
+  .chart-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+  }
+  .chart-container .chart-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+  .chart-container canvas {
+    max-height: 260px;
+  }
+
+  /* Table */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 12px 0;
+  }
+  .data-table th {
+    background: var(--surface2);
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-dim);
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+  }
+  .data-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+
+  /* Tag */
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .tag.red { background: rgba(239,68,68,0.15); color: var(--red); }
+  .tag.green { background: rgba(34,197,94,0.15); color: var(--green); }
+  .tag.amber { background: rgba(245,158,11,0.15); color: var(--accent); }
+  .tag.blue { background: rgba(59,130,246,0.15); color: var(--blue); }
+
+  /* Strategy Box */
+  .strategy-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 12px;
+  }
+  .strategy-box .role {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .strategy-box ul {
+    list-style: none;
+    padding: 0;
+  }
+  .strategy-box li {
+    font-size: 14px;
+    color: var(--text-dim);
+    padding: 6px 0;
+    padding-left: 18px;
+    position: relative;
+    line-height: 1.6;
+  }
+  .strategy-box li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+
+  /* Divider */
+  .divider {
+    border: none;
+    height: 1px;
+    background: var(--border);
+    margin: 28px 0;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 32px;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* List in section */
+  .section ul {
+    padding-left: 0;
+    list-style: none;
+  }
+  .section ul li {
+    font-size: 14px;
+    color: var(--text-dim);
+    padding: 4px 0 4px 16px;
+    position: relative;
+  }
+  .section ul li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Header -->
+<div class="header">
+  <div class="date">2026년 02월 19일 마켓 브리핑</div>
+  <h1>사모 신용 뱅크런 리스크 발생<br>1992년 이후 최대 시장 분열</h1>
+  <div class="subtitle">프라이빗 크레딧 균열 · 지정학적 긴장 · 디지털 경제 역전</div>
+  <div class="source">출처: <a href="https://www.youtube.com/live/WMcq2zCfcmI?si=grxED-w0rd_K9ZBz" target="_blank">CIA.chat 멤버미팅 (NOVA)</a></div>
+</div>
+
+<!-- Alert -->
+<div class="alert-banner">
+  <div class="icon">⚠️</div>
+  <div class="title">오늘의 2대 공포 요인</div>
+  <div class="desc">① 이란 군사 긴장 (10일 내 타격 가능성 발언) &nbsp; ② 사모 크레딧 환매 중단 사태</div>
+</div>
+
+<!-- 시장 개요 -->
+<div class="section">
+  <div class="section-label">📊 MARKET OVERVIEW</div>
+  <h2>시장 마감 및 섹터 동향</h2>
+
+  <div class="stat-grid">
+    <div class="stat-box red">
+      <div class="label">나스닥</div>
+      <div class="value">하락</div>
+      <div class="sub" style="color:var(--red)">빅테크 약세</div>
+    </div>
+    <div class="stat-box amber">
+      <div class="label">다우존스</div>
+      <div class="value">혼조</div>
+      <div class="sub" style="color:var(--accent)">산업재 강세</div>
+    </div>
+    <div class="stat-box green">
+      <div class="label">에너지 섹터</div>
+      <div class="value">강세</div>
+      <div class="sub" style="color:var(--green)">유가 상승 수혜</div>
+    </div>
+    <div class="stat-box green">
+      <div class="label">산업재 섹터</div>
+      <div class="value">강세</div>
+      <div class="sub" style="color:var(--green)">실물 인프라 랠리</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📈 히트맵 요약</div>
+    <p style="margin:0;font-size:14px;color:var(--text-dim)"><strong style="color:var(--green)">에너지·산업재</strong>만 녹색, 나머지 섹터는 대부분 적색 마감. 트럼프의 이란 타격 발언으로 유가가 <strong style="color:var(--green)">6개월 최고치</strong> 경신. 옵션 시장 콜:풋 비율은 <strong style="color:var(--red)">33:30</strong>으로 비관적 심리 반영.</p>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- 위기 1: 지정학 -->
+<div class="section">
+  <div class="section-label">🔴 RISK #1</div>
+  <h2>지정학적 긴장: 이란 군사 시나리오</h2>
+
+  <p>트럼프 대통령이 피스보드(평화위원회) 연설에서 <strong style="color:var(--red)">"10일 안에 이란을 타격할 수 있다"</strong>고 발언. 항공모함 제럴드 포드(Gerald Ford)가 추가 배치되었으며, 해군 관계자에 따르면 <strong>"이번 주말이면 작전 준비 완료"</strong>라는 보도도 나옴.</p>
+
+  <div class="key-point danger">
+    <strong>핵심 분석:</strong> 실제 공격 가능성은 3월 중순~말로 추정. 현재는 무력 시위 성격이 강하며, 2003년 걸프전 이후 최대 공군력 배치 중. 금 가격이 온스당 $5,000을 재돌파.
+  </div>
+
+  <div class="card">
+    <div class="card-title">🛢️ 유가·금 영향</div>
+    <table class="data-table">
+      <tr><th>자산</th><th>상태</th><th>시그널</th></tr>
+      <tr><td>WTI 원유</td><td><span class="tag green">급등</span></td><td>6개월 최고치, 추가 상승 가능</td></tr>
+      <tr><td>금(Gold)</td><td><span class="tag green">$5,000 돌파</span></td><td>안전자산 수요 폭증</td></tr>
+      <tr><td>방산주</td><td><span class="tag green">강세</span></td><td>헤지 자산으로 자금 유입</td></tr>
+    </table>
+  </div>
+
+  <p><strong>"전쟁 나면 주식 다 팔아야 하나?"</strong> → 아님. 어떤 주식을 보유하고 있느냐에 따라 극과 극으로 갈린다. 에너지·방산주는 수혜, 성장주·소비재는 타격 가능.</p>
+</div>
+
+<hr class="divider">
+
+<!-- 위기 2: 사모 크레딧 -->
+<div class="section">
+  <div class="section-label">🔴 RISK #2</div>
+  <h2>사모 크레딧(Private Credit) 균열: 블루아울 사태</h2>
+
+  <h3>무슨 일이 있었나?</h3>
+  <p><strong>블루아울(Blue Owl)</strong>이 실적 발표에서 <strong style="color:var(--red)">OBDC2 펀드 환매를 영구 중단</strong>한다고 선언. OBDC2는 매 분기 원금의 5%를 투자자에게 돌려주는 구조였는데, 이를 더 이상 이행할 수 없게 된 것.</p>
+
+  <h3>왜 문제인가?</h3>
+
+  <div class="timeline-item">
+    <div class="timeline-dot red"></div>
+    <div class="timeline-content"><strong>원인:</strong> 고금리 장기화로 대출 기업들이 이자를 상환하지 못하는 상황 발생</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-dot red"></div>
+    <div class="timeline-content"><strong>조치:</strong> 대출 자산 $1.4B(14억 달러)를 매각 계획 발표 — 유동성 확보 시도</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-dot red"></div>
+    <div class="timeline-content"><strong>연쇄반응:</strong> 블랙스톤, 아폴로, KKR 등 대형 자산운용사 주가 <strong style="color:var(--red)">5~6% 급락</strong></div>
+  </div>
+
+  <div class="key-point danger">
+    <strong>모하메드 엘 에리안(Mohamed El-Erian):</strong> "이것은 <strong>탄광 속의 카나리아</strong>다. 2008년 리먼 사태도 이런 작은 균열에서 시작됐다."
+  </div>
+
+  <div class="card">
+    <div class="card-title">💰 사모 크레딧(Private Credit)이란?</div>
+    <p style="margin:0;font-size:13px;color:var(--text-dim)">은행 규제가 높아 은행에서 대출받기 어려운 기업들이 블루아울 같은 투자회사를 통해 자금을 조달하는 시장. 투자자들이 자금을 모아 기업에 고금리로 대출해주고, 이자 수익을 투자자에게 배분하는 구조. 현재 시장 규모는 약 <strong style="color:var(--accent)">$1.8 Trillion(1.8조 달러)</strong>.</p>
+  </div>
+
+  <div class="chart-container">
+    <div class="chart-title">사모 크레딧 리스크 전파 경로</div>
+    <canvas id="creditRiskChart"></canvas>
+  </div>
+
+  <p>이 문제는 자산운용사에만 국한되지 않음. <strong style="color:var(--red)">자금 조달이 어려운 성장주, 미수익 테크기업</strong>에도 충격이 확산될 수 있으며, 은행 규제 완화가 이루어지지 않는 한 균열은 계속될 수 있음.</p>
+</div>
+
+<hr class="divider">
+
+<!-- 왕자의 교체 -->
+<div class="section">
+  <div class="section-label">👑 HISTORIC MOMENT</div>
+  <h2>13년 만의 왕위 교체: 아마존 > 월마트</h2>
+
+  <p>아마존의 매출액이 <strong style="color:var(--accent)">13년간 세계 1위</strong>를 지켜온 월마트를 처음으로 추월. 세계 최대 매출 기업의 자리가 실물 유통(Physical Retail)에서 디지털 플랫폼으로 넘어간 역사적 전환점.</p>
+
+  <div class="chart-container">
+    <div class="chart-title">아마존 vs 월마트 매출 추이 (연간, 개념도)</div>
+    <canvas id="revenueChart"></canvas>
+  </div>
+
+  <h3>아마존 승리의 3대 요인</h3>
+  <div class="timeline-item">
+    <div class="timeline-dot green"></div>
+    <div class="timeline-content"><strong>기술(Technology):</strong> AI와 데이터 기반 의사결정으로 유통 혁신</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-dot green"></div>
+    <div class="timeline-content"><strong>물류(Logistics):</strong> 기술을 통해 구현한 압도적 배송 인프라</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-dot green"></div>
+    <div class="timeline-content"><strong>AWS:</strong> 전체 매출의 약 18%를 차지하는 클라우드 사업이 "돈줄" 역할</div>
+  </div>
+
+  <div class="key-point success">
+    <strong>핵심 시사점:</strong> 리테일의 정의가 바뀌었다. 실물 매장의 시대가 아닌, <strong>온라인·디지털·AI 인프라</strong>를 얼마나 보유했느냐가 매출을 결정하는 시대. "실물경제 + 디지털 AI = 성공 공식"
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- AI 소프트웨어 위협 -->
+<div class="section">
+  <div class="section-label">🤖 AI DISRUPTION</div>
+  <h2>기업 소프트웨어 50% AI로 대체 가능</h2>
+
+  <p>아서 맹크(Arthur Mensch) 등 AI 업계 인사가 <strong style="color:var(--red)">"기업 소프트웨어의 50%가 AI 기술로 대체될 수 있다"</strong>고 발언. 이 발언으로 세일즈포스, 인튜이트, 아카마이, 부킹닷컴 등 소프트웨어·플랫폼 기업 주가가 급락.</p>
+
+  <div class="card">
+    <div class="card-title">🎯 AI 에이전트가 위협하는 분야</div>
+    <table class="data-table">
+      <tr><th>분야</th><th>위협 대상</th><th>AI 대체 시나리오</th></tr>
+      <tr><td>여행</td><td>부킹닷컴, 익스피디아</td><td>AI가 직접 최적 가격 탐색·예약</td></tr>
+      <tr><td>기업 SW</td><td>세일즈포스, 인튜이트</td><td>자체 AI로 CRM·회계 처리</td></tr>
+      <tr><td>CDN/보안</td><td>아카마이</td><td>AI 기반 자동화 인프라</td></tr>
+      <tr><td>코딩</td><td>구독형 개발툴</td><td>무료 AI가 코딩 대체</td></tr>
+    </table>
+  </div>
+
+  <div class="key-point info">
+    <strong>투자 관점:</strong> "미들맨(중개자)" 역할을 하는 소프트웨어 기업의 장기 리스크가 부각됨. AI 에이전트가 중개자 역할을 직접 수행하게 되면, 비싼 구독료를 내는 SaaS 모델 자체가 위협받을 수 있음.
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- 하드햇 AI -->
+<div class="section">
+  <div class="section-label">🔨 HARD HAT AI</div>
+  <h2>"안전모 쓴 AI" — 실물 인프라 투자 폭발</h2>
+
+  <p>소프트웨어·앱 중심의 AI가 아닌, <strong style="color:var(--accent)">전력·냉각·건설·기계 등 물리적 기반(Hard Hat)</strong>에 투자한 기업들이 압도적 수익을 기록 중.</p>
+
+  <div class="card">
+    <div class="card-title">🏆 핵심 종목 성과</div>
+    <table class="data-table">
+      <tr><th>기업</th><th>분야</th><th>성과</th></tr>
+      <tr><td><strong>FIX (Comfort Systems)</strong></td><td>HVAC 시스템</td><td><span class="tag green">5년 수익률 2,000%</span> (엔비디아 초과)</td></tr>
+      <tr><td><strong>DE (John Deere)</strong></td><td>농기계·건설장비+AI</td><td><span class="tag green">YTD +42%</span>, 당일 +12%</td></tr>
+      <tr><td><strong>PWR (Quanta Services)</strong></td><td>전력망 인프라</td><td><span class="tag green">강세 지속</span></td></tr>
+    </table>
+  </div>
+
+  <h3>존디어(John Deere) 어닝 하이라이트</h3>
+  <p>어닝콜에서 <strong style="color:var(--accent)">"2026년이 사이클의 바닥"</strong>이라고 선언. 단순 농기계가 아닌, 건설장비 + AI 융합으로 사업 영역 확장. 불도저·포크레인 등 건설 중장비에 AI를 탑재하며 차세대 성장 동력 확보.</p>
+
+  <div class="key-point">
+    <strong>NOVA의 핵심 메시지:</strong> "AI 투자의 정답은 챗봇이나 소프트웨어 앱이 아니다. <strong>물리적 기반(전력, 냉각, 건설, 전력망)</strong>이 훨씬 중요하다."
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- 1992년 이후 최대 괴리 -->
+<div class="section">
+  <div class="section-label">📉 MARKET DIVERGENCE</div>
+  <h2>1992년 이후 최대의 시장 괴리</h2>
+
+  <p>S&P 500 동일가중 ETF(RSP)가 시가총액 가중 ETF(SPY)를 크게 아웃퍼폼. 이 격차는 <strong style="color:var(--accent)">1992년 이후 최대</strong>.</p>
+
+  <div class="stat-grid">
+    <div class="stat-box green">
+      <div class="label">RSP (동일가중) YTD</div>
+      <div class="value">+5.14%</div>
+    </div>
+    <div class="stat-box red">
+      <div class="label">SPY (시총가중) YTD</div>
+      <div class="value">+0.38%</div>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <div class="chart-title">RSP vs SPY YTD 수익률 비교</div>
+    <canvas id="rspSpyChart"></canvas>
+  </div>
+
+  <p><strong>의미:</strong> 빅테크(Mag 7)가 횡보하는 동안, 나머지 493개 기업이 시장을 하드캐리하고 있는 상황. NOVA는 이를 <strong style="color:var(--green)">"건전한 확산(Healthy Broadening)"</strong>으로 해석 — 빅테크 거품이 빠지고, 실물 경기 연관 종목이 실질적으로 돈을 벌고 있다는 의미.</p>
+
+  <div class="card">
+    <div class="card-title">💡 RSP vs SPY 비용 비교</div>
+    <p style="margin:0;font-size:13px;color:var(--text-dim)">RSP 운용보수: 약 0.05% | SPY 운용보수: 약 0.11~0.12% → RSP가 비용 면에서도 유리</p>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- 거시경제 -->
+<div class="section">
+  <div class="section-label">🏛️ MACRO ECONOMY</div>
+  <h2>거시경제 지표 점검</h2>
+
+  <div class="card">
+    <div class="card-title">📊 주요 지표 현황</div>
+    <table class="data-table">
+      <tr><th>지표</th><th>상태</th><th>시사점</th></tr>
+      <tr><td>고용시장</td><td><span class="tag green">양호</span></td><td>아직 탄탄한 고용</td></tr>
+      <tr><td>무역적자</td><td><span class="tag red">확대 중</span></td><td>AI 장비 수입 급증이 원인</td></tr>
+      <tr><td>경기선행지수(LEI)</td><td><span class="tag red">5개월 연속 하락</span></td><td>하반기 성장 둔화 가능성</td></tr>
+      <tr><td>금리 전망</td><td><span class="tag amber">관망</span></td><td>내일 PCE + GDP 발표 주목</td></tr>
+    </table>
+  </div>
+
+  <h3>무역적자 확대의 숨은 원인: AI 장비</h3>
+  <p>관세를 부과하고 있음에도 미국의 무역적자가 계속 커지는 이유는 <strong style="color:var(--accent)">AI 인프라 장비(서버 랙, 메모리, 반도체 등) 수입이 폭증</strong>하고 있기 때문. 미국 혼자서는 AI를 완성할 수 없으며, 하드웨어의 대부분은 해외 공급망에 의존.</p>
+
+  <h3>경기선행지수(LEI) 5개월 연속 하락</h3>
+  <p>하반기 성장 둔화 신호. 다만 이 경우 <strong>금리 인하 가능성</strong>이 다시 부상할 수 있어, 시장에 새로운 기회가 될 수도 있음.</p>
+
+  <div class="key-point info">
+    <strong>내일(2/20) 주요 일정:</strong> PCE(개인소비지출) + GDP 분기 데이터 발표 → 연준 금리 결정에 대한 시장 기대를 좌우할 핵심 변수. 발표 직후 변동성 확대 예상되나, 오후에는 안정화되는 패턴이 반복되어 옴.
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- 투자 전략 -->
+<div class="section">
+  <div class="section-label">💼 INVESTMENT STRATEGY</div>
+  <h2>투자 전략 요약</h2>
+
+  <div class="strategy-box">
+    <div class="role">🔄 트레이더 (단기)</div>
+    <ul>
+      <li>현금 비중 확대 — 불확실성 대비</li>
+      <li>헤지 가능 자산 확보: 에너지, 방산주, 산업재</li>
+      <li>내일 PCE 발표 후 변동성을 기회로 활용</li>
+      <li>옵션 콜:풋 비율(33:30) 참고 — 비관적 심리 우세</li>
+    </ul>
+  </div>
+
+  <div class="strategy-box">
+    <div class="role">📈 투자자 (장기)</div>
+    <ul>
+      <li>AI 인프라(전력, 냉각, 건설, 전력망) 지속 진입</li>
+      <li>소프트웨어 비중 축소 — AI 대체 리스크 반영</li>
+      <li>실물 자산 "하드햇" 종목에 집중 (FIX, DE, PWR 등)</li>
+      <li>아마존, MSFT 등 빅테크는 과매도 구간 진입 시 관심</li>
+    </ul>
+  </div>
+
+  <div class="strategy-box">
+    <div class="role">⚠️ 위험 관리</div>
+    <ul>
+      <li>사모 크레딧 추가 뉴스 모니터링 — 연쇄 파산 가능성 경계</li>
+      <li>이란 지정학적 상황 변화에 따른 유가 포지션 조정</li>
+      <li>성장주·미수익 기업의 자금 조달 리스크 확인</li>
+      <li>저널링(투자 일지) 반드시 실천 — 감정·행동·실수 기록</li>
+    </ul>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- 핵심 요약 -->
+<div class="section">
+  <div class="section-label">📌 SUMMARY</div>
+  <h2>오늘의 핵심 3줄 요약</h2>
+
+  <div class="key-point danger">
+    <strong>1. 리스크 귀환:</strong> 이란 군사 긴장 + 사모 크레딧 균열. 특히 사모 크레딧은 $1.8T 시장으로, 2008년급 위기로 확산될 가능성을 경계해야 함.
+  </div>
+  <div class="key-point success">
+    <strong>2. 왕자 교체:</strong> 아마존이 13년 만에 월마트를 매출로 추월. 디지털 + AI 인프라 = 실물경제 승리 공식 확립.
+  </div>
+  <div class="key-point">
+    <strong>3. AI 투자의 정답:</strong> 소프트웨어가 아닌 "안전모(하드햇)" — 전력·냉각·건설·전력망 실물 인프라가 수익률 2,000%를 만들고 있다.
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  CIA.chat 멤버미팅 분석 | 2026.02.19 | 투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다
+</div>
+
+</div>
+
+<script>
+// Chart.js defaults
+Chart.defaults.color = '#8b9dc3';
+Chart.defaults.borderColor = '#1e2d4a';
+Chart.defaults.font.family = 'Noto Sans KR';
+
+// Credit Risk Flow Chart (Horizontal Bar)
+new Chart(document.getElementById('creditRiskChart'), {
+  type: 'bar',
+  data: {
+    labels: ['사모 크레딧 시장', '블루아울(OBDC2)', '대형 운용사(블랙스톤,KKR)', '성장주/미수익 기업', '은행 규제 미완화'],
+    datasets: [{
+      label: '위험 수준',
+      data: [90, 95, 70, 60, 80],
+      backgroundColor: [
+        'rgba(239,68,68,0.7)',
+        'rgba(239,68,68,0.9)',
+        'rgba(245,158,11,0.7)',
+        'rgba(245,158,11,0.5)',
+        'rgba(239,68,68,0.6)'
+      ],
+      borderRadius: 6,
+      barThickness: 20
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => `위험 지수: ${ctx.raw}/100`
+        }
+      }
+    },
+    scales: {
+      x: { display: false, max: 100 },
+      y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+    }
+  }
+});
+
+// Amazon vs Walmart Revenue (Conceptual)
+new Chart(document.getElementById('revenueChart'), {
+  type: 'line',
+  data: {
+    labels: ['2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026E'],
+    datasets: [
+      {
+        label: '아마존',
+        data: [280, 386, 470, 514, 575, 638, 690, 720],
+        borderColor: '#f59e0b',
+        backgroundColor: 'rgba(245,158,11,0.1)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 4,
+        borderWidth: 2.5
+      },
+      {
+        label: '월마트',
+        data: [524, 559, 573, 611, 648, 674, 695, 700],
+        borderColor: '#3b82f6',
+        backgroundColor: 'rgba(59,130,246,0.05)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 4,
+        borderWidth: 2.5
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } },
+      tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: $${ctx.raw}B` } }
+    },
+    scales: {
+      y: {
+        title: { display: true, text: '매출 ($B)', font: { size: 11 } },
+        grid: { color: 'rgba(30,45,74,0.5)' }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// RSP vs SPY YTD
+new Chart(document.getElementById('rspSpyChart'), {
+  type: 'bar',
+  data: {
+    labels: ['YTD 수익률', '1년 수익률'],
+    datasets: [
+      {
+        label: 'RSP (동일가중)',
+        data: [5.14, 11.33],
+        backgroundColor: 'rgba(34,197,94,0.7)',
+        borderRadius: 8,
+        barThickness: 36
+      },
+      {
+        label: 'SPY (시총가중)',
+        data: [0.38, 11.67],
+        backgroundColor: 'rgba(59,130,246,0.7)',
+        borderRadius: 8,
+        barThickness: 36
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } },
+      tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.raw}%` } }
+    },
+    scales: {
+      y: {
+        title: { display: true, text: '%', font: { size: 11 } },
+        grid: { color: 'rgba(30,45,74,0.5)' }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+</script>
+</body>
+</html>

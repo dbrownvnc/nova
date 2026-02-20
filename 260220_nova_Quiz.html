@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시험문제 10선 | 사모 신용 리스크 & 시장 분열 | 2026.02.19</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap');
+
+  :root {
+    --bg: #0a0e17;
+    --surface: #111827;
+    --surface2: #1a2236;
+    --border: #1e2d4a;
+    --text: #e2e8f0;
+    --text-dim: #8b9dc3;
+    --accent: #f59e0b;
+    --red: #ef4444;
+    --green: #22c55e;
+    --blue: #3b82f6;
+    --purple: #a78bfa;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  .container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 20px 16px 60px;
+  }
+
+  .header {
+    text-align: center;
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+  .header .badge {
+    display: inline-block;
+    background: rgba(245,158,11,0.15);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  .header h1 {
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.4;
+  }
+  .header .sub {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 6px;
+  }
+
+  .difficulty {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .difficulty.easy { background: rgba(34,197,94,0.15); color: var(--green); }
+  .difficulty.medium { background: rgba(245,158,11,0.15); color: var(--accent); }
+  .difficulty.hard { background: rgba(239,68,68,0.15); color: var(--red); }
+
+  .question-type {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    background: rgba(59,130,246,0.15);
+    color: var(--blue);
+    margin-left: 6px;
+  }
+
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 14px;
+  }
+  .q-card .q-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .q-num {
+    background: var(--accent);
+    color: var(--bg);
+    font-size: 12px;
+    font-weight: 800;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .q-text {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .options {
+    padding-left: 0;
+    list-style: none;
+  }
+  .options li {
+    font-size: 14px;
+    color: var(--text-dim);
+    padding: 8px 14px;
+    margin-bottom: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: default;
+  }
+  .options li strong { color: var(--text); }
+
+  hr.divider {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    margin: 36px 0;
+  }
+
+  /* Answer Section */
+  .answer-section {
+    margin-top: 40px;
+  }
+  .answer-header {
+    text-align: center;
+    padding: 20px 0;
+    border-top: 2px solid var(--accent);
+    margin-bottom: 20px;
+  }
+  .answer-header h2 {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .a-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .a-card .a-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .a-card .a-num {
+    background: var(--green);
+    color: var(--bg);
+    font-size: 11px;
+    font-weight: 800;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .a-card .answer-text {
+    font-weight: 700;
+    color: var(--green);
+    font-size: 14px;
+  }
+  .a-card .explanation {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    margin-top: 6px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  .toggle-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--accent), #d97706);
+    color: var(--bg);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    margin: 30px 0 20px;
+    text-align: center;
+  }
+  .toggle-btn:hover { opacity: 0.9; }
+
+  .hidden { display: none; }
+
+  .footer {
+    text-align: center;
+    padding: 20px 0;
+    font-size: 11px;
+    color: var(--text-dim);
+    border-top: 1px solid var(--border);
+    margin-top: 24px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="badge">📝 TEST 10 QUESTIONS</div>
+  <h1>사모 신용 리스크 & 시장 분열<br>시험문제 10선</h1>
+  <div class="sub">2026.02.19 CIA.chat 멤버미팅 기반 | 쉬움 30% · 보통 50% · 어려움 20%</div>
+</div>
+
+<!-- ==================== 문제 섹션 ==================== -->
+
+<!-- Q1 -->
+<div class="q-card">
+  <div class="q-header">
+    <div class="q-num">1</div>
+    <span class="difficulty easy">쉬움</span>
+    <span class="question-type">OX</span>
+  </div>
+  <div class="q-text">블루아울(Blue Owl)이 OBDC2 펀드의 환매를 영구 중단한 주된 이유는, 투자자들이 너무 많은 환매를 요청했기 때문이다.</div>
+  <p style="font-size:13px;color:var(--text-dim);">O 또는 X를 선택하세요.</p>
+</div>
+
+<!-- Q2 -->
+<div class="q-card">
+  <div class="q-header">
+    <div class="q-num">2</div>
+    <span class="difficulty easy">쉬움</span>
+    <span class="question-type">객관식</span>
+  </div>
+  <div class="q-text">2026년 2월 19일 미국 증시에서 유일하게 강세를 보인 2개 섹터는?</div>
+  <ul class="options">
+    <li><strong>①</strong> 기술(Tech) & 헬스케어(Healthcare)</li>
+    <li><strong>②</strong> 에너지(Energy) & 산업재(Industrials)</li>
+    <li><strong>③</strong> 소비재(Consumer) & 유틸리티(Utilities)</li>
+    <li><strong>④</strong> 금융(Financials) & 부동산(Real Estate)</li>
+  </ul>
+</div>
+
+<!-- Q3 -->
+<div class="q-card">
+  <div class="q-header">
+    <div class="q-num">3</div>
+    <span class="difficulty easy">쉬움</span>
+    <span class="question-type">단답형</span>
+  </div>
+  <div class="q-text">13년간 세계 최대 매출 기업이었던 월마트를 처음으로 매출액에서 추월한 기업의 이름은?</div>
+</div>
+
+<!-- Q4 -->
+<div class="q-card">
+  <div class="q-header">
+    <div class="q-num">4</div>
+    <span class="difficulty medium">보통</span>
+    <span class="question-type">객관식</span>
+  </div>
+  <div class="q-text">사모 크레딧(Private Credit) 시장의 규모는 약 얼마인가?</div>
+  <ul class="options">
+    <li><strong>①</strong> $180 Billion (1,800억 달러)</li>
+    <li><strong>②</strong> $1.8 Trillion (1.8조 달러)</li>
+    <li><strong>③</strong> $18 Trillion (18조 달러)</li>
+    <li><strong>④</strong> $800 Billion (8,000억 달러)</li>
+  </ul>
+</div>
+
+<!-- Q5 -->
+<div class="q-card">
+  <div class="q-header">
+    <div class="q-num">5</div>
+    <span class="difficulty medium">보통</span>
+    <span class="question-type">객관식</span>
+  </div>
+  <div class="q-text">RSP(S&P 500 동일가중 ETF)가 SPY(시가총액 가중 ETF)를 크게 아웃퍼폼하는 현상이 의미하는 것으로 가장 적절한 것은?</div>
+  <ul class="options">
+    <li><strong>①</strong> 빅테크 7개 기업이 시장을 주도하고 있다</li>
+    <li><strong>②</strong> 나머지 493개 기업이 빅테크보다 더 좋은 성과를 내고 있다</li>
+    <li><strong>③</strong> 전체 시장이 동시에 급락하고 있다</li>
+    <li><strong>④</strong> 연준이 금리를 인하했다</li>
+  </ul>
+</div>
+
+<!-- Q6 -->
+<div class="q-card">
+  <div class="q-header">
+    <div class="q-num">6</div>
+    <span class="difficulty medium">보통</span>
+    <span class="question-type">OX</span>
+  </div>
+  <div class="q-text">미국의 무역적자가 관세 부과에도 불구하고 확대되고 있는 주된 원인은 AI 인프라 장비(서버 랙, 메모리, 반도체 등)의 수입 급증 때문이다.</div>
+  <p style="font-size:13px;color:var(--text-dim);">O 또는 X를 선택하세요.</p>
+</div>
+
+<!-- Q7 -->
+<div class="q-card">
+  <div class="q-header">
+    <div class="q-num">7</div>
+    <span class="difficulty medium">보통</span>
+    <span class="question-type">단답형</span>
+  </div>
+  <div class="q-text">모하메드 엘 에리안이 블루아울 사태를 비유한 표현으로, "이것은 ______ 속의 카나리아다"에서 빈칸에 들어갈 단어는?</div>
+</div>
+
+<!-- Q8 -->
+<div class="q-card">
+  <div class="q-header">
+    <div class="q-num">8</div>
+    <span class="difficulty medium">보통</span>
+    <span class="question-type">객관식</span>
+  </div>
+  <div class="q-text">존디어(John Deere)가 어닝콜에서 선언한 내용과 가장 일치하는 것은?</div>
+  <ul class="options">
+    <li><strong>①</strong> 2026년을 마지막으로 사업을 축소한다</li>
+    <li><strong>②</strong> 2026년이 사이클의 바닥이며, 이후 회복을 기대한다</li>
+    <li><strong>③</strong> AI 사업에서 완전히 철수한다</li>
+    <li><strong>④</strong> 배당금을 영구 중단한다</li>
+  </ul>
+</div>
+
+<!-- Q9 -->
+<div class="q-card">
+  <div class="q-header">
+    <div class="q-num">9</div>
+    <span class="difficulty hard">어려움</span>
+    <span class="question-type">서술형</span>
+  </div>
+  <div class="q-text">"기업 소프트웨어의 50%가 AI로 대체될 수 있다"는 발언이 부킹닷컴, 세일즈포스 같은 기업에 부정적인 이유를 '미들맨(중개자)' 개념을 활용하여 설명하시오.</div>
+</div>
+
+<!-- Q10 -->
+<div class="q-card">
+  <div class="q-header">
+    <div class="q-num">10</div>
+    <span class="difficulty hard">어려움</span>
+    <span class="question-type">서술형</span>
+  </div>
+  <div class="q-text">사모 크레딧(Private Credit) 시장의 균열이 단순한 자산운용사 문제를 넘어 성장주(Growth Stocks)에까지 영향을 미칠 수 있는 메커니즘을 설명하시오.</div>
+</div>
+
+<!-- 정답 토글 버튼 -->
+<button class="toggle-btn" onclick="toggleAnswers()">📖 정답 및 해설 보기</button>
+
+<!-- ==================== 정답 섹션 ==================== -->
+<div id="answerSection" class="answer-section hidden">
+
+<div class="answer-header">
+  <h2>📖 정답 및 해설</h2>
+</div>
+
+<!-- A1 -->
+<div class="a-card">
+  <div class="a-top">
+    <div class="a-num">1</div>
+    <div class="answer-text">X (오답)</div>
+  </div>
+  <div class="explanation">환매 중단의 주된 이유는 투자자의 환매 요청이 아니라, <strong>대출 기업들이 이자를 상환하지 못해 블루아울의 자금이 부족</strong>해졌기 때문이다. 고금리 장기화로 차입 기업들의 이자 부담이 증가하면서 자금 흐름에 문제가 발생한 것.</div>
+</div>
+
+<!-- A2 -->
+<div class="a-card">
+  <div class="a-top">
+    <div class="a-num">2</div>
+    <div class="answer-text">② 에너지(Energy) & 산업재(Industrials)</div>
+  </div>
+  <div class="explanation">트럼프의 이란 타격 발언으로 유가가 6개월 최고치를 기록하면서 에너지 섹터가 강세를 보였고, 실물 인프라 투자 확대에 따라 산업재 섹터도 상승했다. 나머지 섹터는 대부분 적색 마감.</div>
+</div>
+
+<!-- A3 -->
+<div class="a-card">
+  <div class="a-top">
+    <div class="a-num">3</div>
+    <div class="answer-text">아마존(Amazon)</div>
+  </div>
+  <div class="explanation">아마존이 13년간 세계 1위 매출을 유지해온 월마트를 최초로 매출액에서 추월. 기술·물류·AWS(전체 매출의 약 18%)가 아마존 승리의 핵심 요인.</div>
+</div>
+
+<!-- A4 -->
+<div class="a-card">
+  <div class="a-top">
+    <div class="a-num">4</div>
+    <div class="answer-text">② $1.8 Trillion (1.8조 달러)</div>
+  </div>
+  <div class="explanation">사모 크레딧 시장은 약 1.8조 달러 규모의 거대 시장으로, 은행 규제로 대출이 어려운 기업들이 자금을 조달하는 대안적 금융 시장이다.</div>
+</div>
+
+<!-- A5 -->
+<div class="a-card">
+  <div class="a-top">
+    <div class="a-num">5</div>
+    <div class="answer-text">② 나머지 493개 기업이 빅테크보다 더 좋은 성과를 내고 있다</div>
+  </div>
+  <div class="explanation">RSP는 S&P 500 전 종목에 동일 비중을 투자하므로, RSP가 SPY를 아웃퍼폼한다는 것은 Mag 7(빅테크 7개)이 횡보하는 동안 나머지 493개 기업이 더 좋은 수익을 내고 있다는 의미. YTD 기준 RSP +5.14% vs SPY +0.38%로 1992년 이후 최대 격차 기록.</div>
+</div>
+
+<!-- A6 -->
+<div class="a-card">
+  <div class="a-top">
+    <div class="a-num">6</div>
+    <div class="answer-text">O (정답)</div>
+  </div>
+  <div class="explanation">미국은 AI 인프라를 자체 생산할 수 없어 서버 랙, 메모리, 반도체 등 대부분의 AI 장비를 해외에서 수입해야 한다. 관세를 부과해도 AI 수요 자체가 워낙 크기 때문에 무역적자는 오히려 확대되는 구조.</div>
+</div>
+
+<!-- A7 -->
+<div class="a-card">
+  <div class="a-top">
+    <div class="a-num">7</div>
+    <div class="answer-text">탄광(炭鉱)</div>
+  </div>
+  <div class="explanation">"탄광 속의 카나리아(Canary in the coal mine)"는 위험의 초기 징후를 뜻하는 관용 표현. 엘 에리안은 블루아울 사태가 2008년 리먼 사태처럼 작은 균열에서 시작된 대형 위기의 초기 신호일 수 있다고 경고.</div>
+</div>
+
+<!-- A8 -->
+<div class="a-card">
+  <div class="a-top">
+    <div class="a-num">8</div>
+    <div class="answer-text">② 2026년이 사이클의 바닥이며, 이후 회복을 기대한다</div>
+  </div>
+  <div class="explanation">존디어는 어닝콜에서 "2026년이 사이클의 바닥"이라고 선언하며, 이후 건설·농기계 수요가 회복될 것이라는 자신감을 표현. 실제 주가는 YTD +42%로 강세를 이어감. 또한 AI를 농기계·건설장비에 탑재하며 차세대 성장동력을 확보 중.</div>
+</div>
+
+<!-- A9 -->
+<div class="a-card">
+  <div class="a-top">
+    <div class="a-num">9</div>
+    <div class="answer-text">서술형 모범답안</div>
+  </div>
+  <div class="explanation">부킹닷컴, 세일즈포스 등은 본질적으로 <strong>'미들맨(중개자)'</strong> 역할을 하는 기업이다. 부킹닷컴은 호텔과 고객 사이의 중개자이고, 세일즈포스는 기업과 고객 데이터 사이의 중개자다. AI 에이전트가 이러한 중개 기능을 직접 수행하게 되면, 소비자나 기업이 이들 플랫폼에 비싼 구독료를 내고 이용할 필요가 없어진다. 예를 들어 AI가 직접 최적의 호텔을 찾아 예약해주면 부킹닷컴의 존재 이유가 사라진다. '에이전트(Agent)'라는 단어 자체가 중개인을 뜻하므로, AI 에이전트가 기존 소프트웨어 중개자를 대체하는 구조적 위협이 발생하는 것이다.</div>
+</div>
+
+<!-- A10 -->
+<div class="a-card">
+  <div class="a-top">
+    <div class="a-num">10</div>
+    <div class="answer-text">서술형 모범답안</div>
+  </div>
+  <div class="explanation">사모 크레딧 시장은 은행에서 대출받기 어려운 기업들의 대안적 자금 조달 경로다. 이 시장에 균열이 발생하면 다음과 같은 경로로 성장주에 영향이 전파된다:<br><br><strong>① 자금 조달 경색:</strong> 성장주(특히 미수익 기업)는 은행 대출이 어렵고 사모 크레딧에 의존하는 경우가 많다. 블루아울 같은 운용사가 환매를 중단하면, 새로운 투자자 모집도 어려워져 대출 공급 자체가 줄어든다.<br><br><strong>② 이자 부담 가중:</strong> 고금리 환경에서 기존 대출의 이자 부담이 증가하고, 신규 차입 비용은 더 높아진다.<br><br><strong>③ 연쇄 매도:</strong> 블루아울이 $1.4B 자산을 매각하듯, 운용사들이 유동성 확보를 위해 보유 자산을 매도하면 시장 전반의 매도 압력이 증가한다.<br><br><strong>④ 심리적 전염:</strong> 사모 크레딧 시장의 신뢰가 무너지면, 투자자들이 위험자산 전반에서 자금을 회수하는 "뱅크런" 현상이 발생할 수 있으며, 이는 2008년 리먼 사태의 전개 과정과 유사하다.</div>
+</div>
+
+</div>
+
+<div class="footer">
+  CIA.chat 멤버미팅 시험문제 | 2026.02.19 | 학습 목적으로만 활용하시기 바랍니다
+</div>
+
+</div>
+
+<script>
+function toggleAnswers() {
+  const section = document.getElementById('answerSection');
+  const btn = document.querySelector('.toggle-btn');
+  if (section.classList.contains('hidden')) {
+    section.classList.remove('hidden');
+    btn.textContent = '🔒 정답 숨기기';
+    section.scrollIntoView({ behavior: 'smooth' });
+  } else {
+    section.classList.add('hidden');
+    btn.textContent = '📖 정답 및 해설 보기';
+  }
+}
+</script>
+</body>
+</html>
