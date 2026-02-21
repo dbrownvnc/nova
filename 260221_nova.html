@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA 분석 | 대법원 판결 · GDP 쇼크 · 스태그플레이션 경고</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0f14;
+  --surface: #151a24;
+  --surface2: #1c2230;
+  --border: #2a3040;
+  --text: #e2e6ed;
+  --text-dim: #8a93a6;
+  --accent: #f0b429;
+  --accent-glow: rgba(240,180,41,0.15);
+  --red: #ef4444;
+  --red-dim: rgba(239,68,68,0.12);
+  --green: #22c55e;
+  --green-dim: rgba(34,197,94,0.12);
+  --blue: #3b82f6;
+  --blue-dim: rgba(59,130,246,0.12);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 16px;
+  -webkit-font-smoothing: antialiased;
+}
+.hero {
+  padding: 48px 0 32px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+.hero-date {
+  font-size: 12px;
+  color: var(--accent);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1.3;
+  color: #fff;
+  margin-bottom: 16px;
+}
+.hero-sub {
+  font-size: 15px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+.hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.tag {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+.tag-red { background: var(--red-dim); color: var(--red); }
+.tag-green { background: var(--green-dim); color: var(--green); }
+.tag-blue { background: var(--blue-dim); color: var(--blue); }
+.tag-gold { background: var(--accent-glow); color: var(--accent); }
+.section {
+  margin-bottom: 36px;
+}
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.section h2 {
+  font-size: 20px;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+.section h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+p { margin-bottom: 14px; font-size: 14.5px; color: var(--text); }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.card-icon {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.stat-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+}
+.stat-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.stat-value {
+  font-size: 22px;
+  font-weight: 900;
+  color: #fff;
+}
+.stat-value.red { color: var(--red); }
+.stat-value.green { color: var(--green); }
+.stat-value.gold { color: var(--accent); }
+.stat-note {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+.alert {
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  border-left: 4px solid;
+}
+.alert-red { background: var(--red-dim); border-color: var(--red); }
+.alert-green { background: var(--green-dim); border-color: var(--green); }
+.alert-gold { background: var(--accent-glow); border-color: var(--accent); }
+.alert-blue { background: var(--blue-dim); border-color: var(--blue); }
+.alert strong { color: #fff; }
+.table-wrap {
+  overflow-x: auto;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+th {
+  background: var(--surface2);
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+td {
+  padding: 10px 12px;
+  border-top: 1px solid var(--border);
+  color: var(--text);
+  white-space: nowrap;
+}
+tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+.items { margin-bottom: 16px; padding-left: 0; list-style: none; }
+.items li {
+  padding: 8px 0 8px 20px;
+  position: relative;
+  font-size: 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.items li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 36px 0;
+}
+.timeline-item {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.timeline-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+.timeline-content { flex: 1; }
+.timeline-time {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+.timeline-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.6;
+}
+.footer {
+  padding: 32px 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 40px;
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-date">2026년 02월 21일 · NOVA Real Invest</div>
+  <h1>대법원 판결이 살린 시장,<br>그러나 스태그플레이션의 그림자</h1>
+  <p class="hero-sub">GDP 쇼크(2.5%→1.4%), Core PCE 3.0% 급등, 대법원 관세 위헌 판결 6:3 — 오전 패닉에서 오후 랠리로 극적 반전된 하루의 의미와 투자 시사점</p>
+  <div class="hero-tags">
+    <span class="tag tag-red">스태그플레이션 경고</span>
+    <span class="tag tag-green">관세 위헌 판결</span>
+    <span class="tag tag-gold">엔비디아 실적 D-5</span>
+    <span class="tag tag-blue">사이버보안주 급락</span>
+  </div>
+</div>
+
+<!-- 1. 핵심 요약 -->
+<div class="section">
+  <div class="section-label">Executive Summary</div>
+  <h2>📌 오늘의 핵심 3줄 요약</h2>
+  <div class="alert alert-red">
+    <strong>① GDP 쇼크 + 인플레 과열:</strong> 4분기 GDP 수정치 1.4%(예상 2.5%), Core PCE 3.0%로 예상 상회. 금리 인하 전망이 7월 이후로 후퇴.
+  </div>
+  <div class="alert alert-green">
+    <strong>② 대법원 관세 위헌 판결:</strong> IEEPA(국제긴급경제권한법) 활용 관세 부과 위헌 6:3 판결. 트럼프 임명 판사 3명도 위헌 찬성. 시장 10시부터 급반등.
+  </div>
+  <div class="alert alert-gold">
+    <strong>③ 트럼프 대응 — Section 122 발동:</strong> 무역법 122조로 글로벌 10% 균일 관세 행정명령 예고. 단, 150일 한시적 조치. 시장은 "기존 15~50% 대비 오히려 완화"로 해석.
+  </div>
+</div>
+
+<!-- 2. 매크로 데이터 -->
+<div class="section">
+  <div class="section-label">Macro Data</div>
+  <h2>📊 매크로 경제 지표 — 스태그플레이션 신호</h2>
+  <div class="stat-grid">
+    <div class="stat-box">
+      <div class="stat-label">4Q GDP 수정치</div>
+      <div class="stat-value red">1.4%</div>
+      <div class="stat-note">예상 2.5% → 대폭 하회</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Core PCE</div>
+      <div class="stat-value red">3.0%</div>
+      <div class="stat-note">예상치 상회 · 인플레 과열</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">금리 인하 전망</div>
+      <div class="stat-value gold">7월↑</div>
+      <div class="stat-note">6월도 힘들어 → 하반기</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">WTI 유가</div>
+      <div class="stat-value">$66.31</div>
+      <div class="stat-note">1개월간 상승 추세</div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>GDP 쇼크 원인 분석</h3>
+    <p>이코노미스트들은 GDP 부진의 주요 원인으로 <strong>정부 셧다운 장기화</strong>를 지목하고 있으나, 확실하지 않으며 추가 확인이 필요한 상황입니다. 다우지수는 오전에 200포인트 이상 폭락하며 실물경제 우려를 반영했습니다.</p>
+    <p>문제는 <strong>성장 둔화(GDP↓)와 물가 상승(PCE↑)이 동시에 나타나는 스태그플레이션 시그널</strong>이라는 점입니다. 물가 상승의 핵심 요인은 관세와 AI 관련 수입품(대부분 아시아산) 증가로 분석됩니다.</p>
+  </div>
+  <div class="alert alert-red">
+    <strong>⚠️ 스태그플레이션 경고:</strong> GDP 쇼크 + PCE 3.0% 과열이 동시 출현. 미국 경제의 70%를 차지하는 소비 기반이 물가 압박으로 흔들릴 수 있다는 우려. "스태그플레이션"이란 단어가 미디어에 재등장한 것 자체가 경고 신호.
+  </div>
+</div>
+
+<!-- 3. 대법원 판결 -->
+<div class="section">
+  <div class="section-label">Supreme Court Ruling</div>
+  <h2>⚖️ 대법원 관세 위헌 판결 — 시장 반전의 트리거</h2>
+  <div class="card">
+    <h3>판결 핵심 내용</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>판결 결과</td><td><strong>위헌 6 : 3</strong></td></tr>
+        <tr><td>핵심 법률</td><td>IEEPA (국제긴급경제권한법)</td></tr>
+        <tr><td>의견서 작성</td><td>존 로버츠 대법관</td></tr>
+        <tr><td>요지</td><td>의회가 명시적 권한을 부여하지 않은 상태에서 대통령의 임의 관세 부과는 헌법 위반</td></tr>
+        <tr><td>특이사항</td><td>트럼프 임명 판사 3명 모두 위헌 찬성</td></tr>
+      </table>
+    </div>
+    <p>이 판결로 기존의 해방의 날(Liberation Day) 이후 부과됐던 고율 관세의 법적 근거가 무력화되었습니다. 트럼프 대통령이 임명한 판사들까지 등을 돌린 것은 정치적으로도 <strong>레임덕 신호</strong>로 해석될 수 있습니다.</p>
+  </div>
+  <div class="card">
+    <h3>트럼프 대통령 즉각 대응 — Section 122</h3>
+    <ul class="items">
+      <li><strong>무역법 122조(1974년)</strong> 발동 → 글로벌 10% 균일 관세 행정명령 예고</li>
+      <li><strong>150일 한시적 조치</strong> — 이후 의회 승인 필요</li>
+      <li>기존 15~50%의 차등 관세가 → 일률 10%로 변경</li>
+      <li>판사들 개별 이름을 거론하며 강한 비판 (가족 언급까지)</li>
+    </ul>
+  </div>
+  <div class="alert alert-green">
+    <strong>✅ 시장의 해석 — "오히려 좋아?":</strong> 기존 15~50%였던 관세가 10%로 균일화 → 기업들의 현금흐름 대폭 개선. 불확실성이 완전히 사라진 것은 아니나 상당히 축소. 특히 중국 수입 비중이 높은 아마존(+2.6%), 리테일·의류·신발 업종에 수혜.
+  </div>
+</div>
+
+<!-- 4. 장중 타임라인 -->
+<div class="section">
+  <div class="section-label">Intraday Timeline</div>
+  <h2>⏱ 2월 20일 장중 흐름</h2>
+  <div class="timeline-item">
+    <div class="timeline-dot" style="background:var(--red)"></div>
+    <div class="timeline-content">
+      <div class="timeline-time">08:30 ET</div>
+      <div class="timeline-text">GDP 1.4%(예상 2.5%), Core PCE 3.0% 발표 → 다우 200pt↓ 이상 폭락, 월가 패닉</div>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-dot" style="background:var(--red)"></div>
+    <div class="timeline-content">
+      <div class="timeline-time">장 초반</div>
+      <div class="timeline-text">옵션 만기일(2월 셋째 금요일) 겹치며 매도 압력 가중</div>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-dot" style="background:var(--green)"></div>
+    <div class="timeline-content">
+      <div class="timeline-time">10:00 ET</div>
+      <div class="timeline-text"><strong>대법원 관세 위헌 판결 6:3</strong> → 시장 180도 반전, 랠리 시작</div>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-dot" style="background:var(--accent)"></div>
+    <div class="timeline-content">
+      <div class="timeline-time">오후</div>
+      <div class="timeline-text">트럼프 Section 122 발동(10% 균일 관세) → 일시적 흔들림 후, "150일 한시" 확인되며 다시 안정</div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- 5. 섹터별 분석 -->
+<div class="section">
+  <div class="section-label">Sector Analysis</div>
+  <h2>📈 승자와 패자 — 섹터별 분석</h2>
+
+  <h3>🟢 관세 수혜 — 리테일/소비재 급등</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>종목</th><th>등락</th><th>포인트</th></tr>
+      <tr><td>아마존 (AMZN)</td><td style="color:var(--green)">+2.6%↑</td><td>중국 수입 비중 ~70%, 관세 인하 최대 수혜</td></tr>
+      <tr><td>엣지 (ETSY)</td><td style="color:var(--green)">상승</td><td>디팝 → 이베이 매각설 + 관세 수혜 이중 호재</td></tr>
+      <tr><td>월마트 (WMT)</td><td style="color:var(--green)">상승</td><td>수입품 원가 절감 기대</td></tr>
+      <tr><td>나이키 (NKE)</td><td style="color:var(--green)">소폭↑</td><td>Wedbush 긍정적 전망 — "돈이 풀릴 것"</td></tr>
+    </table>
+  </div>
+  <p>아마존 물건의 약 70%가 중국산이며, 대부분의 리테일러가 'Made in China' 수입에 의존하는 구조상 관세 인하는 직접적 마진 개선으로 연결됩니다. 다만 <strong>이미 올린 소비자 가격을 다시 내릴 가능성은 낮다</strong>는 점이 소비자 물가에는 부정적 요인.</p>
+
+  <h3>🔴 사이버보안 — Anthropic 충격파</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>종목</th><th>등락</th><th>원인</th></tr>
+      <tr><td>크라우드스트라이크 (CRWD)</td><td style="color:var(--red)">-7.95%</td><td>Anthropic Claude Code Security 발표</td></tr>
+      <tr><td>옥타 (OKTA)</td><td style="color:var(--red)">급락</td><td>AI 대체 우려</td></tr>
+      <tr><td>아카마이 (AKAM)</td><td style="color:var(--red)">급락</td><td>실적 부진 + AI 대체 우려</td></tr>
+      <tr><td>지스케일러 (ZS)</td><td style="color:var(--red)">급락</td><td>AI 보안 위협</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:var(--red-dim); color:var(--red);">🤖</div>
+      <div class="card-title">Anthropic "Claude Code Security"가 뭐길래?</div>
+    </div>
+    <p>기존 보안 소프트웨어는 <strong>이미 알려진 바이러스/위협</strong>을 정해진 규칙에 따라 탐지합니다. Claude Code Security는 <strong>에이전틱 AI</strong>로, 수백만 줄의 코드를 자체 스캔하여 논리적 취약점을 발견하고 패치 코드까지 자동 생성합니다.</p>
+    <p>핵심 비교: 인간 엔지니어가 코드 하나 수정에 약 <strong>17분</strong> 걸리는 작업을 AI가 <strong>30초 이내</strong>에 완료. 투자자들은 기존 사이버보안 업체의 비즈니스 모델 자체가 AI에 의해 대체될 수 있다는 공포에 빠졌습니다.</p>
+  </div>
+  <div class="alert alert-red">
+    <strong>⚠️ AI 소프트웨어 대체 위험:</strong> 노바는 "AI가 소프트웨어 회사 50%를 없앨 것"이라 전망. Anthropic뿐 아니라 Google 등도 공격적으로 진출 중. 사이버보안 섹터 전반에 구조적 위험 상존.
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- 6. 개별 종목 -->
+<div class="section">
+  <div class="section-label">Stock Spotlight</div>
+  <h2>🔍 개별 종목 심층 분석</h2>
+
+  <h3>🏠 오픈도어 (OPEN) — +19% 폭등, AI 2.0 전략</h3>
+  <div class="card">
+    <p>제로금리 시절 주택 플리핑(매수→리모델링→재판매)으로 주목받았으나, 고금리 전환 후 주가 폭락. 이번에 <strong>어닝 서프라이즈 + 흑자 전환</strong> 발표.</p>
+    <p><strong>역설적 성공 구조:</strong> 고금리 → 매매 거래량 급감 → 바이어스 마켓 형성 → 오픈도어가 경쟁 없이 좋은 매물을 저가 매수 가능 → 리모델 후 수익 확보.</p>
+    <p><strong>핵심 무기 "오픈도어 2.0":</strong> AI 기반 주택 가격 분석 시스템으로, 어떤 주택을 어느 가격에 매수해야 수익이 나는지 정확히 계산. "모든 투자는 살 때 결정된다"는 원칙을 AI가 실행.</p>
+  </div>
+
+  <h3>💀 그레일 (GRAL) — ~50% 폭락</h3>
+  <div class="card">
+    <p>암 조기 검진 치료제 <strong>임상 1차 실패</strong>로 주가 약 50% 급락. 시장 전체가 호재로 가득한 날에도 임상 실패 하나로 반 토막이 났습니다.</p>
+    <div class="alert alert-gold">
+      <strong>💡 바이오 투자 교훈:</strong> 임상 결과라는 단일 데이터로 생사가 결정되는 섹터. 투기적 성격의 바이오 투자는 전체 포트폴리오의 <strong>1~2% 이내</strong>로 제한할 것.
+    </div>
+  </div>
+
+  <h3>☁️ 코어위브 (CRWV) — 신용등급 B+ 충격</h3>
+  <div class="card">
+    <p>AI 인프라 호스팅 업체로 주목받았으나, 오늘 <strong>-8.12%</strong> 이상 급락. 핵심 이슈:</p>
+    <ul class="items">
+      <li><strong>신용등급 B+</strong> (투자 부적격) → 은행 대출 불가, 사모 대출에 의존</li>
+      <li>사모 크레딧 시장 자체가 불안 (블루아울 문제와 연결)</li>
+      <li>로이터 보도: 자금 조달 어려움 → 회사는 "헛소문" 부인, 시장은 불신</li>
+      <li>엔비디아가 지난달 <strong>$20억</strong> 긴급 투입 — 일종의 보증 행위</li>
+    </ul>
+    <p>AI 인프라 투자가 한계에 달했다는 의심이 시장에 확산 중. 엔비디아 입장에서도 코어위브 같은 고객사가 무너지면 GPU 수요 자체가 위협받기에 긴급 투입한 것으로 해석됩니다.</p>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- 7. 다음 주 전망 -->
+<div class="section">
+  <div class="section-label">Week Ahead</div>
+  <h2>📅 다음 주 핵심 일정 — 수·금이 관건</h2>
+  <div class="table-wrap">
+    <table>
+      <tr><th>날짜</th><th>이벤트</th><th>중요도</th></tr>
+      <tr><td>화 (2/24)</td><td>소비자 신뢰지수 · 홈디포 실적</td><td>⭐⭐⭐</td></tr>
+      <tr><td style="color:var(--accent);font-weight:700">수 (2/25)</td><td style="color:var(--accent);font-weight:700">엔비디아 실적 발표 (장후)</td><td>⭐⭐⭐⭐⭐</td></tr>
+      <tr><td style="color:var(--accent);font-weight:700">금 (2/27)</td><td style="color:var(--accent);font-weight:700">PPI (생산자 물가지수)</td><td>⭐⭐⭐⭐</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:var(--accent-glow); color:var(--accent);">🔥</div>
+      <div class="card-title">엔비디아 실적 — 2026년 3분기 증시 운명 좌우</div>
+    </div>
+    <p>5주간 하락세를 보인 시장에서 AI 랠리 지속 여부를 결정할 <strong>분수령</strong>. 핵심 확인 포인트:</p>
+    <ul class="items">
+      <li><strong>블랙웰 실수요:</strong> 실제 출하량과 주문 규모</li>
+      <li><strong>양산 속도:</strong> 수요를 충족하고 있는지</li>
+      <li><strong>빅테크 AI 카펙스 세부:</strong> 구글·메타·MS가 각각 얼마를 계약했는지</li>
+      <li><strong>마진율:</strong> 현재 ~75%의 총이익률 유지 여부 (이전에 소폭 하락만으로도 주가 타격)</li>
+      <li><strong>가이던스 톤:</strong> 젠슨 황의 한마디가 전체 시장 방향 결정</li>
+    </ul>
+    <div class="alert alert-gold">
+      <strong>시나리오 A (긍정):</strong> AI 슈퍼사이클 비전 재확인 + 압도적 실적 → 기술주 전면 랠리<br>
+      <strong>시나리오 B (부정):</strong> 가이던스에서 한 줄이라도 기대 미달 → "역대급 난리" 예상
+    </div>
+  </div>
+  <div class="card">
+    <h3>PPI — 스태그플레이션 2차 확인</h3>
+    <p>PCE 3.0% 이후 PPI까지 뜨겁게 나오면 "스태그플레이션이 정말 오는 것 아니냐"는 공포 확산. 반면 대법원 판결로 관세 부담이 줄었으므로, 수입 물가 하락 → 인플레 진정 기대감도 공존.</p>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- 8. 스마트 머니 -->
+<div class="section">
+  <div class="section-label">Smart Money Flow</div>
+  <h2>🏦 스마트 머니 — 헤지 포지션 강화</h2>
+  <p>대법원 판결에도 불구하고 스마트 머니는 낙관하지 않고 헤지 포지션을 구축하고 있습니다:</p>
+  <div class="stat-grid">
+    <div class="stat-box">
+      <div class="stat-label">에너지</div>
+      <div class="stat-value green">몰빵</div>
+      <div class="stat-note">유가 상승 + 지정학 리스크</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">금·은</div>
+      <div class="stat-value gold">몰빵</div>
+      <div class="stat-note">금값 신고가 행진</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">군수·방산</div>
+      <div class="stat-value green">몰빵</div>
+      <div class="stat-note">이란 긴장 고조</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">현금</div>
+      <div class="stat-value">확보</div>
+      <div class="stat-note">기술주 비중 축소</div>
+    </div>
+  </div>
+  <p>기술주에서 자금을 일시 이탈시키고, 엔비디아 실적(수요일) 확인 후 재진입 여부를 결정하려는 움직임이 뚜렷합니다.</p>
+</div>
+
+<hr class="divider">
+
+<!-- 9. 투자 전략 -->
+<div class="section">
+  <div class="section-label">Investment Strategy</div>
+  <h2>🎯 투자 전략 가이드 (단기 트레이딩 중심)</h2>
+  <div class="card">
+    <h3>1️⃣ 바이 더 딥 — 관세 수혜주</h3>
+    <p>대법원 판결은 번복될 수 없고, Section 122도 150일 한시적 조치. 아마존, 월마트, 나이키, 리테일·의류·신발 등 수입 의존도 높은 종목이 조정 시 매수 기회.</p>
+  </div>
+  <div class="card">
+    <h3>2️⃣ Wait & See — 기술주</h3>
+    <p><strong>아직 기술주 진입 시기가 아님.</strong> 엔비디아 실적(수요일) 확인 후 방향 결정. 월·화·수 기술주는 눌려 있을 것으로 예상.</p>
+  </div>
+  <div class="card">
+    <h3>3️⃣ 주의 — AI 대체 리스크 종목</h3>
+    <p>Anthropic, Google 등의 AI 공세로 소프트웨어·사이버보안 업체 구조적 위험. "AI가 소프트웨어 회사 50%를 없앨 수 있다"는 경고 유의.</p>
+  </div>
+  <div class="card">
+    <h3>4️⃣ 헤지 — 안전자산 비중 확대</h3>
+    <p>유가, 금, 은, 방산주, 현금 등으로 포트폴리오 헤지. 이란 전쟁 리스크와 인플레이션 불확실성에 대비.</p>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- 10. 결론 -->
+<div class="section">
+  <div class="section-label">Conclusion</div>
+  <h2>🧭 결론 — 안개 속에서 찾은 길, 그러나 끝은 아니다</h2>
+  <div class="card">
+    <ul class="items">
+      <li>대법원 판결로 <strong>관세 불확실성은 크게 축소</strong>됐으나, 10% 균일 관세는 여전히 존재</li>
+      <li>기존에 납부한 고율 관세에 대한 <strong>기업 소송 러시</strong> 예상 (코스코 이미 소송 착수), 다만 미국 사법 절차는 4~5년 소요 가능</li>
+      <li>GDP 쇼크 + PCE 과열로 <strong>스태그플레이션 그림자</strong>가 드리워진 상태</li>
+      <li>이란 지정학 리스크 — 미국이 압도적 전력이나, <strong>지상전 돌입 시 장기화</strong> 우려 (아프간·베트남 전례)</li>
+      <li>다음 주 수요일(엔비디아)·금요일(PPI)이 <strong>시장 방향의 분수령</strong></li>
+    </ul>
+  </div>
+  <div class="alert alert-blue">
+    <strong>📌 노바의 핵심 메시지:</strong> "축제 분위기이나 냉철하게 봐야 한다. 한번 오른 물가는 내려가지 않는다. 소비자 물가는 그대로일 것이다. 4개의 카테고리(관세수혜·기술주관망·AI대체주의·헤지자산)로 포트폴리오를 정리하라."
+  </div>
+</div>
+
+<div class="footer">
+  <p>NOVA Real Invest 방송 분석 · 2026.02.21</p>
+  <p style="margin-top:4px;">본 자료는 교육 목적이며 투자 조언이 아닙니다. 투자 판단은 본인 책임입니다.</p>
+</div>
+
+</body>
+</html>

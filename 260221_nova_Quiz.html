@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA 시험문제 | 대법원 판결 · GDP 쇼크 · 스태그플레이션</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0f14;
+  --surface: #151a24;
+  --surface2: #1c2230;
+  --border: #2a3040;
+  --text: #e2e6ed;
+  --text-dim: #8a93a6;
+  --accent: #f0b429;
+  --accent-glow: rgba(240,180,41,0.15);
+  --red: #ef4444;
+  --red-dim: rgba(239,68,68,0.12);
+  --green: #22c55e;
+  --green-dim: rgba(34,197,94,0.12);
+  --blue: #3b82f6;
+  --blue-dim: rgba(59,130,246,0.12);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 16px;
+  -webkit-font-smoothing: antialiased;
+}
+.hero {
+  padding: 48px 0 32px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+.hero-date {
+  font-size: 12px;
+  color: var(--accent);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1.3;
+  color: #fff;
+  margin-bottom: 12px;
+}
+.hero-sub {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+.hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.tag {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+.tag-green { background: var(--green-dim); color: var(--green); }
+.tag-blue { background: var(--blue-dim); color: var(--blue); }
+.tag-red { background: var(--red-dim); color: var(--red); }
+
+/* Score Counter */
+.score-bar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.score-label {
+  font-size: 13px;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+.score-value {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--accent);
+}
+
+/* Questions */
+.q-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.q-header {
+  padding: 16px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.q-num {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 900; color: #fff;
+  flex-shrink: 0;
+  background: var(--surface2);
+}
+.q-content { flex: 1; }
+.q-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.q-badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+.q-easy { background: var(--green-dim); color: var(--green); }
+.q-medium { background: var(--blue-dim); color: var(--blue); }
+.q-hard { background: var(--red-dim); color: var(--red); }
+.q-type {
+  font-size: 10px;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+.q-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.5;
+}
+.q-options {
+  padding: 0 20px 4px 64px;
+  list-style: none;
+}
+.q-options li {
+  font-size: 14px;
+  color: var(--text);
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.q-options li:last-child { border-bottom: none; }
+
+/* Answer Toggle */
+.answer-toggle {
+  width: 100%;
+  padding: 12px 20px;
+  background: var(--surface2);
+  border: none;
+  border-top: 1px solid var(--border);
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s;
+}
+.answer-toggle:hover { background: rgba(240,180,41,0.08); }
+.answer-toggle .arrow {
+  font-size: 10px;
+  transition: transform 0.2s;
+}
+.answer-toggle.open .arrow { transform: rotate(180deg); }
+.answer-body {
+  display: none;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text);
+}
+.answer-body.show { display: block; }
+.answer-body strong { color: var(--accent); }
+.answer-body .correct {
+  background: var(--green-dim);
+  color: var(--green);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+.answer-body .explain {
+  color: var(--text-dim);
+  font-size: 13px;
+  margin-top: 8px;
+  line-height: 1.7;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 36px 0;
+}
+.footer {
+  padding: 32px 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 40px;
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-date">2026년 02월 21일 · NOVA Real Invest</div>
+  <h1>📝 시험문제 10선</h1>
+  <p class="hero-sub">대법원 관세 위헌 판결, GDP 쇼크, Core PCE 3.0%, 스태그플레이션 경고 — 방송 내용 기반 학습 확인 테스트</p>
+  <div class="hero-tags">
+    <span class="tag tag-green">쉬움 30%</span>
+    <span class="tag tag-blue">보통 50%</span>
+    <span class="tag tag-red">어려움 20%</span>
+  </div>
+</div>
+
+<!-- SCORE -->
+<div class="score-bar">
+  <span class="score-label">총 10문제 · 클릭하여 정답 확인</span>
+  <span class="score-value">🎯</span>
+</div>
+
+<!-- Q1 -->
+<div class="q-block">
+  <div class="q-header">
+    <div class="q-num">01</div>
+    <div class="q-content">
+      <div class="q-meta">
+        <span class="q-badge q-easy">쉬움</span>
+        <span class="q-type">단답형</span>
+      </div>
+      <div class="q-text">2월 20일 발표된 4분기 GDP 수정치(실제)와 시장 예상치는 각각 얼마였는가?</div>
+    </div>
+  </div>
+  <button class="answer-toggle" onclick="toggleAnswer(this)">정답 및 해설 보기 <span class="arrow">▼</span></button>
+  <div class="answer-body">
+    <div class="correct">정답: 실제 1.4%, 예상 2.5%</div>
+    <div class="explain">4분기 GDP 수정치가 예상(2.5%)을 크게 하회하며 1.4%로 발표되었습니다. 이코노미스트들은 정부 셧다운 장기화를 주요 원인으로 지목했으나, 정확한 원인은 추가 확인이 필요한 상황입니다. 다우지수가 오전에 200포인트 이상 하락하는 등 시장에 즉각적인 충격을 주었습니다.</div>
+  </div>
+</div>
+
+<!-- Q2 -->
+<div class="q-block">
+  <div class="q-header">
+    <div class="q-num">02</div>
+    <div class="q-content">
+      <div class="q-meta">
+        <span class="q-badge q-easy">쉬움</span>
+        <span class="q-type">O/X</span>
+      </div>
+      <div class="q-text">대법원은 IEEPA를 근거로 한 관세 부과에 대해 9:0 만장일치로 위헌 판결을 내렸다. (O/X)</div>
+    </div>
+  </div>
+  <button class="answer-toggle" onclick="toggleAnswer(this)">정답 및 해설 보기 <span class="arrow">▼</span></button>
+  <div class="answer-body">
+    <div class="correct">정답: X</div>
+    <div class="explain">위헌 판결은 맞지만, 6:3의 다수 의견이었습니다(만장일치 아님). 특히 트럼프 대통령이 임명한 판사 3명도 위헌에 찬성했다는 점이 특기할 사항입니다. 존 로버츠 대법관은 "의회가 명시적으로 권한을 주지 않았는데 대통령이 관세를 부과하는 것은 헌법 위반"이라고 명시했습니다.</div>
+  </div>
+</div>
+
+<!-- Q3 -->
+<div class="q-block">
+  <div class="q-header">
+    <div class="q-num">03</div>
+    <div class="q-content">
+      <div class="q-meta">
+        <span class="q-badge q-medium">보통</span>
+        <span class="q-type">단답형</span>
+      </div>
+      <div class="q-text">트럼프 대통령이 대법원 판결 직후 발동한 Section 122(무역법 122조)의 핵심 제한사항은 무엇인가?</div>
+    </div>
+  </div>
+  <button class="answer-toggle" onclick="toggleAnswer(this)">정답 및 해설 보기 <span class="arrow">▼</span></button>
+  <div class="answer-body">
+    <div class="correct">정답: 150일 한시적 조치이며, 이후 의회 승인이 필요하다.</div>
+    <div class="explain">무역법 122조(1974년)를 근거로 글로벌 10% 균일 관세를 예고했으나, 이 조치는 150일까지만 대통령 권한으로 가능합니다. 시장은 이를 "기존 15~50% 관세 대비 완화"이자 "시간제한이 있는 조치"로 해석하여 오히려 긍정적으로 반응했습니다.</div>
+  </div>
+</div>
+
+<!-- Q4 -->
+<div class="q-block">
+  <div class="q-header">
+    <div class="q-num">04</div>
+    <div class="q-content">
+      <div class="q-meta">
+        <span class="q-badge q-medium">보통</span>
+        <span class="q-type">서술형</span>
+      </div>
+      <div class="q-text">Core PCE가 3.0%로 발표된 것이 연준의 금리 정책에 미치는 영향을 설명하시오.</div>
+    </div>
+  </div>
+  <button class="answer-toggle" onclick="toggleAnswer(this)">정답 및 해설 보기 <span class="arrow">▼</span></button>
+  <div class="answer-body">
+    <div class="correct">정답: 금리 인하 전망이 6월에서 7월 이후(하반기)로 후퇴했다.</div>
+    <div class="explain">Core PCE는 연준이 가장 중시하는 인플레이션 지표입니다. 예상치를 크게 상회한 3.0%가 나오면서 6월 금리 인하도 어려워졌고, 시장은 7월 이후(하반기)에나 첫 인하가 가능할 것으로 전망을 수정했습니다. 이는 "금리 인하는 물 건너갔다"는 표현으로 요약됩니다.</div>
+  </div>
+</div>
+
+<!-- Q5 -->
+<div class="q-block">
+  <div class="q-header">
+    <div class="q-num">05</div>
+    <div class="q-content">
+      <div class="q-meta">
+        <span class="q-badge q-easy">쉬움</span>
+        <span class="q-type">단답형</span>
+      </div>
+      <div class="q-text">크라우드스트라이크(-7.95%) 등 사이버보안주가 급락한 직접적 원인은?</div>
+    </div>
+  </div>
+  <button class="answer-toggle" onclick="toggleAnswer(this)">정답 및 해설 보기 <span class="arrow">▼</span></button>
+  <div class="answer-body">
+    <div class="correct">정답: Anthropic의 "Claude Code Security" 발표</div>
+    <div class="explain">Anthropic이 에이전틱 AI 기반 보안 도구를 발표하면서, 기존 보안 업체의 비즈니스 모델이 AI에 의해 대체될 수 있다는 공포가 확산됐습니다. 인간 엔지니어가 코드 수정에 약 17분 걸리는 작업을 AI가 30초 내에 처리한다는 점이 충격을 줬습니다.</div>
+  </div>
+</div>
+
+<!-- Q6 -->
+<div class="q-block">
+  <div class="q-header">
+    <div class="q-num">06</div>
+    <div class="q-content">
+      <div class="q-meta">
+        <span class="q-badge q-medium">보통</span>
+        <span class="q-type">서술형</span>
+      </div>
+      <div class="q-text">오픈도어(OPEN)가 고금리 환경에서 오히려 흑자 전환에 성공한 이유를 설명하시오.</div>
+    </div>
+  </div>
+  <button class="answer-toggle" onclick="toggleAnswer(this)">정답 및 해설 보기 <span class="arrow">▼</span></button>
+  <div class="answer-body">
+    <div class="correct">정답: 고금리로 경쟁 플리퍼가 줄고, AI(오픈도어 2.0)로 좋은 매물을 저가 선별 매수.</div>
+    <div class="explain">일반적으로 고금리는 부동산 플리핑 업체에 불리하지만, 오픈도어는 역설적으로 매매 급감이 경쟁을 제거해 바이어스 마켓에서 유리한 매수 기회를 만들었습니다. 여기에 AI 기반 가격 분석 시스템 "오픈도어 2.0"으로 수익 가능한 매물을 정확히 선별한 것이 핵심입니다.</div>
+  </div>
+</div>
+
+<!-- Q7 -->
+<div class="q-block">
+  <div class="q-header">
+    <div class="q-num">07</div>
+    <div class="q-content">
+      <div class="q-meta">
+        <span class="q-badge q-medium">보통</span>
+        <span class="q-type">서술형</span>
+      </div>
+      <div class="q-text">코어위브(CRWV)의 주가 급락과 엔비디아의 $20억 투입 사이의 관계를 설명하시오.</div>
+    </div>
+  </div>
+  <button class="answer-toggle" onclick="toggleAnswer(this)">정답 및 해설 보기 <span class="arrow">▼</span></button>
+  <div class="answer-body">
+    <div class="correct">정답: 코어위브 신용등급 B+(투자 부적격) → 자금 조달 난항 → 엔비디아가 GPU 수요 생태계 보호 차원에서 긴급 지원</div>
+    <div class="explain">AI 인프라 호스팅 업체인 코어위브는 신용등급 B+로 일반 은행 대출이 어렵고 사모 크레딧 시장에 의존합니다. 블루아울 등 사모 대출 시장의 불안이 겹치면서 자금 조달 어려움이 부각됐고, 엔비디아는 자사의 GPU 수요 생태계를 지키기 위해 긴급 자금 $20억을 투입한 구조입니다.</div>
+  </div>
+</div>
+
+<!-- Q8 -->
+<div class="q-block">
+  <div class="q-header">
+    <div class="q-num">08</div>
+    <div class="q-content">
+      <div class="q-meta">
+        <span class="q-badge q-hard">어려움</span>
+        <span class="q-type">논술형</span>
+      </div>
+      <div class="q-text">"스태그플레이션의 그림자"라는 표현이 사용된 근거 두 가지를 제시하고, 이것이 연준의 딜레마인 이유를 설명하시오.</div>
+    </div>
+  </div>
+  <button class="answer-toggle" onclick="toggleAnswer(this)">정답 및 해설 보기 <span class="arrow">▼</span></button>
+  <div class="answer-body">
+    <div class="correct">정답: ① GDP 쇼크(2.5%→1.4%): 경제 성장 둔화 ② Core PCE 3.0%: 물가 상승 지속</div>
+    <div class="explain"><strong>연준의 딜레마:</strong> 성장 둔화에 대응하려면 금리를 인하해야 하지만, 물가가 여전히 높아 인하할 수 없는 상황입니다. 금리를 유지/인상하면 경기 침체가 깊어지고, 인하하면 인플레이션이 더 심화될 수 있습니다. 미국 경제의 70%가 소비에 의존하는 구조에서 물가 상승은 소비 위축 → 경기 침체의 악순환을 유발할 수 있어 특히 위험합니다.</div>
+  </div>
+</div>
+
+<!-- Q9 -->
+<div class="q-block">
+  <div class="q-header">
+    <div class="q-num">09</div>
+    <div class="q-content">
+      <div class="q-meta">
+        <span class="q-badge q-hard">어려움</span>
+        <span class="q-type">객관식 (복수 정답)</span>
+      </div>
+      <div class="q-text">다음 주 엔비디아 실적 발표에서 확인해야 할 핵심 포인트를 모두 고르시오.</div>
+    </div>
+  </div>
+  <ol class="q-options">
+    <li>① 블랙웰 실수요 및 양산 속도</li>
+    <li>② 주당 배당금 인상 여부</li>
+    <li>③ 빅테크별 AI 카펙스 계약 규모 (구글·메타·MS)</li>
+    <li>④ 마진율 유지 여부 (~75%)</li>
+    <li>⑤ 가이던스 톤 및 AI 슈퍼사이클 비전</li>
+    <li>⑥ 삼성전자와의 신규 파운드리 계약</li>
+  </ol>
+  <button class="answer-toggle" onclick="toggleAnswer(this)">정답 및 해설 보기 <span class="arrow">▼</span></button>
+  <div class="answer-body">
+    <div class="correct">정답: ①③④⑤</div>
+    <div class="explain">②배당금은 성장 기업인 엔비디아에서 핵심 포인트가 아니며, ⑥삼성 파운드리 계약은 본문에 언급되지 않은 내용입니다. 특히 마진율은 이전에 소폭 하락만으로도 주가에 부정적 영향을 미쳤던 전례가 있어 75% 수준 유지 여부가 중요합니다. 젠슨 황의 가이던스 톤 한마디가 AI 랠리의 향방을 결정짓는 분수령이 됩니다.</div>
+  </div>
+</div>
+
+<!-- Q10 -->
+<div class="q-block">
+  <div class="q-header">
+    <div class="q-num">10</div>
+    <div class="q-content">
+      <div class="q-meta">
+        <span class="q-badge q-medium">보통</span>
+        <span class="q-type">서술형</span>
+      </div>
+      <div class="q-text">노바가 제시한 4가지 포트폴리오 카테고리를 모두 나열하시오.</div>
+    </div>
+  </div>
+  <button class="answer-toggle" onclick="toggleAnswer(this)">정답 및 해설 보기 <span class="arrow">▼</span></button>
+  <div class="answer-body">
+    <div class="correct">정답: ① 바이 더 딥(관세수혜주) ② Wait & See(기술주) ③ 주의(AI 대체 리스크) ④ 헤지(안전자산)</div>
+    <div class="explain">
+      ① <strong>바이 더 딥 — 관세 수혜주:</strong> 아마존, 리테일, 의류, 신발 등<br>
+      ② <strong>Wait & See — 기술주:</strong> 엔비디아 실적 확인 후 판단<br>
+      ③ <strong>주의 — AI 대체 리스크 종목:</strong> 사이버보안 등 소프트웨어<br>
+      ④ <strong>헤지 — 안전자산:</strong> 유가, 금, 은, 방산, 현금<br><br>
+      공격(관세수혜 매수)과 방어(헤지), 관망(기술주)과 회피(AI대체 리스크)를 균형 있게 배치하는 전략입니다.
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>NOVA Real Invest 방송 기반 시험문제 · 2026.02.21</p>
+  <p style="margin-top:4px;">본 자료는 교육 목적이며 투자 조언이 아닙니다.</p>
+</div>
+
+<script>
+function toggleAnswer(btn) {
+  const body = btn.nextElementSibling;
+  btn.classList.toggle('open');
+  body.classList.toggle('show');
+  btn.textContent = body.classList.contains('show') ? '정답 숨기기' : '정답 및 해설 보기';
+  const arrow = document.createElement('span');
+  arrow.className = 'arrow';
+  arrow.textContent = ' ▼';
+  btn.appendChild(arrow);
+}
+</script>
+
+</body>
+</html>
