@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>15% 관세 폭탄 & AI 역습 — 미국 증시 분석</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-alt: #fafafa;
+  --text: #1a1a1a;
+  --text-sub: #777777;
+  --accent: #e11d48;
+  --accent2: #f43f5e;
+  --chart1: #e11d48;
+  --chart2: #1a1a1a;
+  --chart3: #6b7280;
+  --chart4: #2563eb;
+  --table-bg: #fafafa;
+  --table-header: #e11d48;
+  --table-border: #e5e5e5;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d1a1f 50%, #1a1a1a 100%);
+  padding: 60px 20px 50px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 70%, rgba(225,29,72,0.15) 0%, transparent 50%);
+  animation: heroPulse 8s ease-in-out infinite;
+}
+@keyframes heroPulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+.hero-label {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 5px 14px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+}
+.hero h1 {
+  font-family: 'Noto Serif KR', serif;
+  color: #fff;
+  font-size: 26px;
+  line-height: 1.4;
+  margin: 20px auto 16px;
+  max-width: 560px;
+  position: relative;
+  z-index: 1;
+  font-weight: 700;
+}
+.hero h1 em {
+  color: var(--accent2);
+  font-style: normal;
+}
+.hero-meta {
+  color: rgba(255,255,255,0.5);
+  font-size: 12px;
+  position: relative;
+  z-index: 1;
+}
+.hero-meta span { color: rgba(255,255,255,0.7); }
+
+/* Section Styles */
+.section {
+  padding: 36px 0;
+  border-bottom: 1px solid var(--table-border);
+}
+.section:last-child { border-bottom: none; }
+
+.section-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 42px;
+  font-weight: 900;
+  color: var(--accent);
+  opacity: 0.15;
+  line-height: 1;
+  margin-bottom: -10px;
+}
+.section-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+.section-subtitle {
+  font-size: 13px;
+  color: var(--text-sub);
+  margin-bottom: 20px;
+  font-weight: 400;
+}
+
+p { margin-bottom: 14px; }
+
+strong { color: var(--text); font-weight: 600; }
+.accent { color: var(--accent); font-weight: 600; }
+.accent-bg {
+  background: linear-gradient(120deg, rgba(225,29,72,0.08) 0%, rgba(244,63,94,0.05) 100%);
+  border-left: 3px solid var(--accent);
+  padding: 14px 16px;
+  margin: 16px 0;
+  border-radius: 0 6px 6px 0;
+  font-size: 14px;
+}
+
+/* Key Metric Cards */
+.metric-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 16px 0;
+}
+.metric-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--table-border);
+  border-radius: 8px;
+  padding: 14px;
+  text-align: center;
+}
+.metric-card.negative { border-left: 3px solid var(--accent); }
+.metric-card.positive { border-left: 3px solid #16a34a; }
+.metric-card .label {
+  font-size: 11px;
+  color: var(--text-sub);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.metric-card .value {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 800;
+}
+.metric-card.negative .value { color: var(--accent); }
+.metric-card.positive .value { color: #16a34a; }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 13px;
+}
+thead th {
+  background: var(--table-header);
+  color: #fff;
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+}
+tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--table-border);
+  background: var(--table-bg);
+}
+tbody tr:hover td { background: #f0f0f0; }
+.td-neg { color: var(--accent); font-weight: 600; }
+.td-pos { color: #16a34a; font-weight: 600; }
+
+/* Chart */
+.chart-container {
+  position: relative;
+  max-height: 340px;
+  margin: 16px 0;
+  background: var(--bg-alt);
+  border-radius: 8px;
+  padding: 16px 12px 10px;
+  border: 1px solid var(--table-border);
+}
+.chart-container canvas {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  max-height: 300px;
+}
+.chart-container.chart-ready canvas {
+  opacity: 1;
+}
+.chart-label {
+  font-size: 12px;
+  color: var(--text-sub);
+  text-align: center;
+  margin-top: 6px;
+}
+
+/* Callout Box */
+.callout {
+  background: var(--bg-alt);
+  border: 1px solid var(--table-border);
+  border-radius: 8px;
+  padding: 18px;
+  margin: 18px 0;
+}
+.callout-title {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.callout p { font-size: 13px; margin-bottom: 8px; }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Scenario Box */
+.scenario {
+  border-radius: 10px;
+  padding: 20px;
+  margin: 18px 0;
+}
+.scenario.bull {
+  background: linear-gradient(135deg, rgba(22,163,106,0.06) 0%, rgba(22,163,106,0.02) 100%);
+  border: 1px solid rgba(22,163,106,0.2);
+}
+.scenario.bear {
+  background: linear-gradient(135deg, rgba(225,29,72,0.06) 0%, rgba(225,29,72,0.02) 100%);
+  border: 1px solid rgba(225,29,72,0.2);
+}
+.scenario h4 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.scenario.bull h4 { color: #16a34a; }
+.scenario.bear h4 { color: var(--accent); }
+.scenario p { font-size: 13.5px; }
+
+/* Tag */
+.tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 3px;
+  margin: 2px 4px 2px 0;
+}
+.tag-red { background: rgba(225,29,72,0.1); color: var(--accent); }
+.tag-blue { background: rgba(37,99,235,0.1); color: var(--chart4); }
+.tag-green { background: rgba(22,163,106,0.1); color: #16a34a; }
+.tag-gray { background: rgba(107,114,128,0.1); color: var(--chart3); }
+
+/* Fade Animation */
+.fade-in {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Divider */
+.divider {
+  width: 40px;
+  height: 3px;
+  background: var(--accent);
+  margin: 30px 0;
+}
+
+/* Footer */
+.footer {
+  background: var(--bg-alt);
+  padding: 30px 20px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-sub);
+  border-top: 1px solid var(--table-border);
+}
+.footer a { color: var(--accent); text-decoration: none; }
+
+/* Action List */
+.action-list {
+  counter-reset: action;
+  margin: 14px 0;
+}
+.action-item {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+  align-items: flex-start;
+}
+.action-item::before {
+  counter-increment: action;
+  content: counter(action);
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+.action-item p { margin-bottom: 0; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">MARKET ANALYSIS</div>
+  <h1>15% 관세 폭탄으로 <em>600조 원 공중분해</em><br>AI 역습의 퍼펙트 스톰</h1>
+  <div class="hero-meta">2026년 2월 24일 · <span>NOVA Real Invest</span> 방송 분석 · 미국 증시 관점</div>
+</div>
+
+<div class="container">
+
+<!-- SECTION 1: Market Overview -->
+<div class="section fade-in">
+  <div class="section-num">01</div>
+  <div class="section-title">시장 개요 — 퍼펙트 스톰의 하루</div>
+  <div class="section-subtitle">관세 충격 + AI 역습 + 매크로 불안의 삼중 폭풍</div>
+
+  <p>2월 24일 미국 증시는 세 가지 악재가 동시에 겹치며 <strong>퍼펙트 스톰</strong>을 형성했다. 트럼프 대통령의 <span class="accent">글로벌 관세 15% 인상</span> 발표, AI 기술의 파괴적 혁신에 대한 공포, 그리고 뉴욕 연준의 인플레이션 경고가 시장을 강타했다.</p>
+
+  <div class="metric-row fade-in">
+    <div class="metric-card negative">
+      <div class="label">다우존스</div>
+      <div class="value">-1.66%</div>
+    </div>
+    <div class="metric-card negative">
+      <div class="label">S&P 500</div>
+      <div class="value">-1.04%</div>
+    </div>
+    <div class="metric-card negative">
+      <div class="label">나스닥</div>
+      <div class="value">-1.13%</div>
+    </div>
+    <div class="metric-card negative">
+      <div class="label">러셀 2000</div>
+      <div class="value">-1.61%</div>
+    </div>
+  </div>
+
+  <div class="metric-row fade-in">
+    <div class="metric-card positive">
+      <div class="label">10년 국채금리</div>
+      <div class="value">4.03%</div>
+    </div>
+    <div class="metric-card positive">
+      <div class="label">VIX 공포지수</div>
+      <div class="value">19</div>
+    </div>
+  </div>
+
+  <p>안전자산 선호 현상이 뚜렷하게 나타나며 <strong>국채금리 4.03%</strong>로 하락(채권 가격 상승), 금 가격도 동반 상승했다. VIX 공포지수는 19까지 치솟았으며, 일부 기관에서는 <span class="accent">VIX 25 도달 가능성</span>을 경고하고 있다.</p>
+</div>
+
+<!-- SECTION 2: Tariff Shock -->
+<div class="section fade-in">
+  <div class="section-num">02</div>
+  <div class="section-title">정책 충격 — 15% 관세의 배신</div>
+  <div class="section-subtitle">Section 122 발동, 150일 한시적이나 충격은 영구적</div>
+
+  <p>금요일 트럼프 대통령은 <strong>Section 232의 위헌 판결</strong> 이후 <strong>Section 122(1974년 통상법)</strong>를 발동해 글로벌 관세를 10%로 설정했다. 시장은 "10%면 그나마 다행"이라며 안도 반등을 보였다.</p>
+
+  <div class="accent-bg fade-in">
+    <strong>그러나 토요일, 트럼프 대통령이 15%로 인상을 발표.</strong> 한국을 포함한 각국이 미국과 협상해 맞춰놓은 최적 딜라인이 사실상 15% 수준이었기에, 그간의 무역 협상 성과가 모두 <span class="accent">원점으로 돌아간</span> 셈이다.
+  </div>
+
+  <div class="chart-container fade-in">
+    <canvas id="tariffChart" height="240"></canvas>
+  </div>
+  <div class="chart-label">관세율 변화 추이 (Section 122 기준)</div>
+
+  <p>150일간 한시적 조치이나, 이미 한국·중국·유럽연합 등 주요 교역국들은 기존 합의가 무효화된 상황이다. 중국과 EU의 <strong>보복관세 가능성</strong>이 대두되며, 글로벌 무역전쟁 확전 리스크가 급상승하고 있다.</p>
+
+  <div class="callout fade-in">
+    <div class="callout-title">💰 600조 원 공중분해의 의미</div>
+    <p>각국이 품목별 무관세·저관세를 합의했던 교역 규모가 15% 일괄 관세 적용으로 사실상 재협상 대상이 되었다. 이로 인한 글로벌 교역 비용 증가 추산치가 약 600조 원에 달한다는 분석이다.</p>
+  </div>
+</div>
+
+<!-- SECTION 3: AI Backlash -->
+<div class="section fade-in">
+  <div class="section-num">03</div>
+  <div class="section-title">AI의 역습 — 소프트웨어 생태계 붕괴 공포</div>
+  <div class="section-subtitle">Citri Research 보고서 + Anthropic Claude Code의 이중 충격</div>
+
+  <p><strong>Citri Research</strong>가 발표한 보고서는 시장에 충격파를 던졌다. 핵심 시나리오는 "글로벌 인텔리전스 크라이시스(Global Intelligence Crisis)"로, AI의 급속한 발전이 화이트칼라 노동시장과 소프트웨어 산업을 근본적으로 파괴할 것이라는 경고다.</p>
+
+  <div class="callout fade-in">
+    <div class="callout-title">📊 Citri Research 핵심 전망</div>
+    <p><strong>실업률:</strong> 화이트칼라 중심으로 <span class="accent">2028년 6월까지 10.2% 도달</span> 전망</p>
+    <p><strong>소프트웨어 산업:</strong> SaaS 비즈니스 모델 완전 붕괴, 파산 기업 속출 예상</p>
+    <p><strong>S&P 500:</strong> 기술주·소프트웨어 폭락으로 <span class="accent">최대 40% 하락</span> 시나리오 제시</p>
+  </div>
+
+  <p>같은 날 <strong>Anthropic의 Claude Code</strong>가 두 가지 신기능을 발표하며 공포를 증폭시켰다.</p>
+
+  <table class="fade-in">
+    <thead>
+      <tr><th>기능</th><th>내용</th><th>영향</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>보안 스캐너</strong></td>
+        <td>컴퓨터·네트워크 보안 취약점 자동 탐지·분석</td>
+        <td>사이버보안 업계 직격탄</td>
+      </tr>
+      <tr>
+        <td><strong>COBOL 자동화</strong></td>
+        <td>레거시 COBOL 코드 분석·수정·보안 강화</td>
+        <td>IBM 레거시 컨설팅 사업 붕괴</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>COBOL은 수십 년 된 프로그래밍 언어로 미국 전역의 <strong>ATM 시스템</strong>, 은행 핵심 시스템에 여전히 사용되고 있다. IBM은 이 레거시 시스템 현대화 컨설팅으로 안정적 수익을 올려왔으나, Claude Code가 <strong>"수백 명이 몇 달씩 매달려 하던 작업을 몇 분 만에"</strong> 처리할 수 있게 되면서 해당 비즈니스 모델이 근본적으로 위협받게 됐다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="aiImpactChart" height="240"></canvas>
+  </div>
+  <div class="chart-label">AI 역습 직격탄 — 주요 종목 일일 수익률</div>
+</div>
+
+<!-- SECTION 4: IBM -->
+<div class="section fade-in">
+  <div class="section-num">04</div>
+  <div class="section-title">IBM 폭락 — 닷컴버블 이후 최악의 하루</div>
+  <div class="section-subtitle">-13.15%, IT 서비스 생태계 전반의 공포 확산</div>
+
+  <div class="metric-row fade-in">
+    <div class="metric-card negative">
+      <div class="label">IBM</div>
+      <div class="value">-13.15%</div>
+    </div>
+    <div class="metric-card negative">
+      <div class="label">CrowdStrike</div>
+      <div class="value">-10%</div>
+    </div>
+  </div>
+
+  <p>IBM은 <span class="accent">2000년 닷컴버블 붕괴 이후 최악의 일일 폭락</span>을 기록했다. Citri Research 보고서와 Claude Code의 COBOL 자동화 소식이 이중으로 작용했다.</p>
+
+  <p>IBM만의 문제가 아니다. <strong>Accenture, Cognizant</strong> 등 IT 컨설팅 기업들이 동반 하락하며, IT 서비스·소프트웨어 서비스 생태계 전반의 수익 모델이 붕괴될 수 있다는 공포가 단 하루 만에 시장을 지배했다.</p>
+
+  <div class="accent-bg fade-in">
+    <strong>제로섬 게임의 현실화:</strong> AI 생태계에서 빌더(하드웨어·인프라)는 수혜를 입지만, AI 유저(소프트웨어·SaaS)는 역설적으로 처참하게 무너지는 구조가 고착화되고 있다.
+  </div>
+
+  <p>사이버보안 ETF <strong>CIBR(BUG)</strong>는 -4.97%를 기록하며 <strong>2023년 11월 이후 최저치</strong>로 계단식 하락을 지속하고 있다. CrowdStrike, Datadog, Zscaler 모두 10%대 하락을 보였다.</p>
+</div>
+
+<!-- SECTION 5: Sector Winners/Losers -->
+<div class="section fade-in">
+  <div class="section-num">05</div>
+  <div class="section-title">섹터별 명암 — 해자(Moat)를 찾아라</div>
+  <div class="section-subtitle">AI가 못 건드리는 곳으로 자금이 이동 중</div>
+
+  <div class="chart-container fade-in">
+    <canvas id="sectorFlowChart" height="250"></canvas>
+  </div>
+  <div class="chart-label">섹터별 자금 유출입 방향</div>
+
+  <table class="fade-in">
+    <thead>
+      <tr><th>종목</th><th>등락</th><th>핵심 사유</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>🔴 IBM</td>
+        <td class="td-neg">-13.15%</td>
+        <td>COBOL 자동화, Citri 보고서</td>
+      </tr>
+      <tr>
+        <td>🔴 Novo Nordisk</td>
+        <td class="td-neg">-16%</td>
+        <td>Cagrisema 감량효과 부진 + Eli Lilly 우위</td>
+      </tr>
+      <tr>
+        <td>🔴 CrowdStrike</td>
+        <td class="td-neg">-10%</td>
+        <td>AI 보안 스캐너 자동화 공포</td>
+      </tr>
+      <tr>
+        <td>🟢 Eli Lilly</td>
+        <td class="td-pos">+4.86%</td>
+        <td>Zepbound 임상 효과 입증, 도이체방크 투자의견 상향</td>
+      </tr>
+      <tr>
+        <td>🟢 Domino's Pizza</td>
+        <td class="td-pos">+4.1%</td>
+        <td>실적 호조, K-경제 수혜 (5달러 피자)</td>
+      </tr>
+      <tr>
+        <td>🟢 ACRX/SLX</td>
+        <td class="td-pos">+78%</td>
+        <td>Gilead Sciences 78억 달러 인수 제안</td>
+      </tr>
+      <tr>
+        <td>🟡 PayPal</td>
+        <td class="td-pos">반등</td>
+        <td>사모펀드·대형 핀테크 인수 관심 (PE 7배, Venmo)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout fade-in">
+    <div class="callout-title">🍕 도미노 피자의 교훈</div>
+    <p>AI가 피자를 만들 수도, 배달할 수도 없다. 기술주가 폭락하는 와중에 실적으로 증명한 도미노 피자(+4.1%, 장중 최대 +7%)는 <strong>AI 방어주</strong>의 전형적 사례다. 5달러 쿠폰 전략은 K-경제(양극화) 시대 소비 트렌드와도 맞물린다.</p>
+  </div>
+</div>
+
+<!-- SECTION 6: Novo Nordisk & Eli Lilly -->
+<div class="section fade-in">
+  <div class="section-num">06</div>
+  <div class="section-title">바이오 섹터 — Novo vs Eli Lilly 역전극</div>
+  <div class="section-subtitle">차세대 비만약 경쟁에서 승패가 갈리다</div>
+
+  <p><strong>Novo Nordisk</strong>는 -16% 폭락하며 <strong>Wegovy 출시 이전인 2021년 6월 수준</strong>으로 주가가 회귀했다. 차세대 비만치료제 <strong>Cagrisema</strong>의 감량 효과가 기대 이하로 나타난 데다, 같은 날 <strong>Eli Lilly</strong>의 <strong>Zepbound</strong>가 임상에서 우월한 효능을 입증하며 이중 악재가 터졌다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="pharmaChart" height="220"></canvas>
+  </div>
+  <div class="chart-label">비만약 경쟁구도: Novo Nordisk vs Eli Lilly</div>
+
+  <p>도이체방크는 즉시 투자의견을 변경했다. 이는 시장의 <strong>제로섬 구조</strong>를 보여주는 대표적 사례로, 한쪽이 우위를 점하면 나머지가 단순히 뒤처지는 것이 아니라 <strong>완전히 밀리는</strong> 현상이 나타나고 있다.</p>
+</div>
+
+<!-- SECTION 7: Macro -->
+<div class="section fade-in">
+  <div class="section-num">07</div>
+  <div class="section-title">매크로 불안 — 인플레이션 재부상</div>
+  <div class="section-subtitle">뉴욕 연준 인플레이션 기대 2.8%, 금리인하 6~7월로 후퇴</div>
+
+  <p>뉴욕 연준의 <strong>인플레이션 기대치가 2.8%</strong>로 상승하며 디플레이션이 아닌 인플레이션 재부상이 확인됐다. 연준 인사 <strong>크리스 월러(Chris Waller)</strong>는 핵심적인 메시지를 전달했다.</p>
+
+  <div class="callout fade-in">
+    <div class="callout-title">🏛️ 크리스 월러 연준 이사 핵심 발언</div>
+    <p><strong>"1월 비농업 고용 증가는 노이즈(Noise)"</strong> — 다른 경제지표와 정합성이 부족하여 신뢰성에 문제가 있다는 입장</p>
+    <p><strong>"인플레이션이 올라가는 건 확실, 금리 인하 불가"</strong> — 단, 실업률이 심각하게 악화되면 인하를 고려할 수 있다고 시사</p>
+  </div>
+
+  <div class="chart-container fade-in">
+    <canvas id="fedChart" height="220"></canvas>
+  </div>
+  <div class="chart-label">CME FedWatch — 금리 인하 확률 (50% 이상 시 유의미)</div>
+
+  <p>CME FedWatch 기준, <strong>6월 47.5%</strong>로 아직 금리 인하 컨센서스에 미치지 못하며, 실질적인 금리인하는 <strong>7월 이후</strong>에나 가능할 전망이다. 인플레이션 상승 + 금리 동결 장기화 구도는 <strong>스태그플레이션 공포</strong>를 재점화할 수 있는 위험 요인이다.</p>
+</div>
+
+<!-- SECTION 8: Fund Flow & Defense -->
+<div class="section fade-in">
+  <div class="section-num">08</div>
+  <div class="section-title">자금 흐름 — 해자(Moat)로의 대이동</div>
+  <div class="section-subtitle">테크·소프트웨어에서 필수소비재·유틸리티·금으로</div>
+
+  <div class="chart-container fade-in">
+    <canvas id="rotationChart" height="250"></canvas>
+  </div>
+  <div class="chart-label">섹터 로테이션 방향</div>
+
+  <p>시장의 자금이 명확한 방향으로 이동하고 있다.</p>
+
+  <div class="accent-bg fade-in">
+    <strong>유출 섹터:</strong> Technology, Software, Financials, Industrials(항공)<br>
+    <strong>유입 섹터:</strong> Consumer Staples(필수소비재), Utilities(유틸리티), Gold(금)
+  </div>
+
+  <p><strong>Industrials</strong>의 하락은 AI 때문이 아닌 미 북동부 <strong>대형 블리자드</strong>로 인한 항공사(United, American, Delta) 타격이 주 원인이다. 약 2주 간격으로 반복되는 겨울 폭풍이 항공 섹터에 지속적 압박을 가하고 있다.</p>
+
+  <p>금융 섹터 하락의 2차 파급은 주목할 만하다. AI로 화이트칼라 실업이 확산되면 고소득 사무직의 <strong>신용카드 연체율 급등</strong>이 예상되며, <strong>American Express</strong> 등 카드사에 직격탄이 된다.</p>
+</div>
+
+<!-- SECTION 9: Bull/Bear Scenarios -->
+<div class="section fade-in">
+  <div class="section-num">09</div>
+  <div class="section-title">시나리오 분석 — Bull vs Bear</div>
+  <div class="section-subtitle">NVIDIA 실적이 분기점, 최악 시 -10% 조정 가능</div>
+
+  <div class="scenario bull fade-in">
+    <h4>🐂 Bull Case — 반등 시나리오</h4>
+    <p><strong>① 관세 = 협상카드:</strong> 15% 관세는 150일 한시적 조치이며, 트럼프 행정부의 협상 전술로 해석. 이후 실질적 관세율은 하향 조정될 가능성.</p>
+    <p><strong>② NVIDIA 실적 서프라이즈:</strong> 수요일 엔비디아 실적에서 AI CAPEX 투자가 예정대로 진행 중임이 확인되고, 신제품 출시 스케줄이 공개되면 기술주 전반에 활력 부여.</p>
+    <p><strong>③ 소프트웨어 바닥 확인:</strong> 기술주 전반의 회복 시 소프트웨어 저가매수 유입 가능. 단, 소프트웨어는 "곁다리 톱니바퀴"이므로 전체 시장 회복이 선행돼야 함.</p>
+  </div>
+
+  <div class="scenario bear fade-in">
+    <h4>🐻 Bear Case — 추가 하락 시나리오</h4>
+    <p><strong>① 무역전쟁 확전:</strong> 중국·EU 보복관세 → 글로벌 공급망 재편 비용 급증 → 기업 실적 하향 조정.</p>
+    <p><strong>② 3월 고용 데이터 악화:</strong> 2월 비농업 고용 통계에서 AI 실업 확산 조짐이 포착되면 시장 공포 심화.</p>
+    <p><strong>③ 스태그플레이션 공포:</strong> 인플레이션↑ + 실업률↑ → 연준 정책 딜레마 → S&P 500 <span class="accent">-10% 조정 가능</span>(개인 포트폴리오 기준 약 -30% 데미지).</p>
+  </div>
+</div>
+
+<!-- SECTION 10: Action Plan -->
+<div class="section fade-in">
+  <div class="section-num">10</div>
+  <div class="section-title">액션 플랜 — 지금 당장 해야 할 것</div>
+  <div class="section-subtitle">"현금이 없으면 위기는 그냥 위기일 뿐"</div>
+
+  <div class="action-list fade-in">
+    <div class="action-item">
+      <p><strong>Cash is King — 포트폴리오의 20% 현금 확보.</strong> NVIDIA 실적(수요일)을 확인한 후 움직여도 늦지 않다. 상승은 천천히 오지만, 폭락은 한순간에 온다.</p>
+    </div>
+    <div class="action-item">
+      <p><strong>Don't Catch a Falling Knife.</strong> 이미 하락 중인 소프트웨어·SaaS 주식은 추가 하락 가능성이 높다. AI 혁신에 대한 내러티브가 사그라들 때까지 관망.</p>
+    </div>
+    <div class="action-item">
+      <p><strong>깨지지 않는 해자(Moat)에 집중.</strong> AI가 못 건드리는 영역 — 바이오(Eli Lilly), 실물 서비스(Domino's), 블루칼라 의존 산업(에어컨·HVAC). "인간의 손"이 필요한 영역.</p>
+    </div>
+    <div class="action-item">
+      <p><strong>AI 빌더 vs AI 유저를 구분하라.</strong> 하드웨어·인프라(GPU, 메모리, 토지/데이터센터) = 수혜. 소프트웨어·SaaS = 파괴 대상. TPL(Texas Pacific Land)처럼 AI CAPEX에 돈을 안 쓰면서 수혜를 받는 종목이 핵심.</p>
+    </div>
+    <div class="action-item">
+      <p><strong>이번 주 핵심 이벤트 모니터링.</strong> 화: 트럼프 국정연설 + Home Depot 실적. 수: <span class="accent">NVIDIA 실적 발표</span>(시장 방향성 결정). 넷플릭스-파라마운트 인수전 결과.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 11: Watchlist -->
+<div class="section fade-in">
+  <div class="section-num">11</div>
+  <div class="section-title">유망 섹터 & 방어 전략</div>
+  <div class="section-subtitle">독점적 지위 + AI 비관련 + 실적 방어력</div>
+
+  <div class="chart-container fade-in">
+    <canvas id="strategyChart" height="240"></canvas>
+  </div>
+  <div class="chart-label">투자 전략 매트릭스: AI 빌더 vs 해자 방어주</div>
+
+  <table class="fade-in">
+    <thead>
+      <tr><th>카테고리</th><th>종목/섹터</th><th>핵심 논리</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="tag tag-red">AI 빌더</span></td>
+        <td>NVIDIA, Micron, STM</td>
+        <td>GPU·메모리 — AI CAPEX 직접 수혜</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-blue">인프라</span></td>
+        <td>TPL, 전기발전, 냉각(HVAC)</td>
+        <td>데이터센터 토지·전력·냉각 필수</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-green">해자 방어</span></td>
+        <td>Eli Lilly, Domino's, TJX</td>
+        <td>독점 바이오 + 가성비 소비 + AI 무관</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-green">필수소비재</span></td>
+        <td>Walmart, Ross, 유틸리티</td>
+        <td>경기 방어 + K-경제 수혜</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-gray">헤지</span></td>
+        <td>Gold</td>
+        <td>안전자산, 비트코인보다 안정적</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout fade-in">
+    <div class="callout-title">⚠️ 비트코인 경고</div>
+    <p>비트코인은 반감기 사이클 종료 후 <strong>헤드앤숄더 패턴</strong>을 형성 중이며, 심리지수처럼 움직이고 있어 헤지 수단으로 부적합하다는 분석. 헤지 목적이라면 <strong>Gold</strong>가 우위.</p>
+  </div>
+</div>
+
+<!-- SECTION 12: Key Takeaway -->
+<div class="section fade-in">
+  <div class="section-num">12</div>
+  <div class="section-title">핵심 결론</div>
+  <div class="section-subtitle">시장의 색깔이 바뀌는 신호를 읽어라</div>
+
+  <div class="accent-bg fade-in" style="border-left-color: var(--chart4);">
+    오늘의 폭락은 끝이 아니라 <strong>시장의 색깔이 바뀌는 신호</strong>로 읽어야 한다. 새로운 주도주가 계속 나오고 있으며, 변동성이 커질수록 기회도 함께 온다. 단, <strong>현금이 없으면 기회도 없다.</strong>
+  </div>
+
+  <p><strong>이번 주 최대 변수는 수요일 NVIDIA 실적.</strong> 실적 확인 후 시장 방향성이 결정된다. 그때까지는 현금 20%를 확보하고, 감정이 아닌 전략에 따라 움직여야 한다. 폭락은 조급하지 않은 투자자에게는 항상 기회였다.</p>
+</div>
+
+<div class="divider"></div>
+
+</div><!-- container -->
+
+<div class="footer">
+  <p>본 문서는 NOVA Real Invest 유튜브 방송(2026.02.24)의 내용을 미국 증시 관점에서 분석·정리한 것입니다.</p>
+  <p>투자 판단의 책임은 본인에게 있으며, 본 자료는 참고용 엔터테인먼트 콘텐츠입니다.</p>
+  <p style="margin-top:8px;"><a href="https://www.youtube.com/watch?v=rRq3ij4Yek8" target="_blank">원본 영상 보기 →</a></p>
+</div>
+
+<script>
+// Observer 1: General fade-in
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// Chart configs dictionary
+const chartConfigs = {};
+
+// Chart 1: Tariff Rate Changes
+chartConfigs['tariffChart'] = () => {
+  new Chart(document.getElementById('tariffChart'), {
+    type: 'bar',
+    data: {
+      labels: ['기존 협정 세율', 'Section 122\n(금요일)', 'Section 122\n인상(토요일)', '각국 최적\n딜라인'],
+      datasets: [{
+        label: '관세율 (%)',
+        data: [2.5, 10, 15, 15],
+        backgroundColor: ['#6b7280', '#2563eb', '#e11d48', '#f43f5e80'],
+        borderColor: ['#6b7280', '#2563eb', '#e11d48', '#f43f5e'],
+        borderWidth: 1,
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1500, easing: 'easeInOutQuart', delay: (ctx) => ctx.dataIndex * 150 },
+      animations: { y: { from: 0 } },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: (c) => c.parsed.y + '%' } }
+      },
+      scales: {
+        y: { beginAtZero: true, max: 20, ticks: { callback: v => v + '%', font: { size: 11 } }, grid: { color: '#e5e5e5' } },
+        x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// Chart 2: AI Impact Stocks
+chartConfigs['aiImpactChart'] = () => {
+  new Chart(document.getElementById('aiImpactChart'), {
+    type: 'bar',
+    data: {
+      labels: ['IBM', 'Novo Nordisk', 'CrowdStrike', 'Datadog/Zscaler', 'CIBR ETF', 'Eli Lilly', 'Domino\'s', 'ACRX/SLX'],
+      datasets: [{
+        label: '일일 수익률 (%)',
+        data: [-13.15, -16, -10, -10, -4.97, 4.86, 4.1, 78],
+        backgroundColor: ctx => {
+          const v = ctx.parsed?.y;
+          if (v === undefined) return '#6b7280';
+          return v < 0 ? '#e11d48' : v > 10 ? '#2563eb' : '#16a34a';
+        },
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      indexAxis: 'y',
+      animation: { duration: 1500, easing: 'easeInOutQuart', delay: (ctx) => ctx.dataIndex * 120 },
+      animations: { x: { from: 0 } },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: (c) => c.parsed.x + '%' } }
+      },
+      scales: {
+        x: { ticks: { callback: v => v + '%', font: { size: 11 } }, grid: { color: '#e5e5e5' } },
+        y: { ticks: { font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// Chart 3: Sector Fund Flow
+chartConfigs['sectorFlowChart'] = () => {
+  new Chart(document.getElementById('sectorFlowChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Software', 'Financials', 'Airlines', 'Cybersec.', 'Consumer\nStaples', 'Utilities', 'Gold', 'AI Infra'],
+      datasets: [{
+        label: '자금 흐름',
+        data: [-8, -5, -4, -6, 6, 5, 7, 4],
+        backgroundColor: ctx => {
+          const v = ctx.parsed?.y;
+          if (v === undefined) return '#6b7280';
+          return v < 0 ? '#e11d48' : '#16a34a';
+        },
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1500, easing: 'easeInOutQuart', delay: (ctx) => ctx.dataIndex * 150 },
+      animations: { y: { from: 0 } },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: (c) => (c.parsed.y > 0 ? '유입' : '유출') } }
+      },
+      scales: {
+        y: { ticks: { callback: v => (v > 0 ? '유입' : v < 0 ? '유출' : ''), font: { size: 10 } }, grid: { color: '#e5e5e5' } },
+        x: { ticks: { font: { size: 9 } }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// Chart 4: Pharma comparison
+chartConfigs['pharmaChart'] = () => {
+  new Chart(document.getElementById('pharmaChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Eli Lilly (Zepbound)', 'Novo Nordisk (Cagrisema)'],
+      datasets: [{
+        data: [65, 35],
+        backgroundColor: ['#16a34a', '#e11d48'],
+        borderWidth: 2,
+        borderColor: '#fff',
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { animateRotate: true, animateScale: true, duration: 2000, easing: 'easeInOutQuart' },
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 16 } },
+        tooltip: { callbacks: { label: (c) => c.label + ': 시장 신뢰도 ' + c.parsed + '%' } }
+      }
+    }
+  });
+};
+
+// Chart 5: Fed Rate Cut Probability
+chartConfigs['fedChart'] = () => {
+  new Chart(document.getElementById('fedChart'), {
+    type: 'line',
+    data: {
+      labels: ['3월', '4월', '5월', '6월', '7월', '9월', '12월'],
+      datasets: [{
+        label: '금리 인하 확률 (%)',
+        data: [5, 12, 28, 47.5, 55, 62, 70],
+        borderColor: '#e11d48',
+        backgroundColor: 'rgba(225,29,72,0.08)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 5,
+        pointBackgroundColor: '#e11d48',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+      }, {
+        label: '컨센서스 기준선 (50%)',
+        data: [50, 50, 50, 50, 50, 50, 50],
+        borderColor: '#6b7280',
+        borderDash: [5, 5],
+        pointRadius: 0,
+        fill: false,
+        tension: 0,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1800, easing: 'easeInOutQuart' },
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 10 }, padding: 12 } },
+        tooltip: { callbacks: { label: (c) => c.dataset.label + ': ' + c.parsed.y + '%' } }
+      },
+      scales: {
+        y: { min: 0, max: 80, ticks: { callback: v => v + '%', font: { size: 11 } }, grid: { color: '#e5e5e5' } },
+        x: { ticks: { font: { size: 11 } }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// Chart 6: Sector Rotation Radar
+chartConfigs['rotationChart'] = () => {
+  new Chart(document.getElementById('rotationChart'), {
+    type: 'radar',
+    data: {
+      labels: ['AI 하드웨어', '필수소비재', '유틸리티', 'Gold', '바이오', '소프트웨어', '금융', '항공'],
+      datasets: [{
+        label: '유망도',
+        data: [85, 78, 72, 80, 75, 15, 30, 25],
+        backgroundColor: 'rgba(225,29,72,0.12)',
+        borderColor: '#e11d48',
+        borderWidth: 2,
+        pointBackgroundColor: '#e11d48',
+        pointRadius: 4,
+      }, {
+        label: '리스크',
+        data: [40, 20, 15, 25, 35, 90, 70, 65],
+        backgroundColor: 'rgba(37,99,235,0.08)',
+        borderColor: '#2563eb',
+        borderWidth: 2,
+        pointBackgroundColor: '#2563eb',
+        pointRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1800, easing: 'easeInOutQuart', delay: ctx => ctx.dataIndex * 120 },
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 10 }, padding: 12 } }
+      },
+      scales: {
+        r: { beginAtZero: true, max: 100, ticks: { font: { size: 9 }, display: false }, grid: { color: '#e5e5e5' }, pointLabels: { font: { size: 10 } } }
+      }
+    }
+  });
+};
+
+// Chart 7: Strategy Matrix
+chartConfigs['strategyChart'] = () => {
+  new Chart(document.getElementById('strategyChart'), {
+    type: 'bar',
+    data: {
+      labels: ['NVIDIA\n(GPU)', 'Micron\n(메모리)', 'TPL\n(토지)', 'Eli Lilly\n(바이오)', "Domino's\n(소비재)", 'Gold\n(헤지)', 'Software\n(위험)'],
+      datasets: [{
+        label: '기대수익',
+        data: [85, 75, 80, 70, 55, 40, 20],
+        backgroundColor: '#e11d48',
+        borderRadius: 4,
+      }, {
+        label: '방어력',
+        data: [45, 50, 85, 80, 75, 90, 10],
+        backgroundColor: '#2563eb',
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1500, easing: 'easeInOutQuart', delay: (ctx) => ctx.dataIndex * 120 },
+      animations: { y: { from: 0 } },
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 10 }, padding: 12 } }
+      },
+      scales: {
+        y: { beginAtZero: true, max: 100, ticks: { font: { size: 10 } }, grid: { color: '#e5e5e5' } },
+        x: { ticks: { font: { size: 9 } }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// Observer 2: Chart-specific — render on scroll
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const canvas = entry.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        setTimeout(() => {
+          chartConfigs[canvas.id]();
+          entry.target.classList.add('chart-ready');
+          delete chartConfigs[canvas.id];
+        }, 200);
+      }
+      chartObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.25 });
+
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+</script>
+</body>
+</html>

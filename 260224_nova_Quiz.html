@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>15% 관세 폭탄 & AI 역습 — 시험문제</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-alt: #fafafa;
+  --text: #1a1a1a;
+  --text-sub: #777777;
+  --accent: #e11d48;
+  --accent2: #f43f5e;
+  --table-border: #e5e5e5;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  font-size: 15px;
+}
+.container { max-width: 640px; margin: 0 auto; padding: 0 20px; }
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d1a1f 50%, #1a1a1a 100%);
+  padding: 48px 20px 40px;
+  text-align: center;
+}
+.header-label {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 4px 12px;
+  border-radius: 2px;
+}
+.header h1 {
+  font-family: 'Noto Serif KR', serif;
+  color: #fff;
+  font-size: 22px;
+  margin: 16px 0 8px;
+  line-height: 1.4;
+}
+.header p { color: rgba(255,255,255,0.5); font-size: 12px; }
+
+/* Section Title */
+.section-title-bar {
+  background: var(--bg-alt);
+  border-bottom: 2px solid var(--accent);
+  padding: 16px 20px;
+  margin: 0 -20px 24px;
+  font-family: 'Noto Serif KR', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  text-align: center;
+}
+
+/* Question Card */
+.q-card {
+  background: var(--bg);
+  border: 1px solid var(--table-border);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 18px;
+  position: relative;
+}
+.q-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.q-num {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 3px 10px;
+  border-radius: 4px;
+}
+.q-difficulty {
+  font-size: 12px;
+  color: var(--text-sub);
+}
+.q-type {
+  font-size: 11px;
+  background: rgba(37,99,235,0.08);
+  color: #2563eb;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+.q-text {
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.q-options { padding-left: 4px; }
+.q-options p {
+  margin-bottom: 6px;
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.q-blank {
+  border-bottom: 2px dashed var(--accent);
+  display: inline-block;
+  min-width: 100px;
+  height: 24px;
+  vertical-align: bottom;
+}
+.q-answer-space {
+  background: var(--bg-alt);
+  border: 1px dashed var(--table-border);
+  border-radius: 6px;
+  padding: 12px;
+  min-height: 48px;
+  font-size: 13px;
+  color: var(--text-sub);
+}
+
+/* Answer Card */
+.a-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--table-border);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 10px 10px 0;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+}
+.a-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.a-num {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+.a-answer {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 15px;
+}
+.a-explanation {
+  font-size: 13.5px;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+.divider {
+  width: 60px;
+  height: 3px;
+  background: var(--accent);
+  margin: 40px auto;
+}
+
+.footer {
+  background: var(--bg-alt);
+  padding: 24px 20px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-sub);
+  border-top: 1px solid var(--table-border);
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-label">EXAM</div>
+  <h1>15% 관세 폭탄 & AI 역습<br>시험문제 (총 10문제)</h1>
+  <p>2026년 2월 24일 NOVA 방송 분석 기반 · 미국 증시 관점</p>
+</div>
+
+<div class="container">
+
+<!-- ━━━━━━━━━━━━━━━━━━━━ 문제지 ━━━━━━━━━━━━━━━━━━━━ -->
+<div class="section-title-bar fade-in">📋 시험문제 (총 10문제)</div>
+
+<!-- Q1 -->
+<div class="q-card fade-in">
+  <div class="q-header">
+    <span class="q-num">문제 1</span>
+    <span class="q-difficulty">⭐ 쉬움</span>
+    <span class="q-type">객관식</span>
+  </div>
+  <div class="q-text">트럼프 대통령이 글로벌 관세를 15%로 인상할 때 발동한 법적 근거는 무엇인가?</div>
+  <div class="q-options">
+    <p>① Section 232 (국가안보 근거)</p>
+    <p>② Section 301 (불공정 무역 근거)</p>
+    <p>③ Section 122 (1974년 통상법)</p>
+    <p>④ Section 201 (세이프가드)</p>
+  </div>
+</div>
+
+<!-- Q2 -->
+<div class="q-card fade-in">
+  <div class="q-header">
+    <span class="q-num">문제 2</span>
+    <span class="q-difficulty">⭐ 쉬움</span>
+    <span class="q-type">OX 문제</span>
+  </div>
+  <div class="q-text">IBM은 2월 24일 하루 동안 -13.15% 폭락했으며, 이는 2008년 금융위기 이후 최악의 일일 하락률이다.</div>
+  <div class="q-answer-space">O / X 선택: ___</div>
+</div>
+
+<!-- Q3 -->
+<div class="q-card fade-in">
+  <div class="q-header">
+    <span class="q-num">문제 3</span>
+    <span class="q-difficulty">⭐⭐ 보통</span>
+    <span class="q-type">객관식</span>
+  </div>
+  <div class="q-text">Citri Research 보고서에서 제시한 'Global Intelligence Crisis' 시나리오에 따르면, S&P 500 지수의 예상 최대 하락폭은?</div>
+  <div class="q-options">
+    <p>① -10%</p>
+    <p>② -20%</p>
+    <p>③ -30%</p>
+    <p>④ -40%</p>
+  </div>
+</div>
+
+<!-- Q4 -->
+<div class="q-card fade-in">
+  <div class="q-header">
+    <span class="q-num">문제 4</span>
+    <span class="q-difficulty">⭐⭐ 보통</span>
+    <span class="q-type">빈칸채우기</span>
+  </div>
+  <div class="q-text">Anthropic의 Claude Code가 자동화할 수 있게 된 레거시 프로그래밍 언어는 <span class="q-blank"></span>(이)며, 이 언어는 미국 전역의 <span class="q-blank"></span> 시스템에 광범위하게 사용되고 있다.</div>
+</div>
+
+<!-- Q5 -->
+<div class="q-card fade-in">
+  <div class="q-header">
+    <span class="q-num">문제 5</span>
+    <span class="q-difficulty">⭐⭐ 보통</span>
+    <span class="q-type">객관식</span>
+  </div>
+  <div class="q-text">뉴욕 연준이 발표한 인플레이션 기대치와, 연준 이사 크리스 월러의 발언을 종합한 올바른 해석은?</div>
+  <div class="q-options">
+    <p>① 인플레이션 2.8% → 3월 즉시 금리인하 단행</p>
+    <p>② 인플레이션 하락 추세 → 6월 금리인하 유력</p>
+    <p>③ 인플레이션 상승 확인 + 1월 고용 데이터는 노이즈 → 금리인하 불투명</p>
+    <p>④ 디플레이션 우려 → 연준 양적완화 재개 가능</p>
+  </div>
+</div>
+
+<!-- Q6 -->
+<div class="q-card fade-in">
+  <div class="q-header">
+    <span class="q-num">문제 6</span>
+    <span class="q-difficulty">⭐⭐ 보통</span>
+    <span class="q-type">단답형</span>
+  </div>
+  <div class="q-text">Novo Nordisk가 -16% 폭락한 두 가지 핵심 원인을 각각 한 줄로 서술하시오.</div>
+  <div class="q-answer-space">원인 1: ___<br>원인 2: ___</div>
+</div>
+
+<!-- Q7 -->
+<div class="q-card fade-in">
+  <div class="q-header">
+    <span class="q-num">문제 7</span>
+    <span class="q-difficulty">⭐ 쉬움</span>
+    <span class="q-type">객관식</span>
+  </div>
+  <div class="q-text">이날 시장에서 '해자(Moat) 방어주'로 분류되어 상승한 종목이 아닌 것은?</div>
+  <div class="q-options">
+    <p>① Eli Lilly (+4.86%)</p>
+    <p>② Domino's Pizza (+4.1%)</p>
+    <p>③ CrowdStrike (-10%)</p>
+    <p>④ ACRX/SLX (+78%)</p>
+  </div>
+</div>
+
+<!-- Q8 -->
+<div class="q-card fade-in">
+  <div class="q-header">
+    <span class="q-num">문제 8</span>
+    <span class="q-difficulty">⭐⭐ 보통</span>
+    <span class="q-type">객관식</span>
+  </div>
+  <div class="q-text">방송에서 제시한 'AI 빌더 vs AI 유저' 프레임워크에서, 수혜를 받는 'AI 빌더'에 해당하는 영역은?</div>
+  <div class="q-options">
+    <p>① SaaS 소프트웨어 기업</p>
+    <p>② 사이버보안 서비스 기업</p>
+    <p>③ 하드웨어 · 인프라 (GPU, 메모리, 데이터센터 토지)</p>
+    <p>④ IT 컨설팅 기업</p>
+  </div>
+</div>
+
+<!-- Q9 -->
+<div class="q-card fade-in">
+  <div class="q-header">
+    <span class="q-num">문제 9</span>
+    <span class="q-difficulty">⭐⭐⭐ 어려움</span>
+    <span class="q-type">서술형</span>
+  </div>
+  <div class="q-text">Bear Case 시나리오에서 S&P 500이 -10% 하락할 경우, 일반 개인투자자의 포트폴리오가 약 -30% 데미지를 입는다고 분석했다. 이 '곱하기 3' 현상이 발생하는 이유를 레버리지·집중투자·변동성의 관점에서 서술하시오.</div>
+  <div class="q-answer-space">&nbsp;</div>
+</div>
+
+<!-- Q10 -->
+<div class="q-card fade-in">
+  <div class="q-header">
+    <span class="q-num">문제 10</span>
+    <span class="q-difficulty">⭐⭐⭐ 어려움</span>
+    <span class="q-type">서술형</span>
+  </div>
+  <div class="q-text">방송에서 제시한 5가지 액션 플랜 중 "Cash is King(현금 20% 확보)"을 최우선으로 강조한 이유를, (1) NVIDIA 실적 발표 리스크, (2) 관세 정책 불확실성, (3) 시장의 비대칭적 움직임(상승은 느리고 하락은 급격)의 세 가지 관점에서 종합적으로 논하시오.</div>
+  <div class="q-answer-space">&nbsp;</div>
+</div>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━ 정답지 ━━━━━━━━━━━━━━━━━━━━ -->
+<div class="divider"></div>
+<div class="section-title-bar fade-in">📝 정답 및 해설</div>
+
+<!-- A1 -->
+<div class="a-card fade-in">
+  <div class="a-header">
+    <span class="a-num">문제 1</span>
+    <span class="a-answer">정답: ③</span>
+  </div>
+  <div class="a-explanation">Section 232가 위헌 판결을 받은 후, 트럼프 대통령은 <strong>Section 122(1974년 통상법)</strong>를 발동하여 글로벌 관세를 10%→15%로 인상했다. 이 법은 150일간 한시적으로 적용되는 긴급 통상 조치 권한을 대통령에게 부여한다.</div>
+</div>
+
+<!-- A2 -->
+<div class="a-card fade-in">
+  <div class="a-header">
+    <span class="a-num">문제 2</span>
+    <span class="a-answer">정답: X</span>
+  </div>
+  <div class="a-explanation">-13.15% 하락은 사실이나, 이는 <strong>2000년 닷컴버블 붕괴 이후 최악</strong>의 일일 폭락이다. '2008년 금융위기 이후'가 아니라 '2000년 닷컴버블 이후'가 정확한 표현이다.</div>
+</div>
+
+<!-- A3 -->
+<div class="a-card fade-in">
+  <div class="a-header">
+    <span class="a-num">문제 3</span>
+    <span class="a-answer">정답: ④</span>
+  </div>
+  <div class="a-explanation">Citri Research는 기술주·소프트웨어 산업의 폭락으로 S&P 500 지수가 <strong>최대 40% 하락</strong>하는 'Global Intelligence Crisis' 시나리오를 제시했다. 화이트칼라 실업률 10.2%(2028년 6월까지)와 SaaS 비즈니스 모델 붕괴를 그 원인으로 분석했다.</div>
+</div>
+
+<!-- A4 -->
+<div class="a-card fade-in">
+  <div class="a-header">
+    <span class="a-num">문제 4</span>
+    <span class="a-answer">정답: COBOL, ATM</span>
+  </div>
+  <div class="a-explanation">Claude Code가 자동화 가능하게 된 레거시 언어는 <strong>COBOL</strong>이며, 미국 전역의 <strong>ATM(현금 자동 출금기)</strong> 시스템에 광범위하게 사용된다. IBM은 이 레거시 시스템의 현대화 컨설팅으로 높은 수익을 올려왔으나, AI 자동화로 해당 비즈니스 모델이 위협받게 됐다.</div>
+</div>
+
+<!-- A5 -->
+<div class="a-card fade-in">
+  <div class="a-header">
+    <span class="a-num">문제 5</span>
+    <span class="a-answer">정답: ③</span>
+  </div>
+  <div class="a-explanation">뉴욕 연준의 인플레이션 기대가 <strong>2.8%로 상승</strong>하여 인플레이션 재부상이 확인됐고, 월러 이사는 1월 비농업 고용 증가를 <strong>"노이즈(Noise)"</strong>로 규정하며 신뢰성에 의문을 제기했다. 인플레이션 상승 + 고용 데이터 불신뢰로 금리인하 시점이 불투명해진 상태이며, CME 기준 6월 47.5%, 실질적 인하는 7월 이후로 전망된다.</div>
+</div>
+
+<!-- A6 -->
+<div class="a-card fade-in">
+  <div class="a-header">
+    <span class="a-num">문제 6</span>
+    <span class="a-answer">정답:</span>
+  </div>
+  <div class="a-explanation">
+    <strong>원인 1:</strong> 차세대 비만치료제 <strong>Cagrisema</strong>의 감량 효과가 기대에 미치지 못함<br>
+    <strong>원인 2:</strong> 경쟁사 <strong>Eli Lilly의 Zepbound</strong>가 임상에서 우월한 효능을 입증하며 도이체방크가 투자의견을 변경, 제로섬 구도에서 시장 신뢰를 빼앗김
+  </div>
+</div>
+
+<!-- A7 -->
+<div class="a-card fade-in">
+  <div class="a-header">
+    <span class="a-num">문제 7</span>
+    <span class="a-answer">정답: ③</span>
+  </div>
+  <div class="a-explanation">CrowdStrike는 -10% 폭락한 <strong>사이버보안 기업</strong>으로, AI 보안 스캐너 자동화 소식에 직격탄을 맞은 종목이다. '해자 방어주'가 아니라 AI 파괴의 대상이다. 나머지 세 종목은 각각 독점적 바이오(Eli Lilly), AI 무관 가성비 소비재(Domino's), M&A 이벤트(ACRX/SLX)로 상승했다.</div>
+</div>
+
+<!-- A8 -->
+<div class="a-card fade-in">
+  <div class="a-header">
+    <span class="a-num">문제 8</span>
+    <span class="a-answer">정답: ③</span>
+  </div>
+  <div class="a-explanation">'AI 빌더'는 AI를 만들고 구동하는 <strong>하드웨어·인프라 영역</strong>(GPU, 메모리, 데이터센터 토지, 전력, 냉각)을 의미한다. 반면 AI를 활용하는 소프트웨어·SaaS·IT컨설팅 기업은 'AI 유저'로, 역설적으로 AI에 의해 비즈니스 모델이 파괴되는 구조에 놓여 있다.</div>
+</div>
+
+<!-- A9 -->
+<div class="a-card fade-in">
+  <div class="a-header">
+    <span class="a-num">문제 9</span>
+    <span class="a-answer">정답 (서술형):</span>
+  </div>
+  <div class="a-explanation">일반 개인투자자의 포트폴리오가 지수 하락의 약 3배 데미지를 입는 이유는 세 가지 구조적 요인에 기인한다.<br><br>
+    <strong>① 레버리지:</strong> 많은 개인투자자가 신용거래·마진 계좌를 활용하고 있어, 지수 -10% 하락 시 실제 손실이 증폭된다.<br>
+    <strong>② 집중투자:</strong> 개인투자자는 기관 대비 분산이 부족하며, 특히 변동성이 큰 기술주·성장주에 편중된 경우가 많아 시장 전체 하락보다 더 큰 타격을 받는다.<br>
+    <strong>③ 변동성 노출:</strong> 고베타(high-beta) 종목 편향과 하락 시 패닉 매도로 인한 추가 손실이 발생하며, 옵션·레버리지 ETF 보유 시 변동성 자체가 손실을 키우는 구조적 문제가 있다.
+  </div>
+</div>
+
+<!-- A10 -->
+<div class="a-card fade-in">
+  <div class="a-header">
+    <span class="a-num">문제 10</span>
+    <span class="a-answer">정답 (서술형):</span>
+  </div>
+  <div class="a-explanation">현금 20% 확보를 최우선으로 강조한 이유는 세 가지 불확실성이 동시에 존재하기 때문이다.<br><br>
+    <strong>(1) NVIDIA 실적 리스크:</strong> 수요일 실적 발표 결과에 따라 AI 투자 지속 여부가 판가름난다. 실적이 기대 이하일 경우 AI CAPEX 회의론이 급부상하며 기술주 전반의 추가 하락을 촉발할 수 있다. 실적 확인 후 투자해도 상승장에서의 기회 손실은 제한적이다.<br><br>
+    <strong>(2) 관세 정책 불확실성:</strong> 15% 관세는 150일 한시적이나, 트럼프 대통령의 국정연설에서 추가 조치나 협상 전략이 예고될 수 있다. 중국·EU의 보복 가능성도 열려 있어 무역전쟁 확전 리스크가 상존한다.<br><br>
+    <strong>(3) 시장의 비대칭적 움직임:</strong> 상승장에서는 매일 0.5~1%씩 완만하게 올라가지만, 하락 시에는 급격한 클리프(cliff) 형태로 떨어진다. 수년간 강세장이 지속된 만큼 조정 시 낙폭이 클 수 있으며, 현금이 없으면 폭락 이후의 저점 매수 기회를 활용할 수 없다. "위기는 곧 기회이지만, 현금이 없으면 위기는 그냥 위기"라는 핵심 원칙이 여기서 도출된다.
+  </div>
+</div>
+
+</div><!-- container -->
+
+<div class="footer">
+  <p>본 시험문제는 NOVA Real Invest 유튜브 방송(2026.02.24) 분석 내용을 기반으로 작성되었습니다.</p>
+  <p>투자 판단의 책임은 본인에게 있습니다.</p>
+</div>
+
+<script>
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+</script>
+</body>
+</html>
