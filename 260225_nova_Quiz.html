@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📝 시험문제 | 메타 6GW · AI 오케스트레이션 · NVDA 프리뷰 | 2026.02.24</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Sans+KR:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-alt: #fafafa;
+  --text: #1a1a1a;
+  --text-sub: #777777;
+  --accent: #e11d48;
+  --accent2: #f43f5e;
+  --border: #e5e5e5;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+.wrapper {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+header {
+  padding: 48px 0 32px;
+  border-bottom: 3px solid var(--accent);
+  margin-bottom: 36px;
+}
+header .tag {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 4px 12px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  line-height: 1.3;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+header h1 em { color: var(--accent); font-style: italic; }
+header .meta {
+  font-size: 13px;
+  color: var(--text-sub);
+}
+header .meta span { margin-right: 14px; }
+section {
+  margin-bottom: 40px;
+}
+section .section-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+section .section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  line-height: 1.35;
+}
+p { margin-bottom: 14px; }
+.fade-in {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Quiz */
+.quiz-q {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin: 14px 0;
+}
+.quiz-q .q-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.quiz-q .q-type {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--accent);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 3px;
+  margin-left: 8px;
+}
+.quiz-q .q-diff {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 3px;
+  margin-left: 4px;
+}
+.diff-easy { background: #dcfce7; color: #166534; }
+.diff-med { background: #fef9c3; color: #854d0e; }
+.diff-hard { background: #fee2e2; color: #991b1b; }
+.quiz-q p { margin: 8px 0 4px; font-weight: 500; }
+.quiz-q .options { padding-left: 20px; font-size: 14px; }
+.quiz-q .options li { margin: 3px 0; }
+/* Answers */
+.answer-section {
+  margin-top: 48px;
+  padding-top: 36px;
+  border-top: 3px double var(--accent);
+}
+.answer-section h2 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.answer-card {
+  background: var(--bg-alt);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 14px 18px;
+  margin: 12px 0;
+}
+.answer-card .a-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.answer-card .a-answer {
+  font-weight: 700;
+  font-size: 15px;
+  margin: 4px 0;
+}
+.answer-card .a-explain {
+  font-size: 13.5px;
+  color: var(--text-sub);
+}
+/* Toggle button */
+.toggle-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin: 36px 0 12px;
+  transition: background 0.2s;
+}
+.toggle-btn:hover { background: var(--accent2); }
+.answers-hidden { display: none; }
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 36px 0;
+}
+footer {
+  padding: 28px 0;
+  border-top: 2px solid var(--text);
+  margin-top: 40px;
+  font-size: 12px;
+  color: var(--text-sub);
+  text-align: center;
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+<header class="fade-in">
+  <div class="tag">Quiz · 10 Questions</div>
+  <h1>📝 시험문제<br><em>메타 6GW · AI 오케스트레이션 · NVDA</em></h1>
+  <div class="meta">
+    <span>📅 2026년 2월 24일</span>
+    <span>📺 CIA.chat 멤버미팅 기반</span>
+    <span>📊 쉬움 30% · 보통 50% · 어려움 20%</span>
+  </div>
+</header>
+
+<!-- ===================== 문제 ===================== -->
+<section class="fade-in">
+  <div class="section-label">Part 1 — Questions</div>
+  <h2>시험 문제</h2>
+
+  <div class="quiz-q fade-in">
+    <div class="q-num">Q1 <span class="q-type">객관식</span> <span class="q-diff diff-easy">쉬움</span></div>
+    <p>엔트로픽이 오늘 소프트웨어 시장에 전한 핵심 메시지는 무엇인가?</p>
+    <ol class="options" type="A">
+      <li>기존 SaaS 기업을 모두 인수하겠다</li>
+      <li>AI가 소프트웨어를 완전히 대체할 것이다</li>
+      <li>기존 소프트웨어 기업들과 파트너십(오케스트레이션)을 하겠다</li>
+      <li>소프트웨어 시장에서 철수하겠다</li>
+    </ol>
+  </div>
+
+  <div class="quiz-q fade-in">
+    <div class="q-num">Q2 <span class="q-type">단답형</span> <span class="q-diff diff-easy">쉬움</span></div>
+    <p>메타가 AMD에게 발주한 데이터센터 인프라 규모는 몇 기가와트(GW)인가?</p>
+  </div>
+
+  <div class="quiz-q fade-in">
+    <div class="q-num">Q3 <span class="q-type">객관식</span> <span class="q-diff diff-med">보통</span></div>
+    <p>메타-AMD 딜에서 AMD가 메타에게 제공하는 워런트 규모와 그에 따른 메타의 AMD 지분율은?</p>
+    <ol class="options" type="A">
+      <li>80M 주, 약 5%</li>
+      <li>160M 주, 약 10%</li>
+      <li>200M 주, 약 15%</li>
+      <li>100M 주, 약 8%</li>
+    </ol>
+  </div>
+
+  <div class="quiz-q fade-in">
+    <div class="q-num">Q4 <span class="q-type">OX</span> <span class="q-diff diff-easy">쉬움</span></div>
+    <p>홈디포의 실적 서프라이즈는 일반 소비자(DIY) 수요 증가가 주원인이다. (O/X)</p>
+  </div>
+
+  <div class="quiz-q fade-in">
+    <div class="q-num">Q5 <span class="q-type">객관식</span> <span class="q-diff diff-med">보통</span></div>
+    <p>키사이트(Keysight)의 주가가 22% 급등한 핵심 이유는?</p>
+    <ol class="options" type="A">
+      <li>전기차 배터리 테스트 장비 수요</li>
+      <li>AI 데이터센터 건설에 따른 정밀 계측기 수요 급증</li>
+      <li>국방부 대형 계약 체결</li>
+      <li>경쟁사 인수 발표</li>
+    </ol>
+  </div>
+
+  <div class="quiz-q fade-in">
+    <div class="q-num">Q6 <span class="q-type">객관식</span> <span class="q-diff diff-med">보통</span></div>
+    <p>메타가 엔비디아 외에 AMD를 벤더로 추가한 전략적 이유가 <strong>아닌</strong> 것은?</p>
+    <ol class="options" type="A">
+      <li>공급망 다변화</li>
+      <li>가격 협상력 확보</li>
+      <li>AMD의 GPU 성능이 블랙웰보다 우수해서</li>
+      <li>AMD 지분 확보를 통한 투자 수익</li>
+    </ol>
+  </div>
+
+  <div class="quiz-q fade-in">
+    <div class="q-num">Q7 <span class="q-type">단답형</span> <span class="q-diff diff-med">보통</span></div>
+    <p>옵션 시장이 반영하고 있는 엔비디아 실적 발표 후 예상 주가 변동폭은 약 ±몇 %인가?</p>
+  </div>
+
+  <div class="quiz-q fade-in">
+    <div class="q-num">Q8 <span class="q-type">OX</span> <span class="q-diff diff-med">보통</span></div>
+    <p>스트라이프가 인수를 검토 중인 것은 페이팔 전체가 아니라 브레인트리(Braintree)라는 자산이다. (O/X)</p>
+  </div>
+
+  <div class="quiz-q fade-in">
+    <div class="q-num">Q9 <span class="q-type">객관식</span> <span class="q-diff diff-hard">어려움</span></div>
+    <p>연준 위원 월러의 "고용이 불안한데 경제는 좋다"는 발언이 시사하는 구조적 변화와 가장 관련 깊은 개념은?</p>
+    <ol class="options" type="A">
+      <li>필립스 곡선의 전통적 작동</li>
+      <li>AI에 의한 생산성 향상과 고용 없는 성장(Jobless Growth)</li>
+      <li>경기 과열로 인한 자연실업률 하락</li>
+      <li>재정정책에 의한 일시적 수요 부양</li>
+    </ol>
+  </div>
+
+  <div class="quiz-q fade-in">
+    <div class="q-num">Q10 <span class="q-type">서술형</span> <span class="q-diff diff-hard">어려움</span></div>
+    <p>바벨(Barbell) 전략이 현재 시장 환경에서 유효한 이유를 엔비디아 실적 불확실성, 관세 리스크, AI 구조변화의 관점에서 설명하시오.</p>
+  </div>
+</section>
+
+<!-- ===================== 정답 토글 ===================== -->
+<button class="toggle-btn fade-in" onclick="toggleAnswers()">📋 정답 및 해설 보기</button>
+
+<section id="answersSection" class="answer-section answers-hidden fade-in">
+  <div class="section-label">Part 2 — Answers</div>
+  <h2>정답 및 해설</h2>
+
+  <div class="answer-card">
+    <div class="a-num">A1</div>
+    <div class="a-answer">정답: C</div>
+    <div class="a-explain">엔트로픽은 클로드 코워크를 통해 세일즈포스·도큐사인·인튜이트 등과 플러그인 방식의 파트너십(오케스트레이션)을 발표하며, 기존 SaaS를 대체하는 것이 아니라 연동하겠다는 메시지를 전달했다.</div>
+  </div>
+
+  <div class="answer-card">
+    <div class="a-num">A2</div>
+    <div class="a-answer">정답: 6GW (6기가와트)</div>
+    <div class="a-explain">메타는 AMD에게 6기가와트 규모의 데이터센터 인프라를 발주하겠다고 밝혔다. 이는 메타 전체 인프라의 20~30%에 해당한다.</div>
+  </div>
+
+  <div class="answer-card">
+    <div class="a-num">A3</div>
+    <div class="a-answer">정답: B (160M 주, 약 10%)</div>
+    <div class="a-explain">AMD는 메타에게 1.6억 주(160 million shares)의 워런트를 제공하며, 이로써 메타는 AMD 지분 약 10%를 확보하게 된다.</div>
+  </div>
+
+  <div class="answer-card">
+    <div class="a-num">A4</div>
+    <div class="a-answer">정답: X</div>
+    <div class="a-explain">일반 소비자(DIY) 수요는 여전히 부진하다. 홈디포의 실적 서프라이즈는 전문 시공업자(프로) 수요가 견고했기 때문이다. 고금리로 주택 매매가 어려워 기존 주택 리모델링 수요가 증가한 것이 배경이다.</div>
+  </div>
+
+  <div class="answer-card">
+    <div class="a-num">A5</div>
+    <div class="a-answer">정답: B</div>
+    <div class="a-explain">AI 데이터센터 건설이 대규모 건축업으로 확대되면서, 데이터센터에 필수적인 정밀 계측기(전력 부하, 열 관리, 데이터 손실 테스트 등) 수요가 급증한 것이 핵심 원인이다.</div>
+  </div>
+
+  <div class="answer-card">
+    <div class="a-num">A6</div>
+    <div class="a-answer">정답: C</div>
+    <div class="a-explain">엔비디아 블랙웰이 최고 성능으로 타의 추종을 불허하고 있으며, AMD는 GPU 단독 공급인 반면 엔비디아는 턴키(랙 포함) 솔루션을 제공한다. AMD 성능이 우수해서가 아니라 공급망 다변화, 가격 협상력, 지분 인센티브가 핵심 이유다.</div>
+  </div>
+
+  <div class="answer-card">
+    <div class="a-num">A7</div>
+    <div class="a-answer">정답: ±6%</div>
+    <div class="a-explain">옵션 시장은 엔비디아 실적 발표 후 플러스/마이너스 약 6%의 주가 변동을 내재 변동성에 반영하고 있다. 시총 1위 기업의 6% 변동은 나스닥 전체에 상당한 파급력을 가진다.</div>
+  </div>
+
+  <div class="answer-card">
+    <div class="a-num">A8</div>
+    <div class="a-answer">정답: O</div>
+    <div class="a-explain">스트라이프가 검토 중인 것은 페이팔의 핵심 자산인 브레인트리(Braintree) 인수다. 번스타인은 인수 가격을 $10B~$15B으로 추정하고 있다.</div>
+  </div>
+
+  <div class="answer-card">
+    <div class="a-num">A9</div>
+    <div class="a-answer">정답: B</div>
+    <div class="a-explain">실업자가 늘어나는데 경제는 좋아지는 현상은 AI가 생산성을 향상시키면서 동시에 고용 없는 성장(Jobless Growth)을 유발하는 구조적 변화를 시사한다. 전통적 필립스 곡선의 관계가 AI에 의해 깨지고 있다.</div>
+  </div>
+
+  <div class="answer-card">
+    <div class="a-num">A10</div>
+    <div class="a-answer">정답 (모범 답안):</div>
+    <div class="a-explain">바벨 전략은 포트폴리오의 양 극단에 자산을 배치하는 방식이다. 현재 시장에서 유효한 이유는 세 가지다.<br><br>
+    <strong>① 엔비디아 불확실성:</strong> ±6% 변동이 예상되는 실적 이벤트는 AI·반도체 섹터 전체를 좌우한다. 고성장주(공격측)를 보유해 상승 시 수혜를 받으면서, 방어주(방어측)로 하락 충격을 완충한다.<br><br>
+    <strong>② 관세 리스크:</strong> 트럼프의 15% 관세 인상과 빅테크 전력비 부담 정책은 시장 전반에 하방 압력을 가한다. 필수소비재·월마트 같은 방어주는 관세 충격에 상대적으로 강하다.<br><br>
+    <strong>③ AI 구조변화:</strong> AI가 고용 없는 성장을 유도하며, 수혜 섹터(데이터센터 인프라, 계측기)와 피해 섹터(전통 SaaS)가 극명히 갈린다. 바벨 전략은 이 양극화된 시장에서 양쪽 기회를 모두 포착할 수 있는 구조를 제공한다.</div>
+  </div>
+</section>
+
+<footer class="fade-in">
+  <p>본 문서는 CIA.chat 멤버미팅(2026.02.24) 분석을 기반으로 작성되었습니다.<br>투자 판단의 책임은 투자자 본인에게 있습니다.</p>
+</footer>
+
+</div>
+
+<script>
+// Fade-in
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// Toggle answers
+function toggleAnswers() {
+  const section = document.getElementById('answersSection');
+  const btn = document.querySelector('.toggle-btn');
+  if (section.classList.contains('answers-hidden')) {
+    section.classList.remove('answers-hidden');
+    section.classList.add('visible');
+    btn.textContent = '🔒 정답 숨기기';
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    section.classList.add('answers-hidden');
+    btn.textContent = '📋 정답 및 해설 보기';
+  }
+}
+</script>
+</body>
+</html>
