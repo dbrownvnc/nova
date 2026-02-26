@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>엔비디아 $780억 가이던스의 숨겨진 진실 | 시장 분석</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-alt: #fafafa;
+  --text: #1a1a1a;
+  --text-sub: #777777;
+  --accent: #e11d48;
+  --accent2: #f43f5e;
+  --chart1: #e11d48;
+  --chart2: #1a1a1a;
+  --chart3: #6b7280;
+  --chart4: #2563eb;
+  --table-bg: #fafafa;
+  --table-header: #e11d48;
+  --table-border: #e5e5e5;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.chart-container {
+  position: relative;
+  max-height: 340px;
+  margin: 20px 0;
+}
+.chart-container canvas {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  max-height: 300px;
+}
+.chart-container.chart-ready canvas {
+  opacity: 1;
+}
+
+/* === HEADER === */
+.hero {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d1a2e 50%, #1a1a1a 100%);
+  padding: 48px 20px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 70%, rgba(225,29,72,0.15) 0%, transparent 50%),
+              radial-gradient(circle at 70% 30%, rgba(244,63,94,0.1) 0%, transparent 50%);
+  animation: heroGlow 8s ease-in-out infinite alternate;
+}
+@keyframes heroGlow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(5deg); }
+}
+.hero-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+  position: relative;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1.3;
+  margin-bottom: 14px;
+  position: relative;
+}
+.hero h1 em {
+  color: var(--accent);
+  font-style: normal;
+}
+.hero-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.55);
+  position: relative;
+  font-weight: 300;
+}
+.hero-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+  margin-top: 20px;
+  position: relative;
+}
+
+/* === CONTENT === */
+.content {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.section {
+  padding: 36px 0;
+  border-bottom: 1px solid var(--table-border);
+}
+.section:last-child { border-bottom: none; }
+
+.section-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 48px;
+  font-weight: 900;
+  color: rgba(225,29,72,0.1);
+  line-height: 1;
+  margin-bottom: -10px;
+}
+.section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+  line-height: 1.35;
+}
+.section h2 span {
+  color: var(--accent);
+}
+.section-subtitle {
+  font-size: 13px;
+  color: var(--text-sub);
+  margin-bottom: 20px;
+  font-weight: 300;
+}
+.section h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 24px 0 10px;
+  padding-left: 12px;
+  border-left: 3px solid var(--accent);
+}
+.section p {
+  margin-bottom: 14px;
+  color: var(--text);
+  font-weight: 400;
+}
+
+/* Highlight box */
+.highlight-box {
+  background: linear-gradient(135deg, #fff5f7 0%, #fafafa 100%);
+  border-left: 4px solid var(--accent);
+  padding: 18px 20px;
+  margin: 20px 0;
+  border-radius: 0 8px 8px 0;
+}
+.highlight-box.dark {
+  background: linear-gradient(135deg, #1a1a1a 0%, #1f1f1f 100%);
+  color: #ffffff;
+  border-left-color: var(--accent2);
+}
+.highlight-box.dark .hl-label { color: var(--accent2); }
+.highlight-box.dark p { color: rgba(255,255,255,0.85); }
+.hl-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.highlight-box p { margin-bottom: 6px; font-size: 14px; }
+
+/* Quote */
+.pull-quote {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--text);
+  text-align: center;
+  padding: 30px 20px;
+  margin: 24px 0;
+  position: relative;
+  font-style: italic;
+  line-height: 1.5;
+}
+.pull-quote::before {
+  content: '"';
+  font-size: 64px;
+  color: var(--accent);
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.3;
+  font-style: normal;
+}
+
+/* Metric cards */
+.metrics-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 20px 0;
+}
+.metric-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--table-border);
+  border-radius: 10px;
+  padding: 18px 16px;
+  text-align: center;
+}
+.metric-card .metric-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--accent);
+  line-height: 1.2;
+}
+.metric-card .metric-label {
+  font-size: 12px;
+  color: var(--text-sub);
+  margin-top: 4px;
+}
+.metric-card .metric-delta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #16a34a;
+  margin-top: 2px;
+}
+.metric-card .metric-delta.neg { color: var(--accent); }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 13px;
+}
+thead th {
+  background: var(--table-header);
+  color: #fff;
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 500;
+  font-size: 12px;
+}
+thead th:first-child { border-radius: 6px 0 0 0; }
+thead th:last-child { border-radius: 0 6px 0 0; }
+tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--table-border);
+  background: var(--table-bg);
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:last-child td:first-child { border-radius: 0 0 0 6px; }
+tbody tr:last-child td:last-child { border-radius: 0 0 6px 0; }
+
+/* Tags */
+.tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  margin-right: 4px;
+  margin-bottom: 4px;
+}
+.tag.bull { background: rgba(22,163,74,0.1); color: #16a34a; }
+.tag.bear { background: rgba(225,29,72,0.1); color: var(--accent); }
+.tag.neutral { background: rgba(107,114,128,0.1); color: var(--chart3); }
+
+/* Flow diagram */
+.flow-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  background: var(--bg-alt);
+  border: 1px solid var(--table-border);
+  border-radius: 8px;
+  margin: 8px 0;
+  font-size: 14px;
+}
+.flow-box .flow-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.flow-arrow {
+  text-align: center;
+  color: var(--accent);
+  font-size: 18px;
+  margin: 4px 0;
+}
+
+/* Sector grid */
+.sector-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 16px 0;
+}
+.sector-item {
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.sector-item.positive {
+  background: rgba(22,163,74,0.06);
+  border: 1px solid rgba(22,163,74,0.2);
+  color: #16a34a;
+}
+.sector-item.negative {
+  background: rgba(225,29,72,0.06);
+  border: 1px solid rgba(225,29,72,0.2);
+  color: var(--accent);
+}
+.sector-item .sector-name {
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.sector-item .sector-detail {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+/* Footer */
+.footer {
+  background: var(--bg-alt);
+  border-top: 1px solid var(--table-border);
+  padding: 30px 20px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-sub);
+}
+.footer-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+/* Probability bar */
+.prob-bar {
+  display: flex;
+  height: 32px;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+.prob-bar .bull-bar {
+  background: linear-gradient(90deg, #16a34a, #22c55e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+.prob-bar .bear-bar {
+  background: linear-gradient(90deg, var(--accent2), var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* List styling */
+.styled-list {
+  margin: 14px 0;
+  padding-left: 0;
+  list-style: none;
+}
+.styled-list li {
+  padding: 8px 0 8px 24px;
+  position: relative;
+  font-size: 14px;
+}
+.styled-list li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  position: absolute;
+  left: 6px;
+  top: 15px;
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 32px 0;
+  color: var(--text-sub);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--table-border);
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">NOVA Real Invest · Market Analysis</div>
+  <h1>엔비디아 <em>$780억</em> 폭주가<br>숨긴 무서운 진실</h1>
+  <div class="hero-sub">트럼프 국정연설 · AI 인퍼런스 시대 · Great AI Decoupling</div>
+  <div class="hero-date">2026. 02. 25 WED — NY Market Close</div>
+</div>
+
+<div class="content">
+
+<!-- ============ SECTION 1 ============ -->
+<div class="section fade-in">
+  <div class="section-num">01</div>
+  <h2>시장 브리핑 — <span>AI가 증시를 구원하다</span></h2>
+  <div class="section-subtitle">다우·S&P·나스닥 동반 상승, 엔비디아 실적 기대감이 핵심 동력</div>
+
+  <p>2월 25일 뉴욕 증시는 다우·S&P 500·나스닥 3대 지수가 모두 상승 마감했다. 엔비디아 실적 발표를 앞두고 장중 내내 매수세가 유입됐으며, 지난 한 달간 AI 소프트웨어 섹터를 짓눌렀던 공포 심리가 크게 완화됐다.</p>
+
+  <div class="highlight-box fade-in">
+    <div class="hl-label">Key Driver</div>
+    <p><strong>① 엔비디아 실적 기대감</strong> — 장중 +1.41% 상승, 시장 전체를 견인</p>
+    <p><strong>② AI 소프트웨어 바운스</strong> — Anthropic 발 충격 완화, 저점 반등 시작</p>
+    <p><strong>③ 트럼프 국정연설</strong> — 401k 확대, 기관주택 매입 금지 등 정책 발표</p>
+  </div>
+
+  <p>10년물 국채금리는 4.048%로 안정적 흐름을 유지했다. 최근 5일 기준 하락 추세를 보이며 모기지 금리 완화 기대감도 형성됐다.</p>
+
+  <div class="metrics-row fade-in">
+    <div class="metric-card">
+      <div class="metric-val">4.048%</div>
+      <div class="metric-label">10년물 국채금리</div>
+      <div class="metric-delta">5일 하락 추세</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">$636</div>
+      <div class="metric-label">CORT 장후 주가</div>
+      <div class="metric-delta">+15~16% 일간 상승</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SECTION 2 ============ -->
+<div class="section fade-in">
+  <div class="section-num">02</div>
+  <h2>엔비디아 실적 — <span>$680억 매출의 위력</span></h2>
+  <div class="section-subtitle">FY2026 Q4 실적 발표, 시장 예상 $20억 이상 초과</div>
+
+  <div class="metrics-row fade-in">
+    <div class="metric-card">
+      <div class="metric-val">$68B</div>
+      <div class="metric-label">총 매출</div>
+      <div class="metric-delta">YoY +73%</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">$62B</div>
+      <div class="metric-label">데이터센터 매출</div>
+      <div class="metric-delta">YoY +75%</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">$78B</div>
+      <div class="metric-label">Q1 가이던스</div>
+      <div class="metric-delta">컨센 대비 +2% 서프라이즈</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">73.4%</div>
+      <div class="metric-label">마진율</div>
+      <div class="metric-delta neg">역대급 수익성</div>
+    </div>
+  </div>
+
+  <p>시장 예상치 $66B을 크게 상회하는 $68B 매출을 기록했다. 데이터센터 부문이 $62B로 전체 매출의 91%를 차지하며, 빅테크들의 천문학적 캐펙스(자본지출)를 사실상 엔비디아가 흡수하고 있음이 확인됐다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="revenueChart" height="240"></canvas>
+  </div>
+
+  <h3>가이던스 $78B의 의미</h3>
+  <p>Q1(2027 FY) 가이던스 $78B은 올해 하이퍼스케일러들의 캐펙스 $600~700B 중 상당 부분을 엔비디아가 가져갈 것임을 시사한다. 연간 매출 $300B 이상 도달 가능성도 열려 있다.</p>
+
+  <div class="highlight-box dark fade-in">
+    <div class="hl-label">Critical Note</div>
+    <p>🇨🇳 <strong>중국 매출은 가이던스에 미포함</strong> — 정치적 불확실성으로 아예 제외. 4월 트럼프 대통령의 결정에 따라 추가 상방 여력이 존재.</p>
+  </div>
+
+  <h3>게이밍 부문 하락</h3>
+  <p>데이터센터 중심의 폭발적 성장과 대조적으로 게이밍 매출은 감소했다. 메모리 가격 상승과 함께 AI 인프라에 자원이 집중되면서 게이밍 부문의 우선순위가 낮아진 것으로 분석된다.</p>
+</div>
+
+<!-- ============ SECTION 3 ============ -->
+<div class="section fade-in">
+  <div class="section-num">03</div>
+  <h2>CFO 발언 논란 — <span>공급 충분 = 수요 종료?</span></h2>
+  <div class="section-subtitle">장후 주가 급락의 원인과 그 진짜 의미</div>
+
+  <div class="pull-quote fade-in">
+    We have a strategically secure inventory and capacity to meet demand beyond the next several quarters.
+  </div>
+
+  <p>엔비디아 CFO의 이 발언 직후 장후 주가가 $200 이상에서 급락, 한때 -0.16%까지 후퇴했다. 시장은 이를 <strong>"수요 포화"</strong> 신호로 오해한 것이다.</p>
+
+  <h3>실제 의미: 공급망 병목 해소</h3>
+
+  <div class="flow-box fade-in">
+    <span class="flow-icon">🏭</span>
+    <span>TSMC · SK하이닉스(HBM) · 삼성과 수분기 공급계약 완료</span>
+  </div>
+  <div class="flow-arrow">↓</div>
+  <div class="flow-box fade-in">
+    <span class="flow-icon">📦</span>
+    <span>공급망 병목 해소 → 계약 이행 능력 확보를 선언한 것</span>
+  </div>
+  <div class="flow-arrow">↓</div>
+  <div class="flow-box fade-in">
+    <span class="flow-icon">📈</span>
+    <span>고객 대기 수요가 끝난 것이 아니라, 안정적 납품이 가능해진 것</span>
+  </div>
+
+  <p>공매도(Short Seller) 세력은 "수요 피크론"을 주장하지만, 이는 <strong>2027년까지 계약이 체결된 상태</strong>라는 점에서 오해에 가깝다. CFO 발언의 본질은 공급 안정성 확보이지, 수요 둔화가 아니다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="marginChart" height="220"></canvas>
+  </div>
+</div>
+
+<!-- ============ SECTION 4 ============ -->
+<div class="section fade-in">
+  <div class="section-num">04</div>
+  <h2>AI 패러다임 전환 — <span>인퍼런스 시대 개막</span></h2>
+  <div class="section-subtitle">젠슨 황 CEO: "Inference equals Revenue"</div>
+
+  <p>젠슨 황 CEO는 어닝콜에서 <strong>"에이전틱 AI(Agentic AI) 자율 에이전트의 변곡점이 도래했다"</strong>고 선언했다. 핵심 메시지는 AI가 더 이상 비용이 아니라 <strong>매출원(Revenue Source)</strong>이 되었다는 것이다.</p>
+
+  <div class="highlight-box fade-in">
+    <div class="hl-label">패러다임 전환</div>
+    <p><strong>Training Era (과거)</strong> → 데이터 학습, 비용 투입 단계. 수익 모델 불명확.</p>
+    <p><strong>Inference Era (현재)</strong> → 스스로 추론·판단. 토큰 생성 = 기업 매출·이익 직결.</p>
+  </div>
+
+  <h3>데이터센터의 진화</h3>
+
+  <table class="fade-in">
+    <thead>
+      <tr><th>구분</th><th>과거 데이터센터</th><th>현재 AI 팩토리</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>역할</td><td>파일 저장 창고 (도서관)</td><td>디지털 지능 생산 공장</td></tr>
+      <tr><td>핵심 기능</td><td>스토리지 · 네트워크</td><td>인퍼런스 · 추론 엔진</td></tr>
+      <tr><td>가치 창출</td><td>보관 · 전달</td><td>자율 업무 수행 · 매출 생산</td></tr>
+      <tr><td>핵심 칩</td><td>범용 서버 CPU</td><td>블랙웰 GPU + NVLink</td></tr>
+    </tbody>
+  </table>
+
+  <h3>에이전틱 AI가 할 수 있는 것</h3>
+  <ul class="styled-list fade-in">
+    <li>기업 인사(HR) · 재무 업무 자동화</li>
+    <li>코딩 · 소프트웨어 개발</li>
+    <li>고객 응대 · 콜센터 대체</li>
+    <li>워크플로우 분석 → 업무 효율화 제안</li>
+    <li>자율 판단 기반의 의사결정 지원</li>
+  </ul>
+
+  <h3>블랙웰의 비용 혁신</h3>
+  <p>블랙웰 시스템은 추론(inference) 비용을 기존 대비 대폭 절감했다. 토큰 하나를 생성할 때마다 기업의 매출·이익으로 직결되는 구조가 확립된 것이다. 또한 칩 간 연결 네트워크인 <strong>NVLink</strong>의 매출이 크게 증가해 턴키(Turn-key) AI 팩토리로서의 입지가 확인됐다.</p>
+
+  <h3>차세대: 베라 루빈 (Vera Rubin)</h3>
+  <div class="highlight-box fade-in">
+    <div class="hl-label">Next Generation</div>
+    <p>🔹 <strong>출시 시기:</strong> 2026년 하반기 공개, 2027년 본격 판매 예상</p>
+    <p>🔹 <strong>성능:</strong> 전력 대비 성능 10배 향상</p>
+    <p>🔹 <strong>메모리:</strong> HBM4 (4세대 고대역폭 메모리) 채택</p>
+    <p>🔹 <strong>영향:</strong> 본격 시판 시 엔비디아 실적 예측 불가 수준으로 확대 전망</p>
+  </div>
+
+  <div class="chart-container fade-in">
+    <canvas id="aiEvolutionChart" height="240"></canvas>
+  </div>
+</div>
+
+<!-- ============ SECTION 5 ============ -->
+<div class="section fade-in">
+  <div class="section-num">05</div>
+  <h2>트럼프 국정연설 — <span>1시간 47분의 키워드</span></h2>
+  <div class="section-subtitle">역대 최장 연설에서 추출한 시장 관련 5대 핵심 포인트</div>
+
+  <table class="fade-in">
+    <thead>
+      <tr><th>#</th><th>정책</th><th>시장 영향</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><strong>401k 저소득 근로자 $1,000 지원</strong></td>
+        <td><span class="tag bull">주식시장 유입 확대</span> 장기 매수 기반 강화</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><strong>기관주택 매입 금지 추진</strong></td>
+        <td><span class="tag neutral">블랙록 등 영향</span> 주택 플리핑 규제</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><strong>인플레이션 진정 프레임</strong></td>
+        <td><span class="tag neutral">금리인하 압박</span> 실효성 의문</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><strong>대외정책 — 이란 강경 스탠스</strong></td>
+        <td><span class="tag bear">지정학 리스크</span> 유가 상승 요인</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><strong>중간선거 대비 포퓰리즘 정책</strong></td>
+        <td><span class="tag neutral">주거비·세금 감면</span> 재정건전성 우려</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>401k 확대 정책은 미국 주식시장으로의 자금 유입을 구조적으로 늘리는 장기 호재로 평가된다. 반면 이란 관련 강경 발언은 유가 상승 압력을 가중시키며, 에너지 섹터에는 호재·소비재 섹터에는 악재로 작용할 수 있다.</p>
+</div>
+
+<!-- ============ SECTION 6 ============ -->
+<div class="section fade-in">
+  <div class="section-num">06</div>
+  <h2>Great AI Decoupling — <span>위대한 디커플링</span></h2>
+  <div class="section-subtitle">AI 인프라 급등 vs 실물경제 침체, 두 개의 미국</div>
+
+  <p>AI 섹터가 사상 최대 실적을 쏟아내는 동시에, 실물경제 지표인 <strong>신규 건설 착공 건수는 -15% 급감</strong>했다. 이는 팬데믹 이후 다시 한번 주식시장과 실물경제의 괴리가 심화되고 있음을 보여준다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="decouplingChart" height="240"></canvas>
+  </div>
+
+  <h3>자금 유입 섹터 vs 유출 섹터</h3>
+  <div class="sector-grid fade-in">
+    <div class="sector-item positive">
+      <div class="sector-name">🟢 AI 반도체</div>
+      <div class="sector-detail">NVDA, 인프라 수혜</div>
+    </div>
+    <div class="sector-item positive">
+      <div class="sector-name">🟢 에너지 · 유틸리티</div>
+      <div class="sector-detail">데이터센터 전력 수요</div>
+    </div>
+    <div class="sector-item positive">
+      <div class="sector-name">🟢 크립토 · 핀테크</div>
+      <div class="sector-detail">Circle USDC +75% 유통</div>
+    </div>
+    <div class="sector-item positive">
+      <div class="sector-name">🟢 AI 적극 도입 SW</div>
+      <div class="sector-detail">Axon AI 매출 +40%</div>
+    </div>
+    <div class="sector-item negative">
+      <div class="sector-name">🔴 신재생에너지</div>
+      <div class="sector-detail">FSLR -17%, 정책 불확실성</div>
+    </div>
+    <div class="sector-item negative">
+      <div class="sector-name">🔴 주택 · 건설</div>
+      <div class="sector-detail">Lowe's 부진, 착공 -15%</div>
+    </div>
+    <div class="sector-item negative">
+      <div class="sector-name">🔴 전통 소비재</div>
+      <div class="sector-detail">고금리 + 소비 위축</div>
+    </div>
+    <div class="sector-item negative">
+      <div class="sector-name">🔴 AI 미도입 SW</div>
+      <div class="sector-detail">Workday 등 폭락</div>
+    </div>
+  </div>
+
+  <h3>개별 종목 하이라이트</h3>
+  <table class="fade-in">
+    <thead><tr><th>종목</th><th>변동</th><th>핵심 포인트</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Circle (서클)</strong></td><td style="color:#16a34a">+35%</td><td>USDC 유통량 75% 증가, 결제 인프라 진화</td></tr>
+      <tr><td><strong>Axon (엑소)</strong></td><td style="color:#16a34a">호실적</td><td>AI 기반 SW 매출 +40%, "AI는 위협이 아닌 기회"</td></tr>
+      <tr><td><strong>Salesforce</strong></td><td style="color:var(--accent)">하락</td><td>$50B 자사주 매입에도 가이던스 부진</td></tr>
+      <tr><td><strong>First Solar</strong></td><td style="color:var(--accent)">-17%</td><td>어닝 쇼크 + 관세 + 정책 불확실성</td></tr>
+      <tr><td><strong>Lowe's</strong></td><td style="color:var(--accent)">하락</td><td>리모델링 지연, 가이던스 부진</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>Home Depot vs Lowe's 크로스체크:</strong> Home Depot의 양호한 실적(프로 수요 증가)이 Lowe's의 부진과 대비되며, 주택 건설·리모델링 섹터의 약세가 이중 확인(Double Check)됐다.</p>
+</div>
+
+<!-- ============ SECTION 7 ============ -->
+<div class="section fade-in">
+  <div class="section-num">07</div>
+  <h2>유가 · 지정학 리스크 — <span>컵앤핸들 패턴 경고</span></h2>
+  <div class="section-subtitle">이란 리스크 + 에너지 섹터 급등의 배경</div>
+
+  <p>WTI 원유 차트가 <strong>컵앤핸들(Cup & Handle)</strong> 패턴을 형성했다. 이란과의 군사적 충돌이 현실화되면 $65를 넘어 $75까지 급등할 수 있는 기술적 형태다.</p>
+
+  <div class="highlight-box fade-in">
+    <div class="hl-label">시나리오 분석</div>
+    <p>🔹 <strong>미·이란 충돌 시:</strong> 실제 교전 ~3일, 전체 정리 1~3개월 소요 전망</p>
+    <p>🔹 <strong>에너지 섹터:</strong> 1주·1개월·3개월 모두 테크 섹터를 상회하는 강세</p>
+    <p>🔹 <strong>유틸리티:</strong> 데이터센터 전력 수요 + 지정학 = 이중 호재 구조</p>
+  </div>
+
+  <div class="chart-container fade-in">
+    <canvas id="sectorChart" height="240"></canvas>
+  </div>
+</div>
+
+<!-- ============ SECTION 8 ============ -->
+<div class="section fade-in">
+  <div class="section-num">08</div>
+  <h2>중기 전망 — <span>불 70% · 베어 30%</span></h2>
+  <div class="section-subtitle">엔비디아 실적 발표로 시장 방향성이 결정됐다</div>
+
+  <p>엔비디아 실적 발표 이후 중기 시장 전망의 불(Bull) 케이스 확률이 약 70%로 상향됐다. S&P 500(SPY)은 $696 돌파 시 신고가 재시도가 가능해진다.</p>
+
+  <div class="prob-bar fade-in">
+    <div class="bull-bar" style="width:70%">BULL 70%</div>
+    <div class="bear-bar" style="width:30%">BEAR 30%</div>
+  </div>
+
+  <div class="metrics-row fade-in">
+    <div class="metric-card">
+      <div class="metric-val">$696</div>
+      <div class="metric-label">SPY 핵심 저항선</div>
+      <div class="metric-delta">돌파 시 신고가 재시도</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">$700B</div>
+      <div class="metric-label">하이퍼스케일러 캐펙스</div>
+      <div class="metric-delta">엔비디아 $300B+ 흡수 전망</div>
+    </div>
+  </div>
+
+  <h3>불 케이스 근거</h3>
+  <ul class="styled-list fade-in">
+    <li>하이퍼스케일러 캐펙스 $600~700B → 엔비디아 직접 수혜</li>
+    <li>인퍼런스 시대 개막 → AI 수익 창출 구조 입증</li>
+    <li>베라 루빈 → 2027년 추가 성장 동력</li>
+    <li>401k 확대 → 미국 주식시장 구조적 자금 유입</li>
+  </ul>
+
+  <h3>베어 케이스 리스크</h3>
+  <ul class="styled-list fade-in">
+    <li>실물경제 침체: 소비·고용 지표 악화</li>
+    <li>관세 전쟁 심화 → 인플레이션 재점화</li>
+    <li>국채금리 급등 시나리오</li>
+    <li>지정학 리스크 확대 (이란, 중국)</li>
+  </ul>
+</div>
+
+<!-- ============ SECTION 9 ============ -->
+<div class="section fade-in">
+  <div class="section-num">09</div>
+  <h2>투자 전략 — <span>AI 3단계 프레임워크</span></h2>
+  <div class="section-subtitle">만드는 AI → 일하는 AI → 피지컬 AI</div>
+
+  <div class="chart-container fade-in">
+    <canvas id="aiFrameworkChart" height="240"></canvas>
+  </div>
+
+  <table class="fade-in">
+    <thead><tr><th>구분</th><th>단계</th><th>관련 기업</th></tr></thead>
+    <tbody>
+      <tr><td><strong>플랫폼</strong></td><td>만드는 AI (완성)</td><td>NVIDIA, AMD, TSMC, Broadcom</td></tr>
+      <tr><td><strong>인프라</strong></td><td>일하는 AI (현재)</td><td>전력·유틸리티, 데이터센터, 네트워크</td></tr>
+      <tr><td><strong>피지컬 AI</strong></td><td>미래 (초기)</td><td>로봇·자율주행·산업자동화</td></tr>
+    </tbody>
+  </table>
+
+  <h3>포트폴리오 전략</h3>
+
+  <div class="highlight-box fade-in">
+    <div class="hl-label">매수 전략</div>
+    <p>✅ AI 인프라 · 전력 · 에너지 — 조정 시 분할 매수</p>
+    <p>✅ AI 적극 도입 소프트웨어 — 선별적 접근</p>
+    <p>✅ 크립토 · 핀테크 — 결제 인프라 안착 모니터링</p>
+    <p>✅ 피지컬 AI — 초기 포지셔닝</p>
+  </div>
+
+  <div class="highlight-box fade-in" style="border-left-color: var(--chart3);">
+    <div class="hl-label" style="color: var(--chart3);">헤지 · 축소</div>
+    <p>⚠️ 주택 · 건설 관련주 — 고금리 + 정책 부재</p>
+    <p>⚠️ 태양광 · 신재생에너지 — 관세 + 정권 리스크</p>
+    <p>⚠️ AI 미도입 전통 소프트웨어 — 대체 위험 상존</p>
+    <p>⚠️ 전통 소비재 — 소비 침체 장기화</p>
+  </div>
+
+  <div class="highlight-box dark fade-in">
+    <div class="hl-label">핵심 원칙</div>
+    <p>💰 <strong>"현금도 포지션이다"</strong> — 베어 케이스 30%에 대비해 현금 비중 유지. 조정 시 공격적 매수를 위한 '실탄' 확보가 핵심.</p>
+  </div>
+</div>
+
+<!-- ============ SECTION 10 ============ -->
+<div class="section fade-in">
+  <div class="section-num">10</div>
+  <h2>내일의 체크포인트</h2>
+  <div class="section-subtitle">2월 26~27일 주요 모니터링 항목</div>
+
+  <table class="fade-in">
+    <thead><tr><th>일자</th><th>항목</th><th>중요도</th></tr></thead>
+    <tbody>
+      <tr><td>2/26 (목)</td><td>엔비디아 장후 여진 → 반도체·AI 섹터 방향성</td><td>⭐⭐⭐</td></tr>
+      <tr><td>2/26 (목)</td><td>주간 신규 실업수당 청구건수</td><td>⭐⭐</td></tr>
+      <tr><td>2/26 (목)</td><td>빌더·건설주 추가 하락 여부 (Lowe's 확인사살 후)</td><td>⭐⭐</td></tr>
+      <tr><td>2/27 (금)</td><td><strong>PPI (생산자물가지수)</strong> — PCE 선행 지표</td><td>⭐⭐⭐</td></tr>
+      <tr><td>지속</td><td>유가 동향 · 컵앤핸들 패턴 모니터링</td><td>⭐⭐⭐</td></tr>
+    </tbody>
+  </table>
+
+  <p>엔비디아 실적 발표 후 여진은 최소 2일간 지속될 전망이다. 내일은 반도체·AI 관련주의 방향성을 확인하는 것이 최우선이며, 금요일 PPI는 PCE(연준 선호 물가지표)의 선행 지표로서 금리 정책 기대감에 직접적 영향을 미친다.</p>
+</div>
+
+<div class="divider fade-in">핵심 요약</div>
+
+<div class="section fade-in" style="border-bottom:none; padding-top:10px;">
+  <div class="highlight-box dark">
+    <div class="hl-label">Bottom Line</div>
+    <p>① 엔비디아 $68B 매출 · $78B 가이던스 — AI 인프라 투자의 절대적 수혜 확인</p>
+    <p>② AI는 Training → Inference 시대로 전환 — 비용이 아닌 매출원으로 진화</p>
+    <p>③ Great AI Decoupling — AI 섹터와 실물경제의 괴리 심화 중</p>
+    <p>④ 중기 불 케이스 70% — SPY $696 돌파가 관건</p>
+    <p>⑤ 에너지 · 유틸리티가 테크보다 강세 — 지정학 + 데이터센터 이중 수혜</p>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<div class="footer">
+  <div class="footer-logo">Market Analysis Report</div>
+  Based on NOVA Real Invest (2026.02.25)<br>
+  본 자료는 교육·정보 목적이며, 투자 권유가 아닙니다.<br>
+  <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#bbb;">엔터테인먼트 채널 기반 분석 · 투자 판단은 본인 책임</span>
+</div>
+
+<script>
+// ====== FADE-IN OBSERVER ======
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// ====== CHART CONFIGS ======
+const chartConfigs = {};
+
+// Chart defaults
+Chart.defaults.font.family = "'Noto Sans KR', 'JetBrains Mono', sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = '#777777';
+
+// 1. Revenue Chart
+chartConfigs['revenueChart'] = () => {
+  new Chart(document.getElementById('revenueChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Q1 FY25', 'Q2 FY25', 'Q3 FY25', 'Q4 FY25', 'Q1 FY26', 'Q2 FY26', 'Q3 FY26', 'Q4 FY26', 'Q1 FY27(G)'],
+      datasets: [{
+        label: '데이터센터 매출 ($B)',
+        data: [22.6, 26.3, 30.8, 36.4, 42.4, 49.3, 55.7, 62, 72],
+        backgroundColor: '#e11d48',
+        borderRadius: 4
+      }, {
+        label: '기타 매출 ($B)',
+        data: [3.4, 3.7, 3.5, 3.4, 3.6, 3.7, 3.3, 6, 6],
+        backgroundColor: '#6b7280',
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: { display: true, text: 'NVIDIA 분기별 매출 추이 ($B)', font: { size: 13, weight: '700' }, color: '#1a1a1a' },
+        legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16, font: { size: 10 } } }
+      },
+      scales: {
+        x: { stacked: true, grid: { display: false } },
+        y: { stacked: true, beginAtZero: true, grid: { color: '#f0f0f0' }, ticks: { callback: v => '$' + v + 'B' } }
+      }
+    }
+  });
+};
+
+// 2. Margin Chart
+chartConfigs['marginChart'] = () => {
+  new Chart(document.getElementById('marginChart'), {
+    type: 'line',
+    data: {
+      labels: ['Q1 FY25', 'Q2 FY25', 'Q3 FY25', 'Q4 FY25', 'Q1 FY26', 'Q2 FY26', 'Q3 FY26', 'Q4 FY26'],
+      datasets: [{
+        label: '총 마진율 (%)',
+        data: [78.4, 75.1, 74.6, 73.0, 75.3, 75.1, 74.6, 73.4],
+        borderColor: '#e11d48',
+        backgroundColor: 'rgba(225,29,72,0.08)',
+        fill: true,
+        tension: 0.35,
+        pointRadius: 4,
+        pointBackgroundColor: '#e11d48'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: { display: true, text: 'NVIDIA 분기별 총 마진율 추이', font: { size: 13, weight: '700' }, color: '#1a1a1a' },
+        legend: { display: false }
+      },
+      scales: {
+        x: { grid: { display: false } },
+        y: { min: 68, max: 82, grid: { color: '#f0f0f0' }, ticks: { callback: v => v + '%' } }
+      }
+    }
+  });
+};
+
+// 3. AI Evolution Chart
+chartConfigs['aiEvolutionChart'] = () => {
+  new Chart(document.getElementById('aiEvolutionChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Training\n(학습)', 'Inference\n(추론)', 'Agentic AI\n(자율 에이전트)', 'Physical AI\n(로봇·자율주행)'],
+      datasets: [{
+        label: '성숙도',
+        data: [95, 60, 25, 8],
+        backgroundColor: ['#1a1a1a', '#e11d48', '#f43f5e', '#6b7280'],
+        borderRadius: 6
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: { display: true, text: 'AI 발전 단계별 성숙도 (추정치 %)', font: { size: 13, weight: '700' }, color: '#1a1a1a' },
+        legend: { display: false }
+      },
+      scales: {
+        x: { min: 0, max: 100, grid: { color: '#f0f0f0' }, ticks: { callback: v => v + '%' } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+};
+
+// 4. Decoupling Chart
+chartConfigs['decouplingChart'] = () => {
+  new Chart(document.getElementById('decouplingChart'), {
+    type: 'line',
+    data: {
+      labels: ['Oct', 'Nov', 'Dec', 'Jan 26', 'Feb 26'],
+      datasets: [{
+        label: 'AI 인프라 투자 (지수)',
+        data: [100, 112, 118, 130, 148],
+        borderColor: '#e11d48',
+        backgroundColor: 'rgba(225,29,72,0.05)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 4
+      }, {
+        label: '실물경제 지표 (지수)',
+        data: [100, 98, 95, 90, 85],
+        borderColor: '#6b7280',
+        backgroundColor: 'rgba(107,114,128,0.05)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 4,
+        borderDash: [5, 5]
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: { display: true, text: 'Great AI Decoupling — AI vs 실물경제 괴리', font: { size: 13, weight: '700' }, color: '#1a1a1a' },
+        legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16, font: { size: 10 } } }
+      },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#f0f0f0' } }
+      }
+    }
+  });
+};
+
+// 5. Sector Performance
+chartConfigs['sectorChart'] = () => {
+  new Chart(document.getElementById('sectorChart'), {
+    type: 'bar',
+    data: {
+      labels: ['에너지', '유틸리티', 'AI 반도체', '핀테크', '테크(전체)', '소비재', '주택건설', '신재생에너지'],
+      datasets: [{
+        label: '1개월 수익률 (%)',
+        data: [8.5, 7.2, 5.8, 6.1, 1.2, -2.4, -5.6, -12.3],
+        backgroundColor: ctx => ctx.raw >= 0 ? '#16a34a' : '#e11d48',
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: { display: true, text: '섹터별 1개월 수익률 (추정)', font: { size: 13, weight: '700' }, color: '#1a1a1a' },
+        legend: { display: false }
+      },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#f0f0f0' }, ticks: { callback: v => v + '%' } }
+      }
+    }
+  });
+};
+
+// 6. AI Investment Framework
+chartConfigs['aiFrameworkChart'] = () => {
+  new Chart(document.getElementById('aiFrameworkChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['AI 플랫폼 (반도체·칩)', 'AI 인프라 (전력·네트워크)', 'AI 소프트웨어 (선별)', '피지컬 AI (로봇)', '현금 포지션'],
+      datasets: [{
+        data: [30, 25, 15, 10, 20],
+        backgroundColor: ['#e11d48', '#1a1a1a', '#2563eb', '#f43f5e', '#6b7280'],
+        borderWidth: 2,
+        borderColor: '#ffffff'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: { display: true, text: '권장 포트폴리오 배분 (예시)', font: { size: 13, weight: '700' }, color: '#1a1a1a' },
+        legend: { position: 'bottom', labels: { boxWidth: 10, padding: 10, font: { size: 10 } } }
+      }
+    }
+  });
+};
+
+// ====== CHART OBSERVER ======
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+</script>
+</body>
+</html>
