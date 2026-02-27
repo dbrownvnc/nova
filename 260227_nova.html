@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시장의 역설: 완벽함이 거부당한 날 | 2026.02.26</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-alt: #fafafa;
+  --text: #1a1a1a;
+  --text-sub: #777777;
+  --accent: #e11d48;
+  --accent-light: #f43f5e;
+  --chart-1: #e11d48;
+  --chart-2: #1a1a1a;
+  --chart-3: #6b7280;
+  --chart-4: #2563eb;
+  --table-bg: #fafafa;
+  --table-header: #e11d48;
+  --border: #e5e5e5;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.container { max-width: 640px; margin: 0 auto; padding: 0 20px; }
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes countPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes accentLine {
+  from { width: 0; }
+  to { width: 100%; }
+}
+@keyframes headerTagIn {
+  from { opacity: 0; transform: translateX(-20px) scale(0.9); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes headerTitleIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes headerSubIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes headerBarGrow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Directional animations */
+.fade-in-left {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-in-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+.fade-in-right {
+  opacity: 0;
+  transform: translateX(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-in-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+.scale-in {
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.scale-in.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Stagger children */
+.stagger-children.visible > * {
+  animation: fadeInUp 0.5s ease forwards;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0s; opacity: 0; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.08s; opacity: 0; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.16s; opacity: 0; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.24s; opacity: 0; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.32s; opacity: 0; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.40s; opacity: 0; }
+.stagger-children > *:nth-child(7) { animation-delay: 0.48s; opacity: 0; }
+.stagger-children > *:nth-child(8) { animation-delay: 0.56s; opacity: 0; }
+
+/* Stat card counter animation */
+.stat-card.visible .value {
+  animation: countPulse 0.6s ease 0.3s;
+}
+
+/* ===== HEADER ===== */
+.header {
+  background: var(--text);
+  color: #fff;
+  padding: 48px 20px 40px;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 20% 80%, rgba(225,29,72,0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--accent);
+  transform-origin: left;
+  animation: headerBarGrow 1s ease 0.8s both;
+}
+.header .tag {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  animation: headerTagIn 0.6s ease 0.2s both;
+}
+.header h1 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+  position: relative;
+  animation: headerTitleIn 0.7s ease 0.4s both;
+}
+.header .subtitle {
+  font-size: 15px;
+  color: rgba(255,255,255,0.65);
+  font-weight: 300;
+  line-height: 1.6;
+  animation: headerSubIn 0.8s ease 0.7s both;
+}
+.header .meta {
+  margin-top: 20px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  animation: headerSubIn 0.8s ease 0.9s both;
+}
+
+/* ===== SECTIONS ===== */
+.section {
+  padding: 36px 0;
+  border-bottom: 1px solid var(--border);
+}
+.section:last-child { border-bottom: none; }
+
+.section-label {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.section h2 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 16px;
+  letter-spacing: -0.3px;
+  position: relative;
+}
+.section h2::after {
+  content: '';
+  display: block;
+  height: 2px;
+  background: var(--accent);
+  margin-top: 10px;
+  width: 0;
+  transition: width 0.8s ease 0.3s;
+}
+.section.fade-in.visible h2::after,
+.section.fade-in-left.visible h2::after {
+  width: 50px;
+}
+.section h3 {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 24px 0 10px;
+  color: var(--text);
+}
+p { margin-bottom: 14px; color: var(--text); }
+p.sub { color: var(--text-sub); font-size: 13.5px; }
+
+/* ===== HIGHLIGHT BOX ===== */
+.highlight-box {
+  background: linear-gradient(135deg, #fff5f7, #fef2f4);
+  border-left: 4px solid var(--accent);
+  padding: 18px 20px;
+  margin: 20px 0;
+  border-radius: 0 8px 8px 0;
+  position: relative;
+  overflow: hidden;
+}
+.highlight-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 3s ease infinite;
+  pointer-events: none;
+}
+.highlight-box strong { color: var(--accent); }
+
+.insight-box {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 8px;
+  transition: box-shadow 0.4s ease, transform 0.3s ease;
+}
+.insight-box:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  transform: translateY(-2px);
+}
+.insight-box .label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+/* ===== STAT GRID ===== */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 20px 0;
+}
+.stat-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.07);
+  border-color: var(--accent);
+}
+.stat-card .value {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--accent);
+  line-height: 1.2;
+  transition: transform 0.3s ease;
+}
+.stat-card:hover .value { transform: scale(1.05); }
+.stat-card .label {
+  font-size: 11.5px;
+  color: var(--text-sub);
+  margin-top: 4px;
+}
+.stat-card.positive .value { color: var(--chart-4); }
+.stat-card.negative .value { color: var(--accent); }
+
+/* ===== TABLE ===== */
+.table-wrap {
+  overflow-x: auto;
+  margin: 20px 0;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+thead th {
+  background: var(--table-header);
+  color: #fff;
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  white-space: nowrap;
+}
+tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--table-bg);
+  transition: background 0.2s ease;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: #f0f0f0; }
+
+/* ===== CHART ===== */
+.chart-container {
+  position: relative;
+  max-height: 340px;
+  margin: 20px 0;
+  background: var(--bg-alt);
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  transition: box-shadow 0.3s ease;
+}
+.chart-container:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+}
+.chart-container canvas {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  max-height: 300px;
+}
+.chart-container.chart-ready canvas {
+  opacity: 1;
+}
+.chart-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+/* ===== QUOTE ===== */
+.quote-block {
+  border-left: 3px solid var(--accent);
+  padding: 14px 18px;
+  margin: 24px 0;
+  background: #fef9fa;
+  font-family: 'Noto Serif KR', serif;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text);
+  transition: transform 0.3s ease;
+}
+.quote-block:hover { transform: translateX(4px); }
+.quote-block .author {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 12px;
+  color: var(--text-sub);
+  margin-top: 8px;
+}
+
+/* ===== DIVIDER ===== */
+.divider {
+  text-align: center;
+  margin: 32px 0;
+  color: var(--border);
+  font-size: 18px;
+  letter-spacing: 8px;
+}
+
+/* ===== TAG PILL ===== */
+.tag-pill {
+  display: inline-block;
+  background: #fef2f4;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin: 2px 4px 2px 0;
+}
+
+/* ===== PROGRESS BAR (new) ===== */
+.progress-bar-wrap {
+  margin: 12px 0;
+}
+.progress-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+.progress-track {
+  height: 8px;
+  background: #eee;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  width: 0;
+  transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s;
+}
+.visible .progress-fill { /* activated by observer */ }
+
+/* ===== TIMELINE (new) ===== */
+.timeline {
+  position: relative;
+  padding-left: 24px;
+  margin: 20px 0;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 20px;
+  padding-left: 12px;
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -22px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px var(--accent);
+  transition: transform 0.3s ease;
+}
+.timeline-item:hover::before { transform: scale(1.4); }
+.timeline-item .tl-title {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+.timeline-item .tl-desc {
+  font-size: 13px;
+  color: var(--text-sub);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  background: var(--text);
+  color: rgba(255,255,255,0.5);
+  padding: 32px 20px;
+  font-size: 11px;
+  text-align: center;
+  line-height: 1.8;
+  margin-top: 24px;
+}
+.footer a { color: var(--accent-light); }
+
+/* ===== SCROLL PROGRESS BAR (top) ===== */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--accent);
+  z-index: 9999;
+  width: 0%;
+  transition: width 0.1s linear;
+}
+</style>
+</head>
+<body>
+
+<!-- Scroll Progress -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="container">
+    <span class="tag">Market Analysis</span>
+    <h1>시장의 역설:<br>완벽함이 거부당한 날</h1>
+    <p class="subtitle">엔비디아 완벽한 실적에도 5.5% 급락 — 자본 대이동, HALO 전략, 그리고 AI 고용 혁명의 서막</p>
+    <div class="meta">
+      <span>📅 2026.02.26 (목)</span>
+      <span>📺 NOVA Real Invest 멤버미팅</span>
+      <span>📊 심층분석</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ===== 1. 시장 개요 ===== -->
+<div class="section fade-in">
+  <span class="section-label">Market Overview</span>
+  <h2>2월 26일 미국 증시 요약</h2>
+  <p>엔비디아가 사상 최고의 실적을 발표했음에도 불구하고 5.5% 이상 급락했다. 나스닥은 기술주 매도세에 -1.18%를 기록한 반면, 다우지수는 소폭 상승하며 기묘한 괴리를 보였다. 러셀2000은 퀀텀 컴퓨팅(아이온큐) 등 중소형주 강세에 힘입어 반등했다.</p>
+
+  <div class="stat-grid stagger-children">
+    <div class="stat-card negative">
+      <div class="value">-1.18%</div>
+      <div class="label">나스닥 종합</div>
+    </div>
+    <div class="stat-card positive">
+      <div class="value">+소폭</div>
+      <div class="label">다우존스</div>
+    </div>
+    <div class="stat-card negative">
+      <div class="value">-5.5%</div>
+      <div class="label">엔비디아(NVDA)</div>
+    </div>
+    <div class="stat-card positive">
+      <div class="value">상승</div>
+      <div class="label">러셀 2000</div>
+    </div>
+  </div>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">📊 주요 지수 및 종목 일간 수익률</div>
+    <canvas id="chart1" height="240"></canvas>
+  </div>
+</div>
+
+<!-- ===== 2. 엔비디아 실적 ===== -->
+<div class="section fade-in-left">
+  <span class="section-label">NVIDIA Earnings</span>
+  <h2>엔비디아: 완벽한 실적, 그러나 거부당한 이유</h2>
+
+  <h3>🏆 압도적인 실적 요약</h3>
+  <p>엔비디아는 역대급 분기 실적을 기록했다. 매출총이익률(Gross Margin) 75%, 데이터센터 매출 폭증, 그리고 다음 분기 가이던스 78빌리언 달러는 시장 기대를 완전히 초과했다. 젠슨 황 CEO는 "세계 최대의 네트워킹 회사"라 선언하며 NVLink 기반 네트워킹 매출 $11B을 최초 공개했다.</p>
+
+  <div class="stat-grid stagger-children">
+    <div class="stat-card">
+      <div class="value">75%</div>
+      <div class="label">매출총이익률</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">$78B</div>
+      <div class="label">다음 분기 가이던스</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">$11B</div>
+      <div class="label">네트워킹 매출 (신규 공개)</div>
+    </div>
+    <div class="stat-card negative">
+      <div class="value">-5.5%</div>
+      <div class="label">당일 주가 변동</div>
+    </div>
+  </div>
+
+  <h3>📉 그런데 왜 빠졌는가?</h3>
+
+  <div class="highlight-box fade-in">
+    <strong>핵심 키워드: "Prove Mode → What's Next Mode"</strong><br>
+    시장은 더 이상 과거 실적 증명(Prove)을 원하지 않는다. 이제 <strong>"앞으로 어떻게 될 것인가"</strong>를 묻고 있다. 75.2% 마진이 정점이 아닌지에 대한 우려가 핵심이다.
+  </div>
+
+  <!-- 하락 원인 타임라인 -->
+  <div class="timeline fade-in">
+    <div class="timeline-item">
+      <div class="tl-title">① 마진 정점(Peak Margin) 우려</div>
+      <div class="tl-desc">75.2% 매출총이익률은 역사적 최고치. 베라 루빈 세대 전환 시 R&D 비용 급등, TSMC 웨이퍼 단가 인상, 고대역폭 HBM 비용 증가로 마진 하락 불가피</div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-title">② 위스퍼 넘버(Whisper Number) 갭</div>
+      <div class="tl-desc">공식 컨센서스 EPS ~$10 vs 월가 헤지펀드 위스퍼 ~$12. 아무리 좋아도 비공식 기대치 충족이 불가능한 구조</div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-title">③ 블랙웰 과열 루머 (The Information)</div>
+      <div class="tl-desc">72프로세서 초고밀도 서버랙 과열 문제 미확인 보도. 서버랙 설계 전면 수정 가능성 → 대형 고객사 출하 지연 우려. 엔비디아 측 공식 부인 부재</div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-title">④ 게이밍 매출 감소</div>
+      <div class="tl-desc">데이터센터 매출 폭증 반면 게이밍 부문 축소 지속. 메모리 가격 급등 → 공급망 병목 미해결 시그널</div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-title">⑤ 무역 불확실성 심화</div>
+      <div class="tl-desc">트럼프 행정부 무역법 섹션 122 활용 관세 10~15%. 미중 정상회담(4월) 난항 보도. 대만·한국 공급망 의존 엔비디아에 치명적</div>
+    </div>
+  </div>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">📊 엔비디아 매출총이익률 추이 (분기별)</div>
+    <canvas id="chart2" height="220"></canvas>
+  </div>
+</div>
+
+<!-- ===== 3. 자본 대이동 ===== -->
+<div class="section fade-in-right">
+  <span class="section-label">Capital Rotation</span>
+  <h2>자본의 대이동: 하드웨어 → 소프트웨어</h2>
+
+  <p>엔비디아를 포함한 반도체·장비주 전반이 급락한 반면, 소프트웨어 섹터가 강한 반등을 보였다. 이것은 개인투자자가 아닌 <strong>헤지펀드 자금의 실질적 이동</strong>이다.</p>
+
+  <div class="highlight-box fade-in">
+    <strong>왜 소프트웨어로?</strong><br>
+    ① 소프트웨어 섹터가 50% 이상 하락한 상태 → 저가매수 기회<br>
+    ② 숏 스퀴즈(Short Squeeze) 임박 — 과도한 공매도 포지션 누적<br>
+    ③ 세일즈포스(CRM)의 호실적 + 자사주 매입 발표가 촉매 역할
+  </div>
+
+  <p><strong>돈이 흘러가는 곳:</strong> 소프트웨어 외에도 산업재(Industrials), 금융 섹터로 자금이 이동 중이다. 10년물 국채 금리 하락이 금융주 반등을 견인했다.</p>
+
+  <!-- 자금 흐름 프로그레스 바 -->
+  <div class="fade-in" style="margin:24px 0;">
+    <div class="progress-bar-wrap">
+      <div class="progress-label"><span>소프트웨어 (저가매수)</span><span>높음</span></div>
+      <div class="progress-track"><div class="progress-fill" data-width="85%" style="background:var(--accent);"></div></div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-label"><span>산업재 (딱따구리)</span><span>중상</span></div>
+      <div class="progress-track"><div class="progress-fill" data-width="70%" style="background:var(--chart-2);"></div></div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-label"><span>금융 (금리 하락 수혜)</span><span>중상</span></div>
+      <div class="progress-track"><div class="progress-fill" data-width="65%" style="background:var(--chart-4);"></div></div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-label"><span>에너지 (HALO)</span><span>꾸준</span></div>
+      <div class="progress-track"><div class="progress-fill" data-width="60%" style="background:var(--chart-3);"></div></div>
+    </div>
+  </div>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">📊 섹터별 1개월 수익률</div>
+    <canvas id="chart3" height="240"></canvas>
+  </div>
+</div>
+
+<!-- ===== 4. Block 감원 ===== -->
+<div class="section fade-in">
+  <span class="section-label">AI Disruption</span>
+  <h2>Block(잭 도시): 직원 40% 감원 — AI 고용 혁명의 서막</h2>
+
+  <p>핀테크 기업 Block(구 Square)의 잭 도시 CEO가 1만 명 중 약 4,000명을 감원한다고 발표했다. 이유는 단 하나 — <strong>AI 도입으로 더 적은 인원으로 더 많은 일이 가능</strong>해졌기 때문이다.</p>
+
+  <div class="stat-grid stagger-children">
+    <div class="stat-card negative">
+      <div class="value">40%</div>
+      <div class="label">감원 비율 (1만→6천명)</div>
+    </div>
+    <div class="stat-card positive">
+      <div class="value">+22.5%</div>
+      <div class="label">Block 주가 (장후)</div>
+    </div>
+    <div class="stat-card positive">
+      <div class="value">$3.2B</div>
+      <div class="label">2026 가이던스 상향</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">60%</div>
+      <div class="label">잔여 인력 비율</div>
+    </div>
+  </div>
+
+  <div class="quote-block scale-in">
+    "더 적은 인원으로 더 많은 일을 하고 있다. 생산성은 오히려 올라가고 있다."
+    <div class="author">— 잭 도시, Block CEO</div>
+  </div>
+
+  <div class="insight-box fade-in">
+    <div class="label">💡 투자 시사점</div>
+    <p style="margin:0">이 사례는 AI 효율성 혁명의 <strong>실체적 증거</strong>다. 컴퓨터 기반 업무를 하는 모든 기업에서 유사한 구조조정이 확산될 전망이다. 인건비 절감 → 마진 극대화 → 주가 상승의 공식이 작동하지만, 거시경제적으로는 실업률 상승 → 소비 위축 → 경기 둔화라는 파라독스를 내포한다.</p>
+  </div>
+</div>
+
+<!-- ===== 5. AI 파라독스 ===== -->
+<div class="section fade-in-left">
+  <span class="section-label">Economic Paradox</span>
+  <h2>AI 파라독스: 생산성 ↑ vs 고용 ↓</h2>
+
+  <p>Block의 감원 사례는 단일 기업 이슈가 아니다. 만약 AI 에이전트가 본격 보급되면 실업률이 5~10% 이상으로 치솟을 가능성이 있다. 미국 GDP의 70%를 차지하는 소비가 위축되면 경기침체로 이어진다.</p>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">📊 AI 파라독스: 기업 효율성 vs 거시경제 영향</div>
+    <canvas id="chart4" height="240"></canvas>
+  </div>
+
+  <h3>📌 연준(Fed)의 딜레마</h3>
+  <p>굴스비 시카고 연준 총재가 이날 발언에서 "데이터를 보고 금리를 내리는 게 맞는 것 같다"며 기존의 매파적 입장에서 한발 물러섰다. 고용 균열 + 생산성 개선이라는 상반된 시그널 속에 연준도 혼란스러운 상황이다.</p>
+
+  <div class="highlight-box fade-in">
+    <strong>채권 시장의 시그널:</strong><br>
+    • 10년물 국채 금리: 큰 폭 하락<br>
+    • 30년 모기지 금리: 최근 최저 수준<br>
+    → 시장은 이미 <strong>경기 둔화 시나리오</strong>를 선반영하기 시작했다.
+  </div>
+</div>
+
+<!-- ===== 6. 에이전틱 AI ===== -->
+<div class="section fade-in">
+  <span class="section-label">Agentic AI</span>
+  <h2>에이전틱 AI 시대와 베라 루빈 플랫폼</h2>
+
+  <p>젠슨 황은 "물리적 AI(Physical AI)의 변곡점에 도달했다"고 선언했다. AI는 이제 텍스트·이미지 생성 수준(1막: 트레이닝)을 넘어, 목표를 부여하면 자율적으로 다단계 작업을 수행하는 <strong>에이전틱 AI(2막: 추론/에이전트)</strong>로 진화하고 있다.</p>
+
+  <div class="insight-box scale-in">
+    <div class="label">🔮 베라 루빈(VERA RUBIN) 플랫폼</div>
+    <p style="margin:0;margin-bottom:8px">블랙웰의 후속작. GPU가 아닌 <strong>플랫폼·아키텍처 단위의 턴키 솔루션</strong>이다.</p>
+    <p style="margin:0">• 88개 코어 기반 단일 랙 시스템<br>
+    • 전력 효율 대폭 개선 + 괴물급 성능<br>
+    • 양산 시점: 공식 2026 하반기, 현실적 예상 <strong>2027년</strong><br>
+    • 토큰당 추론 비용 1/10로 압축 → 에이전틱 AI 본격 상용화 가능</p>
+  </div>
+
+  <p><strong>핵심 포인트:</strong> 현재 컴퓨팅 파워로는 에이전틱 AI를 구동하기에 100~1,000배 부족하다. 빅테크(MS, Google, Amazon, Meta)가 살을 깎으며 인프라에 투자하는 이유가 바로 이것이다. "선점하지 않으면 나락"이라는 절박함이 투자를 지속하게 만든다.</p>
+</div>
+
+<!-- ===== 7. OBPA 법안 ===== -->
+<div class="section fade-in-right">
+  <span class="section-label">Policy</span>
+  <h2>One Beautiful Bill Act: AI 투자 100% 감가상각</h2>
+
+  <p>미국 정부가 추진 중인 OBPA(원빅뷰티풀빌 법안)는 AI 및 데이터센터 투자에 대해 <strong>100% 보너스 감가상각(Bonus Depreciation)</strong>을 허용한다. 투자한 모든 금액을 즉시 전액 비용 처리할 수 있다.</p>
+
+  <div class="highlight-box fade-in">
+    <strong>기업에 미치는 영향:</strong><br>
+    AI·데이터센터에 투자한 금액 전액을 투자 당해년도에 비용 처리 가능 → 세금 부담 대폭 감소 → 투자 인센티브 극대화. 이는 Section 179의 확장 버전으로, 미국의 AI 기술 패권 유지 전략이다.
+  </div>
+
+  <p>이 법안 하나만으로도 빅테크 및 대기업의 AI 투자 동기는 충분하다. 베라 루빈 플랫폼 출시와 맞물리면, 토큰당 추론 비용 1/10 압축 + 100% 비용 처리라는 이중 혜택이 발생한다.</p>
+</div>
+
+<!-- ===== 8. 개별 종목 ===== -->
+<div class="section fade-in">
+  <span class="section-label">Stock Picks</span>
+  <h2>주요 개별 종목 이슈</h2>
+
+  <h3>🖥️ Dell Technologies (DELL)</h3>
+  <p>엔비디아 칩을 서버 시스템으로 조립·판매하는 Dell의 실적이 폭발적이었다. 수주 잔고(Backlog) $43B, 2027년까지 약 $50B 계약 확보. 자사주 매입 $10B + 배당금 20% 인상 발표로 장후 <strong>+11.26%</strong> 급등했다.</p>
+
+  <h3>☁️ CoreWeave</h3>
+  <p>매출은 양호하나 데이터센터 건설에 따른 막대한 투자 비용으로 순손실이 지속되고 있다. 계약 잔고 $66B이지만 대부분이 향후 지출해야 할 비용이다. 코스트의 한계를 극복할 수 있느냐가 관건.</p>
+
+  <h3>🎬 Netflix (NFLX)</h3>
+  <p>넷플릭스가 Warner Bros Discovery 인수를 포기했다. Paramount가 $31 위약금까지 부담하며 WBD를 가져가기로 하자, 넷플릭스는 "Nice to have, not Must have"로 깔끔하게 후퇴. 시장은 이를 호재로 반응하여 장후 <strong>약 10% 수직 상승</strong>. 목표가 $94~95 → $100 → $106 단계적 상승 시나리오.</p>
+
+  <h3>🔥 Vertiv (VRT) — 냉각 시스템</h3>
+  <p>AI 인프라 경쟁 속에서 냉각 시스템 기업 Vertiv는 꾸준한 퍼포먼스를 보여주고 있다. 자본비용 부담이 적은 인프라 파생 수혜주로 분류된다.</p>
+
+  <div class="table-wrap fade-in">
+    <table>
+      <thead>
+        <tr><th>종목</th><th>핵심 이슈</th><th>장후 등락</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>NVDA</strong></td><td>완벽 실적에도 마진 정점 우려</td><td style="color:var(--accent)">-5.5%</td></tr>
+        <tr><td><strong>DELL</strong></td><td>수주 잔고 $43B, 자사주매입 $10B</td><td style="color:var(--chart-4)">+11.26%</td></tr>
+        <tr><td><strong>Block (XYZ)</strong></td><td>40% 감원, AI 효율성 입증</td><td style="color:var(--chart-4)">+22.46%</td></tr>
+        <tr><td><strong>NFLX</strong></td><td>WBD 인수 포기 → 호재</td><td style="color:var(--chart-4)">~+10%</td></tr>
+        <tr><td><strong>CRM</strong></td><td>호실적 + 자사주 매입</td><td style="color:var(--chart-4)">상승</td></tr>
+        <tr><td><strong>IonQ</strong></td><td>매출 증가, 퀀텀 섹터 강세</td><td style="color:var(--chart-4)">상승</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== 9. 기관 목표가 ===== -->
+<div class="section fade-in-left">
+  <span class="section-label">Analyst Targets</span>
+  <h2>엔비디아 기관별 목표가 (2026.02.26)</h2>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">📊 기관별 엔비디아 목표가 ($)</div>
+    <canvas id="chart5" height="250"></canvas>
+  </div>
+
+  <p>대부분의 기관이 $240~$300 목표가에 매수(Buy) 의견을 유지하는 가운데, 단 한 곳만이 $140에 매도(Sell) 의견을 내놓았다. 이 기관은 <strong>회계 불투명성</strong>과 <strong>순환적 금융 리스크</strong>(엔비디아 → CoreWeave/OpenAI 투자 → GPU 재구매라는 돌려막기 구조)를 근거로 제시했다.</p>
+
+  <div class="highlight-box fade-in">
+    <strong>NOVA의 전망:</strong> 현재 주가 $184~185 (장후). 매수 구간은 <strong>$170~$178</strong>. 197불(≈200불) 돌파 시 상승 추세 전환. 178불에 1차 지지, 197불이 핵심 저항선. GTC 컨퍼런스(3월)가 다음 촉매제.
+  </div>
+</div>
+
+<!-- ===== 10. HALO 전략 ===== -->
+<div class="section fade-in">
+  <span class="section-label">Investment Strategy</span>
+  <h2>HALO 전략: 지금 당장 실행할 투자 프레임워크</h2>
+
+  <div class="insight-box scale-in">
+    <div class="label">🎯 HALO = Hard Asset + Low Obsolescence</div>
+    <p style="margin:0"><strong>실물 자산(Hard Asset)</strong> 중에서 <strong>기술이 발전해도 절대 도태되지 않는(Low Obsolescence)</strong> 비즈니스에 투자하는 전략이다.</p>
+  </div>
+
+  <p>에이전틱 AI가 아무리 발전해도 반드시 필요한 것들이 있다:</p>
+
+  <div class="stat-grid stagger-children">
+    <div class="stat-card">
+      <div class="value" style="font-size:20px">🏢</div>
+      <div class="label">부동산 / 데이터센터 부지</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="font-size:20px">⚡</div>
+      <div class="label">에너지 (전력 공급)</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="font-size:20px">❄️</div>
+      <div class="label">쿨링 시스템</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="font-size:20px">🏦</div>
+      <div class="label">금융 시스템</div>
+    </div>
+  </div>
+
+  <h3>📋 HALO 전략 실행 체크리스트</h3>
+  <div class="table-wrap fade-in">
+    <table>
+      <thead>
+        <tr><th>전략 축</th><th>대표 섹터/종목</th><th>시간</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>에너지</strong></td><td>ExxonMobil(XOM) 등</td><td>장기</td></tr>
+        <tr><td><strong>금융</strong></td><td>대형 은행주</td><td>장기</td></tr>
+        <tr><td><strong>인프라 파생</strong></td><td>Dell, Vertiv</td><td>중기</td></tr>
+        <tr><td><strong>SW 순환매</strong></td><td>CRM, 숏스퀴즈 후보</td><td>단기</td></tr>
+        <tr><td><strong>NVDA 분할매수</strong></td><td>$170~$178 구간</td><td>중장기</td></tr>
+        <tr><td><strong>산업재</strong></td><td>인더스트리얼</td><td>장기</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== 11. AVGO 기술적 분석 ===== -->
+<div class="section fade-in-right">
+  <span class="section-label">Technical Analysis</span>
+  <h2>AVGO (Broadcom) 기술적 분석</h2>
+
+  <p>현재 주가 $318 부근. 기관(Whale) 분석 기준 서포트 $315, 타겟 $335.</p>
+
+  <div class="table-wrap fade-in">
+    <table>
+      <thead>
+        <tr><th>레벨</th><th>가격</th><th>의미</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>저항 2</td><td>$337</td><td>상단 저항</td></tr>
+        <tr><td>저항 1</td><td>$329</td><td>1차 저항</td></tr>
+        <tr><td><strong>현재가</strong></td><td><strong>$318</strong></td><td>—</td></tr>
+        <tr><td style="color:var(--accent)">지지 1 (POC)</td><td style="color:var(--accent)">$315</td><td>핵심 지지 (당일 터치)</td></tr>
+        <tr><td>지지 2</td><td>$310</td><td>2차 지지</td></tr>
+        <tr><td>지지 3</td><td>$300</td><td>심리적 지지</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== 12. 기타 이슈 ===== -->
+<div class="section fade-in">
+  <span class="section-label">Additional Topics</span>
+  <h2>기타 주요 이슈</h2>
+
+  <h3>🏠 부동산: 공급 병목 심화</h3>
+  <p>미국 주택 시장은 데이터센터 기업들이 빌더가 확보한 부지를 70% 프리미엄으로 매입하면서 신규 주택 공급이 심각하게 제한되고 있다. 집값 폭락보다는 공급 부족으로 인한 가격 지지가 예상된다.</p>
+
+  <h3>🛡️ Anthropic, 국방부 요청 거부</h3>
+  <p>AI 기업 Anthropic이 국방부의 협력 요청을 거부했다. 트럼프 행정부의 대응이 주목되며, AI 산업 전반의 정부-민간 관계에 리스크 요인이 될 수 있다.</p>
+
+  <h3>🪙 비트코인 전망</h3>
+  <p>투기적 자산 성격상 금리 인하 없이는 상승 동력이 제한적. 단기 추가 하락 가능성 높으며, 기술적 차트 기반 스캘핑/스윙 접근이 유효하다.</p>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">📊 섹터별 3개월 수익률</div>
+    <canvas id="chart6" height="240"></canvas>
+  </div>
+</div>
+
+<!-- ===== 결론 ===== -->
+<div class="section fade-in">
+  <span class="section-label">Conclusion</span>
+  <h2>결론: AI 2막의 시작, 변동성은 기회다</h2>
+
+  <div class="quote-block scale-in">
+    "시장은 단기적으로는 투표 기계지만, 장기적으로는 저울이다."
+    <div class="author">— 벤저민 그레이엄</div>
+  </div>
+
+  <p>엔비디아의 5.5% 급락은 2025년 4월 관세 충격에 맞먹는 수준이다. 그때 이후 엔비디아는 회복했다. AI 산업은 끝난 것이 아니라 <strong>1막(트레이닝) → 2막(에이전틱 AI)</strong>으로 전환하는 과정이다.</p>
+
+  <div class="highlight-box fade-in">
+    <strong>핵심 메시지 5가지:</strong><br><br>
+    ① <strong>현금(Cash)이 왕이다</strong> — 변동성이 만드는 기회를 잡으려면 현금 확보가 필수<br>
+    ② <strong>HALO 전략</strong>으로 장기 포지션 구축 — 에너지, 금융, 인프라, 산업재<br>
+    ③ <strong>엔비디아 $170~178 분할 매수</strong> 구간 대기, GTC(3월) 촉매 기대<br>
+    ④ <strong>소프트웨어 숏스퀴즈</strong> 단기 기회 — 1~2주 내 자본 이동 포착<br>
+    ⑤ <strong>OBPA 100% 감가상각</strong> — AI 투자 가속화의 제도적 기반 확인
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<div class="footer">
+  본 문서는 NOVA Real Invest 2026.02.26 멤버미팅 내용을 기반으로 AI가 분석·정리한 자료입니다.<br>
+  투자 판단의 최종 책임은 투자자 본인에게 있습니다.<br>
+  원본 영상: <a href="https://www.youtube.com/watch?v=fRslw_41hgQ">YouTube 링크</a>
+</div>
+
+<script>
+// ===== Scroll Progress =====
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('scrollProgress').style.width = pct + '%';
+});
+
+// ===== Intersection Observers =====
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => {
+        e.target.classList.add('visible');
+        // Animate progress bars inside
+        e.target.querySelectorAll('.progress-fill').forEach(bar => {
+          bar.style.width = bar.dataset.width;
+        });
+      }, i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right, .scale-in, .stagger-children').forEach(el => fadeObs.observe(el));
+
+// ===== Chart Configs =====
+const chartConfigs = {};
+
+const defaultFont = { family: "'Noto Sans KR', sans-serif" };
+Chart.defaults.font.family = "'Noto Sans KR', sans-serif";
+
+chartConfigs['chart1'] = () => {
+  new Chart(document.getElementById('chart1'), {
+    type: 'bar',
+    data: {
+      labels: ['나스닥', 'S&P 500', '다우존스', '러셀2000', 'NVDA', 'DELL(장후)', 'Block(장후)', 'NFLX(장후)'],
+      datasets: [{
+        label: '일간 수익률 (%)',
+        data: [-1.18, -0.3, 0.2, 0.8, -5.5, 11.26, 22.46, 10],
+        backgroundColor: ctx => ctx.raw >= 0 ? '#2563eb' : '#e11d48',
+        borderRadius: 4, barPercentage: 0.7
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      animation: { duration: 1200, easing: 'easeOutQuart' },
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { grid: { color: '#f0f0f0' }, ticks: { callback: v => v + '%', font: { size: 11 } } },
+        x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 45 } }
+      }
+    }
+  });
+};
+
+chartConfigs['chart2'] = () => {
+  new Chart(document.getElementById('chart2'), {
+    type: 'line',
+    data: {
+      labels: ['Q1\'25', 'Q2\'25', 'Q3\'25', 'Q4\'25', 'Q1\'26', 'Q2\'26', 'Q3\'26', 'Q4\'26'],
+      datasets: [{
+        label: '매출총이익률 (%)',
+        data: [64.6, 70.1, 72.7, 73.0, 73.8, 75.0, 75.2, null],
+        borderColor: '#e11d48', backgroundColor: 'rgba(225,29,72,0.08)',
+        fill: true, tension: 0.3, pointRadius: 5, pointBackgroundColor: '#e11d48'
+      }, {
+        label: '시장 예상 (하락)',
+        data: [null, null, null, null, null, null, 75.2, 72],
+        borderColor: '#6b7280', borderDash: [6, 4],
+        tension: 0.3, pointRadius: 4, pointBackgroundColor: '#6b7280'
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      animation: { duration: 1400, easing: 'easeInOutQuart' },
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } },
+      scales: {
+        y: { min: 60, max: 80, grid: { color: '#f0f0f0' }, ticks: { callback: v => v + '%', font: { size: 11 } } },
+        x: { grid: { display: false }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+};
+
+chartConfigs['chart3'] = () => {
+  new Chart(document.getElementById('chart3'), {
+    type: 'bar',
+    data: {
+      labels: ['인포테크', '유틸리티', '에너지', '소재', '금융', '산업재', '소프트웨어', '헬스케어'],
+      datasets: [{
+        label: '1개월 수익률 (%)',
+        data: [10.2, 8.3, 6.5, 5.8, 5.1, 4.2, 3.8, 1.2],
+        backgroundColor: ['#e11d48', '#2563eb', '#e11d48', '#1a1a1a', '#1a1a1a', '#6b7280', '#f43f5e', '#6b7280'],
+        borderRadius: 4, barPercentage: 0.65
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      animation: { duration: 1200, easing: 'easeOutQuart', delay: ctx => ctx.dataIndex * 100 },
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: '#f0f0f0' }, ticks: { callback: v => v + '%', font: { size: 11 } } },
+        y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+};
+
+chartConfigs['chart4'] = () => {
+  new Chart(document.getElementById('chart4'), {
+    type: 'radar',
+    data: {
+      labels: ['기업 생산성', '마진 개선', '주가 상승', '고용 안정', '소비 성장', 'GDP 성장'],
+      datasets: [{
+        label: 'AI 도입 기업 관점',
+        data: [95, 90, 85, 25, 30, 40],
+        backgroundColor: 'rgba(225,29,72,0.15)', borderColor: '#e11d48', pointBackgroundColor: '#e11d48'
+      }, {
+        label: '거시경제 관점',
+        data: [50, 45, 50, 35, 30, 35],
+        backgroundColor: 'rgba(37,99,235,0.12)', borderColor: '#2563eb', pointBackgroundColor: '#2563eb'
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      animation: { duration: 1500, easing: 'easeOutQuart' },
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } },
+      scales: { r: { min: 0, max: 100, ticks: { stepSize: 25, font: { size: 10 } }, pointLabels: { font: { size: 11 } } } }
+    }
+  });
+};
+
+chartConfigs['chart5'] = () => {
+  new Chart(document.getElementById('chart5'), {
+    type: 'bar',
+    data: {
+      labels: ['기관A', '기관B', '기관C', '기관D', '기관E', '기관F', '기관G', '약세 기관'],
+      datasets: [{
+        label: '목표가 ($)',
+        data: [300, 283, 275, 270, 250, 250, 240, 140],
+        backgroundColor: ctx => ctx.dataIndex === 7 ? '#6b7280' : '#e11d48',
+        borderRadius: 4, barPercentage: 0.65
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      animation: { duration: 1200, easing: 'easeOutQuart', delay: ctx => ctx.dataIndex * 80 },
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { min: 100, grid: { color: '#f0f0f0' }, ticks: { callback: v => '$' + v, font: { size: 11 } } },
+        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+};
+
+chartConfigs['chart6'] = () => {
+  new Chart(document.getElementById('chart6'), {
+    type: 'bar',
+    data: {
+      labels: ['에너지', '소재', '인포테크', '유틸리티', '금융', '산업재', '헬스케어', '부동산'],
+      datasets: [{
+        label: '3개월 수익률 (%)',
+        data: [22, 19, 10, 8.3, 6.2, 5.5, 3.1, 2.0],
+        backgroundColor: ['#e11d48', '#1a1a1a', '#2563eb', '#2563eb', '#6b7280', '#6b7280', '#6b7280', '#6b7280'],
+        borderRadius: 4, barPercentage: 0.65
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      animation: { duration: 1200, easing: 'easeOutQuart' },
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { grid: { color: '#f0f0f0' }, ticks: { callback: v => v + '%', font: { size: 11 } } },
+        x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 45 } }
+      }
+    }
+  });
+};
+
+// ===== Chart Observer =====
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+</script>
+</body>
+</html>
