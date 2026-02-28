@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시험문제 10선 | PPI 쇼크 & 방어주 전략</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-alt: #fafafa;
+  --text: #1a1a1a;
+  --text-sub: #777777;
+  --accent: #e11d48;
+  --accent2: #f43f5e;
+  --border: #e5e5e5;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  font-size: 15px;
+}
+.fade-in {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+.header {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d0a0a 60%, #1a1a1a 100%);
+  padding: 48px 20px 40px;
+  text-align: center;
+}
+.header-label {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 5px 14px;
+  border-radius: 2px;
+}
+.header h1 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 24px;
+  color: #fff;
+  margin: 16px 0 8px;
+  line-height: 1.4;
+}
+.header p { color: rgba(255,255,255,0.5); font-size: 13px; }
+
+.content { max-width: 640px; margin: 0 auto; padding: 0 18px; }
+
+/* QUESTION */
+.q-card {
+  padding: 28px 0;
+  border-bottom: 1px solid var(--border);
+}
+.q-card:last-child { border-bottom: none; }
+.q-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.q-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--accent);
+  min-width: 36px;
+}
+.q-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+}
+.badge-easy { background: #dcfce7; color: #16a34a; }
+.badge-mid { background: #fef3c7; color: #b45309; }
+.badge-hard { background: #fee2e2; color: #dc2626; }
+.badge-ox { background: #ede9fe; color: #7c3aed; }
+.badge-mc { background: #e0f2fe; color: #0369a1; }
+.badge-short { background: #f3f4f6; color: #374151; }
+
+.q-text {
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  line-height: 1.7;
+}
+.q-options {
+  padding-left: 4px;
+}
+.q-option {
+  padding: 8px 14px;
+  margin: 4px 0;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: default;
+}
+
+/* ANSWERS SECTION */
+.divider {
+  text-align: center;
+  padding: 48px 0 16px;
+}
+.divider-line {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  padding: 10px 28px;
+  font-family: 'Noto Serif KR', serif;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 6px;
+}
+.divider-sub {
+  color: var(--text-sub);
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.a-card {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+.a-card:last-child { border-bottom: none; }
+.a-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.a-num {
+  font-family: 'Playfair Display', serif;
+  font-weight: 900;
+  color: var(--accent);
+  font-size: 18px;
+}
+.a-answer {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 15px;
+}
+.a-explain {
+  font-size: 13px;
+  color: var(--text-sub);
+  line-height: 1.7;
+  padding-left: 32px;
+}
+
+.footer {
+  background: var(--bg-alt);
+  padding: 28px 20px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  margin-top: 24px;
+}
+.footer p { font-size: 11px; color: var(--text-sub); }
+</style>
+</head>
+<body>
+
+<div class="header fade-in">
+  <div class="header-label">QUIZ — 10 QUESTIONS</div>
+  <h1>PPI 쇼크 & 방어주 전략<br>시험문제 10선</h1>
+  <p>쉬움 30% · 보통 50% · 어려움 20%</p>
+</div>
+
+<div class="content">
+
+<!-- ============ 문제 섹션 ============ -->
+
+<div class="q-card fade-in">
+  <div class="q-header">
+    <div class="q-num">01</div>
+    <span class="q-badge badge-ox">OX</span>
+    <span class="q-badge badge-easy">쉬움</span>
+  </div>
+  <div class="q-text">2월 27일 발표된 근원 PPI(식품·에너지 제외)는 예상치(0.3%)의 약 2배 이상인 0.8%를 기록했다.</div>
+  <div class="q-options">
+    <div class="q-option">⭕ O</div>
+    <div class="q-option">❌ X</div>
+  </div>
+</div>
+
+<div class="q-card fade-in">
+  <div class="q-header">
+    <div class="q-num">02</div>
+    <span class="q-badge badge-mc">객관식</span>
+    <span class="q-badge badge-easy">쉬움</span>
+  </div>
+  <div class="q-text">PPI(생산자물가지수) 상승이 CPI(소비자물가지수)에 전이되는 데 걸리는 시간은 대략 얼마인가?</div>
+  <div class="q-options">
+    <div class="q-option">① 약 1주일</div>
+    <div class="q-option">② 약 2개월</div>
+    <div class="q-option">③ 약 6개월</div>
+    <div class="q-option">④ 약 1년</div>
+  </div>
+</div>
+
+<div class="q-card fade-in">
+  <div class="q-header">
+    <div class="q-num">03</div>
+    <span class="q-badge badge-short">단답형</span>
+    <span class="q-badge badge-easy">쉬움</span>
+  </div>
+  <div class="q-text">2월 27일 금(Gold) 가격이 온스당 사상 최고치를 기록했다. 그 가격은 얼마인가?</div>
+</div>
+
+<div class="q-card fade-in">
+  <div class="q-header">
+    <div class="q-num">04</div>
+    <span class="q-badge badge-mc">객관식</span>
+    <span class="q-badge badge-mid">보통</span>
+  </div>
+  <div class="q-text">PPI 발표 이후 CME FedWatch 기준 5월 금리인하 확률은 어떻게 변화했는가?</div>
+  <div class="q-options">
+    <div class="q-option">① 65% → 45%로 소폭 하락</div>
+    <div class="q-option">② 65% → 15% 미만으로 급락</div>
+    <div class="q-option">③ 50% → 30%로 하락</div>
+    <div class="q-option">④ 변화 없음</div>
+  </div>
+</div>
+
+<div class="q-card fade-in">
+  <div class="q-header">
+    <div class="q-num">05</div>
+    <span class="q-badge badge-mc">객관식</span>
+    <span class="q-badge badge-mid">보통</span>
+  </div>
+  <div class="q-text">PPI가 급등했음에도 불구하고 10년물 국채금리가 오히려 하락한 이유로 가장 적절한 것은?</div>
+  <div class="q-options">
+    <div class="q-option">① 연준의 깜짝 금리인하 시사 발언</div>
+    <div class="q-option">② 중동 지정학적 리스크 확대에 따른 안전자산 선호(Flight to Safety)</div>
+    <div class="q-option">③ 미국 경제 성장률 호조에 따른 달러 강세</div>
+    <div class="q-option">④ 유럽 중앙은행의 금리인상 발표</div>
+  </div>
+</div>
+
+<div class="q-card fade-in">
+  <div class="q-header">
+    <div class="q-num">06</div>
+    <span class="q-badge badge-mc">객관식</span>
+    <span class="q-badge badge-mid">보통</span>
+  </div>
+  <div class="q-text">다음 중 '그레이트 로테이션(Great Rotation)' 국면에서 기관투자자들의 자금이 유입되고 있는 섹터로 <u>적절하지 않은</u> 것은?</div>
+  <div class="q-options">
+    <div class="q-option">① 필수소비재(Consumer Staples)</div>
+    <div class="q-option">② 유틸리티(Utilities)</div>
+    <div class="q-option">③ AI 소프트웨어(SaaS)</div>
+    <div class="q-option">④ 에너지(Energy)</div>
+  </div>
+</div>
+
+<div class="q-card fade-in">
+  <div class="q-header">
+    <div class="q-num">07</div>
+    <span class="q-badge badge-ox">OX</span>
+    <span class="q-badge badge-mid">보통</span>
+  </div>
+  <div class="q-text">Dell Technologies는 AI 서버 수요 증명과 2027년까지의 매출 파이프라인 확보 소식으로 당일 21.9% 급등했다.</div>
+  <div class="q-options">
+    <div class="q-option">⭕ O</div>
+    <div class="q-option">❌ X</div>
+  </div>
+</div>
+
+<div class="q-card fade-in">
+  <div class="q-header">
+    <div class="q-num">08</div>
+    <span class="q-badge badge-mc">객관식</span>
+    <span class="q-badge badge-mid">보통</span>
+  </div>
+  <div class="q-text">영국 MFS(Market Financial Solutions) 붕괴와 관련하여, 사모 대출(Private Credit) 시장의 구조적 문제는 무엇인가?</div>
+  <div class="q-options">
+    <div class="q-option">① 정부 규제로 인한 투자 제한</div>
+    <div class="q-option">② 사모펀드 간 자금 돌려막기 구조의 노출</div>
+    <div class="q-option">③ 암호화폐 투자 실패에 따른 손실</div>
+    <div class="q-option">④ 유럽 중앙은행의 긴축 정책</div>
+  </div>
+</div>
+
+<div class="q-card fade-in">
+  <div class="q-header">
+    <div class="q-num">09</div>
+    <span class="q-badge badge-short">단답형</span>
+    <span class="q-badge badge-hard">어려움</span>
+  </div>
+  <div class="q-text">3월 6일에 발표될 예정인 경제지표는 무엇이며, 이 지표가 부정적으로 나올 경우 시장에서 우려하는 경제 현상의 이름을 쓰시오. (두 가지 모두 기술)</div>
+</div>
+
+<div class="q-card fade-in">
+  <div class="q-header">
+    <div class="q-num">10</div>
+    <span class="q-badge badge-mc">객관식</span>
+    <span class="q-badge badge-hard">어려움</span>
+  </div>
+  <div class="q-text">방송에서 제시한 '바벨 전략' 하에서, 인플레이션·전쟁 리스크를 동시에 헤지하기 위한 포트폴리오 구성으로 가장 적절한 것은?</div>
+  <div class="q-options">
+    <div class="q-option">① 기술주 60% + 현금 40%</div>
+    <div class="q-option">② 방어주(에너지·소비재·유틸리티·금) 40% + 현금 20% + AI 우량주 20% + 기타 20%</div>
+    <div class="q-option">③ 금융주 50% + 채권 50%</div>
+    <div class="q-option">④ 비트코인 40% + 성장주 40% + 현금 20%</div>
+  </div>
+</div>
+
+<!-- ============ 정답 및 해설 섹션 ============ -->
+
+<div class="divider fade-in">
+  <div class="divider-line">📝 정답 및 해설</div>
+  <p class="divider-sub">아래로 스크롤하여 정답을 확인하세요</p>
+</div>
+
+<div class="a-card fade-in">
+  <div class="a-header">
+    <div class="a-num">01</div>
+    <div class="a-answer">정답: ⭕ O</div>
+  </div>
+  <div class="a-explain">근원 PPI는 예상치 0.3% 대비 0.8%로 발표되어 약 2.7배 높은 수치를 기록했다. 이는 관세 효과가 도매 단계에서 본격적으로 반영되기 시작했음을 의미한다.</div>
+</div>
+
+<div class="a-card fade-in">
+  <div class="a-header">
+    <div class="a-num">02</div>
+    <div class="a-answer">정답: ② 약 2개월</div>
+  </div>
+  <div class="a-explain">PPI(도매물가) → CPI(소비자물가) 전이에는 통상 약 2개월이 소요된다. 따라서 2월 말 PPI 쇼크는 4월 말~5월 초 CPI에 반영될 가능성이 높으며, 이후 PCE(개인소비지출)까지 파급된다.</div>
+</div>
+
+<div class="a-card fade-in">
+  <div class="a-header">
+    <div class="a-num">03</div>
+    <div class="a-answer">정답: 온스당 $5,263</div>
+  </div>
+  <div class="a-explain">금 가격은 중동 지정학적 리스크와 안전자산 선호 확대에 힘입어 사상 최고치인 온스당 $5,263을 기록했다. 동시에 원유도 배럴당 $67을 돌파했다.</div>
+</div>
+
+<div class="a-card fade-in">
+  <div class="a-header">
+    <div class="a-num">04</div>
+    <div class="a-answer">정답: ② 65% → 15% 미만으로 급락</div>
+  </div>
+  <div class="a-explain">PPI 발표 전 5월 금리인하 확률은 65%였으나, PPI 쇼크 이후 15% 미만으로 급락했다. 시장의 금리인하 기대가 사실상 소멸된 것이며, 실질적 인하 시점이 7월 이후로 밀렸다.</div>
+</div>
+
+<div class="a-card fade-in">
+  <div class="a-header">
+    <div class="a-num">05</div>
+    <div class="a-answer">정답: ② 중동 지정학적 리스크 확대에 따른 안전자산 선호</div>
+  </div>
+  <div class="a-explain">통상 인플레이션 상승 시 국채금리는 올라야 하지만, 이란을 중심으로 한 중동 전쟁 리스크가 크게 확대되면서 투자자들이 이자 수익을 포기하더라도 미국 국채(안전자산)로 피신하는 'Flight to Safety' 현상이 우세해졌기 때문이다.</div>
+</div>
+
+<div class="a-card fade-in">
+  <div class="a-header">
+    <div class="a-num">06</div>
+    <div class="a-answer">정답: ③ AI 소프트웨어(SaaS)</div>
+  </div>
+  <div class="a-explain">그레이트 로테이션 국면에서 기관투자자들은 기술주·금융주에서 자금을 빼내 필수소비재·유틸리티·에너지 등 방어주 섹터로 이동시키고 있다. AI 소프트웨어(SaaS)는 오히려 AI 대체 공포와 높은 밸류에이션 부담으로 자금 유출이 일어나는 섹터이다.</div>
+</div>
+
+<div class="a-card fade-in">
+  <div class="a-header">
+    <div class="a-num">07</div>
+    <div class="a-answer">정답: ⭕ O</div>
+  </div>
+  <div class="a-explain">Dell Technologies는 AI 서버 매출이 약 두 배로 성장하고 2027년까지 매출 파이프라인이 확보되었다는 실적 발표 이후 21.9% 급등했다. 이는 AI 투자가 '캐시 창출'로 증명된 사례다.</div>
+</div>
+
+<div class="a-card fade-in">
+  <div class="a-header">
+    <div class="a-num">08</div>
+    <div class="a-answer">정답: ② 사모펀드 간 자금 돌려막기 구조의 노출</div>
+  </div>
+  <div class="a-explain">신용등급이 낮은 기업들이 대형 은행 대신 사모 대출로 자금을 조달했는데, 이 사모펀드들도 자체 자금이 부족하여 서로 간에 자금을 돌려막기 하고 있었다. MFS 붕괴(£9.3억 규모)가 이 구조적 문제를 노출시켰으며, 바클레이즈·웰스파고·아폴로 등 대형 금융사도 연루되어 있다.</div>
+</div>
+
+<div class="a-card fade-in">
+  <div class="a-header">
+    <div class="a-num">09</div>
+    <div class="a-answer">정답: 고용보고서 / 스태그플레이션</div>
+  </div>
+  <div class="a-explain">3월 6일(금)에 미국 고용보고서가 발표될 예정이다. 이미 PPI 쇼크로 고물가가 확인된 상황에서 고용까지 악화될 경우, 물가 상승 + 경기 침체가 동시에 발생하는 '스태그플레이션(Stagflation)' 공포가 현실화될 수 있다.</div>
+</div>
+
+<div class="a-card fade-in">
+  <div class="a-header">
+    <div class="a-num">10</div>
+    <div class="a-answer">정답: ② 방어주 40% + 현금 20% + AI 우량주 20% + 기타 20%</div>
+  </div>
+  <div class="a-explain">방송에서 제시한 바벨 전략은 에너지·필수소비재·유틸리티·금 등 방어주를 약 40%, 현금 비중을 20%까지 확대하고, AI는 프리캐시플로우를 보유한 우량 기업만 선별 투자하는 구조다. 이는 인플레이션(물가 상승 시 가격결정력 보유 기업 수혜), 전쟁 리스크(실물자산 선호), 금융 리스크(현금 확보)를 동시에 헤지하는 전략이다.</div>
+</div>
+
+</div>
+
+<div class="footer fade-in">
+  <p>NOVA Real Invest 방송 분석 기반 시험문제 | 2026.02.27 기준</p>
+  <p>본 자료는 교육·정보 제공 목적이며 투자 권유가 아닙니다.</p>
+</div>
+
+<script>
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+</script>
+</body>
+</html>
