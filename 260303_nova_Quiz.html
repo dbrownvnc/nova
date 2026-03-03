@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA REAL INVEST — 시험문제 (2026.03.02)</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --c4: #2563eb;
+    --green: #16a34a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 15.5px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  header {
+    background: var(--text);
+    color: #fff;
+    padding: 24px 20px 20px;
+    text-align: center;
+    border-bottom: 4px solid var(--accent);
+  }
+  .header-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--accent2);
+    margin-bottom: 8px;
+  }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 6vw, 34px);
+    font-weight: 900;
+    line-height: 1.2;
+  }
+  .header-title span { color: var(--accent2); }
+  .header-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: #aaa;
+    margin-top: 8px;
+    letter-spacing: 0.1em;
+  }
+  .issue-bar {
+    background: var(--accent);
+    color: #fff;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-align: center;
+    padding: 7px 16px;
+  }
+  .container { max-width: 680px; margin: 0 auto; padding: 0 18px; }
+
+  /* TABS */
+  .tab-bar {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+    margin: 28px 0 0;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 10;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 12px 8px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--text2);
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+  }
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    font-weight: 500;
+  }
+  .tab-content { display: none; padding: 28px 0 40px; }
+  .tab-content.active { display: block; }
+
+  /* QUESTION CARDS */
+  .q-card {
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+    background: var(--bg2);
+  }
+  .q-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--text);
+    color: #fff;
+  }
+  .q-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--accent2);
+    min-width: 28px;
+    line-height: 1;
+  }
+  .q-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .q-type {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: #aaa;
+  }
+  .q-diff {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    padding: 1px 6px;
+    border-radius: 2px;
+    display: inline-block;
+  }
+  .diff-easy { background: var(--green); color: #fff; }
+  .diff-med { background: #d97706; color: #fff; }
+  .diff-hard { background: var(--accent); color: #fff; }
+  .q-body { padding: 16px; }
+  .q-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+  .q-options { list-style: none; }
+  .q-options li {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 6px;
+    font-size: 14px;
+    background: #fff;
+    cursor: default;
+    transition: background 0.15s;
+  }
+  .q-options li:last-child { margin-bottom: 0; }
+  .q-blank {
+    display: inline-block;
+    border-bottom: 2px solid var(--accent);
+    min-width: 80px;
+    color: var(--accent);
+    font-style: italic;
+  }
+  .q-ox { display: flex; gap: 12px; margin-top: 8px; }
+  .ox-btn {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid var(--border);
+    background: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    cursor: default;
+  }
+  .ox-o { border-color: var(--c4); color: var(--c4); }
+  .ox-x { border-color: var(--accent); color: var(--accent); }
+
+  /* ANSWER CARDS */
+  .a-card {
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+    background: #fff;
+  }
+  .a-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    background: var(--green);
+    color: #fff;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+  .a-header strong {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .a-body { padding: 14px 16px; }
+  .a-answer {
+    background: #f0fdf4;
+    border-left: 4px solid var(--green);
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    color: #166534;
+  }
+  .a-explain {
+    font-size: 14px;
+    color: var(--text2);
+    line-height: 1.65;
+  }
+  .a-explain strong { color: var(--text); }
+
+  /* SCORE INFO */
+  .score-info {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 16px;
+    margin-bottom: 24px;
+    font-size: 14px;
+  }
+  .score-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .score-row:last-child { border-bottom: none; }
+  .score-label { color: var(--text2); font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.05em; }
+  .score-val { font-weight: 600; }
+  .green { color: var(--green); }
+  .orange { color: #d97706; }
+  .red { color: var(--accent); }
+
+  footer {
+    background: var(--text);
+    color: #555;
+    text-align: center;
+    padding: 20px 18px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    line-height: 1.8;
+    margin-top: 10px;
+  }
+  footer span { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-label">NOVA REAL INVEST · QUIZ</div>
+  <div class="header-title">시험문제 &amp; 정답<span> · 10문항</span></div>
+  <div class="header-sub">2026년 3월 2일 방송 내용 기반 · 문제와 정답 분리 탭 구성</div>
+</header>
+<div class="issue-bar">총 10문항 &nbsp;·&nbsp; 객관식 4문 · 단답형 4문 · OX 2문 &nbsp;·&nbsp; 각 10점</div>
+
+<div class="container">
+
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('questions', this)">📝 문제지</button>
+    <button class="tab-btn" onclick="switchTab('answers', this)">✅ 정답 &amp; 해설</button>
+  </div>
+
+  <!-- ══════════════════════════════ 문제지 ══════════════════════════════ -->
+  <div id="questions" class="tab-content active">
+
+    <div class="score-info">
+      <div class="score-row"><span class="score-label">총 문항</span><span class="score-val">10문항</span></div>
+      <div class="score-row"><span class="score-label">배점</span><span class="score-val">문항당 10점 · 총 100점</span></div>
+      <div class="score-row"><span class="score-label">난이도 구성</span><span class="score-val"><span class="green">쉬움 3</span> · <span class="orange">보통 5</span> · <span class="red">어려움 2</span></span></div>
+      <div class="score-row"><span class="score-label">정답 확인</span><span class="score-val">'정답 &amp; 해설' 탭 클릭</span></div>
+    </div>
+
+    <!-- Q1 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">1</div>
+        <div class="q-meta">
+          <span class="q-type">객관식</span>
+          <span class="q-diff diff-easy">쉬움</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <p class="q-text">2026년 3월 2일(미국 현지), 중동 전쟁으로 다우지수가 장중 최대 얼마나 하락했는가?</p>
+        <ul class="q-options">
+          <li>① 200포인트</li>
+          <li>② 400포인트</li>
+          <li>③ 600포인트</li>
+          <li>④ 1,000포인트</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">2</div>
+        <div class="q-meta">
+          <span class="q-type">객관식</span>
+          <span class="q-diff diff-easy">쉬움</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <p class="q-text">이란 해군의 선박 격침으로 봉쇄된 해협의 이름은 무엇인가?</p>
+        <ul class="q-options">
+          <li>① 말라카 해협</li>
+          <li>② 수에즈 운하</li>
+          <li>③ 호르무즈 해협</li>
+          <li>④ 지브롤터 해협</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">3</div>
+        <div class="q-meta">
+          <span class="q-type">객관식</span>
+          <span class="q-diff diff-med">보통</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <p class="q-text">이번 발표에서 ISM 제조업 지불가격지수(Prices Paid)의 예상치는 60.6이었다. 실제 발표된 수치는 얼마였는가?</p>
+        <ul class="q-options">
+          <li>① 62.0</li>
+          <li>② 65.5</li>
+          <li>③ 68.0</li>
+          <li>④ 70.5</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">4</div>
+        <div class="q-meta">
+          <span class="q-type">객관식</span>
+          <span class="q-diff diff-hard">어려움</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <p class="q-text">엔비디아가 Corelink와 Lumentum에 투자한 핵심 이유는 무엇인가? 가장 적절한 것을 고르시오.</p>
+        <ul class="q-options">
+          <li>① 두 회사의 CPU 기술을 독점하기 위해</li>
+          <li>② 데이터센터 내 GPU 간 연결을 구리선(전기)에서 광학(빛)으로 전환하기 위해</li>
+          <li>③ 클라우드 소프트웨어 시장 점유율 확대를 위해</li>
+          <li>④ 방산 드론 기술 확보를 위해</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">5</div>
+        <div class="q-meta">
+          <span class="q-type">단답형</span>
+          <span class="q-diff diff-easy">쉬움</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <p class="q-text">방송에서 NOVA가 강조한 포트폴리오 전략 용어로, 딱딱한(실물) 자산과 프리캐시플로우 우량주를 함께 보유하는 전략을 무엇이라 부르는가?</p>
+        <p style="margin-top:10px; font-size:14px; color:#555;">정답: <span class="q-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> 전략</p>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">6</div>
+        <div class="q-meta">
+          <span class="q-type">단답형</span>
+          <span class="q-diff diff-med">보통</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <p class="q-text">포드(Ford)가 이날 7% 이상 하락한 두 가지 구체적 원인을 쓰시오.</p>
+        <p style="margin-top:10px; font-size:14px; color:#555;">①: <span class="q-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+        <p style="margin-top:8px; font-size:14px; color:#555;">②: <span class="q-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">7</div>
+        <div class="q-meta">
+          <span class="q-type">단답형</span>
+          <span class="q-diff diff-med">보통</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <p class="q-text">NOVA에 따르면, PPI(생산자물가지수) 수치가 CPI(소비자물가지수)에 전이되는 데 걸리는 시간은 약 얼마인가?</p>
+        <p style="margin-top:10px; font-size:14px; color:#555;">정답: 약 <span class="q-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> 개월</p>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">8</div>
+        <div class="q-meta">
+          <span class="q-type">단답형</span>
+          <span class="q-diff diff-hard">어려움</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <p class="q-text">방송에서 BlackRock과 EQT가 AES를 매입한 이유로 제시된 것은 무엇인가? 핵심 키워드를 포함하여 한 문장으로 서술하시오.</p>
+        <p style="margin-top:10px; font-size:14px; color:#555;">정답: <span class="q-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+      </div>
+    </div>
+
+    <!-- Q9 OX -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">9</div>
+        <div class="q-meta">
+          <span class="q-type">OX형</span>
+          <span class="q-diff diff-med">보통</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <p class="q-text">소프트웨어 주식이 고점 대비 50% 폭락한 경우, 이는 매크로(인플레이션·전쟁) 패닉에 의한 하락이므로 저가 매수 기회로 볼 수 있다.</p>
+        <div class="q-ox">
+          <div class="ox-btn ox-o">O</div>
+          <div class="ox-btn ox-x">X</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q10 OX -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">10</div>
+        <div class="q-meta">
+          <span class="q-type">OX형</span>
+          <span class="q-diff diff-med">보통</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <p class="q-text">트럼프 대통령이 "3~4주 내 전쟁 종전"을 언급한 배경에는, 미국의 재래식 무기(미사일) 재고가 총공격 기준으로 약 3~4주분에 불과하다는 루머성 분석이 있다.</p>
+        <div class="q-ox">
+          <div class="ox-btn ox-o">O</div>
+          <div class="ox-btn ox-x">X</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════ 정답 & 해설 ══════════════════════════════ -->
+  <div id="answers" class="tab-content">
+
+    <div class="score-info">
+      <div class="score-row"><span class="score-label">90~100점</span><span class="score-val green">우수 — 방송 핵심 완전 이해</span></div>
+      <div class="score-row"><span class="score-label">70~80점</span><span class="score-val orange">양호 — 주요 내용 파악</span></div>
+      <div class="score-row"><span class="score-label">~60점 이하</span><span class="score-val red">복습 필요 — 분석 파일 재독</span></div>
+    </div>
+
+    <!-- A1 -->
+    <div class="a-card">
+      <div class="a-header"><strong>Q1</strong>&nbsp; 객관식 · 쉬움 · 10점</div>
+      <div class="a-body">
+        <div class="a-answer">정답: ③ 600포인트</div>
+        <p class="a-explain">방송에서 "한때 다우지수가 600포인트까지 밀리면서 시장 전체가 패닉에 빠지는 듯 했다"고 직접 언급. 그러나 이후 전 지수가 회복하여 나스닥은 <strong>+0.36%</strong>, S&P 500은 <strong>+0.04%</strong>로 마감했다.</p>
+      </div>
+    </div>
+
+    <!-- A2 -->
+    <div class="a-card">
+      <div class="a-header"><strong>Q2</strong>&nbsp; 객관식 · 쉬움 · 10점</div>
+      <div class="a-body">
+        <div class="a-answer">정답: ③ 호르무즈 해협</div>
+        <p class="a-explain">이란 해군이 호르무즈 해협 통과 선박 한 척을 격침시키며 항로를 봉쇄. 이 해협으로 <strong>전 세계 원유 물동량의 약 20%</strong>가 통과하기 때문에 유가 급등의 직접 원인이 됐다. 약 150척의 선박이 발이 묶인 것으로 보도됐다.</p>
+      </div>
+    </div>
+
+    <!-- A3 -->
+    <div class="a-card">
+      <div class="a-header"><strong>Q3</strong>&nbsp; 객관식 · 보통 · 10점</div>
+      <div class="a-body">
+        <div class="a-answer">정답: ④ 70.5</div>
+        <p class="a-explain">예상치 60.6 대비 실제 <strong>70.5</strong>가 발표됐으며, 이는 <strong>11.5%p(약 11.5포인트)</strong> 급등한 수치다. 이 수치는 제조업체들이 지불하는 원자재·부품 가격의 급등을 의미하며, 인플레이션 재점화의 강력한 선행 지표로 해석된다. ISM 제조업 PMI 자체는 52.4로 양호했다는 점이 포인트.</p>
+      </div>
+    </div>
+
+    <!-- A4 -->
+    <div class="a-card">
+      <div class="a-header"><strong>Q4</strong>&nbsp; 객관식 · 어려움 · 10점</div>
+      <div class="a-body">
+        <div class="a-answer">정답: ② 광학(포토닉스) 기반 GPU 연결 기술 확보</div>
+        <p class="a-explain">데이터센터에서 수만 개의 GPU를 연결할 때 기존에는 <strong>구리선(전기신호)</strong>을 사용했다. 구리선은 저항 발생 → 열 발생 → 전력 손실 → 전송 속도 병목이라는 물리적 한계가 있다. 엔비디아는 이를 <strong>빛(광학 네트워킹)</strong>으로 대체하려는 전략을 추진 중이며, Corelink와 Lumentum에 각 $20억씩 투자한 것이 그 일환이다. 젠슨 황은 "빛의 속도가 필요하다"고 직접 표현했다.</p>
+      </div>
+    </div>
+
+    <!-- A5 -->
+    <div class="a-card">
+      <div class="a-header"><strong>Q5</strong>&nbsp; 단답형 · 쉬움 · 10점</div>
+      <div class="a-body">
+        <div class="a-answer">정답: 바벨(Barbell) 전략</div>
+        <p class="a-explain"><strong>바벨 전략</strong>은 역기(바벨)처럼 양 끝에 무게를 두는 전략이다. 한쪽은 안정적인 <strong>실물(하드) 자산</strong>(에너지, 방산, 물리 인프라), 다른 쪽은 <strong>프리캐시플로우가 풍부한 대형주</strong>(MSFT, AAPL 등)로 구성한다. 변동성이 큰 환경에서 위험을 분산하며 수익도 추구하는 포트폴리오 전략이다.</p>
+      </div>
+    </div>
+
+    <!-- A6 -->
+    <div class="a-card">
+      <div class="a-header"><strong>Q6</strong>&nbsp; 단답형 · 보통 · 10점</div>
+      <div class="a-body">
+        <div class="a-answer">정답: ① 하청 알루미늄 공장 화재 (약 1년간 납품 차질)<br>② 소프트웨어 결함으로 인한 트레일러 모듈 440만 대 리콜</div>
+        <p class="a-explain">두 악재가 동시에 발생하며 포드 주가는 <strong>7% 이상 급락</strong>했다. ① 하청 알루미늄 공장 화재로 납품이 약 1년간 불가해졌으며, ② 소프트웨어 결함으로 <strong>440만 대</strong> 규모의 리콜이 발표됐다. 여기에 알루미늄을 대부분 수입에 의존하기 때문에 유가·원자재 가격 상승에 따른 비용 부담까지 겹친다는 점이 추가 악재로 언급됐다.</p>
+      </div>
+    </div>
+
+    <!-- A7 -->
+    <div class="a-card">
+      <div class="a-header"><strong>Q7</strong>&nbsp; 단답형 · 보통 · 10점</div>
+      <div class="a-body">
+        <div class="a-answer">정답: 약 2개월</div>
+        <p class="a-explain">NOVA는 방송에서 "PPI가 나오고 나서 그 숫자가 CPI로 전이되는 데는 <strong>2개월 정도면 된다</strong>"고 명시했다. 이미 PPI가 예상의 3배 이상 급등한 상황에서, 2개월 후 CPI 발표 시 인플레이션이 크게 반영될 가능성이 높다고 경고했다. 이는 연준의 금리 인하 기대를 더욱 낮추는 요인이다.</p>
+      </div>
+    </div>
+
+    <!-- A8 -->
+    <div class="a-card">
+      <div class="a-header"><strong>Q8</strong>&nbsp; 단답형 · 어려움 · 10점</div>
+      <div class="a-body">
+        <div class="a-answer">정답: AI 데이터센터(AI 팩토리)를 가동하는 데 천문학적인 전력이 필요하기 때문이다.</div>
+        <p class="a-explain">BlackRock과 EQT가 에너지 인프라 기업 AES를 매입한 이유는 단순 에너지 투자가 아닌, <strong>AI 데이터센터의 폭발적인 전력 수요</strong>에 대응하기 위해서다. "AI 팩토리를 돌리기 위해 천문학적인 전력이 필요하다"는 것이 핵심. 이처럼 거대 자본(스마트 머니)이 에너지 인프라를 하드 에셋으로 매집하고 있다는 점이 투자 방향의 근거로 제시됐다.</p>
+      </div>
+    </div>
+
+    <!-- A9 OX -->
+    <div class="a-card">
+      <div class="a-header"><strong>Q9</strong>&nbsp; OX형 · 보통 · 10점</div>
+      <div class="a-body">
+        <div class="a-answer">정답: X (틀림)</div>
+        <p class="a-explain">NOVA는 소프트웨어 주식의 폭락이 <strong>매크로 패닉이 아닌 구조적 붕괴</strong>라고 명확히 구분했다. 매크로(전쟁, 인플레이션) 이슈라면 모든 섹터가 동일하게 하락하지만, 소프트웨어만 집중적으로 하락한 이유는 <strong>에이전틱 AI에 의한 B2B 소프트웨어 수요 대체</strong>라는 구조적 문제 때문이다. 이런 경우 저가 매수는 "가치 함정"이 될 수 있으므로 주의해야 한다고 강조했다.</p>
+      </div>
+    </div>
+
+    <!-- A10 OX -->
+    <div class="a-card">
+      <div class="a-header"><strong>Q10</strong>&nbsp; OX형 · 보통 · 10점</div>
+      <div class="a-body">
+        <div class="a-answer">정답: O (맞음)</div>
+        <p class="a-explain">방송에서 NOVA는 "미국이 총공격을 가할 경우 <strong>재래식 무기(미사일) 재고가 약 3~4주분밖에 없다</strong>는 루머에 가까운 분석이 있다"고 언급했다. 이 분석에 따르면 트럼프 대통령의 "3~4주 내 종전" 발언은 실제 작전 가능 기간을 반영한 것일 수 있다. 다만 이는 방송 내에서도 "카더라 통신", 루머적 성격의 분석임을 명시했으므로 공식 정보로 받아들여서는 안 된다.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div>NOVA REAL INVEST · QUIZ &nbsp;|&nbsp; <span>2026.03.02</span></div>
+  <div style="margin-top:4px;">본 문제는 방송 내용 기반 학습용으로 제작되었습니다.</div>
+</footer>
+
+<script>
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA REAL INVEST — 2026.03.02 마켓 브리핑</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --c1: #e11d48;
+    --c2: #1a1a1a;
+    --c3: #6b7280;
+    --c4: #2563eb;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--text);
+    color: #fff;
+    padding: 24px 20px 20px;
+    text-align: center;
+    border-bottom: 4px solid var(--accent);
+  }
+  .header-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 7vw, 40px);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .header-title span { color: var(--accent2); }
+  .header-sub {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: #aaa;
+    margin-top: 8px;
+  }
+  .header-date {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: #888;
+    margin-top: 6px;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── ISSUE LINE ── */
+  .issue-bar {
+    background: var(--accent);
+    color: #fff;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-align: center;
+    padding: 7px 16px;
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 680px; margin: 0 auto; padding: 0 18px; }
+
+  /* ── SECTION ── */
+  section { padding: 36px 0 28px; border-bottom: 1px solid var(--border); }
+  section:last-child { border-bottom: none; }
+
+  .section-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-eyebrow::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 5vw, 26px);
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 22px 0 8px;
+    padding-left: 12px;
+    border-left: 3px solid var(--accent);
+  }
+
+  p { margin-bottom: 14px; color: var(--text); font-size: 15.5px; }
+  p:last-child { margin-bottom: 0; }
+
+  /* ── PULL QUOTE ── */
+  .pull-quote {
+    border-left: 4px solid var(--accent);
+    margin: 24px 0;
+    padding: 16px 18px;
+    background: var(--bg2);
+  }
+  .pull-quote p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--text);
+    line-height: 1.5;
+    margin: 0;
+  }
+  .pull-quote cite {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--text2);
+    margin-top: 8px;
+    font-style: normal;
+  }
+
+  /* ── STAT CARDS ── */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 20px 0;
+  }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+  }
+  .stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 4px;
+  }
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.1;
+  }
+  .stat-value.up { color: var(--accent); }
+  .stat-value.down { color: var(--c4); }
+  .stat-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text2);
+    margin-top: 3px;
+  }
+
+  /* ── DATA TABLE ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+  .data-table thead tr {
+    background: var(--accent);
+    color: #fff;
+  }
+  .data-table th {
+    padding: 10px 12px;
+    text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+  }
+  .data-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .data-table tbody tr { background: var(--bg2); }
+  .data-table tbody tr:nth-child(even) { background: #f3f3f3; }
+  .td-up { color: var(--accent); font-weight: 600; font-family: 'IBM Plex Mono', monospace; }
+  .td-down { color: var(--c4); font-weight: 600; font-family: 'IBM Plex Mono', monospace; }
+  .td-mono { font-family: 'IBM Plex Mono', monospace; font-size: 13px; }
+
+  /* ── CHART CONTAINERS ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin: 20px 0;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas {
+    opacity: 1;
+  }
+  .chart-caption {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text2);
+    text-align: center;
+    margin-top: 6px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── SCENARIO BOX ── */
+  .scenario-grid { display: grid; gap: 10px; margin: 16px 0; }
+  .scenario-card {
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    background: var(--bg2);
+    position: relative;
+  }
+  .scenario-card::before {
+    content: attr(data-label);
+    position: absolute;
+    top: -9px;
+    left: 14px;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    padding: 2px 8px;
+  }
+  .scenario-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    margin-top: 4px;
+  }
+  .scenario-card p { font-size: 14px; color: var(--text2); margin: 0; }
+
+  /* ── PORTFOLIO TABLE ── */
+  .port-section { margin: 16px 0; }
+  .port-header {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 7px 12px;
+    color: #fff;
+    margin-bottom: 0;
+  }
+  .port-header.buy { background: var(--accent); }
+  .port-header.sell { background: var(--c4); }
+  .port-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+    font-size: 14px;
+  }
+  .port-item:last-child { border-bottom: none; }
+  .port-name { font-weight: 600; }
+  .port-reason { color: var(--text2); font-size: 13px; font-style: italic; }
+
+  /* ── WATCHLIST ── */
+  .watchlist {
+    background: var(--text);
+    color: #fff;
+    padding: 20px;
+    margin: 20px 0;
+  }
+  .watchlist-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 14px;
+  }
+  .watchlist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #333;
+  }
+  .watchlist-item:last-child { border-bottom: none; }
+  .watch-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    min-width: 20px;
+    margin-top: 2px;
+  }
+  .watch-text { font-size: 14px; line-height: 1.5; }
+  .watch-text strong { color: var(--accent2); }
+
+  /* ── DISCLAIMER ── */
+  .disclaimer {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text2);
+    font-family: 'IBM Plex Mono', monospace;
+    line-height: 1.6;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--text);
+    color: #555;
+    text-align: center;
+    padding: 24px 18px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    line-height: 1.8;
+  }
+  footer span { color: var(--accent); }
+
+  /* ── HIGHLIGHT ── */
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--c4); font-weight: 600; }
+  .tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    padding: 2px 7px;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  .tag.blue { background: var(--c4); }
+  .tag.gray { background: var(--c3); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-label">NOVA REAL INVEST · MARKET BRIEFING</div>
+  <div class="header-title">쌍둥이 위기의 충돌<br><span>전쟁·스태그플레이션·AI 구조 붕괴</span></div>
+  <div class="header-sub">Operation Epic Fury 이후 월가를 움직이는 세 가지 힘</div>
+  <div class="header-date">2026년 3월 2일 (미국 동부시각) · 월요일</div>
+</header>
+<div class="issue-bar">VOL. 2026 — NO. 03.02 &nbsp;·&nbsp; HARD ASSET SPECIAL EDITION</div>
+
+<div class="container">
+
+  <!-- ━━ 1. 시장 개요 ━━ -->
+  <section>
+    <div class="section-eyebrow">Market Snapshot</div>
+    <h2>전쟁 공포에도 증시는 '말아올렸다'</h2>
+    <p>
+      <span class="tag">Operation Epic Fury</span> 중동 전쟁 발발로 다우지수가 장중 최대 <strong class="hl">600포인트</strong> 급락하며 시장 전체가 패닉에 빠졌으나, 트럼프 대통령의 "3~4주 내 종전" 발언 이후 주요 지수가 모두 회복하며 마감했다.
+    </p>
+
+    <div class="stat-grid fade-in">
+      <div class="stat-card">
+        <div class="stat-label">NASDAQ</div>
+        <div class="stat-value up">+0.36%</div>
+        <div class="stat-note">낙폭 전 회복 후 상승 마감</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">S&P 500</div>
+        <div class="stat-value up">+0.04%</div>
+        <div class="stat-note">6,881 수준 / 7,000 돌파 미달</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">브렌트유</div>
+        <div class="stat-value up">+6.74%</div>
+        <div class="stat-note">장중 $82 / 한때 +13%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">10년물 국채금리</div>
+        <div class="stat-value up">4.04%</div>
+        <div class="stat-note">+2.17% 상승</div>
+      </div>
+    </div>
+
+    <div class="pull-quote fade-in">
+      <p>"전쟁은 자본주의 사회에서 가장 큰 이득의 수단이다. 겁먹을 이유가 전혀 없다."</p>
+      <cite>— NOVA, 2026.03.02 라이브 방송</cite>
+    </div>
+  </section>
+
+  <!-- ━━ 2. 지정학 위기 ━━ -->
+  <section>
+    <div class="section-eyebrow">Geopolitical Risk</div>
+    <h2>에픽 퓨리 작전 — 확전 시나리오 점검</h2>
+
+    <p>이란 최고지도자 하메네이 사망 이후 전면전 양상으로 비화 중. 이란은 키프로스 소재 영국 공군기지를 공격했으며, 이란 해군의 호르무즈 해협 선박 격침으로 전 세계 원유 물동량의 약 <strong class="hl">20%</strong>가 통과하는 항로가 사실상 봉쇄됐다.</p>
+
+    <h3>유가 시나리오</h3>
+
+    <div class="chart-container fade-in">
+      <canvas id="oilChart" height="220"></canvas>
+    </div>
+    <div class="chart-caption">출처: 방송 언급 수치 기반 시나리오 추정 / 실제 유가와 다를 수 있음</div>
+
+    <h3>전쟁 기간별 S&P 500 시나리오</h3>
+    <div class="scenario-grid fade-in">
+      <div class="scenario-card" data-label="SHORT · 확률 最高">
+        <h4>1~4주 내 종전</h4>
+        <p>S&P 단기 급락 후 V자 반등 가능. 7,000 재도전 시나리오. 러·우 전쟁 패턴 반복 예상.</p>
+      </div>
+      <div class="scenario-card" data-label="MID · 주시 필요">
+        <h4>1~2개월 지속</h4>
+        <p>유가 $80~$100 도달. 인플레이션 압력 심화. 연준 금리 동결 장기화.</p>
+      </div>
+      <div class="scenario-card" data-label="LONG · 위험 시나리오">
+        <h4>6개월 이상 장기화</h4>
+        <p>S&P 6,000선 하락 가능. 스태그플레이션 + AI 실업 복합 충격. 시장 이탈 투자자 속출 우려.</p>
+      </div>
+    </div>
+
+    <p style="margin-top:16px; font-size:14px; color:var(--text2);">
+      ⚠️ <strong>3월 5일 주의</strong> — 해상보험사들의 전쟁위험 담보 취소 조치 발효 예정. 호르무즈 통과 선박 약 150척 발이 묶인 상태. 물류 차질 장기화 여부 체크 필수.
+    </p>
+  </section>
+
+  <!-- ━━ 3. 인플레이션 & 연준 ━━ -->
+  <section>
+    <div class="section-eyebrow">Macro · Fed Policy</div>
+    <h2>스태그플레이션의 망령 — PMI 서프라이즈</h2>
+
+    <p>
+      ISM 제조업 PMI가 <strong class="hl">52.4</strong>로 예상치를 상회하며 경기 확장을 나타냈지만, 진짜 문제는 <strong>지불가격지수(Prices Paid)</strong>의 폭등이다. 예상치 60.6 대비 실제 <strong class="hl">70.5</strong>가 나오며, 한 달 만에 <strong class="hl">11.5%p</strong> 급등했다.
+    </p>
+
+    <div class="chart-container fade-in">
+      <canvas id="pmiChart" height="220"></canvas>
+    </div>
+    <div class="chart-caption">ISM 제조업 PMI vs. 지불가격지수 비교 (2026년 2월 발표 기준)</div>
+
+    <h3>연준 금리 인하 전망 악화</h3>
+    <p>
+      PPI(생산자물가지수)가 이미 예상 대비 3배 이상 급등한 데 이어, 전쟁으로 인한 유가 상승까지 겹치며 6월 금리 인하는 사실상 불가 판단. <strong class="hl">7월 인하 가능성(44.8%)</strong>도 희박한 상황이다. 10년물 국채금리가 <strong class="hl">4.2%를 돌파</strong>하면 금리 인상 우려까지 부상할 수 있다.
+    </p>
+
+    <div class="pull-quote fade-in">
+      <p>"PPI는 CPI로 전이되는 데 약 2개월이 걸린다. 지금의 숫자가 봄에 고스란히 물가 지표에 나타날 것이다."</p>
+      <cite>— NOVA, 방송 중</cite>
+    </div>
+
+    <table class="data-table fade-in">
+      <thead><tr><th>지표</th><th>예상치</th><th>실제치</th><th>괴리</th></tr></thead>
+      <tbody>
+        <tr><td>ISM 제조업 PMI</td><td class="td-mono">~51.0</td><td class="td-up">52.4</td><td class="td-up">↑ 양호</td></tr>
+        <tr><td>Prices Paid</td><td class="td-mono">60.6</td><td class="td-up">70.5</td><td class="td-up">↑ +11.5%p</td></tr>
+        <tr><td>PPI (전월)</td><td class="td-mono">예상 수준</td><td class="td-up">예상의 3배↑</td><td class="td-up">↑ 충격적</td></tr>
+        <tr><td>10년물 국채</td><td class="td-mono">-</td><td class="td-up">4.04%</td><td class="td-up">↑ +2.17%</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ━━ 4. AI & 테크 ━━ -->
+  <section>
+    <div class="section-eyebrow">Tech · AI Disruption</div>
+    <h2>엔비디아의 선전포고 vs. 소프트웨어 종말론</h2>
+
+    <h3>엔비디아 — 포토닉스(빛) 혁명</h3>
+    <p>
+      엔비디아가 <span class="tag">Corelink</span> <span class="tag">Lumentum</span> 두 회사에 각각 <strong class="hl">20억 달러(총 40억 달러)</strong>를 투자한다고 발표하며 주가가 <strong class="hl">$183.46</strong>까지 상승했다. 두 회사의 주가는 모두 <strong class="hl">10% 이상</strong> 급등.
+    </p>
+    <p>
+      핵심은 데이터센터 내 GPU 간 연결에 사용되는 구리선(전기신호)을 <strong>광학 네트워킹(빛 신호)</strong>으로 대체하는 기술이다. 구리선은 저항·발열·전력 손실이라는 물리적 한계를 가지며, 이를 극복하기 위해 "빛의 속도"를 도입하겠다는 것.
+    </p>
+    <div class="pull-quote fade-in">
+      <p>"AI 시대의 소프트웨어는 지능으로 구동되며, AI 팩토리에서 실시간으로 쏟아지는 토큰을 처리하기 위해서는 빛의 속도가 필요하다."</p>
+      <cite>— 젠슨 황 엔비디아 CEO</cite>
+    </div>
+
+    <h3>소프트웨어 섹터 구조적 붕괴</h3>
+    <p>
+      MongoDB 실적 발표 이후 가이던스 실망 및 경영진 교체 소식이 겹치며 약세 지속. IGV(소프트웨어 ETF)는 <strong class="hl">-23%</strong> 수준에서 기어가고 있으며, ServiceNow·Salesforce·Unity 등도 호실적에도 불구하고 가이던스가 지속적으로 부진하다. 이유는 에이전틱 AI가 B2B 소프트웨어 수요를 대체하기 시작했기 때문이다.
+    </p>
+    <p>Adobe 예시: ChatGPT 등장 이후 Adobe 툴의 사용률이 <strong class="hl">60% 감소</strong>했다는 통계가 나옴. 이것이 구조적 붕괴의 실체다.</p>
+
+    <div class="chart-container fade-in">
+      <canvas id="techChart" height="220"></canvas>
+    </div>
+    <div class="chart-caption">소프트웨어 ETF(IGV) vs. 엔비디아 상대 성과 (방송 언급 수치 기반 개념도)</div>
+  </section>
+
+  <!-- ━━ 5. 개별종목 ━━ -->
+  <section>
+    <div class="section-eyebrow">Stock Spotlight</div>
+    <h2>오늘의 급등·급락 종목</h2>
+
+    <table class="data-table fade-in">
+      <thead><tr><th>종목</th><th>등락</th><th>사유</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>AVAV (에어로바이런먼트)</strong></td>
+          <td><span class="td-up">+70% → -20%</span></td>
+          <td>드론 방산주 급등 후, 미 전쟁부의 계약 취소로 재입찰 발표. 매출의 50%에 달하는 계약 상실. 하루 등락폭 약 40%.</td>
+        </tr>
+        <tr>
+          <td><strong>Ford (포드)</strong></td>
+          <td><span class="td-down">-7%+</span></td>
+          <td>① 하청 알루미늄 공장 화재(약 1년간 납품 차질) ② 440만 대 리콜(소프트웨어 결함)</td>
+        </tr>
+        <tr>
+          <td><strong>AES (에너지 인프라)</strong></td>
+          <td><span class="td-up">급등</span></td>
+          <td>BlackRock + EQT의 매입 소식. AI 데이터센터 전력 수요 대응 목적.</td>
+        </tr>
+        <tr>
+          <td><strong>Nvidia</strong></td>
+          <td><span class="td-up">+~ ($183)</span></td>
+          <td>Corelink·Lumentum 각 $20억 투자 발표. 포토닉스 기반 AI 인프라 독점 전략.</td>
+        </tr>
+        <tr>
+          <td><strong>Microsoft / Apple</strong></td>
+          <td><span class="td-up">상승</span></td>
+          <td>프리캐시플로우 풍부한 대형주에 기관 스마트머니 집중 매수.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ━━ 6. 포트폴리오 전략 ━━ -->
+  <section>
+    <div class="section-eyebrow">Portfolio Strategy</div>
+    <h2>바벨 전략 — 딱딱한 것 vs. 줄어드는 것</h2>
+
+    <p>스마트머니(월가 대형 기관자본)는 디지털 해자를 불신하고, <strong class="hl">물리적 실물 자산(하드 에셋)</strong> 중심으로 포트폴리오를 재편 중이다. 방산·에너지·물리 인프라가 핵심.</p>
+
+    <div class="port-section fade-in">
+      <div class="port-header buy">▲ 비중 확대 — HARD ASSETS</div>
+      <div class="port-item"><span class="port-name">⚡ 에너지 인프라 (AES 등)</span><span class="port-reason">AI 전력 수요 + 유가 수혜</span></div>
+      <div class="port-item"><span class="port-name">🛡 방위산업 (드론·방산 ETF)</span><span class="port-reason">전쟁 장기화 대비</span></div>
+      <div class="port-item"><span class="port-name">🔒 사이버보안</span><span class="port-reason">제이미 다이먼 경고 — 사이버 테러 위협</span></div>
+      <div class="port-item"><span class="port-name">🧊 냉방·물리 인프라</span><span class="port-reason">데이터센터 냉각 수요</span></div>
+      <div class="port-item"><span class="port-name">💊 헬스케어 (LLY 등)</span><span class="port-reason">경기 방어 + 구조적 성장</span></div>
+      <div class="port-item"><span class="port-name">💰 프리캐시플로우 대형주 (MSFT, AAPL)</span><span class="port-reason">기관 집중 매수 타깃</span></div>
+    </div>
+
+    <div class="port-section fade-in" style="margin-top:12px;">
+      <div class="port-header sell">▼ 비중 축소 / 주의</div>
+      <div class="port-item"><span class="port-name">❌ B2B 소프트웨어 (IGV, NOW, CRM)</span><span class="port-reason">에이전틱 AI의 구조적 수요 대체</span></div>
+      <div class="port-item"><span class="port-name">❌ 항공·여행·레저</span><span class="port-reason">유가 급등 + 전쟁에 따른 운항 제한</span></div>
+      <div class="port-item"><span class="port-name">⚠️ 어도비 등 크리에이티브 SaaS</span><span class="port-reason">생성형 AI로 사용률 60% 감소</span></div>
+    </div>
+  </section>
+
+  <!-- ━━ 7. 주시 지표 ━━ -->
+  <section>
+    <div class="section-eyebrow">Watchlist</div>
+    <h2>앞으로 봐야 할 6가지 체크포인트</h2>
+
+    <div class="watchlist fade-in">
+      <div class="watchlist-title">NOVA MARKET WATCHLIST</div>
+      <div class="watchlist-item">
+        <span class="watch-num">01</span>
+        <span class="watch-text"><strong>3월 5일</strong> — 해상보험사 전쟁위험 담보 취소 발효. 호르무즈 선박 통행 정상화 여부 확인 필수.</span>
+      </div>
+      <div class="watchlist-item">
+        <span class="watch-num">02</span>
+        <span class="watch-text"><strong>유가 $80 돌파 여부</strong> — $80을 저항선으로 돌파 시 $100 목표. 인플레이션 압력 본격화 신호.</span>
+      </div>
+      <div class="watchlist-item">
+        <span class="watch-num">03</span>
+        <span class="watch-text"><strong>10년물 국채금리 4.2%</strong> — 이를 상향 돌파 시 금리 인상 우려 부상. 현 4.04% 고착화 여부 감시.</span>
+      </div>
+      <div class="watchlist-item">
+        <span class="watch-num">04</span>
+        <span class="watch-text"><strong>전략비축유(SPR) 방출 여부</strong> — 정부의 유가 통제 의지 측정 지표. 러·우 전쟁 때와 동일 패턴 적용.</span>
+      </div>
+      <div class="watchlist-item">
+        <span class="watch-num">05</span>
+        <span class="watch-text"><strong>헤즈볼라·후티·ISIS 동향</strong> — 이란의 프록시(대리) 세력 확전 여부. 제2전선 형성 가능성.</span>
+      </div>
+      <div class="watchlist-item">
+        <span class="watch-num">06</span>
+        <span class="watch-text"><strong>엔비디아 밸류체인 모멘텀</strong> — Corelink·Lumentum 외 연관 기업들의 동반 상승 추세 지속 여부.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ━━ 8. 투자 시사점 요약 ━━ -->
+  <section>
+    <div class="section-eyebrow">Investment Insight</div>
+    <h2>핵심 투자 시사점 종합</h2>
+
+    <h3>① 에너지 패러다임 전환</h3>
+    <p>전쟁이 유가를 올리지만, 미국은 석유·천연가스·원자력·태양광 등 <strong class="hl">다변화된 에너지 포트폴리오</strong>를 보유해 다른 나라 대비 충격이 제한적. 전통 에너지 중심 종목은 오히려 마진 확보가 유리하다.</p>
+
+    <h3>② AI = 물리 자산의 시대</h3>
+    <p>
+      AI의 핵심 병목은 이제 <strong class="hl">물리적 인프라</strong>다. 엔비디아의 포토닉스 투자는 "소프트웨어로 AI를 지배하는 시대"에서 "광학·에너지·반도체 하드웨어가 AI를 지배하는 시대"로의 전환을 상징한다. 하드 에셋이 곧 디지털 해자다.
+    </p>
+
+    <h3>③ 소프트웨어 저가 매수 함정 주의</h3>
+    <p>
+      50% 폭락한 소프트웨어 주식은 싸 보이지만, 이것은 <strong class="hl">구조적 붕괴</strong>이지 매크로 패닉이 아니다. 에이전틱 AI에 의한 B2B 수요 대체는 초기 단계일 가능성이 높으며, "떨어지는 칼날을 잡는 것"은 금물. 최소 수 주간 추세를 확인한 뒤 진입해야 한다.
+    </p>
+
+    <h3>④ 스태그플레이션 리스크 실질화</h3>
+    <p>
+      제조업 확장(PMI 52.4) + 유가 급등(인플레이션) + AI 실업 증가(경기침체 요인)가 동시에 전개되는 복합 위기다. 연준은 금리 인하 카드를 쓸 수 없는 구조가 됐고, 전쟁이 장기화되면 2~3개월 내 CPI에 그대로 반영될 것이다.
+    </p>
+
+    <div class="disclaimer fade-in">
+      ⚠ DISCLAIMER: 본 분석은 공개된 유튜브 방송 내용을 정리한 것으로, 투자 권유가 아닙니다. 모든 투자 결정은 본인 판단과 책임 하에 이루어져야 하며, 제시된 수치 일부는 방송 당시 발화된 추정치입니다. 전문 금융 자문사의 조언을 병행하시기 바랍니다.
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div>NOVA REAL INVEST · MARKET BRIEFING &nbsp;|&nbsp; <span>2026.03.02</span></div>
+  <div style="margin-top:6px;">이 문서는 엔터테인먼트 목적의 방송 내용을 요약·분석한 것입니다.</div>
+  <div style="margin-top:4px;">© 2026 Analysis Report · For Educational Use Only</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+// ── Fade-in Observer ──
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// ── Chart Configs ──
+const chartConfigs = {};
+
+chartConfigs['oilChart'] = () => {
+  new Chart(document.getElementById('oilChart'), {
+    type: 'bar',
+    data: {
+      labels: ['현재 (전쟁 초기)', '1~2개월 (장기화)', '6개월+ (최악)'],
+      datasets: [{
+        label: '브렌트유 예상 ($)',
+        data: [82, 100, 120],
+        backgroundColor: ['#e11d48cc', '#f43f5ecc', '#1a1a1acc'],
+        borderColor: ['#e11d48', '#f43f5e', '#1a1a1a'],
+        borderWidth: 2,
+        borderRadius: 3,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: { label: ctx => ` $${ctx.raw}` }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: false,
+          min: 70,
+          max: 130,
+          ticks: {
+            callback: v => '$' + v,
+            font: { family: 'IBM Plex Mono', size: 10 },
+            color: '#777'
+          },
+          grid: { color: '#e5e5e5' }
+        },
+        x: {
+          ticks: { font: { family: 'Source Serif 4', size: 11 }, color: '#555' },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+};
+
+chartConfigs['pmiChart'] = () => {
+  new Chart(document.getElementById('pmiChart'), {
+    type: 'bar',
+    data: {
+      labels: ['PMI 예상', 'PMI 실제', 'Prices Paid 예상', 'Prices Paid 실제'],
+      datasets: [{
+        label: '수치',
+        data: [51, 52.4, 60.6, 70.5],
+        backgroundColor: ['#6b7280cc', '#2563ebcc', '#6b7280cc', '#e11d48cc'],
+        borderColor: ['#6b7280', '#2563eb', '#6b7280', '#e11d48'],
+        borderWidth: 2,
+        borderRadius: 3,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.raw}` } }
+      },
+      scales: {
+        y: {
+          beginAtZero: false,
+          min: 45,
+          max: 80,
+          ticks: { font: { family: 'IBM Plex Mono', size: 10 }, color: '#777' },
+          grid: { color: '#e5e5e5' }
+        },
+        x: {
+          ticks: { font: { family: 'Source Serif 4', size: 10 }, color: '#555' },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+};
+
+chartConfigs['techChart'] = () => {
+  new Chart(document.getElementById('techChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Nvidia (YTD)', 'IGV 소프트웨어 ETF', 'Adobe (사용률 감소)', 'AMD'],
+      datasets: [{
+        label: '성과 (%)',
+        data: [15, -23, -40, -15],
+        backgroundColor: ctx => ctx.raw >= 0 ? '#2563ebcc' : '#e11d48cc',
+        borderColor: ctx => ctx.raw >= 0 ? '#2563eb' : '#e11d48',
+        borderWidth: 2,
+        borderRadius: 3,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.raw}%` } }
+      },
+      scales: {
+        y: {
+          ticks: {
+            callback: v => v + '%',
+            font: { family: 'IBM Plex Mono', size: 10 },
+            color: '#777'
+          },
+          grid: { color: '#e5e5e5' }
+        },
+        x: {
+          ticks: { font: { family: 'Source Serif 4', size: 10 }, color: '#555' },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+};
+
+// ── Chart Observer ──
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+</script>
+</body>
+</html>
