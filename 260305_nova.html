@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA Real Invest | 2026.03.05 시장 분석</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --chart1: #e11d48;
+    --chart2: #1a1a1a;
+    --chart3: #6b7280;
+    --chart4: #2563eb;
+    --table-bg: #fafafa;
+    --table-header: #e11d48;
+    --table-border: #e5e5e5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+  }
+
+  /* HERO */
+  .hero {
+    border-bottom: 3px solid var(--accent);
+    padding: 36px 0 28px;
+    margin-bottom: 32px;
+  }
+  .hero-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 6vw, 38px);
+    font-weight: 900;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .hero-meta {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--text2);
+    font-family: 'DM Mono', monospace;
+  }
+  .hero-meta span::before { content: '— '; color: var(--accent); }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 40px;
+  }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-left: 2px solid var(--accent);
+    padding-left: 8px;
+    margin-bottom: 12px;
+  }
+  .section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 14px;
+    line-height: 1.3;
+  }
+  .section p {
+    color: var(--text);
+    margin-bottom: 12px;
+    font-size: 14.5px;
+  }
+  .divider {
+    height: 1px;
+    background: var(--table-border);
+    margin: 36px 0;
+  }
+
+  /* STAT CARDS */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--table-border);
+    border-top: 3px solid var(--accent);
+    padding: 16px;
+  }
+  .stat-card .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 6px;
+  }
+  .stat-card .value {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-card .sub {
+    font-size: 11px;
+    color: var(--text2);
+    margin-top: 4px;
+  }
+  .stat-card.neutral { border-top-color: var(--chart4); }
+  .stat-card.neutral .value { color: var(--chart4); }
+  .stat-card.dark { border-top-color: var(--text); }
+  .stat-card.dark .value { color: var(--text); font-size: 20px; }
+
+  /* HIGHLIGHT BOX */
+  .highlight {
+    background: #fff5f7;
+    border-left: 4px solid var(--accent);
+    padding: 16px 18px;
+    margin: 18px 0;
+    font-size: 14px;
+  }
+  .highlight strong { color: var(--accent); }
+  .highlight.blue {
+    background: #eff6ff;
+    border-left-color: var(--chart4);
+  }
+  .highlight.blue strong { color: var(--chart4); }
+  .highlight.dark {
+    background: var(--text);
+    border-left-color: var(--accent);
+    color: #fff;
+  }
+  .highlight.dark strong { color: var(--accent2); }
+
+  /* PULLQUOTE */
+  .pullquote {
+    margin: 24px 0;
+    padding: 20px 0;
+    border-top: 1px solid var(--table-border);
+    border-bottom: 1px solid var(--table-border);
+  }
+  .pullquote p {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--text);
+  }
+  .pullquote cite {
+    display: block;
+    font-size: 11px;
+    color: var(--text2);
+    font-style: normal;
+    margin-top: 8px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 16px 0;
+  }
+  th {
+    background: var(--table-header);
+    color: #fff;
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+  td {
+    background: var(--table-bg);
+    border-bottom: 1px solid var(--table-border);
+    padding: 8px 12px;
+    vertical-align: top;
+  }
+  tr:hover td { background: #f5f5f5; }
+  .up { color: var(--accent); font-weight: 600; }
+  .down { color: var(--chart4); font-weight: 600; }
+
+  /* FORMULA BOX */
+  .formula {
+    background: var(--text);
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    margin: 20px 0;
+    font-family: 'Playfair Display', serif;
+  }
+  .formula .eq {
+    font-size: 16px;
+    letter-spacing: 0.04em;
+    line-height: 1.8;
+  }
+  .formula .eq span { color: var(--accent2); font-weight: 700; }
+  .formula small {
+    display: block;
+    margin-top: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    color: #aaa;
+    font-style: italic;
+  }
+
+  /* TIMELINE */
+  .timeline { margin: 16px 0; }
+  .tl-item {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+  }
+  .tl-date {
+    flex-shrink: 0;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 4px 8px;
+    min-width: 60px;
+    text-align: center;
+  }
+  .tl-content { font-size: 13.5px; }
+  .tl-content strong { display: block; margin-bottom: 2px; }
+
+  /* STRATEGY GRID */
+  .strat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+  .strat-card {
+    border: 1px solid var(--table-border);
+    padding: 14px;
+    font-size: 13px;
+  }
+  .strat-card .strat-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .strat-card ul { padding-left: 14px; }
+  .strat-card li { margin-bottom: 4px; }
+
+  /* CHART */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin: 16px 0;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas { opacity: 1; }
+
+  .chart-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 6px;
+  }
+
+  /* FOOTER */
+  footer {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 3px solid var(--text);
+    text-align: center;
+    font-size: 11px;
+    color: var(--text2);
+    font-family: 'DM Mono', monospace;
+    line-height: 1.8;
+  }
+  footer strong { color: var(--accent); }
+
+  /* PAGE RULE */
+  .issue-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--text2);
+    letter-spacing: 0.12em;
+    margin-bottom: 20px;
+  }
+  .issue-line hr { flex: 1; height: 1px; background: var(--table-border); margin: 0 10px; border: none; }
+
+  /* LIST STYLED */
+  .styled-list { list-style: none; padding: 0; margin: 12px 0; }
+  .styled-list li {
+    padding: 8px 0 8px 18px;
+    border-bottom: 1px solid var(--table-border);
+    font-size: 14px;
+    position: relative;
+  }
+  .styled-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 10px;
+    top: 11px;
+  }
+  .styled-list li:last-child { border-bottom: none; }
+
+  @media(max-width: 420px) {
+    .stat-grid { grid-template-columns: 1fr; }
+    .strat-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="issue-line">
+  <span>NOVA REAL INVEST</span>
+  <hr>
+  <span>2026.03.05 · WED</span>
+</div>
+
+<!-- HERO -->
+<div class="hero fade-in">
+  <div class="hero-label">Morgan Stanley TMT Conference Special</div>
+  <h1>공포를 삼킨<br><em>기술의 확신</em></h1>
+  <div class="hero-meta">
+    <span>나스닥 반등</span>
+    <span>젠슨 황 선언</span>
+    <span>에이전틱 AI 시대</span>
+    <span>브로드컴 실적</span>
+  </div>
+</div>
+
+<!-- 1. 시장 개요 -->
+<div class="section fade-in">
+  <div class="section-label">01 · Market Overview</div>
+  <h2>공포에서 복원력으로</h2>
+  <p>전일까지 지정학적 긴장(이란 분쟁, 관세 우려)으로 아시아 증시가 급락하고 코스피는 12% 폭락했으나, 3월 4일(수) 뉴욕증시는 강하게 반등. 세 가지 매크로 지표가 반등을 이끌었다.</p>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="label">ADP 민간고용 (2월)</div>
+      <div class="value">+63K</div>
+      <div class="sub">예상 +50K 대폭 상회 / 2025년 7월 이후 최고</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">서비스 PMI</div>
+      <div class="value">56.1</div>
+      <div class="sub">예상 53.0 압도 / 2022년 7월 이후 최고점</div>
+    </div>
+    <div class="stat-card neutral">
+      <div class="label">VIX 지수</div>
+      <div class="value">20</div>
+      <div class="sub">3번의 피크 이후 완화 국면 진입 중</div>
+    </div>
+    <div class="stat-card dark">
+      <div class="label">금리 인하 전망 (CME)</div>
+      <div class="value">9월 43%</div>
+      <div class="sub">3·4·6·7월 인하 시나리오 사실상 소멸</div>
+    </div>
+  </div>
+
+  <div class="highlight blue">
+    <strong>스콧 베센트 재무장관 CNBC 발언:</strong><br>
+    "15% 글로벌 관세는 이번 주 발효되나, <strong>5개월 내 이전 수준으로 정상화</strong>될 것." → 시장은 '5개월만 버티면 된다'는 가이던스로 해석.
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 2. ADP vs PMI 차트 -->
+<div class="section fade-in">
+  <div class="section-label">02 · Data Visual</div>
+  <div class="chart-title">ADP 민간고용 vs 서비스 PMI — 예상치 대비 실적</div>
+  <div class="chart-container fade-in">
+    <canvas id="chartMacro" height="220"></canvas>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 3. 젠슨 황 선언 -->
+<div class="section fade-in">
+  <div class="section-label">03 · Jensen Huang · Morgan Stanley TMT</div>
+  <h2>AI 중앙은행의 탈(脫)투자 선언</h2>
+
+  <p>NVIDIA CEO 젠슨 황이 샌프란시스코 모건 스탠리 TMT 컨퍼런스에서 시장의 판도를 바꿀 발언을 쏟아냈다.</p>
+
+  <div class="pullquote fade-in">
+    <p>"오픈AI에 대한 300억 달러 투자가 사실상 <strong>마지막 지분 투자</strong>가 될 것이다."</p>
+    <cite>— Jensen Huang, NVIDIA CEO · Morgan Stanley TMT 2026</cite>
+  </div>
+
+  <p>이 발언의 의미: 그동안 NVIDIA는 자사 GPU를 구매하는 AI 기업에 재투자하는 '순환 딜(circular deal making)' 구조로 비판받아왔다. 이 구조를 공식 종식하겠다고 선언한 것이다.</p>
+
+  <div class="highlight">
+    <strong>추가 포인트:</strong> 앤트로픽 100억 달러 추가 투자도 없을 것. 이유는 단순 — "오픈AI·앤트로픽 모두 IPO할 텐데, 왜 우리가 투자해야 하나?"
+  </div>
+
+  <p>이는 NVIDIA가 <strong>순수한 핵심 인프라 공급업자(pure hardware supplier)</strong>로 포지셔닝을 확정했음을 의미한다. 시장은 이를 환영 — 당일 NVDA <span class="up">+1.66%</span>, 장후 <span class="up">+0.33%</span> 추가 상승.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- 4. 공식 -->
+<div class="section fade-in">
+  <div class="section-label">04 · Jensen's Formula</div>
+  <h2>21세기를 지배하는 경제 방정식</h2>
+
+  <div class="formula fade-in">
+    <div class="eq">
+      <span>컴퓨팅 파워</span> = 매출<br>
+      매출 = <span>국가의 GDP 생산력</span><br>
+      ∴ AI 인프라 = <span>21세기의 원유</span>
+    </div>
+    <small>젠슨 황, 2026 Morgan Stanley TMT Conference</small>
+  </div>
+
+  <p>산업시대에는 석유 매장량이 국가 GDP를 결정했다. 앞으로는 AI 인프라(GPU 클러스터) 보유 여부가 국가의 생산력과 안보를 결정한다는 논리다. 젠슨 황은 "AI 인프라를 독자 구축 못한 국가는 제3세계로 전락할 것"이라고 경고했다.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- 5. 에이전틱 AI -->
+<div class="section fade-in">
+  <div class="section-label">05 · Agentic AI Era</div>
+  <h2>토큰 폭발 — 100만 배의 수요</h2>
+
+  <p>AI 발전 단계별 컴퓨팅 파워 수요는 기하급수적으로 증가한다.</p>
+
+  <table>
+    <thead>
+      <tr><th>단계</th><th>방식</th><th>토큰 소비</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1단계</td><td>생성형 AI (Generative)</td><td>기준 (1x)</td></tr>
+      <tr><td>2단계</td><td>추론 AI (Reasoning)</td><td>수십 ~ 수백 배</td></tr>
+      <tr><td>3단계</td><td><strong>에이전틱 AI (Agentic)</strong></td><td class="up"><strong>100만 배 이상</strong></td></tr>
+    </tbody>
+  </table>
+
+  <p>에이전틱 AI는 사람처럼 '기획 → 검색 → 코딩 → 실행 → 구매'를 자율 수행한다. 이를 처리하려면 수백만 개의 토큰이 필요하며, 이는 현재 수준의 100만 배 이상 컴퓨팅 파워를 요구한다.</p>
+
+  <div class="highlight dark fade-in">
+    <strong>베라 루빈(Vera Rubin) 시스템:</strong> NVIDIA 차세대 GPU. 블랙웰 이후 세대로 전력·발열 효율 개선 + 성능 향상. 3기가와트(GW) 규모 출력 가능. 경쟁자 없음.
+  </div>
+
+  <div class="chart-title" style="margin-top:16px;">에이전틱 AI 전환 — 단계별 컴퓨팅 수요 증폭 (로그 스케일 개념)</div>
+  <div class="chart-container fade-in">
+    <canvas id="chartAgentic" height="220"></canvas>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 6. 브로드컴 실적 -->
+<div class="section fade-in">
+  <div class="section-label">06 · Broadcom Earnings</div>
+  <h2>인프라 제왕의 증명 — AVGO</h2>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="label">매출 성장</div>
+      <div class="value">+106%</div>
+      <div class="sub">전년 동기 대비 2배 이상 성장</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">자사주 매입</div>
+      <div class="value">$100B</div>
+      <div class="sub">캐시 과잉으로 자사주 매입 발표</div>
+    </div>
+    <div class="stat-card neutral">
+      <div class="label">2027년 매출 목표</div>
+      <div class="value">$100B+</div>
+      <div class="sub">수주 계약 이미 확보 완료</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">장후 상승</div>
+      <div class="value">+5.15%</div>
+      <div class="sub">실적 발표 후 장외 즉각 반응</div>
+    </div>
+  </div>
+
+  <p>브로드컴은 구글의 TPU/TFU 등 커스텀 AI 칩(ASIC)을 공급하며 AI 인프라 수혜를 직접 흡수 중. 마이크론도 HBM(고대역 메모리)을 <strong>2026년 완판, 2028년까지 계약 완료</strong>한 상태다.</p>
+
+  <div class="chart-title" style="margin-top:16px;">반도체 인프라 기업 주요 지표 비교</div>
+  <div class="chart-container fade-in">
+    <canvas id="chartSemiconductor" height="220"></canvas>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 7. 모더나 -->
+<div class="section fade-in">
+  <div class="section-label">07 · Moderna · Legal Overhang Cleared</div>
+  <h2>법적 불확실성 해소 = 알파 실현</h2>
+
+  <p>모더나(mRNA)는 LNP(지질나노입자) 기술 특허 소송을 <strong>22억 5천만 달러 합의</strong>로 종결. 이 소송은 오래된 '법적 오버행(주가 억압 요소)'이었으며, 합의 직후 당일 <span class="up">+15.99%</span> 급등.</p>
+
+  <div class="highlight">
+    <strong>LNP 기술이란?</strong> mRNA 백신 약물을 세포 내로 전달하는 나노입자 기술. 코로나 백신뿐 아니라 희귀질환·암 치료제 개발의 핵심 플랫폼으로 활용된다.
+  </div>
+  <p>모더나는 이 플랫폼으로 암치료제·희귀질환 치료제 파이프라인을 확장 중. 법적 불확실성 해소로 기업 가치 재평가 가능성 주목.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- 8. K경제 -->
+<div class="section fade-in">
+  <div class="section-label">08 · K-Economy · Consumer Bifurcation</div>
+  <h2>K자형 소비 양극화의 심화</h2>
+
+  <p>미국 소비 시장은 명확히 두 갈래로 분화되고 있다 — 최고급(하이엔드) 또는 최저가(할인점). 중간 프리미엄 브랜드는 소멸 압력을 받는 중.</p>
+
+  <table>
+    <thead>
+      <tr><th>기업</th><th>성과</th><th>이유</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>RH (Restoration Hardware)</strong></td><td class="up">+8%</td><td>초고가 하이엔드 가구 — 부유층 수요 유지</td></tr>
+      <tr><td><strong>Target</strong></td><td class="up">+동일매장 +9%</td><td>중산층의 하향 소비 이동, 배당 11% 인상</td></tr>
+      <tr><td><strong>McDonald's</strong></td><td class="up">객단가 상승</td><td>중산층이 패밀리 레스토랑 대신 맥도날드로</td></tr>
+    </tbody>
+  </table>
+
+  <div class="highlight blue">
+    <strong>트레이드 다운(Trade-Down) 현상:</strong> 중산층이 허리띠를 조이며 소비는 줄이되 완전히 포기하지 않고, 더 저렴한 채널로 이동. 할인점 채널의 실적이 구조적으로 개선되는 구조.
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 9. AI 구조조정 = 마진 익스팬션 -->
+<div class="section fade-in">
+  <div class="section-label">09 · AI-Driven Margin Expansion</div>
+  <h2>인력 감축 → 마진 확대의 교차점</h2>
+
+  <p>블락(Block): 직원 1만 명 중 4,000명 감원 발표 → 주가 <span class="up">+20%</span> 폭등. AI 도입으로 인력 감축 후에도 영업이 정상 작동함을 증명한 사례.</p>
+
+  <div class="pullquote fade-in">
+    <p>"인력을 해고해도 영업마진이 늘어난다. 이 교차점이 지금 온 것이다."</p>
+    <cite>— 방송 핵심 인사이트</cite>
+  </div>
+
+  <p>투자 아이디어: <strong>대규모 인력 감축을 단행하는 기업 주목</strong>. 단기 감원비용 이후 지속적 마진 익스팬션(Margin Expansion)이 발생하며, 이는 EPS 증가 → 주가 상승으로 이어진다.</p>
+
+  <div class="chart-title">AI 구조조정: 인건비(OpEx) vs 영업마진 교차 개념</div>
+  <div class="chart-container fade-in">
+    <canvas id="chartMargin" height="220"></canvas>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 10. 할로 트레이딩 -->
+<div class="section fade-in">
+  <div class="section-label">10 · Halo Trading Strategy</div>
+  <h2>딱딱하고 무거운 것이 이긴다</h2>
+
+  <p>골드만삭스가 주목한 전략. '기술적 진부화(AI 대체)가 낮은' 하드 자산·제조업 섹터가 AI 하이테크 대비 <span class="up">+25% 아웃퍼포먼스</span> 달성 중.</p>
+
+  <ul class="styled-list">
+    <li>GE 에어로스페이스 — AI가 항공기 터빈을 만들 수 없다</li>
+    <li>방산 / 중공업 — 물리적 제조 = AI 대체 불가</li>
+    <li>유틸리티 / 인프라 — 전력·냉각 수요 폭발 수혜</li>
+    <li>실물자산 전반 — 지정학 리스크 헤지 기능</li>
+  </ul>
+</div>
+
+<div class="divider"></div>
+
+<!-- 11. 바벨 전략 -->
+<div class="section fade-in">
+  <div class="section-label">11 · Portfolio Strategy</div>
+  <h2>바벨(Barbell) 포트폴리오</h2>
+
+  <div class="strat-grid">
+    <div class="strat-card">
+      <div class="strat-title">⚡ 성장의 핵 (Growth Core)</div>
+      <ul>
+        <li>NVIDIA (NVDA)</li>
+        <li>Broadcom (AVGO)</li>
+        <li>Micron (MU)</li>
+        <li>Western Digital / SanDisk</li>
+        <li>SK하이닉스 / 삼성전자</li>
+      </ul>
+    </div>
+    <div class="strat-card">
+      <div class="strat-title">🪨 방어의 축 (Defense Axis)</div>
+      <ul>
+        <li>GE 에어로스페이스</li>
+        <li>할인 리테일 (RH, Target)</li>
+        <li>실물자산 / 중공업</li>
+        <li>Moderna (법적 클리어)</li>
+        <li>드라이파우더 20~30%</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <strong>크립토 주목:</strong> 도지코인 <span class="up">+15%</span>, 코인베이스 <span class="up">+15.3%</span>. 차트 지지선 반등이나 지속성은 불확실. 조심스러운 접근 권고.
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 12. 포워드 캘린더 -->
+<div class="section fade-in">
+  <div class="section-label">12 · Forward Calendar</div>
+  <h2>앞으로의 주요 일정</h2>
+
+  <div class="timeline">
+    <div class="tl-item fade-in">
+      <div class="tl-date">3월 7일</div>
+      <div class="tl-content"><strong>정부 고용통계 (NFP)</strong>예상 +6만 명 내외. 연준 금리정책 판단 기준. 실업률 수치도 병행 주목.</div>
+    </div>
+    <div class="tl-item fade-in">
+      <div class="tl-date">3월 16일</div>
+      <div class="tl-content"><strong>NVIDIA GTC 2026</strong>베라 루빈 시스템 공식 공개 예정. 피지컬 AI·로보틱스 청사진 발표 가능. 행사 전후 반도체 섹터 변동성 확대 — 기회로 활용.</div>
+    </div>
+    <div class="tl-item fade-in">
+      <div class="tl-date">3월 20일</div>
+      <div class="tl-content"><strong>트리플 위칭 데이 (Triple Witching)</strong>주식·지수·ETF 옵션 동시 만기. 역대급 파생상품 만기. 극심한 변동성 예고 → 드라이파우더 20~30% 비축 후 진입 기회 포착.</div>
+    </div>
+    <div class="tl-item fade-in">
+      <div class="tl-date">5개월 후</div>
+      <div class="tl-content"><strong>관세 정상화 가이던스 (베센트)</strong>현 15% 글로벌 관세가 이전 수준으로 정상화될 것이라는 재무장관 발언. 불확실성의 시간적 한계 설정.</div>
+    </div>
+    <div class="tl-item fade-in">
+      <div class="tl-date">9월</div>
+      <div class="tl-content"><strong>연준 금리 인하 첫 인하 시나리오</strong>CME FedWatch 43% 확률. PPI·PCE·ADP 호조로 상반기 인하 가능성 거의 소멸.</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 13. 핵심 요약 -->
+<div class="section fade-in">
+  <div class="section-label">13 · Key Takeaways</div>
+  <h2>오늘 방송의 핵심 5가지</h2>
+
+  <ul class="styled-list">
+    <li><strong>NVIDIA의 탈투자 선언</strong> — 순수 인프라 공급자로 전환. 캐시를 R&D·제품 개발에 집중. AI 중앙은행에서 AI 인프라 국가로 진화.</li>
+    <li><strong>에이전틱 AI = GPU 수요 100만 배</strong> — 베라 루빈 시스템이 이를 커버. 수요 폭발은 이미 시작됐다.</li>
+    <li><strong>AI 구조조정 = 마진 익스팬션</strong> — 대규모 감원을 단행하는 기업 주목. 영업마진 확대 사이클의 교차점이 지금.</li>
+    <li><strong>K자형 소비 양극화</strong> — 하이엔드 또는 초저가. 중간 프리미엄은 소멸. 할인 채널 실적 구조적 개선 지속.</li>
+    <li><strong>3월 20일 트리플 위칭 대비</strong> — 드라이파우더 20~30% 준비. GTC 변동성도 매수 기회로 활용.</li>
+  </ul>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>NOVA Real Invest</strong> · 2026.03.05 방송 분석</p>
+  <p>본 문서는 투자 권유가 아닙니다. 모든 투자 결정과 손익은 본인에게 귀속됩니다.</p>
+  <p style="margin-top:6px;">📖 매거진 에디토리얼 테마 · AI-Powered Analysis</p>
+</footer>
+
+<script>
+/* ====== INTERSECTION OBSERVERS ====== */
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+const chartConfigs = {};
+
+/* Chart 1: ADP vs PMI */
+chartConfigs['chartMacro'] = () => {
+  new Chart(document.getElementById('chartMacro'), {
+    type: 'bar',
+    data: {
+      labels: ['ADP 민간고용 (만명)', '서비스 PMI'],
+      datasets: [
+        {
+          label: '예상치',
+          data: [5, 53],
+          backgroundColor: '#e5e5e5',
+          borderColor: '#aaa',
+          borderWidth: 1,
+        },
+        {
+          label: '실제치',
+          data: [6.3, 56.1],
+          backgroundColor: ['#e11d48', '#2563eb'],
+          borderColor: ['#b91c42', '#1d4ed8'],
+          borderWidth: 1,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      animation: { duration: 900, easing: 'easeOutCubic' },
+      plugins: {
+        legend: { labels: { font: { family: 'DM Sans', size: 11 }, color: '#1a1a1a' } },
+        tooltip: { titleFont: { family: 'DM Sans' }, bodyFont: { family: 'DM Sans' } }
+      },
+      scales: {
+        x: { ticks: { font: { family: 'DM Mono', size: 10 }, color: '#777' }, grid: { display: false } },
+        y: { ticks: { font: { family: 'DM Mono', size: 10 }, color: '#777' }, grid: { color: '#f0f0f0' } }
+      }
+    }
+  });
+};
+
+/* Chart 2: Agentic AI token explosion */
+chartConfigs['chartAgentic'] = () => {
+  new Chart(document.getElementById('chartAgentic'), {
+    type: 'bar',
+    data: {
+      labels: ['생성형 AI', '추론(Reasoning) AI', '에이전틱 AI'],
+      datasets: [{
+        label: '상대적 토큰 소비량 (로그 스케일)',
+        data: [1, 100, 1000000],
+        backgroundColor: ['#6b7280', '#f43f5e', '#e11d48'],
+        borderColor: ['#4b5563', '#e11d48', '#b91c42'],
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      responsive: true,
+      animation: { duration: 1000, easing: 'easeOutExpo' },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const vals = ['기준 (1x)', '약 100x', '100만 x 이상'];
+              return vals[ctx.dataIndex];
+            }
+          },
+          titleFont: { family: 'DM Sans' }, bodyFont: { family: 'DM Sans' }
+        }
+      },
+      scales: {
+        x: { ticks: { font: { family: 'DM Mono', size: 10 }, color: '#777' }, grid: { display: false } },
+        y: {
+          type: 'logarithmic',
+          ticks: { font: { family: 'DM Mono', size: 9 }, color: '#777' },
+          grid: { color: '#f0f0f0' }
+        }
+      }
+    }
+  });
+};
+
+/* Chart 3: Semiconductor comparison */
+chartConfigs['chartSemiconductor'] = () => {
+  new Chart(document.getElementById('chartSemiconductor'), {
+    type: 'bar',
+    data: {
+      labels: ['AVGO 매출성장', 'AVGO 장후등락', 'MU HBM계약(년)', 'NVDA 당일등락'],
+      datasets: [{
+        label: '수치',
+        data: [106, 5.15, 2, 1.66],
+        backgroundColor: ['#e11d48', '#f43f5e', '#2563eb', '#6b7280'],
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      responsive: true,
+      animation: { duration: 900 },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const units = ['%', '%', '년(2028)', '%'];
+              return ctx.parsed.y + units[ctx.dataIndex];
+            }
+          },
+          titleFont: { family: 'DM Sans' }, bodyFont: { family: 'DM Sans' }
+        }
+      },
+      scales: {
+        x: { ticks: { font: { family: 'DM Mono', size: 9 }, color: '#777' }, grid: { display: false } },
+        y: { ticks: { font: { family: 'DM Mono', size: 10 }, color: '#777' }, grid: { color: '#f0f0f0' } }
+      }
+    }
+  });
+};
+
+/* Chart 4: AI Margin Expansion concept */
+chartConfigs['chartMargin'] = () => {
+  const labels = ['0', '6개월', '12개월', '18개월', '24개월', '36개월'];
+  new Chart(document.getElementById('chartMargin'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: '인건비 (OpEx)',
+          data: [100, 75, 60, 55, 52, 50],
+          borderColor: '#6b7280',
+          backgroundColor: 'rgba(107,114,128,0.08)',
+          tension: 0.4,
+          pointRadius: 3,
+        },
+        {
+          label: '영업마진',
+          data: [18, 20, 26, 31, 37, 44],
+          borderColor: '#e11d48',
+          backgroundColor: 'rgba(225,29,72,0.08)',
+          tension: 0.4,
+          pointRadius: 3,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      animation: { duration: 1000 },
+      plugins: {
+        legend: { labels: { font: { family: 'DM Sans', size: 11 }, color: '#1a1a1a' } },
+        tooltip: { titleFont: { family: 'DM Sans' }, bodyFont: { family: 'DM Sans' } }
+      },
+      scales: {
+        x: { ticks: { font: { family: 'DM Mono', size: 10 }, color: '#777' }, grid: { display: false } },
+        y: { ticks: { font: { family: 'DM Mono', size: 10 }, color: '#777' }, grid: { color: '#f0f0f0' } }
+      }
+    }
+  });
+};
+
+/* Chart Observer */
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+</script>
+</body>
+</html>

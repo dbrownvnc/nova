@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA 시험문제 | 2026.03.05</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --correct: #16a34a;
+    --correct-bg: #f0fdf4;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .issue-line {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--text2);
+    letter-spacing: 0.12em;
+    margin: 24px 0 20px;
+    align-items: center;
+  }
+  .issue-line hr { flex:1; height:1px; background:var(--border); margin:0 10px; border:none; }
+
+  .hero {
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 24px;
+    margin-bottom: 32px;
+  }
+  .hero-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 6vw, 34px);
+    font-weight: 900;
+    line-height: 1.2;
+  }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero p { font-size: 13px; color: var(--text2); margin-top: 10px; }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid var(--accent);
+    margin-bottom: 28px;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 10;
+    padding-top: 8px;
+  }
+  .tab {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    cursor: pointer;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    color: var(--text2);
+    transition: all 0.2s;
+  }
+  .tab.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* SECTIONS */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* QUESTION */
+  .q-block {
+    margin-bottom: 28px;
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    padding: 18px;
+    background: var(--bg2);
+  }
+  .q-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .q-num {
+    background: var(--accent);
+    color: #fff;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .q-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border: 1px solid var(--border);
+    color: var(--text2);
+  }
+  .q-badge.easy { border-color: var(--correct); color: var(--correct); }
+  .q-badge.hard { border-color: var(--accent); color: var(--accent); }
+  .q-badge.medium { border-color: #d97706; color: #d97706; }
+
+  .q-text { font-size: 14.5px; font-weight: 500; margin-bottom: 14px; }
+  .q-text strong { color: var(--accent); }
+
+  .options { list-style: none; }
+  .options li {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 6px;
+    font-size: 13.5px;
+    cursor: default;
+    background: #fff;
+  }
+  .options li span { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text2); margin-right: 8px; }
+
+  .blank-input {
+    border: none;
+    border-bottom: 2px solid var(--accent);
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 4px 8px;
+    width: 180px;
+    color: var(--text);
+    outline: none;
+  }
+  .ox-options { display: flex; gap: 12px; margin-top: 8px; }
+  .ox-btn {
+    width: 52px;
+    height: 52px;
+    border: 2px solid var(--border);
+    background: #fff;
+    font-size: 22px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .ox-btn:hover { border-color: var(--accent); }
+
+  /* ANSWER BLOCK */
+  .a-block {
+    margin-bottom: 28px;
+    border: 1px solid #bbf7d0;
+    border-top: 3px solid var(--correct);
+    padding: 18px;
+    background: var(--correct-bg);
+  }
+  .a-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .a-num {
+    background: var(--correct);
+    color: #fff;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .a-title { font-size: 13px; color: #166534; font-weight: 600; }
+  .answer-key {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--correct);
+    background: #dcfce7;
+    display: inline-block;
+    padding: 4px 12px;
+    margin-bottom: 10px;
+  }
+  .explanation { font-size: 13.5px; color: #1a1a1a; line-height: 1.65; }
+  .explanation strong { color: var(--accent); }
+
+  footer {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 3px solid var(--text);
+    text-align: center;
+    font-size: 11px;
+    color: var(--text2);
+    font-family: 'DM Mono', monospace;
+    line-height: 1.8;
+  }
+  footer strong { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="issue-line">
+  <span>NOVA REAL INVEST</span>
+  <hr>
+  <span>2026.03.05 · QUIZ</span>
+</div>
+
+<div class="hero">
+  <div class="hero-label">Study Test · 10 Questions</div>
+  <h1>시험문제 &amp;<br><em>정답·해설</em></h1>
+  <p>난이도: 쉬움 30% · 보통 50% · 어려움 20% / 유형: 객관식·단답형·OX 혼합</p>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="showPanel('questions')">📝 문제</button>
+  <button class="tab" onclick="showPanel('answers')">✅ 정답 &amp; 해설</button>
+</div>
+
+<!-- ===== QUESTIONS PANEL ===== -->
+<div class="panel active" id="questions">
+
+  <!-- Q1 -->
+  <div class="q-block">
+    <div class="q-header">
+      <div class="q-num">1</div>
+      <span class="q-badge easy">쉬움 · 객관식</span>
+    </div>
+    <div class="q-text">오늘(3월 4일) 발표된 ADP 민간고용 수치는 얼마였으며, 예상치는 얼마였는가?</div>
+    <ul class="options">
+      <li><span>①</span>예상 5만 개 / 실제 4만 2천 개</li>
+      <li><span>②</span>예상 5만 개 / 실제 6만 3천 개</li>
+      <li><span>③</span>예상 8만 개 / 실제 6만 3천 개</li>
+      <li><span>④</span>예상 5만 개 / 실제 9만 개</li>
+    </ul>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-block">
+    <div class="q-header">
+      <div class="q-num">2</div>
+      <span class="q-badge easy">쉬움 · OX</span>
+    </div>
+    <div class="q-text">서비스 PMI는 50 이상이면 경기 확장을 의미하며, 오늘 발표된 수치 56.1은 예상치 53을 크게 상회했다.</div>
+    <div class="ox-options">
+      <button class="ox-btn">O</button>
+      <button class="ox-btn">X</button>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-block">
+    <div class="q-header">
+      <div class="q-num">3</div>
+      <span class="q-badge easy">쉬움 · 단답형</span>
+    </div>
+    <div class="q-text">스콧 베센트 재무장관이 CNBC에서 밝힌 "15% 글로벌 관세의 정상화 예상 기간"은 몇 개월인가?</div>
+    <div style="margin-top:8px;">답: <input class="blank-input" placeholder="숫자 입력"> 개월</div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-block">
+    <div class="q-header">
+      <div class="q-num">4</div>
+      <span class="q-badge medium">보통 · 객관식</span>
+    </div>
+    <div class="q-text">젠슨 황이 오늘 모건 스탠리 TMT 컨퍼런스에서 선언한 내용으로 <strong>가장 적절한 것</strong>은?</div>
+    <ul class="options">
+      <li><span>①</span>오픈AI 투자를 300억 달러에서 500억 달러로 확대하겠다</li>
+      <li><span>②</span>오픈AI에 대한 300억 달러 투자가 마지막 지분 투자가 될 것이다</li>
+      <li><span>③</span>엔트로픽에 추가로 200억 달러를 투자하겠다</li>
+      <li><span>④</span>AI 스타트업 전반에 대한 투자를 강화하겠다</li>
+    </ul>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-block">
+    <div class="q-header">
+      <div class="q-num">5</div>
+      <span class="q-badge medium">보통 · 객관식</span>
+    </div>
+    <div class="q-text">젠슨 황이 제시한 경제 방정식에 따르면, 다음 중 빈칸에 들어갈 내용으로 옳은 것은?<br><br>"컴퓨팅 파워 = 매출 = ( ______ )"</div>
+    <ul class="options">
+      <li><span>①</span>기업의 이익률</li>
+      <li><span>②</span>국가의 GDP 생산력</li>
+      <li><span>③</span>AI 스타트업 수</li>
+      <li><span>④</span>반도체 수출액</li>
+    </ul>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-block">
+    <div class="q-header">
+      <div class="q-num">6</div>
+      <span class="q-badge medium">보통 · 단답형</span>
+    </div>
+    <div class="q-text">에이전틱 AI(Agentic AI)는 현재 우리가 사용하는 AI 대비 토큰 소비량이 약 몇 배 이상 필요하다고 젠슨 황이 밝혔는가?</div>
+    <div style="margin-top:8px;">답: <input class="blank-input" placeholder="입력"> 배 이상</div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-block">
+    <div class="q-header">
+      <div class="q-num">7</div>
+      <span class="q-badge medium">보통 · 객관식</span>
+    </div>
+    <div class="q-text">브로드컴(AVGO)이 오늘 발표한 실적에서 기록한 매출 성장률과 자사주 매입 금액으로 올바른 것은?</div>
+    <ul class="options">
+      <li><span>①</span>매출 성장 54% / 자사주 매입 50억 달러</li>
+      <li><span>②</span>매출 성장 106% / 자사주 매입 100억 달러</li>
+      <li><span>③</span>매출 성장 78% / 자사주 매입 200억 달러</li>
+      <li><span>④</span>매출 성장 106% / 자사주 매입 300억 달러</li>
+    </ul>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-block">
+    <div class="q-header">
+      <div class="q-num">8</div>
+      <span class="q-badge medium">보통 · OX</span>
+    </div>
+    <div class="q-text">방송에서 제시된 투자 아이디어에 따르면, AI 도입 후 대규모 인력 감축을 단행하는 기업의 주식은 영업마진 확대로 이어질 가능성이 높아 긍정적으로 평가해야 한다.</div>
+    <div class="ox-options">
+      <button class="ox-btn">O</button>
+      <button class="ox-btn">X</button>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-block">
+    <div class="q-header">
+      <div class="q-num">9</div>
+      <span class="q-badge hard">어려움 · 객관식</span>
+    </div>
+    <div class="q-text">다음 중 방송에서 제시한 '바벨(Barbell) 포트폴리오 전략'의 구성으로 <strong>올바르지 않은 것</strong>은?</div>
+    <ul class="options">
+      <li><span>①</span>성장의 핵: NVIDIA, 브로드컴, 마이크론</li>
+      <li><span>②</span>방어의 축: GE 에어로스페이스, 할인 리테일</li>
+      <li><span>③</span>드라이파우더(현금) 20~30% 비축</li>
+      <li><span>④</span>AI 토큰 소비 중심 스타트업 비중 확대</li>
+    </ul>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-block">
+    <div class="q-header">
+      <div class="q-num">10</div>
+      <span class="q-badge hard">어려움 · 객관식</span>
+    </div>
+    <div class="q-text">3월 20일 '트리플 위칭 데이(Triple Witching Day)'에 대한 설명으로 <strong>가장 적절한 것</strong>은?</div>
+    <ul class="options">
+      <li><span>①</span>연준이 금리를 발표하는 날로 변동성이 크다</li>
+      <li><span>②</span>주식·지수·ETF 옵션이 동시에 만기되는 날로, 대규모 변동성이 예상되어 매수 기회로 활용할 수 있다</li>
+      <li><span>③</span>NVIDIA GTC 컨퍼런스 개최일이다</li>
+      <li><span>④</span>미국 정부 고용통계가 발표되는 날이다</li>
+    </ul>
+  </div>
+
+</div><!-- end questions panel -->
+
+<!-- ===== ANSWERS PANEL ===== -->
+<div class="panel" id="answers">
+
+  <!-- A1 -->
+  <div class="a-block">
+    <div class="a-header">
+      <div class="a-num">1</div>
+      <div class="a-title">ADP 민간고용 — 객관식</div>
+    </div>
+    <div class="answer-key">정답: ②</div>
+    <div class="explanation">
+      오늘 발표된 ADP 민간고용은 <strong>예상 5만 개 대비 실제 6만 3천 개</strong>가 나왔다. 이는 2025년 7월 이후 최고 수준으로, 예상치를 크게 상회하며 시장 반등의 핵심 촉매 중 하나가 됐다.
+    </div>
+  </div>
+
+  <!-- A2 -->
+  <div class="a-block">
+    <div class="a-header">
+      <div class="a-num">2</div>
+      <div class="a-title">서비스 PMI — OX</div>
+    </div>
+    <div class="answer-key">정답: O</div>
+    <div class="explanation">
+      PMI(구매관리자지수)는 50 이상이면 경기 확장, 50 미만이면 수축을 의미한다. 오늘 발표된 서비스 PMI <strong>56.1</strong>은 예상치 53을 크게 웃도는 2022년 7월 이후 최고점으로, 서비스 경기가 강하게 확장 중임을 보여줬다.
+    </div>
+  </div>
+
+  <!-- A3 -->
+  <div class="a-block">
+    <div class="a-header">
+      <div class="a-num">3</div>
+      <div class="a-title">베센트 관세 정상화 — 단답형</div>
+    </div>
+    <div class="answer-key">정답: 5개월</div>
+    <div class="explanation">
+      스콧 베센트 재무장관은 CNBC 인터뷰에서 "15% 글로벌 관세는 <strong>5개월 내 이전 수준으로 정상화</strong>될 것"이라는 가이던스를 제시했다. 시장은 이를 '관세 공포의 시한부'로 해석하며 반등의 심리적 지지대로 삼았다.
+    </div>
+  </div>
+
+  <!-- A4 -->
+  <div class="a-block">
+    <div class="a-header">
+      <div class="a-num">4</div>
+      <div class="a-title">젠슨 황 선언 — 객관식</div>
+    </div>
+    <div class="answer-key">정답: ②</div>
+    <div class="explanation">
+      젠슨 황은 오픈AI에 대한 300억 달러 투자를 <strong>"사실상 마지막 지분 투자"</strong>로 선언했다. 이는 NVIDIA가 그동안 비판받아온 '순환 투자 구조(circular deal making)'를 공식 종식하고, 순수 하드웨어 인프라 공급자로 전환하겠다는 의미다.
+    </div>
+  </div>
+
+  <!-- A5 -->
+  <div class="a-block">
+    <div class="a-header">
+      <div class="a-num">5</div>
+      <div class="a-title">젠슨 황 방정식 — 객관식</div>
+    </div>
+    <div class="answer-key">정답: ②</div>
+    <div class="explanation">
+      젠슨 황이 제시한 공식: <strong>"컴퓨팅 파워 = 매출 = 국가의 GDP 생산력"</strong>. 과거 석유 매장량이 국가 경제력을 결정했듯, AI 인프라(GPU)가 21세기의 원유가 되어 국가의 생산력과 안보를 좌우한다는 논리다.
+    </div>
+  </div>
+
+  <!-- A6 -->
+  <div class="a-block">
+    <div class="a-header">
+      <div class="a-num">6</div>
+      <div class="a-title">에이전틱 AI 토큰 — 단답형</div>
+    </div>
+    <div class="answer-key">정답: 100만(1,000,000) 배</div>
+    <div class="explanation">
+      에이전틱 AI는 사람처럼 기획·검색·코딩·실행·구매를 자율 수행하기 때문에 밀리언(million) 단위의 토큰이 필요하다. 젠슨 황은 현재 우리가 사용하는 AI 대비 <strong>100만 배 이상</strong>의 컴퓨팅 파워가 필요하다고 밝혔으며, 이것이 NVIDIA의 베라 루빈 시스템이 필요한 이유이기도 하다.
+    </div>
+  </div>
+
+  <!-- A7 -->
+  <div class="a-block">
+    <div class="a-header">
+      <div class="a-num">7</div>
+      <div class="a-title">브로드컴 실적 — 객관식</div>
+    </div>
+    <div class="answer-key">정답: ②</div>
+    <div class="explanation">
+      브로드컴(AVGO)은 전년 동기 대비 <strong>매출 106% 성장</strong>을 기록하며 두 배 이상 성장을 증명했다. 또한 캐시 과잉 상태에서 <strong>100억 달러 자사주 매입</strong>을 발표했다. 2027년까지 1,000억 달러 매출 달성도 자신했다.
+    </div>
+  </div>
+
+  <!-- A8 -->
+  <div class="a-block">
+    <div class="a-header">
+      <div class="a-num">8</div>
+      <div class="a-title">AI 구조조정 = 마진 — OX</div>
+    </div>
+    <div class="answer-key">정답: O</div>
+    <div class="explanation">
+      블락(Block)이 1만 명 중 4천 명 감원 후 주가가 <strong>+20% 폭등</strong>한 사례처럼, AI 도입 후 대규모 감원을 단행해도 영업이 정상 작동하며 영업마진이 오히려 확대되는 현상이 나타나고 있다. 방송에서는 이런 기업의 주식을 적극 매수하라는 투자 아이디어로 제시했다.
+    </div>
+  </div>
+
+  <!-- A9 -->
+  <div class="a-block">
+    <div class="a-header">
+      <div class="a-num">9</div>
+      <div class="a-title">바벨 전략 오답 찾기 — 어려움</div>
+    </div>
+    <div class="answer-key">정답: ④</div>
+    <div class="explanation">
+      바벨 전략은 '성장의 핵(AI 인프라)'과 '방어의 축(실물자산·할인 리테일)'으로 구성된다. <strong>AI 토큰을 단순 소비만 하는 스타트업(토큰 리셀러)은 투자 가치가 없다</strong>고 명확히 언급됐다. 이런 회사들은 정리 대상이지 포트폴리오 편입 대상이 아니다.
+    </div>
+  </div>
+
+  <!-- A10 -->
+  <div class="a-block">
+    <div class="a-header">
+      <div class="a-num">10</div>
+      <div class="a-title">트리플 위칭 데이 — 어려움</div>
+    </div>
+    <div class="answer-key">정답: ②</div>
+    <div class="explanation">
+      트리플 위칭 데이(Triple Witching Day)는 매 분기 세 번째 금요일로, 주식 옵션·지수 옵션·ETF 옵션이 <strong>동시에 만기</strong>되는 날이다. 3월 20일 역대급 파생상품 만기가 예정되어 있어 극심한 변동성이 예상된다. 방송에서는 드라이파우더 <strong>20~30%</strong>를 보유하고 이날 매수 기회로 활용하라고 제시했다.
+    </div>
+  </div>
+
+</div><!-- end answers panel -->
+
+<footer>
+  <p><strong>NOVA Real Invest</strong> · 2026.03.05 시험문제 &amp; 해설</p>
+  <p>총 10문제 · 객관식 6 · 단답형 2 · OX 2</p>
+  <p style="margin-top:6px;">본 문서는 교육 목적으로 제작되었습니다</p>
+</footer>
+
+<script>
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
