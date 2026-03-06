@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIA.chat 멤버미팅 분석 — 2026.03.05</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --blue: #2563eb;
+    --gray: #6b7280;
+    --border: #e5e5e5;
+    --table-header: #e11d48;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.75;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+  }
+
+  /* FADE-IN */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* CHART */
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    background: var(--bg2);
+    border-radius: 8px;
+    padding: 16px 16px 8px;
+    border: 1px solid var(--border);
+    margin: 24px 0;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas { opacity: 1; }
+
+  /* HEADER */
+  .site-header {
+    border-bottom: 3px solid var(--accent);
+    padding: 32px 0 16px;
+    margin-bottom: 8px;
+  }
+  .site-header .kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .site-header h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(28px, 7vw, 42px);
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--text);
+    margin: 8px 0 4px;
+  }
+  .site-header h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .meta-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+  .meta-row span::before { content: '— '; color: var(--accent); }
+
+  /* SECTION */
+  section { margin-bottom: 40px; }
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .section-label .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--bg);
+    background: var(--accent);
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-label h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  /* PULL QUOTE */
+  .pull-quote {
+    border-left: 4px solid var(--accent);
+    margin: 28px 0;
+    padding: 12px 20px;
+    background: #fff5f7;
+  }
+  .pull-quote p {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--text);
+  }
+  .pull-quote .attr {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    margin-top: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* STAT CARDS */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    padding: 14px 16px;
+    border-radius: 4px;
+  }
+  .stat-card .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .stat-card .value {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: 2px;
+    line-height: 1;
+  }
+  .stat-card .sub {
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 4px;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+  thead tr { background: var(--table-header); color: #fff; }
+  thead th {
+    padding: 10px 12px;
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:nth-child(even) { background: var(--bg2); }
+  tbody td { padding: 9px 12px; }
+  .up { color: var(--accent); font-weight: 600; }
+  .down { color: var(--blue); font-weight: 600; }
+  .neutral { color: var(--gray); }
+
+  /* ALERT BOX */
+  .alert {
+    background: #fff1f3;
+    border: 1px solid #fda4af;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 20px 0;
+  }
+  .alert .alert-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+  .alert p { font-size: 14px; line-height: 1.6; }
+
+  /* SCENARIO BOX */
+  .scenario {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 16px 0;
+  }
+  .scenario-header {
+    padding: 10px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .scenario-header.hot { background: #fef2f2; color: #dc2626; }
+  .scenario-header.neutral { background: #f0fdf4; color: #16a34a; }
+  .scenario-header.cold { background: #eff6ff; color: #1d4ed8; }
+  .scenario-body { padding: 12px 16px; font-size: 14px; line-height: 1.7; }
+
+  /* STRATEGY LIST */
+  .strategy-list { list-style: none; padding: 0; margin: 16px 0; }
+  .strategy-list li {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 15px;
+    align-items: flex-start;
+  }
+  .strategy-list li:last-child { border-bottom: none; }
+  .strategy-list li::before {
+    content: '▶';
+    color: var(--accent);
+    font-size: 10px;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+
+  /* DIVIDER */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 36px 0 28px;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .divider span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+  }
+
+  p { margin-bottom: 14px; }
+  strong { color: var(--text); font-weight: 600; }
+  .text-accent { color: var(--accent); font-weight: 600; }
+  .chart-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  footer {
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+    margin-top: 40px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+    line-height: 1.8;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header fade-in">
+  <div class="kicker">CIA.chat 멤버미팅 · 2026년 3월 5일 (목) 뉴욕</div>
+  <h1>검은 목요일 —<br><em>유가·인플레·AI 수출규제</em>의 삼중 충격</h1>
+  <div class="meta-row">
+    <span>미국 증시·경제 분석</span>
+    <span>원유 $81.1 돌파</span>
+    <span>스태그플레이션 경고</span>
+  </div>
+</header>
+
+<!-- OVERVIEW STATS -->
+<div class="stat-grid fade-in">
+  <div class="stat-card">
+    <div class="label">WTI 원유 고점</div>
+    <div class="value">$81.1</div>
+    <div class="sub">주간 상승률 약 +20% / 경계선 돌파</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">다우존스 낙폭</div>
+    <div class="value">−1,100</div>
+    <div class="sub">포인트 / 유가·인플레 공포 반영</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">3월 금리인하 확률</div>
+    <div class="value">&lt;5%</div>
+    <div class="sub">CME FedWatch 기준 / 사실상 소멸</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Marvell 시간외</div>
+    <div class="value">+14%</div>
+    <div class="sub">AI 실적·가이던스 폭발 / 분기 매출↑</div>
+  </div>
+</div>
+
+<!-- ① 유가 쇼크 -->
+<div class="divider"><span>Core Issue 01</span></div>
+<section class="fade-in">
+  <div class="section-label">
+    <div class="num">1</div>
+    <h2>원유 $81 돌파 — 왜 이게 "검은 목요일"인가</h2>
+  </div>
+
+  <p>이날 방송의 핵심 키워드는 <strong class="text-accent">WTI 원유 $81.1 돌파</strong>였다. 호스트는 이미 수 주 전부터 "$80을 넘으면 심각해진다"고 경고해 왔으며, 이 선이 오늘 처음 뚫렸다. 이란혁명수비대의 호르무즈 해협 유조선 공격 주장, 전쟁 장기화 우려, 컨테이너 운임 급등($1,000→$4,000)이 복합적으로 작용했다.</p>
+
+  <div class="pull-quote">
+    <p>"유가로 불꽃이 튀었어요. 불이 한번 나기 시작하면 소방수가 와도 끄기 힘든 게 산불 같은 물가입니다."</p>
+    <div class="attr">— 방송 호스트 직접 발언</div>
+  </div>
+
+  <div class="chart-title">WTI 원유 주요 레벨 vs 시장 반응</div>
+  <div class="chart-container fade-in">
+    <canvas id="oilChart" height="220"></canvas>
+  </div>
+
+  <p>팬데믹 당시와 비슷한 <strong>해운 대란</strong>도 재연 중이다. 중동발 선박 300여 척이 호르무즈 인근에 발이 묶였고, 보험사들은 해당 해역 보험 제공을 거부하거나 보험료를 대폭 올리고 있다. 에너지 가격 상승 → 물류비 급등 → 소비자물가 전이라는 연쇄 경로가 우려된다.</p>
+
+  <div class="alert">
+    <div class="alert-title">⚠ 에너지주 역설</div>
+    <p>유가가 $80을 넘으면 에너지 기업들도 원가 상승 압박을 받는다. 정제 마진이 축소되고, 소비자가 극도로 가격에 민감해지면 수요 자체가 꺾인다. <strong>$80~$100 구간에서는 에너지 주식도 단순 수혜주가 아닐 수 있다.</strong></p>
+  </div>
+</section>
+
+<!-- ② 연준·인플레 -->
+<div class="divider"><span>Core Issue 02</span></div>
+<section class="fade-in">
+  <div class="section-label">
+    <div class="num">2</div>
+    <h2>연준 딜레마 — 고용보다 물가가 더 무섭다</h2>
+  </div>
+
+  <p>연준 이사 박킨(Waller로 추정)이 이날 공개적으로 발언했다: <strong>"고용이 문제가 아니다. 글로벌 지정학 리스크로 물가가 큰일 났다."</strong> 최근 1~2개월 데이터가 인플레이션 방향으로 완전히 반전됐으며, <strong>인플레이션 리스크가 노동 리스크를 압도</strong>하고 있다고 평가했다. 단기 쇼크는 무시할 수 있지만 장기 쇼크는 무시 불가능하다는 입장이다.</p>
+
+  <div class="chart-title">CME FedWatch — 금리인하 첫 시점 확률 (2026년 3월 5일 기준)</div>
+  <div class="chart-container fade-in">
+    <canvas id="fedChart" height="220"></canvas>
+  </div>
+
+  <p>현재 CME FedWatch 기준으로 <span class="text-accent">9월 인하 확률 43%, 10월 인하 확률 40%</span>에 불과하다. 호스트는 "50% 이상은 돼야 의미 있는 시장 기대인데, 너무 낮다"고 평가했다. 사실상 2026년 내 금리인하 가능성이 불확실해진 것이다.</p>
+
+  <p>파월 의장이 "관세는 일시적(transitory)"이라고 발언했는데, 그 관세보다 더 큰 전쟁 인플레가 터졌다. '제롬 파월의 저주'라는 표현까지 등장했다. 이제 연준은 <strong>미팅 바이 미팅(회의마다 데이터 확인 후 판단)</strong> 접근이 불가피하다.</p>
+</section>
+
+<!-- ③ 내일의 고용보고서 시나리오 -->
+<div class="divider"><span>Core Issue 03</span></div>
+<section class="fade-in">
+  <div class="section-label">
+    <div class="num">3</div>
+    <h2>내일의 고용보고서 — 3가지 시나리오</h2>
+  </div>
+
+  <p>방송 다음 날인 3월 6일, 미국 정부 고용보고서(NFP) 발표 예정. 시장 컨센서스: <strong>신규 고용 5~6만 명, 실업률 4.3%, 시급 전월비 +0.3% / 전년비 +3.7%</strong></p>
+
+  <div class="scenario">
+    <div class="scenario-header hot">🔴 시나리오 A — 스태그플레이션 공포 극대화</div>
+    <div class="scenario-body">신규 고용 10만+ 개 AND 시급 +0.4% 이상<br><strong>→</strong> 유가 쇼크 + 임금 인플레 동시 발생. 연준 금리인하 기대 완전 소멸. 시장 급락 우려.</div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-header neutral">🟢 시나리오 B — 골디락스 (컨센서스 부합)</div>
+    <div class="scenario-body">신규 고용 5~6만 개, 시급 +0.3%, 실업률 4.3% 유지<br><strong>→</strong> 시장 안도감. AI·소프트웨어 바닥 다지기 기대. 단기 반등 가능.</div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-header cold">🔵 시나리오 C — 경기침체 공포 부상</div>
+    <div class="scenario-body">신규 고용 3만 이하 AND 실업률 상승<br><strong>→</strong> 경기 둔화 공포 재점화. 방어주·현금 비중 확대 필요. 스태그플레이션 + 경기침체 동시 공포.</div>
+  </div>
+
+  <p style="margin-top:16px;">호스트는 "어느 극단도 좋지 않다"며 두 개의 나쁜 시나리오(A·C) 모두 시장엔 충격이라고 강조했다. 유일한 안도 케이스는 B다.</p>
+</section>
+
+<!-- ④ AI 칩 수출허가제 -->
+<div class="divider"><span>Core Issue 04</span></div>
+<section class="fade-in">
+  <div class="section-label">
+    <div class="num">4</div>
+    <h2>AI 칩 전세계 수출 허가제 검토 — NVIDIA·AMD 직격탄</h2>
+  </div>
+
+  <p>블룸버그 보도로 알려진 이번 소식은 단순 뉴스가 아니다. 기존에는 중국에만 적용하던 AI 반도체(GPU) 수출 허가제를 <strong>전 세계 대상으로 확대</strong>하는 방안을 트럼프 행정부가 검토 중이다. NVIDIA는 장 중 이 뉴스 직후 급락했다가 반등하는 모습을 보였다.</p>
+
+  <div class="alert">
+    <div class="alert-title">💡 가격 결정력 하락의 논리</div>
+    <p>지금 NVIDIA는 "부르는 게 값"인 독점적 위치에 있다. 그런데 미국 국내에서만 판매해야 한다면 경쟁이 제한되는 동시에 <strong>타 국가의 자체 개발 동기를 자극</strong>한다(중국 화웨이·딥시크 사례). 장기적으로 가격 결정력이 낮아지고, 글로벌 시장 점유율이 잠식될 수 있다.</p>
+  </div>
+
+  <p>호스트는 이를 '세국정책(자국 산업 보호)'의 역설로 설명한다. 한국의 영화 쿼터제, 싱가포르 항공의 사례를 들며 <strong>경쟁 없이 보호받는 기업은 경쟁력을 잃는다</strong>는 논리를 폈다. AI 칩이 방산 물자화되는 상황이다.</p>
+
+  <div class="chart-title">AI 반도체 관련주 주요 이벤트 (2026년 3월 5일)</div>
+  <div class="chart-container fade-in">
+    <canvas id="aiChart" height="240"></canvas>
+  </div>
+</section>
+
+<!-- ⑤ AI 인프라 호실적 -->
+<div class="divider"><span>Core Issue 05</span></div>
+<section class="fade-in">
+  <div class="section-label">
+    <div class="num">5</div>
+    <h2>AI 인프라 수요는 꺾이지 않는다</h2>
+  </div>
+
+  <p>거시 불안과 별개로 AI 섹터의 펀더멘털은 강하다. 전일 발표된 브로드컴(AVGO)에 이어 이날 마벨(MRVL)도 폭발적 실적을 냈다.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>기업</th>
+        <th>핵심 지표</th>
+        <th>비고</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>브로드컴 (AVGO)</td>
+        <td class="up">AI 매출 +106% YoY</td>
+        <td>백로그 $1,000억+, 자사주 $100억 매입</td>
+      </tr>
+      <tr>
+        <td>마벨 (MRVL)</td>
+        <td class="up">시간외 +14%</td>
+        <td>가이던스 $2.4B, 범용 GPU→ASIC 전환</td>
+      </tr>
+      <tr>
+        <td>NVIDIA (NVDA)</td>
+        <td class="neutral">당일 등락 반복</td>
+        <td>수출 허가제 뉴스로 장중 급락 후 반등</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>호스트는 "AI 거시 수요는 꺾이지 않고 있음을 확인했다"고 평가했다. 다음 주 NVIDIA의 GTC 컨퍼런스가 예정되어 있어 추가 촉매 가능성도 있다.</p>
+</section>
+
+<!-- ⑥ 소프트웨어 방어주 부상 -->
+<div class="divider"><span>Core Issue 06</span></div>
+<section class="fade-in">
+  <div class="section-label">
+    <div class="num">6</div>
+    <h2>소프트웨어 — 하락장의 방어주 부상</h2>
+  </div>
+
+  <p>물리적 공급망에 노출되지 않는 소프트웨어 섹터(IGV ETF 기준)가 <strong>4일 연속 상승</strong>하며 주목받고 있다. 특히 오늘 두드러진 움직임은 TTD(The Trade Desk)였다.</p>
+
+  <p><strong>TTD 급등 이유 두 가지:</strong></p>
+  <ul style="list-style:none; padding:0;">
+    <li style="padding:8px 0; border-bottom:1px solid var(--border); font-size:14px;">① OpenAI와의 광고 판매 파트너십 논의 보도 → 시간외 <span class="text-accent">+17.9%</span></li>
+    <li style="padding:8px 0; font-size:14px;">② TTD CEO, <strong>3월 4일 자사주 $1억 4,810만 달러(약 113만 주)</strong> 개인 매입 — 7자리 수 대규모 insider buying</li>
+  </ul>
+
+  <p style="margin-top:14px;">호스트는 "AGI 광고 모델의 현실화 가능성"을 언급하며, AI 응답 대기 시간 중 광고를 삽입하는 방식이 유력하다고 분석했다. Oracle도 이날 인력 감축 발표 후 주가가 올라, <strong>비용 효율화 + AI 전환 기업들의 주가 신호</strong>를 재확인했다.</p>
+
+  <div class="alert">
+    <div class="alert-title">📌 버크셔 해서웨이 자사주 매입 발표</div>
+    <p>주가 급락 후 버크셔가 드디어 자사주 매입을 선언했다. 호스트는 "우리 캐시 많고 안 죽었다는 시그널"로 해석했다. 워런 버핏 시대와 달리 시장이 냉정하게 반응한다는 점도 주목할 부분이다.</p>
+  </div>
+</section>
+
+<!-- ⑦ 관세 불확실성 -->
+<div class="divider"><span>Core Issue 07</span></div>
+<section class="fade-in">
+  <div class="section-label">
+    <div class="num">7</div>
+    <h2>트럼프 관세 — 불확실성의 연속</h2>
+  </div>
+
+  <p>트럼프 대통령이 74년 된 법률을 근거로 <strong>관세를 10%→15%로 인상</strong>하겠다고 발표했으나, 24개 주가 소송을 제기한 상태다. 이미 대법원에서 위헌 판결을 받은 다른 조치 대신 새로운 법적 근거를 찾은 것이다. 이번 주 중 시행 예정이나 법원 저지 가능성이 남아 있다.</p>
+
+  <p>호스트는 이 상황을 "계획성이 완전히 무너지는 것"이라며 시장의 불확실성을 키우는 핵심 변수로 지목했다. 하원도 "전쟁 전 의회 승인" 조항을 부결시켜 대통령의 군사 행동권이 사실상 확대됐다.</p>
+
+  <div class="chart-title">시장 불안 요인 복합 구조</div>
+  <div class="chart-container fade-in">
+    <canvas id="riskChart" height="240"></canvas>
+  </div>
+</section>
+
+<!-- ⑧ 전략 -->
+<div class="divider"><span>Investment Strategy</span></div>
+<section class="fade-in">
+  <div class="section-label">
+    <div class="num">8</div>
+    <h2>지금 어떻게 해야 하는가 — 투자 전략</h2>
+  </div>
+
+  <p>호스트가 제시한 대응 전략을 정리한다:</p>
+
+  <ul class="strategy-list">
+    <li><strong>현금 비중 확대 유지.</strong> 섣부른 저점 매수 및 바닥 예측 자제. 내일 고용 보고서, 다음 주 GTC, 트리플 위칭 데이 등 이벤트가 밀집해 있다.</li>
+    <li><strong>바벨 전략(Barbell Strategy).</strong> AI 하드웨어(고성장 고위험)와 유틸리티(방어·배당) 양 극단을 동시 보유. 에너지주 비중이 높다면 유틸리티로 밸런스를 맞출 것.</li>
+    <li><strong>유틸리티 주목.</strong> AWK, EXC 등 수도·전력 기업은 경기 민감도가 낮고 배당 제공. 물가 상승기에도 상대적 안정성 확보. 차트 오름세 확인.</li>
+    <li><strong>AI 소프트웨어 분할 매수.</strong> TTD, Weave Communications, Samsara(IOT) 등 실적 확인된 종목. 매크로 이슈로 하락 시 패딩(부분 매수) 방식 접근.</li>
+    <li><strong>3분의 1 원칙.</strong> 저점이 지하 1층인지 3층인지 모를 때는 1차·2차·3차로 나눠 진입. 한 번에 풀 베팅 금지.</li>
+    <li><strong>장기 계좌와 단기 계좌 분리.</strong> 장기 투자 계좌는 공포 구간에서 이탈 방지 장치 역할. 매번 시장에서 이탈한 개인 투자자는 재진입이 매우 어렵다.</li>
+  </ul>
+
+  <div class="pull-quote">
+    <p>"모든 장애물은 해결이 됩니다. 전쟁도 끝납니다. 문제는 그게 한 달 후인지, 3개월 후인지, 3년 후인지 모른다는 겁니다."</p>
+    <div class="attr">— 방송 호스트</div>
+  </div>
+</section>
+
+<!-- ⑨ 거시 시나리오 -->
+<div class="divider"><span>Macro Outlook</span></div>
+<section class="fade-in">
+  <div class="section-label">
+    <div class="num">9</div>
+    <h2>전쟁 종결 시나리오와 S&P 500 목표</h2>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>시나리오</th>
+        <th>조건</th>
+        <th>시장 전망</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>✅ 최선 케이스</td>
+        <td>1개월 내 이란 전쟁 종결</td>
+        <td class="up">유가 급락 → 인플레 진정 → 금리인하 기대 복원</td>
+      </tr>
+      <tr>
+        <td>⚠️ 중간 케이스</td>
+        <td>3개월 장기화</td>
+        <td class="neutral">물가 지속 상승 → 스태그플레이션 우려 심화</td>
+      </tr>
+      <tr>
+        <td>🔴 최악 케이스</td>
+        <td>장기화 + 물가 악화</td>
+        <td class="down">S&P 500 6,100선까지 하락 가능. 방어주·현금 필수</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>이란 측이 CIA를 통해 물 밑 협상을 제안했다는 정보도 나왔다. 협상이든 군사적 해결이든 <strong>조기 종전이 가장 강력한 매수 촉매</strong>라는 것이 호스트의 결론이다.</p>
+</section>
+
+<!-- 핵심 요약 -->
+<div class="divider"><span>Key Takeaways</span></div>
+<section class="fade-in">
+  <div class="section-label">
+    <div class="num">✦</div>
+    <h2>오늘의 핵심 메시지</h2>
+  </div>
+  <table>
+    <thead><tr><th>#</th><th>핵심 포인트</th><th>의미</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>WTI $81 돌파</td><td class="up">인플레 불씨 점화 — 물가 상승 경로 가속</td></tr>
+      <tr><td>2</td><td>연준 금리인하 사실상 연기</td><td class="down">9~10월에도 확률 40% 미만</td></tr>
+      <tr><td>3</td><td>AI 칩 수출 허가제 검토</td><td class="neutral">NVIDIA 가격 결정력·성장성 위협</td></tr>
+      <tr><td>4</td><td>Marvell·Broadcom 호실적</td><td class="up">AI 인프라 펀더멘털 이상 없음</td></tr>
+      <tr><td>5</td><td>TTD CEO $1.5억 자사주 매입</td><td class="up">AI 광고 모델 강한 내부 확신</td></tr>
+      <tr><td>6</td><td>스태그플레이션 공포 확산</td><td class="down">기관들이 최악 시나리오 리포트 작성 중</td></tr>
+      <tr><td>7</td><td>관세 불확실성 지속</td><td class="neutral">24개 주 소송 → 계획성 약화</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer class="fade-in">
+  <div>출처 — CIA.chat 멤버미팅 원본 자막 (2026-03-05, 뉴욕 오후 7시 39분)</div>
+  <div>본 문서는 교육·정보 목적으로 작성되었으며 투자 권유가 아닙니다.</div>
+  <div>수치 및 발언은 원본 자막 기준이며, 실제 시장 데이터와 일부 상이할 수 있습니다.</div>
+</footer>
+
+<script>
+// ===================== OBSERVERS =====================
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// ===================== CHART CONFIGS =====================
+const chartConfigs = {};
+
+// Chart 1: Oil levels
+chartConfigs['oilChart'] = () => {
+  new Chart(document.getElementById('oilChart'), {
+    type: 'bar',
+    data: {
+      labels: ['$70 이하\n(안전)', '$70~$75', '$75~$80', '$80 경계선', '$81.1\n(오늘)', '$90 이상\n(위험)'],
+      datasets: [{
+        label: '시장 긴장도 (상대 지수)',
+        data: [10, 25, 45, 75, 95, 100],
+        backgroundColor: ['#6b7280','#6b7280','#f59e0b','#e11d48','#e11d48','#991b1b'],
+        borderRadius: 4,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` 긴장도 ${ctx.parsed.y}/100` } }
+      },
+      scales: {
+        y: { beginAtZero: true, max: 110, grid: { color: '#e5e5e5' }, ticks: { font: { size: 11 } } },
+        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+};
+
+// Chart 2: Fed rate cut probability
+chartConfigs['fedChart'] = () => {
+  new Chart(document.getElementById('fedChart'), {
+    type: 'bar',
+    data: {
+      labels: ['3월 인하\n(<5%)', '5월 인하', '6월 인하', '7월 인하', '9월 인하\n(43%)', '10월 인하\n(40%)'],
+      datasets: [{
+        label: '금리인하 확률 (%)',
+        data: [4, 8, 14, 22, 43, 40],
+        backgroundColor: ['#e11d48','#e11d48','#f43f5e','#f43f5e','#2563eb','#2563eb'],
+        borderRadius: 4,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y}%` } }
+      },
+      scales: {
+        y: { beginAtZero: true, max: 60, ticks: { callback: v => v+'%', font:{size:11} }, grid: { color: '#e5e5e5' } },
+        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+};
+
+// Chart 3: AI stocks event chart (bubble-style via scatter)
+chartConfigs['aiChart'] = () => {
+  new Chart(document.getElementById('aiChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Marvell\n시간외', 'Broadcom\nAI매출', 'TTD\n시간외', 'NVIDIA\n당일 낙폭\n(중간)', 'Oracle\n당일'],
+      datasets: [{
+        label: '주가 변화율 (%)',
+        data: [14, null, 17.9, -5, 3.2],
+        backgroundColor: ['#e11d48','#1a1a1a','#e11d48','#6b7280','#2563eb'],
+        borderRadius: 4,
+        borderSkipped: false,
+      },{
+        label: 'AI 매출 성장 (YoY%)',
+        data: [null, 106, null, null, null],
+        backgroundColor: ['#1a1a1a'],
+        borderRadius: 4,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: { labels: { font: { size: 11 } } },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y}%` } }
+      },
+      scales: {
+        y: { grid: { color: '#e5e5e5' }, ticks: { callback: v => v+'%', font:{size:11} } },
+        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+};
+
+// Chart 4: Risk radar as doughnut
+chartConfigs['riskChart'] = () => {
+  new Chart(document.getElementById('riskChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['유가·에너지 리스크', 'AI 수출규제 리스크', '관세·법적 불확실성', '인플레·연준 리스크', '지정학(이란 전쟁)', '기업 펀더멘털(양호)'],
+      datasets: [{
+        data: [25, 20, 18, 22, 10, 5],
+        backgroundColor: ['#e11d48','#1a1a1a','#f43f5e','#6b7280','#2563eb','#d1fae5'],
+        borderWidth: 2,
+        borderColor: '#fff',
+        hoverOffset: 8,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      cutout: '55%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 11 }, padding: 10, boxWidth: 12 }
+        },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed}%` } }
+      }
+    }
+  });
+};
+
+// ===================== CHART OBSERVER =====================
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+</script>
+</body>
+</html>
