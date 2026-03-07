@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시험문제 10선 — NOVA 트리플쇼크 분석 | 2026.03.07</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --green: #16a34a;
+    --blue: #2563eb;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .masthead {
+    background: var(--text);
+    color: #fff;
+    padding: 28px 20px 22px;
+  }
+  .masthead-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--accent2);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .masthead-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 6vw, 34px);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+  .masthead-title em { color: var(--accent2); font-style: italic; }
+  .masthead-meta { font-size: 11px; color: #aaa; font-family: 'DM Mono', monospace; }
+
+  .notice-bar {
+    background: #fff5f7;
+    border-bottom: 2px solid var(--accent);
+    padding: 10px 20px;
+    font-size: 12.5px;
+    color: #555;
+    line-height: 1.5;
+  }
+  .notice-bar strong { color: var(--accent); }
+
+  .container { max-width: 680px; margin: 0 auto; padding: 0 18px 40px; }
+
+  /* ── QUESTION CARDS ── */
+  .q-section {
+    padding-top: 28px;
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--accent);
+  }
+  .section-title h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+  }
+  .diff-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    margin-left: auto;
+  }
+  .easy { background: #dcfce7; color: #15803d; }
+  .medium { background: #fef3c7; color: #b45309; }
+  .hard { background: #fee2e2; color: #b91c1c; }
+
+  .q-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    background: var(--bg);
+  }
+  .q-head {
+    background: var(--bg2);
+    padding: 12px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .q-num {
+    background: var(--accent);
+    color: #fff;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .q-meta { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  .q-type-row { display: flex; gap: 6px; align-items: center; }
+  .q-type {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 2px;
+    font-weight: 600;
+  }
+  .type-mc { background: #eff6ff; color: #1d4ed8; }
+  .type-tf { background: #f0fdf4; color: #15803d; }
+  .type-sa { background: #fdf4ff; color: #7e22ce; }
+  .q-diff { font-size: 10px; font-family: 'DM Mono', monospace; }
+
+  .q-text {
+    padding: 14px 16px;
+    font-size: 14.5px;
+    font-weight: 500;
+    line-height: 1.65;
+    color: var(--text);
+  }
+  .options {
+    padding: 0 16px 14px;
+    list-style: none;
+  }
+  .options li {
+    padding: 7px 10px;
+    margin-bottom: 5px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    font-size: 13.5px;
+    color: #333;
+    background: var(--bg2);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .options li .opt-label {
+    font-family: 'DM Mono', monospace;
+    font-weight: 700;
+    color: var(--text2);
+    font-size: 12px;
+    min-width: 18px;
+    padding-top: 1px;
+  }
+  .options li.correct {
+    background: #f0fdf4;
+    border-color: #86efac;
+    color: #15803d;
+  }
+  .options li.correct .opt-label { color: var(--green); }
+
+  /* ── ANSWER SECTION ── */
+  .a-section {
+    padding: 32px 0 0;
+    border-top: 3px solid var(--text);
+    margin-top: 32px;
+  }
+  .a-section .big-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 5vw, 28px);
+    font-weight: 900;
+    margin-bottom: 6px;
+  }
+  .a-section .big-title em { color: var(--accent); font-style: italic; }
+  .a-section .subtitle {
+    font-size: 12px;
+    color: var(--text2);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 24px;
+    letter-spacing: 0.5px;
+  }
+
+  .ans-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .ans-head {
+    background: var(--text);
+    color: #fff;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .ans-head .anum {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    background: var(--accent);
+    padding: 2px 7px;
+    border-radius: 3px;
+  }
+  .ans-head .atitle { font-size: 13px; font-weight: 500; flex: 1; color: #ddd; line-height: 1.4; }
+  .ans-body { padding: 14px 16px; background: var(--bg2); }
+  .ans-correct {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--green);
+    color: #fff;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  .ans-explain {
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #333;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 12px 14px;
+  }
+  .ans-explain strong { color: var(--accent); }
+  .ans-explain em { font-style: normal; font-weight: 600; color: var(--blue); }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--text);
+    color: #777;
+    padding: 22px 20px;
+    text-align: center;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    line-height: 1.8;
+    margin-top: 36px;
+  }
+  .footer strong { color: #fff; }
+
+  /* ── SCORE BOX ── */
+  .score-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .score-item { text-align: center; flex: 1; min-width: 60px; }
+  .score-item .sv { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--accent); display: block; }
+  .score-item .sl { font-size: 11px; color: var(--text2); font-family: 'DM Mono', monospace; }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-label">NOVA Real Invest · Quiz Sheet</div>
+  <div class="masthead-title">
+    <em>시험문제</em> 10선<br>트리플 쇼크 분석
+  </div>
+  <div class="masthead-meta">2026.03.07 · 문제 + 정답 및 해설 포함</div>
+</div>
+
+<div class="notice-bar">
+  <strong>구성 안내</strong> — 총 10문항 (쉬움 3문항 / 보통 5문항 / 어려움 2문항) · 객관식·OX·단답형 혼합<br>
+  아래 "정답 및 해설" 섹션은 문제를 모두 풀고 난 후 확인하세요.
+</div>
+
+<div class="container">
+
+  <!-- =============================== -->
+  <!--          QUESTIONS              -->
+  <!-- =============================== -->
+  <div class="q-section">
+
+    <!-- DIFFICULTY SECTION: EASY -->
+    <div class="section-title">
+      <h2>📗 쉬움 (Easy)</h2>
+      <span class="diff-badge easy">30% · 3문항</span>
+    </div>
+
+    <!-- Q1 -->
+    <div class="q-card">
+      <div class="q-head">
+        <div class="q-num">1</div>
+        <div class="q-meta">
+          <div class="q-type-row">
+            <span class="q-type type-mc">객관식</span>
+            <span class="q-diff">🟢 쉬움</span>
+          </div>
+        </div>
+      </div>
+      <div class="q-text">
+        2026년 3월 6일, 오늘 방송에서 언급된 "트리플 쇼크(Triple Shock)"의 세 가지 충격이 아닌 것은?
+      </div>
+      <ul class="options">
+        <li><span class="opt-label">①</span> 유가 폭등 ($80 → $90 이상)</li>
+        <li><span class="opt-label">②</span> 비농업 고용 지표 마이너스</li>
+        <li><span class="opt-label">③</span> 블랙록 사모펀드 환매 제한(게이팅) 발동</li>
+        <li><span class="opt-label">④</span> 연방준비제도의 긴급 금리 인하 발표</li>
+      </ul>
+    </div>
+
+    <!-- Q2 -->
+    <div class="q-card">
+      <div class="q-head">
+        <div class="q-num">2</div>
+        <div class="q-meta">
+          <div class="q-type-row">
+            <span class="q-type type-tf">OX</span>
+            <span class="q-diff">🟢 쉬움</span>
+          </div>
+        </div>
+      </div>
+      <div class="q-text">
+        [OX 문제] 유가 상승은 물가 상승(인플레이션)으로 이어지므로, 고용 악화와 유가 급등이 동시에 발생하면 연준은 금리를 곧바로 인하하기 쉬운 환경이 된다. (O / X)
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="q-card">
+      <div class="q-head">
+        <div class="q-num">3</div>
+        <div class="q-meta">
+          <div class="q-type-row">
+            <span class="q-type type-mc">객관식</span>
+            <span class="q-diff">🟢 쉬움</span>
+          </div>
+        </div>
+      </div>
+      <div class="q-text">
+        2월 비농업 고용 지표 발표에서 실제로 나온 수치와 시장의 사전 예상치(컨센서스)를 바르게 짝지은 것은?
+      </div>
+      <ul class="options">
+        <li><span class="opt-label">①</span> 예상: +5만 명 / 실제: +12만 명</li>
+        <li><span class="opt-label">②</span> 예상: +5만 명 / 실제: -9만 2천 명</li>
+        <li><span class="opt-label">③</span> 예상: -5만 명 / 실제: -9만 2천 명</li>
+        <li><span class="opt-label">④</span> 예상: +10만 명 / 실제: +2만 명</li>
+      </ul>
+    </div>
+
+    <!-- DIFFICULTY SECTION: MEDIUM -->
+    <div class="section-title" style="margin-top:28px;">
+      <h2>📙 보통 (Medium)</h2>
+      <span class="diff-badge medium">50% · 5문항</span>
+    </div>
+
+    <!-- Q4 -->
+    <div class="q-card">
+      <div class="q-head">
+        <div class="q-num">4</div>
+        <div class="q-meta">
+          <div class="q-type-row">
+            <span class="q-type type-mc">객관식</span>
+            <span class="q-diff">🟡 보통</span>
+          </div>
+        </div>
+      </div>
+      <div class="q-text">
+        방송에서 블랙록(BlackRock) 사모펀드의 "게이팅(Gating)" 사태를 설명한 내용으로 옳은 것은?
+      </div>
+      <ul class="options">
+        <li><span class="opt-label">①</span> 투자자들이 9.3%의 환매를 요청했고, 블랙록은 이 전액을 지급했다</li>
+        <li><span class="opt-label">②</span> 블랙록이 새로운 투자자를 모집하기 위해 5% 제한을 자발적으로 걸었다</li>
+        <li><span class="opt-label">③</span> 환매 요청이 9.3% 집중됐으나 블랙록은 5%까지만 지급 가능하다며 제한을 걸었다</li>
+        <li><span class="opt-label">④</span> 블랙록이 파산 신청을 하면서 모든 환매가 동결됐다</li>
+      </ul>
+    </div>
+
+    <!-- Q5 -->
+    <div class="q-card">
+      <div class="q-head">
+        <div class="q-num">5</div>
+        <div class="q-meta">
+          <div class="q-type-row">
+            <span class="q-type type-mc">객관식</span>
+            <span class="q-diff">🟡 보통</span>
+          </div>
+        </div>
+      </div>
+      <div class="q-text">
+        S&P 500 지수의 "하락(베어) 시나리오"가 발생하는 조건으로 방송에서 언급된 것을 모두 고르면?
+        <br><small style="color:#888;font-size:12px;">① 호르무즈 해협 1개월 이상 봉쇄 &nbsp; ② WTI 유가 $100 돌파 &nbsp; ③ 사모신용 문제 확산 &nbsp; ④ 이란과 즉각 휴전 협정</small>
+      </div>
+      <ul class="options">
+        <li><span class="opt-label">①</span> ①②③</li>
+        <li><span class="opt-label">②</span> ①②④</li>
+        <li><span class="opt-label">③</span> ②③④</li>
+        <li><span class="opt-label">④</span> ①③④</li>
+      </ul>
+    </div>
+
+    <!-- Q6 -->
+    <div class="q-card">
+      <div class="q-head">
+        <div class="q-num">6</div>
+        <div class="q-meta">
+          <div class="q-type-row">
+            <span class="q-type type-sa">단답형</span>
+            <span class="q-diff">🟡 보통</span>
+          </div>
+        </div>
+      </div>
+      <div class="q-text">
+        방송에서 언급된 "물리적 AI(Physical AI)" 인프라 투자의 핵심 테마로 S&P 500에 새로 편입된 종목들의 공통점은 무엇입니까? 해당 기업들이 해결하려는 세 가지 물리적 한계를 서술하시오.
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="q-card">
+      <div class="q-head">
+        <div class="q-num">7</div>
+        <div class="q-meta">
+          <div class="q-type-row">
+            <span class="q-type type-tf">OX</span>
+            <span class="q-diff">🟡 보통</span>
+          </div>
+        </div>
+      </div>
+      <div class="q-text">
+        [OX 문제] 오늘 시장에서 방산주(록히드마틴, 노스롭그루먼 등)는 전쟁 긴장 고조로 인해 상승했으나, 이란과의 즉각 휴전 뉴스가 발표될 경우 방산주 역시 급락할 위험이 있다. (O / X)
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="q-card">
+      <div class="q-head">
+        <div class="q-num">8</div>
+        <div class="q-meta">
+          <div class="q-type-row">
+            <span class="q-type type-mc">객관식</span>
+            <span class="q-diff">🟡 보통</span>
+          </div>
+        </div>
+      </div>
+      <div class="q-text">
+        방송에서 "카타르의 불가항력 선언 가능성"과 "비료 대란" 간의 연결 고리를 설명한 내용으로 가장 정확한 것은?
+      </div>
+      <ul class="options">
+        <li><span class="opt-label">①</span> 카타르는 세계 최대 곡물 수출국이므로 비료 가격에 직접 영향을 준다</li>
+        <li><span class="opt-label">②</span> 천연가스가 암모니아 비료의 핵심 원료이며, LNG 공급 차질이 비료 생산 차질로 이어진다</li>
+        <li><span class="opt-label">③</span> 카타르 원유 감산이 화학 비료 생산 공장의 에너지 비용을 높인다</li>
+        <li><span class="opt-label">④</span> 카타르가 비료를 수출하지 않겠다고 선언한 것이 직접 원인이다</li>
+      </ul>
+    </div>
+
+    <!-- DIFFICULTY SECTION: HARD -->
+    <div class="section-title" style="margin-top:28px;">
+      <h2>📕 어려움 (Hard)</h2>
+      <span class="diff-badge hard">20% · 2문항</span>
+    </div>
+
+    <!-- Q9 -->
+    <div class="q-card">
+      <div class="q-head">
+        <div class="q-num">9</div>
+        <div class="q-meta">
+          <div class="q-type-row">
+            <span class="q-type type-sa">단답형</span>
+            <span class="q-diff">🔴 어려움</span>
+          </div>
+        </div>
+      </div>
+      <div class="q-text">
+        방송에서 현재 상황을 "레이건 대통령 초기"와 비교한 이유를 설명하고, "연준 독립성 상실"이 경제에 미치는 위험을 방송 내용을 바탕으로 서술하시오.
+      </div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="q-card">
+      <div class="q-head">
+        <div class="q-num">10</div>
+        <div class="q-meta">
+          <div class="q-type-row">
+            <span class="q-type type-mc">객관식</span>
+            <span class="q-diff">🔴 어려움</span>
+          </div>
+        </div>
+      </div>
+      <div class="q-text">
+        다음 중 3월 20일(금)을 "트리플 위칭 데이(Triple Witching Day)"라고 부르는 이유와 이 날의 의미를 가장 종합적으로 서술한 것은?
+      </div>
+      <ul class="options">
+        <li><span class="opt-label">①</span> 세 명의 연준 위원이 동시에 금리 관련 발언을 하는 날이어서, 시장 방향성이 세 갈래로 나뉜다</li>
+        <li><span class="opt-label">②</span> 주간 옵션 만기, 월간 옵션 만기, 분기 선물 만기가 하루에 동시 도래해 대규모 포지션 정리로 극단적 변동성이 발생하며, 이날 S&P 500 리밸런싱 편입도 겹쳐 대규모 수급 이벤트가 된다</li>
+        <li><span class="opt-label">③</span> 에너지·방산·AI 세 섹터의 옵션 만기가 겹치는 날로 이 세 섹터만 극심한 변동을 보인다</span></li>
+        <li><span class="opt-label">④</span> 매년 3월 세 번째 주에 미국·유럽·아시아 세 시장의 선물 만기가 동시에 돌아오는 글로벌 이벤트다</li>
+      </ul>
+    </div>
+
+  </div><!-- /q-section -->
+
+
+  <!-- =============================== -->
+  <!--          ANSWERS                -->
+  <!-- =============================== -->
+  <div class="a-section">
+    <div class="big-title"><em>정답</em> 및 해설</div>
+    <div class="subtitle">ANSWER KEY & EXPLANATIONS — 문제를 모두 푼 후 확인하세요</div>
+
+    <div class="score-box">
+      <div class="score-item"><span class="sv">10</span><span class="sl">총 문항</span></div>
+      <div class="score-item"><span class="sv">3</span><span class="sl">쉬움</span></div>
+      <div class="score-item"><span class="sv">5</span><span class="sl">보통</span></div>
+      <div class="score-item"><span class="sv">2</span><span class="sl">어려움</span></div>
+    </div>
+
+    <!-- A1 -->
+    <div class="ans-card">
+      <div class="ans-head">
+        <span class="anum">Q1</span>
+        <span class="atitle">트리플 쇼크의 세 가지 충격</span>
+      </div>
+      <div class="ans-body">
+        <div class="ans-correct">✓ 정답: ④</div>
+        <div class="ans-explain">
+          오늘 방송의 세 가지 충격은 <strong>① 유가 폭등(WTI $80→$90+)</strong>, <strong>② 비농업 고용 마이너스(-92,000)</strong>, <strong>③ 블랙록 사모펀드 게이팅 발동</strong>이다. 연준은 오늘 어떠한 금리 결정도 하지 않았다. 오히려 방송의 핵심 메시지는 연준이 "이러지도 저러지도 못하는" 딜레마에 빠졌다는 것이다.
+        </div>
+      </div>
+    </div>
+
+    <!-- A2 -->
+    <div class="ans-card">
+      <div class="ans-head">
+        <span class="anum">Q2</span>
+        <span class="atitle">연준 금리 인하 환경 OX</span>
+      </div>
+      <div class="ans-body">
+        <div class="ans-correct">✓ 정답: X</div>
+        <div class="ans-explain">
+          <strong>틀렸다.</strong> 유가 급등 = 물가 상승 압력이므로 연준은 오히려 금리를 내리기 어렵다. 고용 악화 단독이면 금리 인하가 맞지만, 동시에 물가가 올라가면 금리를 올려야 하는 상반된 신호가 충돌한다. 이것이 <em>스태그플레이션</em> 환경에서 연준이 "아무것도 할 수 없는" 최악의 상태가 되는 이유다. CME FedWatch에서 첫 인하 시점이 계속 뒤로 밀리는 것이 그 증거다.
+        </div>
+      </div>
+    </div>
+
+    <!-- A3 -->
+    <div class="ans-card">
+      <div class="ans-head">
+        <span class="anum">Q3</span>
+        <span class="atitle">비농업 고용 수치</span>
+      </div>
+      <div class="ans-body">
+        <div class="ans-correct">✓ 정답: ②</div>
+        <div class="ans-explain">
+          방송에서 명확히 언급됐다. 시장 예상(컨센서스)은 <strong>+5만 명</strong>이었으나 실제 발표치는 <strong>-9만 2천 명</strong>으로, 예상 대비 약 14만 2천 명 차이의 충격적인 미스였다. 이로 인해 실업률도 <strong>4.4%</strong>로 급등했다.
+        </div>
+      </div>
+    </div>
+
+    <!-- A4 -->
+    <div class="ans-card">
+      <div class="ans-head">
+        <span class="anum">Q4</span>
+        <span class="atitle">블랙록 게이팅 사태</span>
+      </div>
+      <div class="ans-body">
+        <div class="ans-correct">✓ 정답: ③</div>
+        <div class="ans-explain">
+          투자자들의 환매(돈 돌려달라는) 요청이 <strong>9.3%</strong>로 집중됐으나, 블랙록은 현금 유동성 부족으로 <strong>5%까지만 지급</strong> 가능하다며 게이팅을 발동했다. 이는 사실상 사모펀드의 <em>뱅크런</em>과 같다. 블랙록 주가는 당일 <strong>-7%</strong> 폭락했다. 앞서 발생한 블루아울(Blue Owl) 사태와 동일한 패턴으로, JP모건 다이몬의 "바퀴벌레 한 마리" 경고가 현실화되는 흐름이다.
+        </div>
+      </div>
+    </div>
+
+    <!-- A5 -->
+    <div class="ans-card">
+      <div class="ans-head">
+        <span class="anum">Q5</span>
+        <span class="atitle">S&P 하락 시나리오 조건</span>
+      </div>
+      <div class="ans-body">
+        <div class="ans-correct">✓ 정답: ①</div>
+        <div class="ans-explain">
+          방송의 하락 시나리오 조건은 <strong>① 호르무즈 해협 1개월 이상 봉쇄, ② 유가 $100 돌파, ③ 사모신용 문제 확산</strong>이다. ④ 이란과의 즉각 휴전은 오히려 반등을 촉발하는 <em>상승 시나리오</em>의 조건이다. 이란 휴전 시 에너지·방산주는 급락하지만 전반적인 증시는 회복될 수 있다.
+        </div>
+      </div>
+    </div>
+
+    <!-- A6 -->
+    <div class="ans-card">
+      <div class="ans-head">
+        <span class="anum">Q6</span>
+        <span class="atitle">물리적 AI 인프라의 세 가지 한계</span>
+      </div>
+      <div class="ans-body">
+        <div class="ans-correct">✓ 핵심 키워드</div>
+        <div class="ans-explain">
+          방송에서 언급된 세 가지 물리적 한계는 다음과 같다.<br><br>
+          <strong>① 발열 문제</strong> — AI 칩(GPU)이 엄청난 열을 발생시켜 성능을 제한함. 이를 해결하는 것이 Vertiv(VRT)의 <em>액체 냉각 시스템</em>이다.<br><br>
+          <strong>② 네트워크 속도 한계</strong> — AI 데이터센터 간 데이터 전송 속도가 병목. 이를 해결하는 것이 Lumentum(LITE), Coherent(COHR)의 <em>광학(빛의 속도) 네트워킹</em>이다.<br><br>
+          <strong>③ 메모리 대역폭 한계</strong> — AI 연산에 필요한 데이터를 충분히 빠르게 공급하지 못함. 이를 해결하는 것이 Micron(MU)의 <em>HBM(High Bandwidth Memory)</em>이다.
+        </div>
+      </div>
+    </div>
+
+    <!-- A7 -->
+    <div class="ans-card">
+      <div class="ans-head">
+        <span class="anum">Q7</span>
+        <span class="atitle">방산주 휴전 리스크 OX</span>
+      </div>
+      <div class="ans-body">
+        <div class="ans-correct">✓ 정답: O</div>
+        <div class="ans-explain">
+          <strong>맞다.</strong> 방송에서 명확히 경고했다. 지정학적 긴장이 해소되는 순간(트럼프 대통령의 갑작스러운 "평화협정" 발표 등), 방산주는 물론 에너지, 비료, 곡물 관련 주식이 <em>전부 급락</em>할 수 있다. 방산주는 전쟁 리스크에 역방향 헤지(hedge) 성격이 있으므로, "뉴스를 지속적으로 모니터링하면서 조심스럽게" 접근해야 한다고 강조됐다.
+        </div>
+      </div>
+    </div>
+
+    <!-- A8 -->
+    <div class="ans-card">
+      <div class="ans-head">
+        <span class="anum">Q8</span>
+        <span class="atitle">카타르·비료 연결 고리</span>
+      </div>
+      <div class="ans-body">
+        <div class="ans-correct">✓ 정답: ②</div>
+        <div class="ans-explain">
+          <strong>천연가스 → 암모니아 → 비료</strong>의 생산 사슬이 핵심이다. 카타르는 세계 최대 LNG(액화천연가스) 수출국 중 하나다. 천연가스를 생산·처리하는 과정에서 <em>암모니아</em>가 추출되며, 이 암모니아는 농업용 질소비료의 핵심 원료다. 호르무즈 해협 봉쇄로 LNG 선박 운항이 차단되면 → 카타르 천연가스 생산 및 수출 차질 → 암모니아 공급 감소 → 비료 생산 차질 → 식량 가격 급등으로 이어진다.
+        </div>
+      </div>
+    </div>
+
+    <!-- A9 -->
+    <div class="ans-card">
+      <div class="ans-head">
+        <span class="anum">Q9</span>
+        <span class="atitle">레이건 초기 비교 & 연준 독립성</span>
+      </div>
+      <div class="ans-body">
+        <div class="ans-correct">✓ 모범 답안</div>
+        <div class="ans-explain">
+          <strong>[레이건 초기 비교]</strong><br>
+          1980년대 초 레이건 대통령 취임 초기는 에너지 공급 쇼크로 인한 극심한 인플레이션과 경기 침체가 동시에 발생하던 시기다. 현재도 이란 전쟁→유가 급등→물가 상승의 구조가 유사하다. 방송에서는 유가의 단일 일간 상승폭이 <strong>"1984년 이후 사상 최대"</strong>라고 언급해, 당시와 비견되는 충격임을 강조했다.<br><br>
+          <strong>[연준 독립성 상실의 위험]</strong><br>
+          방송에서는 "역사상 어느 나라든 중앙은행이 독립성을 잃고 대통령 말 한마디에 금리가 오르락내리락하면 그 나라 경제는 망가지기 시작한다"고 경고했다. 연준이 정치적 압력에 굴복해 인플레이션 상황에서도 금리를 내리면 → <em>물가 통제 실패 → 하이퍼인플레이션 위험</em>이 발생한다. 반대로 경기 침체 상황에서 금리를 올리면 → <em>경기 악화 가속</em>이 된다. 연준의 독립성은 이 두 극단 사이에서 데이터 기반의 균형 잡힌 결정을 가능하게 하는 제도적 장치다.
+        </div>
+      </div>
+    </div>
+
+    <!-- A10 -->
+    <div class="ans-card">
+      <div class="ans-head">
+        <span class="anum">Q10</span>
+        <span class="atitle">트리플 위칭 데이</span>
+      </div>
+      <div class="ans-body">
+        <div class="ans-correct">✓ 정답: ②</div>
+        <div class="ans-explain">
+          <strong>트리플 위칭(Triple Witching)</strong>은 <em>주간 옵션 만기 + 월간 옵션 만기 + 분기 선물 만기</em>가 하루에 겹치는 날이다. 거대한 파생상품 포지션들이 동시에 만기를 맞아 정리되면서 극심한 변동성이 발생한다. 3월 20일은 여기에 더해 <strong>S&P 500 리밸런싱(VRT, LITE, COHR, MU 등 편입)</strong>이 공식 적용되는 날이기도 해, 인덱스 펀드들의 대규모 매수 수급이 동시에 발생한다. 이는 단순한 변동성 이벤트를 넘어 특정 종목에 대한 수급 기회가 될 수 있다고 방송에서 시사했다.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /a-section -->
+
+</div><!-- /container -->
+
+<div class="footer">
+  <strong>NOVA Real Invest — Quiz Sheet</strong><br>
+  2026.03.07 · 트리플 쇼크 분석 기반 · 출제 문항 수: 10<br>
+  본 시험지는 학습 목적으로 제작되었으며 투자 권유가 아닙니다.
+</div>
+
+</body>
+</html>

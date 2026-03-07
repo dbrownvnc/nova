@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA 마켓 브리핑 — 트리플 쇼크 | 2026.03.07</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --tbl-hdr: #e11d48;
+    --c1: #e11d48;
+    --c2: #1a1a1a;
+    --c3: #6b7280;
+    --c4: #2563eb;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER ── */
+  .masthead {
+    background: var(--text);
+    color: #fff;
+    padding: 28px 20px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .masthead::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.15;
+  }
+  .masthead-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 8px;
+  }
+  .masthead-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 7vw, 42px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+  .masthead-title em {
+    color: var(--accent2);
+    font-style: italic;
+  }
+  .masthead-meta {
+    font-size: 11px;
+    color: #aaa;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 1px;
+  }
+  .masthead-meta span { color: #fff; margin-right: 12px; }
+
+  /* ── ALERT BANNER ── */
+  .alert-bar {
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .alert-bar::before { content: '⚠'; font-size: 14px; }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 680px; margin: 0 auto; padding: 0 18px; }
+
+  /* ── SECTION DIVIDER ── */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 32px 0 20px;
+  }
+  .section-divider .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    opacity: 0.18;
+    min-width: 36px;
+  }
+  .section-divider h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  /* ── SHOCK CARDS ── */
+  .shock-card {
+    background: var(--bg2);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+  }
+  .shock-card .shock-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+    font-family: 'DM Mono', monospace;
+  }
+  .shock-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .shock-card p {
+    font-size: 13.5px;
+    color: #333;
+    line-height: 1.65;
+  }
+
+  /* ── STAT GRID ── */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 18px 0;
+  }
+  .stat-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 14px 12px;
+    text-align: center;
+  }
+  .stat-box .val {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--accent);
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-box .val.dark { color: var(--text); }
+  .stat-box .lbl {
+    font-size: 11px;
+    color: var(--text2);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.5px;
+    line-height: 1.3;
+  }
+
+  /* ── CHART CONTAINERS ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin: 18px 0;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas {
+    opacity: 1;
+  }
+  .chart-label {
+    font-size: 11px;
+    color: var(--text2);
+    font-family: 'DM Mono', monospace;
+    text-align: center;
+    margin-top: -4px;
+    margin-bottom: 6px;
+  }
+
+  /* ── TABLE ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 13px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .data-table thead tr {
+    background: var(--tbl-hdr);
+    color: #fff;
+  }
+  .data-table thead th {
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .data-table tbody tr { background: var(--bg2); }
+  .data-table tbody tr:nth-child(even) { background: #f0f0f0; }
+  .data-table tbody td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .data-table tbody td:first-child { font-weight: 600; color: var(--text); }
+  .tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 2px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+  .tag.blue { background: var(--c4); }
+  .tag.gray { background: var(--c3); }
+
+  /* ── QUOTE BLOCK ── */
+  .pull-quote {
+    border-top: 3px solid var(--accent);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 0 14px;
+    margin: 22px 0;
+  }
+  .pull-quote p {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--text);
+  }
+  .pull-quote cite {
+    display: block;
+    font-size: 11px;
+    color: var(--text2);
+    font-style: normal;
+    margin-top: 8px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── SCENARIO CARDS ── */
+  .scenario-grid { margin: 16px 0; }
+  .scenario-item {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    background: var(--bg2);
+  }
+  .scenario-item.bear { border-left: 4px solid #dc2626; }
+  .scenario-item.base { border-left: 4px solid var(--c3); }
+  .scenario-item.bull { border-left: 4px solid #16a34a; }
+  .scenario-item .scenario-hd {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .scenario-item .icon { font-size: 18px; }
+  .scenario-item h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .scenario-item .target {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .scenario-item ul {
+    padding-left: 16px;
+    font-size: 13px;
+    color: #444;
+    line-height: 1.7;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline { margin: 16px 0; }
+  .tl-item {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+  .tl-date {
+    min-width: 66px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #fff;
+    background: var(--text);
+    padding: 4px 6px;
+    border-radius: 4px;
+    text-align: center;
+    line-height: 1.3;
+    font-weight: 500;
+  }
+  .tl-date.hot { background: var(--accent); }
+  .tl-content { font-size: 13.5px; line-height: 1.6; }
+  .tl-content strong { font-weight: 600; color: var(--text); }
+
+  /* ── STOCK TABLE HIGHLIGHT ── */
+  .ticker { font-family: 'DM Mono', monospace; font-weight: 600; color: var(--c4); font-size: 13px; }
+  .up { color: #16a34a; font-weight: 600; }
+  .dn { color: var(--accent); font-weight: 600; }
+
+  /* ── BODY SECTIONS ── */
+  .body-section { margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+  .body-section:last-of-type { border-bottom: none; }
+
+  .lead-text {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 14px;
+  }
+  .body-text {
+    font-size: 14px;
+    line-height: 1.75;
+    color: #444;
+    margin-bottom: 10px;
+  }
+
+  /* ── KEY POINT BOX ── */
+  .key-point {
+    background: #fff5f7;
+    border: 1px solid #fecdd3;
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin: 14px 0;
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: #444;
+  }
+  .key-point strong { color: var(--accent); }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--text);
+    color: #aaa;
+    padding: 24px 20px;
+    text-align: center;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    line-height: 1.8;
+    letter-spacing: 0.3px;
+    margin-top: 36px;
+  }
+  .footer strong { color: #fff; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+  /* ── TOP NAV STRIP ── */
+  .top-strip {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 7px 20px;
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text2);
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    letter-spacing: 0.5px;
+  }
+  .top-strip span { display: flex; align-items: center; gap: 4px; }
+  .top-strip .up-val { color: #16a34a; font-weight: 600; }
+  .top-strip .dn-val { color: var(--accent); font-weight: 600; }
+
+  /* ── INLINE LIST ── */
+  .inline-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 10px 0;
+  }
+  .inline-list .chip {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 9px;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .inline-list .chip.accent { background: #fff5f7; border-color: #fecdd3; color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- TOP STRIP -->
+<div class="top-strip">
+  <span>S&amp;P 500 <span class="dn-val">▼ ~1.7%</span></span>
+  <span>NASDAQ <span class="dn-val">▼ ~2.0%</span></span>
+  <span>VIX <span class="dn-val">28.0 ▲4개월 高</span></span>
+  <span>WTI 유가 <span class="dn-val">$90+ ▲폭등</span></span>
+  <span>실업률 <span class="dn-val">4.4%</span></span>
+</div>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="container">
+    <div class="masthead-label">NOVA Real Invest · US Market Analysis</div>
+    <div class="masthead-title">
+      <em>Triple</em> Shock<br>
+      트리플 쇼크
+    </div>
+    <div class="masthead-meta">
+      <span>2026.03.07 SAT</span>
+      <span>뉴욕 시각 기준 2026.03.06(FRI) 장 마감 후 분석</span>
+    </div>
+  </div>
+</div>
+
+<!-- ALERT -->
+<div class="alert-bar">
+  유가 1일 $10 급등 · 비농업 고용 -92,000 · 사모펀드 뱅크런 신호 — 3대 악재 동시 충격
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+  <!-- ===== OVERVIEW ===== -->
+  <div class="body-section" style="padding-top:24px;">
+    <div class="section-divider">
+      <span class="num">00</span>
+      <h2>오늘 시장 한눈에</h2>
+    </div>
+
+    <div class="stat-grid fade-in">
+      <div class="stat-box">
+        <span class="val">28.0</span>
+        <span class="lbl">VIX 지수<br>4개월 최고치</span>
+      </div>
+      <div class="stat-box">
+        <span class="val">4:1</span>
+        <span class="lbl">하락:상승 비율<br>하락 2,131개 종목</span>
+      </div>
+      <div class="stat-box">
+        <span class="val">$90+</span>
+        <span class="lbl">WTI 유가<br>하루 +$10 급등</span>
+      </div>
+      <div class="stat-box">
+        <span class="val">4.4%</span>
+        <span class="lbl">미국 실업률<br>2월 비농업 -92,000</span>
+      </div>
+    </div>
+
+    <p class="lead-text">
+      2026년 3월 6일(금), 세 가지 악재가 동시에 터졌다. 원유 가격이 하루 만에 10달러 폭등하고, 고용지표는 예상을 크게 하회해 마이너스를 기록했으며, 대형 사모펀드 블랙록에서 환매 제한(게이팅) 사태가 발생했다. 시장은 공황 매도는 피했지만 — 아직 "전쟁이 빨리 끝날 것"이라는 희망의 끈을 붙잡고 있는 상태 — 구조적 위험 신호는 선명하게 켜졌다.
+    </p>
+
+    <!-- Market Overview Chart -->
+    <div class="chart-container fade-in">
+      <canvas id="overviewChart" height="220"></canvas>
+    </div>
+    <p class="chart-label">S&P 500 시나리오별 주요 레벨 (현재 ~ 목표)</p>
+  </div>
+
+
+  <!-- ===== SHOCK 1: OIL ===== -->
+  <div class="body-section">
+    <div class="section-divider">
+      <span class="num">01</span>
+      <h2>충격 ① — 유가 폭등: 1984년 이후 최대폭</h2>
+    </div>
+
+    <div class="shock-card fade-in">
+      <span class="shock-badge">Shock 1 · Oil</span>
+      <h3>WTI $80 → $90+ : 하루 만에 $10 급등</h3>
+      <p>1984년 이후 단 하루 기준 사상 최대 상승폭. 팬데믹(COVID-19) 당시에도 이 수준의 일일 급등은 없었다.</p>
+    </div>
+
+    <p class="body-text">유가 급등의 직접적 원인은 이란-미국 갈등 격화다. 트럼프 대통령이 이란에 <strong>"무조건적인 항복(unconditional surrender)"</strong> 없이는 협상 불가 입장을 선언한 직후, 호르무즈 해협 봉쇄 리스크가 현실화됐다.</p>
+
+    <div class="key-point">
+      <strong>카타르 불가항력 선언 경고:</strong> 카타르는 세계 최대 LNG 공급국 중 하나다. 선박 운항이 막히자 "공급 계약을 이행할 수 없다(불가항력)"고 선언할 수 있다고 경고했다. 천연가스 저장에는 물리적 한계가 있어 생산을 무한정 지속할 수 없기 때문이다.
+    </div>
+
+    <table class="data-table fade-in">
+      <thead>
+        <tr><th>국가/기관</th><th>조치 내용</th><th>영향</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>트럼프 행정부</td><td>이란 "무조건 항복" 요구</td><td>협상 기대 소멸, 전쟁 장기화 우려↑</td></tr>
+        <tr><td>카타르</td><td>불가항력 선언 가능성 경고</td><td>LNG 공급 차질, 150달러 경고</td></tr>
+        <tr><td>쿠웨이트</td><td>원유 20% 감산 시작</td><td>공급량 감소 직접 충격</td></tr>
+        <tr><td>이라크</td><td>일부 감산 시작</td><td>OPEC+ 공급 추가 축소</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Oil Price Chart -->
+    <div class="chart-container fade-in">
+      <canvas id="oilChart" height="220"></canvas>
+    </div>
+    <p class="chart-label">WTI 유가 주요 레벨 및 시나리오 (달러/배럴)</p>
+
+    <div class="pull-quote fade-in">
+      <p>"유가 100달러는 마지노선, 150달러가 되면 전 세계 경제가 파탄 난다."</p>
+      <cite>— 경제학자들의 경고 (방송 인용)</cite>
+    </div>
+
+    <p class="body-text">
+      유가 급등이 무서운 이유는 <strong>비료 생산 차질</strong>로까지 연결되기 때문이다. 천연가스는 암모니아(비료의 핵심 원료) 생산에 필수적이다. 호르무즈 봉쇄로 천연가스 공급이 막히면 → 비료 생산 차질 → 식량 가격 상승으로 이어지는 연쇄반응이 시작된다. CF Industries(비료)는 이번 주 한 주간 약 <strong>+20% 급등</strong>했다.
+    </p>
+  </div>
+
+
+  <!-- ===== SHOCK 2: JOBS ===== -->
+  <div class="body-section">
+    <div class="section-divider">
+      <span class="num">02</span>
+      <h2>충격 ② — 고용 쇼크: 예상치의 정반대</h2>
+    </div>
+
+    <div class="shock-card fade-in">
+      <span class="shock-badge">Shock 2 · Employment</span>
+      <h3>비농업 고용 -92,000 (예상: +50,000)</h3>
+      <p>예상 대비 약 14만 2천 명 차이. 실업률은 4.4%로 급등. 헬스케어·제조업·건설업에서 전방위적 고용 축소.</p>
+    </div>
+
+    <!-- Jobs Chart -->
+    <div class="chart-container fade-in">
+      <canvas id="jobsChart" height="220"></canvas>
+    </div>
+    <p class="chart-label">비농업 고용 변화 (단위: 천 명) — 전월 비교</p>
+
+    <p class="body-text">
+      정부는 "2월 폭설로 인한 일시적 충격"이라는 해명을 내놓았다. 실제로 방송 진행자도 2주간 폭설로 외출이 불가능했다고 전했다. 하지만 문제는 통계 신뢰성이다 — 12월 수치가 이미 사후에 마이너스로 수정된 전례가 있어, 이번 1월 수치(+12만 명으로 발표)도 마사지 가능성이 있다는 우려가 제기됐다.
+    </p>
+
+    <div class="key-point">
+      <strong>스태그플레이션(Stagflation) 공식 성립:</strong> 유가 급등 = 물가 상승 + 고용 마이너스 = 경기 침체. 이 두 가지가 동시에 나타나는 것이 바로 스태그플레이션이다. 1970년대 오일쇼크 이후 가장 위험한 경제 조합으로 꼽힌다.
+    </div>
+  </div>
+
+
+  <!-- ===== SHOCK 3: FINANCIAL ===== -->
+  <div class="body-section">
+    <div class="section-divider">
+      <span class="num">03</span>
+      <h2>충격 ③ — 사모신용 뱅크런 신호</h2>
+    </div>
+
+    <div class="shock-card fade-in">
+      <span class="shock-badge">Shock 3 · Financial</span>
+      <h3>블랙록(BlackRock) 사모펀드 — 게이팅(Gating) 발동</h3>
+      <p>환매 요청 9.3% 집중 → 5%만 지급 가능 선언. 블랙록 주가 당일 -7% 폭락.</p>
+    </div>
+
+    <p class="body-text">
+      <strong>게이팅(Gating)</strong>이란 펀드가 투자자들의 환매(돈 돌려달라는) 요청에 응하지 못할 때 지급 한도를 제한하는 조치다. 은행으로 치면 <strong>'뱅크런' 방어막</strong>과 같다. 앞서 블루아울(Blue Owl) 사태에 이어 블랙록에서도 같은 현상이 발생했다.
+    </p>
+
+    <div class="key-point">
+      <strong>JP모건 제이미 다이몬 경고 (이전 발언):</strong> "바퀴벌레 한 마리가 나오면 벽 속에 300마리가 있다." — 사모신용(Private Credit) 시장의 구조적 취약성을 경고한 말이다. 블루아울에 이어 블랙록까지 동일 증상이 발생하며 이 경고가 현실화되고 있다.
+    </div>
+
+    <!-- Financial Stress Chart -->
+    <div class="chart-container fade-in">
+      <canvas id="finChart" height="220"></canvas>
+    </div>
+    <p class="chart-label">사모펀드 게이팅 사태 비교 (요청 vs 지급 비율 %)</p>
+  </div>
+
+
+  <!-- ===== FED DILEMMA ===== -->
+  <div class="body-section">
+    <div class="section-divider">
+      <span class="num">04</span>
+      <h2>연준 딜레마: 이러지도 저러지도 못한다</h2>
+    </div>
+
+    <p class="body-text">
+      연방준비제도(Fed)는 현재 최악의 선택지 앞에 서 있다. 고용이 무너지면 금리를 내려야 하지만, 유가가 급등해 물가가 오르면 금리를 올려야 한다. 두 신호가 정반대 방향을 가리키고 있는 것이다.
+    </p>
+
+    <!-- CME Chart -->
+    <div class="chart-container fade-in">
+      <canvas id="cmeChart" height="220"></canvas>
+    </div>
+    <p class="chart-label">CME FedWatch — 2026년 첫 금리 인하 시기 기대 확률 (%)</p>
+
+    <table class="data-table fade-in">
+      <thead>
+        <tr><th>연준위원</th><th>성향</th><th>발언 요지</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>해머크(Hammack)</td><td><span class="tag gray">중립</span></td><td>금리 동결 장기화 가능성 시사</td></tr>
+        <tr><td>데일리(Daly)</td><td><span class="tag gray">중립</span></td><td>연준 풋(Put) 기대 자제 촉구</td></tr>
+        <tr><td>무살렘(Musalem)</td><td><span class="tag blue">비둘기</span></td><td>금리 인하 필요 입장</td></tr>
+        <tr><td>기타 강경파</td><td><span class="tag">매파</span></td><td>물가 우선, 인하 불가 입장</td></tr>
+      </tbody>
+    </table>
+
+    <p class="body-text">
+      CME FedWatch 기준으로 첫 번째 금리 인하 시점 전망이 6월 → 7월 → <strong>9월 이후</strong>로 계속 뒤로 밀리고 있다. 방송 중 실시간으로 7월 확률이 사라지고 9월(43%), 10월(40%), 12월(35.7%)로 재편되는 것이 관측됐다.
+    </p>
+  </div>
+
+
+  <!-- ===== S&P SCENARIOS ===== -->
+  <div class="body-section">
+    <div class="section-divider">
+      <span class="num">05</span>
+      <h2>S&P 500 시나리오 3가지</h2>
+    </div>
+
+    <div class="scenario-grid">
+      <div class="scenario-item bear fade-in">
+        <div class="scenario-hd">
+          <span class="icon">🔴</span>
+          <h4>하락 시나리오</h4>
+          <span class="target">6,400 붕괴</span>
+        </div>
+        <ul>
+          <li>호르무즈 해협 <strong>1개월 이상 봉쇄</strong></li>
+          <li>WTI 유가 <strong>$100 돌파</strong></li>
+          <li>사모신용 문제 확산 (금융위기 징조)</li>
+          <li>6,400 붕괴 시 추가 급락, <strong>장기 5년 침체 가능성</strong></li>
+        </ul>
+      </div>
+
+      <div class="scenario-item base fade-in">
+        <div class="scenario-hd">
+          <span class="icon">⚪</span>
+          <h4>기본 시나리오 (베이스)</h4>
+          <span class="target" style="color:var(--c3)">횡보</span>
+        </div>
+        <ul>
+          <li>전쟁 교착 상태 지속</li>
+          <li>WTI 유가 <strong>$85~$95 범위</strong> 등락</li>
+          <li>연준 금리 동결 확인</li>
+          <li>계단식 하락 + 줬다 뺐다 반복 패턴</li>
+        </ul>
+      </div>
+
+      <div class="scenario-item bull fade-in">
+        <div class="scenario-hd">
+          <span class="icon">🟢</span>
+          <h4>상승 시나리오</h4>
+          <span class="target" style="color:#16a34a">7,000 목표</span>
+        </div>
+        <ul>
+          <li>이란과 <strong>휴전/협상 타결</strong></li>
+          <li>3월 11일(수) <strong>CPI 양호</strong> 발표</li>
+          <li>물가 안정 → 금리 인하 기대 재부상</li>
+          <li>갑작스러운 "중대 발표"로 반전 가능</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ===== AI INFRA / S&P 편입 ===== -->
+  <div class="body-section">
+    <div class="section-divider">
+      <span class="num">06</span>
+      <h2>돈이 몰리는 곳: 물리적 AI 인프라</h2>
+    </div>
+
+    <p class="body-text">
+      장 후 발표된 S&P 500/100 리밸런싱에서 편입 종목들이 주목받았다. 나가는 종목(PayPal, Target, Match 등)이 소비재·핀테크인 반면, <strong>들어오는 종목은 전부 AI 물리적 인프라</strong>다. 엔비디아가 투자·파트너십을 맺은 기업들이 S&P에 편입되는 흐름이 확인됐다.
+    </p>
+
+    <table class="data-table fade-in">
+      <thead>
+        <tr><th>티커</th><th>기업명</th><th>역할</th><th>분류</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="ticker">VRT</span></td>
+          <td>Vertiv Holdings</td>
+          <td>AI 서버 액체 냉각 시스템</td>
+          <td><span class="tag">NVIDIA 파트너</span></td>
+        </tr>
+        <tr>
+          <td><span class="ticker">LITE</span></td>
+          <td>Lumentum</td>
+          <td>광통신 네트워킹 (빛의 속도 연결)</td>
+          <td><span class="tag">NVIDIA 투자</span></td>
+        </tr>
+        <tr>
+          <td><span class="ticker">COHR</span></td>
+          <td>Coherent Corp.</td>
+          <td>광학 네트워크 부품</td>
+          <td><span class="tag">NVIDIA 투자</span></td>
+        </tr>
+        <tr>
+          <td><span class="ticker">AMAT</span></td>
+          <td>Applied Materials</td>
+          <td>반도체 제조 장비</td>
+          <td><span class="tag blue">반도체 장비</span></td>
+        </tr>
+        <tr>
+          <td><span class="ticker">LRCX</span></td>
+          <td>Lam Research</td>
+          <td>반도체 식각 장비</td>
+          <td><span class="tag blue">반도체 장비</span></td>
+        </tr>
+        <tr>
+          <td><span class="ticker">MU</span></td>
+          <td>Micron Technology</td>
+          <td>HBM 메모리 (AI 필수)</td>
+          <td><span class="tag blue">메모리</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="inline-list">
+      <span class="chip accent">물리적 AI</span>
+      <span class="chip accent">액체 냉각</span>
+      <span class="chip accent">광학 네트워킹</span>
+      <span class="chip accent">HBM 메모리</span>
+      <span class="chip">반도체 장비</span>
+    </div>
+
+    <p class="body-text">
+      AI 칩이 물리적 한계(발열, 네트워크 속도, 메모리 대역폭)에 직면하면서, 이를 해결하는 하드웨어 기업들이 새로운 패러다임의 수혜주가 되고 있다. S&P 편입 효과로 3월 20일(금·옵션만기일) 리밸런싱 완료까지 대규모 자금 유입이 예상된다.
+    </p>
+
+    <!-- AI Infra Chart -->
+    <div class="chart-container fade-in">
+      <canvas id="aiChart" height="220"></canvas>
+    </div>
+    <p class="chart-label">물리적 AI 인프라 — 섹터별 투자 테마 구조</p>
+  </div>
+
+
+  <!-- ===== KEY CALENDAR ===== -->
+  <div class="body-section">
+    <div class="section-divider">
+      <span class="num">07</span>
+      <h2>주요 일정: 다음 3주</h2>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item fade-in">
+        <div class="tl-date">3/10<br>TUE</div>
+        <div class="tl-content"><strong>오라클(ORCL) 실적 발표</strong><br>오픈AI와 텍사스 데이터센터 계약 파기 후 메타(META)와 새 파트너십 논의 중. 기존 계약 진행 상황과 신규 수주 내용이 관건.</div>
+      </div>
+      <div class="tl-item fade-in">
+        <div class="tl-date hot">3/11<br>WED</div>
+        <div class="tl-content"><strong>🔥 CPI 소비자물가지수 발표 (초고관심)</strong><br>2월 유가 상승분이 물가에 얼마나 전이됐는지 확인. 양호 시 시장 안도 랠리, 예상 상회 시 금리 인하 기대 추가 후퇴. 이번 주 가장 중요한 이벤트.</div>
+      </div>
+      <div class="tl-item fade-in">
+        <div class="tl-date">3/19<br>WED</div>
+        <div class="tl-content"><strong>FOMC 회의</strong><br>금리 동결 거의 확실. 파월 의장 발언과 점도표(Dot Plot)에서 연내 인하 횟수 조정 여부 주목.</div>
+      </div>
+      <div class="tl-item fade-in">
+        <div class="tl-date hot">3/20<br>FRI</div>
+        <div class="tl-content"><strong>🔥 트리플 위칭 데이 (세 마녀의 날)</strong><br>S&P 리밸런싱 적용일 + 주간/월간 옵션 만기 + 분기 선물 만기 동시 도래. 대규모 변동성 예상. 위험이자 기회의 구간.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ===== ACTION PLAN ===== -->
+  <div class="body-section">
+    <div class="section-divider">
+      <span class="num">08</span>
+      <h2>투자 행동 지침</h2>
+    </div>
+
+    <table class="data-table fade-in">
+      <thead>
+        <tr><th>상황</th><th>행동 방향</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>현재 보유 주식</td>
+          <td>관심 종목은 <strong>최소 1주 이상 보유 유지</strong>. 전량 매도 후 재진입은 심리적으로 매우 어렵다.</td>
+        </tr>
+        <tr>
+          <td>현금 비중</td>
+          <td>현금 비중 <strong>확보 및 유지</strong> (12월부터 강조). 기회 포착을 위한 "실탄" 확보가 핵심.</td>
+        </tr>
+        <tr>
+          <td>물리적 AI 인프라</td>
+          <td>VRT, LITE, COHR, AMAT, LRCX, MU 등 <strong>장기 구조적 수혜주</strong>. S&P 편입 자금 유입 수혜 예상.</td>
+        </tr>
+        <tr>
+          <td>방산주</td>
+          <td>록히드마틴(LMT), 노스롭그루먼(NOC), 팔란티어(PLTR) 등. 전쟁 리스크에 역방향 수혜. <strong>단, 전쟁 종료 시 급락 위험</strong> 병존.</td>
+        </tr>
+        <tr>
+          <td>에너지/비료</td>
+          <td>XOM, CVX, OXY, CF Industries, IPI. <strong>단기 급등 후 전쟁 종료 시 폭락 리스크</strong>. 뉴스 모니터링 필수.</td>
+        </tr>
+        <tr>
+          <td>피해야 할 것</td>
+          <td>소비재, 일반 기술주(소프트웨어 중심), 은행주 (금융위기 우려). 레버리지 비중 축소.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="pull-quote fade-in">
+      <p>"폭락장에 어떻게 대응하냐고? 미리 준비하는 것이다. 낌새가 보이면 가드를 올려야지, 타이슨도 아닌데 맞으면서 대응할 수 없다."</p>
+      <cite>— NOVA 방송 핵심 메시지</cite>
+    </div>
+
+    <div class="key-point">
+      <strong>핵심 원칙:</strong> 자본이 이동하는 길목에 <em>먼저</em> 가서 기다려라. 사건이 터진 후 대응하려 하면 이미 늦다. 전쟁 종료 기미(협상 뉴스, 트럼프 중대 발표 등)를 포착하면 즉시 방어 포지션 일부 정리 및 성장주 줍줍 준비.
+    </div>
+  </div>
+
+
+  <!-- ===== KEY CONCEPTS ===== -->
+  <div class="body-section">
+    <div class="section-divider">
+      <span class="num">09</span>
+      <h2>핵심 개념 정리</h2>
+    </div>
+
+    <table class="data-table fade-in">
+      <thead>
+        <tr><th>용어</th><th>뜻</th><th>오늘 맥락</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>스태그플레이션</td>
+          <td>경기침체(고용↓) + 물가상승 동시 발생</td>
+          <td>고용 -9만 2천 + 유가 급등 = 조건 성립</td>
+        </tr>
+        <tr>
+          <td>게이팅(Gating)</td>
+          <td>펀드가 투자자 환매 요청을 일부만 허용하는 제한 조치</td>
+          <td>블랙록 9.3% 요청 → 5%만 지급</td>
+        </tr>
+        <tr>
+          <td>불가항력(Force Majeure)</td>
+          <td>계약 이행 불가 상황을 법적으로 선언</td>
+          <td>카타르 LNG 공급 계약 이행 불가 경고</td>
+        </tr>
+        <tr>
+          <td>트리플 위칭</td>
+          <td>주식·지수·선물 옵션 만기가 동시 도래하는 날</td>
+          <td>3월 20일 — 극심한 변동성 예상</td>
+        </tr>
+        <tr>
+          <td>연준 풋(Fed Put)</td>
+          <td>주가 급락 시 연준이 금리를 내려 시장을 구제한다는 기대</td>
+          <td>현 스태그 환경에서 발동 불가능에 가까움</td>
+        </tr>
+        <tr>
+          <td>HBM (High Bandwidth Memory)</td>
+          <td>AI 연산에 특화된 초고속 메모리 반도체</td>
+          <td>Micron이 S&P 편입 — AI 수요 구조적 증가</td>
+        </tr>
+        <tr>
+          <td>CME FedWatch</td>
+          <td>금리 선물 시장으로 금리 인하 시기 확률을 추정하는 도구</td>
+          <td>첫 인하 시점 9~12월로 후퇴</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /container -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <strong>NOVA Real Invest — US Market Briefing</strong><br>
+  2026.03.07 · 뉴욕 시장 2026.03.06 기준 · 엔터테인먼트 채널 정보 제공<br>
+  본 문서는 투자 권유가 아닙니다. 모든 투자 결정과 손익은 투자자 본인에게 귀속됩니다.<br>
+  <span style="color:#555">원본 방송: NOVA Real Invest YouTube Channel</span>
+</div>
+
+
+<script>
+// ─── FADE-IN OBSERVER ───────────────────────────────
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// ─── CHART CONFIGS ──────────────────────────────────
+const chartConfigs = {};
+
+// 1. Market Overview — S&P 500 Scenario Levels
+chartConfigs['overviewChart'] = () => {
+  new Chart(document.getElementById('overviewChart'), {
+    type: 'bar',
+    data: {
+      labels: ['하락 경계선\n(6,400)', '현재 수준\n(~6,550)', '베이스 횡보\n상단 (~6,700)', '상승 목표\n(7,000)'],
+      datasets: [{
+        label: 'S&P 500 레벨',
+        data: [6400, 6550, 6700, 7000],
+        backgroundColor: ['#e11d48', '#6b7280', '#6b7280', '#2563eb'],
+        borderRadius: 4,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ' S&P: ' + ctx.parsed.y.toLocaleString()
+          }
+        }
+      },
+      scales: {
+        y: {
+          min: 6200,
+          max: 7200,
+          ticks: { font: { size: 11 }, color: '#777' },
+          grid: { color: '#f0f0f0' }
+        },
+        x: {
+          ticks: { font: { size: 10 }, color: '#555' },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+};
+
+// 2. Oil Price Chart
+chartConfigs['oilChart'] = () => {
+  new Chart(document.getElementById('oilChart'), {
+    type: 'line',
+    data: {
+      labels: ['1월초', '1월말', '2월초', '2월말', '3/5(전날)', '3/6(오늘)', '목표①\n$100', '목표②\n$150'],
+      datasets: [{
+        label: 'WTI 유가 ($)',
+        data: [72, 75, 76, 79, 80, 90, null, null],
+        borderColor: '#e11d48',
+        backgroundColor: 'rgba(225,29,72,0.08)',
+        borderWidth: 2.5,
+        pointRadius: [3,3,3,3,5,7,0,0],
+        pointBackgroundColor: ['#6b7280','#6b7280','#6b7280','#6b7280','#6b7280','#e11d48','#e11d48','#e11d48'],
+        tension: 0.3,
+        fill: true
+      },{
+        label: '경고 레벨',
+        data: [null, null, null, null, null, null, 100, 150],
+        borderColor: '#2563eb',
+        backgroundColor: 'rgba(37,99,235,0.06)',
+        borderWidth: 2,
+        borderDash: [6,3],
+        pointRadius: [0,0,0,0,0,0,6,6],
+        pointBackgroundColor: ['#2563eb','#2563eb'],
+        tension: 0,
+        fill: false
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top', labels: { font: { size: 11 }, boxWidth: 12 } },
+        tooltip: { callbacks: { label: ctx => ' $' + ctx.parsed.y } }
+      },
+      scales: {
+        y: {
+          min: 60,
+          ticks: { font: { size: 11 }, color: '#777', callback: v => '$' + v },
+          grid: { color: '#f0f0f0' }
+        },
+        x: { ticks: { font: { size: 10 }, color: '#555' }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// 3. Jobs Chart
+chartConfigs['jobsChart'] = () => {
+  new Chart(document.getElementById('jobsChart'), {
+    type: 'bar',
+    data: {
+      labels: ['11월(수정)', '12월(수정→-)', '1월(잠정)', '2월(발표)', '예상치(2월)'],
+      datasets: [{
+        label: '고용 변화 (천 명)',
+        data: [180, -20, 120, -92, 50],
+        backgroundColor: ctx => ctx.raw < 0 ? '#e11d48' : ctx.raw === 50 ? '#2563eb' : '#6b7280',
+        borderRadius: 4,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ' ' + ctx.parsed.y + '천 명' } }
+      },
+      scales: {
+        y: {
+          ticks: { font: { size: 11 }, color: '#777', callback: v => v + 'K' },
+          grid: { color: '#f0f0f0' }
+        },
+        x: { ticks: { font: { size: 10 }, color: '#555' }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// 4. Financial Stress Chart
+chartConfigs['finChart'] = () => {
+  new Chart(document.getElementById('finChart'), {
+    type: 'bar',
+    data: {
+      labels: ['블루아울\n환매 요청', '블루아울\n지급 가능', '블랙록\n환매 요청', '블랙록\n지급 가능'],
+      datasets: [{
+        label: '비율 (%)',
+        data: [null, null, 9.3, 5.0],
+        backgroundColor: ['#6b7280', '#2563eb', '#e11d48', '#2563eb'],
+        borderRadius: 4,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ' ' + ctx.parsed.y + '%' } }
+      },
+      scales: {
+        y: {
+          max: 15,
+          ticks: { font: { size: 11 }, color: '#777', callback: v => v + '%' },
+          grid: { color: '#f0f0f0' }
+        },
+        x: { ticks: { font: { size: 10 }, color: '#555' }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// 5. CME FedWatch
+chartConfigs['cmeChart'] = () => {
+  new Chart(document.getElementById('cmeChart'), {
+    type: 'bar',
+    data: {
+      labels: ['6월\n(소멸)', '7월\n(소멸)', '9월', '10월', '12월'],
+      datasets: [{
+        label: '금리 인하 확률 (%)',
+        data: [0, 0, 43, 40, 35.7],
+        backgroundColor: ['#d1d5db','#d1d5db','#e11d48','#f43f5e','#6b7280'],
+        borderRadius: 4,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ' ' + ctx.parsed.y + '%' } }
+      },
+      scales: {
+        y: {
+          max: 60,
+          ticks: { font: { size: 11 }, color: '#777', callback: v => v + '%' },
+          grid: { color: '#f0f0f0' }
+        },
+        x: { ticks: { font: { size: 10 }, color: '#555' }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// 6. AI Infra Radar
+chartConfigs['aiChart'] = () => {
+  new Chart(document.getElementById('aiChart'), {
+    type: 'radar',
+    data: {
+      labels: ['액체 냉각\n(VRT)', '광학 네트워킹\n(LITE/COHR)', 'HBM 메모리\n(MU)', '반도체 장비\n(AMAT/LRCX)', '방산·AI\n(PLTR)', '비료·에너지\n(CF/XOM)'],
+      datasets: [{
+        label: '현재 모멘텀',
+        data: [90, 85, 80, 85, 75, 70],
+        borderColor: '#e11d48',
+        backgroundColor: 'rgba(225,29,72,0.12)',
+        borderWidth: 2,
+        pointBackgroundColor: '#e11d48',
+        pointRadius: 4,
+      },{
+        label: '구조적 성장성',
+        data: [85, 90, 88, 80, 65, 40],
+        borderColor: '#2563eb',
+        backgroundColor: 'rgba(37,99,235,0.08)',
+        borderWidth: 2,
+        pointBackgroundColor: '#2563eb',
+        pointRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top', labels: { font: { size: 11 }, boxWidth: 12 } }
+      },
+      scales: {
+        r: {
+          min: 0, max: 100,
+          ticks: { display: false },
+          grid: { color: '#e5e5e5' },
+          pointLabels: { font: { size: 10 }, color: '#444' }
+        }
+      }
+    }
+  });
+};
+
+// ─── CHART INTERSECTION OBSERVER ────────────────────
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+</script>
+</body>
+</html>
