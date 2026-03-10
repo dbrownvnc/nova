@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA Market Digest — 시험문제 2026.03.09</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,400;0,600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff; --bg2: #fafafa;
+    --text: #1a1a1a; --text2: #777777;
+    --accent: #e11d48; --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --c4: #2563eb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Source Serif 4', Georgia, serif; font-size: 16px; line-height: 1.75; }
+
+  /* MASTHEAD */
+  .masthead { background: var(--text); color: #fff; text-align: center; padding: 28px 20px 22px; position: relative; overflow: hidden; }
+  .masthead::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.03) 60px, rgba(255,255,255,0.03) 61px); }
+  .masthead-label { font-family: 'DM Sans', sans-serif; font-size: 10px; letter-spacing: 4px; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; }
+  .masthead h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 900; letter-spacing: -1px; line-height: 1.1; position: relative; }
+  .masthead-sub { font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 2.5px; color: rgba(255,255,255,0.5); margin-top: 10px; text-transform: uppercase; }
+  .accent-bar { height: 4px; background: linear-gradient(90deg, var(--accent), var(--accent2), transparent); }
+
+  .info-bar { background: var(--bg2); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px; padding: 8px 20px; font-family: 'DM Sans', sans-serif; font-size: 11px; color: var(--text2); letter-spacing: 0.5px; }
+  .info-bar span b { color: var(--text); }
+
+  .container { max-width: 680px; margin: 0 auto; padding: 0 18px 40px; }
+
+  /* SCORE CARD */
+  .score-section { padding: 24px 0 16px; border-bottom: 1px solid var(--border); margin-bottom: 28px; }
+  .score-section h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 12px; }
+  .score-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .score-box { background: var(--bg2); border: 1px solid var(--border); padding: 8px 4px; text-align: center; font-family: 'DM Sans', sans-serif; }
+  .score-box .s-num { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
+  .score-box .s-check { width: 28px; height: 28px; border: 2px solid var(--border); border-radius: 50%; margin: 0 auto; }
+
+  /* DIFFICULTY LEGEND */
+  .legend { display: flex; gap: 12px; flex-wrap: wrap; margin: 14px 0 4px; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-family: 'DM Sans', sans-serif; font-size: 11px; color: var(--text2); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+  /* QUESTION BLOCKS */
+  .question-block { margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid var(--border); }
+  .question-block:last-child { border-bottom: none; }
+
+  .q-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+  .q-num { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; color: var(--accent); line-height: 1; flex-shrink: 0; min-width: 36px; }
+
+  .q-meta { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 6px; }
+  .q-badge { font-family: 'DM Sans', sans-serif; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; padding: 2px 8px; border-radius: 2px; font-weight: 600; }
+  .badge-easy { background: #d1fae5; color: #065f46; }
+  .badge-mid  { background: #fef3c7; color: #92400e; }
+  .badge-hard { background: #fee2e2; color: #991b1b; }
+  .badge-ox   { background: #ede9fe; color: #5b21b6; }
+  .badge-mc   { background: #dbeafe; color: #1e40af; }
+  .badge-sa   { background: #fce7f3; color: #9d174d; }
+
+  .q-text { font-size: 1rem; font-weight: 600; line-height: 1.6; color: var(--text); margin-bottom: 12px; }
+
+  .q-options { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .q-option { font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text2); padding: 8px 12px; background: var(--bg2); border: 1px solid var(--border); border-radius: 2px; display: flex; gap: 8px; }
+  .q-option .opt-num { font-weight: 600; color: var(--text); flex-shrink: 0; }
+
+  /* ANSWER TOGGLE */
+  .answer-toggle { display: none; }
+  .answer-label {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--accent); border: 1.5px solid var(--accent);
+    padding: 5px 14px; cursor: pointer; border-radius: 2px;
+    user-select: none; transition: background 0.2s;
+  }
+  .answer-label:hover { background: rgba(225,29,72,0.06); }
+  .answer-label::before { content: '▶'; font-size: 8px; transition: transform 0.2s; }
+  .answer-toggle:checked + .answer-label { background: var(--accent); color: #fff; }
+  .answer-toggle:checked + .answer-label::before { content: '▼'; }
+  .answer-toggle:checked + .answer-label + .answer-box { display: block; }
+
+  .answer-box {
+    display: none;
+    background: #fff7f7; border: 1px solid #fecdd3;
+    border-left: 4px solid var(--accent);
+    padding: 14px 16px; margin-top: 10px;
+  }
+  .answer-box strong { font-family: 'DM Sans', sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 6px; }
+  .answer-box p { font-size: 0.9rem; color: var(--text); margin: 0; line-height: 1.65; }
+
+  /* DIVIDER */
+  .section-divider { display: flex; align-items: center; gap: 12px; margin: 32px 0 28px; }
+  .section-divider span { font-family: 'DM Sans', sans-serif; font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--text2); white-space: nowrap; }
+  .section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* FADE */
+  .fade-in { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* FOOTER */
+  .footer { background: var(--text); color: rgba(255,255,255,0.4); text-align: center; padding: 22px 20px; font-family: 'DM Sans', sans-serif; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 40px; }
+  .footer span { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-label">Nova Real Invest · Test Paper</div>
+  <h1>시험문제 10선<br><small style="font-size:0.55em;font-weight:700;letter-spacing:1px;color:rgba(255,255,255,0.6)">2026.03.09 방송 기반</small></h1>
+  <div class="masthead-sub">U.S. Market Analysis Quiz</div>
+</div>
+<div class="accent-bar"></div>
+<div class="info-bar">
+  <span><b>총 10문제</b></span>
+  <span>객관식 · 단답형 · OX</span>
+  <span>쉬움 30% / 보통 50% / 어려움 20%</span>
+  <span>▶ 버튼으로 정답 확인</span>
+</div>
+
+<div class="container">
+
+<!-- 범례 & 채점표 -->
+<div class="score-section fade-in">
+  <h2>나의 채점표</h2>
+  <div class="score-grid">
+    <div class="score-box"><div class="s-num">01</div><div class="s-check"></div></div>
+    <div class="score-box"><div class="s-num">02</div><div class="s-check"></div></div>
+    <div class="score-box"><div class="s-num">03</div><div class="s-check"></div></div>
+    <div class="score-box"><div class="s-num">04</div><div class="s-check"></div></div>
+    <div class="score-box"><div class="s-num">05</div><div class="s-check"></div></div>
+    <div class="score-box"><div class="s-num">06</div><div class="s-check"></div></div>
+    <div class="score-box"><div class="s-num">07</div><div class="s-check"></div></div>
+    <div class="score-box"><div class="s-num">08</div><div class="s-check"></div></div>
+    <div class="score-box"><div class="s-num">09</div><div class="s-check"></div></div>
+    <div class="score-box"><div class="s-num">10</div><div class="s-check"></div></div>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#d1fae5;border:1px solid #6ee7b7"></div>쉬움</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#fef3c7;border:1px solid #fcd34d"></div>보통</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#fee2e2;border:1px solid #fca5a5"></div>어려움</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ede9fe;border:1px solid #c4b5fd"></div>OX</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#dbeafe;border:1px solid #93c5fd"></div>객관식</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#fce7f3;border:1px solid #f9a8d4"></div>단답형</div>
+  </div>
+</div>
+
+<div class="section-divider fade-in"><span>쉬움 (30%)</span></div>
+
+<!-- Q1 -->
+<div class="question-block fade-in">
+  <div class="q-header">
+    <div class="q-num">01</div>
+    <div>
+      <div class="q-meta">
+        <span class="q-badge badge-easy">쉬움</span>
+        <span class="q-badge badge-ox">OX</span>
+      </div>
+      <div class="q-text">트럼프 대통령은 오늘(3월 9일) 오후 3시 15분경 CBS 인터뷰에서 "전쟁이 거의 완전히 끝났다"는 발언을 했다. (O / X)</div>
+    </div>
+  </div>
+  <input type="checkbox" class="answer-toggle" id="a1">
+  <label class="answer-label" for="a1">정답 확인</label>
+  <div class="answer-box">
+    <strong>정답 &amp; 해설</strong>
+    <p><strong>O (정답)</strong><br>트럼프 대통령은 CBS 전화 인터뷰에서 "The war is very much completed, pretty much"라고 발언했다. 이 한마디를 계기로 유가가 $119→$85로 수직 낙하하고 주식시장이 V자 반등했다.</p>
+  </div>
+</div>
+
+<!-- Q2 -->
+<div class="question-block fade-in">
+  <div class="q-header">
+    <div class="q-num">02</div>
+    <div>
+      <div class="q-meta">
+        <span class="q-badge badge-easy">쉬움</span>
+        <span class="q-badge badge-mc">객관식</span>
+      </div>
+      <div class="q-text">오늘 장중 WTI 유가가 도달한 최고점에 가장 가까운 값은?</div>
+    </div>
+  </div>
+  <div class="q-options">
+    <div class="q-option"><span class="opt-num">①</span> $88</div>
+    <div class="q-option"><span class="opt-num">②</span> $99</div>
+    <div class="q-option"><span class="opt-num">③</span> $119.48</div>
+    <div class="q-option"><span class="opt-num">④</span> $145</div>
+  </div>
+  <input type="checkbox" class="answer-toggle" id="a2">
+  <label class="answer-label" for="a2">정답 확인</label>
+  <div class="answer-box">
+    <strong>정답 &amp; 해설</strong>
+    <p><strong>③ $119.48 (정답)</strong><br>방송에서 "유가 119.48 — 딱 잘라 120불"이라고 언급. 호르무즈 봉쇄 공포에 의한 장중 고점이었으며, 이후 트럼프 발언 후 $85대로 급락했다.</p>
+  </div>
+</div>
+
+<!-- Q3 -->
+<div class="question-block fade-in">
+  <div class="q-header">
+    <div class="q-num">03</div>
+    <div>
+      <div class="q-meta">
+        <span class="q-badge badge-easy">쉬움</span>
+        <span class="q-badge badge-mc">객관식</span>
+      </div>
+      <div class="q-text">오늘 가장 높은 상승률을 기록한 미국 주요 지수는?</div>
+    </div>
+  </div>
+  <div class="q-options">
+    <div class="q-option"><span class="opt-num">①</span> 다우존스 (+0.51%)</div>
+    <div class="q-option"><span class="opt-num">②</span> S&amp;P 500 (+0.83%)</div>
+    <div class="q-option"><span class="opt-num">③</span> 나스닥 (+1.38%)</div>
+    <div class="q-option"><span class="opt-num">④</span> 러셀 2000 (+0.3%)</div>
+  </div>
+  <input type="checkbox" class="answer-toggle" id="a3">
+  <label class="answer-label" for="a3">정답 확인</label>
+  <div class="answer-box">
+    <strong>정답 &amp; 해설</strong>
+    <p><strong>③ 나스닥 +1.38% (정답)</strong><br>다우 +0.51%, S&P +0.83%, 나스닥 +1.38% 순이었다. 기술·AI 반도체 주도의 반등으로 나스닥이 가장 강하게 상승했다.</p>
+  </div>
+</div>
+
+<div class="section-divider fade-in"><span>보통 (50%)</span></div>
+
+<!-- Q4 -->
+<div class="question-block fade-in">
+  <div class="q-header">
+    <div class="q-num">04</div>
+    <div>
+      <div class="q-meta">
+        <span class="q-badge badge-mid">보통</span>
+        <span class="q-badge badge-sa">단답형</span>
+      </div>
+      <div class="q-text">"TACO 트레이드"에서 TACO가 의미하는 영문 약자를 풀어 쓰시오.</div>
+    </div>
+  </div>
+  <input type="checkbox" class="answer-toggle" id="a4">
+  <label class="answer-label" for="a4">정답 확인</label>
+  <div class="answer-box">
+    <strong>정답 &amp; 해설</strong>
+    <p><strong>Trump Always Chickens Out</strong><br>"트럼프는 항상 겁을 먹고 물러선다"는 뜻의 트레이딩 용어. 시장에 극단적 충격이 발생하면 트럼프가 결국 후퇴한다는 패턴을 활용하는 전략이다. 오늘도 유가 $120 접근 시 트럼프가 직접 발언해 TACO 패턴이 재확인됐다.</p>
+  </div>
+</div>
+
+<!-- Q5 -->
+<div class="question-block fade-in">
+  <div class="q-header">
+    <div class="q-num">05</div>
+    <div>
+      <div class="q-meta">
+        <span class="q-badge badge-mid">보통</span>
+        <span class="q-badge badge-mc">객관식</span>
+      </div>
+      <div class="q-text">HPE(Hewlett Packard Enterprise)의 오늘 실적 발표에서 확인된 AI 관련 수주 잔고(백로그)는?</div>
+    </div>
+  </div>
+  <div class="q-options">
+    <div class="q-option"><span class="opt-num">①</span> 5억 달러</div>
+    <div class="q-option"><span class="opt-num">②</span> 15억 달러</div>
+    <div class="q-option"><span class="opt-num">③</span> 50억 달러</div>
+    <div class="q-option"><span class="opt-num">④</span> 200억 달러</div>
+  </div>
+  <input type="checkbox" class="answer-toggle" id="a5">
+  <label class="answer-label" for="a5">정답 확인</label>
+  <div class="answer-box">
+    <strong>정답 &amp; 해설</strong>
+    <p><strong>③ 50억 달러 (정답)</strong><br>HPE는 분기 매출 18% 이상 성장과 AI 백로그 50억 달러를 기록, 가이던스를 상향했다. "인기 없는 회사도 AI로 돈을 버는 시대"라는 핵심 펀더멘탈 시그널이었다.</p>
+  </div>
+</div>
+
+<!-- Q6 -->
+<div class="question-block fade-in">
+  <div class="q-header">
+    <div class="q-num">06</div>
+    <div>
+      <div class="q-meta">
+        <span class="q-badge badge-mid">보통</span>
+        <span class="q-badge badge-ox">OX</span>
+      </div>
+      <div class="q-text">방송에 따르면, 역사적으로 지정학적 충격(전쟁·테러) 발생 후 주식시장이 최저점을 형성하는 데 걸리는 기간은 평균 30일이다. (O / X)</div>
+    </div>
+  </div>
+  <input type="checkbox" class="answer-toggle" id="a6">
+  <label class="answer-label" for="a6">정답 확인</label>
+  <div class="answer-box">
+    <strong>정답 &amp; 해설</strong>
+    <p><strong>X (오답)</strong><br>방송에서는 <strong>평균 18일(약 3주) 이내에 바닥</strong>을 다지고, <strong>39일(약 5~6주) 이내에 전 고점을 회복</strong>한다고 언급했다. 우크라이나 전쟁을 포함한 과거 데이터 기반의 통계적 패턴이다.</p>
+  </div>
+</div>
+
+<!-- Q7 -->
+<div class="question-block fade-in">
+  <div class="q-header">
+    <div class="q-num">07</div>
+    <div>
+      <div class="q-meta">
+        <span class="q-badge badge-mid">보통</span>
+        <span class="q-badge badge-sa">단답형</span>
+      </div>
+      <div class="q-text">바이오 종목 HIMS(힘스)가 오늘 약 48% 폭등한 이유를 두 가지로 간략히 서술하시오.</div>
+    </div>
+  </div>
+  <input type="checkbox" class="answer-toggle" id="a7">
+  <label class="answer-label" for="a7">정답 확인</label>
+  <div class="answer-box">
+    <strong>정답 &amp; 해설</strong>
+    <p>① <strong>소송 취하</strong>: 복제약 관련 노보 노디스크와의 법적 소송을 힘스가 포기(드랍)했다.<br>② <strong>유통 파트너십 체결</strong>: 힘스 플랫폼에서 노보 노디스크 제품을 유통하는 전격적인 파트너십 계약. 사업 모델 확장 + 소송 리스크 해소가 동시에 작용했다.</p>
+  </div>
+</div>
+
+<!-- Q8 -->
+<div class="question-block fade-in">
+  <div class="q-header">
+    <div class="q-num">08</div>
+    <div>
+      <div class="q-meta">
+        <span class="q-badge badge-mid">보통</span>
+        <span class="q-badge badge-mc">객관식</span>
+      </div>
+      <div class="q-text">방송에서 언급된 오늘 스마트머니(기관)의 자금 '유출' 섹터로 올바르게 짝지어진 것은?</div>
+    </div>
+  </div>
+  <div class="q-options">
+    <div class="q-option"><span class="opt-num">①</span> 반도체 &amp; 바이오</div>
+    <div class="q-option"><span class="opt-num">②</span> 에너지 &amp; 방산</div>
+    <div class="q-option"><span class="opt-num">③</span> 금융 &amp; 유틸리티</div>
+    <div class="q-option"><span class="opt-num">④</span> 항공 &amp; 크루즈</div>
+  </div>
+  <input type="checkbox" class="answer-toggle" id="a8">
+  <label class="answer-label" for="a8">정답 확인</label>
+  <div class="answer-box">
+    <strong>정답 &amp; 해설</strong>
+    <p><strong>② 에너지 &amp; 방산 (정답)</strong><br>전쟁 프리미엄 소멸로 에너지 섹터 급락, 트럼프 "전쟁 끝" 발언으로 방산 섹터도 하락. MOC(장 마감 주문) 분석에서 이 두 섹터에서 자금이 유출되고 AI 기술·반도체로 이동하는 것이 확인됐다.</p>
+  </div>
+</div>
+
+<div class="section-divider fade-in"><span>어려움 (20%)</span></div>
+
+<!-- Q9 -->
+<div class="question-block fade-in">
+  <div class="q-header">
+    <div class="q-num">09</div>
+    <div>
+      <div class="q-meta">
+        <span class="q-badge badge-hard">어려움</span>
+        <span class="q-badge badge-sa">단답형</span>
+      </div>
+      <div class="q-text">방송에서 "스태그플레이션(Stagflation)"이 우려되는 이유를, 오늘 언급된 두 가지 거시경제 지표를 들어 설명하시오.</div>
+    </div>
+  </div>
+  <input type="checkbox" class="answer-toggle" id="a9">
+  <label class="answer-label" for="a9">정답 확인</label>
+  <div class="answer-box">
+    <strong>정답 &amp; 해설</strong>
+    <p><strong>스태그플레이션</strong> = 경기 침체 + 물가 상승 동시 발생.<br><br>① <strong>경기 침체 신호</strong>: 4분기 GDP 성장률 1.4% 수직 낙하, 최근 고용 -9만 2천 명(마이너스) → 경제 둔화 확실.<br><br>② <strong>물가 상승 신호</strong>: 유가가 장중 $120까지 급등하는 등 지속적인 고유가 → 소비자물가 압박 지속.<br><br>경기는 식는데 물가는 오르는 최악의 조합이 연준의 금리 인하를 막는 딜레마 상황이다.</p>
+  </div>
+</div>
+
+<!-- Q10 -->
+<div class="question-block fade-in">
+  <div class="q-header">
+    <div class="q-num">10</div>
+    <div>
+      <div class="q-meta">
+        <span class="q-badge badge-hard">어려움</span>
+        <span class="q-badge badge-mc">객관식</span>
+      </div>
+      <div class="q-text">방송의 투자 전략 관점에서 "바벨(Barbell) 전략"에 관한 설명으로 가장 적절하지 않은 것은?</div>
+    </div>
+  </div>
+  <div class="q-options">
+    <div class="q-option"><span class="opt-num">①</span> 포트폴리오를 고위험 공격 자산과 안전 방어 자산 두 축으로 구성한다.</div>
+    <div class="q-option"><span class="opt-num">②</span> 공격 축에는 AI 반도체·하드웨어 슈퍼사이클 종목을 편입한다.</div>
+    <div class="q-option"><span class="opt-num">③</span> 방어 축에는 에너지·방산처럼 인플레이션에 직접 노출된 종목을 담는다.</div>
+    <div class="q-option"><span class="opt-num">④</span> 현금(유동성)을 일부 보유해 급락 시 분할 매수에 대응한다.</div>
+  </div>
+  <input type="checkbox" class="answer-toggle" id="a10">
+  <label class="answer-label" for="a10">정답 확인</label>
+  <div class="answer-box">
+    <strong>정답 &amp; 해설</strong>
+    <p><strong>③ (부적절한 설명 = 정답)</strong><br>방어 축에는 헬스케어·바이오, 월마트·코스트코 같은 필수소비재, 유틸리티처럼 인플레이션 환경에서 마진을 방어할 수 있는 종목을 편입한다. 에너지·방산은 지정학적 변화에 극도로 민감해 변동성이 크기 때문에 오히려 추격 매수를 경계해야 할 대상으로 언급됐다.</p>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<div class="footer">
+  <span>NOVA REAL INVEST</span> · Test Paper · 2026.03.09<br>
+  본 자료는 교육 목적으로 제작되었습니다.
+</div>
+
+<script>
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 70);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+</script>
+</body>
+</html>
