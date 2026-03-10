@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIA.chat 멤버미팅 분석 — 2026.03.10</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Source+Serif+4:wght@300;400;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --c1: #e11d48;
+    --c2: #1a1a1a;
+    --c3: #6b7280;
+    --c4: #2563eb;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-weight: 300;
+    line-height: 1.75;
+    font-size: 16px;
+  }
+
+  /* HEADER */
+  .masthead {
+    background: var(--text);
+    color: #fff;
+    padding: 20px 20px 16px;
+    position: relative;
+  }
+  .masthead-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .masthead-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1.15;
+    color: #fff;
+  }
+  .masthead-title span {
+    color: var(--accent2);
+    font-style: italic;
+  }
+  .masthead-sub {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #aaa;
+    font-family: 'DM Mono', monospace;
+  }
+  .masthead-rule {
+    margin-top: 16px;
+    border: none;
+    border-top: 2px solid var(--accent);
+    width: 48px;
+  }
+
+  /* CONTAINER */
+  .container { max-width: 640px; margin: 0 auto; padding: 0 20px 60px; }
+
+  /* SECTION LABELS */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: 40px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 20px 0 8px;
+  }
+  p { margin-bottom: 12px; color: var(--text); }
+
+  /* LEAD */
+  .lead {
+    font-size: 17px;
+    line-height: 1.8;
+    color: #333;
+    border-left: 3px solid var(--accent);
+    padding-left: 16px;
+    margin: 20px 0 24px;
+  }
+
+  /* HIGHLIGHT BOX */
+  .highlight {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    padding: 16px 18px;
+    margin: 20px 0;
+    border-radius: 2px;
+  }
+  .highlight .hl-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .highlight p { margin: 0; font-size: 14.5px; }
+
+  /* STAT CARDS */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 16px 14px;
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent);
+  }
+  .stat-card.blue::before { background: var(--c4); }
+  .stat-card.dark::before { background: var(--c2); }
+  .stat-card.gray::before { background: var(--c3); }
+  .stat-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1.1;
+  }
+  .stat-card.blue .stat-val { color: var(--c4); }
+  .stat-card.dark .stat-val { color: var(--c2); }
+  .stat-card.gray .stat-val { color: var(--c3); }
+  .stat-label {
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  /* TABLE */
+  .tbl-wrap { overflow-x: auto; margin: 20px 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+  thead th {
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 12px;
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+  }
+  tbody td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+    vertical-align: top;
+  }
+  tbody tr:hover td { background: #f3f4f6; }
+  .tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 2px;
+    font-weight: 500;
+  }
+  .tag-bull { background: #fee2e2; color: var(--accent); }
+  .tag-bear { background: #e0e7ff; color: #3730a3; }
+  .tag-neu  { background: #f3f4f6; color: #374151; }
+
+  /* CHART */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin: 20px 0;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 16px;
+    border-radius: 2px;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas {
+    opacity: 1;
+  }
+  .chart-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 10px;
+  }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+  .divider-ornament {
+    text-align: center;
+    margin: 28px 0;
+    position: relative;
+  }
+  .divider-ornament::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 0; right: 0;
+    height: 1px;
+    background: var(--border);
+  }
+  .divider-ornament span {
+    background: var(--bg);
+    position: relative;
+    padding: 0 12px;
+    color: var(--accent);
+    font-size: 18px;
+  }
+
+  /* RISK BOX */
+  .risk-box {
+    background: #fff1f2;
+    border: 1px solid #fecdd3;
+    border-left: 4px solid var(--accent);
+    padding: 16px 18px;
+    margin: 20px 0;
+    border-radius: 2px;
+  }
+  .risk-box .risk-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+    font-size: 15px;
+  }
+  .risk-box p { font-size: 14px; margin: 0; }
+
+  /* PLAYBOOK */
+  .playbook-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .playbook-item:last-child { border-bottom: none; }
+  .pb-icon {
+    width: 32px; height: 32px;
+    background: var(--accent);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    flex-shrink: 0;
+    border-radius: 2px;
+  }
+  .pb-icon.blue { background: var(--c4); }
+  .pb-icon.dark { background: var(--c2); }
+  .pb-icon.gray { background: var(--c3); }
+  .pb-title { font-weight: 600; font-size: 14.5px; margin-bottom: 3px; }
+  .pb-desc { font-size: 13px; color: var(--text2); }
+
+  /* FOOTER */
+  footer {
+    background: var(--text);
+    color: #666;
+    padding: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    text-align: center;
+    letter-spacing: 0.05em;
+    margin-top: 40px;
+  }
+  footer span { color: var(--accent2); }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-meta">CIA.chat · Members Meeting · Vol. 2026-03-10</div>
+  <div class="masthead-title">신호와 <span>소음</span></div>
+  <div class="masthead-sub">Signal vs. Noise — 미국 증시·경제 분석 리포트</div>
+  <hr class="masthead-rule">
+</div>
+
+<div class="container">
+
+  <!-- 섹션 1: 요약 -->
+  <div class="section-label fade-in">Executive Summary</div>
+  <h2 class="fade-in">거시적 소음 vs. 미시적 신호</h2>
+  <p class="lead fade-in">
+    지정학적 헤드라인과 트윗 한 줄이 시장을 흔드는 가운데, 오라클·TSMC·아마존 등 AI 인프라 기업들은 펀더멘탈로 강한 신호를 보내고 있다. 소음에 흔들리지 않고 진짜 돈의 흐름을 읽어야 할 시점이다.
+  </p>
+
+  <!-- 핵심 지표 -->
+  <div class="section-label fade-in">Key Metrics · 2026.03.10</div>
+  <div class="stat-grid fade-in">
+    <div class="stat-card">
+      <div class="stat-val">−0.21%</div>
+      <div class="stat-label">S&P 500 당일 마감</div>
+    </div>
+    <div class="stat-card blue">
+      <div class="stat-val">+8~9%</div>
+      <div class="stat-label">Oracle 실적 발표 후 시간외 상승</div>
+    </div>
+    <div class="stat-card dark">
+      <div class="stat-val">+29.9%</div>
+      <div class="stat-label">TSMC 누적 매출 YoY (1~2월)</div>
+    </div>
+    <div class="stat-card gray">
+      <div class="stat-val">+325%</div>
+      <div class="stat-label">Oracle RPO(잔여수주) 전년비 증가</div>
+    </div>
+  </div>
+
+  <div class="divider-ornament"><span>◆</span></div>
+
+  <!-- 섹션 2: 유가 분석 -->
+  <div class="section-label fade-in">Oil Market</div>
+  <h2 class="fade-in">유가: 펀더멘탈 없는 밈(Meme) 시장</h2>
+
+  <p class="fade-in">당일 유가는 공급·수요 변화가 아닌 트윗 하나로 요동쳤다. 이란 외무장관의 호르무즈 해협 봉쇄 발언으로 WTI가 85달러까지 급등했다가, 트럼프 대통령의 "전쟁 조기 종식" 발언으로 83달러대로 내려왔다.</p>
+
+  <p class="fade-in">더 극적인 장면도 있었다. 미국 에너지부 장관이 "해군이 호르무즈 유조선 호위에 성공했다"는 트윗을 올리면서 유가가 76.73달러까지 급락했지만, 백악관이 "아직 호송한 적 없다"고 공식 반박하자 순식간에 반등했다.</p>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">Oil Price Intraday Range — 2026.03.10 (개념 재구성)</div>
+    <canvas id="oilChart" height="220"></canvas>
+  </div>
+
+  <div class="highlight fade-in">
+    <div class="hl-label">핵심 포인트</div>
+    <p>유가는 현재 생산량·수요 변화가 아닌 <strong>정치적 발언</strong>에 의해 움직이는 구조다. 밈주식처럼 단기 변동성이 극심하므로, 유가 관련 포지션은 펀더멘탈 기준이 아닌 <strong>정책·발언 리스크</strong>로 접근해야 한다.</p>
+  </div>
+
+  <!-- 웰스파고 경고 -->
+  <div class="risk-box fade-in">
+    <div class="risk-title">⚠ Wells Fargo 시나리오 경고</div>
+    <p>WTI가 <strong>130달러 수준을 3개월 이상 유지</strong>할 경우, 미국 경제는 리세션·스태그플레이션 진입 가능성이 높고 약 10년간의 성장 위축이 우려된다. 트럼프 행정부의 목표는 60달러대 안착이다.</p>
+  </div>
+
+  <div class="divider-ornament"><span>◆</span></div>
+
+  <!-- 섹션 3: AI 인프라 신호 -->
+  <div class="section-label fade-in">AI Infrastructure Signals</div>
+  <h2 class="fade-in">스마트머니가 가리키는 방향</h2>
+
+  <h3 class="fade-in">🔷 Oracle — 수요가 공급을 압도</h3>
+  <p class="fade-in">오라클의 <strong>RPO(잔여 수주잔고)</strong>가 553억 달러로 전년 대비 325% 폭증했다. RPO란 아직 매출로 인식되지 않은, 이미 계약된 미래 수익이다. AI 클라우드를 쓰려는 기업들이 돈을 싸들고 줄 서 있다는 의미다.</p>
+  <p class="fade-in">레리 앨리슨 회장은 "AI 학습·추론용 클라우드 수요가 공급보다 훨씬 빠르게 증가하고 있다"고 밝혔다. 오라클은 이제 대형 계약 시 <strong>선급금을 받고 GPU도 고객이 직접 조달</strong>하도록 하는 자본 효율적 모델로 전환 중이다. 마진 걱정 없이 수익을 쌓는 구조다.</p>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">Oracle RPO Growth (개념)</div>
+    <canvas id="oracleChart" height="220"></canvas>
+  </div>
+
+  <h3 class="fade-in">🔷 TSMC — 춘절 효과 제거 후 실질 성장</h3>
+  <p class="fade-in">2월 매출은 전월 대비 −20.8% 하락으로 보도됐지만, 이는 춘절로 인한 조업일수 감소 효과다. 1~2월 누적 기준 <strong>YoY +29.9%</strong>로 사실상 연간 30% 성장 궤도를 유지하고 있다.</p>
+  <p class="fade-in">시장의 주목 포인트는 <strong>4월 10일 1분기 실적 발표</strong>다. 서프라이즈 가능성이 높다는 기관 평가가 나오고 있다.</p>
+
+  <h3 class="fade-in">🔷 Amazon — AI에 $500억 채권 발행</h3>
+  <p class="fade-in">아마존이 약 500억 달러 규모의 채권을 발행하겠다고 밝혔다. 만기는 50년, 조달 자금의 목적지는 AI 인프라 구축이다. 구글이 100년 만기 채권을 발행한 선례와 같은 흐름이다. 대형 빅테크들이 장기 부채로 AI 인프라에 공격적으로 베팅하고 있다는 강력한 신호다.</p>
+
+  <h3 class="fade-in">🔷 Vertiv (VRT) — 전력 인프라 메가트렌드</h3>
+  <p class="fade-in">EIA(미국 에너지정보청)는 AI 데이터센터 수요로 <strong>2026~2027년 미국 전력 수요가 역사상 최고치를 기록</strong>할 것이라 전망했다. Vertiv는 S&P 500 지수 편입 뉴스만으로도 폭등 중이다.</p>
+
+  <div class="highlight fade-in">
+    <div class="hl-label">투자 인사이트</div>
+    <p>지수 편입 뉴스가 나오면 편입일까지 1~2주 보유하는 전략이 단순하지만 유효하다. Vertiv가 그 사례다.</p>
+  </div>
+
+  <h3 class="fade-in">🔷 Applied Materials × SK하이닉스 HBM 협력</h3>
+  <p class="fade-in">Applied Materials가 SK하이닉스와 HBM(고대역폭메모리) 협력을 발표했다. AI 가속기 핵심 부품인 HBM 관련 장비주로의 <strong>2차 확산</strong>이 일어나고 있음을 보여주는 신호다.</p>
+
+  <div class="divider-ornament"><span>◆</span></div>
+
+  <!-- 섹션 4: 개별 종목 흐름 -->
+  <div class="section-label fade-in">Individual Stocks</div>
+  <h2 class="fade-in">주목할 개별 종목 동향</h2>
+
+  <div class="tbl-wrap fade-in">
+    <table>
+      <thead>
+        <tr>
+          <th>종목</th>
+          <th>이슈</th>
+          <th>평가</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Oracle</strong></td>
+          <td>RPO +325%, AI 클라우드 수요 폭발, 클라우드 매출 +84%</td>
+          <td><span class="tag tag-bull">강세</span></td>
+        </tr>
+        <tr>
+          <td><strong>TSMC</strong></td>
+          <td>누적 YoY +29.9%, 4월 10일 1Q 서프라이즈 기대</td>
+          <td><span class="tag tag-bull">강세</span></td>
+        </tr>
+        <tr>
+          <td><strong>Amazon</strong></td>
+          <td>$500억 AI 인프라 채권 발행 예정 (50년 만기)</td>
+          <td><span class="tag tag-bull">강세</span></td>
+        </tr>
+        <tr>
+          <td><strong>Vertiv (VRT)</strong></td>
+          <td>S&P 500 편입 + EIA 전력 수요 최고치 전망</td>
+          <td><span class="tag tag-bull">강세</span></td>
+        </tr>
+        <tr>
+          <td><strong>NIO</strong></td>
+          <td>사상 첫 분기 순익 + 컨센서스 대폭 상회</td>
+          <td><span class="tag tag-bull">서프라이즈</span></td>
+        </tr>
+        <tr>
+          <td><strong>Vertex Pharma</strong></td>
+          <td>신장질환 신약 소식</td>
+          <td><span class="tag tag-bull">강세</span></td>
+        </tr>
+        <tr>
+          <td><strong>BioNTech</strong></td>
+          <td>공동창업자 2명 동시 사임 → 리더십 공백</td>
+          <td><span class="tag tag-bear">급락</span></td>
+        </tr>
+        <tr>
+          <td><strong>Bank of America</strong></td>
+          <td>전쟁·유가 불안에도 YTD 꾸준한 상승</td>
+          <td><span class="tag tag-neu">방어적</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider-ornament"><span>◆</span></div>
+
+  <!-- 섹션 5: 거시·미시 매트릭스 -->
+  <div class="section-label fade-in">Macro × Micro Matrix</div>
+  <h2 class="fade-in">교집합을 찾아라: 정책 × 실적</h2>
+
+  <p class="fade-in">강한 주식의 조건은 두 가지가 동시에 충족될 때다. <strong>①펀더멘탈(실적)이 증명되고 ②정책이 서포트</strong>하는 영역. 과거 테슬라가 민주당 정권의 재생에너지 정책 수혜를 받았던 구도와 같다.</p>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">거시·미시 포지셔닝 매트릭스 (개념)</div>
+    <canvas id="matrixChart" height="220"></canvas>
+  </div>
+
+  <div class="tbl-wrap fade-in">
+    <table>
+      <thead>
+        <tr><th>구분</th><th>특징</th><th>예시</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="tag tag-bull">공격적</span></td>
+          <td>실적 + 정책 교집합, 고성장</td>
+          <td>Nvidia, Vertiv, TSMC 관련 장비주</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-neu">방어적</span></td>
+          <td>FCF(잉여현금흐름) 안정, 낮은 변동성</td>
+          <td>Bank of America, 방위산업</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-bear">회피</span></td>
+          <td>유가 직접 노출 + 정책 발언 리스크</td>
+          <td>에너지 관련 밈주식 성격 종목</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-bear">위험</span></td>
+          <td>실적 부진 + 리더십 공백</td>
+          <td>BioNTech 류 공동 창업자 이탈 종목</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider-ornament"><span>◆</span></div>
+
+  <!-- 섹션 6: 전술 플레이북 -->
+  <div class="section-label fade-in">Tactical Playbook</div>
+  <h2 class="fade-in">지금 당장의 행동 지침</h2>
+
+  <div class="fade-in">
+    <div class="playbook-item">
+      <div class="pb-icon">ATK</div>
+      <div>
+        <div class="pb-title">공격 포지션</div>
+        <div class="pb-desc">AI 인프라 실적 중심주 — Nvidia, Vertiv, TSMC 관련 장비주. 수요가 공급을 초과하는 구조 확인.</div>
+      </div>
+    </div>
+    <div class="playbook-item">
+      <div class="pb-icon blue">BAL</div>
+      <div>
+        <div class="pb-title">균형 포지션</div>
+        <div class="pb-desc">시총 1~10위 대형주 일부 편입. 변동성 장세에서 심리적 안정 역할.</div>
+      </div>
+    </div>
+    <div class="playbook-item">
+      <div class="pb-icon dark">DEF</div>
+      <div>
+        <div class="pb-title">방어 포지션</div>
+        <div class="pb-desc">현금 일부 확보 + 유틸리티(Vertiv 등). 내일 CPI, 다음주 트리플 위칭까지 소화 필요.</div>
+      </div>
+    </div>
+    <div class="playbook-item">
+      <div class="pb-icon gray">AVD</div>
+      <div>
+        <div class="pb-title">회피 종목</div>
+        <div class="pb-desc">유가 직접 노출 순수 에너지주, 리더십 공백 바이오, 실적 하회 + 정책 역풍 종목.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 주요 일정 -->
+  <div class="section-label fade-in">Calendar</div>
+  <h2 class="fade-in">앞으로의 주요 이벤트</h2>
+
+  <div class="tbl-wrap fade-in">
+    <table>
+      <thead><tr><th>일정</th><th>이벤트</th><th>중요도</th></tr></thead>
+      <tbody>
+        <tr><td>2026.03.11 (내일)</td><td>미국 CPI 발표</td><td><span class="tag tag-bull">HIGH</span></td></tr>
+        <tr><td>2026.03 셋째 주</td><td>트리플 위칭 데이 (선물·옵션 동시 만기)</td><td><span class="tag tag-bull">HIGH</span></td></tr>
+        <tr><td>2026.04.10</td><td>TSMC 1분기 실적 발표</td><td><span class="tag tag-bull">HIGH</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="highlight fade-in">
+    <div class="hl-label">용어 설명</div>
+    <p><strong>트리플 위칭(Triple Witching)</strong>: 주가지수선물·주가지수옵션·개별주식옵션이 동시에 만료되는 날. 보통 3·6·9·12월 셋째 주 금요일. 대규모 포지션 청산이 몰려 변동성이 급격히 높아진다.</p>
+  </div>
+
+  <div class="divider-ornament"><span>◆</span></div>
+
+  <!-- 파이널 인사이트 -->
+  <div class="section-label fade-in">Final Insight</div>
+  <h2 class="fade-in">메가트렌드는 불가역적이다</h2>
+
+  <p class="lead fade-in">
+    시장이 1~2% 흔들리고 유가가 트윗 하나에 오르내려도, 진짜 돈의 방향은 명확하다. <strong>AI 인프라</strong>다. 모든 정부가 집중하는 정책, 실적으로 증명하는 기업, 공급을 초과하는 수요. 세 가지가 교차하는 곳이 메가트렌드다.
+  </p>
+
+  <p class="fade-in">소음에 반응하지 말고 신호에 집중하라. 오라클 RPO +325%, TSMC YoY +30%, Amazon의 50년 AI채권 — 이것이 신호다.</p>
+
+</div>
+
+<footer>
+  <span>CIA.chat</span> Members Meeting 2026-03-10 · 분석 자료 · 투자 참고용 — 투자 결정은 본인 책임
+</footer>
+
+<script>
+  // Fade observer
+  const fadeObs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        fadeObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+  // Chart configs
+  const chartConfigs = {};
+
+  chartConfigs['oilChart'] = () => {
+    new Chart(document.getElementById('oilChart'), {
+      type: 'line',
+      data: {
+        labels: ['장 전','이란 봉쇄 발언','오픈','트럼프 종전 발언','호위 트윗','백악관 반박','장 마감'],
+        datasets: [{
+          label: 'WTI (USD)',
+          data: [80, 85, 83, 80, 76.73, 81, 83],
+          borderColor: '#e11d48',
+          backgroundColor: 'rgba(225,29,72,0.07)',
+          tension: 0.4,
+          pointBackgroundColor: '#e11d48',
+          pointRadius: 4,
+          fill: true,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: {
+            min: 74, max: 88,
+            ticks: { font: { family: 'DM Mono', size: 10 }, color: '#777' },
+            grid: { color: '#e5e5e5' }
+          },
+          x: {
+            ticks: { font: { family: 'DM Mono', size: 9 }, color: '#777', maxRotation: 25 },
+            grid: { display: false }
+          }
+        }
+      }
+    });
+  };
+
+  chartConfigs['oracleChart'] = () => {
+    new Chart(document.getElementById('oracleChart'), {
+      type: 'bar',
+      data: {
+        labels: ['전년도 RPO', '현재 RPO (553B$)'],
+        datasets: [{
+          label: '잔여 수주 (RPO)',
+          data: [130, 553],
+          backgroundColor: ['#6b7280', '#e11d48'],
+          borderRadius: 2,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: { label: ctx => `$${ctx.raw}B` }
+          }
+        },
+        scales: {
+          y: {
+            ticks: { font: { family: 'DM Mono', size: 10 }, color: '#777', callback: v => `$${v}B` },
+            grid: { color: '#e5e5e5' }
+          },
+          x: { ticks: { font: { family: 'DM Mono', size: 10 }, color: '#777' }, grid: { display: false } }
+        }
+      }
+    });
+  };
+
+  chartConfigs['matrixChart'] = () => {
+    new Chart(document.getElementById('matrixChart'), {
+      type: 'bar',
+      data: {
+        labels: ['AI 인프라\n(Nvidia·Vertiv)', 'TSMC\n관련 장비주', 'Bank of America\n(방어)', 'BioNTech\n(위험)'],
+        datasets: [
+          {
+            label: '실적 점수',
+            data: [95, 88, 70, 30],
+            backgroundColor: '#e11d48',
+            borderRadius: 2,
+          },
+          {
+            label: '정책 지원 점수',
+            data: [92, 85, 65, 20],
+            backgroundColor: '#2563eb',
+            borderRadius: 2,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom', labels: { font: { family: 'DM Mono', size: 10 }, color: '#555' } }
+        },
+        scales: {
+          y: {
+            max: 100,
+            ticks: { font: { family: 'DM Mono', size: 10 }, color: '#777' },
+            grid: { color: '#e5e5e5' }
+          },
+          x: { ticks: { font: { family: 'DM Mono', size: 9 }, color: '#777' }, grid: { display: false } }
+        }
+      }
+    });
+  };
+
+  const chartObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const canvas = e.target.querySelector('canvas');
+        if (canvas && chartConfigs[canvas.id]) {
+          chartConfigs[canvas.id]();
+          e.target.classList.add('chart-ready');
+          chartObs.unobserve(e.target);
+        }
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+</script>
+</body>
+</html>

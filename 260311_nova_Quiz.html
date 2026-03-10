@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시험문제 + 정답 — CIA.chat 2026.03.10</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:wght@300;400;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff; --bg2: #fafafa;
+    --text: #1a1a1a; --text2: #777777;
+    --accent: #e11d48; --accent2: #f43f5e;
+    --border: #e5e5e5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-weight: 300; line-height: 1.75; font-size: 16px;
+  }
+  .masthead {
+    background: var(--text); color: #fff;
+    padding: 20px 20px 16px;
+  }
+  .masthead-meta {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    letter-spacing: 0.18em; color: var(--accent2);
+    text-transform: uppercase; margin-bottom: 10px;
+  }
+  .masthead-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px; font-weight: 900; color: #fff;
+  }
+  .masthead-title span { color: var(--accent2); font-style: italic; }
+  hr.rule { border: none; border-top: 2px solid var(--accent); width: 48px; margin-top: 16px; }
+
+  .container { max-width: 640px; margin: 0 auto; padding: 0 20px 60px; }
+
+  /* SECTION DIVIDER */
+  .section-banner {
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 18px;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; font-weight: 900;
+    margin: 36px -20px 0;
+    letter-spacing: 0.02em;
+  }
+  .section-banner span {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 0.1em;
+    opacity: 0.8; margin-left: 10px; font-weight: 400;
+  }
+
+  /* QUESTION CARD */
+  .q-card {
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    background: var(--bg2);
+    padding: 18px 18px 14px;
+    margin: 18px 0;
+    border-radius: 2px;
+  }
+  .q-meta {
+    display: flex; gap: 8px; align-items: center;
+    margin-bottom: 8px; flex-wrap: wrap;
+  }
+  .q-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    color: var(--accent); letter-spacing: 0.05em;
+  }
+  .badge {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    padding: 2px 8px; border-radius: 2px; font-weight: 500;
+  }
+  .badge-easy { background: #dcfce7; color: #15803d; }
+  .badge-med  { background: #fef9c3; color: #854d0e; }
+  .badge-hard { background: #fee2e2; color: var(--accent); }
+  .badge-type { background: #e0e7ff; color: #3730a3; }
+  .q-text { font-size: 15.5px; font-weight: 600; line-height: 1.6; margin-bottom: 10px; }
+  .q-options { list-style: none; padding: 0; }
+  .q-options li {
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    margin-bottom: 5px;
+    font-size: 14px;
+    border-radius: 2px;
+    cursor: default;
+  }
+  .q-input {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px; color: var(--text2);
+    border-bottom: 1px dashed var(--border);
+    padding: 4px 0; margin-top: 6px;
+  }
+
+  /* ANSWER CARD */
+  .a-card {
+    border: 1px solid #fecdd3;
+    border-left: 4px solid #f43f5e;
+    background: #fff1f2;
+    padding: 16px 18px;
+    margin: 18px 0;
+    border-radius: 2px;
+  }
+  .a-num {
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    color: var(--accent); font-weight: 500; margin-bottom: 6px;
+  }
+  .a-answer {
+    font-weight: 600; font-size: 15px; color: var(--text); margin-bottom: 6px;
+  }
+  .a-explain { font-size: 14px; color: #4b5563; line-height: 1.65; }
+
+  footer {
+    background: var(--text); color: #666;
+    padding: 20px; font-family: 'DM Mono', monospace;
+    font-size: 11px; text-align: center; letter-spacing: 0.05em;
+    margin-top: 40px;
+  }
+  footer span { color: var(--accent2); }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-meta">CIA.chat · Quiz · 2026-03-10</div>
+  <div class="masthead-title">시험 문제 <span>&</span> 정답</div>
+  <hr class="rule">
+</div>
+
+<div class="container">
+
+<!-- ========== 문제지 ========== -->
+<div class="section-banner">📝 문제지 <span>QUESTIONS — 총 10문항</span></div>
+
+<!-- Q1 -->
+<div class="q-card">
+  <div class="q-meta">
+    <span class="q-num">Q 01</span>
+    <span class="badge badge-easy">쉬움</span>
+    <span class="badge badge-type">객관식</span>
+  </div>
+  <div class="q-text">이날 S&P 500 지수의 마감 등락률로 올바른 것은?</div>
+  <ul class="q-options">
+    <li>① +0.21%</li>
+    <li>② −0.21%</li>
+    <li>③ +1.05%</li>
+    <li>④ −1.05%</li>
+  </ul>
+</div>
+
+<!-- Q2 -->
+<div class="q-card">
+  <div class="q-meta">
+    <span class="q-num">Q 02</span>
+    <span class="badge badge-easy">쉬움</span>
+    <span class="badge badge-type">OX</span>
+  </div>
+  <div class="q-text">이날 유가 급등락의 주요 원인은 실제 원유 공급량 또는 수요의 변화였다. (O / X)</div>
+</div>
+
+<!-- Q3 -->
+<div class="q-card">
+  <div class="q-meta">
+    <span class="q-num">Q 03</span>
+    <span class="badge badge-easy">쉬움</span>
+    <span class="badge badge-type">단답형</span>
+  </div>
+  <div class="q-text">Oracle의 잔여 수주잔고(RPO)는 얼마이며, 전년 대비 몇 % 증가했는가?</div>
+  <div class="q-input">답: ___________________________________________</div>
+</div>
+
+<!-- Q4 -->
+<div class="q-card">
+  <div class="q-meta">
+    <span class="q-num">Q 04</span>
+    <span class="badge badge-med">보통</span>
+    <span class="badge badge-type">객관식</span>
+  </div>
+  <div class="q-text">TSMC 1~2월 누적 매출의 전년 동기 대비(YoY) 증가율은?</div>
+  <ul class="q-options">
+    <li>① −20.8%</li>
+    <li>② +22.2%</li>
+    <li>③ +29.9%</li>
+    <li>④ +45.0%</li>
+  </ul>
+</div>
+
+<!-- Q5 -->
+<div class="q-card">
+  <div class="q-meta">
+    <span class="q-num">Q 05</span>
+    <span class="badge badge-med">보통</span>
+    <span class="badge badge-type">객관식</span>
+  </div>
+  <div class="q-text">아마존이 발행하려는 채권의 규모와 만기, 그리고 조달 자금의 주요 사용 목적으로 올바른 것은?</div>
+  <ul class="q-options">
+    <li>① $100억 / 30년 / 물류 인프라 확장</li>
+    <li>② $500억 / 100년 / AI 인프라 구축</li>
+    <li>③ $500억 / 50년 / AI 인프라 구축</li>
+    <li>④ $500억 / 50년 / 자사주 매입</li>
+  </ul>
+</div>
+
+<!-- Q6 -->
+<div class="q-card">
+  <div class="q-meta">
+    <span class="q-num">Q 06</span>
+    <span class="badge badge-med">보통</span>
+    <span class="badge badge-type">객관식</span>
+  </div>
+  <div class="q-text">Wells Fargo가 경기침체·스태그플레이션 위험을 경고한 유가 수준은?</div>
+  <ul class="q-options">
+    <li>① WTI $100 / 1개월 유지</li>
+    <li>② WTI $110 / 6개월 유지</li>
+    <li>③ WTI $130 / 3개월 유지</li>
+    <li>④ WTI $150 / 1개월 유지</li>
+  </ul>
+</div>
+
+<!-- Q7 -->
+<div class="q-card">
+  <div class="q-meta">
+    <span class="q-num">Q 07</span>
+    <span class="badge badge-med">보통</span>
+    <span class="badge badge-type">단답형</span>
+  </div>
+  <div class="q-text">오라클이 최근 대규모 AI 계약에서 자본 효율을 높이기 위해 채택한 새로운 방식을 설명하라. (GPU 관련)</div>
+  <div class="q-input">답: ___________________________________________</div>
+</div>
+
+<!-- Q8 -->
+<div class="q-card">
+  <div class="q-meta">
+    <span class="q-num">Q 08</span>
+    <span class="badge badge-med">보통</span>
+    <span class="badge badge-type">OX</span>
+  </div>
+  <div class="q-text">EIA(미국 에너지정보청) 보고서에 따르면 2026~2027년 미국 전력 수요는 AI 데이터센터 수요로 인해 역사상 최고치를 기록할 전망이다. (O / X)</div>
+</div>
+
+<!-- Q9 -->
+<div class="q-card">
+  <div class="q-meta">
+    <span class="q-num">Q 09</span>
+    <span class="badge badge-hard">어려움</span>
+    <span class="badge badge-type">서술형</span>
+  </div>
+  <div class="q-text">강의에서 강조한 "정책과 실적의 교집합" 투자 전략을 설명하고, 이 전략에 부합하는 대표적인 분야를 과거 사례(테슬라)와 현재 사례를 들어 비교 서술하라.</div>
+  <div class="q-input">답: ___________________________________________</div>
+</div>
+
+<!-- Q10 -->
+<div class="q-card">
+  <div class="q-meta">
+    <span class="q-num">Q 10</span>
+    <span class="badge badge-hard">어려움</span>
+    <span class="badge badge-type">객관식</span>
+  </div>
+  <div class="q-text">TSMC 2월 매출이 전월 대비 −20.8% 하락한 주된 이유와, 이를 올바르게 해석하는 방법으로 가장 적절한 것은?</div>
+  <ul class="q-options">
+    <li>① 미·중 무역갈등으로 주문이 감소했기 때문이며, 구조적 하락 신호로 봐야 한다</li>
+    <li>② 춘절로 인한 조업일수 감소 때문이며, 누적 YoY 지표로 실질 성장을 확인해야 한다</li>
+    <li>③ 엔비디아 주문이 취소됐기 때문이며, AI 수요 둔화 신호로 봐야 한다</li>
+    <li>④ 환율 변동 때문이며, 달러 기준 매출로 환산해야 정확하다</li>
+  </ul>
+</div>
+
+<!-- ========== 정답·해설지 ========== -->
+<div class="section-banner">✅ 정답 및 해설 <span>ANSWERS & EXPLANATIONS</span></div>
+
+<!-- A1 -->
+<div class="a-card">
+  <div class="a-num">Q 01 정답</div>
+  <div class="a-answer">② −0.21%</div>
+  <div class="a-explain">S&P 500 지수는 아침 장 초반 상승 후 오후 들어 하락 반전하며 −0.21%로 마감했다. 장 초반 급등 후 소음 요인(유가 변동, 발언 등)으로 상승분이 반납되는 전형적인 헤드라인 장세였다.</div>
+</div>
+
+<!-- A2 -->
+<div class="a-card">
+  <div class="a-num">Q 02 정답</div>
+  <div class="a-answer">X (틀림)</div>
+  <div class="a-explain">이날 유가 급등락의 핵심 원인은 이란 외무장관의 호르무즈 봉쇄 발언, 트럼프 대통령의 종전 발언, 에너지부 장관의 트윗과 백악관의 즉각 반박 등 정치적 발언과 루머였다. 실제 공급량이나 수요 데이터의 변화가 아니었다.</div>
+</div>
+
+<!-- A3 -->
+<div class="a-card">
+  <div class="a-num">Q 03 정답</div>
+  <div class="a-answer">553억 달러 / 전년 대비 +325%</div>
+  <div class="a-explain">RPO(Remaining Performance Obligation, 잔여 수주잔고)는 아직 매출로 인식되지 않은 계약 잔고다. 553억 달러가 이미 확보되어 있고 이를 실제로 처리하면서 매출로 전환할 예정으로, 오라클의 향후 성장 가시성을 보여준다.</div>
+</div>
+
+<!-- A4 -->
+<div class="a-card">
+  <div class="a-num">Q 04 정답</div>
+  <div class="a-answer">③ +29.9%</div>
+  <div class="a-explain">2월 단월 기준으로는 춘절 영향으로 전월 대비 −20.8%를 기록했으나, 1~2월 누적 YoY 기준으로는 +29.9%다. 전년 동기와의 비교(YoY)가 실질 성장 추세를 파악하는 올바른 지표다.</div>
+</div>
+
+<!-- A5 -->
+<div class="a-card">
+  <div class="a-num">Q 05 정답</div>
+  <div class="a-answer">③ $500억 / 50년 / AI 인프라 구축</div>
+  <div class="a-explain">아마존은 약 500억 달러를 나눠서 채권으로 조달할 예정이며, 만기는 50년이다. 구글이 100년 만기 채권을 발행한 선례와 유사하다. 조달 자금은 전액 AI 인프라 구축에 쓰인다고 밝혔다. 장기 채권 발행은 AI 투자에 대한 장기적 확신을 의미한다.</div>
+</div>
+
+<!-- A6 -->
+<div class="a-card">
+  <div class="a-num">Q 06 정답</div>
+  <div class="a-answer">③ WTI $130 / 3개월 유지</div>
+  <div class="a-explain">Wells Fargo는 WTI가 130달러 수준을 약 3개월 이상 유지할 경우, 미국 경제가 리세션 또는 스태그플레이션에 진입하고 약 10년간 성장이 위축될 수 있다고 경고했다. 이 때문에 트럼프 행정부는 유가를 60달러대까지 낮추는 것을 정책 목표로 삼고 있다.</div>
+</div>
+
+<!-- A7 -->
+<div class="a-card">
+  <div class="a-num">Q 07 정답</div>
+  <div class="a-answer">고객(클라이언트)이 GPU를 직접 조달해서 제공하면 오라클이 클라우드를 구축·운영하는 방식</div>
+  <div class="a-explain">기존 방식은 오라클이 GPU를 직접 구매해 데이터센터를 구축한 뒤 고객에게 제공하는 것이었다. 이는 GPU 구매 비용이 크게 발생해 마진을 압박했다. 새 방식은 수요가 공급을 초과하는 상황에서 '줄 서있는' 고객에게 "GPU는 직접 구해오라"는 역발상 모델로, 자본 지출 없이 수익을 올릴 수 있어 자본 효율이 크게 높아진다.</div>
+</div>
+
+<!-- A8 -->
+<div class="a-card">
+  <div class="a-num">Q 08 정답</div>
+  <div class="a-answer">O (맞음)</div>
+  <div class="a-explain">EIA 보고서는 AI 데이터센터로 인한 전력 수요 급증을 이유로 2026년과 2027년 미국 전력 수요가 역사상 최고치를 기록할 것이라고 전망했다. 이 보고서가 전력 인프라 기업인 Vertiv(VRT) 주가 급등의 배경이 됐다.</div>
+</div>
+
+<!-- A9 -->
+<div class="a-card">
+  <div class="a-num">Q 09 정답 (예시 답안)</div>
+  <div class="a-answer">정책과 실적의 교집합 = 가장 강한 주식</div>
+  <div class="a-explain">
+    <strong>전략 설명:</strong> 기업의 실적(펀더멘탈)이 견고하면서 동시에 정부 정책이 그 산업을 지원·보호하는 영역에 투자하면, 두 가지 상승 동력이 동시에 작용해 위험 대비 수익이 극대화된다.<br><br>
+    <strong>과거 사례(테슬라):</strong> 민주당 정권의 재생에너지·전기차 정책(보조금, 세액공제), EV 내러티브, 일론 머스크 스타 파워가 결합되어 폭발적 상승. 정책이 실적을 보완하는 구조였다.<br><br>
+    <strong>현재 사례:</strong> AI 인프라(Nvidia, Vertiv, TSMC 관련 장비주)는 기업 실적으로 AI 수요를 증명하면서, 동시에 미국·한국·일본·대만 등 주요국 정부가 AI 반도체·데이터센터에 집중 투자하는 정책적 뒷받침을 받고 있다.
+  </div>
+</div>
+
+<!-- A10 -->
+<div class="a-card">
+  <div class="a-num">Q 10 정답</div>
+  <div class="a-answer">② 춘절로 인한 조업일수 감소 때문이며, 누적 YoY 지표로 실질 성장을 확인해야 한다</div>
+  <div class="a-explain">중화권(대만·중국)에서 춘절은 가장 큰 명절로, 공장 가동일이 크게 줄어 월 매출이 급감하는 것은 구조적 특성이다. 이를 전월 대비 하락으로만 해석하면 단기 둔화로 오인하기 쉽다. 올바른 분석은 1~2월 누적 YoY(+29.9%) 등 계절성이 제거된 비교 지표를 활용하는 것이다. 이것이 "시장의 오해"를 투자 기회로 전환하는 핵심 분석 기법이다.</div>
+</div>
+
+</div>
+
+<footer>
+  <span>CIA.chat</span> Members Meeting 2026-03-10 · 시험 문제 및 정답 · 학습 참고용
+</footer>
+
+</body>
+</html>
