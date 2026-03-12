@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시험문제 | 노바 시장 분석 2026.03.12</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff; --bg2: #fafafa;
+    --text: #1a1a1a; --text2: #777777;
+    --red: #e11d48; --red2: #f43f5e;
+    --border: #e5e5e5; --green: #16a34a; --blue: #2563eb;
+  }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 0 80px;
+    font-size: 15px;
+  }
+
+  .header {
+    background: var(--text);
+    color: #fff;
+    padding: 40px 24px 28px;
+  }
+  .header-label {
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--red2);
+    margin-bottom: 10px;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 900;
+    line-height: 1.3;
+    margin-bottom: 12px;
+  }
+  .header-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* 탭 */
+  .tab-bar {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+    background: var(--bg2);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: var(--text2);
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+  }
+  .tab-btn.active {
+    color: var(--red);
+    border-bottom-color: var(--red);
+    background: #fff;
+  }
+
+  /* 패널 */
+  .panel { display: none; padding: 0 0 20px; }
+  .panel.active { display: block; }
+
+  /* 난이도 뱃지 */
+  .diff {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin-bottom: 10px;
+  }
+  .diff-easy { background: #dcfce7; color: var(--green); }
+  .diff-mid { background: #fef9c3; color: #854d0e; }
+  .diff-hard { background: #fef2f2; color: var(--red); }
+
+  /* 문제 카드 */
+  .q-card {
+    margin: 20px 20px 0;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .q-header {
+    background: var(--bg2);
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .q-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--border);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .q-type {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text2);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .q-text {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--text);
+  }
+  .q-body { padding: 16px 18px; }
+
+  /* 선택지 */
+  .choices { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .choices li {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 14px;
+    background: var(--bg2);
+    cursor: pointer;
+    transition: all 0.18s;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .choices li:hover { border-color: var(--red); background: #fff1f2; }
+  .choices li.selected { border-color: var(--red); background: #fff1f2; }
+  .choices li.correct { border-color: var(--green); background: #f0fdf4; color: var(--green); font-weight: 600; }
+  .choices li.wrong { border-color: var(--red); background: #fef2f2; color: var(--red); }
+  .choice-marker {
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    border: 1.5px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    color: var(--text2);
+  }
+
+  /* OX 버튼 */
+  .ox-group { display: flex; gap: 12px; }
+  .ox-btn {
+    flex: 1;
+    padding: 14px;
+    font-size: 22px;
+    font-weight: 700;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg2);
+    cursor: pointer;
+    transition: all 0.18s;
+    text-align: center;
+  }
+  .ox-btn:hover { border-color: var(--red); }
+  .ox-btn.correct { border-color: var(--green); background: #f0fdf4; color: var(--green); }
+  .ox-btn.wrong { border-color: var(--red); background: #fef2f2; color: var(--red); }
+
+  /* 단답형 */
+  .short-input {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    background: var(--bg2);
+    margin-bottom: 10px;
+  }
+  .short-input:focus { border-color: var(--red); background: #fff; }
+  .check-btn {
+    width: 100%;
+    padding: 11px;
+    background: var(--text);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+  }
+  .check-btn:hover { background: var(--red); }
+
+  /* 피드백 */
+  .feedback {
+    display: none;
+    margin-top: 12px;
+    padding: 12px 14px;
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .feedback.correct-fb { background: #f0fdf4; border-left: 3px solid var(--green); color: #15803d; }
+  .feedback.wrong-fb { background: #fef2f2; border-left: 3px solid var(--red); color: #9f1239; }
+  .feedback.show { display: block; }
+
+  /* 정답 패널 */
+  .ans-card {
+    margin: 20px 20px 0;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .ans-header {
+    background: var(--red);
+    color: #fff;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .ans-num { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; }
+  .ans-type-badge { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; opacity: 0.8; }
+  .ans-q { padding: 14px 16px 10px; font-weight: 600; font-size: 14px; background: var(--bg2); border-bottom: 1px solid var(--border); line-height: 1.5; }
+  .ans-body { padding: 14px 16px; }
+  .ans-answer {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--red);
+    margin-bottom: 10px;
+  }
+  .ans-explain {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.65;
+  }
+
+  /* 점수 */
+  .score-box {
+    margin: 24px 20px;
+    padding: 24px;
+    background: var(--text);
+    color: #fff;
+    border-radius: 6px;
+    text-align: center;
+  }
+  .score-label { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+  .score-num { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 900; color: var(--red2); }
+  .score-sub { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 6px; }
+
+  /* progress bar */
+  .progress-bar-wrap { height: 3px; background: var(--border); }
+  .progress-bar { height: 100%; background: var(--red); transition: width 0.4s ease; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-label">시험문제 | 2026.03.12</div>
+  <h1>오라클 어닝·<br>호르무즈·CPI<br>10문제 퀴즈</h1>
+  <div class="header-sub">노바 시장 분석 방송 기반 · 문항별 즉시 채점</div>
+</div>
+
+<!-- 진행도 바 -->
+<div class="progress-bar-wrap">
+  <div class="progress-bar" id="progressBar" style="width:0%"></div>
+</div>
+
+<!-- 탭 -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('quiz')">📝 시험문제</button>
+  <button class="tab-btn" onclick="switchTab('answer')">🔴 정답 & 해설</button>
+</div>
+
+<!-- ═══════════ 시험문제 패널 ═══════════ -->
+<div id="panel-quiz" class="panel active">
+
+  <!-- 점수 영역 -->
+  <div class="score-box" id="scoreBox" style="display:none">
+    <div class="score-label">최종 점수</div>
+    <div class="score-num" id="scoreNum">-</div>
+    <div class="score-sub" id="scoreSub"></div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" data-q="1">
+    <div class="q-header">
+      <div class="q-num">01</div>
+      <div class="q-type">객관식</div>
+      <span class="diff diff-easy">쉬움</span>
+      <div class="q-text">2026년 3월 12일 발표된 CPI 데이터는 몇 월 물가를 반영한 것인가?</div>
+    </div>
+    <div class="q-body">
+      <ul class="choices">
+        <li onclick="answerMC(this,'q1','A')"><span class="choice-marker">A</span>1월</li>
+        <li onclick="answerMC(this,'q1','B')"><span class="choice-marker">B</span>2월</li>
+        <li onclick="answerMC(this,'q1','C')"><span class="choice-marker">C</span>3월</li>
+        <li onclick="answerMC(this,'q1','D')"><span class="choice-marker">D</span>4월</li>
+      </ul>
+      <div class="feedback" id="fb-q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" data-q="2">
+    <div class="q-header">
+      <div class="q-num">02</div>
+      <div class="q-type">OX 문제</div>
+      <span class="diff diff-easy">쉬움</span>
+      <div class="q-text">IEA가 전략비축유를 방출하면, 시장은 이를 "비상사태 신호"로 읽기 때문에 오히려 유가 불안을 증폭시킬 수 있다.</div>
+    </div>
+    <div class="q-body">
+      <div class="ox-group">
+        <button class="ox-btn" onclick="answerOX(this,'q2','O')">O</button>
+        <button class="ox-btn" onclick="answerOX(this,'q2','X')">X</button>
+      </div>
+      <div class="feedback" id="fb-q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" data-q="3">
+    <div class="q-header">
+      <div class="q-num">03</div>
+      <div class="q-type">객관식</div>
+      <span class="diff diff-easy">쉬움</span>
+      <div class="q-text">오라클 실적 발표에서 수주잔고(백로그)는 전 분기 대비 약 몇 % 증가했는가?</div>
+    </div>
+    <div class="q-body">
+      <ul class="choices">
+        <li onclick="answerMC(this,'q3','A')"><span class="choice-marker">A</span>125%</li>
+        <li onclick="answerMC(this,'q3','B')"><span class="choice-marker">B</span>200%</li>
+        <li onclick="answerMC(this,'q3','C')"><span class="choice-marker">C</span>325%</li>
+        <li onclick="answerMC(this,'q3','D')"><span class="choice-marker">D</span>500%</li>
+      </ul>
+      <div class="feedback" id="fb-q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" data-q="4">
+    <div class="q-header">
+      <div class="q-num">04</div>
+      <div class="q-type">단답형</div>
+      <span class="diff diff-mid">보통</span>
+      <div class="q-text">오라클이 캐펙스를 줄이면서도 수익성을 높일 수 있었던 핵심 전략을 한 문장으로 서술하시오.</div>
+    </div>
+    <div class="q-body">
+      <input class="short-input" type="text" id="input-q4" placeholder="답 입력...">
+      <button class="check-btn" onclick="checkShort('q4', ['고객', 'GPU', '상차림', '조달'])">확인하기</button>
+      <div class="feedback" id="fb-q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" data-q="5">
+    <div class="q-header">
+      <div class="q-num">05</div>
+      <div class="q-type">객관식</div>
+      <span class="diff diff-mid">보통</span>
+      <div class="q-text">방송에서 'SaaS(소프트웨어 구독 기업) 반등은 데드캣 바운스'라고 평가한 이유로 가장 적절한 것은?</div>
+    </div>
+    <div class="q-body">
+      <ul class="choices">
+        <li onclick="answerMC(this,'q5','A')"><span class="choice-marker">A</span>금리 인상으로 인한 일시적 밸류에이션 하락</li>
+        <li onclick="answerMC(this,'q5','B')"><span class="choice-marker">B</span>사모신용 경색으로 신용 공급 감소 + AI 전환에 따른 구조적 사용자 감소</li>
+        <li onclick="answerMC(this,'q5','C')"><span class="choice-marker">C</span>달러 강세로 인한 해외 매출 타격</li>
+        <li onclick="answerMC(this,'q5','D')"><span class="choice-marker">D</span>연준의 긴급 금리 인상 가능성</li>
+      </ul>
+      <div class="feedback" id="fb-q5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card" data-q="6">
+    <div class="q-header">
+      <div class="q-num">06</div>
+      <div class="q-type">OX 문제</div>
+      <span class="diff diff-mid">보통</span>
+      <div class="q-text">방송에서 제안한 2×2 포트폴리오 전략에서 '레거시 SaaS 기업'은 1순위 투자 대상에 해당한다.</div>
+    </div>
+    <div class="q-body">
+      <div class="ox-group">
+        <button class="ox-btn" onclick="answerOX(this,'q6','O')">O</button>
+        <button class="ox-btn" onclick="answerOX(this,'q6','X')">X</button>
+      </div>
+      <div class="feedback" id="fb-q6"></div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-card" data-q="7">
+    <div class="q-header">
+      <div class="q-num">07</div>
+      <div class="q-type">객관식</div>
+      <span class="diff diff-mid">보통</span>
+      <div class="q-text">방송에서 오라클 주가의 베이스 케이스(Base Case, 45% 확률) 목표 구간으로 제시된 것은?</div>
+    </div>
+    <div class="q-body">
+      <ul class="choices">
+        <li onclick="answerMC(this,'q7','A')"><span class="choice-marker">A</span>$140 – $160</li>
+        <li onclick="answerMC(this,'q7','B')"><span class="choice-marker">B</span>$170 – $200</li>
+        <li onclick="answerMC(this,'q7','C')"><span class="choice-marker">C</span>$220 – $250</li>
+        <li onclick="answerMC(this,'q7','D')"><span class="choice-marker">D</span>$100 – $130</li>
+      </ul>
+      <div class="feedback" id="fb-q7"></div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-card" data-q="8">
+    <div class="q-header">
+      <div class="q-num">08</div>
+      <div class="q-type">단답형</div>
+      <span class="diff diff-mid">보통</span>
+      <div class="q-text">방송에서 '헤일로 자산'으로 언급된 섹터 3가지를 쓰시오.</div>
+    </div>
+    <div class="q-body">
+      <input class="short-input" type="text" id="input-q8" placeholder="예) 에너지, ...">
+      <button class="check-btn" onclick="checkShort('q8', ['에너지', '비료', '방산', '인더스트리얼', '중장비'])">확인하기</button>
+      <div class="feedback" id="fb-q8"></div>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-card" data-q="9">
+    <div class="q-header">
+      <div class="q-num">09</div>
+      <div class="q-type">객관식</div>
+      <span class="diff diff-hard">어려움</span>
+      <div class="q-text">방송에서 IEA 비축유 방출이 유가 안정에 한계가 있다고 본 핵심 이유는 무엇인가?</div>
+    </div>
+    <div class="q-body">
+      <ul class="choices">
+        <li onclick="answerMC(this,'q9','A')"><span class="choice-marker">A</span>OPEC+ 증산으로 공급이 이미 충분하기 때문</li>
+        <li onclick="answerMC(this,'q9','B')"><span class="choice-marker">B</span>호르무즈 해협의 물리적 병목을 비축유로 해소할 수 없고, 방출 후 미래 재고가 더 감소해 선물시장 불안을 오히려 심화시키기 때문</li>
+        <li onclick="answerMC(this,'q9','C')"><span class="choice-marker">C</span>달러 약세로 원유 수입 비용이 상승하기 때문</li>
+        <li onclick="answerMC(this,'q9','D')"><span class="choice-marker">D</span>미국 정치 갈등으로 방출 결정이 무산되기 때문</li>
+      </ul>
+      <div class="feedback" id="fb-q9"></div>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-card" data-q="10">
+    <div class="q-header">
+      <div class="q-num">10</div>
+      <div class="q-type">서술형</div>
+      <span class="diff diff-hard">어려움</span>
+      <div class="q-text">방송에서 제안한 투자 액션 플랜 4가지를 순서대로 서술하고, 각각의 이유를 간략히 설명하시오.</div>
+    </div>
+    <div class="q-body">
+      <input class="short-input" type="text" id="input-q10" placeholder="핵심 키워드를 입력 (예: AI 인프라, 헤일로...)">
+      <button class="check-btn" onclick="checkShort('q10', ['AI','헤일로','매도','현금','실탄'])">확인하기</button>
+      <div class="feedback" id="fb-q10"></div>
+    </div>
+  </div>
+
+</div><!-- /panel-quiz -->
+
+
+<!-- ═══════════ 정답 & 해설 패널 ═══════════ -->
+<div id="panel-answer" class="panel">
+
+  <div style="padding:16px 20px 0; font-size:13px; color:var(--text2); line-height:1.6;">
+    ⚠️ 문제를 먼저 풀고 확인하세요. 아래는 전체 정답과 상세 해설입니다.
+  </div>
+
+  <!-- A1 -->
+  <div class="ans-card">
+    <div class="ans-header">
+      <span class="ans-num">문제 1</span>
+      <span class="ans-type-badge">객관식 · 쉬움</span>
+    </div>
+    <div class="ans-q">발표된 CPI 데이터는 몇 월 물가를 반영한 것인가?</div>
+    <div class="ans-body">
+      <div class="ans-answer">✅ 정답: B) 2월</div>
+      <div class="ans-explain">3월 12일에 발표된 CPI는 2월의 물가 데이터다. 방송에서는 이를 "과거의 기록"이라 표현하며, 현재 3월에 발발한 이란-미국 전쟁의 영향은 전혀 반영되지 않았음을 강조했다. 실제 전쟁 영향은 3월 CPI에 반영되고, 이는 4월에 발표된다.</div>
+    </div>
+  </div>
+
+  <!-- A2 -->
+  <div class="ans-card">
+    <div class="ans-header">
+      <span class="ans-num">문제 2</span>
+      <span class="ans-type-badge">OX · 쉬움</span>
+    </div>
+    <div class="ans-q">IEA 비축유 방출은 오히려 유가 불안을 증폭시킬 수 있다.</div>
+    <div class="ans-body">
+      <div class="ans-answer">✅ 정답: O (맞다)</div>
+      <div class="ans-explain">비축유 방출은 "지금이 이머전시(비상사태)"라는 신호를 시장에 공식 각인한다. 더불어 방출 후 미래 재고가 줄어드는 것을 선물시장 참가자들이 계산하여 미래 원유를 더 많이 미리 확보하려 한다. 결국 선물가격(4월 26일자 $92~96 수준)이 오히려 상승 압력을 받는다.</div>
+    </div>
+  </div>
+
+  <!-- A3 -->
+  <div class="ans-card">
+    <div class="ans-header">
+      <span class="ans-num">문제 3</span>
+      <span class="ans-type-badge">객관식 · 쉬움</span>
+    </div>
+    <div class="ans-q">오라클 수주잔고(백로그) 증가율은?</div>
+    <div class="ans-body">
+      <div class="ans-answer">✅ 정답: C) 325%</div>
+      <div class="ans-explain">방송에서 오라클의 수주잔고가 325% 급증했다고 명시했다. 캐펙스를 줄이면서도 수요를 대폭 끌어들인 결과다. 이는 AI 인프라에 대한 수요가 여전히 폭발적임을 직접적으로 보여주는 지표다.</div>
+    </div>
+  </div>
+
+  <!-- A4 -->
+  <div class="ans-card">
+    <div class="ans-header">
+      <span class="ans-num">문제 4</span>
+      <span class="ans-type-badge">단답형 · 보통</span>
+    </div>
+    <div class="ans-q">오라클의 캐펙스 절감 핵심 전략은?</div>
+    <div class="ans-body">
+      <div class="ans-answer">✅ 모범 답안</div>
+      <div class="ans-explain">고객(기업)이 직접 GPU를 조달해 오면, 오라클은 데이터센터 운영과 AI 인프라 서비스만 제공하고 '상차림 비용(서비스 수수료)'만 받는 구조로 전환했다. GPU·서버를 직접 보유·관리할 필요가 없어 캐펙스(자본 지출)와 재고 부담이 대폭 감소하고, 그 결과 마진이 크게 개선됐다. 방송에서는 이를 "노량진 수산시장 전략"에 비유했다.</div>
+    </div>
+  </div>
+
+  <!-- A5 -->
+  <div class="ans-card">
+    <div class="ans-header">
+      <span class="ans-num">문제 5</span>
+      <span class="ans-type-badge">객관식 · 보통</span>
+    </div>
+    <div class="ans-q">SaaS 반등이 데드캣 바운스라고 평가한 이유?</div>
+    <div class="ans-body">
+      <div class="ans-answer">✅ 정답: B</div>
+      <div class="ans-explain">사모신용(Private Credit) 시장 불안으로 SaaS 스타트업의 신용 공급이 줄어들고, AI 전환으로 구독 사용자가 구조적으로 감소하고 있다. 어도비의 경우 전년 대비 사용자가 60% 이상 감소했다는 언급도 있었다. 이는 일시적 반등 후 재하락하는 '데드캣 바운스' 패턴으로 해석된다.</div>
+    </div>
+  </div>
+
+  <!-- A6 -->
+  <div class="ans-card">
+    <div class="ans-header">
+      <span class="ans-num">문제 6</span>
+      <span class="ans-type-badge">OX · 보통</span>
+    </div>
+    <div class="ans-q">레거시 SaaS는 2×2 매트릭스에서 1순위 투자 대상이다.</div>
+    <div class="ans-body">
+      <div class="ans-answer">✅ 정답: X (틀리다)</div>
+      <div class="ans-explain">2×2 매트릭스에서 1순위는 "AI 수혜 + 실물/매크로 방어력"이 모두 높은 종목이다. 레거시 SaaS는 AI 수혜도 낮고 매크로 방어력도 약한 '회피 대상' 사분면에 속한다. 방송에서는 이 구간을 명확히 "가면 안 되는 곳"으로 지목했다.</div>
+    </div>
+  </div>
+
+  <!-- A7 -->
+  <div class="ans-card">
+    <div class="ans-header">
+      <span class="ans-num">문제 7</span>
+      <span class="ans-type-badge">객관식 · 보통</span>
+    </div>
+    <div class="ans-q">오라클 베이스 케이스 목표 구간은?</div>
+    <div class="ans-body">
+      <div class="ans-answer">✅ 정답: B) $170 – $200</div>
+      <div class="ans-explain">방송 기준 오라클 현재가 약 $163에서 베이스 케이스(확률 45%)는 $170~200 구간이다. 1차 익절은 $170, 2차 익절은 $190~200 수준을 제안했다. 불 케이스(35%)는 $220~250, 베어 케이스(20%)는 현 수준 이하로 설정됐다.</div>
+    </div>
+  </div>
+
+  <!-- A8 -->
+  <div class="ans-card">
+    <div class="ans-header">
+      <span class="ans-num">문제 8</span>
+      <span class="ans-type-badge">단답형 · 보통</span>
+    </div>
+    <div class="ans-q">헤일로 자산 섹터 3가지는?</div>
+    <div class="ans-body">
+      <div class="ans-answer">✅ 모범 답안: 에너지, 비료(농업 원자재), 방산, 산업기계(인더스트리얼) 중 3가지</div>
+      <div class="ans-explain">방송에서 헤일로(Halo) 자산으로 언급된 섹터는 ①에너지(유가 수혜), ②비료(CF 등 농업 원자재), ③방산(지정학 리스크 수혜), ④인더스트리얼·중장비(캐터필라 등)다. 포트폴리오의 약 20%를 이 자산군으로 방어하는 전략을 제안했다.</div>
+    </div>
+  </div>
+
+  <!-- A9 -->
+  <div class="ans-card">
+    <div class="ans-header">
+      <span class="ans-num">문제 9</span>
+      <span class="ans-type-badge">객관식 · 어려움</span>
+    </div>
+    <div class="ans-q">IEA 비축유 방출의 유가 안정 한계 이유?</div>
+    <div class="ans-body">
+      <div class="ans-answer">✅ 정답: B</div>
+      <div class="ans-explain">핵심은 두 가지다. ① 호르무즈 해협의 물리적 봉쇄라는 '병목'을 비축유로는 해결할 수 없다. ② 비축유를 쓰면 미래 가용 재고가 더 줄어든다. 선물 시장 참가자들은 "미래 재고 감소 → 미래 가격 상승"으로 계산해 선물 매수를 늘리는 악순환이 발생한다.</div>
+    </div>
+  </div>
+
+  <!-- A10 -->
+  <div class="ans-card">
+    <div class="ans-header">
+      <span class="ans-num">문제 10</span>
+      <span class="ans-type-badge">서술형 · 어려움</span>
+    </div>
+    <div class="ans-q">투자 액션 플랜 4가지를 순서대로 서술하고, 각 이유를 설명하시오.</div>
+    <div class="ans-body">
+      <div class="ans-answer">✅ 모범 답안 (4가지 순서)</div>
+      <div class="ans-explain">
+        <strong>① AI 인프라 하드웨어 집중</strong> — AI + 실물자산 교집합에 핵심 비중. 오라클 실적이 AI 캐펙스 지속을 증명했기 때문.<br><br>
+        <strong>② 헤일로 자산으로 20% 방어</strong> — 에너지·비료·방산·인더스트리얼. 유가·지정학 리스크가 해소되지 않았으므로 실물 독점 자산으로 포트폴리오 안정화.<br><br>
+        <strong>③ 레거시 SaaS·소비재 구형 자산 과감히 매도</strong> — 사모신용 경색 + AI 사용자 이탈로 구조적 하락세. 데드캣 바운스 구간을 활용해 정리.<br><br>
+        <strong>④ 현금(실탄) 확보</strong> — 저점 스나이퍼 전략을 위해 기회가 왔을 때 바로 매수할 수 있는 현금 보유 필수. 현금 없으면 기회를 활용할 수 없다.
+      </div>
+    </div>
+  </div>
+
+</div><!-- /panel-answer -->
+
+<script>
+const answers = {
+  q1: { type:'mc', correct:'B', ok:"정답입니다! 3월 12일 발표는 2월 물가 데이터입니다.", fail:"오답입니다. 정답은 B) 2월입니다." },
+  q2: { type:'ox', correct:'O', ok:"정답입니다! IEA 방출은 이머전시 신호로 읽혀 오히려 불안을 가중시킵니다.", fail:"오답입니다. O(맞다)입니다. 비축유 방출은 비상사태 공식 선언으로 해석됩니다." },
+  q3: { type:'mc', correct:'C', ok:"정답입니다! 오라클 수주잔고 325% 급증이 AI 수요 지속을 증명했습니다.", fail:"오답입니다. 정답은 C) 325%입니다." },
+  q4: { type:'short', ok:"키워드가 포함됐습니다! 고객이 GPU를 조달하면 오라클은 상차림 비용(서비스료)만 받는 구조입니다.", fail:"핵심 키워드(고객/GPU/상차림)가 부족합니다. 정답 탭에서 모범 답안을 확인하세요." },
+  q5: { type:'mc', correct:'B', ok:"정답입니다! 사모신용 경색 + AI로 인한 구조적 사용자 감소가 핵심입니다.", fail:"오답입니다. 정답은 B입니다." },
+  q6: { type:'ox', correct:'X', ok:"정답입니다! 레거시 SaaS는 회피 대상(최하위)입니다.", fail:"오답입니다. 정답은 X입니다. 레거시 SaaS는 2×2 매트릭스에서 '회피' 구간입니다." },
+  q7: { type:'mc', correct:'B', ok:"정답입니다! 베이스 케이스(45%)는 $170~200 구간입니다.", fail:"오답입니다. 정답은 B) $170–$200입니다." },
+  q8: { type:'short', ok:"맞습니다! 에너지·비료·방산·인더스트리얼 중 3개를 잘 서술했습니다.", fail:"키워드가 부족합니다. 에너지, 비료, 방산, 인더스트리얼(중장비) 중 3가지가 정답입니다." },
+  q9: { type:'mc', correct:'B', ok:"정답입니다! 물리적 병목 해소 불가 + 미래 재고 감소로 선물 가격이 오히려 상승합니다.", fail:"오답입니다. 정답은 B입니다." },
+  q10: { type:'short', ok:"키워드를 잘 포함했습니다! 정답 탭에서 상세 해설을 확인하세요.", fail:"핵심 키워드(AI, 헤일로, 매도, 현금)가 부족합니다. 정답 탭에서 모범 답안을 확인하세요." }
+};
+
+let scored = {};
+
+function updateProgress() {
+  const done = Object.keys(scored).length;
+  document.getElementById('progressBar').style.width = (done/10*100) + '%';
+  if (done === 10) {
+    const correct = Object.values(scored).filter(v=>v).length;
+    const sb = document.getElementById('scoreBox');
+    sb.style.display = 'block';
+    sb.scrollIntoView({ behavior:'smooth', block:'center' });
+    document.getElementById('scoreNum').textContent = correct + ' / 10';
+    const msgs = ['다시 학습이 필요합니다 📖', '절반 이상 맞혔습니다! 💪', '훌륭합니다! 👏', '완벽합니다! 🏆'];
+    document.getElementById('scoreSub').textContent = correct < 4 ? msgs[0] : correct < 7 ? msgs[1] : correct < 10 ? msgs[2] : msgs[3];
+  }
+}
+
+function showFB(id, isCorrect, ok, fail) {
+  const el = document.getElementById('fb-'+id);
+  el.textContent = isCorrect ? '✅ ' + ok : '❌ ' + fail;
+  el.className = 'feedback show ' + (isCorrect ? 'correct-fb' : 'wrong-fb');
+  if (!(id in scored)) {
+    scored[id] = isCorrect;
+    updateProgress();
+  }
+}
+
+function answerMC(el, qid, choice) {
+  if (qid in scored) return;
+  const ans = answers[qid];
+  const isCorrect = choice === ans.correct;
+  const allLi = el.closest('ul').querySelectorAll('li');
+  allLi.forEach(li => li.style.pointerEvents = 'none');
+  el.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    allLi.forEach(li => {
+      if (li.textContent.trim()[0] === ans.correct) li.classList.add('correct');
+    });
+  }
+  showFB(qid, isCorrect, ans.ok, ans.fail);
+}
+
+function answerOX(el, qid, choice) {
+  if (qid in scored) return;
+  const ans = answers[qid];
+  const isCorrect = choice === ans.correct;
+  const btns = el.closest('.ox-group').querySelectorAll('button');
+  btns.forEach(b => b.disabled = true);
+  el.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    btns.forEach(b => { if (b.textContent === ans.correct) b.classList.add('correct'); });
+  }
+  showFB(qid, isCorrect, ans.ok, ans.fail);
+}
+
+function checkShort(qid, keywords) {
+  const val = (document.getElementById('input-'+qid).value || '').toLowerCase();
+  const hit = keywords.filter(k => val.includes(k.toLowerCase()));
+  const isCorrect = hit.length >= 2;
+  const ans = answers[qid];
+  document.getElementById('input-'+qid).disabled = true;
+  document.getElementById('input-'+qid).nextElementSibling.disabled = true;
+  showFB(qid, isCorrect, ans.ok, ans.fail);
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    b.classList.toggle('active', (i===0&&name==='quiz')||(i===1&&name==='answer'));
+  });
+  document.getElementById('panel-quiz').classList.toggle('active', name==='quiz');
+  document.getElementById('panel-answer').classList.toggle('active', name==='answer');
+}
+</script>
+</body>
+</html>

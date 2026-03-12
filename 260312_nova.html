@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시장 분석 리포트 | 2026.03.12</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --red: #e11d48;
+    --red2: #f43f5e;
+    --border: #e5e5e5;
+    --blue: #2563eb;
+    --gray: #6b7280;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 0 60px;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--text);
+    color: #fff;
+    padding: 48px 24px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: var(--red);
+    opacity: 0.18;
+  }
+  .header-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--red2);
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1.25;
+    margin-bottom: 16px;
+  }
+  .header-meta {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.5px;
+  }
+  .header-date {
+    display: inline-block;
+    background: var(--red);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+
+  /* ── SUMMARY STRIP ── */
+  .summary-strip {
+    background: var(--red);
+    color: #fff;
+    padding: 14px 24px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    line-height: 1.5;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    padding: 28px 24px 0;
+  }
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 14px;
+  }
+  .section p {
+    font-family: 'Source Serif 4', serif;
+    font-size: 15px;
+    color: var(--text);
+    margin-bottom: 12px;
+    line-height: 1.75;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    margin: 28px 24px;
+    border: none;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── STAT CARDS ── */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 0 24px;
+    margin-bottom: 20px;
+  }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 14px;
+  }
+  .stat-card.highlight {
+    background: var(--text);
+    border-color: var(--text);
+    color: #fff;
+  }
+  .stat-card.highlight .stat-label { color: rgba(255,255,255,0.55); }
+  .stat-card.highlight .stat-value { color: var(--red2); }
+  .stat-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 6px;
+  }
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--red);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-desc {
+    font-size: 11px;
+    color: var(--text2);
+  }
+
+  /* ── PULL QUOTE ── */
+  .pull-quote {
+    margin: 24px;
+    padding: 20px 20px 20px 24px;
+    border-left: 4px solid var(--red);
+    background: var(--bg2);
+  }
+  .pull-quote p {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--text);
+    margin: 0;
+  }
+
+  /* ── CHART CONTAINER ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin: 0 24px 24px;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas {
+    opacity: 1;
+  }
+  .chart-title {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin: 0 24px 10px;
+  }
+
+  /* ── TAG LIST ── */
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 24px;
+    margin-bottom: 20px;
+  }
+  .tag {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 2px;
+    letter-spacing: 0.3px;
+  }
+  .tag-red { background: #fef2f2; color: var(--red); border: 1px solid #fecdd3; }
+  .tag-dark { background: var(--text); color: #fff; }
+  .tag-gray { background: var(--bg2); color: var(--text2); border: 1px solid var(--border); }
+  .tag-blue { background: #eff6ff; color: var(--blue); border: 1px solid #bfdbfe; }
+
+  /* ── TABLE ── */
+  .tbl-wrap {
+    margin: 0 24px 24px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background: var(--bg2);
+  }
+  thead th {
+    background: var(--red);
+    color: #fff;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody td { padding: 10px 12px; vertical-align: middle; }
+  td.up { color: var(--red); font-weight: 600; }
+  td.label { color: var(--text2); font-size: 12px; }
+
+  /* ── SCENARIO CARDS ── */
+  .scenario-grid {
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .scenario-card {
+    border-radius: 4px;
+    padding: 16px 18px;
+    border-left: 4px solid;
+  }
+  .scenario-card.bull { border-color: var(--blue); background: #eff6ff; }
+  .scenario-card.base { border-color: #10b981; background: #f0fdf4; }
+  .scenario-card.bear { border-color: var(--gray); background: var(--bg2); }
+  .sc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .sc-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .sc-prob {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .bull .sc-label, .bull .sc-prob { color: var(--blue); }
+  .base .sc-label, .base .sc-prob { color: #10b981; }
+  .bear .sc-label, .bear .sc-prob { color: var(--gray); }
+  .sc-range {
+    font-size: 20px;
+    font-weight: 700;
+    font-family: 'Playfair Display', serif;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  .sc-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+  /* ── ACTION PLAN ── */
+  .action-list {
+    padding: 0 24px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .action-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+  .action-num {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    background: var(--red);
+    color: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+  }
+  .action-body strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .action-body span {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    margin: 40px 24px 0;
+    padding-top: 20px;
+    border-top: 2px solid var(--text);
+  }
+  .footer p {
+    font-size: 11px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  /* ── 2x2 MATRIX ── */
+  .matrix-wrap {
+    margin: 0 24px 24px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .matrix-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    min-height: 200px;
+  }
+  .matrix-cell {
+    padding: 16px 14px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+  }
+  .matrix-cell.q1 { background: #fff1f2; }
+  .matrix-cell.q2 { background: #f0f9ff; }
+  .matrix-cell.q3 { background: #fafafa; }
+  .matrix-cell.q4 { background: #fafafa; opacity: 0.5; }
+  .mc-badge {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-bottom: 8px;
+    width: fit-content;
+  }
+  .q1 .mc-badge { background: var(--red); color: #fff; }
+  .q2 .mc-badge { background: var(--blue); color: #fff; }
+  .q3 .mc-badge { background: var(--gray); color: #fff; }
+  .q4 .mc-badge { background: #e5e5e5; color: var(--text2); }
+  .mc-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .mc-examples { font-size: 11px; color: var(--text2); line-height: 1.5; }
+  .matrix-axes {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 14px;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    font-size: 10px;
+    color: var(--text2);
+    letter-spacing: 0.5px;
+  }
+
+  /* fade-in for general elements */
+  .fi { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fi.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header fade-in">
+  <div class="header-date">2026 · 03 · 12</div>
+  <div class="header-label">미국 증시 & 거시경제 분석</div>
+  <h1>오라클이 증명한 AI,<br>호르무즈가 누른 CPI</h1>
+  <div class="header-meta">📺 노바 라이브 방송 기반 분석 리포트</div>
+</div>
+
+<!-- SUMMARY STRIP -->
+<div class="summary-strip fi">
+  ⚡ 오늘의 핵심: CPI 예상 부합 → 표면적 안도. 그러나 이란-미 전쟁·호르무즈 봉쇄·유가 급등이 만드는 '폭풍전야'. 오라클 어닝은 AI 인프라 투자 지속을 재확인.
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 1: CPI & 지정학 -->
+<!-- ═══════════════════════════════════ -->
+<div class="section fi" style="padding-top:28px">
+  <div class="section-label">CPI & 지정학 리스크</div>
+  <h2>2월 CPI는 '과거의 기록',<br>진짜 충격은 3월부터</h2>
+  <p>
+    2026년 3월 12일, 2월 소비자물가지수(CPI)가 발표됐다. 전월 대비(MoM) 기준 시장 컨센서스에 정확히 부합했고, 수개월째 컨센서스를 좌우로 맞춰나가는 패턴이 반복됐다.
+  </p>
+  <p>
+    문제는 이 데이터가 <strong>2월의 기록</strong>이라는 점이다. 시장이 현재 살고 있는 시간은 3월이다. 2월 28일 이란-미국 전쟁이 발발했고, 호르무즈 해협 봉쇄 위협과 함께 유가·비료 등 원자재 가격이 급등하기 시작했다.
+  </p>
+</div>
+
+<div class="pull-quote fi">
+  <p>"오늘의 CPI는 폭풍전야다. 아직 폭풍은 오지 않았다."</p>
+</div>
+
+<!-- CPI MoM 차트 -->
+<p class="chart-title fi">CPI (MoM) 추이 — 컨센서스 vs 발표치 (개념도)</p>
+<div class="chart-container fade-in">
+  <canvas id="cpiChart" height="220"></canvas>
+</div>
+
+<div class="stat-grid fi">
+  <div class="stat-card highlight">
+    <div class="stat-label">공포지수 (VIX)</div>
+    <div class="stat-value">24.9</div>
+    <div class="stat-desc">장중 고점 기록</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">유가 선물 (4/26)</div>
+    <div class="stat-value" style="font-size:22px">$92~96</div>
+    <div class="stat-desc">시장 예상 수준</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">비료 ETF (CF)</div>
+    <div class="stat-value">+22%</div>
+    <div class="stat-desc">전쟁 이후 누적</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">3월 CPI 발표</div>
+    <div class="stat-value" style="font-size:18px;color:var(--gray)">4월</div>
+    <div class="stat-desc">실질 인플레 반영 시점</div>
+  </div>
+</div>
+
+<div class="section fi">
+  <div class="section-label">IEA 전략비축유 방출</div>
+  <h2>비축유 방출 = "이머전시" 신호</h2>
+  <p>
+    국제에너지기구(IEA·International Energy Agency)가 전략비축유 방출을 결정했다. 표면적으로는 유가를 낮추는 조치처럼 보이지만, 시장은 반대로 읽었다.
+  </p>
+  <p>
+    비축유를 방출한다는 것은 곧 <strong>"지금이 비상사태(Emergency)"</strong>임을 공식 인정하는 신호다. 더구나 방출 후 재고가 줄어들면 미래 가용 물량은 더 감소한다. 유가 선물시장은 이를 반영해 오히려 미래 가격을 더 높이 책정하는 흐름이 이어지고 있다.
+  </p>
+  <p style="font-size:13px; color:var(--text2)">
+    ※ 주요국 비축일수: 중국 약 90일, 일본 약 180일. 미국은 상대적으로 비축 여력이 제한적.
+  </p>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 2: 오라클 어닝 -->
+<!-- ═══════════════════════════════════ -->
+<div class="section fi">
+  <div class="section-label">어닝 분석</div>
+  <h2>오라클의 비밀:<br>노량진 수산시장 전략</h2>
+  <p>
+    오라클(ORCL)이 시장 기대를 뛰어넘는 실적을 발표했다. 그동안 시장이 걱정했던 핵심은 <strong>캐펙스(CapEx · Capital Expenditure, 자본적 지출)</strong> 급증이었다. 데이터센터를 짓다 보면 비용이 폭증해 수익성이 악화된다는 논리였다.
+  </p>
+  <p>
+    그런데 오라클은 캐펙스를 대폭 축소하면서도 수주 잔고를 <strong>325% 급증</strong>시키는 데 성공했다. 비결은 비즈니스 모델 전환이다.
+  </p>
+</div>
+
+<div class="pull-quote fi">
+  <p>"물고기는 손님이 사 와요. 우리는 상차림 비용만 받습니다. — 오라클의 새 전략"</p>
+</div>
+
+<div class="section fi" style="padding-top:0">
+  <p>
+    노량진 수산시장처럼 고객(기업)이 직접 GPU를 조달해 오면, 오라클은 데이터센터 운영·AI 인프라 서비스만 제공하고 수수료를 받는 구조다. 재고(GPU·서버) 부담이 사라지고 마진이 대폭 개선된다.
+  </p>
+  <p>
+    추가로 오라클은 틱톡(TikTok) 지분 약 15%(약 20억 달러)를 확보했으며, 틱톡에서 발생하는 AI 관련 매출이 편입될 가능성이 높다.
+  </p>
+</div>
+
+<!-- 오라클 실적 차트 -->
+<p class="chart-title fi">오라클 수주잔고 변화 & 캐펙스 (개념 비교)</p>
+<div class="chart-container fade-in">
+  <canvas id="oracleChart" height="220"></canvas>
+</div>
+
+<!-- 오라클 시나리오 -->
+<div class="section fi" style="padding-top:0">
+  <div class="section-label">오라클 주가 시나리오</div>
+  <h2>현재가 $163 기준 3-Case</h2>
+</div>
+<div class="scenario-grid fi">
+  <div class="scenario-card bull">
+    <div class="sc-header">
+      <span class="sc-label">Bull Case</span>
+      <span class="sc-prob">35%</span>
+    </div>
+    <div class="sc-range">$220 – $250</div>
+    <div class="sc-desc">강한 호재 2개 이상 가세 필요. AI 수요 폭발 + 지정학 안정 시나리오.</div>
+  </div>
+  <div class="scenario-card base">
+    <div class="sc-header">
+      <span class="sc-label">Base Case</span>
+      <span class="sc-prob">45%</span>
+    </div>
+    <div class="sc-range">$170 – $200</div>
+    <div class="sc-desc">1차 익절 $170, 2차 익절 $190~200 설정. 가장 합리적 목표 구간.</div>
+  </div>
+  <div class="scenario-card bear">
+    <div class="sc-header">
+      <span class="sc-label">Bear Case</span>
+      <span class="sc-prob">20%</span>
+    </div>
+    <div class="sc-range">현 수준 이하</div>
+    <div class="sc-desc">전쟁 장기화, 사모신용 시장 경색, AI 내러티브 훼손 시 하방 압력.</div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 3: AI vs 레거시 양극화 -->
+<!-- ═══════════════════════════════════ -->
+<div class="section fi">
+  <div class="section-label">시장 양극화 (Bifurcation)</div>
+  <h2>AI 하드웨어 ↑<br>레거시 SaaS ↓</h2>
+  <p>
+    오늘 시장 전체는 부진했으나 포트폴리오별 성과는 극단적으로 갈렸다. AI 인프라·하드웨어 관련주는 강세, 전통 소프트웨어(SaaS·레거시) 종목은 지속 하락했다.
+  </p>
+  <p>
+    <strong>SaaS(Software as a Service)</strong>: 구독 방식으로 소프트웨어를 제공하는 사업 모델. 어도비·세일즈포스 계열이 대표적. AI 전환 속에 사용자 감소가 가속화되고 있다.
+  </p>
+  <p>
+    <strong>사모신용(Private Credit)</strong> 시장 불안도 레거시 기술주에 추가 압박을 가하고 있다. AI 스타트업·데이터센터들은 은행 대출 대신 사모신용에서 자금을 조달해 왔는데, 이 시장이 흔들리며 신용 공급이 줄어드는 양상이다.
+  </p>
+</div>
+
+<!-- 섹터 성과 차트 -->
+<p class="chart-title fi">오늘의 주요 종목 성과율</p>
+<div class="chart-container fade-in">
+  <canvas id="perfChart" height="240"></canvas>
+</div>
+
+<div class="section fi" style="padding-top:0">
+  <div class="section-label">오늘의 주목 종목</div>
+</div>
+<div class="tbl-wrap fi">
+  <table>
+    <thead>
+      <tr>
+        <th>종목</th>
+        <th>등락</th>
+        <th>이슈</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>PACS</strong></td>
+        <td class="up">+6.82%</td>
+        <td class="label">장후 실적 발표</td>
+      </tr>
+      <tr>
+        <td><strong>MBIS</strong></td>
+        <td class="up">+16.14%</td>
+        <td class="label">엔비디아 투자 유입</td>
+      </tr>
+      <tr>
+        <td><strong>SBOT</strong></td>
+        <td class="up">+10.2%</td>
+        <td class="label">매출 400% 급증, AI 배달 로보틱스</td>
+      </tr>
+      <tr>
+        <td><strong>LWLG</strong></td>
+        <td class="up">+상승</td>
+        <td class="label">타워세미 실리콘 포토닉스 계약</td>
+      </tr>
+      <tr>
+        <td><strong>PZZA</strong></td>
+        <td class="up">+19.4%</td>
+        <td class="label">M&A 50% 프리미엄 루머</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 4: 2×2 포트폴리오 전략 -->
+<!-- ═══════════════════════════════════ -->
+<div class="section fi">
+  <div class="section-label">투자 전략</div>
+  <h2>2×2 포트폴리오 매트릭스</h2>
+  <p>Y축: AI 수혜·모멘텀 / X축: 매크로 방어력·실물자산 가치</p>
+</div>
+
+<div class="matrix-wrap fi">
+  <div class="matrix-grid">
+    <div class="matrix-cell q1">
+      <span class="mc-badge">★ 1순위</span>
+      <div class="mc-title">AI + 딱딱한 자산</div>
+      <div class="mc-examples">엔비디아, AI 데이터센터 인프라, 오라클, 에너지 결합 AI</div>
+    </div>
+    <div class="matrix-cell q2">
+      <span class="mc-badge">2순위</span>
+      <div class="mc-title">AI 고성장 (방어력 보통)</div>
+      <div class="mc-examples">퍼플렉시티, AI SaaS 전환 기업</div>
+    </div>
+    <div class="matrix-cell q3">
+      <span class="mc-badge">방어형</span>
+      <div class="mc-title">실물 자산 (AI 연결 낮음)</div>
+      <div class="mc-examples">에너지, 비료, 방산, 캐터필라, 토지·부동산</div>
+    </div>
+    <div class="matrix-cell q4">
+      <span class="mc-badge">회피</span>
+      <div class="mc-title">레거시 SaaS</div>
+      <div class="mc-examples">어도비 구독, 전통 ERP, AI 전환 실패 기업</div>
+    </div>
+  </div>
+  <div class="matrix-axes">
+    <span>← 매크로 취약</span>
+    <span>매크로 방어 →</span>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 5: 액션 플랜 -->
+<!-- ═══════════════════════════════════ -->
+<div class="section fi">
+  <div class="section-label">Action Plan</div>
+  <h2>지금 당장 해야 할 4가지</h2>
+</div>
+<div class="action-list fi">
+  <div class="action-item">
+    <div class="action-num">1</div>
+    <div class="action-body">
+      <strong>AI 인프라 하드웨어 집중</strong>
+      <span>AI + 실물자산 교집합에 포트폴리오 핵심 배치. 소프트웨어가 아닌 하드웨어(GPU, 데이터센터, 반도체)에 우선순위.</span>
+    </div>
+  </div>
+  <div class="action-item">
+    <div class="action-num">2</div>
+    <div class="action-body">
+      <strong>헤일로 자산으로 20% 방어</strong>
+      <span>에너지·비료·방산·산업기계(인더스트리얼) 등 실물 독점 자산을 포트폴리오의 약 20% 배분. 유가 불안 헤지.</span>
+    </div>
+  </div>
+  <div class="action-item">
+    <div class="action-num">3</div>
+    <div class="action-body">
+      <strong>레거시 SaaS 과감히 매도</strong>
+      <span>구형 소프트웨어·SaaS 종목은 데드캣 바운스(일시 반등 후 재하락) 구간에서 정리. 손실 고착화 전에 청산.</span>
+    </div>
+  </div>
+  <div class="action-item">
+    <div class="action-num">4</div>
+    <div class="action-body">
+      <strong>현금(실탄) 확보</strong>
+      <span>기회 포착을 위한 저점 매수 실탄 보유 필수. 현금 없는 저점 스나이퍼는 방아쇠를 당길 수 없다.</span>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 6: 거시경제 시사점 -->
+<!-- ═══════════════════════════════════ -->
+<div class="section fi">
+  <div class="section-label">거시경제 & 연준 정책</div>
+  <h2>금리 인하 기대는<br>후퇴 중</h2>
+  <p>
+    전쟁 발발로 인한 유가·비료 급등은 3월 CPI에 본격 반영된다. 이 데이터는 4월에 발표된다. 즉, 현재 시장이 보고 있는 CPI는 전쟁 이전의 '깨끗한' 데이터다.
+  </p>
+  <p>
+    연준(Fed)이 금리 인하에 나서기 위해서는 인플레이션 하락 추세가 확인돼야 하는데, 지정학적 물가 충격이 가세하면서 <strong>2026년 금리 인하는 1회도 쉽지 않은 환경</strong>으로 변화하고 있다.
+  </p>
+  <p>
+    사모신용(Private Credit) 시장 불안은 금리 장기 고착화와 맞물려 중소 AI 스타트업의 자금 조달 비용을 높이고, 이는 다시 SaaS 등 기술 성장주에 신용 압박으로 전이된다.
+  </p>
+</div>
+
+<!-- 금리 인하 기대 차트 -->
+<p class="chart-title fi">2026년 연준 금리 인하 기대 변화 (시나리오)</p>
+<div class="chart-container fade-in">
+  <canvas id="rateChart" height="210"></canvas>
+</div>
+
+<div class="tag-list fi">
+  <span class="tag tag-red">유가 급등 리스크</span>
+  <span class="tag tag-dark">AI 인프라 수요↑</span>
+  <span class="tag tag-blue">오라클 실적 서프라이즈</span>
+  <span class="tag tag-gray">SaaS 구조적 하락</span>
+  <span class="tag tag-red">사모신용 긴축</span>
+  <span class="tag tag-gray">금리 인하 지연</span>
+</div>
+
+<!-- FOOTER -->
+<div class="footer fi">
+  <div class="footer-brand">Nova Market Report</div>
+  <p>본 문서는 YouTube 방송 내용을 바탕으로 미국 증시·거시경제 관점에서 정리한 분석 리포트입니다. 투자 권유가 아니며 모든 투자 결정은 본인 책임입니다. 수치 및 시나리오는 방송 원본 기준이며 실제 시장과 차이가 있을 수 있습니다.</p>
+  <p style="margin-top:8px; font-weight:500; color:var(--text)">2026년 3월 12일</p>
+</div>
+
+<script>
+// ─── INTERSECTION OBSERVERS ───
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in, .fi').forEach(el => fadeObs.observe(el));
+
+// ─── CHART CONFIGS ───
+const chartConfigs = {};
+
+// Chart 1: CPI MoM
+chartConfigs['cpiChart'] = () => {
+  new Chart(document.getElementById('cpiChart'), {
+    type: 'line',
+    data: {
+      labels: ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar*'],
+      datasets: [
+        {
+          label: '발표치 (MoM)',
+          data: [0.24, 0.31, 0.27, 0.29, 0.28, null],
+          borderColor: '#e11d48',
+          backgroundColor: 'rgba(225,29,72,0.08)',
+          borderWidth: 2.5,
+          pointBackgroundColor: '#e11d48',
+          pointRadius: 5,
+          tension: 0.35,
+          fill: true
+        },
+        {
+          label: '컨센서스',
+          data: [0.25, 0.30, 0.28, 0.30, 0.28, null],
+          borderColor: '#6b7280',
+          borderWidth: 1.5,
+          borderDash: [5,4],
+          pointRadius: 3,
+          tension: 0.35
+        },
+        {
+          label: '전쟁 이후 (추정)',
+          data: [null, null, null, null, null, 0.45],
+          borderColor: '#f43f5e',
+          backgroundColor: 'rgba(244,63,94,0.1)',
+          borderWidth: 2,
+          borderDash: [3,3],
+          pointBackgroundColor: '#f43f5e',
+          pointRadius: 6,
+          pointStyle: 'triangle'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { font: { size: 11 }, boxWidth: 16 } },
+        tooltip: { mode: 'index', intersect: false }
+      },
+      scales: {
+        y: {
+          min: 0.1, max: 0.6,
+          ticks: { callback: v => v.toFixed(2) + '%', font: { size: 10 } },
+          grid: { color: '#f0f0f0' }
+        },
+        x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// Chart 2: Oracle CapEx vs Backlog
+chartConfigs['oracleChart'] = () => {
+  new Chart(document.getElementById('oracleChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Q2 FY25', 'Q3 FY25', 'Q4 FY25', 'Q1 FY26'],
+      datasets: [
+        {
+          label: '수주잔고 (상대지수)',
+          data: [100, 180, 290, 425],
+          backgroundColor: 'rgba(225,29,72,0.85)',
+          borderRadius: 3,
+          yAxisID: 'y'
+        },
+        {
+          label: 'CapEx 부담 (상대지수)',
+          data: [100, 110, 90, 65],
+          backgroundColor: 'rgba(37,99,235,0.55)',
+          borderRadius: 3,
+          yAxisID: 'y'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { font: { size: 11 }, boxWidth: 14 } },
+        tooltip: { mode: 'index' }
+      },
+      scales: {
+        y: {
+          ticks: { font: { size: 10 } },
+          grid: { color: '#f0f0f0' }
+        },
+        x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// Chart 3: 종목 성과
+chartConfigs['perfChart'] = () => {
+  new Chart(document.getElementById('perfChart'), {
+    type: 'bar',
+    data: {
+      labels: ['PZZA', 'PACS', 'SBOT', 'MBIS', 'CF(비료)', 'S&P500'],
+      datasets: [{
+        label: '등락률 (%)',
+        data: [19.4, 6.82, 10.2, 16.14, 22, -1.4],
+        backgroundColor: [
+          '#e11d48','#f43f5e','#e11d48','#f43f5e','#2563eb','#6b7280'
+        ],
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.raw}%` } }
+      },
+      scales: {
+        x: {
+          ticks: { callback: v => v + '%', font: { size: 10 } },
+          grid: { color: '#f0f0f0' }
+        },
+        y: { ticks: { font: { size: 11 } }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// Chart 4: 금리 인하 기대
+chartConfigs['rateChart'] = () => {
+  new Chart(document.getElementById('rateChart'), {
+    type: 'line',
+    data: {
+      labels: ['1월초', '2월초', '2월말', '3월초', '3월12일'],
+      datasets: [
+        {
+          label: '연내 금리 인하 기대(회)',
+          data: [3.0, 2.5, 2.0, 1.2, 0.8],
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37,99,235,0.08)',
+          borderWidth: 2.5,
+          pointBackgroundColor: '#2563eb',
+          pointRadius: 5,
+          tension: 0.4,
+          fill: true
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { font: { size: 11 }, boxWidth: 14 } }
+      },
+      scales: {
+        y: {
+          min: 0, max: 4,
+          ticks: { callback: v => v + '회', font: { size: 10 } },
+          grid: { color: '#f0f0f0' }
+        },
+        x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// ─── CHART OBSERVER ───
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+</script>
+</body>
+</html>
