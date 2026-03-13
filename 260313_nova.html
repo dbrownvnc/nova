@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIA.chat 미팅 분석 — 2026.03.12</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Serif+KR:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --chart1: #e11d48;
+    --chart2: #1a1a1a;
+    --chart3: #6b7280;
+    --chart4: #2563eb;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', 'Noto Serif KR', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 0 60px;
+  }
+
+  /* ── HEADER ── */
+  .masthead {
+    background: var(--text);
+    color: var(--bg);
+    padding: 36px 24px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .masthead::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    background: var(--accent);
+    border-radius: 50%;
+    opacity: 0.18;
+  }
+  .masthead-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 10px;
+  }
+  .masthead h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 14px;
+  }
+  .masthead h1 span { color: var(--accent2); }
+  .masthead-meta {
+    font-size: 11px;
+    color: #aaaaaa;
+    letter-spacing: 1px;
+  }
+
+  /* ── SECTION LABELS ── */
+  .section-label {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    margin-bottom: 10px;
+  }
+
+  /* ── ALERT BOX ── */
+  .alert-box {
+    background: #fff1f2;
+    border-left: 4px solid var(--accent);
+    padding: 16px 18px;
+    margin: 20px 24px;
+    border-radius: 0 6px 6px 0;
+  }
+  .alert-box .alert-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .alert-box p { font-size: 13px; color: var(--text); }
+
+  /* ── CONTENT SECTIONS ── */
+  .section {
+    padding: 28px 24px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section:last-of-type { border-bottom: none; }
+
+  .section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 21px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    line-height: 1.3;
+  }
+
+  .section h3 {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 18px 0 8px;
+    color: var(--text);
+    border-bottom: 2px solid var(--accent);
+    display: inline-block;
+    padding-bottom: 2px;
+  }
+
+  .section p {
+    color: var(--text);
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+
+  /* ── STAT CARDS ── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 16px 0;
+  }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 14px 12px;
+    border-radius: 6px;
+    text-align: center;
+  }
+  .stat-card .val {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--accent);
+    display: block;
+  }
+  .stat-card .lbl {
+    font-size: 10px;
+    color: var(--text2);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* ── TABLE ── */
+  .tbl-wrap { overflow-x: auto; margin: 14px 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+  thead th {
+    background: var(--accent);
+    color: #fff;
+    padding: 9px 10px;
+    text-align: left;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  tbody tr { background: var(--bg2); border-bottom: 1px solid var(--border); }
+  tbody tr:nth-child(even) { background: #fff; }
+  td { padding: 9px 10px; }
+
+  /* ── QUOTE BLOCK ── */
+  .pullquote {
+    border-top: 3px solid var(--accent);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 0;
+    margin: 20px 0;
+  }
+  .pullquote p {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.45;
+    color: var(--text);
+  }
+  .pullquote cite {
+    font-size: 11px;
+    color: var(--text2);
+    display: block;
+    margin-top: 8px;
+    font-style: normal;
+  }
+
+  /* ── PILL TAGS ── */
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+  .tag {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+  .tag-red { background: #fff1f2; color: var(--accent); border: 1px solid #fecdd3; }
+  .tag-dark { background: #f3f4f6; color: var(--text); border: 1px solid var(--border); }
+  .tag-blue { background: #eff6ff; color: var(--chart4); border: 1px solid #bfdbfe; }
+
+  /* ── RISK METER ── */
+  .risk-bar-wrap { margin: 12px 0; }
+  .risk-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-bottom: 4px;
+    color: var(--text2);
+  }
+  .risk-bar-label span:first-child { font-weight: 600; color: var(--text); }
+  .risk-bar-bg {
+    background: var(--border);
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .risk-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--chart4), var(--accent));
+  }
+
+  /* ── STRATEGY BOX ── */
+  .strategy-box {
+    background: var(--text);
+    color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 16px 0;
+  }
+  .strategy-box h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--accent2);
+    margin-bottom: 12px;
+  }
+  .strategy-box ul { padding-left: 18px; }
+  .strategy-box li { font-size: 13px; margin-bottom: 7px; color: #e5e5e5; }
+  .strategy-box li strong { color: var(--accent2); }
+
+  /* ── DIVIDER ── */
+  .divider { height: 1px; background: var(--border); margin: 0 24px; }
+
+  /* ── CHART ── */
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin: 16px 0;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas { opacity: 1; }
+
+  /* ── FADE IN ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 30px 24px;
+    font-size: 11px;
+    color: var(--text2);
+    border-top: 1px solid var(--border);
+    margin-top: 20px;
+  }
+  footer strong { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-label">CIA.chat 멤버 미팅 분석 리포트</div>
+  <h1>퍼펙트 스톰:<br><span>삼중 악재와</span> 생존 전략</h1>
+  <div class="masthead-meta">2026.03.12 (목) NYC 기준 오후 7:20 · 미국 증시·거시경제 분석</div>
+</div>
+
+<!-- SUMMARY ALERT -->
+<div class="alert-box fade-in">
+  <div class="alert-title">⚠️ 핵심 요약</div>
+  <p>전쟁(이란-호르무즈), 금리(인하 기대 붕괴), 사모신용 리스크라는 <strong>삼중 악재</strong>가 동시 폭발. S&P500은 200일 이동평균선 테스트 중이며 기계적 매도와 알고리즘 트레이딩이 하락을 가속화하고 있다.</p>
+</div>
+
+<!-- SECTION 1: 시장 현황 -->
+<div class="section">
+  <div class="section-label">시장 현황</div>
+  <h2>3월 12일, 시장은 무슨 말을 했나</h2>
+
+  <div class="stat-row fade-in">
+    <div class="stat-card">
+      <span class="val">−2.0%</span>
+      <span class="lbl">나스닥 일간 수익률</span>
+    </div>
+    <div class="stat-card">
+      <span class="val">4.27%</span>
+      <span class="lbl">10년물 국채 금리</span>
+    </div>
+    <div class="stat-card">
+      <span class="val">$96.84</span>
+      <span class="lbl">유가 (당일 고점)</span>
+    </div>
+    <div class="stat-card">
+      <span class="val">6%+</span>
+      <span class="lbl">30년 모기지 금리</span>
+    </div>
+  </div>
+
+  <p>다우존스는 연중 최저치를 경신했고, S&P500(SPY)은 <strong>200일 이동평균선</strong>을 테스트하는 중이다. 발표자가 제시한 지지선 레벨은 다음과 같다.</p>
+
+  <div class="tbl-wrap fade-in">
+    <table>
+      <thead>
+        <tr><th>레벨</th><th>SPY 가격</th><th>의미</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>현재</td><td>$666</td><td>200일 이평선 붕괴 직전</td></tr>
+        <tr><td>지하 1층</td><td>$661</td><td>1차 지지선</td></tr>
+        <tr><td>지하 2층</td><td>$650</td><td>2차 지지선</td></tr>
+        <tr><td>지하 3층</td><td>$636</td><td>위험 구간 진입</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="chart-container fade-in">
+    <canvas id="chartSPY" height="230"></canvas>
+  </div>
+
+  <p style="color:var(--text2); font-size:12px;">▲ SPY 가상 지지선 시나리오. 실제 수치는 원본 발언 기준.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- SECTION 2: 삼중 악재 -->
+<div class="section">
+  <div class="section-label">거시경제</div>
+  <h2>퍼펙트 스톰의 세 가지 엔진</h2>
+
+  <h3>① 전쟁 · 지정학 리스크</h3>
+  <p>이란이 호르무즈 해협에서 유조선 4척 이상을 공격하고, 중동 정유시설과 창고를 타격하는 소모전에 돌입했다. 하루 평균 <strong>2,000만 배럴</strong>이 통과하는 호르무즈가 막히면서 유가는 3월 들어 수직 상승 중이다.</p>
+
+  <div class="pullquote fade-in">
+    <p>"IEA가 1.7억 배럴을 방출해도 버틸 수 있는 건 28일뿐. 전쟁이 빨리 끝나지 않으면 한 달 후 엄청난 충격이 온다."</p>
+    <cite>— 발표자 (CIA.chat 미팅, 2026.03.12)</cite>
+  </div>
+
+  <p>트럼프 대통령은 며칠 전 "전쟁 종료"를 선언했다가, 당일 "2~4주 추가 소요"로 번복했다. 명확한 출구 전략(Exit Plan) 없이 군사 개입이 지속되고 있어 시장의 불확실성이 극대화된 상태다.</p>
+
+  <h3>② 금리 — 연준의 딜레마</h3>
+  <p>CME 페드워치 기준, 3월·4월·5월·6월·7월·9월·10월·12월 모두 금리 동결 확률이 지배적이다. 50% 이상 인하 확률을 보이는 시점이 없다는 것이 핵심이다. 발표자는 이를 <strong>"올해 금리 인하는 꿈도 꾸지 말라"</strong>는 시그널로 해석했다.</p>
+
+  <div class="risk-bar-wrap fade-in">
+    <div class="risk-bar-label"><span>연준 금리 인하 기대 (12월 FOMC)</span><span>&lt;40%</span></div>
+    <div class="risk-bar-bg"><div class="risk-bar-fill" style="width:38%"></div></div>
+    <div class="risk-bar-label"><span>연준 기준금리 동결 확률</span><span>&gt;60%</span></div>
+    <div class="risk-bar-bg"><div class="risk-bar-fill" style="width:62%; background: var(--chart3)"></div></div>
+  </div>
+
+  <p>인플레이션은 오르고(전쟁 → 유가 → 물가 상승), 경제는 둔화되고(스태그플레이션), 고용도 AI 도입으로 약화되는 상황에서 연준은 <strong>어느 방향으로도 움직이기 어렵다.</strong> 트럼프는 파월에게 금리 인하를 트윗으로 압박하지만, 5월 취임하는 신임 연준 의장도 구조적 인플레를 무시한 인하는 불가능에 가깝다.</p>
+
+  <h3>③ 사모신용(Private Credit) 위기</h3>
+  <p>기존에 블랙락, 블루아울에서 나타났던 사모펀드 환매 중단 이슈가 <strong>모건스탠리</strong>(North Haven PIF)에도 번졌다. 투자자 약 11%가 환매를 요청했으나 모건스탠리는 5% 캡(상한)을 적용하며 전부 지급을 거부했다. 당일 MS 주가는 <strong>−4.05%</strong> 급락.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="chartRisk" height="230"></canvas>
+  </div>
+
+  <p>도이치뱅크 리서치에 따르면 이들 대형 금융사들은 서로 간의 대출 익스포저(노출액)가 약 <strong>300억 달러($30B)</strong>에 달하는 것으로 추정된다. 금융 시스템 내부의 상호 신용 의존이 신뢰 붕괴 시 시스템 전체로 파급될 수 있다는 경고다.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- SECTION 3: 자본 흐름 -->
+<div class="section">
+  <div class="section-label">자본 흐름</div>
+  <h2>돈은 어디서 나와, 어디로 가나</h2>
+
+  <div class="tbl-wrap fade-in">
+    <table>
+      <thead>
+        <tr><th>자금 유출 (Sell)</th><th>자금 유입 (Buy)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>고평가 기술주 (나스닥)</td><td>에너지·원유 관련주</td></tr>
+        <tr><td>항공·크루즈 (−8% 이상)</td><td>방산주</td></tr>
+        <tr><td>전기차·재생에너지</td><td>CF (비료·식량 안보)</td></tr>
+        <tr><td>금융주 (사모신용 우려)</td><td>미국 국채 (안전자산)</td></tr>
+        <tr><td>소비재 (달러 제너럴 등)</td><td>옥시덴탈 등 전통 에너지</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>CF Industries는 당일 약 <strong>+14%</strong> 급등. 웰스파고와 파이퍼샌들러는 옥시덴탈에 비중 확대 업그레이드를 부여하며 목표주가 $66~$69를 제시했다.</p>
+
+  <div class="pullquote fade-in">
+    <p>"에너지가 모든 것이 됐다. 에너지 때문에 물가가 움직이고, 에너지 때문에 채권 금리가 움직이고, 에너지 때문에 경제가 파괴되고 있다."</p>
+    <cite>— 발표자</cite>
+  </div>
+
+  <h3>K자형 경제 심화</h3>
+  <p>달러 제너럴(저소득층 타깃 소매점) 실적 부진 vs. 딕스스포팅굿즈(고소득 레저·스포츠) 실적 상승이 <strong>K자형 경제(빈익빈 부익부)</strong>를 극명하게 보여줬다. 저소득층의 소비 여력이 고물가·고유가에 완전히 잠식되고 있다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="chartKeco" height="230"></canvas>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SECTION 4: 어도비·AI -->
+<div class="section">
+  <div class="section-label">개별 이슈</div>
+  <h2>어도비 CEO 퇴임 — AI 전환의 경고</h2>
+  <p>어도비는 실적 예상치를 충족했음에도 불구하고, CEO 퇴임 발표로 주가가 급락했다. 발표자는 이를 <strong>AI 전환에 실패한 기업</strong>에 대한 이사회의 경질로 해석했다. 생성 AI 경쟁에서 어도비가 뒤처지고 있다는 시장의 판단이 실적 호조를 무력화한 사례다.</p>
+
+  <div class="tags">
+    <span class="tag tag-red">AI 전환 실패</span>
+    <span class="tag tag-dark">CEO 교체</span>
+    <span class="tag tag-dark">실적 무관 주가 하락</span>
+  </div>
+
+  <h3>AI 스토리의 퇴조</h3>
+  <p>그동안 나스닥을 지탱하던 AI 성장 내러티브가 전쟁·인플레·사모신용 리스크에 가려졌다. 시장은 이제 <strong>"미래 현금흐름 할인"이 아닌 "현재 현금창출력"</strong>에만 반응하고 있다. 고평가 AI 주식에 대한 기계적 매도가 지속 중이다.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- SECTION 5: 내일 PC 발표 -->
+<div class="section">
+  <div class="section-label">이벤트</div>
+  <h2>내일 PCE 발표 — 두 가지 시나리오</h2>
+  <p>3월 13일(금) 발표 예정인 1월 PCE(개인소비지출) 물가지수가 스태그플레이션 공포를 확인하거나 반증할 변수다. 연준이 주목하는 지표는 <strong>코어 PCE YoY</strong>로, 컨센서스는 약 3.1% 수준.</p>
+
+  <div class="tbl-wrap fade-in">
+    <table>
+      <thead>
+        <tr><th>시나리오</th><th>조건</th><th>예상 반응</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>안도 랠리</td><td>코어 PCE &lt; 3.0%</td><td>단기 반등 (오전 한정 가능성)</td></tr>
+        <tr><td>중립</td><td>코어 PCE ≈ 3.1%</td><td>전쟁 스토리 지배 → 큰 변화 없음</td></tr>
+        <tr><td>추가 하락</td><td>코어 PCE &gt; 3.3%↑</td><td>지하 3층($636) 시나리오 가속</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>발표자는 PCE가 주도권을 가져가기 어렵다고 판단한다. <strong>전쟁(이란)이 진짜 주인공</strong>이며, PCE가 예상 범위를 크게 벗어나지 않는다면 오전 잠깐의 반응 후 원래 추세로 복귀할 가능성이 높다.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- SECTION 6: 투자 전략 -->
+<div class="section">
+  <div class="section-label">투자 전략</div>
+  <h2>생존 플레이: 폭풍이 지나갈 때까지</h2>
+
+  <div class="strategy-box fade-in">
+    <h4>📌 장기 투자자 전략</h4>
+    <ul>
+      <li><strong>현금 20~40% 유지:</strong> 현금은 미래 기회를 잡는 콜옵션이다</li>
+      <li><strong>퀄리티 바벨:</strong> 고평가 적자 기업 → 강력한 현금흐름 기업으로 교체</li>
+      <li><strong>AI 인프라 + 에너지 + 방산주</strong>로 포트폴리오 재편</li>
+      <li><strong>기계적 분할매수(DCA):</strong> 1차·2차·3차 진입 계획을 사전에 수립</li>
+    </ul>
+  </div>
+
+  <div class="strategy-box fade-in" style="background: var(--bg2); color: var(--text); border: 1px solid var(--border);">
+    <h4 style="color: var(--accent);">📌 단기 트레이더 전략</h4>
+    <ul style="color: var(--text);">
+      <li><strong>오버나이트 리스크 최소화:</strong> 데이트레이딩 위주로 전환</li>
+      <li><strong>반등·반납 사이클 활용:</strong> 아침 갭을 역방향으로 공략</li>
+      <li><strong>섹터 페어 트레이딩:</strong> 에너지 ↑ vs 항공 ↓ 등 상관관계 활용</li>
+      <li><strong>포지션 50% 축소:</strong> 평소 진입 사이즈 절반 이하로 제한</li>
+    </ul>
+  </div>
+
+  <p>발표자가 가장 강조한 핵심 원칙: <strong>"벌려고 하지 말고, 살아남는 것에 초점을 맞춰라."</strong> 폭풍이 지나간 후 해가 떴을 때 포트폴리오를 가지고 있어야 반등을 수확할 수 있다.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- SECTION 7: 요약 -->
+<div class="section">
+  <div class="section-label">종합 판단</div>
+  <h2>지금 이 시장을 어떻게 볼 것인가</h2>
+
+  <div class="risk-bar-wrap fade-in">
+    <div class="risk-bar-label"><span>지정학 리스크 (전쟁·유가)</span><span>매우 높음</span></div>
+    <div class="risk-bar-bg"><div class="risk-bar-fill" style="width:90%"></div></div>
+
+    <div class="risk-bar-label" style="margin-top:10px"><span>사모신용 위기 전이 위험</span><span>높음</span></div>
+    <div class="risk-bar-bg"><div class="risk-bar-fill" style="width:70%"></div></div>
+
+    <div class="risk-bar-label" style="margin-top:10px"><span>연준 정책 불확실성</span><span>높음</span></div>
+    <div class="risk-bar-bg"><div class="risk-bar-fill" style="width:75%; background: var(--chart4)"></div></div>
+
+    <div class="risk-bar-label" style="margin-top:10px"><span>단기 반등 가능성</span><span>제한적</span></div>
+    <div class="risk-bar-bg"><div class="risk-bar-fill" style="width:25%; background: var(--chart3)"></div></div>
+  </div>
+
+  <p>발표자는 <strong>전면적 패닉은 아니다</strong>라고 선을 그었다. 에너지·방산·식량 안보 섹터는 자금 유입이 뚜렷하다. 하지만 고평가 기술주와 소비재의 기계적 매도, 그리고 사모신용 시스템 리스크가 중첩되어 <strong>최소 한 달간의 변동성 구간</strong>이 예상된다. 전쟁 조기 종결 시 5~6월 회복 시나리오, 장기화 시 2027년까지 하방 압력이 지속될 수 있다.</p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <strong>CIA.chat</strong> 멤버 미팅 · 2026년 3월 12일 · 뉴욕 시각<br>
+  본 문서는 투자 권유가 아닙니다. 모든 투자 결정은 본인 책임 하에 이루어져야 합니다.
+</footer>
+
+<script>
+// ── Fade Observer ──
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// ── Chart Configs ──
+const chartConfigs = {};
+
+chartConfigs['chartSPY'] = () => {
+  new Chart(document.getElementById('chartSPY'), {
+    type: 'line',
+    data: {
+      labels: ['2월말', '3/1', '3/5', '3/8', '3/10', '3/12 (현재)', '지하1층', '지하2층', '지하3층'],
+      datasets: [
+        {
+          label: 'SPY 추이 (가상)',
+          data: [695, 685, 678, 670, 667, 666, null, null, null],
+          borderColor: '#e11d48',
+          backgroundColor: 'rgba(225,29,72,0.08)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 3,
+        },
+        {
+          label: '지지선 레벨',
+          data: [null, null, null, null, null, null, 661, 650, 636],
+          borderColor: '#2563eb',
+          borderDash: [5,4],
+          backgroundColor: 'transparent',
+          pointRadius: 5,
+          pointStyle: 'triangle',
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11 }, color: '#1a1a1a' } },
+        title: { display: true, text: 'SPY 지지선 시나리오 (2026.03)', font: { size: 13 }, color: '#1a1a1a' }
+      },
+      scales: {
+        y: { ticks: { color: '#777', font: { size: 10 } }, grid: { color: '#e5e5e5' } },
+        x: { ticks: { color: '#777', font: { size: 9 } }, grid: { color: 'transparent' } }
+      }
+    }
+  });
+};
+
+chartConfigs['chartRisk'] = () => {
+  new Chart(document.getElementById('chartRisk'), {
+    type: 'bar',
+    data: {
+      labels: ['블루아울\n(3주 전)', '블랙락', '클리프워러', '모건스탠리\n(3/12)'],
+      datasets: [{
+        label: '환매 요청 비율 (%)',
+        data: [8, 9, 7, 11],
+        backgroundColor: ['#6b7280','#6b7280','#6b7280','#e11d48'],
+        borderRadius: 4,
+      },{
+        label: '지급 상한 캡 (%)',
+        data: [5, 5, 5, 5],
+        backgroundColor: 'rgba(37,99,235,0.5)',
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 10 }, color: '#1a1a1a' } },
+        title: { display: true, text: '사모신용 펀드 환매 요청 vs 지급 상한', font: { size: 12 }, color: '#1a1a1a' }
+      },
+      scales: {
+        y: { ticks: { color: '#777', font: { size: 10 } }, grid: { color: '#e5e5e5' } },
+        x: { ticks: { color: '#777', font: { size: 9 } }, grid: { color: 'transparent' } }
+      }
+    }
+  });
+};
+
+chartConfigs['chartKeco'] = () => {
+  new Chart(document.getElementById('chartKeco'), {
+    type: 'bar',
+    data: {
+      labels: ['달러 제너럴\n(저소득층)', '딕스스포팅굿즈\n(고소득층)', 'CF Industries\n(비료·식량안보)', '크루즈\n(여행·레저)'],
+      datasets: [{
+        label: '당일 주가 변화율 (%)',
+        data: [-6.5, 5.2, 14, -8.3],
+        backgroundColor: (ctx) => ctx.raw >= 0 ? '#2563eb' : '#e11d48',
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        title: { display: true, text: 'K자형 경제: 3월 12일 섹터별 주가 변화', font: { size: 12 }, color: '#1a1a1a' }
+      },
+      scales: {
+        y: {
+          ticks: { color: '#777', font: { size: 10 }, callback: v => v + '%' },
+          grid: { color: '#e5e5e5' }
+        },
+        x: { ticks: { color: '#777', font: { size: 9 } }, grid: { color: 'transparent' } }
+      }
+    }
+  });
+};
+
+// ── Chart Observer ──
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+</script>
+</body>
+</html>

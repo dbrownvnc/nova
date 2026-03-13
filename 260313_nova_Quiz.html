@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시험문제 — CIA.chat 2026.03.12 분석</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff; --bg2: #fafafa; --text: #1a1a1a; --text2: #777;
+    --accent: #e11d48; --accent2: #f43f5e; --border: #e5e5e5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'DM Sans', 'Noto Serif KR', sans-serif;
+    font-size: 14px; line-height: 1.7;
+    max-width: 480px; margin: 0 auto; padding: 0 0 60px;
+  }
+
+  .masthead {
+    background: var(--text); color: #fff;
+    padding: 32px 24px 24px; position: relative; overflow: hidden;
+  }
+  .masthead::before {
+    content:''; position: absolute; bottom:-30px; right:-30px;
+    width:150px; height:150px; background: var(--accent);
+    border-radius:50%; opacity:0.15;
+  }
+  .masthead-label {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--accent2); margin-bottom: 8px;
+  }
+  .masthead h1 {
+    font-family: 'Playfair Display', serif; font-size: 26px;
+    font-weight: 900; line-height: 1.25; margin-bottom: 10px;
+  }
+  .masthead-meta { font-size: 11px; color: #aaa; letter-spacing: 1px; }
+
+  /* TABS */
+  .tab-bar {
+    display: flex; background: var(--bg2);
+    border-bottom: 2px solid var(--border); position: sticky; top: 0; z-index: 10;
+  }
+  .tab-btn {
+    flex: 1; padding: 12px 4px; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.5px; text-align: center; cursor: pointer;
+    border: none; background: transparent; color: var(--text2);
+    transition: all 0.2s;
+  }
+  .tab-btn.active { color: var(--accent); border-bottom: 3px solid var(--accent); margin-bottom: -2px; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* QUESTION CARDS */
+  .q-section { padding: 20px 24px 4px; }
+  .diff-label {
+    display: inline-block; font-size: 9px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase; padding: 2px 9px;
+    border-radius: 12px; margin-bottom: 14px;
+  }
+  .diff-easy { background: #dcfce7; color: #16a34a; }
+  .diff-mid   { background: #fef9c3; color: #ca8a04; }
+  .diff-hard  { background: #fff1f2; color: var(--accent); }
+
+  .q-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; margin-bottom: 14px; overflow: hidden;
+  }
+  .q-header {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 14px 16px 10px;
+  }
+  .q-num {
+    background: var(--accent); color: #fff;
+    font-size: 11px; font-weight: 700; border-radius: 50%;
+    width: 24px; height: 24px; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0; margin-top: 1px;
+  }
+  .q-type {
+    font-size: 10px; color: var(--text2); font-weight: 500;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .q-text { font-size: 14px; font-weight: 600; line-height: 1.5; }
+
+  .q-options { padding: 0 16px 12px 50px; }
+  .q-options li { font-size: 13px; margin-bottom: 5px; list-style: none; }
+  .q-options li::before { content: attr(data-opt) ". "; font-weight: 600; color: var(--text2); }
+
+  .q-blank { padding: 0 16px 12px 50px; }
+  .blank-line {
+    border-bottom: 1.5px solid var(--text); display: inline-block;
+    width: 120px; margin: 0 4px; vertical-align: bottom;
+  }
+
+  /* ANSWER SECTION */
+  .a-card {
+    background: #fff; border: 1px solid var(--border);
+    border-radius: 8px; margin-bottom: 14px; overflow: hidden;
+  }
+  .a-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px; background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+  }
+  .a-num {
+    background: var(--text); color: #fff;
+    font-size: 11px; font-weight: 700; border-radius: 50%;
+    width: 24px; height: 24px; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0;
+  }
+  .a-q-text { font-size: 12px; color: var(--text2); }
+  .a-body { padding: 12px 16px; }
+  .a-answer {
+    font-size: 15px; font-weight: 700; color: var(--accent);
+    margin-bottom: 6px; font-family: 'Playfair Display', serif;
+  }
+  .a-exp { font-size: 13px; color: var(--text); line-height: 1.6; }
+  .a-exp strong { color: var(--accent); }
+
+  .divider { height: 1px; background: var(--border); margin: 0 24px; }
+  footer {
+    text-align: center; padding: 24px; font-size: 11px;
+    color: var(--text2); border-top: 1px solid var(--border); margin-top: 16px;
+  }
+  footer strong { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-label">CIA.chat 분석 시험문제</div>
+  <h1>미국 증시·거시경제<br>실력 점검 10선</h1>
+  <div class="masthead-meta">2026.03.12 멤버 미팅 기반 · 객관식·단답형·OX 혼합</div>
+</div>
+
+<!-- TAB BAR -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('questions', this)">📝 문제지</button>
+  <button class="tab-btn" onclick="switchTab('answers', this)">✅ 정답·해설</button>
+</div>
+
+<!-- ════════════════════════════════ 문제지 ════════════════════════════════ -->
+<div id="questions" class="tab-panel active">
+
+  <!-- 쉬움 30% -->
+  <div class="q-section">
+    <span class="diff-label diff-easy">🟢 쉬움 (30%)</span>
+
+    <!-- Q1 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">1</div>
+        <div>
+          <div class="q-type">객관식</div>
+          <div class="q-text">발표자가 말한 현재 시장 하락의 '삼중 악재(퍼펙트 스톰)'에 해당하지 않는 것은?</div>
+        </div>
+      </div>
+      <ol class="q-options">
+        <li data-opt="①">전쟁·지정학 리스크 (이란-호르무즈)</li>
+        <li data-opt="②">금리 인하 기대의 붕괴</li>
+        <li data-opt="③">달러 급등에 따른 수출 둔화</li>
+        <li data-opt="④">사모신용(Private Credit) 위기</li>
+      </ol>
+    </div>
+
+    <!-- Q2 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">2</div>
+        <div>
+          <div class="q-type">OX</div>
+          <div class="q-text">발표자에 따르면, IEA가 1.7억 배럴의 전략 비축유를 방출하면 호르무즈 봉쇄 충격을 약 28일간 완화할 수 있다.</div>
+        </div>
+      </div>
+      <div class="q-blank">( &nbsp;&nbsp; O &nbsp;&nbsp;/&nbsp;&nbsp; X &nbsp;&nbsp; )</div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">3</div>
+        <div>
+          <div class="q-type">단답형</div>
+          <div class="q-text">3월 12일 기준 발표자가 제시한 S&P500(SPY) '지하 1층' 지지선 가격은 얼마인가?</div>
+        </div>
+      </div>
+      <div class="q-blank">$ <span class="blank-line"></span></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 보통 50% -->
+  <div class="q-section">
+    <span class="diff-label diff-mid">🟡 보통 (50%)</span>
+
+    <!-- Q4 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">4</div>
+        <div>
+          <div class="q-type">객관식</div>
+          <div class="q-text">모건스탠리의 North Haven PIF 사모펀드에서 나타난 문제를 가장 정확하게 설명한 것은?</div>
+        </div>
+      </div>
+      <ol class="q-options">
+        <li data-opt="①">펀드 수익률이 마이너스로 전환되어 청산 절차가 시작됐다</li>
+        <li data-opt="②">투자자의 약 11%가 환매를 요청했으나 5% 캡을 적용해 전액 지급을 거부했다</li>
+        <li data-opt="③">SEC의 긴급 조사로 신규 투자가 중단됐다</li>
+        <li data-opt="④">기초자산인 부동산 가치가 30% 이상 하락했다</li>
+      </ol>
+    </div>
+
+    <!-- Q5 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">5</div>
+        <div>
+          <div class="q-type">객관식</div>
+          <div class="q-text">발표자가 '스태그플레이션'이라고 표현한 상황을 구성하는 두 가지 요인의 조합으로 가장 적절한 것은?</div>
+        </div>
+      </div>
+      <ol class="q-options">
+        <li data-opt="①">물가 하락 + 경기 과열</li>
+        <li data-opt="②">물가 상승 + 경기 침체(고용 둔화)</li>
+        <li data-opt="③">달러 강세 + 무역 흑자</li>
+        <li data-opt="④">금리 인상 + 주가 급등</li>
+      </ol>
+    </div>
+
+    <!-- Q6 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">6</div>
+        <div>
+          <div class="q-type">OX</div>
+          <div class="q-text">달러 제너럴과 딕스스포팅굿즈의 실적 격차는 미국 내 K자형 경제(소득 양극화)의 심화를 보여주는 사례로 해석할 수 있다.</div>
+        </div>
+      </div>
+      <div class="q-blank">( &nbsp;&nbsp; O &nbsp;&nbsp;/&nbsp;&nbsp; X &nbsp;&nbsp; )</div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">7</div>
+        <div>
+          <div class="q-type">단답형</div>
+          <div class="q-text">발표자가 단기 트레이더에게 권고한 '포지션 사이즈 축소' 수준은 평소 대비 몇 % 이하인가?</div>
+        </div>
+      </div>
+      <div class="q-blank"><span class="blank-line"></span> %</div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">8</div>
+        <div>
+          <div class="q-type">객관식</div>
+          <div class="q-text">발표자가 제시한 '퀄리티 바벨(Quality Barbell) 전략'의 핵심 구성으로 옳은 것은?</div>
+        </div>
+      </div>
+      <ol class="q-options">
+        <li data-opt="①">현금 100% 보유 + 전체 매도</li>
+        <li data-opt="②">고평가 성장주 + 달러 ETF</li>
+        <li data-opt="③">강력한 현금흐름 기업 + AI 인프라·에너지·방산주</li>
+        <li data-opt="④">채권 100% + 금(Gold)</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 어려움 20% -->
+  <div class="q-section">
+    <span class="diff-label diff-hard">🔴 어려움 (20%)</span>
+
+    <!-- Q9 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">9</div>
+        <div>
+          <div class="q-type">서술형</div>
+          <div class="q-text">도이치뱅크 리서치가 발견한 사모신용 위기의 '시스템 리스크' 요인을 설명하고, 이것이 일반 소비자·실물 경제에 미칠 수 있는 파급 경로를 서술하시오. (3문장 이내)</div>
+        </div>
+      </div>
+      <div class="q-blank" style="border-bottom: 1.5px solid #e5e5e5; height: 80px; margin-top: 8px;"></div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">10</div>
+        <div>
+          <div class="q-type">객관식 (복합)</div>
+          <div class="q-text">다음 중 발표자가 제시한 내일(3/13) PCE 발표 시나리오에 대한 설명으로 <strong>틀린 것</strong>은?</div>
+        </div>
+      </div>
+      <ol class="q-options">
+        <li data-opt="①">컨센서스 예상치는 코어 PCE YoY 약 3.1%다</li>
+        <li data-opt="②">PCE가 3% 미만으로 나오면 단기 안도 랠리 가능성이 있다</li>
+        <li data-opt="③">PCE 결과와 무관하게 전쟁(이란) 변수가 시장의 주도권을 쥐고 있다</li>
+        <li data-opt="④">PCE가 예상치대로 나오면 에너지·방산주의 상승 추세는 즉시 반전될 것이다</li>
+      </ol>
+    </div>
+  </div>
+
+</div><!-- /문제지 -->
+
+<!-- ════════════════════════════════ 정답·해설 ════════════════════════════════ -->
+<div id="answers" class="tab-panel">
+
+  <div class="q-section">
+    <span class="diff-label diff-easy">🟢 쉬움</span>
+
+    <div class="a-card">
+      <div class="a-header"><div class="a-num">1</div><div class="a-q-text">삼중 악재에 해당하지 않는 것</div></div>
+      <div class="a-body">
+        <div class="a-answer">정답: ③ 달러 급등에 따른 수출 둔화</div>
+        <div class="a-exp">발표자가 명시한 세 가지 악재는 <strong>① 전쟁·지정학(이란)</strong>, <strong>② 금리 인하 기대 붕괴</strong>, <strong>③ 사모신용 위기</strong>다. 달러 강세·수출 둔화는 언급되지 않았다.</div>
+      </div>
+    </div>
+
+    <div class="a-card">
+      <div class="a-header"><div class="a-num">2</div><div class="a-q-text">IEA 비축유 28일 완화 효과</div></div>
+      <div class="a-body">
+        <div class="a-answer">정답: O (맞다)</div>
+        <div class="a-exp">호르무즈 하루 통과량 2,000만 배럴 기준으로 1.7억 배럴을 나누면 약 <strong>28일</strong>이다. 발표자는 "한 달 후 엄청난 충격이 온다"며 조기 종전의 필요성을 강조했다.</div>
+      </div>
+    </div>
+
+    <div class="a-card">
+      <div class="a-header"><div class="a-num">3</div><div class="a-q-text">SPY 지하 1층 지지선</div></div>
+      <div class="a-body">
+        <div class="a-answer">정답: $661</div>
+        <div class="a-exp">발표자는 지지선을 지하 1층 <strong>$661</strong>, 지하 2층 $650, 지하 3층 $636으로 제시했다. 당일 SPY는 $666으로, 200일 이동평균선 붕괴 직전 상태였다.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="q-section">
+    <span class="diff-label diff-mid">🟡 보통</span>
+
+    <div class="a-card">
+      <div class="a-header"><div class="a-num">4</div><div class="a-q-text">모건스탠리 사모펀드 문제</div></div>
+      <div class="a-body">
+        <div class="a-answer">정답: ②</div>
+        <div class="a-exp">North Haven PIF에서 투자자 <strong>약 11%</strong>가 환매를 요청했으나 모건스탠리는 <strong>5% 캡</strong>을 적용해 전부 지급하지 않았다. 이 소식으로 모건스탠리 주가는 당일 <strong>−4.05%</strong> 급락했다.</div>
+      </div>
+    </div>
+
+    <div class="a-card">
+      <div class="a-header"><div class="a-num">5</div><div class="a-q-text">스태그플레이션의 구성 요인</div></div>
+      <div class="a-body">
+        <div class="a-answer">정답: ②</div>
+        <div class="a-exp">스태그플레이션(Stagflation)은 <strong>물가 상승(인플레이션) + 경기 침체(성장 둔화·고용 악화)</strong>가 동시에 발생하는 상태다. 발표자는 유가 급등으로 물가가 오르는 동시에, AI 도입으로 고용이 둔화되고 소비가 위축되는 구도를 스태그플레이션이라 설명했다.</div>
+      </div>
+    </div>
+
+    <div class="a-card">
+      <div class="a-header"><div class="a-num">6</div><div class="a-q-text">K자형 경제 사례 판단</div></div>
+      <div class="a-body">
+        <div class="a-answer">정답: O (맞다)</div>
+        <div class="a-exp">저소득층을 주요 고객으로 하는 달러 제너럴의 실적이 부진한 반면, 고소득층 레저·스포츠 소비자를 겨냥한 딕스스포팅굿즈가 상승한 것은 소득 양극화('K자형 경제')를 상징적으로 보여준다.</div>
+      </div>
+    </div>
+
+    <div class="a-card">
+      <div class="a-header"><div class="a-num">7</div><div class="a-q-text">트레이더 포지션 축소 수준</div></div>
+      <div class="a-body">
+        <div class="a-answer">정답: 50% (이하)</div>
+        <div class="a-exp">발표자는 이런 변동성 국면에서 트레이더가 평소 진입 사이즈를 <strong>50% 이하</strong>로 줄이고, 손절 라인도 더 타이트하게 잡아 자금을 보호해야 한다고 강조했다.</div>
+      </div>
+    </div>
+
+    <div class="a-card">
+      <div class="a-header"><div class="a-num">8</div><div class="a-q-text">퀄리티 바벨 전략의 핵심</div></div>
+      <div class="a-body">
+        <div class="a-answer">정답: ③</div>
+        <div class="a-exp">발표자는 '퀄리티 바벨 전략'으로 <strong>강력한 현금흐름 기업(수익성 우량주) + AI 인프라·에너지·방산주</strong>의 양쪽 끝을 잡고, 고평가 적자 기업은 매도하는 방식을 권고했다.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="q-section">
+    <span class="diff-label diff-hard">🔴 어려움</span>
+
+    <div class="a-card">
+      <div class="a-header"><div class="a-num">9</div><div class="a-q-text">사모신용 시스템 리스크와 파급 경로</div></div>
+      <div class="a-body">
+        <div class="a-answer">정답 (예시 답안)</div>
+        <div class="a-exp">
+          도이치뱅크 리서치에 따르면 블랙락·모건스탠리 등 대형 금융사들이 <strong>서로의 사모펀드에 약 $30B 규모</strong>의 익스포저를 보유하고 있어, 한 곳의 환매 위기가 상호 연쇄 부도로 번질 수 있다.<br><br>
+          신뢰가 깨지면 <strong>금융 시스템 전반의 신용 경색(동맥경화)</strong>이 발생해 기업 대출이 막히고 소비자도 은행에서 예금을 인출하지 못하는 상황이 올 수 있다.<br><br>
+          결국 기업 투자 감소 → 고용 악화 → 소비 위축의 <strong>실물 경제 침체 루프</strong>로 연결된다.
+        </div>
+      </div>
+    </div>
+
+    <div class="a-card">
+      <div class="a-header"><div class="a-num">10</div><div class="a-q-text">PCE 시나리오 중 틀린 것</div></div>
+      <div class="a-body">
+        <div class="a-answer">정답: ④</div>
+        <div class="a-exp">발표자는 PCE가 예상치대로 나오더라도 <strong>전쟁이 끝나지 않은 한 에너지·방산주의 상승 추세는 유지</strong>된다고 했다. ④처럼 "즉시 반전"된다는 주장은 발표자의 견해와 정반대다. PCE 결과는 오전에 잠깐 영향을 미칠 수 있지만 전쟁 변수가 시장 주도권을 유지한다.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /정답 -->
+
+<footer>
+  <strong>CIA.chat</strong> 멤버 미팅 · 2026.03.12 기반 시험문제<br>
+  본 문서의 내용은 투자 조언이 아닙니다.
+</footer>
+
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
