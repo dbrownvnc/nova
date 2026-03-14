@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA Real Invest — 2026.03.14 시장 분석</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --table-bg: #fafafa;
+    --c1: #e11d48;
+    --c2: #1a1a1a;
+    --c3: #6b7280;
+    --c4: #2563eb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 0 60px;
+  }
+
+  /* HEADER */
+  .masthead {
+    border-bottom: 3px solid var(--accent);
+    padding: 28px 20px 16px;
+    position: relative;
+  }
+  .masthead-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .masthead-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1.15;
+    color: var(--text);
+  }
+  .masthead-sub {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text2);
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .masthead-sub span { display: flex; align-items: center; gap: 4px; }
+
+  /* HERO STAT */
+  .hero-stat {
+    background: var(--accent);
+    color: #fff;
+    padding: 22px 20px;
+    margin-bottom: 2px;
+  }
+  .hero-stat-label { font-size: 11px; letter-spacing: 2px; opacity: .75; text-transform: uppercase; }
+  .hero-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    font-weight: 900;
+    line-height: 1;
+    margin: 4px 0 2px;
+  }
+  .hero-stat-desc { font-size: 13px; opacity: .85; }
+
+  /* SECTION */
+  .section { padding: 24px 20px 0; }
+  .section-eyebrow {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    border-left: 4px solid var(--accent);
+    padding-left: 12px;
+  }
+  .section-body { color: var(--text); font-size: 14px; line-height: 1.75; }
+  .section-body p { margin-bottom: 10px; }
+  .divider { height: 1px; background: var(--border); margin: 24px 20px 0; }
+
+  /* HIGHLIGHT BOX */
+  .highlight-box {
+    background: var(--bg2);
+    border-left: 4px solid var(--accent);
+    padding: 14px 16px;
+    margin: 14px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 13.5px;
+  }
+  .highlight-box strong { color: var(--accent); }
+
+  /* STAT CARDS ROW */
+  .stat-row { display: flex; gap: 8px; margin: 14px 0; flex-wrap: wrap; }
+  .stat-card {
+    flex: 1 1 calc(50% - 4px);
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 14px;
+    min-width: 130px;
+  }
+  .stat-card-label { font-size: 11px; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; }
+  .stat-card-value { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; margin: 2px 0; }
+  .stat-card-sub { font-size: 11px; color: var(--text2); }
+  .red { color: var(--accent); }
+  .blue { color: var(--c4); }
+  .gray { color: var(--c3); }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; margin: 14px 0; border-radius: 4px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th {
+    background: var(--accent);
+    color: #fff;
+    padding: 9px 12px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: .5px;
+  }
+  tbody tr:nth-child(even) td { background: var(--bg2); }
+  tbody td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: none; }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .badge-up { background: #dcfce7; color: #16a34a; }
+  .badge-down { background: #fee2e2; color: #dc2626; }
+  .badge-neutral { background: #f3f4f6; color: #6b7280; }
+
+  /* FADE IN */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* CHART */
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin: 14px 0;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas { opacity: 1; }
+
+  /* PORTFOLIO PIE */
+  .portfolio-list { list-style: none; margin: 12px 0; }
+  .portfolio-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13.5px;
+  }
+  .portfolio-list li:last-child { border-bottom: none; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .pct { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; flex-shrink: 0; min-width: 52px; }
+
+  /* NEXT WEEK TIMELINE */
+  .timeline { margin: 14px 0; }
+  .tl-item { display: flex; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .tl-item:last-child { border-bottom: none; }
+  .tl-date {
+    min-width: 60px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding-top: 2px;
+  }
+  .tl-content { flex: 1; }
+  .tl-title { font-weight: 500; font-size: 14px; margin-bottom: 2px; }
+  .tl-desc { font-size: 12.5px; color: var(--text2); }
+
+  /* STRATEGY */
+  .strategy-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    margin: 10px 0;
+  }
+  .strategy-card h4 { font-size: 14px; font-weight: 500; margin-bottom: 6px; color: var(--accent); }
+  .strategy-card p { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+  /* VIXHEDGE */
+  .hedge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
+  .hedge-card {
+    background: var(--text);
+    color: #fff;
+    border-radius: 6px;
+    padding: 14px;
+    text-align: center;
+  }
+  .hedge-card .ticker { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--accent2); }
+  .hedge-card .desc { font-size: 11px; opacity: .75; margin-top: 4px; }
+
+  /* PULL QUOTE */
+  .pull-quote {
+    border-top: 3px solid var(--accent);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 0 14px;
+    margin: 18px 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--text);
+  }
+  .pull-quote span { color: var(--accent); }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 40px;
+    padding: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text2);
+    text-align: center;
+    line-height: 1.6;
+  }
+  .footer strong { color: var(--accent); }
+
+  /* WARN */
+  .warn-box {
+    background: #fff7ed;
+    border: 1px solid #fdba74;
+    border-radius: 4px;
+    padding: 12px 14px;
+    font-size: 12.5px;
+    color: #9a3412;
+    margin: 12px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead fade-in">
+  <div class="masthead-label">NOVA Real Invest · 미국 증시 분석</div>
+  <div class="masthead-title">폭풍의 눈:<br>스태그플레이션의 귀환</div>
+  <div class="masthead-sub">
+    <span>📅 2026년 3월 13일 (뉴욕)</span>
+    <span>📍 분석: 거시경제·연준·투자전략</span>
+  </div>
+</div>
+
+<!-- HERO STATS -->
+<div class="hero-stat fade-in">
+  <div class="hero-stat-label">S&P 500 — 2026년 연저점</div>
+  <div class="hero-stat-num">−0.61%</div>
+  <div class="hero-stat-desc">3주 연속 하락 · 2026년 최저점 갱신</div>
+</div>
+
+<div class="stat-row section fade-in" style="padding-bottom:0;">
+  <div class="stat-card">
+    <div class="stat-card-label">코어 PCE</div>
+    <div class="stat-card-value red">3.1%</div>
+    <div class="stat-card-sub">목표치 2% 상회 지속</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-label">Q4 GDP (수정)</div>
+    <div class="stat-card-value red">0.7%</div>
+    <div class="stat-card-sub">초기 발표 1.4%에서 절반 하락</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-label">VIX 공포지수</div>
+    <div class="stat-card-value red">27.19</div>
+    <div class="stat-card-sub">경계선 20 상회 · 상승추세</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-label">Fear &amp; Greed</div>
+    <div class="stat-card-value red">20</div>
+    <div class="stat-card-sub">극단적 공포 구간 진입</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SECTION 1: 퍼펙트스톰 -->
+<div class="section fade-in">
+  <div class="section-eyebrow">Macro Risk</div>
+  <div class="section-title">퍼펙트스톰의 조건들</div>
+  <div class="section-body">
+    <p>세 가지 악재가 동시에 작동하면서 시장이 "폭풍의 눈" 한가운데 진입했다는 분석이 나온다. 에너지 공급 쇼크, 스태그플레이션 고착화, 그리고 묶여버린 연준이 압력솥을 만들고 있다.</p>
+  </div>
+</div>
+
+<div class="section fade-in">
+  <div class="section-eyebrow">① 호르무즈 봉쇄</div>
+  <div class="section-title">기뢰 살포 — 에너지 쇼크</div>
+  <div class="section-body">
+    <p>이란이 호르무즈 해협에 기뢰를 살포하며 국제 해상 운송을 차단하고 있다. 현재 인도·중국·터키 국적 선박만 선별 통과시키고 있으며, 미 해군도 기뢰 위치를 정확히 파악하지 못해 진입이 사실상 불가능한 상태다.</p>
+
+    <div class="highlight-box">
+      <strong>브렌트유 $103 / WTI계열 $98</strong> 돌파. 일부 분석가는 $200 도달 가능성을 언급하고 있으며, 미국 전략 비축유(SPR)는 소진 시 <strong>28일분</strong>에 불과하다.
+    </div>
+
+    <p>기뢰는 고정식뿐 아니라 해저에서 부상해 선박을 유도 추격하는 방식으로도 운용되어 제거 자체가 극히 어렵다. 운송 원가 급등 → 소비재 마진 붕괴로 이어지는 공급망 충격이 핵심이다.</p>
+  </div>
+</div>
+
+<div class="section chart-container fade-in">
+  <div class="section-eyebrow">유가 추이 개요</div>
+  <canvas id="oilChart" height="220"></canvas>
+</div>
+
+<div class="divider"></div>
+
+<!-- SECTION 2: 스태그플레이션 -->
+<div class="section fade-in">
+  <div class="section-eyebrow">② 스태그플레이션</div>
+  <div class="section-title">물가↑ + 성장↓ 동시 진행</div>
+  <div class="section-body">
+    <p><strong>코어 PCE 3.1%</strong>로 연준 목표치(2%)를 크게 웃돌며 물가는 하락 기미가 없다. 반면 GDP는 4분기 기준 <strong>0.7%</strong>로 수정 발표돼 초기치(1.4%)의 절반 수준에 그쳤다.</p>
+
+    <div class="warn-box">
+      ⚠️ <strong>통계 신뢰성 문제:</strong> 초기 발표와 수정치의 격차가 0.7%p에 달하는 것은 통상적인 오차 범위(±0.1~0.5%p)를 벗어난다. 경제 주체들이 잘못된 수치를 보고 의사결정을 내렸을 가능성이 있어 시장 불확실성을 높이고 있다.
+    </div>
+
+    <p>스태그플레이션이란 물가상승(Inflation)과 경기침체(Stagnation)가 동시에 발생하는 상황이다. 연준은 보통 경기침체 시 금리를 내려 경기를 부양하지만, 물가가 높으면 금리를 내릴 수 없어 사실상 손발이 묶이게 된다.</p>
+  </div>
+</div>
+
+<div class="section chart-container fade-in">
+  <canvas id="stagChart" height="220"></canvas>
+</div>
+
+<div class="divider"></div>
+
+<!-- SECTION 3: 연준 -->
+<div class="section fade-in">
+  <div class="section-eyebrow">③ 연준 · FOMC</div>
+  <div class="section-title">금리인하는 12월로 밀려났다</div>
+  <div class="section-body">
+    <p>현재 금리선물 시장은 <strong>12월 1회 인하</strong>만을 반영하고 있다. 물가가 잡히지 않는 상황에서 연준이 압력을 풀어줄 수 없는 구조다. 다음 주 FOMC(수요일 발표)에서는 <strong>점도표(Dot Plot)</strong>가 함께 공개된다.</p>
+
+    <div class="highlight-box">
+      <strong>점도표(Dot Plot)</strong>란? 연준 위원들이 각자 예상하는 향후 기준금리 경로를 점으로 표시한 그래프. 시장은 이 점도표를 보고 연준의 금리인하 속도를 판단한다. 이번 발표에서 점도표가 인하 횟수를 줄이면 주식시장에 큰 충격이 예상된다.
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 부동산 -->
+<div class="section fade-in">
+  <div class="section-eyebrow">Real Estate</div>
+  <div class="section-title">모기지 6%↑ — 부동산 냉각</div>
+  <div class="section-body">
+    <p>미국 30년 고정 모기지 금리가 다시 <strong>6% 이상</strong>으로 올라가면서 봄철 부동산 거래 시즌임에도 매수세가 급감하고 있다. 집이 팔리지 않으면 가격 인하 압박이 생기고, 이는 가계 자산(홈 에쿼티)을 축소시켜 소비 여력 감소로 이어진다.</p>
+    <p>미국 가계의 상당수는 홈 에쿼티(집의 시세 - 대출잔액)를 활용해 주식·소비·투자를 해왔는데, 이 자산이 줄어들면 소비 위축이 뒤따를 수 있다.</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 섹터 승자 패자 -->
+<div class="section fade-in">
+  <div class="section-eyebrow">Sector Rotation</div>
+  <div class="section-title">극단적 양극화 장세</div>
+  <div class="section-body">
+    <p>빅테크(Big 7)가 대부분 하락하는 가운데, 에너지·유틸리티 등 방어적 섹터가 연초대비(YTD) <strong>20% 이상</strong> 상승하는 극단적 양극화가 진행 중이다.</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>섹터/종목</th><th>현황</th><th>평가</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>에너지</strong> (XOM, CVX)</td><td>52주 신고가 지속</td><td><span class="badge badge-up">강세</span></td></tr>
+        <tr><td><strong>유틸리티</strong> (XLU)</td><td>YTD +20% 이상</td><td><span class="badge badge-up">강세</span></td></tr>
+        <tr><td><strong>비료</strong> (NTR, CF)</td><td>지속 상승</td><td><span class="badge badge-up">강세</span></td></tr>
+        <tr><td><strong>AI 인프라</strong> (마이크론, SNDK)</td><td>상승 지속 중</td><td><span class="badge badge-up">강세</span></td></tr>
+        <tr><td><strong>기술주 전반</strong></td><td>−1.1%</td><td><span class="badge badge-down">약세</span></td></tr>
+        <tr><td><strong>ULTA</strong> (화장품)</td><td>실적 발표 후 −84%</td><td><span class="badge badge-down">급락</span></td></tr>
+        <tr><td><strong>항공·운송</strong> (UAL, AAL)</td><td>하락 중</td><td><span class="badge badge-down">약세</span></td></tr>
+        <tr><td><strong>어도비</strong> (ADBE)</td><td>어닝 서프라이즈에도 하락</td><td><span class="badge badge-down">약세</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="section fade-in">
+  <div class="pull-quote">
+    "매출은 늘었는데 왜 주가가 폭락할까? 코스트(원가)가 더 빠르게 올랐기 때문이다. <span>ULTA −84%</span>는 인플레이션이 기업 마진을 어떻게 파괴하는지 보여주는 교과서 사례다."
+  </div>
+</div>
+
+<div class="section chart-container fade-in">
+  <div class="section-eyebrow">섹터 성과 비교 (개념)</div>
+  <canvas id="sectorChart" height="220"></canvas>
+</div>
+
+<div class="divider"></div>
+
+<!-- 종목 선택 기준 -->
+<div class="section fade-in">
+  <div class="section-eyebrow">종목 선별 Framework</div>
+  <div class="section-title">3가지 생존 판단 기준</div>
+  <div class="section-body">
+    <p>스태그플레이션 국면에서 살아남을 종목을 고르는 핵심 기준 3가지:</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>기준</th><th>설명</th><th>예시</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>① 가격 결정력</strong><br><small>(Pricing Power)</small></td>
+          <td>비용 상승을 소비자에게 전가할 수 있는 능력</td>
+          <td>에너지, 전력망</td>
+        </tr>
+        <tr>
+          <td><strong>② 인플레이션 방어력</strong></td>
+          <td>물가 상승 시 자산·수익이 같이 올라가는 구조</td>
+          <td>에너지, 비료, 원자재</td>
+        </tr>
+        <tr>
+          <td><strong>③ AI 실수요</strong></td>
+          <td>AI 인프라 확장에 필수 불가결한 실질 수요 보유</td>
+          <td>HBM 메모리, 광학 인터커넥트</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-body" style="margin-top:10px;">
+    <p>이 세 기준으로 점수(0~2점)를 매겨 합산하면 포트폴리오 편입 여부를 결정할 수 있다. 에너지는 ①②에서 만점, ③에서 1점으로 <strong>약 5점</strong>. 전통 SaaS(어도비류)나 중저가 소비재는 세 기준 모두 취약하다.</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- NVIDIA GTC -->
+<div class="section fade-in">
+  <div class="section-eyebrow">다음 주 핵심 이벤트</div>
+  <div class="section-title">엔비디아 GTC 2026 &amp; 슈퍼위크</div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-date">월 3/16</div>
+      <div class="tl-content">
+        <div class="tl-title">🚀 엔비디아 GTC 개막</div>
+        <div class="tl-desc">키노트 캘리포니아 오전 11시 (동부 오후 2시). 젠슨 황 CEO 발표. <strong>베라 루빈(Vera Rubin)</strong> GPU — 블랙웰 대비 성능 3.3~5배, 전성비 10배. HBM4 메모리·광학 인터커넥트(실리콘 포토닉스) 발표 예상.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">수 3/18</div>
+      <div class="tl-content">
+        <div class="tl-title">👗 룰루레몬 실적 발표</div>
+        <div class="tl-desc">ULTA 쇼크 이후 소비 경기 판단의 핵심 지표. 프리미엄 소비 섹터 건전성 확인.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">수 3/18</div>
+      <div class="tl-content">
+        <div class="tl-title">🏦 FOMC 결과 &amp; 점도표 발표</div>
+        <div class="tl-desc">금리 동결 유력. <strong>점도표</strong>가 시장 방향을 결정할 핵심 변수. 파월 의장 기자회견 예정. 옵션 시장은 다음 주 변동성 ±7~12% 예상.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">목 3/19</div>
+      <div class="tl-content">
+        <div class="tl-title">📦 페덱스 실적 발표</div>
+        <div class="tl-desc">물류·유통주는 실물 경기의 바로미터. 결과에 따라 미국 경기 침체 여부의 강력한 시그널이 될 수 있다.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section fade-in">
+  <div class="section-body">
+    <div class="highlight-box">
+      <strong>GTC 과거 패턴 주의:</strong> 엔비디아는 GTC 발표 이후 주가가 항상 상승한 것이 아니다. "뉴스에 팔아라(Sell the News)" 패턴이 반복되었다. 관련 협력사·밴더 주가는 반응할 수 있으나 지수 전체를 끌어올리기는 어렵다.
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- VIX 헤지 전략 -->
+<div class="section fade-in">
+  <div class="section-eyebrow">VIX Hedge Strategy</div>
+  <div class="section-title">선수만 아는 변동성 헤지</div>
+  <div class="section-body">
+    <p>VIX가 27 수준으로 상승한 상황에서 포트폴리오를 방어하는 두 가지 전략:</p>
+  </div>
+
+  <div class="hedge-grid">
+    <div class="hedge-card">
+      <div class="ticker">UVXY</div>
+      <div class="desc">VIX 3배 레버리지 ETF<br>직접 방어 · 단기만 보유</div>
+    </div>
+    <div class="hedge-card">
+      <div class="ticker">VXX</div>
+      <div class="desc">VIX 선물 ETF<br>콜스프레드 옵션 활용 가능</div>
+    </div>
+  </div>
+
+  <div class="strategy-card">
+    <h4>⚠️ 컨탱고 디케이(Contango Decay)란?</h4>
+    <p>UVXY·VXX는 매달 만기가 돌아오는 30일물 선물 기반이다. 선물 가격은 현물보다 항상 높게 형성되는데, 롤오버(만기 이월) 때마다 이 프리미엄이 사라지며 가치가 자연스럽게 깎인다. 즉, 시장이 제자리여도 오래 보유할수록 손실이 발생한다.</p>
+  </div>
+  <div class="strategy-card">
+    <h4>✅ 핵심 원칙</h4>
+    <p><strong>무조건 신상(당일물)을 사야 한다.</strong> 어제 산 것을 오늘 팔고, 오늘 새로 사는 방식이 이론적으로 가장 효율적이다. 한 달 이상 장기 보유는 디케이 손실이 쌓여 수익을 갉아먹는다.<br><br>
+    <strong>자산의 2~3%만</strong> 활용할 것. VIX가 22 이하로 내려가면 즉시 청산하고 주식 매수(콜맷)로 전환한다.</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 포트폴리오 -->
+<div class="section fade-in">
+  <div class="section-eyebrow">Portfolio Allocation</div>
+  <div class="section-title">빌리언웨어 포트폴리오</div>
+  <div class="section-body">
+    <p>현재 국면에 맞는 자산 배분 제안 (유가 상승 지속, 이란 갈등 장기화 가정):</p>
+  </div>
+
+  <ul class="portfolio-list">
+    <li>
+      <div class="dot" style="background:var(--c1);"></div>
+      <div class="pct red">35%</div>
+      <div><strong>에너지 + 비료</strong><br><small class="gray">XOM, CVX, NTR, CF 등 — 가격 결정력 최고</small></div>
+    </li>
+    <li>
+      <div class="dot" style="background:var(--c2);"></div>
+      <div class="pct">30%</div>
+      <div><strong>현금 + 헤지(UVXY 포함)</strong><br><small class="gray">넥스트 기회를 위한 총알 확보</small></div>
+    </li>
+    <li>
+      <div class="dot" style="background:var(--c4);"></div>
+      <div class="pct blue">20~25%</div>
+      <div><strong>AI 인프라 + 로보틱스</strong><br><small class="gray">딥바이 전략 — 엔비디아 GTC 결과 후 판단</small></div>
+    </li>
+    <li>
+      <div class="dot" style="background:var(--c3);"></div>
+      <div class="pct gray">10~15%</div>
+      <div><strong>방어주 + 전력망 + 배당</strong><br><small class="gray">XLU 등 유틸리티 · 안정적 현금흐름 자산</small></div>
+    </li>
+  </ul>
+</div>
+
+<div class="section chart-container fade-in">
+  <canvas id="portChart" height="220"></canvas>
+</div>
+
+<div class="divider"></div>
+
+<!-- 어도비 -->
+<div class="section fade-in">
+  <div class="section-eyebrow">기업 분석</div>
+  <div class="section-title">어도비 CEO 교체 — AI 전환 실패의 신호</div>
+  <div class="section-body">
+    <p>18년간 CEO를 맡아온 산타누 나라엔이 퇴임하며 시장에 충격을 줬다. 실적 자체는 양호했으나 캔바, 스태빌리티 AI 등에 핵심 고객층을 빼앗기며 AI 시대 전환에 실패했다는 평가다.</p>
+    <p>후임 CEO도 아직 정해지지 않아 리더십 공백이 지속되고 있다. 전통 SaaS 기업이 AI 전환에 실패할 때 어떤 결과가 오는지 보여주는 대표 사례가 되고 있다.</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 액션 플랜 -->
+<div class="section fade-in">
+  <div class="section-eyebrow">Action Plan</div>
+  <div class="section-title">현금 비중에 따른 대응 전략</div>
+
+  <div class="strategy-card">
+    <h4>✅ 현금 비중 30% 이상인 경우</h4>
+    <p>GTC 키노트(3/16) 결과를 기다린다. 엔비디아가 $180 돌파 시 AI 딥바이 진입. 시장 반응이 미약하면 에너지(XLU 등) 유틸리티로 대기.</p>
+  </div>
+  <div class="strategy-card">
+    <h4>⚠️ 현금 비중 30% 미만인 경우</h4>
+    <p>항공·운송, 이미 소비재(뷰티 등), 전통 SaaS 소프트웨어 매도. 현금 확보 후 포트폴리오의 2% 수준으로 헤지(UVXY) 설정 후 대기.</p>
+  </div>
+
+  <div class="warn-box" style="margin-top:12px;">
+    💡 Fear &amp; Greed 지수가 18 이하로 하락하는 시점을 매수 신호로 주목. 극단적 공포 구간은 역사적으로 중기 저점과 일치하는 경향이 있다.
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 크레이머 역발상 -->
+<div class="section fade-in">
+  <div class="section-eyebrow">Contrarian Signal</div>
+  <div class="section-title">짐 크레이머가 "지금 사고 있다"</div>
+  <div class="section-body">
+    <p>CNBC의 짐 크레이머가 "시장이 과매도(Oversold) 상태이며 현재 주식을 매수하고 있다"고 발언했다. 역사적으로 그의 발언과 반대 방향으로 시장이 움직이는 경향이 있어 일부 투자자들은 역발상 지표로 활용하기도 한다. (실제로 그의 발언을 반대로 추종하는 ETF도 존재한다.)</p>
+    <p>이번 발언이 추가 하락의 신호인지, 진짜 저점 신호인지는 다음 주 FOMC·GTC 결과와 함께 판단해야 한다.</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p><strong>⚠️ 투자 유의사항</strong></p>
+  <p>본 자료는 유튜브 방송 내용을 미국 증시·경제적 관점에서 정리한 분석 요약입니다. 특정 종목의 매수·매도를 권유하지 않으며, 모든 투자 결정과 그 결과는 투자자 본인에게 귀속됩니다.</p>
+  <p style="margin-top:8px;">출처: NOVA Real Invest 생방송 (2026.03.13, 뉴욕시간)</p>
+</div>
+
+<script>
+// FADE IN OBSERVER
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// CHART CONFIGS
+const chartConfigs = {};
+
+chartConfigs['oilChart'] = () => {
+  new Chart(document.getElementById('oilChart'), {
+    type: 'line',
+    data: {
+      labels: ['1주전', '5일전', '4일전', '3일전', '2일전', '어제', '현재'],
+      datasets: [
+        {
+          label: '브렌트유 ($)',
+          data: [88, 91, 93, 97, 99, 101, 103],
+          borderColor: '#e11d48',
+          backgroundColor: 'rgba(225,29,72,0.08)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 3,
+        },
+        {
+          label: 'WTI계열 ($)',
+          data: [84, 87, 89, 92, 95, 97, 98],
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37,99,235,0.05)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 3,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top', labels: { font: { size: 11 }, boxWidth: 12 } },
+        title: { display: true, text: '국제 유가 추이 (개념도)', font: { size: 13 } }
+      },
+      scales: {
+        y: { beginAtZero: false, ticks: { font: { size: 11 } } },
+        x: { ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+};
+
+chartConfigs['stagChart'] = () => {
+  new Chart(document.getElementById('stagChart'), {
+    type: 'bar',
+    data: {
+      labels: ['PCE 목표', '현재 코어 PCE', 'GDP 초기발표', 'GDP 수정발표'],
+      datasets: [{
+        label: '(%)',
+        data: [2.0, 3.1, 1.4, 0.7],
+        backgroundColor: ['#6b7280','#e11d48','#2563eb','#f43f5e'],
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        title: { display: true, text: '물가 vs 성장률 비교', font: { size: 13 } }
+      },
+      scales: {
+        y: { beginAtZero: true, ticks: { font: { size: 11 }, callback: v => v + '%' } },
+        x: { ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+};
+
+chartConfigs['sectorChart'] = () => {
+  new Chart(document.getElementById('sectorChart'), {
+    type: 'bar',
+    data: {
+      labels: ['에너지', '유틸리티', '비료', 'AI인프라', '기술주', '소비재(ULTA)', '항공운송'],
+      datasets: [{
+        label: '상대 성과',
+        data: [22, 20, 18, 12, -1.1, -84, -8],
+        backgroundColor: ctx => ctx.raw >= 0 ? '#e11d48' : '#1a1a1a',
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        title: { display: true, text: '섹터별 성과 개요 (%)', font: { size: 13 } }
+      },
+      scales: {
+        x: { ticks: { font: { size: 10 }, callback: v => v + '%' } },
+        y: { ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+};
+
+chartConfigs['portChart'] = () => {
+  new Chart(document.getElementById('portChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['에너지+비료 35%', '현금+헤지 30%', 'AI인프라 22%', '방어주+배당 13%'],
+      datasets: [{
+        data: [35, 30, 22, 13],
+        backgroundColor: ['#e11d48','#1a1a1a','#2563eb','#6b7280'],
+        borderWidth: 2,
+        borderColor: '#ffffff',
+      }]
+    },
+    options: {
+      responsive: true,
+      cutout: '60%',
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12 } },
+        title: { display: true, text: '빌리언웨어 포트폴리오', font: { size: 13 } }
+      }
+    }
+  });
+};
+
+// CHART OBSERVER
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+</script>
+</body>
+</html>
