@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA REAL INVEST | 2026.03.17 시장 분석</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Serif+KR:wght@300;400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --table-header: #e11d48;
+    --c1: #e11d48;
+    --c2: #1a1a1a;
+    --c3: #6b7280;
+    --c4: #2563eb;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Serif KR', serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    font-size: 15px;
+  }
+
+  /* ─── HEADER ─── */
+  .site-header {
+    border-bottom: 3px solid var(--text);
+    padding: 18px 20px 12px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 100;
+  }
+  .site-header .issue-line {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--text2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .site-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .site-header h1 span { color: var(--accent); }
+  .site-header .sub-line {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--text2);
+    margin-top: 5px;
+    text-transform: uppercase;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--text);
+    color: #fff;
+    padding: 36px 20px 28px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: -60px;
+    width: 200px; height: 200px;
+    background: var(--accent);
+    border-radius: 50%;
+    opacity: 0.12;
+  }
+  .hero .kicker {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 12px;
+  }
+  .hero h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 14px;
+  }
+  .hero p {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #ccc;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* ─── MAIN ─── */
+  main { max-width: 640px; margin: 0 auto; padding: 0 16px 60px; }
+
+  /* ─── SECTION ─── */
+  .section { padding: 32px 0 0; }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-top: 2px solid var(--accent);
+    padding-top: 8px;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 14px;
+  }
+  .section p { font-size: 14px; color: var(--text); margin-bottom: 12px; }
+  .section p strong { color: var(--accent); font-weight: 700; }
+
+  /* ─── DIVIDER ─── */
+  hr.editorial { border: none; border-top: 1px solid var(--border); margin: 28px 0 0; }
+
+  /* ─── HIGHLIGHT BOX ─── */
+  .highlight-box {
+    background: var(--bg2);
+    border-left: 4px solid var(--accent);
+    padding: 16px 18px;
+    margin: 18px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .highlight-box .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .highlight-box p { font-size: 13.5px; margin: 0; }
+
+  /* ─── STAT GRID ─── */
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .stat-card .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-card .label { font-size: 11px; color: var(--text2); margin-top: 4px; letter-spacing: 0.04em; }
+
+  /* ─── TABLE ─── */
+  .table-wrap { overflow-x: auto; margin: 18px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th {
+    background: var(--table-header);
+    color: #fff;
+    padding: 10px 12px;
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+  }
+  tbody td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+  tbody tr:nth-child(even) td { background: var(--bg2); }
+  tbody tr:hover td { background: #fff0f3; }
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+  }
+  .tag-up { background: #fef2f2; color: var(--accent); border: 1px solid #fecdd3; }
+  .tag-risk { background: #fefce8; color: #a16207; border: 1px solid #fde68a; }
+  .tag-watch { background: #eff6ff; color: var(--c4); border: 1px solid #bfdbfe; }
+
+  /* ─── SCENARIO CARDS ─── */
+  .scenario-grid { display: grid; gap: 12px; margin: 18px 0; }
+  .scenario-card {
+    border-radius: 8px;
+    padding: 16px 18px;
+    border: 1.5px solid;
+  }
+  .scenario-card.bull { border-color: #22c55e; background: #f0fdf4; }
+  .scenario-card.bear { border-color: var(--accent); background: #fff1f2; }
+  .scenario-card.base { border-color: var(--c4); background: #eff6ff; }
+  .scenario-card .s-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .scenario-card.bull .s-label { color: #16a34a; }
+  .scenario-card.bear .s-label { color: var(--accent); }
+  .scenario-card.base .s-label { color: var(--c4); }
+  .scenario-card .s-target {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .scenario-card.bull .s-target { color: #16a34a; }
+  .scenario-card.bear .s-target { color: var(--accent); }
+  .scenario-card.base .s-target { color: var(--c4); }
+  .scenario-card p { font-size: 13px; margin: 0; }
+
+  /* ─── RISK ITEMS ─── */
+  .risk-list { list-style: none; margin: 14px 0; }
+  .risk-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .risk-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    min-width: 26px;
+  }
+
+  /* ─── STRATEGY BOXES ─── */
+  .strategy-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 18px 0; }
+  .strategy-box { border-radius: 8px; padding: 14px 16px; }
+  .strategy-box.green { background: #f0fdf4; border: 1.5px solid #86efac; }
+  .strategy-box.red { background: #fff1f2; border: 1.5px solid #fecdd3; }
+  .strategy-box .s-title {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .strategy-box.green .s-title { color: #16a34a; }
+  .strategy-box.red .s-title { color: var(--accent); }
+  .strategy-box ul { list-style: none; }
+  .strategy-box ul li { font-size: 13px; padding: 3px 0; }
+  .strategy-box.green ul li::before { content: '▲ '; color: #16a34a; font-size: 10px; }
+  .strategy-box.red ul li::before { content: '▼ '; color: var(--accent); font-size: 10px; }
+
+  /* ─── CHART ─── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin: 20px 0;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas {
+    opacity: 1;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--text);
+    color: #888;
+    text-align: center;
+    padding: 24px 20px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.08em;
+    line-height: 1.8;
+  }
+  footer strong { color: #fff; }
+
+  /* ─── PULLQUOTE ─── */
+  .pullquote {
+    border-top: 3px solid var(--text);
+    border-bottom: 3px solid var(--text);
+    padding: 20px 0;
+    margin: 24px 0;
+    text-align: center;
+  }
+  .pullquote p {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-style: italic;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.4;
+    margin: 0;
+  }
+  .pullquote .attribution {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--text2);
+    margin-top: 10px;
+    text-transform: uppercase;
+    display: block;
+  }
+
+  /* ─── INLINE TAG ─── */
+  .ticker {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    background: var(--text);
+    color: #fff;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+
+  .keyword {
+    font-weight: 700;
+    color: var(--accent);
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="issue-line">Nova Real Invest · 미국 증시 분석 리포트</div>
+  <h1>MARKET<span>&</span>AI</h1>
+  <div class="sub-line">2026년 03월 17일 · S&P500 · NVDA · GTC · 인퍼런스 혁명</div>
+</header>
+
+<!-- HERO -->
+<div class="hero fade-in">
+  <div class="kicker">오늘의 메인 스토리</div>
+  <h2>S&P 5400 경고 속<br>AI가 시장을 구했다</h2>
+  <p>유가 급락 + 엔비디아 GTC 개막이 맞물리며 3주간의 하락세를 단 하루 만에 되돌렸다. 그러나 리스크는 여전하다.</p>
+</div>
+
+<main>
+
+  <!-- ── 1. 오늘의 시장 ── -->
+  <section class="section fade-in">
+    <span class="section-label">Section 01 · Market Overview</span>
+    <h3>오늘 시장에 무슨 일이 있었나?</h3>
+    <p>S&P 500은 지난 <strong>3주간 연속 하락</strong>했으나 오늘 반등에 성공했다. 나스닥도 단 하루 만에 분위기가 반전됐다. 두 가지 촉매가 동시에 작용했다.</p>
+
+    <div class="stat-grid fade-in">
+      <div class="stat-card">
+        <div class="num">−5.3%</div>
+        <div class="label">유가 일간 하락폭<br>(WTI 기준 약 $93)</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">+2.33%</div>
+        <div class="label">Meta 주가 상승<br>(구조조정 발표 효과)</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">+15%</div>
+        <div class="label">NBIS(네비우스)<br>단일 세션 급등</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">$74K</div>
+        <div class="label">비트코인 상승<br>(유가 하락 연동)</div>
+      </div>
+    </div>
+
+    <div class="highlight-box fade-in">
+      <div class="label">🔑 핵심 촉매 2가지</div>
+      <p><strong>① 유가 급락</strong> — 베센트 재무장관이 이란 유조선 통행 허용 및 IEA 전략비축유 방출 합의를 발표. 유가 공포 심리 완화.<br>
+      <strong>② 엔비디아 GTC 개막</strong> — 3일간의 GPU 테크놀로지 컨퍼런스에서 AI 하드웨어·생태계 로드맵 공개. AI 주 전반 급등.</p>
+    </div>
+
+    <div class="pullquote fade-in">
+      <p>"오늘은 장마철에 잠깐 해가 뜬 것. 장마가 끝난 것이 아니다."</p>
+      <span class="attribution">— NOVA 분석 요약</span>
+    </div>
+  </section>
+
+  <hr class="editorial">
+
+  <!-- ── 2. 유가 리스크 ── -->
+  <section class="section fade-in">
+    <span class="section-label">Section 02 · Oil & Macro</span>
+    <h3>유가 안정? 진짜 해결은 아직</h3>
+    <p>베센트 장관의 발표와 IEA 비축유 방출 합의는 <strong>단기 심리적 안정</strong> 효과는 있지만, 본질적 해결책이 아니다. IEA의 방출 규모 <strong>4억 배럴</strong>은 글로벌 수요 기준 <strong>4일치</strong>에 불과하다.</p>
+    <p>유가가 <strong>$80를 돌파</strong>하는 순간 패닉 바잉이 발생해 단 하루 만에 $100까지 치솟았던 사례에서 보듯, 지정학적 긴장이 재개될 경우 동일한 시나리오가 반복될 수 있다.</p>
+
+    <div class="chart-container fade-in">
+      <canvas id="oilChart" height="220"></canvas>
+    </div>
+
+    <div class="highlight-box fade-in">
+      <div class="label">⚠️ 유가와 물가의 연결고리</div>
+      <p>유가 = 물가 상승 압력 → 연준 금리 인하 지연 → 주식 밸류에이션 압박. 유가 안정화가 없으면 골디락스 랠리는 불가능하다.</p>
+    </div>
+  </section>
+
+  <hr class="editorial">
+
+  <!-- ── 3. 엔비디아 GTC ── -->
+  <section class="section fade-in">
+    <span class="section-label">Section 03 · NVIDIA GTC 2026</span>
+    <h3>엔비디아, 1조 달러 매출을 선언하다</h3>
+    <p>오늘 GTC 키노트에서 젠슨 황은 <strong>2026~2027년 매출 1조 달러(1 Trillion USD)</strong> 목표를 제시했다. 현재 매출 약 5천억 달러 대비 정확히 <strong>2배(2X)</strong>다. 현 시총 4.5조 달러에서 추가 상승 여력이 있다는 분석.</p>
+
+    <div class="stat-grid fade-in">
+      <div class="stat-card">
+        <div class="num">$500B</div>
+        <div class="label">현재 연간 매출<br>(2025 기준)</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">$1T</div>
+        <div class="label">2026~2027 목표 매출<br>(블랙웰 중심)</div>
+      </div>
+    </div>
+
+    <p>이 목표 매출은 사실상 <span class="ticker">블랙웰</span> GPU에서 대부분 창출될 전망이다. 차세대 <span class="ticker">베라 루빈</span>은 2026년 하반기 출시 예정으로 2027년부터 본격 매출에 기여한다.</p>
+
+    <div class="table-wrap fade-in">
+      <table>
+        <thead>
+          <tr>
+            <th>제품</th>
+            <th>특징</th>
+            <th>매출 기여 시점</th>
+            <th>상태</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>블랙웰</strong></td>
+            <td>현 세대 주력 GPU, 솔드아웃 행진</td>
+            <td>2025~2026</td>
+            <td><span class="tag tag-up">판매 중</span></td>
+          </tr>
+          <tr>
+            <td><strong>베라 루빈</strong></td>
+            <td>22TB/s 대역폭, HBM4E 탑재, CPU는 인텔 Xeon 6</td>
+            <td>2026 하반기~2027</td>
+            <td><span class="tag tag-watch">출시 예정</span></td>
+          </tr>
+          <tr>
+            <td><strong>그록 LPX 랙</strong></td>
+            <td>LPU 256개 탑재, 베라루빈 옆에 설치 시 토큰 생성 35배 증폭</td>
+            <td>2026~2027</td>
+            <td><span class="tag tag-watch">발표됨</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="highlight-box fade-in">
+      <div class="label">📡 소버린 AI & 인퍼런스 시대</div>
+      <p><strong>소버린 AI</strong>(국가 단위 AI 인프라 구축)가 2026년 핵심 테마로 부상. AI가 '트레이닝(학습)' 단계에서 <strong>'인퍼런스(추론·실행)'</strong> 단계로 전환 중. 즉, AI는 이제 질문에 답하는 존재가 아니라 스스로 생각하고 행동하는 단계로 진화한다.<br><br>
+      젠슨 황: <strong>"토큰은 새로운 원자재다"</strong> — 컴퓨팅 수요가 100만 배 증가할 것으로 예측. AI 토큰 생성이 전기·석유처럼 필수 자원화된다는 의미.</p>
+    </div>
+  </section>
+
+  <hr class="editorial">
+
+  <!-- ── 4. 주목 종목 ── -->
+  <section class="section fade-in">
+    <span class="section-label">Section 04 · Stock Spotlight</span>
+    <h3>오늘 시장을 주도한 종목들</h3>
+
+    <div class="table-wrap fade-in">
+      <table>
+        <thead>
+          <tr><th>티커</th><th>종목명</th><th>핵심 이슈</th><th>투자 포인트</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="ticker">NVDA</span></td>
+            <td>엔비디아</td>
+            <td>GTC 키노트: 매출 1조달러 목표, 베라루빈 로드맵 공개</td>
+            <td><span class="tag tag-up">핵심 보유</span></td>
+          </tr>
+          <tr>
+            <td><span class="ticker">MU</span></td>
+            <td>마이크론</td>
+            <td>HBM4E 솔드아웃(2026 물량 완판), 대만 2위 제조 거점 확보, 12M 목표가 $525</td>
+            <td><span class="tag tag-up">비중 확대</span></td>
+          </tr>
+          <tr>
+            <td><span class="ticker">META</span></td>
+            <td>메타</td>
+            <td>직원 16,000명(20%) 감축 검토, 2026 CAPEX $135B, 네비우스에 $27B 파트너십</td>
+            <td><span class="tag tag-up">+2.33%</span></td>
+          </tr>
+          <tr>
+            <td><span class="ticker">NBIS</span></td>
+            <td>네비우스</td>
+            <td>메타 $27B 파트너십 체결, 엔비디아 베라루빈 선점, 유럽 AI 호스팅 1위</td>
+            <td><span class="tag tag-up">+15%</span></td>
+          </tr>
+          <tr>
+            <td><span class="ticker">INTC</span></td>
+            <td>인텔</td>
+            <td>베라루빈에 Xeon 6 CPU 채택, 에이전틱 AI 두뇌 역할</td>
+            <td><span class="tag tag-watch">2027 매출 반영</span></td>
+          </tr>
+          <tr>
+            <td><span class="ticker">COHR</span></td>
+            <td>코히어런트</td>
+            <td>광학 연결(이더넷 없이 레이저 연결), 엔비디아 투자 수혜주</td>
+            <td><span class="tag tag-watch">관심 유지</span></td>
+          </tr>
+          <tr>
+            <td><span class="ticker">UBER</span></td>
+            <td>우버</td>
+            <td>GTC에서 로봇택시 협력 발표, 현대·벤츠도 엔비디아 드라이브 채택</td>
+            <td><span class="tag tag-watch">장 막판 급등</span></td>
+          </tr>
+          <tr>
+            <td><span class="ticker">DLTR</span></td>
+            <td>달러트리</td>
+            <td>EPS 호조, 소비자 가성비 소비 트렌드 수혜</td>
+            <td><span class="tag tag-watch">소비 방어주</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="font-size:13px; color: var(--text2); margin-top: 8px;">* 네비우스(NBIS)는 원래 인도계 기술 기업(야넥스)에서 출발, 네덜란드 법인으로 전환한 유럽 AI 호스팅 전문 기업. 엔비디아가 $20B 투자하며 베라루빈 우선 공급권 확보.</p>
+
+    <div class="chart-container fade-in">
+      <canvas id="stockChart" height="220"></canvas>
+    </div>
+
+    <div class="highlight-box fade-in">
+      <div class="label">💡 엔비디아 생태계 투자 원칙</div>
+      <p>빅테크의 공식: <strong>사람 감원 → 기계(AI 인프라)에 투자 → 수익성 개선 → 재투자</strong>. 이 사이클이 반복되는 한 AI 인프라 수요는 구조적으로 증가하며, 그 수혜 최정점에 엔비디아가 있다. "엔비디아가 투자하는 곳에 함께 투자하라."</p>
+    </div>
+  </section>
+
+  <hr class="editorial">
+
+  <!-- ── 5. 리스크 ── -->
+  <section class="section fade-in">
+    <span class="section-label">Section 05 · Risk Factors</span>
+    <h3>4가지 핵심 리스크</h3>
+    <p>오늘의 반등에 도취되면 안 되는 이유. 아래 4가지 위험 요인은 여전히 현재 진행형이다.</p>
+
+    <ul class="risk-list fade-in">
+      <li>
+        <span class="risk-num">01</span>
+        <div>
+          <strong>지정학·유가 리스크 지속</strong><br>
+          IEA 비축유 방출은 4일치에 불과. 호르무즈 해협 전면 봉쇄 시나리오는 소멸되지 않았다. 유가가 물가에 직접 연결되는 구조에서, 유가 재상승 = 연준 금리 동결 연장 = 시장 밸류에이션 재압박.
+        </div>
+      </li>
+      <li>
+        <span class="risk-num">02</span>
+        <div>
+          <strong>미국 가계 신용 팽창 (2022년 10월 이후 최대)</strong><br>
+          뉴욕 연준 데이터 기준, 미국인의 대출 규모가 2022년 10월 이후 최대치. 소비자 지갑이 비어가고 있다는 신호. 달러트리 실적 호조가 역설적으로 이를 증명한다.
+        </div>
+      </li>
+      <li>
+        <span class="risk-num">03</span>
+        <div>
+          <strong>연준 금리 인하 가능성 희박</strong><br>
+          PCE(근원 개인소비지출) 인플레이션 3.1% 수준에서 금리 인하는 사실상 불가능. 이번 FOMC는 '패스(동결)'로 예상되며, 고금리 장기화 시 기업 밸류에이션과 소비자 부채 부담 동시 악화.
+        </div>
+      </li>
+      <li>
+        <span class="risk-num">04</span>
+        <div>
+          <strong>프라이빗 크레딧(사모펀드) 신용위기 뇌관</strong><br>
+          블루 아울(Blue Owl), 블랙락, 모건 스탠리 등 사모펀드 크레딧 부문에서 고금리로 인한 한계 기업 부실화 진행 중. 2008년 서브프라임 모기지 사태와 구조적 유사성. 약 $3,000억 규모의 크레딧이 붕괴 시 주식시장 수년간 타격 가능.
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <hr class="editorial">
+
+  <!-- ── 6. 시나리오 ── -->
+  <section class="section fade-in">
+    <span class="section-label">Section 06 · Scenario Analysis</span>
+    <h3>S&P 500 3가지 경로</h3>
+    <p>골드만삭스·모건 스탠리 분석과 방송 내용을 토대로 정리한 시나리오 매트릭스. 현재 S&P 500 수준: <strong>약 6,699</strong>.</p>
+
+    <div class="scenario-grid fade-in">
+      <div class="scenario-card bull">
+        <div class="s-label">🟢 Bull · 골디락스 랠리</div>
+        <div class="s-target">7,600</div>
+        <p><strong>조건:</strong> 유가 $80 이하 안정 + AI 실적 호조 지속<br>
+        <strong>주체:</strong> 골드만삭스 볼 케이스<br>
+        <strong>기간:</strong> 12개월 내<br>
+        현 수준 대비 약 +13% 상승 여력</p>
+      </div>
+      <div class="scenario-card base">
+        <div class="s-label">🔵 Base · 박스권 장세</div>
+        <div class="s-target">6,300</div>
+        <p><strong>조건:</strong> 유가 불안 지속, AI만 선방<br>
+        <strong>주체:</strong> 모건 스탠리<br>
+        <strong>특징:</strong> 테크주 극단적 쏠림, 나머지 부진<br>
+        현 수준 대비 약 −6% 조정 가능</p>
+      </div>
+      <div class="scenario-card bear">
+        <div class="s-label">🔴 Bear · 스태그플레이션</div>
+        <div class="s-target">5,400</div>
+        <p><strong>조건:</strong> 호르무즈 봉쇄 + AI 실적 실망 + 2008형 신용위기<br>
+        <strong>주체:</strong> 골드만삭스 베어 케이스<br>
+        <strong>회복 기간:</strong> 수년 소요<br>
+        현 수준 대비 약 −19% 폭락 시나리오</p>
+      </div>
+    </div>
+
+    <div class="chart-container fade-in">
+      <canvas id="scenarioChart" height="220"></canvas>
+    </div>
+  </section>
+
+  <hr class="editorial">
+
+  <!-- ── 7. 투자 전략 ── -->
+  <section class="section fade-in">
+    <span class="section-label">Section 07 · Investment Strategy</span>
+    <h3>지금 어떻게 포트폴리오를 짜야 하나?</h3>
+    <p>불확실성이 높을수록 포지션의 명확함이 중요하다. 방송에서 제시된 <strong>바벨 전략</strong>(고위험·저위험 양 극단 보유, 중간 제거)을 기반으로 한다.</p>
+
+    <div class="strategy-row fade-in">
+      <div class="strategy-box green">
+        <div class="s-title">▲ 비중 확대</div>
+        <ul>
+          <li>AI 인프라 하드웨어</li>
+          <li>NVDA (엔비디아)</li>
+          <li>MU (마이크론 HBM)</li>
+          <li>NBIS (네비우스)</li>
+          <li>COHR (광학 연결)</li>
+          <li>캐시(현금) 유지</li>
+        </ul>
+      </div>
+      <div class="strategy-box red">
+        <div class="s-title">▼ 비중 축소·제거</div>
+        <ul>
+          <li>은행·금융주 전반</li>
+          <li>고부채 리츠</li>
+          <li>소비재 경기 민감주</li>
+          <li>사모펀드 연계 종목</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight-box fade-in">
+      <div class="label">🏦 은행주 판단 기준</div>
+      <p>은행 실적 발표 시 주가 방향보다 <strong>실적 자체</strong>를 주목. 은행이 돈을 못 번다면 = 경제 불황 신호. 현재는 금리 인하 기대 소멸 + 사모 크레딧 리스크로 은행주 보유 비추. 에너지·유틸리티를 헤지용으로 일부 보유 권장.</p>
+    </div>
+
+    <div class="pullquote fade-in">
+      <p>"주식시장이 아무리 흔들려도<br>캐시와 AI 인프라를 쥔 자가 최후의 승자."</p>
+      <span class="attribution">— NOVA 투자 결론</span>
+    </div>
+  </section>
+
+  <hr class="editorial">
+
+  <!-- ── 8. 용어 해설 ── -->
+  <section class="section fade-in">
+    <span class="section-label">Section 08 · Glossary</span>
+    <h3>핵심 용어 해설</h3>
+
+    <div class="table-wrap fade-in">
+      <table>
+        <thead><tr><th>용어</th><th>설명</th></tr></thead>
+        <tbody>
+          <tr><td><strong>인퍼런스(Inference)</strong></td><td>AI가 학습된 내용을 바탕으로 실제로 결과를 추론·생성하는 단계. '트레이닝(학습)'의 반대 개념. 앞으로 AI 연산 수요의 핵심.</td></tr>
+          <tr><td><strong>소버린 AI</strong></td><td>국가 단위로 AI 인프라를 직접 구축·운영하는 것. 데이터 주권 확보 및 산업 경쟁력 강화 목적.</td></tr>
+          <tr><td><strong>HBM (High Bandwidth Memory)</strong></td><td>AI GPU에 탑재되는 초고속·고대역폭 메모리. HBM4E는 최신 세대로, 베라루빈에 1TB 규격이 요구됨. 주요 공급사: 마이크론, SK하이닉스, 삼성.</td></tr>
+          <tr><td><strong>LPU (Language Processing Unit)</strong></td><td>텍스트·언어 처리에 특화된 맞춤형 반도체. 그록(Groq)이 개발, 베라루빈과 조합 시 토큰 생성 35배 증폭.</td></tr>
+          <tr><td><strong>CAPEX (Capital Expenditure)</strong></td><td>자본지출. 데이터센터 서버 등 물리적 인프라에 투자하는 비용. 메타 2026년 $1,350억 예정.</td></tr>
+          <tr><td><strong>프라이빗 크레딧</strong></td><td>은행이 아닌 사모펀드·헤지펀드가 기업에 직접 대출하는 방식. 규제 밖에 있어 고금리 환경에서 부실화 리스크 높음.</td></tr>
+          <tr><td><strong>바벨 전략</strong></td><td>포트폴리오를 초안전 자산(캐시)과 초고성장 자산(AI 인프라)으로 양분하고 중간 위험 자산은 제거하는 투자 방식.</td></tr>
+          <tr><td><strong>IEA (국제에너지기구)</strong></td><td>주요 에너지 소비국 연합체. OPEC의 대항마 성격. 미국 등 서방국이 주도하며 전략비축유 방출 등 유가 안정 정책 조율.</td></tr>
+          <tr><td><strong>골디락스</strong></td><td>성장은 적당히 좋고 물가는 안정된 '딱 좋은' 경제 상태. 금리 인하 여력과 기업 이익 개선이 공존.</td></tr>
+          <tr><td><strong>스태그플레이션</strong></td><td>경기 침체(Stagnation) + 물가 상승(Inflation) 동시 발생. 연준이 금리를 올려도 내려도 모두 문제가 되는 최악의 상황.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <strong>NOVA REAL INVEST · 시장 분석 리포트</strong><br>
+  2026.03.17 기준 · 본 문서는 투자 권유가 아닌 정보 제공 목적입니다.<br>
+  투자 결정 및 손익은 본인 책임입니다.<br>
+  <br>
+  ⚠ 시험문제는 별도 파일(nova_quiz_260317.html)을 확인하세요.
+</footer>
+
+<script>
+// ─── FADE OBSERVER ───
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// ─── CHART CONFIGS ───
+const chartConfigs = {};
+
+chartConfigs['oilChart'] = () => {
+  new Chart(document.getElementById('oilChart'), {
+    type: 'line',
+    data: {
+      labels: ['기준선', '80 돌파', '패닉 급등', '100 도달', 'IEA 합의', '베센트 발표', '오늘'],
+      datasets: [{
+        label: 'WTI 유가 (USD)',
+        data: [72, 80, 91, 100, 97, 94, 93],
+        borderColor: '#e11d48',
+        backgroundColor: 'rgba(225,29,72,0.08)',
+        borderWidth: 2.5,
+        pointBackgroundColor: '#e11d48',
+        pointRadius: 5,
+        fill: true,
+        tension: 0.35
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        title: { display: true, text: 'WTI 유가 경로 (개념도)', color: '#1a1a1a', font: { size: 12 } }
+      },
+      scales: {
+        y: {
+          min: 65, max: 110,
+          ticks: { callback: v => '$' + v, color: '#777' },
+          grid: { color: '#f0f0f0' }
+        },
+        x: { ticks: { color: '#777', font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+chartConfigs['stockChart'] = () => {
+  new Chart(document.getElementById('stockChart'), {
+    type: 'bar',
+    data: {
+      labels: ['NVDA', 'MU', 'META', 'NBIS', 'UBER', 'DLTR'],
+      datasets: [{
+        label: '오늘 주가 변동 (%)',
+        data: [3.2, 2.8, 2.33, 15.0, 3.5, 4.1],
+        backgroundColor: ['#e11d48','#1a1a1a','#f43f5e','#e11d48','#2563eb','#6b7280'],
+        borderRadius: 4,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        title: { display: true, text: '주요 종목 당일 등락률 (추정치, %)', color: '#1a1a1a', font: { size: 12 } }
+      },
+      scales: {
+        y: {
+          ticks: { callback: v => v + '%', color: '#777' },
+          grid: { color: '#f0f0f0' }
+        },
+        x: { ticks: { color: '#777' }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+chartConfigs['scenarioChart'] = () => {
+  new Chart(document.getElementById('scenarioChart'), {
+    type: 'bar',
+    data: {
+      labels: ['현재 S&P', '베어 시나리오\n(5400)', '베이스 시나리오\n(6300)', '불 시나리오\n(7600)'],
+      datasets: [{
+        label: 'S&P 500 목표 지수',
+        data: [6699, 5400, 6300, 7600],
+        backgroundColor: ['#6b7280', '#e11d48', '#2563eb', '#22c55e'],
+        borderRadius: 6,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        title: { display: true, text: 'S&P 500 시나리오별 목표 지수', color: '#1a1a1a', font: { size: 12 } }
+      },
+      scales: {
+        y: {
+          min: 4500,
+          ticks: { color: '#777' },
+          grid: { color: '#f0f0f0' }
+        },
+        x: { ticks: { color: '#777', font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// ─── CHART OBSERVER ───
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+</script>
+</body>
+</html>

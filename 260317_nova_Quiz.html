@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA 시험문제 | 2026.03.17</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Serif+KR:wght@300;400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --border: #e5e5e5;
+    --easy: #16a34a;
+    --mid: #d97706;
+    --hard: #dc2626;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Noto Serif KR', serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    font-size: 15px;
+  }
+
+  /* HEADER */
+  .site-header {
+    border-bottom: 3px solid var(--text);
+    padding: 16px 20px 12px;
+    text-align: center;
+  }
+  .site-header .issue-line {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--text2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .site-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: -0.01em;
+  }
+  .site-header h1 span { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    background: var(--text);
+    color: #fff;
+    padding: 28px 20px;
+    text-align: center;
+  }
+  .hero .kicker {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #f43f5e;
+    margin-bottom: 10px;
+  }
+  .hero h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 900;
+    margin-bottom: 8px;
+  }
+  .hero p { font-size: 13px; color: #aaa; }
+
+  /* SCORE DISPLAY */
+  .score-bar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+  }
+  .score-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .chip-score { background: #fff0f3; color: var(--accent); border: 1px solid #fecdd3; font-size: 14px; font-weight: 700; }
+  .chip-easy { background: #f0fdf4; color: var(--easy); border: 1px solid #bbf7d0; }
+  .chip-mid { background: #fffbeb; color: var(--mid); border: 1px solid #fde68a; }
+  .chip-hard { background: #fef2f2; color: var(--hard); border: 1px solid #fecaca; }
+
+  main { max-width: 640px; margin: 0 auto; padding: 0 16px 60px; }
+
+  /* SECTION HEADERS */
+  .section-bar {
+    margin-top: 32px;
+    border-top: 2px solid var(--accent);
+    padding-top: 8px;
+    margin-bottom: 20px;
+  }
+  .section-bar .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .section-bar h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  /* QUESTION CARD */
+  .q-card {
+    background: var(--bg2);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 18px 16px;
+    margin-bottom: 16px;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+  .q-card:hover { border-color: #fca5a5; }
+
+  .q-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .q-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    min-width: 32px;
+  }
+  .q-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+  .q-type-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+  .badge-easy { background: #f0fdf4; color: var(--easy); border: 1px solid #bbf7d0; }
+  .badge-mid { background: #fffbeb; color: var(--mid); border: 1px solid #fde68a; }
+  .badge-hard { background: #fef2f2; color: var(--hard); border: 1px solid #fecaca; }
+  .badge-ox { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+  .badge-mc { background: #faf5ff; color: #7c3aed; border: 1px solid #e9d5ff; }
+  .badge-sa { background: #fff0f3; color: var(--accent); border: 1px solid #fecdd3; }
+
+  .q-text {
+    font-size: 14.5px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  /* OPTIONS */
+  .options { list-style: none; margin: 10px 0 0; }
+  .options li {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 6px;
+    font-size: 13.5px;
+    background: #fff;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    position: relative;
+  }
+  .options li:hover { background: #fff0f3; border-color: #fca5a5; }
+  .options li.selected { background: #fff0f3; border-color: var(--accent); }
+  .options li.correct { background: #f0fdf4; border-color: #16a34a; color: #15803d; font-weight: 600; }
+  .options li.wrong { background: #fef2f2; border-color: #dc2626; color: #b91c1c; text-decoration: line-through; }
+
+  /* OX BUTTONS */
+  .ox-buttons { display: flex; gap: 10px; margin: 10px 0 0; }
+  .ox-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    background: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 900;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+  .ox-btn:hover { background: var(--bg2); border-color: var(--accent); }
+  .ox-btn.selected { background: var(--bg2); border-color: var(--accent); }
+  .ox-btn.correct { background: #f0fdf4; border-color: #16a34a; color: #15803d; }
+  .ox-btn.wrong { background: #fef2f2; border-color: #dc2626; color: #b91c1c; }
+
+  /* SHORT ANSWER */
+  .sa-wrap { margin: 10px 0 0; }
+  .sa-input {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 14px;
+    color: var(--text);
+    background: #fff;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .sa-input:focus { border-color: var(--accent); }
+
+  /* CHECK BUTTON */
+  .check-btn {
+    margin-top: 10px;
+    padding: 8px 18px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.15s;
+  }
+  .check-btn:hover { background: #be123c; }
+  .check-btn:disabled { background: #aaa; cursor: default; }
+
+  /* ANSWER REVEAL */
+  .answer-box {
+    display: none;
+    margin-top: 12px;
+    border-top: 1px dashed var(--border);
+    padding-top: 10px;
+  }
+  .answer-box.show { display: block; }
+  .answer-box .ans-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .answer-box .ans-text {
+    font-size: 13.5px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .answer-box .ans-text strong { color: var(--accent); }
+
+  /* SCORE RESULT */
+  .result-box {
+    display: none;
+    background: var(--text);
+    color: #fff;
+    border-radius: 12px;
+    padding: 28px 24px;
+    text-align: center;
+    margin: 32px 0;
+  }
+  .result-box.show { display: block; }
+  .result-box .r-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 60px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .result-box .r-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #aaa;
+    margin-top: 6px;
+  }
+  .result-box .r-msg { font-size: 15px; color: #ddd; margin-top: 14px; }
+
+  /* SUBMIT BUTTON */
+  .submit-all {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: var(--text);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin: 24px 0;
+    transition: background 0.2s;
+    letter-spacing: 0.02em;
+  }
+  .submit-all:hover { background: var(--accent); }
+
+  hr.editorial { border: none; border-top: 1px solid var(--border); margin: 28px 0 0; }
+
+  footer {
+    background: var(--text);
+    color: #888;
+    text-align: center;
+    padding: 24px 20px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.08em;
+    line-height: 1.8;
+  }
+  footer strong { color: #fff; }
+
+  /* Progress */
+  .progress-wrap { margin: 16px 0 0; }
+  .progress-bar {
+    background: #e5e5e5;
+    border-radius: 4px;
+    height: 6px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 4px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text2);
+    text-align: right;
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="issue-line">Nova Real Invest · 시험문제 모음</div>
+  <h1>QUIZ <span>&</span> ANSWERS</h1>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="kicker">2026.03.17 방송 기반</div>
+  <h2>미국 증시 & AI 투자 이해도 테스트</h2>
+  <p>총 10문제 · 객관식 / OX / 단답형 혼합 · 총 100점</p>
+</div>
+
+<!-- SCORE BAR -->
+<div class="score-bar">
+  <div class="score-chip chip-score" id="totalScore">점수: 0 / 100</div>
+  <div class="score-chip chip-easy">🟢 쉬움 3문제 (30점)</div>
+  <div class="score-chip chip-mid">🟡 보통 5문제 (50점)</div>
+  <div class="score-chip chip-hard">🔴 어려움 2문제 (20점)</div>
+</div>
+
+<main>
+
+  <!-- QUESTIONS SECTION -->
+  <div class="section-bar">
+    <div class="label">문제 풀기</div>
+    <h2>Questions 01 — 10</h2>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">0 / 10 완료</div>
+  </div>
+
+  <!-- ─── Q1 쉬움 OX ─── -->
+  <div class="q-card" data-qid="1" data-type="ox" data-answer="O" data-points="10">
+    <div class="q-header">
+      <span class="q-num">01</span>
+      <div class="q-meta">
+        <div class="q-type-row">
+          <span class="badge badge-easy">🟢 쉬움</span>
+          <span class="badge badge-ox">OX형</span>
+          <span class="badge" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;">10점</span>
+        </div>
+      </div>
+    </div>
+    <p class="q-text">엔비디아 GTC는 엔비디아가 직접 개최하는 GPU 테크놀로지 관련 컨퍼런스이다.</p>
+    <div class="ox-buttons">
+      <button class="ox-btn" data-val="O">⭕ O</button>
+      <button class="ox-btn" data-val="X">❌ X</button>
+    </div>
+    <div class="answer-box">
+      <div class="ans-label">정답 & 해설</div>
+      <div class="ans-text"><strong>정답: O (맞다)</strong><br>GTC(GPU Technology Conference)는 엔비디아가 주관하는 연례 AI·GPU 기술 컨퍼런스다. 젠슨 황 CEO가 직접 키노트를 진행하며, 엔비디아의 신제품 로드맵과 AI 비전을 발표하는 가장 중요한 행사이다.</div>
+    </div>
+  </div>
+
+  <!-- ─── Q2 쉬움 OX ─── -->
+  <div class="q-card" data-qid="2" data-type="ox" data-answer="X" data-points="10">
+    <div class="q-header">
+      <span class="q-num">02</span>
+      <div class="q-meta">
+        <div class="q-type-row">
+          <span class="badge badge-easy">🟢 쉬움</span>
+          <span class="badge badge-ox">OX형</span>
+          <span class="badge" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;">10점</span>
+        </div>
+      </div>
+    </div>
+    <p class="q-text">IEA(국제에너지기구)가 방출하기로 한 4억 배럴의 전략비축유는 글로벌 에너지 수요의 1개월치에 해당한다.</p>
+    <div class="ox-buttons">
+      <button class="ox-btn" data-val="O">⭕ O</button>
+      <button class="ox-btn" data-val="X">❌ X</button>
+    </div>
+    <div class="answer-box">
+      <div class="ans-label">정답 & 해설</div>
+      <div class="ans-text"><strong>정답: X (틀리다)</strong><br>4억 배럴은 글로벌 수요 기준 <strong>4일치</strong>에 불과하다. 심리적 안도 효과는 있지만 실질적인 에너지 위기의 해결책이 될 수 없다는 것이 핵심 포인트다.</div>
+    </div>
+  </div>
+
+  <!-- ─── Q3 쉬움 단답형 ─── -->
+  <div class="q-card" data-qid="3" data-type="sa" data-answer="인퍼런스" data-points="10">
+    <div class="q-header">
+      <span class="q-num">03</span>
+      <div class="q-meta">
+        <div class="q-type-row">
+          <span class="badge badge-easy">🟢 쉬움</span>
+          <span class="badge badge-sa">단답형</span>
+          <span class="badge" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;">10점</span>
+        </div>
+      </div>
+    </div>
+    <p class="q-text">AI가 학습 단계를 넘어 실제로 결과를 추론·생성하는 실행 단계를 무엇이라고 하는가?</p>
+    <div class="sa-wrap">
+      <input type="text" class="sa-input" placeholder="답을 입력하세요...">
+    </div>
+    <button class="check-btn">확인하기</button>
+    <div class="answer-box">
+      <div class="ans-label">정답 & 해설</div>
+      <div class="ans-text"><strong>정답: 인퍼런스 (Inference)</strong><br>트레이닝(Training)이 AI를 학습시키는 단계라면, 인퍼런스는 학습된 AI가 실제로 질문에 답하거나 작업을 수행하는 단계다. 젠슨 황은 이 전환이 AI 컴퓨팅 수요를 폭발적으로 증가시킬 것이라 강조했다.</div>
+    </div>
+  </div>
+
+  <!-- ─── Q4 보통 객관식 ─── -->
+  <div class="q-card" data-qid="4" data-type="mc" data-answer="2" data-points="10">
+    <div class="q-header">
+      <span class="q-num">04</span>
+      <div class="q-meta">
+        <div class="q-type-row">
+          <span class="badge badge-mid">🟡 보통</span>
+          <span class="badge badge-mc">객관식</span>
+          <span class="badge" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;">10점</span>
+        </div>
+      </div>
+    </div>
+    <p class="q-text">엔비디아 베라 루빈(Vera Rubin) GPU에 탑재되는 최신 세대 메모리로 올바른 것은?</p>
+    <ul class="options">
+      <li data-val="1">① DDR5</li>
+      <li data-val="2">② HBM4E</li>
+      <li data-val="3">③ GDDR7</li>
+      <li data-val="4">④ LPDDR5X</li>
+    </ul>
+    <div class="answer-box">
+      <div class="ans-label">정답 & 해설</div>
+      <div class="ans-text"><strong>정답: ② HBM4E</strong><br>베라 루빈은 초당 22TB(22 트릴리언 비트)의 대역폭을 처리하며, 이를 가능하게 하는 것이 HBM4E(4세대 고대역폭 메모리)다. 베라 루빈 울트라 시스템에는 1TB 용량의 HBM4E가 요구된다. 마이크론이 주요 공급사 중 하나다.</div>
+    </div>
+  </div>
+
+  <!-- ─── Q5 보통 객관식 ─── -->
+  <div class="q-card" data-qid="5" data-type="mc" data-answer="3" data-points="10">
+    <div class="q-header">
+      <span class="q-num">05</span>
+      <div class="q-meta">
+        <div class="q-type-row">
+          <span class="badge badge-mid">🟡 보통</span>
+          <span class="badge badge-mc">객관식</span>
+          <span class="badge" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;">10점</span>
+        </div>
+      </div>
+    </div>
+    <p class="q-text">엔비디아가 $20B를 투자했으며, 메타와 $27B 파트너십을 체결한 AI 호스팅 기업의 티커(종목코드)는?</p>
+    <ul class="options">
+      <li data-val="1">① SMCI</li>
+      <li data-val="2">② COHR</li>
+      <li data-val="3">③ NBIS</li>
+      <li data-val="4">④ INTC</li>
+    </ul>
+    <div class="answer-box">
+      <div class="ans-label">정답 & 해설</div>
+      <div class="ans-text"><strong>정답: ③ NBIS (네비우스)</strong><br>네비우스(Nebius)는 인도계 기술 기업에서 출발해 네덜란드 법인으로 전환한 유럽 AI 호스팅 전문 기업이다. 엔비디아 베라루빈 우선 공급권을 확보했으며, 메타와 5년 $27B 파트너십을 체결했다. 이 발표로 당일 주가가 +15% 급등했다.</div>
+    </div>
+  </div>
+
+  <!-- ─── Q6 보통 객관식 ─── -->
+  <div class="q-card" data-qid="6" data-type="mc" data-answer="4" data-points="10">
+    <div class="q-header">
+      <span class="q-num">06</span>
+      <div class="q-meta">
+        <div class="q-type-row">
+          <span class="badge badge-mid">🟡 보통</span>
+          <span class="badge badge-mc">객관식</span>
+          <span class="badge" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;">10점</span>
+        </div>
+      </div>
+    </div>
+    <p class="q-text">빅테크의 현재 비용 절감 및 투자 전략의 흐름을 올바르게 나타낸 것은?</p>
+    <ul class="options">
+      <li data-val="1">① AI 투자 → 인력 확대 → 매출 증가 → 재투자</li>
+      <li data-val="2">② 인력 확대 → AI 투자 → 수익성 개선 → 배당 확대</li>
+      <li data-val="3">③ 채권 발행 → AI 투자 → 인력 확대 → 수익성 개선</li>
+      <li data-val="4">④ 인력 감축 → AI 투자(CAPEX) → 수익성 개선 → 재투자 반복</li>
+    </ul>
+    <div class="answer-box">
+      <div class="ans-label">정답 & 해설</div>
+      <div class="ans-text"><strong>정답: ④</strong><br>메타가 16,000명 감원을 검토하면서 절감액($7~8B/년)을 AI 인프라 CAPEX($135B, 작년 대비 2배)에 재투자하는 구조다. 방송에서 "사람 줄여서 기계에 투자 → 수익성 개선 → 다시 반복" 이 공식을 핵심 포뮬라로 강조했다.</div>
+    </div>
+  </div>
+
+  <!-- ─── Q7 보통 단답형 ─── -->
+  <div class="q-card" data-qid="7" data-type="sa" data-answer="35" data-points="10">
+    <div class="q-header">
+      <span class="q-num">07</span>
+      <div class="q-meta">
+        <div class="q-type-row">
+          <span class="badge badge-mid">🟡 보통</span>
+          <span class="badge badge-sa">단답형</span>
+          <span class="badge" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;">10점</span>
+        </div>
+      </div>
+    </div>
+    <p class="q-text">베라 루빈 GPU 랙 옆에 그록(Groq)의 LPX 랙을 설치했을 때 토큰 생성 성능이 몇 배 증폭되는가? (숫자만 입력)</p>
+    <div class="sa-wrap">
+      <input type="text" class="sa-input" placeholder="숫자를 입력하세요...">
+    </div>
+    <button class="check-btn">확인하기</button>
+    <div class="answer-box">
+      <div class="ans-label">정답 & 해설</div>
+      <div class="ans-text"><strong>정답: 35 (배)</strong><br>그록(Groq)의 LPU 256개가 탑재된 LPX 랙을 베라 루빈 시스템에 병렬 연결하면 토큰 생성 성능이 35배 증폭된다. 엔비디아는 그록에 $20B를 투자해 사실상 라이선스를 전량 확보했다.</div>
+    </div>
+  </div>
+
+  <!-- ─── Q8 보통 객관식 ─── -->
+  <div class="q-card" data-qid="8" data-type="mc" data-answer="1" data-points="10">
+    <div class="q-header">
+      <span class="q-num">08</span>
+      <div class="q-meta">
+        <div class="q-type-row">
+          <span class="badge badge-mid">🟡 보통</span>
+          <span class="badge badge-mc">객관식</span>
+          <span class="badge" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;">10점</span>
+        </div>
+      </div>
+    </div>
+    <p class="q-text">방송에서 '골디락스 랠리' 시나리오에서 S&P 500의 12개월 내 목표 지수(골드만삭스 볼 케이스)는?</p>
+    <ul class="options">
+      <li data-val="1">① 7,600</li>
+      <li data-val="2">② 7,000</li>
+      <li data-val="3">③ 6,300</li>
+      <li data-val="4">④ 5,400</li>
+    </ul>
+    <div class="answer-box">
+      <div class="ans-label">정답 & 해설</div>
+      <div class="ans-text"><strong>정답: ① 7,600</strong><br>골드만삭스의 볼(강세) 케이스: 유가 $80 이하 안정 + AI 실적 호조 조건이 충족되면 S&P 500이 7,600까지 도달 가능. 이는 당시 기준(약 6,699)에서 약 +13% 수준. 반면 베어 케이스는 5,400, 모건 스탠리 베이스는 6,300이다.</div>
+    </div>
+  </div>
+
+  <!-- ─── Q9 어려움 객관식 ─── -->
+  <div class="q-card" data-qid="9" data-type="mc" data-answer="3" data-points="10">
+    <div class="q-header">
+      <span class="q-num">09</span>
+      <div class="q-meta">
+        <div class="q-type-row">
+          <span class="badge badge-hard">🔴 어려움</span>
+          <span class="badge badge-mc">객관식</span>
+          <span class="badge" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;">10점</span>
+        </div>
+      </div>
+    </div>
+    <p class="q-text">방송에서 제시한 '바벨 전략'에 관한 설명으로 가장 올바른 것은?</p>
+    <ul class="options">
+      <li data-val="1">① 은행주와 리츠를 핵심 축으로 구성하는 전략</li>
+      <li data-val="2">② 성장주와 가치주를 1:1로 균등 분산하는 전략</li>
+      <li data-val="3">③ 캐시(초안전)와 AI 인프라(고성장) 양 극단에 집중하고 중간 위험 자산은 제거하는 전략</li>
+      <li data-val="4">④ 코인과 채권을 절반씩 나눠 보유하는 전략</li>
+    </ul>
+    <div class="answer-box">
+      <div class="ans-label">정답 & 해설</div>
+      <div class="ans-text"><strong>정답: ③</strong><br>바벨(Barbell) 전략은 양 끝에 무게를 집중한 바벨 모양에서 이름을 딴 전략이다. 방송에서는 <strong>한쪽에 캐시(현금·유틸리티 등 방어자산)</strong>, <strong>반대쪽에 AI 인프라(NVDA·MU 등 고성장)</strong>를 배치하고, 중간 위험도 자산(은행·금융주 등)은 완전히 제거하도록 권고했다. 현재 같은 불확실한 시장에서 특히 유효하다.</div>
+    </div>
+  </div>
+
+  <!-- ─── Q10 어려움 단답형 ─── -->
+  <div class="q-card" data-qid="10" data-type="sa" data-answer="프라이빗 크레딧" data-points="10">
+    <div class="q-header">
+      <span class="q-num">10</span>
+      <div class="q-meta">
+        <div class="q-type-row">
+          <span class="badge badge-hard">🔴 어려움</span>
+          <span class="badge badge-sa">단답형</span>
+          <span class="badge" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;">10점</span>
+        </div>
+      </div>
+    </div>
+    <p class="q-text">방송에서 2008년 금융위기와 구조적으로 가장 유사하며, 현재 가장 큰 시장 폭발 뇌관으로 지목된 리스크 요인은 무엇인가? (힌트: 사모펀드 관련)</p>
+    <div class="sa-wrap">
+      <input type="text" class="sa-input" placeholder="(예: 프라이빗 ○○○○)">
+    </div>
+    <button class="check-btn">확인하기</button>
+    <div class="answer-box">
+      <div class="ans-label">정답 & 해설</div>
+      <div class="ans-text"><strong>정답: 프라이빗 크레딧 (Private Credit)</strong><br>사모펀드·헤지펀드 등이 은행 규제 밖에서 기업에 직접 대출하는 프라이빗 크레딧 시장의 부실화를 지목했다. 블루 아울, 블랙락, 모건 스탠리 등이 이 문제에 노출돼 있으며, 고금리 장기화로 한계 기업이 연쇄 부실화될 경우 2008년 서브프라임 모기지 사태와 유사한 전염 효과가 발생할 수 있다고 경고했다.</div>
+    </div>
+  </div>
+
+  <!-- SUBMIT -->
+  <button class="submit-all" id="submitAll">채점하기 →</button>
+
+  <!-- RESULT -->
+  <div class="result-box" id="resultBox">
+    <div class="r-score" id="resultScore">0</div>
+    <div class="r-label">점 / 100점</div>
+    <div class="r-msg" id="resultMsg"></div>
+  </div>
+
+  <hr class="editorial">
+
+  <!-- ANSWER KEY SECTION -->
+  <div class="section-bar" style="margin-top:32px;">
+    <div class="label">정답 요약표</div>
+    <h2>Answer Key</h2>
+  </div>
+
+  <div style="overflow-x:auto; margin-bottom:24px;">
+    <table style="width:100%; border-collapse:collapse; font-size:13px;">
+      <thead>
+        <tr>
+          <th style="background:#e11d48; color:#fff; padding:9px 12px; text-align:left; font-family:'DM Mono',monospace; font-size:11px;">번호</th>
+          <th style="background:#e11d48; color:#fff; padding:9px 12px; text-align:left; font-family:'DM Mono',monospace; font-size:11px;">유형</th>
+          <th style="background:#e11d48; color:#fff; padding:9px 12px; text-align:left; font-family:'DM Mono',monospace; font-size:11px;">난이도</th>
+          <th style="background:#e11d48; color:#fff; padding:9px 12px; text-align:left; font-family:'DM Mono',monospace; font-size:11px;">정답</th>
+          <th style="background:#e11d48; color:#fff; padding:9px 12px; text-align:left; font-family:'DM Mono',monospace; font-size:11px;">점수</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding:8px 12px; border-bottom:1px solid #e5e5e5;">01</td><td>OX</td><td style="color:#16a34a; font-weight:600;">쉬움</td><td><strong>O</strong></td><td>10</td></tr>
+        <tr style="background:#fafafa;"><td style="padding:8px 12px; border-bottom:1px solid #e5e5e5;">02</td><td>OX</td><td style="color:#16a34a; font-weight:600;">쉬움</td><td><strong>X</strong></td><td>10</td></tr>
+        <tr><td style="padding:8px 12px; border-bottom:1px solid #e5e5e5;">03</td><td>단답형</td><td style="color:#16a34a; font-weight:600;">쉬움</td><td><strong>인퍼런스</strong></td><td>10</td></tr>
+        <tr style="background:#fafafa;"><td style="padding:8px 12px; border-bottom:1px solid #e5e5e5;">04</td><td>객관식</td><td style="color:#d97706; font-weight:600;">보통</td><td><strong>② HBM4E</strong></td><td>10</td></tr>
+        <tr><td style="padding:8px 12px; border-bottom:1px solid #e5e5e5;">05</td><td>객관식</td><td style="color:#d97706; font-weight:600;">보통</td><td><strong>③ NBIS</strong></td><td>10</td></tr>
+        <tr style="background:#fafafa;"><td style="padding:8px 12px; border-bottom:1px solid #e5e5e5;">06</td><td>객관식</td><td style="color:#d97706; font-weight:600;">보통</td><td><strong>④ 인력감축→AI투자→수익성개선</strong></td><td>10</td></tr>
+        <tr><td style="padding:8px 12px; border-bottom:1px solid #e5e5e5;">07</td><td>단답형</td><td style="color:#d97706; font-weight:600;">보통</td><td><strong>35 (배)</strong></td><td>10</td></tr>
+        <tr style="background:#fafafa;"><td style="padding:8px 12px; border-bottom:1px solid #e5e5e5;">08</td><td>객관식</td><td style="color:#d97706; font-weight:600;">보통</td><td><strong>① 7,600</strong></td><td>10</td></tr>
+        <tr><td style="padding:8px 12px; border-bottom:1px solid #e5e5e5;">09</td><td>객관식</td><td style="color:#dc2626; font-weight:600;">어려움</td><td><strong>③ 바벨 전략 정의</strong></td><td>10</td></tr>
+        <tr style="background:#fafafa;"><td style="padding:8px 12px; border-bottom:1px solid #e5e5e5;">10</td><td>단답형</td><td style="color:#dc2626; font-weight:600;">어려움</td><td><strong>프라이빗 크레딧</strong></td><td>10</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<footer>
+  <strong>NOVA REAL INVEST · 시험문제 파일</strong><br>
+  2026.03.17 기준 · 본 문서는 교육 목적으로 제작되었습니다.<br>
+  ← 분석 리포트: nova_analysis_260317.html
+</footer>
+
+<script>
+const answers = {
+  1: { type: 'ox', correct: 'O', points: 10 },
+  2: { type: 'ox', correct: 'X', points: 10 },
+  3: { type: 'sa', correct: '인퍼런스', points: 10 },
+  4: { type: 'mc', correct: '2', points: 10 },
+  5: { type: 'mc', correct: '3', points: 10 },
+  6: { type: 'mc', correct: '4', points: 10 },
+  7: { type: 'sa', correct: '35', points: 10 },
+  8: { type: 'mc', correct: '1', points: 10 },
+  9: { type: 'mc', correct: '3', points: 10 },
+  10: { type: 'sa', correct: '프라이빗 크레딧', points: 10 }
+};
+
+let userAnswers = {};
+let completed = 0;
+
+function updateProgress() {
+  const pct = (completed / 10) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = completed + ' / 10 완료';
+}
+
+function markAnswer(qid, isCorrect) {
+  const card = document.querySelector(`[data-qid="${qid}"]`);
+  const ansBox = card.querySelector('.answer-box');
+  ansBox.classList.add('show');
+  if (!userAnswers[qid]) {
+    userAnswers[qid] = true;
+    completed++;
+    updateProgress();
+  }
+}
+
+// OX Buttons
+document.querySelectorAll('.q-card[data-type="ox"]').forEach(card => {
+  const qid = parseInt(card.dataset.qid);
+  card.querySelectorAll('.ox-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (userAnswers[qid]) return;
+      const val = btn.dataset.val;
+      const correct = answers[qid].correct;
+      card.querySelectorAll('.ox-btn').forEach(b => {
+        b.classList.remove('selected', 'correct', 'wrong');
+        if (b.dataset.val === correct) b.classList.add('correct');
+        else b.classList.add('wrong');
+      });
+      markAnswer(qid, val === correct);
+    });
+  });
+});
+
+// MC Options
+document.querySelectorAll('.q-card[data-type="mc"]').forEach(card => {
+  const qid = parseInt(card.dataset.qid);
+  card.querySelectorAll('.options li').forEach(li => {
+    li.addEventListener('click', () => {
+      if (userAnswers[qid]) return;
+      const val = li.dataset.val;
+      const correct = answers[qid].correct;
+      card.querySelectorAll('.options li').forEach(o => {
+        o.classList.remove('selected', 'correct', 'wrong');
+        if (o.dataset.val === correct) o.classList.add('correct');
+        else o.classList.add('wrong');
+      });
+      markAnswer(qid, val === correct);
+    });
+  });
+});
+
+// Short Answer
+document.querySelectorAll('.q-card[data-type="sa"]').forEach(card => {
+  const qid = parseInt(card.dataset.qid);
+  const btn = card.querySelector('.check-btn');
+  const input = card.querySelector('.sa-input');
+  btn.addEventListener('click', () => {
+    if (userAnswers[qid]) return;
+    const val = input.value.trim();
+    if (!val) return;
+    const correct = answers[qid].correct;
+    const isCorrect = val === correct || val.includes(correct.split(' ')[0]);
+    input.style.borderColor = isCorrect ? '#16a34a' : '#dc2626';
+    input.style.background = isCorrect ? '#f0fdf4' : '#fef2f2';
+    btn.disabled = true;
+    markAnswer(qid, isCorrect);
+  });
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') btn.click(); });
+});
+
+// Submit All
+document.getElementById('submitAll').addEventListener('click', () => {
+  let score = 0;
+
+  document.querySelectorAll('.q-card').forEach(card => {
+    const qid = parseInt(card.dataset.qid);
+    const type = card.dataset.type;
+    const correct = answers[qid].correct;
+    const points = answers[qid].points;
+    const ansBox = card.querySelector('.answer-box');
+    ansBox.classList.add('show');
+
+    if (type === 'ox') {
+      const selected = card.querySelector('.ox-btn.selected');
+      card.querySelectorAll('.ox-btn').forEach(b => {
+        b.classList.remove('selected', 'correct', 'wrong');
+        if (b.dataset.val === correct) b.classList.add('correct');
+        else b.classList.add('wrong');
+      });
+      if (selected && selected.dataset.val === correct) score += points;
+    } else if (type === 'mc') {
+      const selected = card.querySelector('.options li.selected');
+      card.querySelectorAll('.options li').forEach(o => {
+        o.classList.remove('selected', 'correct', 'wrong');
+        if (o.dataset.val === correct) o.classList.add('correct');
+        else o.classList.add('wrong');
+      });
+      if (selected && selected.dataset.val === correct) score += points;
+    } else if (type === 'sa') {
+      const input = card.querySelector('.sa-input');
+      const val = input.value.trim();
+      if (val && (val === correct || val.includes(correct.split(' ')[0]))) {
+        score += points;
+        input.style.borderColor = '#16a34a';
+        input.style.background = '#f0fdf4';
+      } else {
+        input.style.borderColor = '#dc2626';
+        input.style.background = '#fef2f2';
+      }
+      card.querySelector('.check-btn').disabled = true;
+    }
+
+    if (!userAnswers[qid]) { userAnswers[qid] = true; completed++; }
+  });
+
+  updateProgress();
+  document.getElementById('totalScore').textContent = '점수: ' + score + ' / 100';
+
+  const resultBox = document.getElementById('resultBox');
+  document.getElementById('resultScore').textContent = score;
+  const msgs = [
+    [90, '🏆 완벽! NOVA급 투자자입니다.'],
+    [70, '📈 훌륭합니다! 핵심을 잘 이해하셨네요.'],
+    [50, '📚 절반 이상 맞췄습니다. 리포트를 다시 복습해보세요.'],
+    [0, '💡 어렵죠? 분석 파일을 먼저 꼼꼼히 읽어보세요.']
+  ];
+  const msg = msgs.find(([min]) => score >= min);
+  document.getElementById('resultMsg').textContent = msg[1];
+  resultBox.classList.add('show');
+  resultBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+</script>
+</body>
+</html>
