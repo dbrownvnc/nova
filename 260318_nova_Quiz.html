@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIA.chat 시험문제 10선 | 2026.03.17</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Noto+Serif+KR:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff; --bg2: #fafafa;
+    --text: #1a1a1a; --text2: #777777;
+    --accent: #e11d48; --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --c4: #2563eb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans','Noto Serif KR',sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 15px; }
+
+  /* HEADER */
+  .quiz-header {
+    background: var(--text);
+    color: #fff;
+    padding: 36px 20px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .quiz-header::before {
+    content:'';
+    position:absolute; top:-40px; right:-40px;
+    width:200px; height:200px;
+    background:var(--accent); border-radius:50%; opacity:.18;
+  }
+  .quiz-header::after {
+    content:'';
+    position:absolute; bottom:-30px; left:-20px;
+    width:140px; height:140px;
+    background:var(--accent2); border-radius:50%; opacity:.1;
+  }
+  .quiz-header-inner { position:relative; z-index:1; }
+  .mag-kicker { display:inline-block; background:var(--accent); color:#fff; font-size:10px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; padding:4px 10px; margin-bottom:14px; border-radius:2px; }
+  .quiz-header h1 { font-family:'Playfair Display',serif; font-size:clamp(22px,6vw,30px); font-weight:900; line-height:1.25; margin-bottom:10px; }
+  .quiz-header h1 em { color:var(--accent2); font-style:italic; }
+  .quiz-header-meta { font-size:12px; color:#aaa; display:flex; gap:14px; flex-wrap:wrap; margin-top:10px; }
+
+  /* NOTICE */
+  .quiz-notice {
+    background:#fff9e6; border:1px solid #fcd34d;
+    border-left:4px solid #f59e0b;
+    border-radius:0 8px 8px 0;
+    padding:14px 18px; margin:20px;
+    font-size:13px; color:#92400e; line-height:1.7;
+  }
+  .quiz-notice strong { color:#78350f; }
+
+  /* DIFFICULTY LEGEND */
+  .legend { display:flex; gap:8px; flex-wrap:wrap; padding:0 20px 16px; }
+  .legend-item { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--text2); }
+
+  /* QUIZ ITEMS */
+  .quiz-list { padding: 0 20px; }
+  .quiz-item {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .quiz-item-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+  }
+  .q-num {
+    background: var(--accent);
+    color: #fff;
+    min-width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .q-meta { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+  .q-badges { display: flex; gap: 5px; flex-wrap: wrap; }
+  .q-text { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.55; }
+
+  .quiz-type-badge {
+    display: inline-block; font-size: 9px; font-weight: 800;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 20px;
+  }
+  .badge-easy { background:#dcfce7; color:#15803d; }
+  .badge-med { background:#fef9c3; color:#854d0e; }
+  .badge-hard { background:#fee2e8; color:var(--accent); }
+  .badge-mc { background:#ede9fe; color:#7c3aed; }
+  .badge-short { background:#dbeafe; color:var(--c4); }
+  .badge-ox { background:#fce7f3; color:#be185d; }
+  .badge-essay { background:#f0fdf4; color:#15803d; }
+
+  .quiz-options {
+    list-style: none; padding: 12px 16px 14px 52px;
+  }
+  .quiz-options li {
+    font-size: 13px; color: #444;
+    padding: 5px 8px; border-radius: 6px;
+    cursor: pointer; transition: background .15s;
+    border: 1px solid transparent; margin-bottom: 3px;
+  }
+  .quiz-options li:hover { background: #fff; border-color: var(--border); }
+
+  .quiz-blank {
+    padding: 12px 16px 16px 52px;
+    font-size: 13px; color: #888; font-style: italic;
+  }
+
+  /* DIVIDER */
+  .section-divider {
+    text-align: center;
+    padding: 28px 20px 8px;
+    position: relative;
+  }
+  .section-divider::before {
+    content:'';
+    position: absolute; top: 50%;
+    left: 20px; right: 20px;
+    border-top: 2px dashed var(--border);
+  }
+  .section-divider-inner {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px; font-weight: 800;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 8px 20px; border-radius: 20px;
+    position: relative; z-index: 1;
+  }
+
+  /* ANSWER SECTION */
+  .ans-list { padding: 16px 20px; }
+  .ans-item {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .ans-item-header {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 12px 16px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+  }
+  .ans-num {
+    background: var(--text);
+    color: #fff;
+    min-width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .ans-q-preview {
+    font-size: 12px; color: var(--text2);
+    line-height: 1.5; flex: 1;
+  }
+  .ans-body { padding: 14px 16px; }
+  .ans-label {
+    font-size: 10px; font-weight: 800; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--text2); margin-bottom: 5px;
+  }
+  .ans-answer {
+    font-size: 15px; font-weight: 800;
+    color: var(--accent); margin-bottom: 10px;
+    padding: 8px 12px;
+    background: #fff1f2;
+    border-radius: 6px;
+    border-left: 3px solid var(--accent);
+  }
+  .ans-explain {
+    font-size: 13px; color: #555; line-height: 1.75;
+    border-top: 1px solid var(--border);
+    padding-top: 10px; margin-top: 2px;
+  }
+  .ans-explain strong { color: var(--text); }
+
+  /* FOOTER */
+  .mag-footer {
+    background: var(--text); color: #888;
+    text-align: center; padding: 24px 20px;
+    font-size: 11px; line-height: 1.8; margin-top: 20px;
+  }
+  .mag-footer strong { color: #fff; }
+
+  /* SCORE GUIDE */
+  .score-guide {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 18px;
+    margin: 0 20px 20px;
+  }
+  .score-guide-title { font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--text2); margin-bottom:10px; }
+  .score-row { display:flex; justify-content:space-between; font-size:13px; padding:4px 0; border-bottom:1px dotted var(--border); }
+  .score-row:last-child { border-bottom:none; }
+  .score-grade { font-weight:700; color:var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="quiz-header">
+  <div class="quiz-header-inner">
+    <div class="mag-kicker">CIA.chat 멤버미팅 · 2026년 3월 17일</div>
+    <h1>시장 분석 <em>시험문제</em> 10선</h1>
+    <div class="quiz-header-meta">
+      <span>📝 총 10문제</span>
+      <span>🟢 쉬움 3 · 🟡 보통 5 · 🔴 어려움 2</span>
+      <span>📌 정답·해설 하단 수록</span>
+    </div>
+  </div>
+</header>
+
+<!-- NOTICE -->
+<div class="quiz-notice">
+  <strong>📌 학습 안내</strong><br>
+  아래 10문제를 먼저 스스로 풀어보세요. 정답과 해설은 페이지 하단 <strong>"정답 및 해설"</strong> 섹션에 별도로 수록되어 있습니다. 본 문제는 2026년 3월 17일 CIA.chat 멤버미팅 방송 내용을 바탕으로 출제되었습니다.
+</div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="legend-item"><span class="quiz-type-badge badge-mc">객관식</span></div>
+  <div class="legend-item"><span class="quiz-type-badge badge-short">단답형</span></div>
+  <div class="legend-item"><span class="quiz-type-badge badge-ox">OX</span></div>
+  <div class="legend-item"><span class="quiz-type-badge badge-essay">논술형</span></div>
+  <div class="legend-item"><span class="quiz-type-badge badge-easy">쉬움</span></div>
+  <div class="legend-item"><span class="quiz-type-badge badge-med">보통</span></div>
+  <div class="legend-item"><span class="quiz-type-badge badge-hard">어려움</span></div>
+</div>
+
+<!-- QUIZ LIST -->
+<div class="quiz-list">
+
+  <!-- Q1 -->
+  <div class="quiz-item">
+    <div class="quiz-item-header">
+      <div class="q-num">1</div>
+      <div class="q-meta">
+        <div class="q-badges">
+          <span class="quiz-type-badge badge-mc">객관식</span>
+          <span class="quiz-type-badge badge-easy">쉬움</span>
+        </div>
+        <div class="q-text">2026년 3월 17일 미국 증시에서 나스닥의 당일 상승률은?</div>
+      </div>
+    </div>
+    <ul class="quiz-options">
+      <li>① +1.2%</li>
+      <li>② +0.47%</li>
+      <li>③ −0.35%</li>
+      <li>④ +2.1%</li>
+    </ul>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-item">
+    <div class="quiz-item-header">
+      <div class="q-num">2</div>
+      <div class="q-meta">
+        <div class="q-badges">
+          <span class="quiz-type-badge badge-ox">OX</span>
+          <span class="quiz-type-badge badge-easy">쉬움</span>
+        </div>
+        <div class="q-text">룰루레몬(Lululemon)은 이날 실적 발표에서 긍정적인 매출 성장을 기록했다. (O / X)</div>
+      </div>
+    </div>
+    <div class="quiz-blank">O 또는 X로 답하세요.</div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-item">
+    <div class="quiz-item-header">
+      <div class="q-num">3</div>
+      <div class="q-meta">
+        <div class="q-badges">
+          <span class="quiz-type-badge badge-mc">객관식</span>
+          <span class="quiz-type-badge badge-easy">쉬움</span>
+        </div>
+        <div class="q-text">아마존 AWS가 내부 회의에서 발표한 AI 매출 연간 목표 상향은?</div>
+      </div>
+    </div>
+    <ul class="quiz-options">
+      <li>① $1,000억 → $2,000억</li>
+      <li>② $3,000억 → $6,000억</li>
+      <li>③ $5,000억 → $1조</li>
+      <li>④ $2,000억 → $4,000억</li>
+    </ul>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-item">
+    <div class="quiz-item-header">
+      <div class="q-num">4</div>
+      <div class="q-meta">
+        <div class="q-badges">
+          <span class="quiz-type-badge badge-short">단답형</span>
+          <span class="quiz-type-badge badge-med">보통</span>
+        </div>
+        <div class="q-text">"K자 경제(K-Economy)"에서 두 가지 소비 양극의 승자와 패자를 각각 서술하시오.</div>
+      </div>
+    </div>
+    <div class="quiz-blank">승자: __________ / 패자: __________</div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-item">
+    <div class="quiz-item-header">
+      <div class="q-num">5</div>
+      <div class="q-meta">
+        <div class="q-badges">
+          <span class="quiz-type-badge badge-mc">객관식</span>
+          <span class="quiz-type-badge badge-med">보통</span>
+        </div>
+        <div class="q-text">MBIS가 당일 11% 급락한 직접적인 원인은?</div>
+      </div>
+    </div>
+    <ul class="quiz-options">
+      <li>① 엔비디아와의 계약 파기</li>
+      <li>② $37.5억 규모 전환사채(Convertible Note) 발행</li>
+      <li>③ 데이터센터 화재 사고 발생</li>
+      <li>④ 메타와의 계약 해지</li>
+    </ul>
+  </div>
+
+  <!-- Q6 -->
+  <div class="quiz-item">
+    <div class="quiz-item-header">
+      <div class="q-num">6</div>
+      <div class="q-meta">
+        <div class="q-badges">
+          <span class="quiz-type-badge badge-ox">OX</span>
+          <span class="quiz-type-badge badge-med">보통</span>
+        </div>
+        <div class="q-text">연사의 관점에 따르면, 미국 본토 외에서 발발한 전쟁은 통상 약 3주 후부터 주식시장에 미치는 영향이 약해지기 시작한다. (O / X)</div>
+      </div>
+    </div>
+    <div class="quiz-blank">O 또는 X로 답하세요.</div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="quiz-item">
+    <div class="quiz-item-header">
+      <div class="q-num">7</div>
+      <div class="q-meta">
+        <div class="q-badges">
+          <span class="quiz-type-badge badge-mc">객관식</span>
+          <span class="quiz-type-badge badge-med">보통</span>
+        </div>
+        <div class="q-text">연사가 제안한 "삼축 포트폴리오" 구성이 <u>아닌</u> 것은?</div>
+      </div>
+    </div>
+    <ul class="quiz-options">
+      <li>① AI 인프라</li>
+      <li>② 에너지 방어주</li>
+      <li>③ 프리미엄 여행</li>
+      <li>④ 일반 소매(리테일)</li>
+    </ul>
+  </div>
+
+  <!-- Q8 -->
+  <div class="quiz-item">
+    <div class="quiz-item-header">
+      <div class="q-num">8</div>
+      <div class="q-meta">
+        <div class="q-badges">
+          <span class="quiz-type-badge badge-short">단답형</span>
+          <span class="quiz-type-badge badge-med">보통</span>
+        </div>
+        <div class="q-text">연사가 제시한 MBIS의 단기 지지 구간(Support Zone)은 어느 가격대인지 쓰시오.</div>
+      </div>
+    </div>
+    <div class="quiz-blank">지지 구간: $_______ ~ $_______</div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="quiz-item">
+    <div class="quiz-item-header">
+      <div class="q-num">9</div>
+      <div class="q-meta">
+        <div class="q-badges">
+          <span class="quiz-type-badge badge-mc">객관식</span>
+          <span class="quiz-type-badge badge-hard">어려움</span>
+        </div>
+        <div class="q-text">다음 중 이날 방송에서 '강세장 전환 조건'으로 언급된 것과 가장 거리가 <u>먼</u> 것은?</div>
+      </div>
+    </div>
+    <ul class="quiz-options">
+      <li>① AI 실수요 폭발이 기업 실적으로 확인되는 것</li>
+      <li>② 빅테크 대장주들의 동반 랠리 재개</li>
+      <li>③ VIX(변동성 지수) 급락</li>
+      <li>④ 30년 모기지 금리의 추가 상승</li>
+    </ul>
+  </div>
+
+  <!-- Q10 -->
+  <div class="quiz-item">
+    <div class="quiz-item-header">
+      <div class="q-num">10</div>
+      <div class="q-meta">
+        <div class="q-badges">
+          <span class="quiz-type-badge badge-essay">논술형</span>
+          <span class="quiz-type-badge badge-hard">어려움</span>
+        </div>
+        <div class="q-text">연사가 언급한 "AI 시장의 승자 독식 법칙"을 소형 AI 기업(MBIS 유형)과 빅테크 기업의 차이를 비교하여 100자 내외로 서술하시오.</div>
+      </div>
+    </div>
+    <div class="quiz-blank">서술 답안: ___________________________________</div>
+  </div>
+
+</div>
+
+<!-- SCORE GUIDE -->
+<div class="score-guide">
+  <div class="score-guide-title">점수 기준 (문항별 배점)</div>
+  <div class="score-row"><span>객관식 (Q1·3·5·7·9) — 각 8점</span><span class="score-grade">× 5 = 40점</span></div>
+  <div class="score-row"><span>OX형 (Q2·6) — 각 8점</span><span class="score-grade">× 2 = 16점</span></div>
+  <div class="score-row"><span>단답형 (Q4·8) — 각 10점</span><span class="score-grade">× 2 = 20점</span></div>
+  <div class="score-row"><span>논술형 (Q10) — 24점</span><span class="score-grade">= 24점</span></div>
+  <div class="score-row" style="font-weight:700; color:var(--text);"><span>총점</span><span class="score-grade">100점</span></div>
+</div>
+
+<!-- ────────── ANSWER SECTION ────────── -->
+<div class="section-divider">
+  <div class="section-divider-inner">✦ 정답 및 해설 ✦</div>
+</div>
+
+<div class="ans-list">
+
+  <div class="ans-item">
+    <div class="ans-item-header">
+      <div class="ans-num">1</div>
+      <div class="ans-q-preview">나스닥 당일 상승률 · 객관식 · 쉬움</div>
+    </div>
+    <div class="ans-body">
+      <div class="ans-label">정답</div>
+      <div class="ans-answer">② +0.47%</div>
+      <div class="ans-explain">방송에서 "나스닥 0.47, 어제보다는 덜하지만 그래도 반등한 모습을 보여줬습니다"라고 직접 언급했습니다. S&P500·나스닥·다우 세 지수 모두 상승 마감.</div>
+    </div>
+  </div>
+
+  <div class="ans-item">
+    <div class="ans-item-header">
+      <div class="ans-num">2</div>
+      <div class="ans-q-preview">룰루레몬 실적 성장 여부 · OX · 쉬움</div>
+    </div>
+    <div class="ans-body">
+      <div class="ans-label">정답</div>
+      <div class="ans-answer">X (오답 — 역성장)</div>
+      <div class="ans-explain">룰루레몬은 지난 분기에 이어 이번에도 <strong>역성장</strong>을 기록했습니다. 연간 목표를 대폭 하회했으며, 가성비 대체재(아마존 등) 증가로 <strong>가격 결정력을 상실</strong>한 사례로 제시되었습니다.</div>
+    </div>
+  </div>
+
+  <div class="ans-item">
+    <div class="ans-item-header">
+      <div class="ans-num">3</div>
+      <div class="ans-q-preview">AWS AI 매출 목표 상향 · 객관식 · 쉬움</div>
+    </div>
+    <div class="ans-body">
+      <div class="ans-label">정답</div>
+      <div class="ans-answer">② $3,000억 → $6,000억</div>
+      <div class="ans-explain">"원래 목표는 300빌리언이었습니다. 거의 2배 정도 늘어난 거죠." 아마존 내부 회의에서 공개된 수치로, AI 매출이 실질적으로 급증하고 있음을 증명하는 데이터입니다.</div>
+    </div>
+  </div>
+
+  <div class="ans-item">
+    <div class="ans-item-header">
+      <div class="ans-num">4</div>
+      <div class="ans-q-preview">K자 경제 승자/패자 · 단답형 · 보통</div>
+    </div>
+    <div class="ans-body">
+      <div class="ans-label">모범 답안</div>
+      <div class="ans-answer">승자: 프리미엄 경험 소비층 (항공여행 등) / 패자: 가성비 대체재에 밀린 프리미엄 소비재 (룰루레몬 등)</div>
+      <div class="ans-explain"><strong>승자(상위 소비층):</strong> 비행기 여행(델타항공 등) 같은 프리미엄 경험 소비는 유가 상승에도 수요가 가속화. 가격이 올라도 계속 소비.<br><strong>패자(중하위 소비층):</strong> 룰루레몬($106) 같은 프리미엄 브랜드를 아마존 가성비 제품($30~)으로 대체. 지갑이 닫힌 것이 아니라 <strong>소비의 위치가 달라진 것</strong>이 핵심.</div>
+    </div>
+  </div>
+
+  <div class="ans-item">
+    <div class="ans-item-header">
+      <div class="ans-num">5</div>
+      <div class="ans-q-preview">MBIS 11% 급락 원인 · 객관식 · 보통</div>
+    </div>
+    <div class="ans-body">
+      <div class="ans-label">정답</div>
+      <div class="ans-answer">② $37.5억 규모 전환사채(Convertible Note) 발행</div>
+      <div class="ans-explain"><strong>전환사채(Convertible Note)</strong>란 일정 조건 충족 시 주식으로 전환 가능한 채권으로, 발행 시 기존 주주 지분 희석 우려로 단기 주가가 하락하는 경향이 있습니다. 데이터센터 확장 자금 조달이 목적이었으며, 과거 전환사채 발행 이후 주가가 +200% 오른 선례가 있습니다.</div>
+    </div>
+  </div>
+
+  <div class="ans-item">
+    <div class="ans-item-header">
+      <div class="ans-num">6</div>
+      <div class="ans-q-preview">"3주 법칙" 전쟁과 시장 · OX · 보통</div>
+    </div>
+    <div class="ans-body">
+      <div class="ans-label">정답</div>
+      <div class="ans-answer">O (맞음)</div>
+      <div class="ans-explain">"전쟁이 저쪽에서 터지고, 미국 입장에서는 본국 전쟁이 아니기 때문에 보통 3주면 시장이 잊어버리기 시작한다"고 명시적으로 언급되었습니다. 연사는 이 패턴이 3/16(전날)부터 시작된 것으로 판단했습니다. 단, 유가 상승이라는 실물 충격 경로는 별도로 지속된다는 점도 강조되었습니다.</div>
+    </div>
+  </div>
+
+  <div class="ans-item">
+    <div class="ans-item-header">
+      <div class="ans-num">7</div>
+      <div class="ans-q-preview">삼축 포트폴리오 구성 · 객관식 · 보통</div>
+    </div>
+    <div class="ans-body">
+      <div class="ans-label">정답</div>
+      <div class="ans-answer">④ 일반 소매(리테일)</div>
+      <div class="ans-explain">삼축 포트폴리오는 <strong>① AI 인프라 + ② 에너지 방어주 + ③ 프리미엄 여행</strong>으로 구성됩니다. 일반 소매는 K자 경제의 패자 섹터로 분류되며, 밸류에이션 과열주·가격 결정력 없는 소비재와 함께 <strong>피해야 할 섹터</strong>로 명시되었습니다.</div>
+    </div>
+  </div>
+
+  <div class="ans-item">
+    <div class="ans-item-header">
+      <div class="ans-num">8</div>
+      <div class="ans-q-preview">MBIS 단기 지지 구간 · 단답형 · 보통</div>
+    </div>
+    <div class="ans-body">
+      <div class="ans-label">정답</div>
+      <div class="ans-answer">$103 ~ $106</div>
+      <div class="ans-explain">"106불을 일종의 중간 지지로 보고, 많이 빠져도 갭을 지켜주는 103불까지"라고 언급되었습니다. <strong>갭(Gap)</strong>은 차트상 가격이 비어 있는 구간으로, 이를 채우려는 매수세가 유입되는 경향이 있어 지지선 역할을 합니다. 기관 목표가는 시티 $160~170, 모건스탠리 $130 내외.</div>
+    </div>
+  </div>
+
+  <div class="ans-item">
+    <div class="ans-item-header">
+      <div class="ans-num">9</div>
+      <div class="ans-q-preview">강세장 전환 조건이 아닌 것 · 객관식 · 어려움</div>
+    </div>
+    <div class="ans-body">
+      <div class="ans-label">정답</div>
+      <div class="ans-answer">④ 30년 모기지 금리의 추가 상승</div>
+      <div class="ans-explain">모기지 금리 상승은 부동산 시장과 소비를 압박하는 <strong>부정적 요인</strong>입니다. 방송에서도 "30년 모기지가 최근 최고치"라며 우려 사항으로 언급되었습니다. 강세장 전환 조건으로 제시된 것은 <strong>AI 실적 확인, VIX 급락, 빅테크 랠리 재개, 파월의 금리 인하 시그널</strong> 등입니다.</div>
+    </div>
+  </div>
+
+  <div class="ans-item">
+    <div class="ans-item-header">
+      <div class="ans-num">10</div>
+      <div class="ans-q-preview">AI 시장 승자 독식 법칙 비교 · 논술형 · 어려움</div>
+    </div>
+    <div class="ans-body">
+      <div class="ans-label">모범 답안</div>
+      <div class="ans-answer">빅테크 = 프리캐시플로우로 자력 투자 / 소형 기업 = 전환사채 등 외부 차입 의존</div>
+      <div class="ans-explain">빅테크(구글·메타·아마존 등)는 막대한 <strong>프리캐시플로우(Free Cash Flow)</strong>로 AI 인프라를 자력 투자할 수 있는 반면, MBIS 같은 소형 AI 기업은 전환사채 등 <strong>외부 차입</strong>에 의존해야 합니다. AI 시장은 승자 독식 구조이므로 자금 조달력과 신용도가 생존의 핵심이며, 소형 기업은 대형 고객 계약 확보 여부에 따라 주가 변동성이 크게 나타납니다.<br><br><em>핵심 채점 포인트: 프리캐시플로우 vs 외부 차입 대비, 승자 독식 구조 언급, 리스크 차이 서술</em></div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="mag-footer">
+  <strong>CIA.chat 멤버미팅 — 시험문제 파일</strong><br>
+  2026년 3월 17일 방송 내용 기반 출제. 학습 목적으로만 사용하세요.<br>
+  <span style="color:#555">분석 리포트: cia_analysis_20260317.html 참조</span>
+</footer>
+
+</body>
+</html>

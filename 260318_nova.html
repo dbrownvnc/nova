@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIA.chat 시장 분석 | 2026.03.17</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Noto+Serif+KR:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff; --bg2: #fafafa;
+    --text: #1a1a1a; --text2: #777777;
+    --accent: #e11d48; --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --c1: #e11d48; --c2: #1a1a1a; --c3: #6b7280; --c4: #2563eb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans','Noto Serif KR',sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 15px; }
+
+  .mag-header { background: var(--text); color: #fff; position: relative; overflow: hidden; }
+  .mag-header::before { content:''; position:absolute; top:-40px; right:-40px; width:220px; height:220px; background:var(--accent); border-radius:50%; opacity:.18; }
+  .mag-header-inner { padding: 36px 20px 28px; position: relative; z-index:1; }
+  .mag-kicker { display:inline-block; background:var(--accent); color:#fff; font-size:10px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; padding:4px 10px; margin-bottom:14px; border-radius:2px; }
+  .mag-title { font-family:'Playfair Display','Noto Serif KR',serif; font-size:clamp(22px,6vw,32px); font-weight:900; line-height:1.25; color:#fff; margin-bottom:12px; }
+  .mag-title em { color:var(--accent2); font-style:italic; }
+  .mag-meta { font-size:12px; color:#aaa; display:flex; gap:16px; flex-wrap:wrap; margin-top:12px; }
+
+  .toc { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:16px 20px; margin:20px; }
+  .toc-title { font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text2); margin-bottom:12px; }
+  .toc ul { list-style:none; padding:0; }
+  .toc li { font-size:13px; padding:5px 0; border-bottom:1px dotted var(--border); }
+  .toc li:last-child { border-bottom:none; }
+  .toc a { color:var(--text); text-decoration:none; display:flex; justify-content:space-between; }
+  .toc a:hover { color:var(--accent); }
+  .toc-num { color:var(--text2); font-size:11px; }
+
+  .section { padding:28px 20px; border-bottom:1px solid var(--border); }
+  .section:last-child { border-bottom:none; }
+  .section-label { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--accent); margin-bottom:6px; }
+  .section-title { font-family:'Playfair Display',serif; font-size:clamp(18px,5vw,24px); font-weight:700; line-height:1.3; margin-bottom:14px; }
+  .lead { font-size:15px; color:#444; line-height:1.8; margin-bottom:14px; }
+  p { color:#444; line-height:1.8; margin-bottom:10px; }
+
+  .pull-quote { border-left:4px solid var(--accent); padding:14px 18px; background:var(--bg2); margin:20px 0; border-radius:0 6px 6px 0; }
+  .pull-quote p { font-family:'Playfair Display',serif; font-size:17px; font-style:italic; color:var(--text); margin:0; }
+
+  .stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:18px 0; }
+  .stat-card { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:14px 12px; text-align:center; }
+  .stat-card.highlight { background:var(--accent); border-color:var(--accent); }
+  .stat-card.highlight .stat-val, .stat-card.highlight .stat-label { color:#fff; }
+  .stat-val { font-family:'Playfair Display',serif; font-size:26px; font-weight:900; color:var(--accent); line-height:1; margin-bottom:4px; }
+  .stat-label { font-size:11px; color:var(--text2); letter-spacing:.5px; line-height:1.4; }
+  .stat-change { font-size:12px; font-weight:600; margin-top:4px; }
+  .up { color:#16a34a; } .down { color:var(--accent); }
+
+  .tags { display:flex; flex-wrap:wrap; gap:6px; margin:14px 0; }
+  .tag { font-size:11px; font-weight:600; padding:4px 10px; border-radius:20px; letter-spacing:.5px; }
+  .tag-red { background:#fee2e8; color:var(--accent); }
+  .tag-dark { background:#1a1a1a; color:#fff; }
+  .tag-gray { background:#f3f4f6; color:#374151; }
+  .tag-blue { background:#dbeafe; color:var(--c4); }
+
+  .mag-table { width:100%; border-collapse:collapse; font-size:13px; margin:16px 0; background:var(--bg2); border-radius:8px; overflow:hidden; border:1px solid var(--border); }
+  .mag-table th { background:var(--accent); color:#fff; padding:10px 12px; text-align:left; font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; }
+  .mag-table td { padding:10px 12px; border-bottom:1px solid var(--border); color:#333; vertical-align:top; }
+  .mag-table tr:last-child td { border-bottom:none; }
+  .mag-table tr:nth-child(even) td { background:#f8f8f8; }
+  .td-green { color:#16a34a; font-weight:700; }
+  .td-red { color:var(--accent); font-weight:700; }
+
+  .scenario-wrap { display:grid; gap:12px; margin:14px 0; }
+  .scenario-card { border-radius:10px; padding:16px; border:2px solid transparent; }
+  .scenario-bull { background:#f0fdf4; border-color:#86efac; }
+  .scenario-bear { background:#fff1f2; border-color:#fecdd3; }
+  .scenario-title { font-weight:800; font-size:14px; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+  .scenario-title.bull { color:#15803d; }
+  .scenario-title.bear { color:var(--accent); }
+  .scenario-list { list-style:none; padding:0; }
+  .scenario-list li { font-size:13px; color:#444; padding:3px 0 3px 16px; position:relative; }
+  .scenario-list li::before { content:'→'; position:absolute; left:0; color:#aaa; }
+
+  .portfolio-grid { display:grid; gap:10px; margin:14px 0; }
+  .port-card { display:flex; align-items:flex-start; gap:12px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:14px; }
+  .port-icon { width:40px; height:40px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+  .port-icon.red { background:#fee2e8; }
+  .port-icon.dark { background:#1a1a1a; }
+  .port-icon.blue { background:#dbeafe; }
+  .port-name { font-weight:700; font-size:14px; color:var(--text); }
+  .port-desc { font-size:12px; color:var(--text2); margin-top:3px; line-height:1.5; }
+
+  .fade-in { opacity:0; transform:translateY(18px); transition:opacity .7s ease,transform .7s ease; }
+  .fade-in.visible { opacity:1; transform:translateY(0); }
+  .chart-container { position:relative; max-height:340px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:16px; margin:16px 0; }
+  .chart-container canvas { opacity:0; transition:opacity .4s ease; max-height:300px; }
+  .chart-container.chart-ready canvas { opacity:1; }
+  .chart-title { font-size:12px; font-weight:700; color:var(--text2); letter-spacing:1px; text-transform:uppercase; margin-bottom:10px; }
+
+  .highlight-box { background:var(--accent); color:#fff; border-radius:10px; padding:16px; margin:16px 0; }
+  .highlight-box h3 { font-family:'Playfair Display',serif; font-size:16px; margin-bottom:8px; }
+  .highlight-box p { color:rgba(255,255,255,.88); font-size:13px; margin:4px 0; }
+
+  .warning-box { background:#fff7ed; border:1px solid #fed7aa; border-left:4px solid #f97316; border-radius:0 8px 8px 0; padding:14px 16px; margin:14px 0; }
+  .warning-box p { font-size:13px; color:#7c2d12; margin:0; }
+
+  .rule { border:none; border-top:1px solid var(--border); margin:24px 0; }
+
+  .mag-footer { background:var(--text); color:#888; text-align:center; padding:24px 20px; font-size:11px; line-height:1.8; }
+  .mag-footer strong { color:#fff; }
+</style>
+</head>
+<body>
+
+<header class="mag-header">
+  <div class="mag-header-inner">
+    <div class="mag-kicker">CIA.chat 멤버미팅 · 2026년 3월 17일</div>
+    <h1 class="mag-title">유가 쇼크를 압도한<br><em>AI와 소비의 회복력</em></h1>
+    <div class="mag-meta">
+      <span>📅 2026.03.17 (화)</span>
+      <span>📈 미국 증시·거시경제 분석</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="toc-title">목차 Contents</div>
+  <ul>
+    <li><a href="#market">① 당일 시장 요약 <span class="toc-num">지수·변동성</span></a></li>
+    <li><a href="#geo">② 지정학 리스크 <span class="toc-num">중동 전쟁</span></a></li>
+    <li><a href="#ai">③ AI 캐펙스 폭발 <span class="toc-num">NVDA·AMZN·MBIS</span></a></li>
+    <li><a href="#keconomy">④ K자 경제 <span class="toc-num">항공 vs 룰루레몬</span></a></li>
+    <li><a href="#energy">⑤ 에너지·인플레이션 <span class="toc-num">유가 구조적 랠리</span></a></li>
+    <li><a href="#portfolio">⑥ 투자 전략 <span class="toc-num">포트폴리오 재편</span></a></li>
+    <li><a href="#scenarios">⑦ 강세·약세 시나리오 <span class="toc-num">체크리스트</span></a></li>
+  </ul>
+</nav>
+
+<!-- ① 시장 요약 -->
+<section class="section" id="market">
+  <div class="section-label">Market Snapshot</div>
+  <div class="section-title">당일 시장 요약</div>
+  <p class="lead">유가 급등·중동 전쟁의 압박에도 S&P500·나스닥·다우 세 지수 모두 상승 마감. 장 후반 매수세가 낙폭을 회복하며 "오뚜기 장세"를 재연했습니다.</p>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-val">+0.47%</div>
+      <div class="stat-label">나스닥 상승률</div>
+      <div class="stat-change up">↑ 장 후반 회복</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">22.37</div>
+      <div class="stat-label">VIX 변동성 지수</div>
+      <div class="stat-change up">↓ 공포 완화 중</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">29/27</div>
+      <div class="stat-label">콜/풋 옵션 비율</div>
+      <div class="stat-change up">↑ 풋 대폭 감소</div>
+    </div>
+    <div class="stat-card highlight">
+      <div class="stat-val">↑</div>
+      <div class="stat-label">30년 모기지<br>최근 최고치</div>
+    </div>
+  </div>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">당일 주요 섹터 심리 강도 (상대값)</div>
+    <canvas id="sectorChart" height="220"></canvas>
+  </div>
+
+  <div class="pull-quote">
+    <p>"항공·AI·에너지 — 딥바잉 기회로 인식, 시장이 이들을 줍줍 중이다."</p>
+  </div>
+
+  <table class="mag-table">
+    <thead><tr><th>지표</th><th>방향</th><th>의미</th></tr></thead>
+    <tbody>
+      <tr><td>S&P / 나스닥 / 다우</td><td class="td-green">▲ 상승</td><td>거시 공포에도 미시 실적이 압도</td></tr>
+      <tr><td>WTI 원유</td><td class="td-red">▲ 상승</td><td>호르무즈 봉쇄 지속, 에너지 인플레 압박</td></tr>
+      <tr><td>국채 금리</td><td class="td-green">▼ 하락</td><td>안전자산 수요 소폭 완화 → 다행</td></tr>
+      <tr><td>VIX</td><td class="td-green">▼ 22.37</td><td>공포 지수 하락 중, 아직 경계 구간</td></tr>
+      <tr><td>풋 옵션</td><td class="td-green">▼ 대폭 감소</td><td>하락 베팅 위축 → 긍정 신호</td></tr>
+      <tr><td>30년 모기지</td><td class="td-red">▲ 최고치</td><td>부동산·소비 압박 요인</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ② 지정학 -->
+<section class="section" id="geo">
+  <div class="section-label">Geopolitics</div>
+  <div class="section-title">중동 전쟁 — 시장의 새 노멀이 되다</div>
+
+  <div class="warning-box">
+    <p>⚠️ <strong>호르무즈 해협 봉쇄 지속.</strong> 인도 등 일부 국가만 통과 중. 글로벌 에너지 물류 차질 장기화 전망.</p>
+  </div>
+
+  <p>이란이 아랍에미리트(UAE)의 후자이라 터미널·샤르자 가스 필드를 공격하며 에너지 인프라 타격을 노렸습니다. 이스라엘은 드론으로 이란 바시즈(Basij) 민병대 사령관을 도심에서 제거. 전쟁 양상이 첨단 드론 정밀 타격으로 진화하고 있습니다.</p>
+
+  <div class="highlight-box">
+    <h3>📌 "3주 법칙" — 전쟁은 시장 기억에서 사라진다</h3>
+    <p>미국 본토 외 전쟁은 통상 발발 3주 후부터 증시 영향 희석 → 3/16부터 그 패턴이 적용되기 시작한 것으로 판단.</p>
+    <p>단, 유가 상승이라는 실물 경로는 지속 → 인플레이션 간접 경로는 살아있음.</p>
+  </div>
+
+  <table class="mag-table">
+    <thead><tr><th>이벤트</th><th>증시 영향</th></tr></thead>
+    <tbody>
+      <tr><td>이란 → UAE 에너지 인프라 공격</td><td class="td-red">유가 상승 압력 ↑</td></tr>
+      <tr><td>이스라엘 드론, 민병대 사령관 제거</td><td class="td-red">중동 확전 리스크 ↑</td></tr>
+      <tr><td>호르무즈 해협 봉쇄 (일부 국가만 통과)</td><td class="td-red">글로벌 공급망 차질</td></tr>
+      <tr><td>트럼프 "미군 최강" 발언</td><td class="td-green">협상 레버리지 시도</td></tr>
+      <tr><td>전쟁 3주 페이드아웃 패턴 진입</td><td class="td-green">시장 심리 개선 기대</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ③ AI 캐펙스 -->
+<section class="section" id="ai">
+  <div class="section-label">AI CapEx Explosion</div>
+  <div class="section-title">AI는 이제 "얼마나 쓸 수 있는가"의 자원 게임</div>
+
+  <p class="lead">빅테크들이 AI 인프라에 천문학적 지출을 쏟아붓는 배경은 단순합니다. 이미 막대한 이익을 내고 있기 때문입니다. 수익이 지출을 가능케 하고, 지출이 시장 선점을 가능케 하는 선순환 구조.</p>
+
+  <div class="port-card" style="margin:14px 0; border-left:4px solid var(--accent);">
+    <div class="port-icon red">⚡</div>
+    <div>
+      <div class="port-name">엔비디아 (NVDA) — 수요 폭발, 공급 한계</div>
+      <div class="port-desc">젠슨 황 CEO CNBC 인터뷰: "수요는 미친 듯하고 생산이 못 따라간다." 블랙웰·루빈 칩 수요 폭발적. 2027년까지 누적 매출 <strong>$1조 달러</strong> 목표. 중국 소기업 수출 라이센스 재가동으로 신규 매출 창출. 단, 당일 주가는 소폭 하락.</div>
+    </div>
+  </div>
+
+  <div class="port-card" style="margin:14px 0; border-left:4px solid var(--c4);">
+    <div class="port-icon blue">☁️</div>
+    <div>
+      <div class="port-name">아마존 AWS — 목표 매출 2배 상향</div>
+      <div class="port-desc">내부 회의에서 AWS AI 매출 급증 확인. 연간 목표를 기존 $3,000억 → <strong>$6,000억</strong>으로 2배 상향. AI 투자가 실질 매출로 전환되고 있음을 증명.</div>
+    </div>
+  </div>
+
+  <div class="port-card" style="margin:14px 0; border-left:4px solid #f97316;">
+    <div class="port-icon" style="background:#fff7ed;">⚠️</div>
+    <div>
+      <div class="port-name">MBIS — 전환사채 발행 → 11% 급락</div>
+      <div class="port-desc">데이터센터 확장을 위해 <strong>$37.5억 전환사채</strong> 재발행. 주가 -11% 급락. 과거 전환사채 발행 후 <strong>주가 +200% 선례</strong> 존재. 엔비디아가 투자할 만큼 기술력 인정. 단기 박스권(1~3개월) 예상, 지지선 $103~$106 구간.</div>
+    </div>
+  </div>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">AI 빅테크 캐펙스 & AWS 매출 목표 비교 ($B)</div>
+    <canvas id="capexChart" height="220"></canvas>
+  </div>
+
+  <div class="pull-quote">
+    <p>"AI는 얼마나 버느냐에 기대어 얼마나 쓸 수 있느냐의 '현실 자원 게임'으로 전환됐다."</p>
+  </div>
+</section>
+
+<!-- ④ K자 경제 -->
+<section class="section" id="keconomy">
+  <div class="section-label">K-Economy</div>
+  <div class="section-title">소비 양극화 — 프리미엄 경험 vs 가성비 소비</div>
+
+  <p>K자 경제(K-Economy)란 소득 상위 계층은 소비가 증가하고, 중하위 계층은 감소하는 '갈라지는 K자' 형태의 경제 구조를 뜻합니다.</p>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">델타항공 vs 룰루레몬 — 주요 지표 비교</div>
+    <canvas id="kChart" height="220"></canvas>
+  </div>
+
+  <table class="mag-table">
+    <thead><tr><th>항목</th><th>델타항공 ✈️</th><th>룰루레몬 🧘</th></tr></thead>
+    <tbody>
+      <tr><td>매출 방향</td><td class="td-green">▲ 가속 성장</td><td class="td-red">▼ 역성장 지속</td></tr>
+      <tr><td>유가 충격 방어</td><td class="td-green">◎ 표값 전가 가능</td><td class="td-red">✕ 가격 올리면 이탈</td></tr>
+      <tr><td>수요 모멘텀</td><td class="td-green">3월 이후 가속화</td><td class="td-red">지속 둔화</td></tr>
+      <tr><td>가격 결정력</td><td class="td-green">강함</td><td class="td-red">상실 (가성비 대체제↑)</td></tr>
+      <tr><td>1분기 가이던스</td><td class="td-green">상향</td><td class="td-red">연간 목표 대폭 하회</td></tr>
+      <tr><td>소비자 프로필</td><td>프리미엄 경험 소비층</td><td>가성비 전환 소비층</td></tr>
+    </tbody>
+  </table>
+
+  <div class="highlight-box">
+    <h3>📌 핵심 인사이트</h3>
+    <p>지갑이 닫힌 것이 아니라, <strong>돈을 쓰는 위치가 달라졌다.</strong></p>
+    <p>룰루레몬($106)은 아마존 가성비 제품($30~)에 대체되는 반면, 비행기 여행이라는 '경험 소비'는 유가 상승에도 수요가 탄탄.</p>
+  </div>
+</section>
+
+<!-- ⑤ 에너지 -->
+<section class="section" id="energy">
+  <div class="section-label">Energy &amp; Inflation</div>
+  <div class="section-title">유가 구조적 랠리 — 20년 저항선 돌파</div>
+
+  <p class="lead">호르무즈 해협 봉쇄가 장기화되면서 원유 가격이 20년 역사상 가장 높은 수준에서 저항선을 돌파. 이는 단순한 지정학 이벤트를 넘어 구조적 에너지 인플레이션의 시작일 수 있습니다.</p>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">WTI 원유 추세 & 20년 저항선 돌파 (상대 수준)</div>
+    <canvas id="oilChart" height="220"></canvas>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-val">$50+</div>
+      <div class="stat-label">에너지 ETF 20년<br>최고 수준 돌파</div>
+    </div>
+    <div class="stat-card highlight">
+      <div class="stat-val">36mo</div>
+      <div class="stat-label">전쟁 지속 예상<br>(연사 개인 관점)</div>
+    </div>
+  </div>
+
+  <div class="warning-box">
+    <p>⚠️ <strong>스태그플레이션 리스크:</strong> 유가 $100 이상 지속 시 금리 인하 기대 후퇴 + 성장 둔화 동시 진행 가능성. 파월 연준의장 발언에 따라 시장 반응이 크게 갈릴 것.</p>
+  </div>
+</section>
+
+<!-- ⑥ 포트폴리오 -->
+<section class="section" id="portfolio">
+  <div class="section-label">Investment Strategy</div>
+  <div class="section-title">삼축(三軸) 포트폴리오 재편 전략</div>
+
+  <p>기존 바벨(Barbell) 전략 → <strong>AI + 에너지 방어 + 프리미엄 여행</strong> 삼축 구조로 전환 권고.</p>
+
+  <div class="portfolio-grid">
+    <div class="port-card">
+      <div class="port-icon dark">🤖</div>
+      <div>
+        <div class="port-name">① AI 인프라</div>
+        <div class="port-desc">NVDA, AWS, 빅테크 AI 캐펙스 수혜주. 실수요 폭발 + 자기자금 조달력 핵심. 프리캐시플로우 풍부한 대형주 중심.</div>
+      </div>
+    </div>
+    <div class="port-card">
+      <div class="port-icon red">⚡</div>
+      <div>
+        <div class="port-name">② 에너지 방어주</div>
+        <div class="port-desc">고유가 장기화 수혜. 20년 저항선 돌파 후 구조적 랠리 기대. 인플레이션 헷지 역할. 에너지 ETF 포함.</div>
+      </div>
+    </div>
+    <div class="port-card">
+      <div class="port-icon blue">✈️</div>
+      <div>
+        <div class="port-name">③ 프리미엄 여행</div>
+        <div class="port-desc">델타, 아메리칸 항공 등. K자 경제의 프리미엄 소비 수혜. 유가 상승분 요금 전가 가능. 3월 이후 수요 가속화 확인.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="rule">
+  <div class="section-label" style="margin-top:0">피해야 할 섹터</div>
+  <div class="tags">
+    <span class="tag tag-red">밸류에이션 과열주</span>
+    <span class="tag tag-red">일반 소매 (룰루레몬 유형)</span>
+    <span class="tag tag-red">가격 결정력 없는 소비재</span>
+    <span class="tag tag-gray">전환사채 남발 소형 AI주 (단기)</span>
+  </div>
+
+  <div class="highlight-box" style="margin-top:16px">
+    <h3>💰 현금 비중 유지 필수</h3>
+    <p>딥바잉(Dip Buying) 기회가 수시로 발생 → 현금은 무기. 비중 유지하면서 낙폭 과대 시 매수.</p>
+  </div>
+</section>
+
+<!-- ⑦ 시나리오 -->
+<section class="section" id="scenarios">
+  <div class="section-label">Market Scenarios</div>
+  <div class="section-title">강세·약세 분기 체크리스트</div>
+  <p style="margin-bottom:14px">내일(3/18) <strong>마이크론(Micron) 실적 발표</strong>가 단기 방향성을 좌우하는 핵심 변수.</p>
+
+  <div class="scenario-wrap">
+    <div class="scenario-card scenario-bull">
+      <div class="scenario-title bull">🐂 강세 시나리오</div>
+      <ul class="scenario-list">
+        <li>AI 실수요 폭발 — 실적으로 입증 지속</li>
+        <li>VIX 급락 → 20 이하 진입</li>
+        <li>빅테크(빅5) 동반 랠리 재개</li>
+        <li>마이크론 어닝 서프라이즈 + 강한 가이던스</li>
+        <li>파월 금리 인하 시그널 발신</li>
+        <li>중동 정전·협상 가능성 대두</li>
+      </ul>
+    </div>
+    <div class="scenario-card scenario-bear">
+      <div class="scenario-title bear">🐻 약세/스태그플레이션 시나리오</div>
+      <ul class="scenario-list">
+        <li>유가 $100 이상 돌파·지속</li>
+        <li>금리 동결 장기화 + 경기 둔화 동시 진행</li>
+        <li>기관의 밸류에이션 재평가(하향) 보고서 쏟아짐</li>
+        <li>마이크론 어닝 쇼크 or 약한 가이던스</li>
+        <li>호르무즈 완전 봉쇄 장기화</li>
+        <li>빅테크 캐펙스 지출 불투명 신호</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer class="mag-footer">
+  <strong>CIA.chat 멤버미팅</strong> — 2026년 3월 17일 (화)<br>
+  본 문서는 유튜브 방송 자막을 기반으로 미국 증시·거시경제 관점에서 분석·정리한 학습용 자료입니다.<br>
+  투자 결정의 최종 책임은 본인에게 있으며, 이 내용은 투자 권유가 아닙니다.<br><br>
+  <span style="color:#555">📌 내일 주목: 마이크론 실적 발표 + 파월 연준의장 발언</span>
+</footer>
+
+<script>
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+const chartConfigs = {};
+
+chartConfigs['sectorChart'] = () => {
+  new Chart(document.getElementById('sectorChart'), {
+    type: 'bar',
+    data: {
+      labels: ['AI/반도체', '항공', '에너지', '빅테크', '소매(룰루)', '금융'],
+      datasets: [{ label: '심리 강도', data: [82,78,74,70,22,55],
+        backgroundColor: ['#e11d48','#e11d48','#f43f5e','#2563eb','#6b7280','#6b7280'],
+        borderRadius: 5, borderSkipped: false }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+        y: { beginAtZero: true, max: 100, grid: { color: '#f0f0f0' }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+};
+
+chartConfigs['capexChart'] = () => {
+  new Chart(document.getElementById('capexChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Meta 캐펙스','AWS 기존목표','AWS 신규목표','NVDA 누적(27)','MBIS 전환사채'],
+      datasets: [{ label: '금액 ($B)', data: [27,300,600,1000,3.75],
+        backgroundColor: ['#2563eb','#6b7280','#e11d48','#1a1a1a','#f43f5e'],
+        borderRadius: 5, borderSkipped: false }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` $${ctx.raw}B` } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+        y: { beginAtZero: true, grid: { color: '#f0f0f0' }, ticks: { font: { size: 11 }, callback: v => `$${v}B` } }
+      }
+    }
+  });
+};
+
+chartConfigs['kChart'] = () => {
+  new Chart(document.getElementById('kChart'), {
+    type: 'radar',
+    data: {
+      labels: ['매출 성장','유가 방어력','수요 모멘텀','가격 결정력','가이던스','소비자 신뢰'],
+      datasets: [
+        { label: '델타항공 ✈️', data: [85,88,90,85,88,80], borderColor: '#e11d48', backgroundColor: 'rgba(225,29,72,0.12)', pointBackgroundColor: '#e11d48', borderWidth: 2 },
+        { label: '룰루레몬 🧘', data: [15,18,20,18,12,30], borderColor: '#6b7280', backgroundColor: 'rgba(107,114,128,0.1)', pointBackgroundColor: '#6b7280', borderWidth: 2 }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } },
+      scales: { r: { beginAtZero: true, max: 100, grid: { color: '#e5e5e5' }, ticks: { display: false }, pointLabels: { font: { size: 11 } } } }
+    }
+  });
+};
+
+chartConfigs['oilChart'] = () => {
+  new Chart(document.getElementById('oilChart'), {
+    type: 'line',
+    data: {
+      labels: ['2025 Q3','2025 Q4','2026 1월','2026 2월','2026 2월말','2026 3월초','3/17'],
+      datasets: [
+        { label: 'WTI 상대 수준', data: [62,65,68,72,78,88,95], borderColor: '#e11d48', backgroundColor: 'rgba(225,29,72,0.08)', fill: true, tension: 0.4, pointBackgroundColor: '#e11d48', pointRadius: 4, borderWidth: 2.5 },
+        { label: '20년 저항선', data: [85,85,85,85,85,85,85], borderColor: '#1a1a1a', borderDash: [6,4], borderWidth: 1.5, pointRadius: 0, fill: false }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+        y: { grid: { color: '#f0f0f0' }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+};
+
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+</script>
+</body>
+</html>
