@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시험문제 — 삼중악재 퍼펙트 스톰 분석</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --correct: #16a34a;
+    --wrong: #dc2626;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .header {
+    background: var(--text);
+    color: #fff;
+    padding: 28px 20px 24px;
+    text-align: center;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 5vw, 32px);
+    font-weight: 900;
+    margin-bottom: 8px;
+  }
+  .header h1 em { color: var(--accent2); font-style: italic; }
+  .header p { font-size: 13px; color: rgba(255,255,255,0.6); }
+
+  .meta-strip {
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding: 10px 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    flex-wrap: wrap;
+  }
+
+  .container { max-width: 680px; margin: 0 auto; padding: 0 20px; }
+
+  /* SCORE BOARD */
+  .score-board {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    padding: 18px 16px;
+    margin: 28px 0 16px;
+    text-align: center;
+  }
+  .score-board h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  .score-display {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .score-display span { font-size: 22px; color: var(--text2); }
+  .score-msg { font-size: 14px; color: var(--text2); margin-top: 8px; font-style: italic; }
+  .progress-bar {
+    width: 100%; height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    margin-top: 14px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  /* QUESTION CARD */
+  .q-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .q-card.answered { pointer-events: none; }
+
+  .q-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .q-num {
+    flex-shrink: 0;
+    width: 30px; height: 30px;
+    background: var(--text);
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+  .q-num.correct { background: var(--correct); }
+  .q-num.wrong { background: var(--wrong); }
+
+  .q-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+  .q-badge {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 2px;
+  }
+  .q-badge.easy { background: #dcfce7; color: #166534; }
+  .q-badge.med { background: #fef3c7; color: #92400e; }
+  .q-badge.hard { background: #fee2e2; color: #be123c; }
+  .q-badge.mc { background: #dbeafe; color: #1e3a8a; }
+  .q-badge.sa { background: #f3e8ff; color: #6b21a8; }
+  .q-badge.ox { background: #ecfeff; color: #155e75; }
+
+  .q-body { padding: 14px 16px; }
+  .q-text {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 14px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  /* MC OPTIONS */
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option-btn {
+    width: 100%;
+    text-align: left;
+    background: var(--bg2);
+    border: 1.5px solid var(--border);
+    padding: 10px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.18s;
+    border-radius: 2px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: #fff5f6;
+  }
+  .option-btn.correct {
+    background: #dcfce7;
+    border-color: var(--correct);
+    color: var(--correct);
+    font-weight: 600;
+  }
+  .option-btn.wrong {
+    background: #fee2e2;
+    border-color: var(--wrong);
+    color: var(--wrong);
+  }
+
+  /* OX BUTTONS */
+  .ox-wrap { display: flex; gap: 12px; }
+  .ox-btn {
+    flex: 1;
+    padding: 16px;
+    font-size: 28px;
+    font-weight: 900;
+    background: var(--bg2);
+    border: 2px solid var(--border);
+    cursor: pointer;
+    transition: all 0.18s;
+    border-radius: 4px;
+  }
+  .ox-btn:hover:not(:disabled) { border-color: var(--accent); background: #fff5f6; }
+  .ox-btn.correct { background: #dcfce7; border-color: var(--correct); }
+  .ox-btn.wrong { background: #fee2e2; border-color: var(--wrong); }
+
+  /* SHORT ANSWER */
+  .sa-wrap { display: flex; flex-direction: column; gap: 8px; }
+  .sa-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    border-radius: 2px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .sa-input:focus { border-color: var(--accent); }
+  .sa-submit {
+    align-self: flex-start;
+    background: var(--text);
+    color: #fff;
+    border: none;
+    padding: 9px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.2s;
+  }
+  .sa-submit:hover { background: var(--accent); }
+
+  /* FEEDBACK */
+  .feedback {
+    display: none;
+    margin-top: 12px;
+    padding: 12px 14px;
+    border-radius: 2px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: #dcfce7;
+    border-left: 4px solid var(--correct);
+    color: #14532d;
+  }
+  .feedback.wrong-fb {
+    background: #fee2e2;
+    border-left: 4px solid var(--wrong);
+    color: #7f1d1d;
+  }
+  .feedback strong { font-weight: 700; }
+
+  /* DIVIDER */
+  .section-divider {
+    text-align: center;
+    margin: 32px 0 20px;
+    position: relative;
+  }
+  .section-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 0; right: 0;
+    height: 1px;
+    background: var(--border);
+  }
+  .section-divider span {
+    position: relative;
+    background: #fff;
+    padding: 0 14px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text2);
+  }
+
+  /* ANSWER SHEET */
+  .answer-sheet {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--text);
+    padding: 22px 18px;
+    margin: 10px 0 40px;
+  }
+  .answer-sheet h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+  }
+  .answer-item {
+    margin-bottom: 18px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .answer-item:last-child { border-bottom: none; margin-bottom: 0; }
+  .answer-item .a-num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .answer-item .a-answer {
+    font-weight: 700;
+    color: var(--correct);
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  .answer-item .a-explain {
+    font-size: 13.5px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  .show-answers-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--text);
+    color: #fff;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-bottom: 16px;
+    border-radius: 2px;
+  }
+  .show-answers-btn:hover { background: var(--accent); }
+
+  .hidden { display: none; }
+
+  footer {
+    background: var(--bg2);
+    border-top: 2px solid var(--text);
+    padding: 20px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--text2);
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📋 시험문제 — <em>삼중악재 퍼펙트 스톰</em></h1>
+  <p>Nova Market Review · 2026.03.19 · 미국 증시 분석 기반</p>
+</div>
+<div class="meta-strip">
+  <span>총 10문제</span>
+  <span>객관식 5 · 단답형 3 · OX 2</span>
+  <span>쉬움 30% · 보통 50% · 어려움 20%</span>
+</div>
+
+<div class="container">
+
+  <!-- SCORE BOARD -->
+  <div class="score-board" id="scoreBoard">
+    <h2>📊 현재 점수</h2>
+    <div class="score-display">
+      <span id="scoreNum">0</span><span> / 10</span>
+    </div>
+    <div class="score-msg" id="scoreMsg">문제를 풀어보세요!</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- ──────────────────────── Q1 ──────────────────────── -->
+  <div class="q-card" id="q1">
+    <div class="q-header">
+      <div class="q-num" id="qnum1">1</div>
+      <div class="q-badges">
+        <span class="q-badge easy">쉬움</span>
+        <span class="q-badge mc">객관식</span>
+      </div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">Q1. 오늘 뉴욕 증시에서 가장 많이 하락한 지수는? (대략 하락폭 기준)</div>
+      <div class="options">
+        <button class="option-btn" onclick="answerMC(1,'a')">① 나스닥 (-1.46%)</button>
+        <button class="option-btn" onclick="answerMC(1,'b')">② 다우존스 (-1.63%)</button>
+        <button class="option-btn" onclick="answerMC(1,'c')">③ S&amp;P 500 (-1.36%)</button>
+        <button class="option-btn" onclick="answerMC(1,'d')">④ 러셀 2000</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+    </div>
+  </div>
+
+  <!-- ──────────────────────── Q2 ──────────────────────── -->
+  <div class="q-card" id="q2">
+    <div class="q-header">
+      <div class="q-num" id="qnum2">2</div>
+      <div class="q-badges">
+        <span class="q-badge easy">쉬움</span>
+        <span class="q-badge ox">OX</span>
+      </div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">Q2. 생산자물가지수(PPI)는 소비자물가지수(CPI)로 전이되는 데 약 2개월 시차가 있다. (O/X)</div>
+      <div class="ox-wrap">
+        <button class="ox-btn" onclick="answerOX(2,'O')">⭕ O</button>
+        <button class="ox-btn" onclick="answerOX(2,'X')">❌ X</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+    </div>
+  </div>
+
+  <!-- ──────────────────────── Q3 ──────────────────────── -->
+  <div class="q-card" id="q3">
+    <div class="q-header">
+      <div class="q-num" id="qnum3">3</div>
+      <div class="q-badges">
+        <span class="q-badge easy">쉬움</span>
+        <span class="q-badge sa">단답형</span>
+      </div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">Q3. 마이크론이 발표한 2026년 Q3 가이던스 기준 총마진율(Gross Margin)은 몇 %인가?</div>
+      <div class="sa-wrap">
+        <input type="text" class="sa-input" id="sa3" placeholder="숫자만 입력 (예: 50)">
+        <button class="sa-submit" onclick="answerSA(3,'81')">제출</button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+    </div>
+  </div>
+
+  <!-- ──────────────────────── Q4 ──────────────────────── -->
+  <div class="q-card" id="q4">
+    <div class="q-header">
+      <div class="q-num" id="qnum4">4</div>
+      <div class="q-badges">
+        <span class="q-badge med">보통</span>
+        <span class="q-badge mc">객관식</span>
+      </div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">Q4. 다우지수가 200일 이동평균선 아래로 내려온 것이 마지막으로 있었던 시점은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="answerMC(4,'a')">① 2024년 12월</button>
+        <button class="option-btn" onclick="answerMC(4,'b')">② 2025년 1월</button>
+        <button class="option-btn" onclick="answerMC(4,'c')">③ 2025년 6월 (트럼프 관세 충격)</button>
+        <button class="option-btn" onclick="answerMC(4,'d')">④ 2025년 9월</button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+    </div>
+  </div>
+
+  <!-- ──────────────────────── Q5 ──────────────────────── -->
+  <div class="q-card" id="q5">
+    <div class="q-header">
+      <div class="q-num" id="qnum5">5</div>
+      <div class="q-badges">
+        <span class="q-badge med">보통</span>
+        <span class="q-badge mc">객관식</span>
+      </div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">Q5. 이란이 공격한 카타르 LNG 시설의 경제적 중요성은? 카타르는 전 세계 LNG 공급의 몇 %를 담당하는가?</div>
+      <div class="options">
+        <button class="option-btn" onclick="answerMC(5,'a')">① 약 5%</button>
+        <button class="option-btn" onclick="answerMC(5,'b')">② 약 10%</button>
+        <button class="option-btn" onclick="answerMC(5,'c')">③ 약 20%</button>
+        <button class="option-btn" onclick="answerMC(5,'d')">④ 약 35%</button>
+      </div>
+      <div class="feedback" id="fb5"></div>
+    </div>
+  </div>
+
+  <!-- ──────────────────────── Q6 ──────────────────────── -->
+  <div class="q-card" id="q6">
+    <div class="q-header">
+      <div class="q-num" id="qnum6">6</div>
+      <div class="q-badges">
+        <span class="q-badge med">보통</span>
+        <span class="q-badge sa">단답형</span>
+      </div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">Q6. 경기 침체(stagnation)와 물가 상승(inflation)이 동시에 발생하는 최악의 경제 상황을 무엇이라고 하는가?</div>
+      <div class="sa-wrap">
+        <input type="text" class="sa-input" id="sa6" placeholder="영어 또는 한국어로 입력">
+        <button class="sa-submit" onclick="answerSA(6,'스태그플레이션')">제출</button>
+      </div>
+      <div class="feedback" id="fb6"></div>
+    </div>
+  </div>
+
+  <!-- ──────────────────────── Q7 ──────────────────────── -->
+  <div class="q-card" id="q7">
+    <div class="q-header">
+      <div class="q-num" id="qnum7">7</div>
+      <div class="q-badges">
+        <span class="q-badge med">보통</span>
+        <span class="q-badge mc">객관식</span>
+      </div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">Q7. 마이크론의 주가가 역대급 실적 발표 후에도 하락한 주된 이유가 아닌 것은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="answerMC(7,'a')">① 비공식 기대치(위스퍼넘버)를 충족하지 못함</button>
+        <button class="option-btn" onclick="answerMC(7,'b')">② 어닝콜 중 지정학 충격(이란의 카타르 공격) 속보</button>
+        <button class="option-btn" onclick="answerMC(7,'c')">③ 엔비디아의 경쟁 제품 출시 발표</button>
+        <button class="option-btn" onclick="answerMC(7,'d')">④ 막대한 설비투자(CapEx, $25B) 부담 우려</button>
+      </div>
+      <div class="feedback" id="fb7"></div>
+    </div>
+  </div>
+
+  <!-- ──────────────────────── Q8 ──────────────────────── -->
+  <div class="q-card" id="q8">
+    <div class="q-header">
+      <div class="q-num" id="qnum8">8</div>
+      <div class="q-badges">
+        <span class="q-badge med">보통</span>
+        <span class="q-badge ox">OX</span>
+      </div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">Q8. 2월 PPI 데이터는 이란-카타르 LNG 공격 및 유가 폭등 사건이 발생하기 이전 시점의 데이터다. 따라서 3월 데이터는 더 악화될 가능성이 높다. (O/X)</div>
+      <div class="ox-wrap">
+        <button class="ox-btn" onclick="answerOX(8,'O')">⭕ O</button>
+        <button class="ox-btn" onclick="answerOX(8,'X')">❌ X</button>
+      </div>
+      <div class="feedback" id="fb8"></div>
+    </div>
+  </div>
+
+  <!-- ──────────────────────── Q9 ──────────────────────── -->
+  <div class="q-card" id="q9">
+    <div class="q-header">
+      <div class="q-num" id="qnum9">9</div>
+      <div class="q-badges">
+        <span class="q-badge hard">어려움</span>
+        <span class="q-badge mc">객관식</span>
+      </div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">Q9. 바벨(Barbell) 전략에 대한 설명으로 가장 적절한 것은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="answerMC(9,'a')">① 안전 자산(채권)과 위험 자산(주식)을 50:50으로 균형 있게 배분하는 전략</button>
+        <button class="option-btn" onclick="answerMC(9,'b')">② 고위험·고성장 자산(AI 주식)과 인플레이션 헤지 자산(에너지·방산)의 양극단에 집중하고, 금리 취약 중간 자산은 회피하는 전략</button>
+        <button class="option-btn" onclick="answerMC(9,'c')">③ 시장 하락 시 무조건 매수하는 '바이더딥(Buy the Dip)' 전략의 다른 이름</button>
+        <button class="option-btn" onclick="answerMC(9,'d')">④ 지수 ETF(SPY, QQQ)를 중심으로 베타를 최대화하는 전략</button>
+      </div>
+      <div class="feedback" id="fb9"></div>
+    </div>
+  </div>
+
+  <!-- ──────────────────────── Q10 ──────────────────────── -->
+  <div class="q-card" id="q10">
+    <div class="q-header">
+      <div class="q-num" id="qnum10">10</div>
+      <div class="q-badges">
+        <span class="q-badge hard">어려움</span>
+        <span class="q-badge sa">단답형</span>
+      </div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">Q10. 자빌(Jabil, JBL)이 연간 매출 가이던스를 대폭 상향한 이유는 무엇인가? 핵심 요인을 한 문장으로 쓰시오.</div>
+      <div class="sa-wrap">
+        <input type="text" class="sa-input" id="sa10" placeholder="핵심 키워드를 포함해 작성">
+        <button class="sa-submit" onclick="answerSA(10,'ai')">제출</button>
+      </div>
+      <div class="feedback" id="fb10"></div>
+    </div>
+  </div>
+
+  <!-- 정답 보기 버튼 & 정답 시트 -->
+  <div class="section-divider">
+    <span>정답 및 해설</span>
+  </div>
+
+  <button class="show-answers-btn" id="showAnswersBtn" onclick="toggleAnswers()">
+    📖 전체 정답 & 해설 보기
+  </button>
+
+  <div class="answer-sheet hidden" id="answerSheet">
+    <h2>✅ 정답 및 해설</h2>
+
+    <div class="answer-item">
+      <div class="a-num">Q1 · 쉬움 · 객관식</div>
+      <div class="a-answer">정답: ② 다우존스 (-1.63%)</div>
+      <div class="a-explain">오늘 나스닥은 -1.46%, S&P500은 -1.36%, 다우존스는 -1.63%로 가장 큰 폭으로 하락했다. 특히 다우존스는 약 800포인트 하락하며 연중 최저치를 기록했다.</div>
+    </div>
+
+    <div class="answer-item">
+      <div class="a-num">Q2 · 쉬움 · OX</div>
+      <div class="a-answer">정답: ⭕ O (맞다)</div>
+      <div class="a-explain">생산자물가(PPI)가 소비자물가(CPI)로 전이되는 데는 통상 약 2개월의 시차가 있다. 따라서 2월 PPI 데이터의 충격이 CPI에 반영되려면 4월 데이터를 봐야 한다. 3월은 유가 폭등 효과까지 더해져 더 심각할 수 있다.</div>
+    </div>
+
+    <div class="answer-item">
+      <div class="a-num">Q3 · 쉬움 · 단답형</div>
+      <div class="a-answer">정답: 81%</div>
+      <div class="a-explain">마이크론의 2026년 Q3 가이던스 기준 총마진율은 81%다. 이는 엔비디아의 약 71%를 상회하는 수준으로, 사실상 '돈 복사기'에 가까운 수익성이다. 마이크론은 초기 36% → 74% → 81%로 마진율이 지속 개선됐다.</div>
+    </div>
+
+    <div class="answer-item">
+      <div class="a-num">Q4 · 보통 · 객관식</div>
+      <div class="a-answer">정답: ③ 2025년 6월 (트럼프 관세 충격)</div>
+      <div class="a-explain">다우지수가 200일 이동평균선 아래로 내려온 것은 2025년 6월 이후 처음이다. 당시에는 트럼프 대통령의 관세 정책 충격으로 200일선이 깨졌다. 200일선은 기술적 분석에서 중기 추세를 판단하는 핵심 지표다.</div>
+    </div>
+
+    <div class="answer-item">
+      <div class="a-num">Q5 · 보통 · 객관식</div>
+      <div class="a-answer">정답: ③ 약 20%</div>
+      <div class="a-explain">카타르는 전 세계 LNG(액화천연가스) 공급의 약 20%를 담당한다. 따라서 이란의 카타르 LNG 시설 공격은 단순한 지역 분쟁을 넘어 글로벌 에너지 공급망에 직접적인 충격을 주는 사건이다.</div>
+    </div>
+
+    <div class="answer-item">
+      <div class="a-num">Q6 · 보통 · 단답형</div>
+      <div class="a-answer">정답: 스태그플레이션 (Stagflation)</div>
+      <div class="a-explain">스태그플레이션(Stagflation) = 경기 침체(Stagnation) + 물가 상승(Inflation). 연준 입장에서 가장 다루기 어려운 상황이다. 경기를 살리려 금리를 내리면 물가가 더 오르고, 물가를 잡으려 금리를 올리면 경기가 더 악화되는 딜레마에 빠진다.</div>
+    </div>
+
+    <div class="answer-item">
+      <div class="a-num">Q7 · 보통 · 객관식</div>
+      <div class="a-answer">정답: ③ 엔비디아의 경쟁 제품 출시 발표</div>
+      <div class="a-explain">마이크론 주가 하락의 실제 원인은 ①비공식 기대치(위스퍼넘버) 미충족, ②어닝콜 중 이란의 카타르 공격 속보, ③막대한 CapEx($25B) 부담이었다. 엔비디아 경쟁 제품 출시 발표는 언급되지 않았으며, 두 회사는 오히려 협력 관계에 있다.</div>
+    </div>
+
+    <div class="answer-item">
+      <div class="a-num">Q8 · 보통 · OX</div>
+      <div class="a-answer">정답: ⭕ O (맞다)</div>
+      <div class="a-explain">2월 PPI 데이터는 전쟁 및 유가 급등 사태가 발생하기 이전 데이터다. 유가가 오르지도 않은 상태의 PPI가 이미 충격적인데, 3월에는 이란의 LNG 공격, 브렌트유 $111 돌파 등이 반영되므로 3월 PPI는 더 심각할 가능성이 높다.</div>
+    </div>
+
+    <div class="answer-item">
+      <div class="a-num">Q9 · 어려움 · 객관식</div>
+      <div class="a-answer">정답: ② 고위험·고성장 자산과 인플레이션 헤지 자산의 양극단에 집중, 중간 회피</div>
+      <div class="a-explain">바벨 전략은 덤벨처럼 양쪽 끝에 무게를 집중시키는 포트폴리오 전략이다. AI 반도체(NVDA, MU, AMD)와 에너지·방산주로 양극단을 구성하고, 금리에 취약한 리츠(REITs), 중소형주, 소비재 등 중간 영역을 회피하는 것이 핵심이다.</div>
+    </div>
+
+    <div class="answer-item">
+      <div class="a-num">Q10 · 어려움 · 단답형</div>
+      <div class="a-answer">정답 (핵심): AI 데이터센터 인프라 수요 급증</div>
+      <div class="a-explain">자빌(JBL)은 반도체 제조사가 아닌 전자제품 조립·제조 기업이지만, AI 데이터센터 서버·네트워크 장비 조립 수요가 폭증하면서 연간 매출 가이던스를 $34B로 상향했다. 이 사례는 AI 수혜가 하청·재하청 단계까지 확산되고 있음을 보여준다. 키워드: AI 데이터센터 / 서버 조립 / 인프라 수요.</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>이 시험문제는 Nova Market Review 분석 내용을 기반으로 교육 목적으로 제작되었습니다.</p>
+  <p>투자 조언이 아니며, 모든 투자 결정은 본인의 책임입니다. · 2026.03.19</p>
+</footer>
+
+<script>
+// ── STATE ──────────────────────────
+let score = 0;
+let answered = 0;
+
+const correctAnswers = {
+  1: 'b', 2: 'O', 3: '81', 4: 'c', 5: 'c',
+  6: '스태그플레이션', 7: 'c', 8: 'O', 9: 'b', 10: 'ai'
+};
+
+const explanations = {
+  1: { correct: '✓ 정답! 다우존스가 -1.63%로 오늘 가장 큰 하락폭을 기록했습니다.', wrong: '✗ 오답. 정답은 다우존스(-1.63%)입니다. 나스닥 -1.46%, S&P500 -1.36%이었습니다.' },
+  2: { correct: '✓ 정답! PPI에서 CPI로 전이되는 시차는 약 2개월입니다.', wrong: '✗ 오답. 정답은 O입니다. PPI는 약 2개월 시차를 두고 CPI에 전이됩니다.' },
+  3: { correct: '✓ 정답! 마이크론의 Q3 가이던스 총마진율은 81%입니다.', wrong: '✗ 오답. 정답은 81%입니다. 엔비디아(약 71%)를 뛰어넘는 수준입니다.' },
+  4: { correct: '✓ 정답! 2025년 6월 트럼프 관세 충격 이후 처음으로 200일선이 깨졌습니다.', wrong: '✗ 오답. 정답은 2025년 6월입니다. 당시 트럼프 관세 정책으로 200일선이 일시 이탈했었습니다.' },
+  5: { correct: '✓ 정답! 카타르는 전 세계 LNG 공급의 약 20%를 담당합니다.', wrong: '✗ 오답. 정답은 약 20%입니다. 카타르는 세계 최대 LNG 공급국 중 하나입니다.' },
+  6: { correct: '✓ 정답! 스태그플레이션(Stagflation)은 경기 침체와 물가 상승이 동시에 발생하는 상황입니다.', wrong: '✗ 오답. 정답은 스태그플레이션(Stagflation)입니다.' },
+  7: { correct: '✓ 정답! 엔비디아 경쟁 제품 출시는 언급되지 않았습니다. 나머지 3가지가 실제 하락 원인이었습니다.', wrong: '✗ 오답. 정답은 ③입니다. 엔비디아 경쟁 제품 발표는 마이크론 하락의 원인이 아니었습니다.' },
+  8: { correct: '✓ 정답! 2월 데이터는 전쟁 이전이라 3월은 더 심각할 것으로 예상됩니다.', wrong: '✗ 오답. 정답은 O입니다. 2월 PPI는 전쟁 이전 데이터이므로 3월은 더 악화될 가능성이 높습니다.' },
+  9: { correct: '✓ 정답! 바벨 전략은 AI와 에너지·방산 양극단에 집중하고 중간 자산을 회피하는 전략입니다.', wrong: '✗ 오답. 정답은 ②입니다. 바벨 전략은 양극단(AI + 에너지/방산)에 집중하고 중간(리츠, 소비재 등)을 회피합니다.' },
+  10: { correct: '✓ 정답! AI 데이터센터 인프라 수요 급증이 자빌 가이던스 상향의 핵심 이유입니다.', wrong: '✗ 오답. 핵심 키워드: AI 데이터센터 인프라 수요. 자빌은 서버·네트워크 장비 조립으로 이 수혜를 받고 있습니다.' }
+};
+
+// ── HELPERS ────────────────────────
+function updateScore() {
+  document.getElementById('scoreNum').textContent = score;
+  const pct = (answered / 10) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  
+  if (answered === 0) {
+    document.getElementById('scoreMsg').textContent = '문제를 풀어보세요!';
+  } else if (score / answered >= 0.8) {
+    document.getElementById('scoreMsg').textContent = `${answered}문제 중 ${score}개 정답 — 훌륭합니다! 🎉`;
+  } else if (score / answered >= 0.5) {
+    document.getElementById('scoreMsg').textContent = `${answered}문제 중 ${score}개 정답 — 잘 하고 있어요!`;
+  } else {
+    document.getElementById('scoreMsg').textContent = `${answered}문제 중 ${score}개 정답 — 해설을 참고해보세요.`;
+  }
+}
+
+function disableCard(qNum) {
+  document.getElementById('q' + qNum).classList.add('answered');
+  const btns = document.getElementById('q' + qNum).querySelectorAll('button:not(.sa-submit)');
+  btns.forEach(b => b.disabled = true);
+}
+
+function showFeedback(qNum, isCorrect) {
+  const fb = document.getElementById('fb' + qNum);
+  const qnum = document.getElementById('qnum' + qNum);
+  const exp = explanations[qNum];
+  fb.className = 'feedback show ' + (isCorrect ? 'correct-fb' : 'wrong-fb');
+  fb.innerHTML = '<strong>' + (isCorrect ? exp.correct : exp.wrong) + '</strong>';
+  qnum.className = 'q-num ' + (isCorrect ? 'correct' : 'wrong');
+}
+
+// ── ANSWER HANDLERS ────────────────
+function answerMC(qNum, choice) {
+  if (document.getElementById('q' + qNum).classList.contains('answered')) return;
+  const correct = correctAnswers[qNum];
+  const isCorrect = choice === correct;
+  
+  answered++;
+  if (isCorrect) score++;
+  
+  const btns = document.getElementById('q' + qNum).querySelectorAll('.option-btn');
+  const choiceIndex = ['a','b','c','d'].indexOf(choice);
+  const correctIndex = ['a','b','c','d'].indexOf(correct);
+  btns[choiceIndex].classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) btns[correctIndex].classList.add('correct');
+  
+  showFeedback(qNum, isCorrect);
+  disableCard(qNum);
+  updateScore();
+}
+
+function answerOX(qNum, choice) {
+  if (document.getElementById('q' + qNum).classList.contains('answered')) return;
+  const correct = correctAnswers[qNum];
+  const isCorrect = choice === correct;
+  
+  answered++;
+  if (isCorrect) score++;
+  
+  const btns = document.getElementById('q' + qNum).querySelectorAll('.ox-btn');
+  const idx = choice === 'O' ? 0 : 1;
+  const correctIdx = correct === 'O' ? 0 : 1;
+  btns[idx].classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) btns[correctIdx].classList.add('correct');
+  
+  showFeedback(qNum, isCorrect);
+  disableCard(qNum);
+  updateScore();
+}
+
+function answerSA(qNum, keyword) {
+  if (document.getElementById('q' + qNum).classList.contains('answered')) return;
+  const input = document.getElementById('sa' + qNum).value.trim().toLowerCase();
+  const keywordLC = keyword.toLowerCase();
+  
+  // Check for keyword presence
+  let isCorrect = false;
+  if (qNum === 3) {
+    isCorrect = input.includes('81');
+  } else if (qNum === 6) {
+    isCorrect = input.includes('스태그') || input.includes('stagflation') || input.includes('스테그');
+  } else if (qNum === 10) {
+    isCorrect = input.includes('ai') || input.includes('데이터센터') || input.includes('데이터 센터') || input.includes('인프라') || input.includes('조립');
+  }
+  
+  answered++;
+  if (isCorrect) score++;
+  
+  showFeedback(qNum, isCorrect);
+  disableCard(qNum);
+  document.getElementById('sa' + qNum).disabled = true;
+  updateScore();
+}
+
+function toggleAnswers() {
+  const sheet = document.getElementById('answerSheet');
+  const btn = document.getElementById('showAnswersBtn');
+  if (sheet.classList.contains('hidden')) {
+    sheet.classList.remove('hidden');
+    btn.textContent = '▲ 정답 & 해설 닫기';
+  } else {
+    sheet.classList.add('hidden');
+    btn.textContent = '📖 전체 정답 & 해설 보기';
+  }
+}
+</script>
+
+</body>
+</html>
