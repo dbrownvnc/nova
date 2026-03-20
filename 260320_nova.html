@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S&P 200일선 붕괴 · 테슬라 리콜 위기 · 피바다 장세 분석</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --blue: #2563eb;
+    --gray: #6b7280;
+    --border: #e5e5e5;
+    --table-bg: #fafafa;
+    --table-header: #e11d48;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Serif 4', serif;
+    font-size: 16px;
+    line-height: 1.75;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+  }
+  .masthead {
+    border-top: 3px solid var(--accent);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 0 12px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .masthead-title { font-family:'DM Sans',sans-serif; font-size:11px; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  .masthead-date  { font-family:'DM Sans',sans-serif; font-size:11px; color:var(--text2); letter-spacing:.06em; }
+  .hero-label { font-family:'DM Sans',sans-serif; font-size:10px; font-weight:500; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); margin-top:28px; margin-bottom:10px; }
+  h1 { font-family:'Playfair Display',serif; font-size:clamp(28px,7vw,42px); font-weight:900; line-height:1.12; letter-spacing:-.02em; margin-bottom:14px; }
+  h1 em { color:var(--accent); font-style:normal; }
+  .hero-sub { font-family:'Source Serif 4',serif; font-size:15px; font-style:italic; color:var(--text2); border-left:3px solid var(--accent); padding-left:14px; margin-bottom:28px; line-height:1.6; }
+  .divider { border:none; border-top:1px solid var(--border); margin:32px 0; }
+  .divider-thick { border:none; border-top:2px solid var(--text); margin:36px 0 28px; }
+  h2 { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; line-height:1.25; margin-bottom:14px; letter-spacing:-.01em; }
+  h3 { font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; margin-top:24px; }
+  p { margin-bottom:14px; }
+  strong { font-weight:600; }
+  .pull-quote { font-family:'Playfair Display',serif; font-size:20px; font-style:italic; line-height:1.4; color:var(--text); border-top:2px solid var(--accent); border-bottom:1px solid var(--border); padding:18px 0 16px; margin:32px 0; }
+  .pull-quote span { color:var(--accent); }
+  .tag-row { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:24px; }
+  .tag { font-family:'DM Sans',sans-serif; font-size:10px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; background:var(--bg2); border:1px solid var(--border); border-radius:2px; padding:3px 8px; color:var(--text2); }
+  .tag.red { background:#fff0f3; border-color:var(--accent2); color:var(--accent); }
+  .stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:24px 0; }
+  .stat-card { background:var(--bg2); border:1px solid var(--border); border-top:3px solid var(--accent); padding:14px 16px; }
+  .stat-card.blue { border-top-color:var(--blue); }
+  .stat-card.dark { border-top-color:var(--text); }
+  .stat-card.green { border-top-color:#16a34a; }
+  .stat-num { font-family:'Playfair Display',serif; font-size:28px; font-weight:700; line-height:1.1; letter-spacing:-.02em; }
+  .stat-card.red .stat-num { color:var(--accent); }
+  .stat-card.blue .stat-num { color:var(--blue); }
+  .stat-card.green .stat-num { color:#16a34a; }
+  .stat-label { font-family:'DM Sans',sans-serif; font-size:11px; color:var(--text2); margin-top:4px; letter-spacing:.04em; }
+  .stat-note  { font-family:'DM Sans',sans-serif; font-size:10px; color:var(--accent); margin-top:2px; font-weight:500; }
+  .fade-in { opacity:0; transform:translateY(18px); transition:opacity 0.7s ease,transform 0.7s ease; }
+  .fade-in.visible { opacity:1; transform:translateY(0); }
+  .chart-container { position:relative; max-height:340px; background:var(--bg2); border:1px solid var(--border); padding:16px; margin:20px 0; }
+  .chart-container canvas { opacity:0; transition:opacity 0.4s ease; max-height:300px; }
+  .chart-container.chart-ready canvas { opacity:1; }
+  .chart-title { font-family:'DM Sans',sans-serif; font-size:11px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--text2); margin-bottom:10px; }
+  .data-table { width:100%; border-collapse:collapse; font-family:'DM Sans',sans-serif; font-size:13px; margin:20px 0; }
+  .data-table th { background:var(--table-header); color:#fff; padding:8px 12px; text-align:left; font-weight:500; letter-spacing:.04em; font-size:11px; }
+  .data-table td { padding:8px 12px; border-bottom:1px solid var(--border); background:var(--table-bg); color:var(--text); vertical-align:top; }
+  .data-table tr:nth-child(even) td { background:#f4f4f4; }
+  .info-box { background:var(--bg2); border-left:4px solid var(--accent); padding:14px 16px; margin:20px 0; font-size:14px; line-height:1.65; }
+  .info-box.blue { border-left-color:var(--blue); }
+  .info-box.dark { border-left-color:var(--text); }
+  .checklist { list-style:none; margin:16px 0; }
+  .checklist li { font-family:'DM Sans',sans-serif; font-size:14px; padding:8px 0 8px 30px; border-bottom:1px solid var(--border); position:relative; }
+  .checklist li::before { content:'☐'; position:absolute; left:0; color:var(--accent); font-size:16px; line-height:1.4; }
+  .sim-box { background:var(--bg2); border:1px solid var(--border); border-top:3px solid var(--blue); padding:20px; margin:24px 0; }
+  .sim-title { font-family:'Playfair Display',serif; font-size:16px; font-weight:700; margin-bottom:16px; }
+  .sim-row { display:flex; align-items:center; gap:12px; margin-bottom:14px; flex-wrap:wrap; }
+  .sim-row label { font-family:'DM Sans',sans-serif; font-size:12px; color:var(--text2); min-width:120px; letter-spacing:.04em; }
+  .sim-row input[type=range] { flex:1; min-width:120px; accent-color:var(--accent); cursor:pointer; }
+  .sim-val { font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600; min-width:52px; text-align:right; color:var(--text); }
+  .sim-reset { font-family:'DM Sans',sans-serif; font-size:11px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; background:none; border:1px solid var(--border); color:var(--text2); padding:5px 12px; cursor:pointer; margin-top:12px; transition:all .2s; }
+  .sim-reset:hover { border-color:var(--accent); color:var(--accent); }
+  .footer { font-family:'DM Sans',sans-serif; font-size:11px; color:var(--text2); border-top:1px solid var(--border); padding-top:16px; margin-top:48px; line-height:1.7; }
+  @media (max-width:400px) { .stat-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <span class="masthead-title">CIA.chat Market Analysis</span>
+  <span class="masthead-date">2026년 3월 19일 · 뉴욕 오후 8:31</span>
+</div>
+
+<div class="hero-label">Breaking Market Watch</div>
+<h1>S&P <em>200일선</em> 붕괴,<br>테슬라 초강도 조사,<br>피바다 장세</h1>
+<div class="hero-sub">이스라엘-이란 에너지 인프라 교전 → 글로벌 LNG 공급 17% 차질 → 인플레이션 재점화 → 연준 금리 동결 고착 → 밸류에이션 압박 연쇄 확산. 도미노가 쓰러지고 있다.</div>
+<div class="tag-row">
+  <span class="tag red">긴급</span><span class="tag red">S&P 200일선</span><span class="tag">LNG 공급 위기</span><span class="tag">연준 동결</span><span class="tag">스태그플레이션</span><span class="tag">트리플 위칭</span><span class="tag red">테슬라 리콜 조사</span>
+</div>
+
+<hr class="divider-thick">
+
+<!-- 1. 핵심 수치 -->
+<h3>핵심 수치 스냅샷</h3>
+<div class="stat-grid fade-in">
+  <div class="stat-card red"><div class="stat-num">3.75%</div><div class="stat-label">연준 목표금리 (동결)</div><div class="stat-note">▲ 2년물 3.96% 육박</div></div>
+  <div class="stat-card blue"><div class="stat-num">17%</div><div class="stat-label">글로벌 LNG 공급 차질 전망</div><div class="stat-note">복구 3~5년 소요 추정</div></div>
+  <div class="stat-card dark"><div class="stat-num">$119</div><div class="stat-label">브렌트유 장중 고점 ($/배럴)</div><div class="stat-note">천연가스 대체 수요 급등</div></div>
+  <div class="stat-card red"><div class="stat-num">6,000</div><div class="stat-label">S&P 500 단기 지지선 주목</div><div class="stat-note">볼륨 프로파일 상 핵심 구간</div></div>
+</div>
+
+<!-- 2. 지정학 도미노 -->
+<hr class="divider">
+<h2>🌍 이스라엘-이란 에너지 전쟁과 도미노 이펙트</h2>
+<p>이번 시장 충격의 진원지는 <strong>이스라엘의 이란 사우스파스 가스전 타격</strong>이었습니다. 이란은 즉각 카타르 라세라판 가스전을 보복 공격했고, 브렌트유는 장중 <strong>119달러</strong>를 돌파했습니다. 사우디아라비아는 초반 강경 대응을 시사했다가 "공격하지 않겠다"고 철회하면서 사태 확산은 일단 숨을 고뤘습니다.</p>
+<div class="info-box">
+  <strong>글로벌 LNG 공급 17% 차질, 복구 3~5년</strong><br>
+  전 세계 천연가스 공급 네트워크에 직접 타격이 가해졌습니다. 복구에 3~5년이 소요될 것으로 추산되며, 이는 에너지 비용 상승을 통해 <strong>인플레이션 재점화의 구조적 압력</strong>으로 작용합니다.
+</div>
+<p>더 큰 문제는 이란 정권 교체 가능성이 사실상 <strong>0%</strong>임이 재확인됐다는 점입니다. 혁명수비대라는 촘촘한 민병대 네트워크가 이란 사회 전반에 뿌리내려 있어 내부 붕괴를 기대하기 어렵습니다.</p>
+
+<div class="pull-quote">"전쟁이 무서운 게 아니라,<br><span>에너지 급변 사태</span>가 오는 것이다.<br>글로벌 에너지 망의 붕괴는<br>전세계 경제 목을 탁 치는 것."</div>
+
+<div class="chart-container fade-in" style="max-height:none; padding:20px;">
+  <div class="chart-title">도미노 이펙트 — 충격 전파 경로</div>
+  <div id="domino-flow"></div>
+</div>
+
+<!-- 3. 연준 & 금리 -->
+<hr class="divider">
+<h2>🏦 연준 동결 고착과 베어 플래트닝</h2>
+<p>3월 FOMC는 예상대로 <strong>3.75% 동결</strong>을 결정했습니다. 점도표(Dot Plot)는 연내 한 차례 인하 가능성마저 희미하게 만들었습니다. 시장은 이를 곧바로 반영해 <strong>단기금리가 급등</strong>했습니다.</p>
+<div class="stat-grid fade-in">
+  <div class="stat-card dark"><div class="stat-num">3.96%</div><div class="stat-label">미국 2년물 국채 금리</div><div class="stat-note">연준 목표금리 3.75% 돌파</div></div>
+  <div class="stat-card blue"><div class="stat-num">~4.2%</div><div class="stat-label">미국 10년물 국채 금리</div><div class="stat-note">2년물과 수렴 중 (베어 플래트닝)</div></div>
+</div>
+<div class="info-box blue">
+  <strong>베어 플래트닝(Bear Flattening)이란?</strong><br>
+  단기 금리가 장기 금리 수준으로 빠르게 올라오면서 수익률 곡선이 납작해지는 현상입니다. 이 상태가 심화되면 <strong>장단기 금리 역전</strong>이 발생하고, 역사적으로 경기침체(리세션)의 강력한 선행 지표로 여겨집니다.
+</div>
+
+<div class="chart-title" style="margin-top:16px;margin-bottom:4px;">미국 국채 2년물 vs 10년물 금리 (근사치 흐름)</div>
+<div class="chart-container fade-in">
+  <canvas id="yieldChart" height="220"></canvas>
+</div>
+
+<p>호주계 투자은행 <strong>맥쿼리(Macquarie)</strong>는 충격적인 전망을 내놓았습니다. <strong>2027년 상반기에 금리 인상이 있을 것</strong>이라는 예측입니다. CME FedWatch 상에서도 2027년 1월 기준 금리 인상 확률이 <strong>14.4%</strong>까지 치솟은 상태입니다.</p>
+
+<!-- 4. 금·은 -->
+<hr class="divider">
+<h2>💰 금·은 플래시 크래시 — 1983년 이후 최장 하락</h2>
+<p>금과 은은 지금 <strong>1983년 이후 가장 긴 연속 하락</strong> 기록을 세우고 있습니다. 안전자산으로 알려진 금이 왜 이 시점에 빠지는 걸까요?</p>
+<div class="fade-in">
+<table class="data-table">
+  <thead><tr><th>원인</th><th>설명</th></tr></thead>
+  <tbody>
+    <tr><td>실질금리 상승</td><td>이자를 주는 달러 현금·단기채권 매력 ↑ → 이자가 없는 금에서 자금 유출</td></tr>
+    <tr><td>강달러</td><td>달러 강세 시 달러 표시 금값은 하락 압력</td></tr>
+    <tr><td>마진콜 청산</td><td>주식 하락으로 레버리지 투자자들이 금 ETF 매도해 현금 확보</td></tr>
+    <tr><td>기관 ETF 리밸런싱</td><td>분기 말 포트폴리오 조정 과정에서 금·은 포지션 청산</td></tr>
+  </tbody>
+</table>
+</div>
+<p>현금 MMF나 단기채권은 현재 <strong>연 4% 이상의 이자</strong>를 제공합니다. 이자를 한 푼도 주지 않는 금보다 훨씬 매력적이기 때문에 자금이 빠져나가는 것입니다. 당분간 이 압력은 지속될 것으로 보입니다.</p>
+
+<!-- 5. 스태그플레이션 -->
+<hr class="divider">
+<h2>⚠️ 스태그플레이션 초기 진입 신호</h2>
+<p><strong>스태그플레이션(Stagflation)</strong>이란 경기 침체(실업 증가)와 물가 상승(인플레이션)이 동시에 나타나는 최악의 경제 조합입니다. 일반적으로 경기가 나쁘면 물가가 내려가는데, 에너지 공급 충격이 있을 때는 경기가 나빠져도 물가가 오릅니다.</p>
+<div class="info-box">
+  현재 상황: <strong>실업률은 유지</strong>(주간 실업자 수 변화 없음)되고 있지만, <strong>에너지 비용 상승으로 물가는 오를 것</strong>이 확실시됩니다. 연준이 움직이려면 실업자가 나와야 하는데, 아직 고용 시장은 건재합니다. 이것이 연준의 딜레마입니다.
+</div>
+
+<div class="sim-box fade-in">
+  <div class="sim-title">스태그플레이션 투자 영향 시뮬레이터</div>
+  <p style="font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text2);margin-bottom:16px;">에너지 가격과 금리 변수를 조정해 주요 자산별 기대 수익률 방향을 확인하세요.</p>
+  <div class="sim-row">
+    <label>유가 상승률 (%)</label>
+    <input type="range" id="oilSlider" min="0" max="80" value="30" step="5">
+    <span class="sim-val" id="oilVal">+30%</span>
+  </div>
+  <div class="sim-row">
+    <label>금리 인상 압력</label>
+    <input type="range" id="rateSlider" min="0" max="10" value="5" step="1">
+    <span class="sim-val" id="rateVal">중간</span>
+  </div>
+  <div class="sim-row">
+    <label>경기 침체 강도</label>
+    <input type="range" id="recSlider" min="0" max="10" value="4" step="1">
+    <span class="sim-val" id="recVal">약함</span>
+  </div>
+  <div id="stagResult" style="margin-top:16px;"></div>
+  <button class="sim-reset" onclick="resetStagSim()">↺ 초기화</button>
+</div>
+
+<!-- 6. S&P -->
+<hr class="divider">
+<h2>📉 S&P 500 200일선 붕괴 — 다음 지지선은?</h2>
+<p>어제 다우 200일선에 이어 오늘 <strong>S&P 500도 200일 이동평균선을 하향 이탈</strong>했습니다. 200일선은 기술적 분석에서 장기 추세의 분기점으로 여겨집니다.</p>
+<div class="chart-title" style="margin-bottom:4px;">S&P 500 주요 가격 레벨 — 볼륨 프로파일</div>
+<div class="chart-container fade-in">
+  <canvas id="spChart" height="240"></canvas>
+</div>
+<div class="info-box">
+  <strong>S&P 500 핵심 레벨</strong><br>
+  • 현재 200일선 근방 (이미 하향 이탈)<br>
+  • <strong>6,000</strong> — 볼륨 프로파일 상 밀집 구간. JP모건·골드만삭스 언급<br>
+  • <strong>7,200</strong> — DAP 하향 수정 연말 목표치 (기존 7,500)
+</div>
+<p>내일(3월 20일)은 <strong>트리플 위칭 데이</strong>입니다. 주식·선물·옵션의 만기가 한꺼번에 몰리는 날로, <strong>분기 말 리밸런싱</strong>까지 겹쳐 극단적인 변동성이 예상됩니다. 현재 S&P 500 풋옵션 비중이 <strong>60%</strong>에 달해 시장 심리는 명백히 하락에 기울어져 있습니다.</p>
+
+<!-- 7. 개별 종목 -->
+<hr class="divider">
+<h2>📊 오늘의 개별 종목 — 희비 교차</h2>
+<div class="chart-title" style="margin-bottom:4px;">주요 종목 등락률 한눈에 보기</div>
+<div class="chart-container fade-in">
+  <canvas id="stockBar" height="240"></canvas>
+</div>
+
+<h3>테슬라 — NHTSA 초강도 조사 개시</h3>
+<p>미국 도로교통안전국(NHTSA)이 테슬라 <strong>풀셀프드라이빙(FSD) 시스템 관련 사고 9건, 사망 1건</strong>에 대해 정식 조사에 착수합니다. 대상 차량은 무려 <strong>320만 대</strong>. 테슬라는 오늘 <strong>3.2% 하락</strong>했습니다.</p>
+<div class="info-box">
+  <strong>왜 테슬라 FSD가 악천후에 취약한가?</strong><br>
+  테슬라는 경쟁사와 달리 <strong>카메라 기반 비주얼 시스템만</strong> 사용합니다. 눈·비 등 악천후에서는 카메라 인식률이 떨어지지만, 라이다(LiDAR)나 레이더를 쓰면 비용 상승 및 차량 디자인 문제가 생깁니다. 이번 조사는 이 구조적 약점을 정면으로 겨냥합니다.
+</div>
+
+<h3>우버 + 리비안 — 로보택시 동맹</h3>
+<p>우버는 리비안에 <strong>2028년까지 로보택시 1만 대, 2031년까지 5만 대</strong>를 공급받는 계약을 체결했습니다. 리비안은 <strong>기존 생산라인을 활용</strong>해 추가 캐펙스 부담 없이 참여합니다. 인간 노동력 착취 모델에서 벗어나는 구조적 전환으로 긍정적으로 평가됩니다.</p>
+
+<h3>페덱스 — AI로 10억 달러 비용 절감</h3>
+<p>페덱스는 '네트워크 2.0' AI 물류 최적화를 통해 <strong>배송 차량·항공기 배분을 AI로 재설계</strong>, 연간 10억 달러 이상의 비용을 절감했습니다. 화물 부문 분사(스핀오프)도 발표해 향후 수익성 개선이 기대됩니다.</p>
+
+<h3>파이브빌로우(Five Below) +10.6%</h3>
+<p>5달러 균일가 소매업체가 급등했습니다. <strong>가성비 전략이 중산층까지 파고들고 있다</strong>는 증거입니다. 실질 구매력이 떨어진 중산층이 달러숍보다 품질 좋고 저렴한 이곳으로 내려왔습니다.</p>
+
+<h3>카니발(Carnival) +4.8%</h3>
+<p>모건스탠리가 비중 확대 의견을 제시하면서 크루즈 업체 카니발이 반등했습니다. 유가 상승에도 불구하고 <strong>고가 여행 수요(K-경제 상단)는 탄탄</strong>합니다.</p>
+
+<h3>알리바바 — 클라우드 +36%, 순익 -66%</h3>
+<p>클라우드 매출이 36% 성장했음에도 인프라 투자 급증으로 순이익이 <strong>66% 증발</strong>했습니다. 시장은 '돈을 너무 많이 쓰는 것 아니냐'는 우려를 보이고 있습니다.</p>
+
+<!-- 8. 섹터 -->
+<hr class="divider">
+<h2>🏭 섹터 퍼포먼스 — 에너지만 생존</h2>
+<div class="chart-title" style="margin-bottom:4px;">섹터별 주간 수익률 (근사치)</div>
+<div class="chart-container fade-in">
+  <canvas id="sectorChart" height="230"></canvas>
+</div>
+<p>1주일, 1개월, 3개월, 6개월, 1년 모든 기간에 걸쳐 <strong>에너지 섹터가 독주</strong>하고 있습니다. 나머지 섹터는 전반적으로 하락세입니다. 유틸리티는 한때 방어적 피난처로 주목받았지만 이날 정오부터 하락 신호가 나타났습니다.</p>
+
+<!-- 9. 생존 공식 -->
+<hr class="divider">
+<h2>🛡️ 스태그플레이션 생존 공식</h2>
+<div class="fade-in">
+<table class="data-table">
+  <thead><tr><th>전략</th><th>핵심 내용</th><th>예시</th></tr></thead>
+  <tbody>
+    <tr><td><strong>비용 통제</strong></td><td>매출 성장보다 비용 절감 능력이 있는 기업</td><td>페덱스 AI 물류 최적화</td></tr>
+    <tr><td><strong>블루칼라 르네상스</strong></td><td>소프트웨어·AI보다 물리적 인프라 기업</td><td>캐터필라, LNG 인프라</td></tr>
+    <tr><td><strong>필수 수요</strong></td><td>경기 무관 현실 세계 필수재</td><td>에너지, 유틸리티(선별)</td></tr>
+    <tr><td><strong>현금(캐시) 확보</strong></td><td>단기 MMF·현금 보유, 폭락 시 매수 여력</td><td>연 4%+ 단기금리 활용</td></tr>
+    <tr><td><strong>프리 캐시플로우</strong></td><td>실제 현금을 버는 기업에 집중</td><td>플래닛랩스 흑자 전환</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="pull-quote">"제발 폭락해라, 제발 내려가라 —<br><span>이런 마음이 생길 정도의 현금</span>을<br>가지고 있어야 잘하고 있는 것이다."</div>
+
+<!-- 10. 체크리스트 -->
+<hr class="divider">
+<h2>✅ 피바다 장세 체크리스트</h2>
+<ul class="checklist fade-in">
+  <li>주식·채권 동반 하락 — 60/40 포트폴리오 맹신 금지 (올웨더 전략 비효율 구간)</li>
+  <li>S&P 500 6,000 지지 여부 모니터링</li>
+  <li>2년물·10년물 금리 역전(장단기 역전) 발생 여부 확인</li>
+  <li>에너지·유틸리티 섹터 포지션 점검</li>
+  <li>현금(MMF 또는 단기채) 비중 확대</li>
+  <li>레버리지 투자 비중 축소 (마진콜 위험)</li>
+  <li>보유 종목 프리 캐시플로우 확인</li>
+  <li>내일(3월 20일) 트리플 위칭 + 분기 리밸런싱 변동성 대비</li>
+  <li>맥쿼리 2027년 금리 인상 시나리오 리스크 관리</li>
+  <li>테슬라 NHTSA 조사 진행 경과 모니터링</li>
+</ul>
+
+<!-- 거시 종합 -->
+<hr class="divider">
+<h2>🔭 거시경제 종합</h2>
+<div class="stat-grid fade-in">
+  <div class="stat-card red"><div class="stat-num">VIX 24</div><div class="stat-label">공포지수 — 변동성 경계 수준</div><div class="stat-note">등락 반복 중</div></div>
+  <div class="stat-card blue"><div class="stat-num">7,200</div><div class="stat-label">DAP 연말 S&P 목표 하향</div><div class="stat-note">기존 목표 7,500에서 하향</div></div>
+  <div class="stat-card dark"><div class="stat-num">60%</div><div class="stat-label">S&P 풋옵션 비중</div><div class="stat-note">명백한 하락 배팅 우위</div></div>
+  <div class="stat-card green"><div class="stat-num">+10.6%</div><div class="stat-label">파이브빌로우 급등</div><div class="stat-note">가성비 소비의 부상</div></div>
+</div>
+<div class="info-box dark">
+  <strong>JP모건·골드만삭스의 공통 경고</strong><br>
+  두 대형 기관이 동시에 하락 시나리오를 공개적으로 언급하고 있습니다. 이 캠페인이 마무리되고 "바닥이다"는 신호가 나올 때 다시 매수 기회가 올 수 있습니다.
+</div>
+
+<div class="footer">
+  <strong>출처:</strong> CIA.chat 멤버미팅 자막 (2026-03-19) · 본 문서는 교육 목적의 정보 요약이며 투자 권유가 아닙니다. 모든 투자 결정은 본인 책임입니다.
+</div>
+
+<script>
+// 도미노 플로우
+(function(){
+  const steps=[
+    {icon:'💥',label:'이스라엘 → 이란 사우스파스 가스전 타격'},
+    {icon:'🔥',label:'이란 보복 → 카타르 라세라판 가스전 공격'},
+    {icon:'⛽',label:'글로벌 LNG 17% 차질 (복구 3~5년)'},
+    {icon:'📈',label:'브렌트유 $119 돌파 · 에너지 비용 급등'},
+    {icon:'🔥',label:'인플레이션 재점화 압력 심화'},
+    {icon:'🏦',label:'연준 금리 동결 고착 · 인하 사실상 불가'},
+    {icon:'📉',label:'밸류에이션 압박 · S&P 200일선 붕괴'},
+    {icon:'🪙',label:'금·은 플래시 크래시 (1983년 이후 최장 하락)'},
+  ];
+  const el=document.getElementById('domino-flow');
+  let html='';
+  steps.forEach((s,i)=>{
+    html+=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:4px"><span style="font-size:18px;width:24px;text-align:center">${s.icon}</span><span style="flex:1;font-size:13px;font-family:'DM Sans',sans-serif">${s.label}</span></div>`;
+    if(i<steps.length-1) html+=`<div style="margin-left:10px;color:#ccc;font-size:16px;line-height:1;margin-bottom:4px">↓</div>`;
+  });
+  el.innerHTML=html;
+})();
+
+// 스태그플레이션 시뮬레이터
+const rateLabels=['없음','매우낮음','낮음','약간','보통','중간','다소높음','높음','매우높음','극단적','최악'];
+const recLabels =['없음','매우약함','약함','약함','약함','보통','보통','강함','강함','매우강함','최악'];
+function updateStagSim(){
+  const oil=parseInt(document.getElementById('oilSlider').value);
+  const rate=parseInt(document.getElementById('rateSlider').value);
+  const rec=parseInt(document.getElementById('recSlider').value);
+  document.getElementById('oilVal').textContent='+'+oil+'%';
+  document.getElementById('rateVal').textContent=rateLabels[rate];
+  document.getElementById('recVal').textContent=recLabels[rec];
+  const assets=[
+    {name:'에너지주',       score:oil*0.8-rec*2,             base:40},
+    {name:'성장주(기술)',   score:-(oil*0.3+rate*6+rec*3),  base:0},
+    {name:'금',             score:-(rate*8)+rec*2,           base:0},
+    {name:'단기채권/현금',  score:rate*5-rec*1,              base:10},
+    {name:'필수소비재',     score:-(oil*0.2+rec*1),          base:5},
+    {name:'방산·인프라',    score:oil*0.4+rec*0.5,           base:10},
+  ];
+  let html='';
+  assets.forEach(a=>{
+    const val=Math.max(-50,Math.min(60,a.base+a.score));
+    const pct=Math.round(val);
+    const color=pct>=5?'#16a34a':pct>=-5?'#92400e':'#e11d48';
+    const barW=Math.min(100,Math.abs(pct)*1.5);
+    const barColor=pct>=0?'#16a34a':'#e11d48';
+    html+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;font-family:'DM Sans',sans-serif"><span style="font-size:12px;min-width:100px">${a.name}</span><div style="flex:1;height:12px;background:#f0f0f0;border-radius:2px;overflow:hidden"><div style="width:${barW}%;height:100%;background:${barColor};border-radius:2px;transition:width .4s"></div></div><span style="font-size:12px;font-weight:600;min-width:44px;text-align:right;color:${color}">${pct>=0?'▲':'▼'}${Math.abs(pct)}%</span></div>`;
+  });
+  const s=(oil*0.5+rate*3+rec*2);
+  const l=s<20?'정상 범위':s<40?'스태그플레이션 초기':s<60?'스태그플레이션 심화':'위기 단계';
+  const c=s<20?'#16a34a':s<40?'#d97706':'#e11d48';
+  document.getElementById('stagResult').innerHTML=html+`<div style="margin-top:12px;padding:12px;background:#fafafa;border:1px solid var(--border)"><span style="font-family:'DM Sans',sans-serif;font-size:11px;color:var(--text2)">현재 경제 국면 평가: </span><strong style="font-family:'Playfair Display',serif;font-size:15px;color:${c}">${l}</strong></div>`;
+}
+function resetStagSim(){
+  document.getElementById('oilSlider').value=30;
+  document.getElementById('rateSlider').value=5;
+  document.getElementById('recSlider').value=4;
+  updateStagSim();
+}
+['oilSlider','rateSlider','recSlider'].forEach(id=>document.getElementById(id).addEventListener('input',updateStagSim));
+updateStagSim();
+
+// Fade observer
+const fadeObs=new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*80);fadeObs.unobserve(e.target);}});
+},{threshold:0.12});
+document.querySelectorAll('.fade-in').forEach(el=>fadeObs.observe(el));
+
+// Chart configs
+const chartConfigs={};
+chartConfigs['yieldChart']=()=>{
+  const labels=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan\'26','Feb','Mar'];
+  new Chart(document.getElementById('yieldChart'),{type:'line',data:{labels,datasets:[
+    {label:'2년물 금리 (%)',data:[4.25,4.32,4.19,4.10,4.05,4.20,4.30,4.15,4.00,3.95,3.85,3.80,3.88,3.92,3.96],borderColor:'#e11d48',backgroundColor:'rgba(225,29,72,0.06)',fill:true,tension:0.4,pointRadius:2,borderWidth:2},
+    {label:'10년물 금리 (%)',data:[4.60,4.70,4.55,4.45,4.35,4.40,4.50,4.38,4.20,4.10,4.00,3.95,4.05,4.15,4.22],borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,0.04)',fill:true,tension:0.4,pointRadius:2,borderWidth:2},
+  ]},options:{responsive:true,maintainAspectRatio:true,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',labels:{font:{family:'DM Sans',size:11},boxWidth:12}},tooltip:{bodyFont:{family:'DM Sans',size:12}}},scales:{x:{ticks:{font:{family:'DM Sans',size:9},maxRotation:45},grid:{color:'#f0f0f0'}},y:{ticks:{font:{family:'DM Sans',size:10}},grid:{color:'#f0f0f0'},min:3.5,max:5.0}}}});
+};
+chartConfigs['spChart']=()=>{
+  const labels=['5,800','5,900','6,000','6,100','6,200','6,300','6,400','6,500','6,600','6,700','6,800'];
+  const volData=[85,90,100,72,68,60,50,45,35,25,20];
+  new Chart(document.getElementById('spChart'),{type:'bar',data:{labels,datasets:[{label:'볼륨 프로파일 (상대값)',data:volData,backgroundColor:labels.map(l=>l==='6,000'?'#e11d48':l==='6,200'?'#2563eb':'rgba(107,114,128,0.35)'),borderColor:labels.map(l=>l==='6,000'?'#e11d48':l==='6,200'?'#2563eb':'rgba(107,114,128,0.5)'),borderWidth:1}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` 거래 밀집도: ${ctx.parsed.x}`,title:ctx=>`S&P 500 ~ ${ctx[0].label}`},bodyFont:{family:'DM Sans',size:12}}},scales:{x:{ticks:{font:{family:'DM Sans',size:10}},grid:{color:'#f0f0f0'},title:{display:true,text:'거래량 밀집도 (상대값)',font:{family:'DM Sans',size:10}}},y:{ticks:{font:{family:'DM Sans',size:10}},grid:{display:false}}}}});
+};
+chartConfigs['stockBar']=()=>{
+  const tickers=['FiveBelow','Carnival','Planet Labs','Accenture','Uber','FedEx*','Alibaba','Micron','Tesla'];
+  const changes=[10.6,4.8,3.2,2.1,0.8,4.0,-5.2,-2.8,-3.2];
+  new Chart(document.getElementById('stockBar'),{type:'bar',data:{labels:tickers,datasets:[{label:'등락률 (%)',data:changes,backgroundColor:changes.map(v=>v>=0?'rgba(22,163,74,0.7)':'rgba(225,29,72,0.7)'),borderColor:changes.map(v=>v>=0?'#16a34a':'#e11d48'),borderWidth:1}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.y>=0?'+':''}${ctx.parsed.y}%`},bodyFont:{family:'DM Sans',size:12}}},scales:{x:{ticks:{font:{family:'DM Sans',size:9},maxRotation:35},grid:{display:false}},y:{ticks:{font:{family:'DM Sans',size:10},callback:v=>v+'%'},grid:{color:'#f0f0f0'}}}}});
+};
+chartConfigs['sectorChart']=()=>{
+  const sectors=['에너지','금융','유틸리티','헬스케어','필수소비재','산업재','소재','임의소비재','IT','커뮤니케이션'];
+  const data=[4.2,0.3,-0.8,-1.2,-1.5,-1.8,-2.0,-2.5,-3.1,-3.8];
+  new Chart(document.getElementById('sectorChart'),{type:'bar',data:{labels:sectors,datasets:[{label:'주간 수익률 (%)',data,backgroundColor:data.map(v=>v>=0?'rgba(22,163,74,0.7)':'rgba(225,29,72,0.55)'),borderColor:data.map(v=>v>=0?'#16a34a':'#e11d48'),borderWidth:1}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.x>=0?'+':''}${ctx.parsed.x}%`},bodyFont:{family:'DM Sans',size:12}}},scales:{x:{ticks:{font:{family:'DM Sans',size:10},callback:v=>v+'%'},grid:{color:'#f0f0f0'}},y:{ticks:{font:{family:'DM Sans',size:10}},grid:{display:false}}}}});
+};
+
+const chartObs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){const canvas=e.target.querySelector('canvas');if(canvas&&chartConfigs[canvas.id]){chartConfigs[canvas.id]();e.target.classList.add('chart-ready');chartObs.unobserve(e.target);}}});
+},{threshold:0.15});
+document.querySelectorAll('.chart-container').forEach(el=>chartObs.observe(el));
+</script>
+</body>
+</html>
