@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>심층분석 | AI 200일선 붕괴, 3대 위기 동시 충격</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --chart1: #e11d48;
+    --chart2: #1a1a1a;
+    --chart3: #6b7280;
+    --chart4: #2563eb;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  /* ── HEADER ── */
+  .masthead {
+    background: var(--text);
+    color: #fff;
+    padding: 14px 20px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .masthead-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    letter-spacing: 3px;
+    font-weight: 900;
+    color: #fff;
+  }
+  .masthead-date {
+    font-size: 11px;
+    color: #aaa;
+    letter-spacing: 1px;
+  }
+
+  .hero {
+    background: var(--text);
+    color: #fff;
+    padding: 36px 20px 32px;
+    border-top: 1px solid #333;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    padding: 4px 10px;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 6vw, 38px);
+    line-height: 1.25;
+    font-weight: 900;
+    margin-bottom: 14px;
+  }
+  .hero h1 em {
+    color: var(--accent2);
+    font-style: normal;
+  }
+  .hero-sub {
+    font-size: 13px;
+    color: #bbb;
+    line-height: 1.6;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 16px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .hero-tag {
+    font-size: 11px;
+    color: #888;
+    border: 1px solid #444;
+    padding: 3px 9px;
+    letter-spacing: 1px;
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 680px; margin: 0 auto; padding: 0 20px; }
+
+  /* ── SECTION HEADERS ── */
+  .section { padding: 32px 0 8px; }
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--accent);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 5vw, 26px);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 16px;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 12px;
+  }
+  .section h2 span { color: var(--accent); }
+
+  /* ── PULL QUOTE ── */
+  .pull-quote {
+    border-left: 4px solid var(--accent);
+    padding: 16px 18px;
+    margin: 24px 0;
+    background: var(--bg2);
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .pull-quote cite {
+    display: block;
+    font-size: 11px;
+    font-style: normal;
+    color: var(--text2);
+    margin-top: 8px;
+    letter-spacing: 1px;
+  }
+
+  /* ── ALERT BOX ── */
+  .alert {
+    border: 1.5px solid var(--accent);
+    padding: 14px 16px;
+    margin: 18px 0;
+    background: #fff5f7;
+  }
+  .alert-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .alert p { font-size: 13.5px; line-height: 1.65; }
+
+  /* ── STAT CARDS ── */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 16px 14px;
+  }
+  .stat-card .label {
+    font-size: 10px;
+    color: var(--text2);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .stat-card .value {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-card .value.dark { color: var(--text); }
+  .stat-card .note {
+    font-size: 11px;
+    color: var(--text2);
+    margin-top: 4px;
+  }
+
+  /* ── TABLE ── */
+  .tbl-wrap { overflow-x: auto; margin: 18px 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background: var(--bg2);
+  }
+  thead tr { background: var(--accent); color: #fff; }
+  thead th {
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-size: 12px;
+  }
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:hover { background: #fff5f7; }
+  tbody td { padding: 9px 12px; vertical-align: top; }
+  tbody td:first-child { font-weight: 600; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 28px 0;
+  }
+  .divider.bold { border-top: 2px solid var(--text); }
+
+  /* ── CHART ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin: 20px 0;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas { opacity: 1; }
+  .chart-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--text2);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    margin-top: 24px;
+  }
+
+  /* ── INTERACTIVE SIMULATOR ── */
+  .sim-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 20px;
+    margin: 24px 0;
+  }
+  .sim-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .sim-desc {
+    font-size: 12px;
+    color: var(--text2);
+    margin-bottom: 16px;
+  }
+  .slider-row {
+    margin-bottom: 14px;
+  }
+  .slider-row label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+  .slider-row label span {
+    font-weight: 700;
+    color: var(--accent);
+  }
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 5px;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  }
+  .sim-result {
+    background: var(--text);
+    color: #fff;
+    padding: 16px;
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .sim-result-item .r-label {
+    font-size: 10px;
+    color: #aaa;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .sim-result-item .r-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent2);
+  }
+  .sim-result-item .r-val.green { color: #4ade80; }
+  .reset-btn {
+    background: none;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 11px;
+    padding: 6px 14px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    margin-top: 12px;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { background: var(--accent); color: #fff; }
+
+  /* ── BEAR/BULL TOGGLE ── */
+  .scenario-toggle {
+    display: flex;
+    gap: 0;
+    margin: 18px 0 0;
+  }
+  .scene-btn {
+    flex: 1;
+    padding: 10px;
+    border: 1.5px solid var(--border);
+    background: var(--bg2);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text2);
+  }
+  .scene-btn.active.bear { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .scene-btn.active.bull { background: #2563eb; color: #fff; border-color: #2563eb; }
+  .scene-content {
+    display: none;
+    padding: 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-top: none;
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+  .scene-content.active { display: block; }
+  .scene-content ul { padding-left: 18px; }
+  .scene-content ul li { margin-bottom: 6px; }
+  .scene-content .source {
+    font-size: 11px;
+    color: var(--text2);
+    margin-top: 10px;
+    letter-spacing: 1px;
+  }
+
+  /* ── ACTION PLAN ── */
+  .action-list { list-style: none; margin: 16px 0; }
+  .action-list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .action-list li:last-child { border-bottom: none; }
+  .action-num {
+    width: 28px;
+    height: 28px;
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .action-body .a-title {
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 3px;
+  }
+  .action-body .a-desc {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  /* ── KEY HIGHLIGHT ── */
+  .highlight-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--bg2);
+    border-left: 3px solid var(--accent);
+    margin: 10px 0;
+    font-size: 13.5px;
+  }
+  .highlight-row .icon { font-size: 16px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--text);
+    color: #777;
+    padding: 28px 20px;
+    font-size: 11px;
+    line-height: 1.8;
+    margin-top: 48px;
+  }
+  footer strong { color: #aaa; }
+
+  /* ── PROSE ── */
+  p { margin-bottom: 14px; font-size: 14.5px; line-height: 1.8; }
+  p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); }
+
+  /* ── QUIZ SECTION ── */
+  #quiz { padding-top: 0; }
+  .quiz-header {
+    background: var(--text);
+    color: #fff;
+    padding: 28px 20px;
+    margin-top: 40px;
+  }
+  .quiz-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: #fff;
+    border: none;
+    padding: 0;
+    margin: 0 0 6px;
+  }
+  .quiz-header p { color: #aaa; font-size: 13px; margin: 0; }
+  .q-item {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .q-num {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .q-text {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .q-options { list-style: none; }
+  .q-options li {
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    border: 1px solid var(--border);
+    font-size: 13.5px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-radius: 2px;
+  }
+  .q-options li:hover { border-color: var(--accent); background: #fff5f7; }
+  .q-options li.correct { background: #dcfce7; border-color: #16a34a; color: #166534; }
+  .q-options li.wrong { background: #fee2e2; border-color: var(--accent); }
+  .q-input {
+    width: 100%;
+    border: 1px solid var(--border);
+    padding: 9px 12px;
+    font-size: 13.5px;
+    font-family: 'Noto Sans KR', sans-serif;
+    outline: none;
+    transition: border 0.2s;
+  }
+  .q-input:focus { border-color: var(--accent); }
+  .q-check-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-top: 8px;
+    font-family: 'Noto Sans KR', sans-serif;
+    letter-spacing: 1px;
+  }
+  .q-feedback {
+    font-size: 13px;
+    margin-top: 8px;
+    padding: 8px 12px;
+    display: none;
+  }
+  .q-feedback.correct { background: #dcfce7; color: #166534; display: block; }
+  .q-feedback.wrong { background: #fee2e2; color: #991b1b; display: block; }
+  .q-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .quiz-score-box {
+    background: var(--bg2);
+    border: 2px solid var(--accent);
+    padding: 20px;
+    margin: 24px 0;
+    text-align: center;
+    display: none;
+  }
+  .quiz-score-box .score-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .quiz-score-box p { font-size: 13px; color: var(--text2); margin: 4px 0 0; }
+  .submit-all-btn {
+    width: 100%;
+    background: var(--text);
+    color: #fff;
+    border: none;
+    padding: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 1px;
+    margin-top: 20px;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: background 0.2s;
+  }
+  .submit-all-btn:hover { background: var(--accent); }
+
+  @media (max-width: 400px) {
+    .stat-grid { grid-template-columns: 1fr 1fr; }
+    .sim-result { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-logo">NOVA MARKET</div>
+  <div class="masthead-date">2026.03.21 · FRIDAY DEEP DIVE</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">심층분석 · 포트폴리오 재편전략</div>
+    <h1>AI 200일선 붕괴,<br><em>3대 위기</em>의 동시 충격</h1>
+    <p class="hero-sub">지정학 · 에너지 · 금리가 동시에 폭발하는 지금,<br>시장의 DNA가 바뀌었다. 포트폴리오를 어떻게 재편할 것인가.</p>
+    <div class="hero-meta">
+      <span class="hero-tag">GEOPOLITICS</span>
+      <span class="hero-tag">FED POLICY</span>
+      <span class="hero-tag">AI SECTOR</span>
+      <span class="hero-tag">ENERGY</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ── 1. 현황 요약 ── -->
+  <div class="section">
+    <div class="section-label">MACRO OVERVIEW</div>
+    <h2>지금 시장, 무슨 일이 일어나고 있나</h2>
+
+    <p>2026년 3월 21일(금), 미국 3대 주가지수가 일제히 급락했다. 다우존스, 나스닥, S&amp;P 500 모두 큰 폭으로 하락했으며, 소형주 지수인 러셀 2000은 이미 조정 구간(전고점 대비 -10% 이상)에 진입했다. 4주째 이어지는 하락세다.</p>
+
+    <p>핵심은 단 하나의 악재가 아닌 <strong>3대 거시 위기가 동시에 충돌</strong>했다는 점이다. ① 이란 전쟁 확전 우려와 호르무즈 해협 봉쇄 위기(<strong>지정학 리스크</strong>), ② 유가 폭등과 글로벌 공급망 붕괴(<strong>에너지 위기</strong>), ③ 금리 인상 재검토 발언과 10년물 국채금리 급등(<strong>금리 위기</strong>). 그동안 이 세 가지 압력을 버텨왔던 AI 테크 섹터도 SMCI(슈퍼마이크로컴퓨터) 스캔들로 결국 무너지기 시작했다.</p>
+
+    <div class="stat-grid fade-in">
+      <div class="stat-card">
+        <div class="label">나스닥 200일선</div>
+        <div class="value">붕괴</div>
+        <div class="note">오늘 완전히 하향 돌파</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">SMCI 당일 하락</div>
+        <div class="value">-33%</div>
+        <div class="note">고점 대비 -81% 수준</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">10년물 금리 경계선</div>
+        <div class="value dark">4.2%</div>
+        <div class="note">이 선 이상이면 위험 구간</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">CVX 전쟁 이후 상승</div>
+        <div class="value">+34%</div>
+        <div class="note">$150 → $202 수준</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── 2. SMCI 스캔들 ── -->
+  <div class="section">
+    <div class="section-label">TRIGGER EVENT</div>
+    <h2>SMCI 스캔들: <span>AI의 배신</span></h2>
+
+    <p>오늘 나스닥 급락의 직접적 방아쇠는 슈퍼마이크로컴퓨터(SMCI) 사태였다. 공동창업자를 포함한 임원 3명이 <strong>싱가포르에 페이퍼 컴퍼니를 설립</strong>하고 더미 서버를 구축해, 엔비디아 GPU를 사실상 중국에 밀수출한 것이다. 감사 체계까지 무력화했다는 점에서 단순한 기업 비리를 넘어선다.</p>
+
+    <div class="alert fade-in">
+      <div class="alert-title">⚠️ 컴플라이언스 리스크란?</div>
+      <p>미국 SEC(증권거래위원회)가 기업에 요구하는 법적·회계적 투명성 기준. 위반 시 <strong>상장 폐지(Delisting)</strong>까지 가능하다. 밀수출 혐의는 연방법 위반이므로 형사 처벌도 수반될 수 있다.</p>
+    </div>
+
+    <p>이것이 단순히 SMCI 한 회사의 문제가 아닌 이유가 있다. <strong>엔비디아가 판매한 칩이 제재 대상국으로 흘러들어 갔다</strong>는 점에서, 미국 정부는 원청업체인 엔비디아에도 책임을 물을 수 있다. 미국의 하청-원청 책임 구조상, 하청의 위법 행위가 원청에 대한 징벌적 과징금 또는 수출 면허 제한으로 이어질 가능성이 크다.</p>
+
+    <div class="tbl-wrap fade-in">
+      <table>
+        <thead><tr><th>주체</th><th>예상 충격</th><th>강도</th></tr></thead>
+        <tbody>
+          <tr><td>SMCI</td><td>상장폐지 가능, 현 주가 추가 하락 예상</td><td>🔴 극심</td></tr>
+          <tr><td>엔비디아(NVDA)</td><td>수출 규제 강화 리스크, 200일선 하향 이탈</td><td>🟠 심각</td></tr>
+          <tr><td>AI 섹터 전반</td><td>도매급 신뢰도 훼손, 나스닥 추가 하방 압력</td><td>🟠 심각</td></tr>
+          <tr><td>마이크론(MU)</td><td>AI 수요 성장세 유지, 단 수출 규제 간접 영향</td><td>🟡 경계</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── 3. 연준 및 금리 ── -->
+  <div class="section">
+    <div class="section-label">FED POLICY</div>
+    <h2>연준의 경고: <span>금리 인상 옵션</span>이 살아났다</h2>
+
+    <p>오늘 연준 이사 두 명이 공개적으로 "<strong>금리 계획에 대한 재검토가 필요한 시점</strong>"이라고 발언했다. 이는 시장이 기정사실로 여기던 금리 동결 또는 인하 경로에 제동을 거는 발언이다.</p>
+
+    <div class="pull-quote fade-in">
+      "10년물 금리 4.2%는 마지노선이다. 이 선이 깨지면 위험 구간이다. 지금 미국 장기 금리는 수십 년 만의 추세 전환을 시도하고 있다."
+      <cite>— 방송 핵심 발언 요약</cite>
+    </div>
+
+    <p>미국 10년물 국채금리는 수십 년간 하락 추세를 유지해왔다. 그런데 지금 그 추세가 완전히 꺾이는 '<strong>턴어라운드</strong>' 구간에 진입하고 있다. CME FedWatch 기준, 6월 금리 <strong>인상</strong> 가능성이 점점 높아지고 있으며 이는 시장에 충격으로 받아들여지고 있다.</p>
+
+    <p class="chart-title">📈 금리 인상 시나리오별 주요 자산 영향</p>
+    <div class="chart-container fade-in">
+      <canvas id="rateImpactChart" height="220"></canvas>
+    </div>
+
+    <div class="highlight-row fade-in">
+      <span class="icon">🏚️</span>
+      <span>부동산 지표 악화 발표: 고금리로 인해 대출 수요 급감, 미국 부동산 거품 해소 신호.</span>
+    </div>
+    <div class="highlight-row fade-in">
+      <span class="icon">📉</span>
+      <span>유틸리티·리츠(REITs) 등 고배당 방어주: 금리 상승의 직격탄 맞는 섹터.</span>
+    </div>
+    <div class="highlight-row fade-in">
+      <span class="icon">🪙</span>
+      <span>금(Gold)도 최근 폭락: 안전자산 마저 흔들리는 이례적 장세.</span>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── 4. 에너지 & 지정학 ── -->
+  <div class="section">
+    <div class="section-label">ENERGY &amp; GEOPOLITICS</div>
+    <h2>에너지 전쟁: <span>CVX vs XOM</span></h2>
+
+    <p>이란이 공급 불가(모라토리움)를 선언하고, 호르무즈 해협 통행 관리를 사실상 각국에 떠넘긴 상황이다. 트럼프 대통령은 일본 주둔 해병대를 중동으로 이동시키며 긴장을 높이고 있다. 에너지 가격 폭등은 기정사실화됐다.</p>
+
+    <p>에너지주 중에서도 종목별 차별화가 뚜렷하다. 중동 원유 의존도가 핵심 변수다.</p>
+
+    <div class="tbl-wrap fade-in">
+      <table>
+        <thead><tr><th>항목</th><th>CVX (쉐브론)</th><th>XOM (엑슨모빌)</th></tr></thead>
+        <tbody>
+          <tr><td>중동 생산량</td><td>20만 배럴 미만/일</td><td>90만 배럴 이상/일</td></tr>
+          <tr><td>전쟁 직접 타격</td><td>낮음 ✅</td><td>높음 ⚠️</td></tr>
+          <tr><td>업스트림 비율</td><td>보통</td><td>압도적 우위</td></tr>
+          <tr><td>밸류에이션</td><td>매력적 (여유 있음)</td><td>다소 부담</td></tr>
+          <tr><td>주가 (전쟁 전→현재)</td><td>$150 → $202</td><td>상승 중 (조정 반복)</td></tr>
+          <tr><td>전략적 우선순위</td><td>⭐ 1순위</td><td>2순위</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="chart-title">⚡ 중동 원유 의존도 vs 전쟁 리스크 노출</p>
+    <div class="chart-container fade-in">
+      <canvas id="energyChart" height="220"></canvas>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── 5. 대피소 섹터 ── -->
+  <div class="section">
+    <div class="section-label">SAFE HARBOR SECTORS</div>
+    <h2>대피소: 지금 <span>살아있는 곳</span></h2>
+
+    <p>전통적 대피소 역할을 해온 금·유틸리티·리츠가 모두 흔들리는 상황에서, 새로운 방어 섹터가 부상하고 있다. 핵심 기준은 하나다: <strong>지금 당장 현금을 버는 기업인가</strong>.</p>
+
+    <div class="tbl-wrap fade-in">
+      <table>
+        <thead><tr><th>종목/섹터</th><th>핵심 호재</th><th>캐시 창출력</th></tr></thead>
+        <tbody>
+          <tr><td>🛰️ Planet Labs (우주)</td><td>중동 전쟁으로 위성 감시 수요 폭발, 정부·군 계약 급증</td><td>FCF 개선 중 ✅</td></tr>
+          <tr><td>🤖 팔란티어(PLTR)</td><td>미 국방부 '메이븐 스마트 시스템' Program of Record 격상 — 정권 교체 후에도 계속</td><td>안정적 정부 계약 ✅</td></tr>
+          <tr><td>📦 FedEx(FDX)</td><td>AI 기반 '네트워크 2.0'으로 $22억 비용 절감, 유가 급등 속 수익성 방어</td><td>매출 성장 없이도 이익 급증 ✅</td></tr>
+          <tr><td>⛽ CVX (에너지)</td><td>중동 생산 노출 낮음, 유가 상승 수혜 직접</td><td>배당+자사주매입 여력 ✅</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pull-quote fade-in">
+      "스토리, 내러티브, 미래팔이는 끝났다. 지금 시장은 오직 하나만 본다 — 지금 돈을 벌고 있냐, 아니냐."
+      <cite>— 방송 핵심 투자 원칙</cite>
+    </div>
+
+    <p><strong>FedEx 사례</strong>: 겉으로는 물류·운송업체지만 IT 인프라 투자에 막대한 자금을 쏟아온 회사다. AI 기반 스케줄링으로 비행기·트럭의 공회전을 제로에 가깝게 만들었고, 그 결과 유가 폭등 국면에서도 비용 절감이 수익으로 직결됐다.</p>
+
+    <p><strong>우주 섹터</strong>: 2025년 12월 말 이미 예고됐던 테마가 현실화됐다. 호르무즈 위기로 24시간 위성 감시 수요가 폭발하면서 고해상도 지구관측 위성 서비스 수요가 급증하고 있다.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── 6. 마이크론의 역설 ── -->
+  <div class="section">
+    <div class="section-label">SEMICONDUCTOR CYCLE</div>
+    <h2>마이크론의 역설: <span>사이클의 함정</span></h2>
+
+    <p>마이크론은 최근 매출 성장률 +196%, EPS +42%, 마진 81%라는 역대급 실적을 기록했다. AI 수요가 HBM(고대역폭 메모리) 시장을 달구며 캐펙스(설비투자)를 확대 중이다.</p>
+
+    <div class="alert fade-in">
+      <div class="alert-title">⏱️ 반도체는 사이클 산업</div>
+      <p>반도체 공장(팹) 건설에는 최소 2년, 수율 안정화까지 3년이 필요하다. 공장이 완공될 시점에 수요 사이클이 꺾일 경우, 공급 과잉으로 전환된다. 호황기에 투자 확대 → 3년 후 공급 과잉 → 폭락의 반복 패턴이다.</p>
+    </div>
+
+    <p>지금 AI 수요로 반도체 투자가 급격히 늘어나고 있다. 그러나 3년 후 그 공장들이 완공될 때 AI 수요 사이클이 어디 있을지 불확실하다. 호황 → 과잉 → 폭락의 반도체 사이클이 반복될 가능성을 배제할 수 없다.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── 7. Bull vs Bear 시나리오 ── -->
+  <div class="section">
+    <div class="section-label">MARKET SCENARIOS</div>
+    <h2>월가 의견 충돌: <span>Bear vs Bull</span></h2>
+
+    <p>이번에 특이한 점은 월가 주요 기관의 전망이 엇갈렸다는 것이다. 평소 같은 방향을 보이던 골드만삭스-모건스탠리가 반대편에 섰다.</p>
+
+    <div class="scenario-toggle">
+      <button class="scene-btn active bear" onclick="switchScene('bear')">🐻 BEAR CASE</button>
+      <button class="scene-btn bull" onclick="switchScene('bull')">🐂 BULL CASE</button>
+    </div>
+    <div id="scene-bear" class="scene-content active">
+      <p><strong>골드만삭스 / HSBC 주장:</strong></p>
+      <ul>
+        <li>시장은 아직 지정학 리스크를 충분히 반영하지 않았다.</li>
+        <li>유가 급등(하루 $10 이상 상승 반복) 대비 주가 낙폭이 너무 작다.</li>
+        <li>SMCI 사태로 AI 섹터 신뢰도가 근본적으로 훼손됐다.</li>
+        <li>전쟁 확전 시 S&amp;P 500 <strong>최대 -35% 하락</strong> 가능성.</li>
+        <li>러셀 2000 이미 조정 구간 진입, 중소형 성장주 더 위험.</li>
+      </ul>
+      <div class="source">📌 기준 지수: S&amp;P 500 — 베어 케이스 목표 6,000pt 이하</div>
+    </div>
+    <div id="scene-bull" class="scene-content">
+      <p><strong>UBS / 모건스탠리 주장:</strong></p>
+      <ul>
+        <li>역사적으로 전쟁·지정학 위기는 약 3주 후 시장에서 '무시'된다.</li>
+        <li>지금이 딱 3주차 — 과매도 상태에서 저가 매수 기회.</li>
+        <li>미국 경제 펀더멘탈(기초체력)은 여전히 견고하다.</li>
+        <li>공포 심리에 의한 단기 과매도 → 회복 시 반등 기회.</li>
+        <li>MOC(장 마감 동시호가)에서 빅테크(Mag-7)에 자금 일부 유입 확인.</li>
+      </ul>
+      <div class="source">📌 UBS·러-우크라, 걸프전 등 과거 전쟁 후 평균 3개월 내 회복 사례 근거</div>
+    </div>
+
+    <p class="chart-title">📊 S&amp;P 500 시나리오별 목표 레벨</p>
+    <div class="chart-container fade-in">
+      <canvas id="scenarioChart" height="220"></canvas>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── 8. 포트폴리오 헷지 계산기 ── -->
+  <div class="sim-box fade-in">
+    <div class="sim-title">🧮 포트폴리오 헷지 시뮬레이터</div>
+    <div class="sim-desc">에너지·방어 자산 비중을 조절하며 시나리오별 포트폴리오 예상 손익을 확인하세요.</div>
+
+    <div class="slider-row">
+      <label>AI·테크 비중 <span id="techVal">60</span>%</label>
+      <input type="range" id="techSlider" min="0" max="100" value="60" step="5">
+    </div>
+    <div class="slider-row">
+      <label>에너지 헷지 비중 <span id="energyVal">10</span>%</label>
+      <input type="range" id="energySlider" min="0" max="40" value="10" step="5">
+    </div>
+    <div class="slider-row">
+      <label>전쟁 지속 기간 가정 <span id="warVal">3</span>개월</label>
+      <input type="range" id="warSlider" min="1" max="12" value="3" step="1">
+    </div>
+
+    <div class="sim-result">
+      <div class="sim-result-item">
+        <div class="r-label">기타 비중</div>
+        <div class="r-val green" id="otherVal">30%</div>
+      </div>
+      <div class="sim-result-item">
+        <div class="r-label">베어 케이스 추정 손익</div>
+        <div class="r-val" id="bearReturn">-18.5%</div>
+      </div>
+      <div class="sim-result-item">
+        <div class="r-label">불 케이스 추정 손익</div>
+        <div class="r-val green" id="bullReturn">+4.2%</div>
+      </div>
+      <div class="sim-result-item">
+        <div class="r-label">헷지 효과</div>
+        <div class="r-val green" id="hedgeEffect">+3.1%p</div>
+      </div>
+    </div>
+    <button class="reset-btn" onclick="resetSim()">↺ 초기화</button>
+    <p style="font-size:11px;color:var(--text2);margin-top:10px;">⚠️ 본 시뮬레이터는 학습 목적의 추정치이며, 실제 투자 결과와 다를 수 있습니다.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── 9. 액션 플랜 ── -->
+  <div class="section">
+    <div class="section-label">ACTION PLAN</div>
+    <h2>지금 당장 해야 할 <span>4가지</span></h2>
+
+    <ul class="action-list">
+      <li class="fade-in">
+        <div class="action-num">1</div>
+        <div class="action-body">
+          <div class="a-title">에너지 헷지 필수</div>
+          <div class="a-desc">포트폴리오의 5~10% 이상을 지정학 방어 자산(CVX 등 에너지주)으로 채워라. AI 장기 투자자라도 지금은 헷지가 우선.</div>
+        </div>
+      </li>
+      <li class="fade-in">
+        <div class="action-num">2</div>
+        <div class="action-body">
+          <div class="a-title">컴플라이언스 리스크 종목 완전 제거</div>
+          <div class="a-desc">SMCI처럼 회계·법적 문제가 불거진 종목은 낙폭 과대 단타 유혹에도 절대 진입 금지. 상장 폐지 가능성이 있으며, 쌀 때 사는 것이 아니라 영구적 손실로 이어질 수 있다.</div>
+        </div>
+      </li>
+      <li class="fade-in">
+        <div class="action-num">3</div>
+        <div class="action-body">
+          <div class="a-title">현금 창출 우량주 분할 매수</div>
+          <div class="a-desc">FedEx·팔란티어·Planet Labs처럼 지금 돈을 버는 회사에 집중. 공포에 의한 투매 국면에서 분할 매수 전략. '현금(Cash)이 왕'인 시대.</div>
+        </div>
+      </li>
+      <li class="fade-in">
+        <div class="action-num">4</div>
+        <div class="action-body">
+          <div class="a-title">포트폴리오 다각화 재검토</div>
+          <div class="a-desc">AI·기술주 과집중 포트폴리오를 재편. 단기채권·방어주·에너지 등으로 리스크 분산. 월요일 시가 확인 후 최종 결정 권고.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="pull-quote fade-in">
+    "썰물이 빠져나가야 누가 발가벗고 헤엄치고 있는지 알 수 있다. 지금이 바로 그 순간이다."
+    <cite>— 워런 버핏 (방송 인용)</cite>
+  </div>
+
+  <hr class="divider bold">
+
+  <!-- ── 10. QUIZ ── -->
+  <div id="quiz">
+    <div class="quiz-header">
+      <h2>📝 시험문제 10선</h2>
+      <p>본 분석의 핵심 내용을 바탕으로 출제된 문제입니다. 정답 확인 후 해설을 확인하세요.</p>
+    </div>
+
+    <div style="padding: 20px 0;">
+
+      <!-- Q1 -->
+      <div class="q-item fade-in">
+        <div class="q-tag">객관식 · 쉬움</div>
+        <div class="q-num">Q1</div>
+        <div class="q-text">오늘 나스닥 급락의 직접적 방아쇠가 된 사건은?</div>
+        <ul class="q-options" id="q1-opts">
+          <li onclick="checkMCQ(this,'q1',false)">① 연준의 금리 인상 발표</li>
+          <li onclick="checkMCQ(this,'q1',false)">② 이란의 원유 수출 중단 선언</li>
+          <li onclick="checkMCQ(this,'q1',true)">③ SMCI 임원의 GPU 밀수출 스캔들</li>
+          <li onclick="checkMCQ(this,'q1',false)">④ 트럼프 대통령의 관세 인상 발표</li>
+        </ul>
+        <div class="q-feedback" id="q1-fb"></div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="q-item fade-in">
+        <div class="q-tag">객관식 · 쉬움</div>
+        <div class="q-num">Q2</div>
+        <div class="q-text">방송에서 언급된 미국 10년물 국채금리의 '위험 마지노선'은?</div>
+        <ul class="q-options" id="q2-opts">
+          <li onclick="checkMCQ(this,'q2',false)">① 3.5%</li>
+          <li onclick="checkMCQ(this,'q2',false)">② 3.8%</li>
+          <li onclick="checkMCQ(this,'q2',true)">③ 4.2%</li>
+          <li onclick="checkMCQ(this,'q2',false)">④ 5.0%</li>
+        </ul>
+        <div class="q-feedback" id="q2-fb"></div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="q-item fade-in">
+        <div class="q-tag">OX · 쉬움</div>
+        <div class="q-num">Q3</div>
+        <div class="q-text">러셀 2000 지수는 오늘 기준 조정 구간(전고점 대비 -10% 이상)에 이미 진입했다. (O/X)</div>
+        <ul class="q-options" id="q3-opts">
+          <li onclick="checkMCQ(this,'q3',true)">O (맞다)</li>
+          <li onclick="checkMCQ(this,'q3',false)">X (아니다)</li>
+        </ul>
+        <div class="q-feedback" id="q3-fb"></div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="q-item fade-in">
+        <div class="q-tag">객관식 · 보통</div>
+        <div class="q-num">Q4</div>
+        <div class="q-text">CVX(쉐브론)가 XOM(엑슨모빌)보다 전쟁 국면에서 더 유리한 주된 이유는?</div>
+        <ul class="q-options" id="q4-opts">
+          <li onclick="checkMCQ(this,'q4',false)">① 배당 수익률이 더 높기 때문</li>
+          <li onclick="checkMCQ(this,'q4',true)">② 중동 원유 생산 의존도가 훨씬 낮기 때문</li>
+          <li onclick="checkMCQ(this,'q4',false)">③ 재생에너지 비중이 높기 때문</li>
+          <li onclick="checkMCQ(this,'q4',false)">④ 미국 내 쉐일오일 생산 비중이 높기 때문</li>
+        </ul>
+        <div class="q-feedback" id="q4-fb"></div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="q-item fade-in">
+        <div class="q-tag">단답형 · 보통</div>
+        <div class="q-num">Q5</div>
+        <div class="q-text">팔란티어(PLTR)의 미 국방부 '메이븐 스마트 시스템'이 기존 'Off the Record'에서 승격된 지위는 무엇인가?</div>
+        <input type="text" class="q-input" id="q5-input" placeholder="영어 또는 한국어로 입력">
+        <br><button class="q-check-btn" onclick="checkShort('q5', ['program of record','프로그램 오브 레코드','Program of Record'])">정답 확인</button>
+        <div class="q-feedback" id="q5-fb"></div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="q-item fade-in">
+        <div class="q-tag">객관식 · 보통</div>
+        <div class="q-num">Q6</div>
+        <div class="q-text">FedEx가 도입한 AI 최적화 시스템인 '네트워크 2.0'을 통해 절감한 비용은?</div>
+        <ul class="q-options" id="q6-opts">
+          <li onclick="checkMCQ(this,'q6',false)">① 약 5억 달러</li>
+          <li onclick="checkMCQ(this,'q6',false)">② 약 10억 달러</li>
+          <li onclick="checkMCQ(this,'q6',true)">③ 약 22억 달러</li>
+          <li onclick="checkMCQ(this,'q6',false)">④ 약 50억 달러</li>
+        </ul>
+        <div class="q-feedback" id="q6-fb"></div>
+      </div>
+
+      <!-- Q7 -->
+      <div class="q-item fade-in">
+        <div class="q-tag">객관식 · 보통</div>
+        <div class="q-num">Q7</div>
+        <div class="q-text">반도체 공장(팹) 하나를 건설하고 수율을 안정화하는 데 걸리는 최소 기간은?</div>
+        <ul class="q-options" id="q7-opts">
+          <li onclick="checkMCQ(this,'q7',false)">① 6개월~1년</li>
+          <li onclick="checkMCQ(this,'q7',false)">② 1~2년</li>
+          <li onclick="checkMCQ(this,'q7',true)">③ 2~3년</li>
+          <li onclick="checkMCQ(this,'q7',false)">④ 5년 이상</li>
+        </ul>
+        <div class="q-feedback" id="q7-fb"></div>
+      </div>
+
+      <!-- Q8 -->
+      <div class="q-item fade-in">
+        <div class="q-tag">OX · 보통</div>
+        <div class="q-num">Q8</div>
+        <div class="q-text">UBS와 모건스탠리는 역사적으로 전쟁 발생 후 약 3주가 지나면 시장이 지정학 위기를 '무시'하는 경향이 있다고 주장했다. (O/X)</div>
+        <ul class="q-options" id="q8-opts">
+          <li onclick="checkMCQ(this,'q8',true)">O (맞다)</li>
+          <li onclick="checkMCQ(this,'q8',false)">X (아니다)</li>
+        </ul>
+        <div class="q-feedback" id="q8-fb"></div>
+      </div>
+
+      <!-- Q9 -->
+      <div class="q-item fade-in">
+        <div class="q-tag">객관식 · 어려움</div>
+        <div class="q-num">Q9</div>
+        <div class="q-text">미국 하청-원청 책임 구조에 대한 설명으로 올바른 것은?</div>
+        <ul class="q-options" id="q9-opts">
+          <li onclick="checkMCQ(this,'q9',false)">① 하청이 잘못하면 하청만 처벌받는다</li>
+          <li onclick="checkMCQ(this,'q9',true)">② 하청의 위법 행위에 대해 원청도 징벌적 책임을 질 수 있다</li>
+          <li onclick="checkMCQ(this,'q9',false)">③ 원청은 하청의 법적 책임과 완전히 분리된다</li>
+          <li onclick="checkMCQ(this,'q9',false)">④ 미국은 하청에게만 직접 소송을 제기한다</li>
+        </ul>
+        <div class="q-feedback" id="q9-fb"></div>
+      </div>
+
+      <!-- Q10 -->
+      <div class="q-item fade-in">
+        <div class="q-tag">단답형 · 어려움</div>
+        <div class="q-num">Q10</div>
+        <div class="q-text">HSBC가 제시한 최악의 시나리오에서 S&amp;P 500의 최대 하락 폭(%)은? (숫자만 입력)</div>
+        <input type="text" class="q-input" id="q10-input" placeholder="숫자만 입력 (예: 35)">
+        <br><button class="q-check-btn" onclick="checkShort('q10', ['35','35%','-35','-35%'])">정답 확인</button>
+        <div class="q-feedback" id="q10-fb"></div>
+      </div>
+
+      <button class="submit-all-btn" onclick="showScore()">📊 전체 점수 확인하기</button>
+      <div class="quiz-score-box" id="scoreBox">
+        <div class="score-num" id="scoreNum">0 / 10</div>
+        <p id="scoreMsg">점수를 계산 중입니다...</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<footer>
+  <div class="container">
+    <strong>DISCLAIMER</strong><br>
+    본 문서는 유튜브 방송 내용을 미국 증시·경제적 관점에서 분석·정리한 학습용 자료입니다. 투자 권유나 매매 추천이 아니며, 모든 투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다. 수치와 시나리오는 방송 원본 내용을 기반으로 하며, 실제 시장 결과와 다를 수 있습니다.<br><br>
+    <strong>출처:</strong> NOVA YouTube Channel (2026.03.21) · Chart.js CDN
+  </div>
+</footer>
+
+<script>
+// ── INTERSECTION OBSERVER: FADE-IN ──
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// ── CHART CONFIGS ──
+const chartConfigs = {};
+
+chartConfigs['rateImpactChart'] = () => {
+  new Chart(document.getElementById('rateImpactChart'), {
+    type: 'bar',
+    data: {
+      labels: ['AI·기술주', '유틸리티/리츠', '에너지주', '금(Gold)', '단기채권'],
+      datasets: [{
+        label: '금리 인상 시 예상 영향',
+        data: [-18, -22, +15, -8, +3],
+        backgroundColor: ['#e11d48','#e11d48','#2563eb','#6b7280','#2563eb'],
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` ${ctx.raw > 0 ? '+' : ''}${ctx.raw}% (추정)`
+          }
+        }
+      },
+      scales: {
+        y: {
+          ticks: { callback: v => v + '%', font: { size: 11 } },
+          grid: { color: '#f0f0f0' }
+        },
+        x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+chartConfigs['energyChart'] = () => {
+  new Chart(document.getElementById('energyChart'), {
+    type: 'bar',
+    data: {
+      labels: ['CVX 중동 생산', 'XOM 중동 생산'],
+      datasets: [{
+        label: '하루 생산량 (만 배럴)',
+        data: [20, 90],
+        backgroundColor: ['#2563eb', '#e11d48'],
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.raw}만 배럴/일` } }
+      },
+      scales: {
+        x: {
+          ticks: { callback: v => v + '만', font: { size: 11 } },
+          grid: { color: '#f0f0f0' }
+        },
+        y: { ticks: { font: { size: 12 } }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+chartConfigs['scenarioChart'] = () => {
+  new Chart(document.getElementById('scenarioChart'), {
+    type: 'bar',
+    data: {
+      labels: ['현재 레벨\n(기준)', 'Bull Case\n(+6~8%)', 'Base Case\n(-10%)', 'Bear Case\n(-35%)'],
+      datasets: [{
+        label: 'S&P 500 시나리오 (가상 레벨)',
+        data: [5700, 6150, 5130, 3705],
+        backgroundColor: ['#6b7280', '#2563eb', '#f59e0b', '#e11d48'],
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` S&P ~${ctx.raw.toLocaleString()}pt` } }
+      },
+      scales: {
+        y: {
+          min: 3000,
+          ticks: { callback: v => v.toLocaleString(), font: { size: 10 } },
+          grid: { color: '#f0f0f0' }
+        },
+        x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// ── CHART OBSERVER ──
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+// ── SCENARIO TOGGLE ──
+function switchScene(type) {
+  document.querySelectorAll('.scene-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.scene-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('scene-' + type).classList.add('active');
+  document.querySelector('.scene-btn.' + type).classList.add('active');
+}
+
+// ── PORTFOLIO SIMULATOR ──
+const DEFAULTS = { tech: 60, energy: 10, war: 3 };
+
+function updateSim() {
+  const tech = +document.getElementById('techSlider').value;
+  const energy = +document.getElementById('energySlider').value;
+  const war = +document.getElementById('warSlider').value;
+  const other = Math.max(0, 100 - tech - energy);
+
+  document.getElementById('techVal').textContent = tech;
+  document.getElementById('energyVal').textContent = energy;
+  document.getElementById('warVal').textContent = war;
+  document.getElementById('otherVal').textContent = other + '%';
+
+  // Simple model: bear case
+  const techBear = -0.25 - (war * 0.02);
+  const energyBull = 0.20 + (war * 0.03);
+  const otherNeutral = -0.05;
+  const bearRet = (tech/100 * techBear + energy/100 * energyBull + other/100 * otherNeutral) * 100;
+
+  // Bull case
+  const techBullCase = 0.08;
+  const energyBullCase = 0.25;
+  const bullRet = (tech/100 * techBullCase + energy/100 * energyBullCase + other/100 * 0.02) * 100;
+
+  // Hedge effect vs 100% tech
+  const noHedgeBear = (techBear) * 100;
+  const hedgeEffect = bearRet - noHedgeBear;
+
+  document.getElementById('bearReturn').textContent = bearRet.toFixed(1) + '%';
+  document.getElementById('bullReturn').textContent = (bullRet > 0 ? '+' : '') + bullRet.toFixed(1) + '%';
+  document.getElementById('hedgeEffect').textContent = (hedgeEffect > 0 ? '+' : '') + hedgeEffect.toFixed(1) + '%p';
+
+  document.getElementById('bearReturn').style.color = bearRet < 0 ? '#f43f5e' : '#4ade80';
+}
+
+function resetSim() {
+  document.getElementById('techSlider').value = DEFAULTS.tech;
+  document.getElementById('energySlider').value = DEFAULTS.energy;
+  document.getElementById('warSlider').value = DEFAULTS.war;
+  updateSim();
+}
+
+['techSlider','energySlider','warSlider'].forEach(id => {
+  document.getElementById(id).addEventListener('input', updateSim);
+});
+updateSim();
+
+// ── QUIZ ──
+const answers = {};
+let totalAnswered = 0;
+let totalCorrect = 0;
+
+function checkMCQ(el, qId, isCorrect) {
+  if (answers[qId] !== undefined) return;
+  answers[qId] = isCorrect;
+  const opts = document.querySelectorAll(`#${qId}-opts li`);
+  opts.forEach(o => o.style.pointerEvents = 'none');
+  el.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    opts.forEach(o => { if (o.onclick && o.onclick.toString().includes('true')) o.classList.add('correct'); });
+  }
+  const fb = document.getElementById(`${qId}-fb`);
+  fb.className = 'q-feedback ' + (isCorrect ? 'correct' : 'wrong');
+  const msgs = {
+    q1: '③ SMCI 공동창업자 포함 임원 3명이 싱가포르 페이퍼 컴퍼니를 통해 GPU를 밀수출한 사건이 오늘 나스닥 급락의 핵심 트리거였습니다.',
+    q2: '③ 방송에서 "4.2%부터 위험해진다"고 명시적으로 언급했습니다. 이 선을 넘으면 채권 시장 전반에 충격이 전이됩니다.',
+    q3: '러셀 2000은 이미 조정 구간에 진입했다고 방송에서 명시했습니다. 중소형 성장주의 위험을 보여주는 지수입니다.',
+    q4: '② CVX의 중동 생산량은 20만 배럴 미만인 반면, XOM은 90만 배럴 이상입니다. 전쟁으로 인한 공급망 충격이 XOM에 직접 타격을 줍니다.',
+    q5: 'Program of Record (프로그램 오브 레코드). 이 지위를 획득하면 정권 교체와 무관하게 프로그램이 지속됩니다.',
+    q6: '③ FedEx는 드라이브 프로그램을 통해 22억 달러의 비용을 절감했다고 언급됐습니다.',
+    q7: '③ 반도체 공장 건설에 최소 2년, 수율 안정화까지 3년이 필요합니다. 이는 반도체 사이클의 함정이 됩니다.',
+    q8: 'UBS와 모건스탠리는 역사적으로 전쟁 후 약 3주면 시장이 지정학 위기를 무시하기 시작한다고 주장했습니다. 지금이 정확히 3주차입니다.',
+    q9: '② 미국에서는 하청의 위법 행위에 원청이 징벌적 손해배상 등 책임을 질 수 있습니다. 이 메커니즘으로 엔비디아가 SMCI 사태에서 자유롭지 않습니다.',
+    q10: 'HSBC가 제시한 최악의 베어 케이스는 S&P 500의 -35% 하락 가능성입니다.'
+  };
+  fb.textContent = '💡 ' + (msgs[qId] || '');
+  totalAnswered++;
+  if (isCorrect) totalCorrect++;
+}
+
+function checkShort(qId, correctAnswers) {
+  if (answers[qId] !== undefined) return;
+  const input = document.getElementById(`${qId}-input`);
+  const val = input.value.trim().toLowerCase();
+  const isCorrect = correctAnswers.some(a => a.toLowerCase() === val || val.includes(a.toLowerCase()));
+  answers[qId] = isCorrect;
+  input.disabled = true;
+  const fb = document.getElementById(`${qId}-fb`);
+  fb.className = 'q-feedback ' + (isCorrect ? 'correct' : 'wrong');
+  const msgs = {
+    q5: '정답: Program of Record. 이 지위를 획득하면 정권 교체와 무관하게 프로그램이 지속됩니다. 팔란티어에게 안정적 수입원이 됩니다.',
+    q10: '정답: 35%. HSBC는 지정학 리스크가 충분히 반영되지 않았으며 최악의 경우 -35% 하락도 가능하다고 경고했습니다.'
+  };
+  fb.textContent = (isCorrect ? '✅ 정답! ' : '❌ 오답. ') + (msgs[qId] || '');
+  totalAnswered++;
+  if (isCorrect) totalCorrect++;
+}
+
+function showScore() {
+  const box = document.getElementById('scoreBox');
+  box.style.display = 'block';
+  document.getElementById('scoreNum').textContent = `${totalCorrect} / 10`;
+  const pct = totalCorrect * 10;
+  let msg = '';
+  if (pct >= 90) msg = '완벽합니다! 오늘 분석을 완전히 이해하셨군요. 🏆';
+  else if (pct >= 70) msg = '훌륭합니다! 핵심 내용을 잘 파악하셨습니다. 📈';
+  else if (pct >= 50) msg = '절반 이상 맞히셨습니다. 틀린 문제를 복습해 보세요. 📚';
+  else msg = '아직 풀지 않은 문제가 있거나 다시 복습이 필요합니다. 💪';
+  document.getElementById('scoreMsg').textContent = msg;
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+</script>
+</body>
+</html>
