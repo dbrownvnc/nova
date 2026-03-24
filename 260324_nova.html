@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA Real Invest — 1.7조 달러 증발, 5일 카운트다운</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Serif+KR:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --chart1: #e11d48;
+    --chart2: #1a1a1a;
+    --chart3: #6b7280;
+    --chart4: #2563eb;
+    --table-bg: #fafafa;
+    --table-header: #e11d48;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', 'Noto Serif KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ── FADE-IN ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas {
+    opacity: 1;
+  }
+
+  /* ── LAYOUT ── */
+  .page { max-width: 680px; margin: 0 auto; padding: 0 18px 60px; }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--text);
+    color: #fff;
+    padding: 48px 22px 40px;
+    margin: 0 -18px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 260px; height: 260px;
+    background: var(--accent);
+    border-radius: 50%;
+    opacity: 0.12;
+  }
+  .hero-tag {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 7vw, 36px);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 14px;
+  }
+  .hero h1 span { color: var(--accent2); }
+  .hero-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    border-top: 1px solid rgba(255,255,255,0.12);
+    padding-top: 14px;
+    margin-top: 14px;
+  }
+  .hero-meta { display: flex; gap: 16px; flex-wrap: wrap; }
+  .hero-meta span { font-size: 11px; color: rgba(255,255,255,0.5); }
+  .hero-meta strong { color: rgba(255,255,255,0.85); }
+
+  /* ── SECTION ── */
+  .section { margin: 36px 0; }
+  .section-label {
+    font-size: 9px;
+    letter-spacing: 3.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    line-height: 1.3;
+  }
+  p { color: #2d2d2d; margin-bottom: 12px; line-height: 1.75; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+  .divider-bold {
+    border: none;
+    border-top: 3px solid var(--accent);
+    margin: 36px 0;
+    width: 48px;
+  }
+
+  /* ── CALLOUT ── */
+  .callout {
+    background: var(--bg2);
+    border-left: 4px solid var(--accent);
+    padding: 16px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 20px 0;
+  }
+  .callout-title {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .callout p { margin: 0; font-size: 14px; }
+
+  .callout-dark {
+    background: var(--text);
+    color: #fff;
+    border-left: 4px solid var(--accent);
+    padding: 16px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 20px 0;
+  }
+  .callout-dark p { color: rgba(255,255,255,0.85); margin: 0; font-size: 14px; }
+
+  /* ── STAT CARDS ── */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 18px 0;
+  }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 4px;
+  }
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+  }
+  .stat-desc { font-size: 11px; color: var(--text2); margin-top: 4px; }
+  .stat-card.up .stat-value { color: #16a34a; }
+  .stat-card.dark { background: var(--text); border-color: var(--text); }
+  .stat-card.dark .stat-value { color: var(--accent2); }
+  .stat-card.dark .stat-label, .stat-card.dark .stat-desc { color: rgba(255,255,255,0.5); }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 24px; margin: 18px 0; }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 7px; top: 0; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot {
+    position: absolute; left: -24px; top: 4px;
+    width: 14px; height: 14px;
+    background: var(--accent);
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+  .tl-time {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .tl-text { font-size: 13px; color: var(--text); margin-top: 2px; }
+
+  /* ── TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 16px 0;
+  }
+  th {
+    background: var(--table-header);
+    color: #fff;
+    padding: 9px 12px;
+    text-align: left;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+  td {
+    background: var(--table-bg);
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  tr:nth-child(even) td { background: #f3f3f3; }
+  .up { color: #16a34a; font-weight: 600; }
+  .dn { color: var(--accent); font-weight: 600; }
+
+  /* ── SCENARIO CARDS ── */
+  .scenario-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 18px 0; }
+  .sc-card {
+    border-radius: 12px;
+    padding: 18px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.25s, transform 0.2s;
+  }
+  .sc-card:hover { transform: translateY(-2px); }
+  .sc-a { background: #f0fdf4; border-color: #16a34a; }
+  .sc-b { background: #fff1f2; border-color: var(--accent); }
+  .sc-badge {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  .sc-a .sc-badge { background: #16a34a; color: #fff; }
+  .sc-b .sc-badge { background: var(--accent); color: #fff; }
+  .sc-title { font-weight: 700; font-size: 15px; margin-bottom: 8px; }
+  .sc-list { list-style: none; }
+  .sc-list li { font-size: 12px; color: var(--text2); margin-bottom: 4px; padding-left: 14px; position: relative; }
+  .sc-list li::before { content: '→'; position: absolute; left: 0; color: inherit; }
+  .sc-a .sc-list li { color: #166534; }
+  .sc-b .sc-list li { color: #9f1239; }
+
+  /* ── PLAYBOOK ── */
+  .playbook-item {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: var(--bg2); border-radius: 10px;
+    padding: 16px; margin-bottom: 10px;
+    border: 1px solid var(--border);
+  }
+  .pb-num {
+    min-width: 32px; height: 32px;
+    background: var(--accent); color: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; flex-shrink: 0;
+  }
+  .pb-content h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .pb-content p { font-size: 12px; color: var(--text2); margin: 0; }
+
+  /* ── SIMULATOR ── */
+  .simulator {
+    background: var(--text);
+    border-radius: 14px;
+    padding: 22px;
+    margin: 20px 0;
+    color: #fff;
+  }
+  .sim-title {
+    font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--accent2); margin-bottom: 16px; font-weight: 600;
+  }
+  .sim-label { font-size: 11px; color: rgba(255,255,255,0.55); margin-bottom: 6px; }
+  .sim-slider {
+    width: 100%; -webkit-appearance: none;
+    height: 4px; border-radius: 2px;
+    background: rgba(255,255,255,0.15);
+    outline: none; cursor: pointer; margin-bottom: 16px;
+  }
+  .sim-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    box-shadow: 0 0 0 3px rgba(225,29,72,0.3);
+  }
+  .sim-value { font-size: 11px; color: var(--accent2); font-weight: 600; float: right; margin-top: -22px; margin-bottom: 10px; }
+  .sim-result {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px; margin-top: 20px;
+  }
+  .sim-res-card { background: rgba(255,255,255,0.07); border-radius: 8px; padding: 12px; text-align: center; }
+  .sim-res-val { font-size: 19px; font-weight: 700; color: #fff; }
+  .sim-res-val.pos { color: #4ade80; }
+  .sim-res-val.neg { color: var(--accent2); }
+  .sim-res-lbl { font-size: 10px; color: rgba(255,255,255,0.45); margin-top: 3px; }
+  .sim-reset { margin-top: 16px; background: none; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.6); padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 11px; }
+  .sim-reset:hover { border-color: var(--accent); color: var(--accent2); }
+
+  /* ── QUIZ ── */
+  .quiz-section {
+    background: var(--bg2);
+    border-radius: 14px;
+    padding: 24px 20px;
+    margin: 36px 0;
+    border: 1px solid var(--border);
+  }
+  .quiz-header {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 14px;
+  }
+  .quiz-icon { font-size: 24px; }
+  .quiz-header h2 { font-family: 'Playfair Display', serif; font-size: 20px; }
+  .quiz-item { margin-bottom: 22px; }
+  .quiz-q {
+    font-size: 13px; font-weight: 600;
+    background: var(--text);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 8px 8px 0 0;
+  }
+  .quiz-q .qnum {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 10px;
+    padding: 1px 7px;
+    border-radius: 4px;
+    margin-right: 8px;
+    font-weight: 700;
+  }
+  .quiz-opts { background: #fff; border: 1px solid var(--border); border-top: none; padding: 10px 14px; border-radius: 0 0 8px 8px; }
+  .quiz-opt {
+    display: block; font-size: 12px; color: #444;
+    padding: 5px 0; cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .quiz-opt:last-child { border-bottom: none; }
+  .quiz-opt input { margin-right: 8px; accent-color: var(--accent); }
+  .quiz-feedback {
+    font-size: 11px; padding: 6px 10px; border-radius: 5px;
+    margin-top: 6px; display: none;
+  }
+  .quiz-feedback.correct { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+  .quiz-feedback.wrong { background: #fff1f2; color: #9f1239; border: 1px solid #fecdd3; }
+  .quiz-check { margin-top: 8px; background: var(--accent); color: #fff; border: none; padding: 6px 14px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: 600; }
+  .quiz-check:hover { background: var(--accent2); }
+
+  /* ── ANSWER KEY ── */
+  .answer-key {
+    background: var(--text);
+    border-radius: 14px;
+    padding: 24px 20px;
+    margin: 36px 0;
+    color: #fff;
+  }
+  .answer-key h2 { font-family: 'Playfair Display', serif; color: #fff; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 12px; }
+  .ans-item { margin-bottom: 16px; }
+  .ans-q { font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
+  .ans-a { font-size: 13px; }
+  .ans-correct { color: var(--accent2); font-weight: 700; }
+  .ans-explain { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 3px; line-height: 1.6; }
+
+  /* ── TAG ── */
+  .tag {
+    display: inline-block; font-size: 10px; letter-spacing: 1.5px;
+    text-transform: uppercase; padding: 3px 9px;
+    border-radius: 4px; font-weight: 600; margin: 2px;
+  }
+  .tag-red { background: #fff1f2; color: var(--accent); }
+  .tag-dark { background: var(--text); color: #fff; }
+  .tag-green { background: #f0fdf4; color: #16a34a; }
+  .tag-blue { background: #eff6ff; color: #2563eb; }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 32px 0 20px;
+    font-size: 11px;
+    color: var(--text2);
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+
+  @media (max-width: 420px) {
+    .stat-grid { grid-template-columns: 1fr 1fr; }
+    .scenario-grid { grid-template-columns: 1fr; }
+    .sim-result { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="page" style="padding-top:0;padding-bottom:0;">
+    <p class="hero-tag">NOVA Real Invest · 2026년 03월 24일</p>
+    <h1><span>1.7조 달러</span> 증발<br>5일 카운트다운</h1>
+    <p style="color:rgba(255,255,255,0.65);font-size:14px;margin-bottom:16px;">트럼프의 트루스소셜 한마디로 유가 급락, 수상한 선물거래 의혹, 그리고 투자자를 위한 전술적 생존 플레이북</p>
+    <div class="hero-meta">
+      <span>채널 <strong>NOVA Real Invest</strong></span>
+      <span>분석유형 <strong>경제·투자</strong></span>
+      <span>키워드 <strong>이란 / 유가 / 선물거래 / 금리</strong></span>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+<!-- ───── 핵심 요약 ───── -->
+<div class="section fade-in">
+  <p class="section-label">오늘의 핵심</p>
+  <h2>단 1분도 안 걸렸다</h2>
+  <p>트럼프 대통령이 오전 7시 5분 트루스소셜에 올린 한 줄의 게시물 — "이란과 생산적인 대화 중, 공습 5일 유예" — 은 글로벌 원유 선물 시장에서 <strong>1.7조 달러(약 2,300조 원)를 1분 이내에 증발</strong>시켰다. 동시에 주식시장은 폭등했고, 누군가는 그 직전에 이미 포지션을 잡았다는 의혹이 불거졌다.</p>
+
+  <div class="stat-grid fade-in">
+    <div class="stat-card">
+      <div class="stat-label">증발한 원유선물 자산</div>
+      <div class="stat-value">$1.7조</div>
+      <div class="stat-desc">1분 이내 / 달러 기준</div>
+    </div>
+    <div class="stat-card up">
+      <div class="stat-label">러셀 2000 상승률</div>
+      <div class="stat-value">+2.29%</div>
+      <div class="stat-desc">소형주 최대 상승</div>
+    </div>
+    <div class="stat-card dark">
+      <div class="stat-label">다우존스 상승</div>
+      <div class="stat-value">+1.38%</div>
+      <div class="stat-desc">트럼프 게시 직후 급등</div>
+    </div>
+    <div class="stat-card dark">
+      <div class="stat-label">S&amp;P 500 상승</div>
+      <div class="stat-value">+1.15%</div>
+      <div class="stat-desc">나스닥(QQQ)도 동반 상승</div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ───── 이벤트 타임라인 ───── -->
+<div class="section fade-in">
+  <p class="section-label">사건 타임라인</p>
+  <h2>7시 5분, 세상이 바뀌었다</h2>
+
+  <div class="timeline fade-in">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">AM 6:50 (추정)</div>
+      <div class="tl-text">트럼프 게시물 15분 전 — S&P 500 선물 대량 매수 포착. 원유 선물 대량 매도도 동시에 발생.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">AM 7:05</div>
+      <div class="tl-text">트럼프, 트루스소셜에 "이란과 매우 생산적인 대화 중, 공습 5일 유예" 게시. 원유·주식 시장 즉각 반응.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">장중</div>
+      <div class="tl-text">이란 측 "미국과 직접·간접 협상 없다, 페이크 뉴스" 공식 반박. 원유 선물 가격 재반등.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">장중 · 쉐브론 CEO</div>
+      <div class="tl-text">"유가 쇼크 지속 시 인플레이션 통제 불능 가능" 발언. 오스틴 굴스비 연준위원 <strong>금리 인상(Rate Hike) 가능성 배제 불가</strong> 언급.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">장 마감 후</div>
+      <div class="tl-text">이란 방송 "트럼프가 우리의 강경 대응에 후퇴한 것 — 쫄았다" 주장. 원유·선물가격 재차 반등.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ───── 수상한 선물거래 ───── -->
+<div class="section fade-in">
+  <p class="section-label">⚠️ 의혹</p>
+  <h2>15분 전에 누군가는 알고 있었다</h2>
+
+  <p>트럼프 대통령의 게시물이 올라오기 <strong>약 15분 전</strong>에 S&P 500 선물 대량 매수와 원유 선물 대량 매도가 동시에 포착됐다. 카타르 통신 등 외신들은 <strong>"트럼프 대통령 패밀리의 작품이 아니냐"</strong>는 의혹을 제기했고, CNBC도 이상 거래를 보도했다.</p>
+
+  <div class="callout-dark fade-in">
+    <div class="callout-title">선행매매(Front Running) 란?</div>
+    <p>미공개 정보를 미리 입수해 공개 전에 매매하는 행위. 내부자 거래(Insider Trading)의 일종으로 불법이다. 이번 경우, 트럼프의 게시물이 나오기 전에 그 내용을 알고 있어야만 가능한 거래가 포착된 것.</p>
+  </div>
+
+  <div class="callout fade-in">
+    <div class="callout-title">SEC의 반응</div>
+    <p>CNBC 보도에 따르면 SEC는 관련 질의에 노코멘트(No Comment)로 답변. 조사 착수 여부는 미확인 상태.</p>
+  </div>
+
+  <p>진행자는 "99.99% 선행매매, 정보 유출이 있었던 것"이라고 단언하며, 트럼프 게시 전 거래가 정보 우위에 의한 것임을 강하게 시사했다.</p>
+</div>
+
+<hr class="divider">
+
+<!-- ───── 시장 반응 차트 ───── -->
+<div class="section fade-in">
+  <p class="section-label">시장 데이터</p>
+  <h2>자산별 당일 등락</h2>
+  <p>트럼프 게시물 이후 주식과 유가의 방향이 극명하게 갈렸다. 특히 소형주(러셀 2000)와 소비재·기술주가 급등하고, 금 현물과 원유는 급락했다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="marketChart" height="240"></canvas>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ───── 이란 협상 현황 ───── -->
+<div class="section fade-in">
+  <p class="section-label">지정학 리스크</p>
+  <h2>이란의 협상 조건</h2>
+  <p>이란 측이 제시한 휴전 2가지 조건:</p>
+
+  <div class="playbook-item fade-in">
+    <div class="pb-num">①</div>
+    <div class="pb-content">
+      <h4>파괴된 인프라 전체 복구 비용 지불</h4>
+      <p>그동안 미국·이스라엘의 공격으로 파괴된 시설 및 민간 피해에 대한 완전한 보상을 선결 조건으로 제시.</p>
+    </div>
+  </div>
+  <div class="playbook-item fade-in">
+    <div class="pb-num">②</div>
+    <div class="pb-content">
+      <h4>"다시는 이란을 공격하지 않겠다"는 문서화된 확약</h4>
+      <p>미국의 공식 서약을 문서로 받아야 한다는 조건. 사실상 받아들이기 어려운 수준의 요구.</p>
+    </div>
+  </div>
+
+  <div class="callout fade-in">
+    <div class="callout-title">진행자 분석 — "타코(TACO) 패턴"</div>
+    <p>트럼프가 강경 자세를 취하다 시장 하락·유가 폭등이 이어지면 협상 카드로 후퇴하는 패턴을 시장이 학습하고 있다. 타코(Trump Always Chickens Out)라는 표현이 쓰이기 시작했다.</p>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ───── 연준·인플레이션 ───── -->
+<div class="section fade-in">
+  <p class="section-label">🔴 핵심 경고</p>
+  <h2>금리 인상 시나리오가 테이블 위로</h2>
+  <p>오스틴 굴스비 연준위원(시카고 연방준비은행 총재)은 오늘 방송에서 이렇게 말했다:</p>
+
+  <div class="callout-dark fade-in">
+    <div class="callout-title">오스틴 굴스비 연준위원 발언</div>
+    <p>"유가 쇼크가 지속되어 인플레이션이 통제불능 상태가 된다면, <strong>금리 인상(Rate Hike)도 배제할 수 없다."</strong></p>
+  </div>
+
+  <p>진행자는 "트럼프 발언보다 이 발언에 더 집중해야 한다"고 강조했다. 이유는 다음과 같다:</p>
+
+  <table class="fade-in">
+    <tr><th>상황</th><th>결과</th></tr>
+    <tr><td>전쟁 4주차 물가 데이터 반영</td><td>CPI·PCE 급등 가능성</td></tr>
+    <tr><td>실업률 악화 동반</td><td>스태그플레이션 공식화</td></tr>
+    <tr><td>연준 금리 인상 재개</td><td>주식·코인·위험자산 전반 급락</td></tr>
+    <tr><td>연내 금리 인하 기대 소멸</td><td>성장주 밸류에이션 압박</td></tr>
+  </table>
+
+  <div class="callout fade-in">
+    <div class="callout-title">스태그플레이션(Stagflation)이란?</div>
+    <p>경기 침체(Stagnation) + 물가 상승(Inflation)이 동시에 발생하는 최악의 경제 시나리오. 금리를 올리면 경기가 더 나빠지고, 내리면 물가가 더 오르는 딜레마에 빠진다.</p>
+  </div>
+
+  <p>이번 주 주목할 경제 지표:</p>
+
+  <table class="fade-in">
+    <tr><th>날짜</th><th>지표</th><th>중요도</th></tr>
+    <tr><td>화요일</td><td>제조업 PMI</td><td><span class="tag tag-red">높음</span></td></tr>
+    <tr><td>목요일</td><td>주간 실업자 수</td><td><span class="tag tag-red">높음</span></td></tr>
+    <tr><td>목요일</td><td>GDP 3차 추정치</td><td><span class="tag tag-red">높음</span></td></tr>
+    <tr><td>목요일</td><td>PCE(개인소비지출) 물가</td><td><span class="tag tag-red">매우 높음</span></td></tr>
+  </table>
+</div>
+
+<hr class="divider">
+
+<!-- ───── 시나리오 분석 ───── -->
+<div class="section fade-in">
+  <p class="section-label">향후 전망</p>
+  <h2>5일 후, 두 갈래 길</h2>
+  <p>트럼프의 5일 유예가 끝나면 시장은 두 방향 중 하나로 폭발적으로 움직인다. 각 시나리오를 확인하라.</p>
+
+  <div class="scenario-grid fade-in">
+    <div class="sc-card sc-a">
+      <div class="sc-badge">시나리오 A</div>
+      <div class="sc-title">🟢 휴전·협상 성립</div>
+      <ul class="sc-list">
+        <li>유가 급락 지속</li>
+        <li>소비심리 회복</li>
+        <li>연내 금리 인하 기대 부활</li>
+        <li>S&amp;P 500 전고점 돌파 시도</li>
+        <li>성장주 밸류에이션 확장</li>
+      </ul>
+    </div>
+    <div class="sc-card sc-b">
+      <div class="sc-badge">시나리오 B</div>
+      <div class="sc-title">🔴 협상 결렬·재공습</div>
+      <ul class="sc-list">
+        <li>유가 재폭등</li>
+        <li>인플레이션 급등</li>
+        <li>연준 금리 인상 테이블 복귀</li>
+        <li>스태그플레이션 공식화</li>
+        <li>주식·코인 패닉셀</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ───── 시뮬레이터 ───── -->
+<div class="section fade-in">
+  <p class="section-label">🎮 인터랙티브</p>
+  <h2>유가 충격 & 포트폴리오 시뮬레이터</h2>
+  <p>유가 변동폭과 내 포트폴리오 구성을 조절하면, 각 시나리오에서의 예상 손익 변화를 확인할 수 있다.</p>
+
+  <div class="simulator fade-in">
+    <div class="sim-title">📊 유가 충격 시뮬레이터</div>
+
+    <div class="sim-label">유가 변동률 <span id="oilLbl" style="color:var(--accent2)">0%</span></div>
+    <input type="range" class="sim-slider" id="oilSlider" min="-30" max="30" value="0" step="1">
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,0.3);margin-top:-10px;margin-bottom:14px;"><span>-30% 급락</span><span>+30% 급등</span></div>
+
+    <div class="sim-label">위험자산 비중 <span id="riskLbl" style="color:var(--accent2)">50%</span></div>
+    <input type="range" class="sim-slider" id="riskSlider" min="0" max="100" value="50" step="5">
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,0.3);margin-top:-10px;margin-bottom:14px;"><span>0% (전액 현금)</span><span>100% (전액 주식)</span></div>
+
+    <div class="sim-label">총 투자금 (만원)</div>
+    <input type="range" class="sim-slider" id="amtSlider" min="500" max="10000" value="3000" step="500">
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,0.3);margin-top:-10px;margin-bottom:14px;"><span>500만</span><span>1억</span></div>
+
+    <div class="sim-result">
+      <div class="sim-res-card">
+        <div class="sim-res-val" id="resPortfolio">+0%</div>
+        <div class="sim-res-lbl">예상 포트폴리오 변동</div>
+      </div>
+      <div class="sim-res-card">
+        <div class="sim-res-val" id="resPnl">±0만원</div>
+        <div class="sim-res-lbl">예상 손익 (만원)</div>
+      </div>
+      <div class="sim-res-card">
+        <div class="sim-res-val" id="resRisk">중립</div>
+        <div class="sim-res-lbl">리스크 수준</div>
+      </div>
+    </div>
+    <button class="sim-reset" id="simReset">↺ 초기화</button>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ───── 주요 종목 분석 ───── -->
+<div class="section fade-in">
+  <p class="section-label">종목 분석</p>
+  <h2>구조적 이슈 vs 유가 연동 이슈</h2>
+
+  <p>진행자는 오늘 움직인 종목들을 두 카테고리로 분류하며, 리스크 수준이 본질적으로 다르다고 강조했다.</p>
+
+  <table class="fade-in">
+    <tr>
+      <th>카테고리</th>
+      <th>대표 종목</th>
+      <th>동인</th>
+      <th>리스크</th>
+    </tr>
+    <tr>
+      <td><span class="tag tag-blue">전쟁+AI</span></td>
+      <td>팔란티어(PLTR)</td>
+      <td>국방부 장기계약</td>
+      <td class="up">낮음</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-blue">전쟁+AI</span></td>
+      <td>테슬라(TSLA)</td>
+      <td>테라팹 AI 인프라 프로젝트</td>
+      <td class="up">중간</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-red">유가 연동</span></td>
+      <td>크루즈(CCL/RCL)</td>
+      <td>유가 5일 하락</td>
+      <td class="dn">매우 높음</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-red">유가 연동</span></td>
+      <td>항공사(UAL/AAL)</td>
+      <td>유가 5일 하락</td>
+      <td class="dn">매우 높음</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-red">소비 둔화</span></td>
+      <td>에스티로더(EL)</td>
+      <td>실적 부진 + M&amp;A 모멘텀</td>
+      <td class="dn">높음</td>
+    </tr>
+  </table>
+
+  <div class="callout fade-in">
+    <div class="callout-title">팔란티어(PLTR) 포인트</div>
+    <p>미 국방부(DoD, 흔히 '전쟁부'라고도 불림)와 장기 계약 체결. 한 번 지정되면 수년~수십 년의 정부 자금이 지속 유입되는 구조. 지정학 리스크와 무관하게 AI·방위 섹터 수혜 지속.</p>
+  </div>
+
+  <div class="callout fade-in">
+    <div class="callout-title">테슬라 테라팹(Terafab) 포인트</div>
+    <p>일론 머스크가 SpaceX·xAI와 함께 대규모 AI 인프라(테라팹) 구축 추진. 문제는 테슬라의 프리캐시플로우(Free Cash Flow)가 6개월치도 안 된다는 것. 실제 자금은 SpaceX IPO 자금에서 나올 가능성. SpaceX IPO는 빠르면 6월 언급. 밸류에이션 내러티브 부풀리기 성격이 있으니 주의 필요.</p>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ───── 전술 포트폴리오 ───── -->
+<div class="section fade-in">
+  <p class="section-label">투자 전술</p>
+  <h2>생존 플레이북 — 3개의 기둥</h2>
+
+  <div class="playbook-item fade-in">
+    <div class="pb-num">①</div>
+    <div class="pb-content">
+      <h4>코어: 방어적 성장 포지션 유지</h4>
+      <p>단기 변동에 흔들리지 말고 장기 관점 유지. 양자컴퓨터(Quantum), 원자력(Nuclear), 드론(Drone), 팔란티어 등 전쟁+AI 섹터 중심 코어 구축. 러셀 2000도 관찰 대상.</p>
+    </div>
+  </div>
+  <div class="playbook-item fade-in">
+    <div class="pb-num">②</div>
+    <div class="pb-content">
+      <h4>유가 연동 종목은 "전술적"으로만</h4>
+      <p>크루즈·항공 등 유가 수혜 종목은 5일 이내 단기 전술적 접근만. 장기 보유 금지. 내일 무슨 일이 일어나느냐에 따라 방향이 즉각 바뀐다.</p>
+    </div>
+  </div>
+  <div class="playbook-item fade-in">
+    <div class="pb-num">③</div>
+    <div class="pb-content">
+      <h4>현금(Cash)도 포지션이다</h4>
+      <p>현금 비중을 늘리는 것 = 풋(Put) 포지션과 동일한 효과. 콜 스프레드(Call Spread) 혹은 옵션 헤지도 고려. 드라이파우더(Dry Powder·현금 여력)를 유지해야 폭락 시 기회를 잡을 수 있다.</p>
+    </div>
+  </div>
+
+  <div class="callout-dark fade-in">
+    <div class="callout-title">핵심 메시지 — "5일 동안 관찰"</div>
+    <p>오늘의 급등은 "지정학적 신기루"다. 신기루인 오아시스에 빠지면 죽는다. 5일 동안은 관망이 아닌 <strong>관찰</strong>. 시나리오 A·B 모두에 대비한 포트폴리오를 세팅하고, 어느 쪽으로 움직이는지 냉정하게 지켜봐야 한다.</p>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ───── 섹터별 수혜·피해 차트 ───── -->
+<div class="section fade-in">
+  <p class="section-label">섹터 분석</p>
+  <h2>유가 하락 시 수혜 vs 피해 섹터</h2>
+
+  <div class="chart-container fade-in">
+    <canvas id="sectorChart" height="240"></canvas>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ───── 전략 vs 전술 ───── -->
+<div class="section fade-in">
+  <p class="section-label">개념 정리</p>
+  <h2>전략 vs 전술의 차이</h2>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-label">전략 (Strategy)</div>
+      <div class="stat-value" style="font-size:18px;color:var(--chart4)">장기·미래</div>
+      <div class="stat-desc">불확실성이 낮은 큰 그림. AI·우주·국방 같은 구조적 변화에 배팅하는 것.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">전술 (Tactics)</div>
+      <div class="stat-value" style="font-size:18px;color:var(--accent)">단기·현재</div>
+      <div class="stat-desc">지금 상황에 맞게 빠르게 움직이는 것. 유가 연동 종목의 5일 플레이가 여기 해당.</div>
+    </div>
+  </div>
+
+  <p style="margin-top:14px;">진행자 왈: <em>"지금은 예측 가능한 전략을 짤 수 없다. 그래서 오늘은 전술을 짠다."</em></p>
+</div>
+
+<hr class="divider">
+
+<!-- ───── QUIZ ───── -->
+<div class="quiz-section fade-in">
+  <div class="quiz-header">
+    <div class="quiz-icon">📝</div>
+    <h2>이해도 점검 — 10문제</h2>
+  </div>
+
+  <!-- Q1 -->
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="qnum">Q1</span> [쉬움·OX] 트럼프 대통령의 트루스소셜 게시물은 이란과의 공습을 5일 유예한다는 내용이었다.</div>
+    <div class="quiz-opts">
+      <label class="quiz-opt"><input type="radio" name="q1" value="O"> O (맞다)</label>
+      <label class="quiz-opt"><input type="radio" name="q1" value="X"> X (틀리다)</label>
+      <div class="quiz-feedback" id="fb1"></div>
+      <button class="quiz-check" onclick="checkQ('q1','O','fb1')">확인</button>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="qnum">Q2</span> [쉬움·객관식] 오늘 가장 큰 상승률을 보인 지수는?</div>
+    <div class="quiz-opts">
+      <label class="quiz-opt"><input type="radio" name="q2" value="a"> ① 다우존스 (+1.38%)</label>
+      <label class="quiz-opt"><input type="radio" name="q2" value="b"> ② S&P 500 (+1.15%)</label>
+      <label class="quiz-opt"><input type="radio" name="q2" value="c"> ③ 러셀 2000 (+2.29%)</label>
+      <label class="quiz-opt"><input type="radio" name="q2" value="d"> ④ 나스닥 QQQ</label>
+      <div class="quiz-feedback" id="fb2"></div>
+      <button class="quiz-check" onclick="checkQ('q2','c','fb2')">확인</button>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="qnum">Q3</span> [보통·객관식] 선행매매(Front Running) 의혹의 핵심 증거로 언급된 것은?</div>
+    <div class="quiz-opts">
+      <label class="quiz-opt"><input type="radio" name="q3" value="a"> ① 트럼프 가족이 SNS를 통해 매매 지시</label>
+      <label class="quiz-opt"><input type="radio" name="q3" value="b"> ② 게시물 약 15분 전 S&P 500 선물 대량 매수·원유 선물 대량 매도 포착</label>
+      <label class="quiz-opt"><input type="radio" name="q3" value="c"> ③ SEC가 공식 조사를 시작했다</label>
+      <label class="quiz-opt"><input type="radio" name="q3" value="d"> ④ CNBC가 트럼프 가족 계좌를 확인했다</label>
+      <div class="quiz-feedback" id="fb3"></div>
+      <button class="quiz-check" onclick="checkQ('q3','b','fb3')">확인</button>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="qnum">Q4</span> [쉬움·단답] 이란이 휴전의 조건으로 내건 두 가지를 각각 한 문장으로 써보세요.</div>
+    <div class="quiz-opts" style="background:#fff;padding:10px 14px;border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;">
+      <textarea style="width:100%;height:60px;font-size:12px;border:1px solid #ddd;padding:8px;border-radius:6px;resize:vertical;" placeholder="①... ②..."></textarea>
+      <div style="font-size:11px;color:var(--text2);margin-top:6px;">💡 정답은 아래 정답지 섹션에서 확인하세요.</div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="qnum">Q5</span> [보통·OX] 연준위원 오스틴 굴스비는 "인플레이션이 통제 불능이 되면 금리 인상도 배제할 수 없다"고 말했다.</div>
+    <div class="quiz-opts">
+      <label class="quiz-opt"><input type="radio" name="q5" value="O"> O (맞다)</label>
+      <label class="quiz-opt"><input type="radio" name="q5" value="X"> X (틀리다)</label>
+      <div class="quiz-feedback" id="fb5"></div>
+      <button class="quiz-check" onclick="checkQ('q5','O','fb5')">확인</button>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="qnum">Q6</span> [보통·객관식] "스태그플레이션(Stagflation)"을 가장 올바르게 설명한 것은?</div>
+    <div class="quiz-opts">
+      <label class="quiz-opt"><input type="radio" name="q6" value="a"> ① 경기 성장과 물가 상승이 동시에 발생하는 상태</label>
+      <label class="quiz-opt"><input type="radio" name="q6" value="b"> ② 경기 침체와 물가 하락이 동시에 발생하는 상태</label>
+      <label class="quiz-opt"><input type="radio" name="q6" value="c"> ③ 경기 침체와 물가 상승이 동시에 발생하는 최악의 상태</label>
+      <label class="quiz-opt"><input type="radio" name="q6" value="d"> ④ 경기 호황으로 인해 물가가 폭발적으로 오르는 상태</label>
+      <div class="quiz-feedback" id="fb6"></div>
+      <button class="quiz-check" onclick="checkQ('q6','c','fb6')">확인</button>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="qnum">Q7</span> [어려움·객관식] 진행자가 크루즈·항공주를 "유가 연동 종목"으로 분류하며 경고한 핵심 이유는?</div>
+    <div class="quiz-opts">
+      <label class="quiz-opt"><input type="radio" name="q7" value="a"> ① 실적 자체가 나쁘기 때문에</label>
+      <label class="quiz-opt"><input type="radio" name="q7" value="b"> ② 5일짜리 유예가 끝나면 유가가 재급등해 순식간에 방향이 바뀔 수 있기 때문에</label>
+      <label class="quiz-opt"><input type="radio" name="q7" value="c"> ③ SEC가 해당 종목 거래를 규제했기 때문에</label>
+      <label class="quiz-opt"><input type="radio" name="q7" value="d"> ④ 팔란티어와 경쟁 관계이기 때문에</label>
+      <div class="quiz-feedback" id="fb7"></div>
+      <button class="quiz-check" onclick="checkQ('q7','b','fb7')">확인</button>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="qnum">Q8</span> [보통·객관식] 진행자가 말한 "타코(TACO) 패턴"이 뜻하는 것은?</div>
+    <div class="quiz-opts">
+      <label class="quiz-opt"><input type="radio" name="q8" value="a"> ① 트럼프가 멕시코 정책을 자주 바꾼다는 의미</label>
+      <label class="quiz-opt"><input type="radio" name="q8" value="b"> ② 트럼프가 강경 발언 후 시장 반응에 따라 후퇴하는 반복 패턴</label>
+      <label class="quiz-opt"><input type="radio" name="q8" value="c"> ③ 원유 가격이 오를 때마다 협상이 시작되는 패턴</label>
+      <label class="quiz-opt"><input type="radio" name="q8" value="d"> ④ 이란이 협상에서 항상 유리한 조건을 얻어내는 패턴</label>
+      <div class="quiz-feedback" id="fb8"></div>
+      <button class="quiz-check" onclick="checkQ('q8','b','fb8')">확인</button>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="qnum">Q9</span> [어려움·객관식] 팔란티어(PLTR)가 오늘 상승한 이유가 크루즈·항공주의 상승 이유와 본질적으로 다른 점은?</div>
+    <div class="quiz-opts">
+      <label class="quiz-opt"><input type="radio" name="q9" value="a"> ① 팔란티어는 유가와 상관없이 국방부 장기계약이라는 구조적 호재가 있기 때문</label>
+      <label class="quiz-opt"><input type="radio" name="q9" value="b"> ② 팔란티어가 더 시가총액이 크기 때문</label>
+      <label class="quiz-opt"><input type="radio" name="q9" value="c"> ③ 팔란티어는 트럼프와 직접 연관이 없기 때문</label>
+      <label class="quiz-opt"><input type="radio" name="q9" value="d"> ④ 팔란티어는 원유 선물과 반대로 움직이기 때문</label>
+      <div class="quiz-feedback" id="fb9"></div>
+      <button class="quiz-check" onclick="checkQ('q9','a','fb9')">확인</button>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="qnum">Q10</span> [어려움·객관식] 진행자가 "현금도 포지션"이라고 말한 의도는?</div>
+    <div class="quiz-opts">
+      <label class="quiz-opt"><input type="radio" name="q10" value="a"> ① 현금을 예금해 이자를 받으라는 뜻</label>
+      <label class="quiz-opt"><input type="radio" name="q10" value="b"> ② 불확실성이 높을 때 현금 비중을 높이는 것이 리스크 헤지이자 기회 확보 전략임을 강조한 것</label>
+      <label class="quiz-opt"><input type="radio" name="q10" value="c"> ③ 달러 강세 시기에 환차익을 노리라는 뜻</label>
+      <label class="quiz-opt"><input type="radio" name="q10" value="d"> ④ 모든 자산을 팔고 시장을 떠나라는 뜻</label>
+      <div class="quiz-feedback" id="fb10"></div>
+      <button class="quiz-check" onclick="checkQ('q10','b','fb10')">확인</button>
+    </div>
+  </div>
+
+</div><!-- /quiz-section -->
+
+<!-- ───── 정답 & 해설 ───── -->
+<div class="answer-key fade-in">
+  <h2>📋 정답 및 해설</h2>
+
+  <div class="ans-item">
+    <div class="ans-q">Q1 [OX·쉬움]</div>
+    <div class="ans-a ans-correct">정답: O</div>
+    <div class="ans-explain">트럼프는 트루스소셜에 "이란과 매우 생산적인 대화를 하고 있어 공습을 5일 유예한다"고 게시했다. 이 한마디가 원유·주식 시장을 즉각 움직였다.</div>
+  </div>
+
+  <div class="ans-item">
+    <div class="ans-q">Q2 [객관식·쉬움]</div>
+    <div class="ans-a ans-correct">정답: ③ 러셀 2000 (+2.29%)</div>
+    <div class="ans-explain">소형주 지수인 러셀 2000이 +2.29%로 가장 큰 폭 상승. 다우 +1.38%, S&P 500 +1.15% 순이었다.</div>
+  </div>
+
+  <div class="ans-item">
+    <div class="ans-q">Q3 [객관식·보통]</div>
+    <div class="ans-a ans-correct">정답: ② 게시물 약 15분 전 S&P 500 선물 대량 매수·원유 선물 대량 매도 포착</div>
+    <div class="ans-explain">트럼프 게시 15분 전에 S&P 500 선물 대량 매수와 원유 선물 대량 매도가 동시에 발생했다는 사실이 핵심 의혹 증거다.</div>
+  </div>
+
+  <div class="ans-item">
+    <div class="ans-q">Q4 [단답·쉬움]</div>
+    <div class="ans-a ans-correct">정답 ①: 미국이 파괴한 이란 인프라 전체 복구 비용 지불</div>
+    <div class="ans-a ans-correct">정답 ②: 다시는 이란을 공격하지 않겠다는 공식·문서화된 확약</div>
+    <div class="ans-explain">이란은 이 두 조건이 선행돼야 휴전을 논할 수 있다는 강경 입장을 고수했다.</div>
+  </div>
+
+  <div class="ans-item">
+    <div class="ans-q">Q5 [OX·보통]</div>
+    <div class="ans-a ans-correct">정답: O</div>
+    <div class="ans-explain">오스틴 굴스비 시카고 연준 총재는 유가 쇼크로 인플레이션이 통제 불능이 되면 금리 인상(Rate Hike)도 배제할 수 없다고 명시적으로 언급했다.</div>
+  </div>
+
+  <div class="ans-item">
+    <div class="ans-q">Q6 [객관식·보통]</div>
+    <div class="ans-a ans-correct">정답: ③ 경기 침체와 물가 상승이 동시에 발생하는 최악의 상태</div>
+    <div class="ans-explain">Stagnation(침체) + Inflation(인플레이션)의 합성어. 금리를 올리면 경기가 더 나빠지고 내리면 물가가 더 오르는 딜레마에 빠진다.</div>
+  </div>
+
+  <div class="ans-item">
+    <div class="ans-q">Q7 [객관식·어려움]</div>
+    <div class="ans-a ans-correct">정답: ② 5일짜리 유예가 끝나면 유가가 재급등해 순식간에 방향이 바뀔 수 있기 때문에</div>
+    <div class="ans-explain">크루즈·항공주는 유가 하락이라는 단기 재료로 움직인 것이다. 5일 후 협상이 결렬되거나 확전이 되면 유가가 재폭등하며 손실이 순식간에 발생할 수 있다.</div>
+  </div>
+
+  <div class="ans-item">
+    <div class="ans-q">Q8 [객관식·보통]</div>
+    <div class="ans-a ans-correct">정답: ② 트럼프가 강경 발언 후 시장 반응에 따라 후퇴하는 반복 패턴</div>
+    <div class="ans-explain">TACO = Trump Always Chickens Out. 시장은 트럼프의 강경 자세 → 시장 하락·유가 폭등 → 트럼프 후퇴 패턴을 학습했다고 진행자는 설명했다.</div>
+  </div>
+
+  <div class="ans-item">
+    <div class="ans-q">Q9 [객관식·어려움]</div>
+    <div class="ans-a ans-correct">정답: ① 팔란티어는 유가와 상관없이 국방부 장기계약이라는 구조적 호재가 있기 때문</div>
+    <div class="ans-explain">크루즈·항공은 유가라는 외부 변수에 의존하지만, 팔란티어는 수년~수십 년의 정부 계약이라는 구조적 성장 동인이 생긴 것. 지정학 리스크와 독립적이다.</div>
+  </div>
+
+  <div class="ans-item">
+    <div class="ans-q">Q10 [객관식·어려움]</div>
+    <div class="ans-a ans-correct">정답: ② 불확실성이 높을 때 현금 비중을 높이는 것이 리스크 헤지이자 기회 확보 전략임을 강조한 것</div>
+    <div class="ans-explain">현금은 '아무것도 안 하는 것'이 아니라, 폭락 시 저가 매수 기회를 잡을 수 있는 적극적 포지션이다. 진행자는 "Cash is King, Cash is a PUT"이라고 강조했다.</div>
+  </div>
+</div>
+
+<div class="footer">
+  NOVA Real Invest 방송 분석 · 2026년 03월 24일<br>
+  본 문서는 교육·정보 제공 목적이며 투자 권유가 아닙니다.
+</div>
+
+</div><!-- /page -->
+
+<script>
+// ── IntersectionObserver for fade-in ──
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// ── Chart configs ──
+const chartConfigs = {};
+
+chartConfigs['marketChart'] = () => {
+  new Chart(document.getElementById('marketChart'), {
+    type: 'bar',
+    data: {
+      labels: ['다우존스', 'S&P 500', '나스닥 QQQ', '러셀 2000', '금 현물', '비트코인', '원유 WTI'],
+      datasets: [{
+        label: '당일 변동률 (%)',
+        data: [1.38, 1.15, 1.05, 2.29, -2.1, -1.5, -4.8],
+        backgroundColor: [
+          '#2563eb','#2563eb','#2563eb','#2563eb',
+          '#6b7280','#6b7280','#e11d48'
+        ],
+        borderRadius: 5,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: { label: ctx => ` ${ctx.parsed.y > 0 ? '+' : ''}${ctx.parsed.y}%` }
+        }
+      },
+      scales: {
+        x: { ticks: { font: { size: 10 } } },
+        y: {
+          ticks: { callback: v => v + '%', font: { size: 10 } },
+          grid: { color: '#f0f0f0' }
+        }
+      }
+    }
+  });
+};
+
+chartConfigs['sectorChart'] = () => {
+  new Chart(document.getElementById('sectorChart'), {
+    type: 'horizontalBar',
+    data: {
+      labels: ['크루즈·항공(유가↓)', '소비재·기술주', '러셀 소형주', '팔란티어(PLTR)', '테슬라(TSLA)', '에스티로더', '에너지(XOM)'],
+      datasets: [{
+        label: '유가 하락 시 수혜도',
+        data: [85, 65, 70, 20, 30, -10, -80],
+        backgroundColor: ctx => ctx.parsed.x > 0 ? '#2563eb' : '#e11d48',
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` 수혜도: ${ctx.parsed.x > 0 ? '+' : ''}${ctx.parsed.x}`
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { font: { size: 10 } },
+          grid: { color: '#f0f0f0' }
+        },
+        y: { ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+};
+
+// ── IntersectionObserver for charts ──
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+// ── Simulator ──
+const oilSlider = document.getElementById('oilSlider');
+const riskSlider = document.getElementById('riskSlider');
+const amtSlider = document.getElementById('amtSlider');
+
+function updateSim() {
+  const oil = parseFloat(oilSlider.value);
+  const risk = parseFloat(riskSlider.value) / 100;
+  const amt = parseFloat(amtSlider.value);
+
+  document.getElementById('oilLbl').textContent = (oil >= 0 ? '+' : '') + oil + '%';
+  document.getElementById('riskLbl').textContent = riskSlider.value + '%';
+
+  // Oil down → stocks up roughly 0.3x correlation (simplified)
+  // Oil up → stocks down
+  const stockEffect = -oil * 0.4;  // inverse
+  const portfolioChange = stockEffect * risk;
+  const pnl = (portfolioChange / 100) * amt;
+
+  const pEl = document.getElementById('resPortfolio');
+  const pnlEl = document.getElementById('resPnl');
+  const rEl = document.getElementById('resRisk');
+
+  pEl.textContent = (portfolioChange >= 0 ? '+' : '') + portfolioChange.toFixed(1) + '%';
+  pEl.className = 'sim-res-val ' + (portfolioChange >= 0 ? 'pos' : 'neg');
+
+  pnlEl.textContent = (pnl >= 0 ? '+' : '') + Math.round(pnl).toLocaleString() + '만';
+  pnlEl.className = 'sim-res-val ' + (pnl >= 0 ? 'pos' : 'neg');
+
+  const absRisk = risk * Math.abs(oil) / 10;
+  rEl.textContent = absRisk < 1.5 ? '낮음' : absRisk < 3 ? '중간' : absRisk < 5 ? '높음' : '매우 높음';
+  rEl.style.color = absRisk < 1.5 ? '#4ade80' : absRisk < 3 ? '#facc15' : '#f87171';
+}
+
+oilSlider.addEventListener('input', updateSim);
+riskSlider.addEventListener('input', updateSim);
+amtSlider.addEventListener('input', updateSim);
+document.getElementById('simReset').addEventListener('click', () => {
+  oilSlider.value = 0; riskSlider.value = 50; amtSlider.value = 3000;
+  updateSim();
+});
+updateSim();
+
+// ── Quiz ──
+const correctAnswers = {
+  q1: 'O', q2: 'c', q3: 'b', q5: 'O',
+  q6: 'c', q7: 'b', q8: 'b', q9: 'a', q10: 'b'
+};
+const explanations = {
+  q1: '트럼프는 이란과의 공습을 5일 유예한다고 트루스소셜에 게시했습니다.',
+  q2: '러셀 2000 소형주 지수가 +2.29%로 가장 큰 폭 상승했습니다.',
+  q3: '게시물 15분 전 S&P 500 선물 매수 + 원유 선물 매도가 핵심 증거입니다.',
+  q5: '굴스비 연준위원은 유가 쇼크 지속 시 금리 인상(Rate Hike)도 배제 불가라고 했습니다.',
+  q6: '스태그플레이션 = 경기침체 + 물가상승의 동시 발생. 정책 딜레마를 유발합니다.',
+  q7: '5일 유예 후 재공습·유가 급등 시 크루즈·항공은 순식간에 손실로 전환됩니다.',
+  q8: 'TACO = Trump Always Chickens Out. 강경 → 후퇴 반복 패턴입니다.',
+  q9: '팔란티어는 국방부 장기계약(구조적 호재), 크루즈·항공은 5일짜리 유가 재료입니다.',
+  q10: '현금 비중 확대 = 드라이파우더 확보 = 폭락 시 기회를 잡는 적극적 포지션입니다.'
+};
+
+function checkQ(name, correct, fbId) {
+  const selected = document.querySelector(`input[name="${name}"]:checked`);
+  const fb = document.getElementById(fbId);
+  if (!selected) { fb.style.display = 'block'; fb.className = 'quiz-feedback wrong'; fb.textContent = '먼저 답을 선택해주세요.'; return; }
+  const isCorrect = selected.value === correct;
+  fb.style.display = 'block';
+  fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
+  fb.textContent = isCorrect
+    ? '✅ 정답! ' + (explanations[name] || '')
+    : '❌ 오답. 정답: ' + correct + ' — ' + (explanations[name] || '');
+}
+</script>
+</body>
+</html>
