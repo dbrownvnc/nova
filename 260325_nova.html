@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>전쟁의 안개와 금융의 폭풍 | CIA.chat 2026-03-24</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --blue: #2563eb;
+    --gray: #6b7280;
+    --border: #e5e5e5;
+    --table-header: #e11d48;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* ===== HEADER ===== */
+  .mag-header {
+    border-top: 4px solid var(--accent);
+    padding: 28px 0 0;
+    margin-bottom: 8px;
+  }
+  .mag-kicker {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mag-kicker::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.3;
+  }
+  .mag-title {
+    font-family: 'Playfair Display', 'Noto Serif KR', serif;
+    font-size: clamp(28px, 7vw, 42px);
+    font-weight: 900;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+  .mag-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .mag-meta {
+    display: flex;
+    gap: 16px;
+    font-size: 11px;
+    color: var(--text2);
+    letter-spacing: 0.5px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .mag-meta span { display: flex; align-items: center; gap: 4px; }
+
+  /* ===== LEAD ===== */
+  .lead {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    line-height: 1.85;
+    color: #2a2a2a;
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    margin: 24px 0;
+    background: #fff5f7;
+  }
+
+  /* ===== SECTIONS ===== */
+  .section {
+    margin: 36px 0;
+  }
+  .section-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', 'Noto Serif KR', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 14px;
+    line-height: 1.3;
+  }
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+
+  /* ===== CARDS ===== */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px;
+  }
+  .card.danger { border-left: 3px solid var(--accent); }
+  .card.safe { border-left: 3px solid var(--blue); }
+  .card.warn { border-left: 3px solid #f59e0b; }
+  .card-label { font-size: 10px; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .card-value { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; }
+  .card-value.down { color: var(--accent); }
+  .card-value.up { color: var(--blue); }
+  .card-desc { font-size: 11px; color: var(--text2); margin-top: 4px; }
+
+  /* ===== PULL QUOTE ===== */
+  .pull-quote {
+    font-family: 'Playfair Display', 'Noto Serif KR', serif;
+    font-size: 20px;
+    font-style: italic;
+    font-weight: 700;
+    line-height: 1.5;
+    color: var(--text);
+    border-top: 2px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
+    padding: 20px 0;
+    margin: 28px 0;
+    text-align: center;
+  }
+  .pull-quote span { color: var(--accent); }
+
+  /* ===== TABLE ===== */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 16px 0;
+  }
+  .data-table th {
+    background: var(--table-header);
+    color: white;
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+  .data-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+  }
+  .data-table tr:nth-child(even) td { background: white; }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .badge.red { background: #fef2f2; color: var(--accent); border: 1px solid #fecdd3; }
+  .badge.blue { background: #eff6ff; color: var(--blue); border: 1px solid #bfdbfe; }
+  .badge.gray { background: #f3f4f6; color: var(--gray); border: 1px solid #e5e7eb; }
+  .badge.yellow { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+
+  /* ===== FADE-IN ===== */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin: 16px 0;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas { opacity: 1; }
+
+  /* ===== SIMULATOR ===== */
+  .simulator {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px;
+    margin: 20px 0;
+  }
+  .simulator h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+  .sim-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+    flex-wrap: wrap;
+  }
+  .sim-label { font-size: 12px; color: var(--text2); min-width: 110px; }
+  .sim-row input[type=range] {
+    flex: 1;
+    min-width: 120px;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+  .sim-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 52px;
+    text-align: right;
+  }
+  .sim-result {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px;
+    margin-top: 14px;
+  }
+  .sim-result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .sim-result-row:last-child { border-bottom: none; }
+  .sim-result-row .key { color: var(--text2); }
+  .sim-result-row .val { font-weight: 600; color: var(--text); }
+  .sim-result-row .val.danger { color: var(--accent); }
+  .sim-result-row .val.safe { color: var(--blue); }
+  .reset-btn {
+    background: none;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 6px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 2px;
+    margin-top: 12px;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { background: var(--accent); color: white; }
+
+  /* ===== FLOW DIAGRAM ===== */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 16px 0;
+  }
+  .flow-step {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 16px;
+    font-size: 13px;
+    position: relative;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .flow-step:hover { border-color: var(--accent); box-shadow: 0 2px 8px rgba(225,29,72,0.1); }
+  .flow-step.active { border-color: var(--accent); background: #fff5f7; }
+  .flow-step-num {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 20px;
+    margin-right: 8px;
+  }
+  .flow-arrow {
+    text-align: center;
+    color: var(--accent);
+    font-size: 18px;
+    line-height: 1.2;
+    margin: 2px 0;
+  }
+  .flow-detail {
+    display: none;
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--border);
+    line-height: 1.6;
+  }
+  .flow-step.active .flow-detail { display: block; }
+
+  /* ===== RISK METER ===== */
+  .risk-meter { margin: 16px 0; }
+  .risk-bar-wrap {
+    height: 14px;
+    background: #e5e5e5;
+    border-radius: 7px;
+    overflow: hidden;
+    margin: 6px 0;
+  }
+  .risk-bar {
+    height: 100%;
+    border-radius: 7px;
+    transition: width 0.8s ease;
+  }
+  .risk-label-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text2);
+    margin-bottom: 2px;
+  }
+  .risk-val { font-weight: 700; color: var(--text); }
+
+  /* ===== QUIZ ===== */
+  .quiz-section {
+    background: var(--bg2);
+    border-top: 4px solid var(--text);
+    padding: 32px 0 0;
+    margin-top: 48px;
+  }
+  .quiz-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .quiz-icon {
+    background: var(--text);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .quiz-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .q-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 18px;
+    margin: 14px 0;
+  }
+  .q-num {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .q-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .q-options { display: flex; flex-direction: column; gap: 8px; }
+  .q-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1.5;
+    transition: all 0.15s;
+    background: white;
+    text-align: left;
+    width: 100%;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .q-option:hover { border-color: var(--accent); background: #fff5f7; }
+  .q-option.correct { border-color: var(--blue); background: #eff6ff; color: var(--blue); }
+  .q-option.wrong { border-color: var(--accent); background: #fef2f2; color: var(--accent); }
+  .q-option .opt-key {
+    font-weight: 700;
+    min-width: 18px;
+    color: var(--text2);
+  }
+  .q-input { width: 100%; border: 1px solid var(--border); padding: 10px 12px; font-size: 13px; border-radius: 4px; font-family: 'Noto Sans KR', sans-serif; outline: none; }
+  .q-input:focus { border-color: var(--accent); }
+  .q-submit {
+    margin-top: 10px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 2px;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: background 0.2s;
+  }
+  .q-submit:hover { background: var(--accent2); }
+  .q-feedback {
+    display: none;
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .q-feedback.show { display: block; }
+  .q-feedback.correct-fb { background: #eff6ff; color: var(--blue); border: 1px solid #bfdbfe; }
+  .q-feedback.wrong-fb { background: #fef2f2; color: var(--accent); border: 1px solid #fecdd3; }
+  .q-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; margin-left: 8px; }
+  .q-easy { background: #dcfce7; color: #166534; }
+  .q-med { background: #fef9c3; color: #854d0e; }
+  .q-hard { background: #fce7f3; color: #9d174d; }
+  .score-board {
+    background: var(--text);
+    color: white;
+    padding: 20px;
+    border-radius: 4px;
+    text-align: center;
+    margin-top: 20px;
+    display: none;
+  }
+  .score-board.show { display: block; }
+  .score-big { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 900; color: var(--accent2); }
+  .score-sub { font-size: 13px; color: #aaa; margin-top: 6px; }
+  .answers-section {
+    border-top: 2px solid var(--border);
+    margin-top: 36px;
+    padding-top: 28px;
+  }
+  .answers-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .answer-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    padding: 14px 16px;
+    margin: 10px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 13px;
+  }
+  .answer-item strong { color: var(--accent); display: block; margin-bottom: 4px; font-size: 12px; }
+  .answer-q { font-weight: 600; margin-bottom: 4px; line-height: 1.5; }
+  .answer-a { color: var(--blue); font-weight: 600; margin-bottom: 4px; }
+  .answer-exp { color: var(--text2); line-height: 1.6; }
+
+  /* ===== FOOTER ===== */
+  .mag-footer {
+    border-top: 1px solid var(--border);
+    padding: 20px 0;
+    margin-top: 40px;
+    font-size: 11px;
+    color: var(--text2);
+    text-align: center;
+  }
+
+  p { margin-bottom: 12px; }
+  strong { color: var(--text); }
+  .highlight { background: #fff5f7; border-radius: 2px; padding: 0 4px; color: var(--accent); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="mag-header">
+  <div class="mag-kicker">CIA.chat 멤버미팅 · 2026년 03월 24일</div>
+  <h1 class="mag-title">전쟁의 안개,<br><em>돈은 이곳으로 도망</em></h1>
+  <div class="mag-meta">
+    <span>📅 2026.03.24</span>
+    <span>📊 마켓 클로징 리포트</span>
+    <span>🎯 사모신용·지정학·스태그플레이션</span>
+  </div>
+</header>
+
+<!-- LEAD -->
+<div class="lead fade-in">
+  뉴욕 증시는 이란·미국 갈등, 사모신용(Private Credit) 환매 중단, PMI 악화라는 세 겹의 불확실성 속에서 방향을 잃었다. 트럼프 대통령의 발언 하나하나가 시장을 수십 분 단위로 흔들고, 유가는 100달러를 넘어 150달러 전망까지 나오는 상황이다. 전문가들은 "스태그플레이션의 귀환"을 경고하고 있다.
+</div>
+
+<!-- 1. 시장 현황 -->
+<div class="section fade-in">
+  <div class="section-label">Market Overview</div>
+  <h2 class="section-title">📊 오늘의 시장: 공포와 희망의 줄다리기</h2>
+
+  <div class="card-grid">
+    <div class="card danger">
+      <div class="card-label">VIX (공포지수)</div>
+      <div class="card-value down">26</div>
+      <div class="card-desc">여전히 고공 유지. 20 이하 안착 전까지 불안</div>
+    </div>
+    <div class="card danger">
+      <div class="card-label">IGV (소프트웨어 ETF)</div>
+      <div class="card-value down">–4.29%</div>
+      <div class="card-desc">1개월 연속 바닥 탈출 실패</div>
+    </div>
+    <div class="card safe">
+      <div class="card-label">에너지 섹터</div>
+      <div class="card-value up">↑ 강세</div>
+      <div class="card-desc">유가 상승 수혜, 방산·희토류 동반 상승</div>
+    </div>
+    <div class="card warn">
+      <div class="card-label">WTI 유가</div>
+      <div class="card-value" style="color:#f59e0b">$100+ </div>
+      <div class="card-desc">벵가드: $150 돌파 시 글로벌 경기 침체 경고</div>
+    </div>
+  </div>
+
+  <div class="chart-container fade-in">
+    <canvas id="marketChart" height="220"></canvas>
+  </div>
+
+  <p>S&P500, 나스닥, 다우, 러셀 모두 오르락내리락을 반복하며 장을 마쳤다. <span class="highlight">VIX 26</span>은 투자자들의 불안이 여전함을 보여주지만, 완전한 패닉 셀은 아직 나오지 않는 "공포 속 희망" 상태다.</p>
+</div>
+
+<hr class="divider">
+
+<!-- 2. 지정학 -->
+<div class="section fade-in">
+  <div class="section-label">Geopolitics</div>
+  <h2 class="section-title">🪖 전쟁의 안개: 이란·미국 갈등</h2>
+
+  <p>트럼프 대통령은 "이란과 생산적인 대화 중"이라고 발언하며 시장을 올렸다가, 이란 측이 즉각 "사실무근"이라 반박하면서 다시 하락했다. <strong>발언 하나가 유가를 수 달러씩 움직이는 헤드라인 트레이딩</strong>이 반복되고 있다.</p>
+
+  <div class="pull-quote">
+    "오키나와 해병대를 중동으로 이동시켰다는 것—<span>그냥 심심해서 한 일이 아니다.</span>"
+  </div>
+
+  <!-- 클릭형 플로우 다이어그램 -->
+  <p style="font-size:12px;color:var(--text2);margin-bottom:8px;">▼ 각 단계를 탭하면 상세 내용이 펼쳐집니다</p>
+  <div class="flow">
+    <div class="flow-step" onclick="toggleFlow(this)">
+      <span class="flow-step-num">1</span><strong>트럼프 "5일 공습 유예" 선언</strong>
+      <div class="flow-detail">라마단 종료 시점과 겹치며 이 기간은 해병대가 중동에 도달하는 데 걸리는 이동 시간과 일치. 협상 기회인지, 군사 준비 시간인지 불분명.</div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step" onclick="toggleFlow(this)">
+      <span class="flow-step-num">2</span><strong>오키나와 해병대 + 82공수여단 중동 이동</strong>
+      <div class="flow-detail">82공수여단(낙하산 투입 특수부대)은 아프가니스탄 전쟁 초기에도 선투입된 엘리트 부대. 이동이 확인된다는 것은 실제 군사 행동 준비 가능성을 시사.</div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step" onclick="toggleFlow(this)">
+      <span class="flow-step-num">3</span><strong>쿠슈너(트럼프 사위) 중재 시도</strong>
+      <div class="flow-detail">이스라엘-이란 간 1개월 휴전 가능성 타진 중. 유대계 인맥을 활용한 막후 협상 루트. 성사 여부는 이번 주 금~토 결정될 전망.</div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step" onclick="toggleFlow(this)">
+      <span class="flow-step-num">4</span><strong>이란의 딜레마: 체제 특성상 굴복 어렵다</strong>
+      <div class="flow-detail">혁명수비대가 일반 시민 감시까지 담당하는 북한형 통제 체제. 이란 지도부는 국민 여론과 무관하게 강경 노선 유지 가능. 협상 타결 가능성 낮음.</div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step" onclick="toggleFlow(this)">
+      <span class="flow-step-num">5</span><strong>시나리오 분기: 협상 vs 군사 행동</strong>
+      <div class="flow-detail">협상 타결 시 → 유가 급락, 위험자산 반등. 군사 행동 시 → 유가 $120~$150+, 글로벌 경기 침체, 연준 금리 인하 강제 가능성.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- 3. 사모신용 -->
+<div class="section fade-in">
+  <div class="section-label">Private Credit Crisis</div>
+  <h2 class="section-title">🏦 사모신용 위기: 제2의 리먼인가?</h2>
+
+  <p><strong>사모신용(Private Credit)</strong>이란 은행이 아닌 사모펀드 회사들이 기업에 직접 대출해주는 시장이다. 규모는 수조 달러에 달하며, 규제가 상대적으로 느슨하다는 특징이 있다.</p>
+
+  <table class="data-table">
+    <tr><th>회사</th><th>상황</th><th>조치</th></tr>
+    <tr>
+      <td>블루아울(Blue Owl)</td>
+      <td><span class="badge red">환매 제한</span></td>
+      <td>2개월 전부터 환매 요청 급증</td>
+    </tr>
+    <tr>
+      <td>아폴로(Apollo)</td>
+      <td><span class="badge red">환매 5% 캡</span></td>
+      <td>11.2% 환매 요청 → 5%만 허용</td>
+    </tr>
+    <tr>
+      <td>모건스탠리</td>
+      <td><span class="badge yellow">선례 제공</span></td>
+      <td>동일한 5% 캡 먼저 적용</td>
+    </tr>
+    <tr>
+      <td>해당 업체(익명)</td>
+      <td><span class="badge red">정크 등급</span></td>
+      <td>모건스탠리가 첫 정크 레이팅 부여</td>
+    </tr>
+  </table>
+
+  <div class="pull-quote">
+    "2008년엔 부동산에 돈이 쌓였고,<br><span>이번엔 AI·소프트웨어에 돈이 쌓였다."</span>
+  </div>
+
+  <p>핵심 리스크는 사모신용 펀드들이 특히 <span class="highlight">AI 소프트웨어 스타트업</span>에 대규모 자금을 투입한 상태라는 점이다. 소프트웨어 섹터가 무너지면 사모신용 → 금융 시스템 전반으로 도미노 붕괴 가능성이 있다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="creditChart" height="220"></canvas>
+  </div>
+
+  <div style="font-size:12px;color:var(--text2);background:var(--bg2);padding:10px 14px;border-radius:4px;border:1px solid var(--border);margin-top:8px;">
+    ⚠️ <strong>정보 신뢰도 원칙:</strong> 사모신용 회사들이 "문제없다"고 말하는 것은 자기 이익이 걸린 당사자 발언이다. 은행권은 이것이 심각한 문제라고 경고 중. 누가 말했는지가 중요하다.
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- 4. 스태그플레이션 -->
+<div class="section fade-in">
+  <div class="section-label">Macro Analysis</div>
+  <h2 class="section-title">📉 스태그플레이션의 귀환</h2>
+
+  <p><strong>스태그플레이션(Stagflation)</strong>이란 경기 침체(Stagnation)와 물가 상승(Inflation)이 동시에 나타나는 최악의 조합이다. 보통 경기가 나쁘면 물가가 내려가야 하지만, 이 둘이 함께 오면 중앙은행이 금리를 올릴 수도, 내릴 수도 없는 딜레마에 빠진다.</p>
+
+  <div class="card-grid">
+    <div class="card danger">
+      <div class="card-label">서비스업 PMI</div>
+      <div class="card-value down">11개월 최저</div>
+      <div class="card-desc">경기 둔화 시그널</div>
+    </div>
+    <div class="card danger">
+      <div class="card-label">노동 생산성</div>
+      <div class="card-value down">↓ 악화</div>
+      <div class="card-desc">노동 비용 상승 = 인플레 압력</div>
+    </div>
+    <div class="card danger">
+      <div class="card-label">10년 국채금리</div>
+      <div class="card-value down">↑ 상승 중</div>
+      <div class="card-desc">채권 시장 불안</div>
+    </div>
+    <div class="card warn">
+      <div class="card-label">WTI 유가 목표치</div>
+      <div class="card-value" style="color:#f59e0b">$150</div>
+      <div class="card-desc">벵가드의 극단 시나리오</div>
+    </div>
+  </div>
+
+  <!-- 유가 시나리오 시뮬레이터 -->
+  <div class="simulator">
+    <h3>🛢️ 유가 시나리오 시뮬레이터</h3>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:14px;">유가가 변하면 경제에 어떤 영향이 올까요? 슬라이더를 조절해보세요.</p>
+    <div class="sim-row">
+      <span class="sim-label">WTI 유가 ($/배럴)</span>
+      <input type="range" id="oilSlider" min="70" max="180" value="100" step="5" oninput="updateOilSim()">
+      <span class="sim-val" id="oilVal">$100</span>
+    </div>
+    <div class="sim-result" id="oilResult"></div>
+    <button class="reset-btn" onclick="resetOilSim()">↺ 초기화</button>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- 5. 섹터별 동향 -->
+<div class="section fade-in">
+  <div class="section-label">Sector Rotation</div>
+  <h2 class="section-title">🔄 돈은 어디로 흘렀나</h2>
+
+  <table class="data-table">
+    <tr><th>섹터/종목</th><th>방향</th><th>이유</th></tr>
+    <tr>
+      <td>에너지</td>
+      <td><span class="badge blue">↑ 강세</span></td>
+      <td>유가 상승, 지정학 리스크</td>
+    </tr>
+    <tr>
+      <td>방산·희토류</td>
+      <td><span class="badge blue">↑ 강세</span></td>
+      <td>전쟁 기운 고조</td>
+    </tr>
+    <tr>
+      <td>사이버보안 (넷기어)</td>
+      <td><span class="badge blue">↑ 급등</span></td>
+      <td>FCC, 중국산 라우터 수입 전면 금지</td>
+    </tr>
+    <tr>
+      <td>AAOI</td>
+      <td><span class="badge blue">↑ 급등</span></td>
+      <td>ARM AI CPU 계약 수주</td>
+    </tr>
+    <tr>
+      <td>소프트웨어 (IGV)</td>
+      <td><span class="badge red">↓ –4.29%</span></td>
+      <td>사모신용 노출 우려, 수익성 부재</td>
+    </tr>
+    <tr>
+      <td>코인 관련주 (코인베이스 등)</td>
+      <td><span class="badge red">↓ 급락</span></td>
+      <td>클래리티 법안: 스테이블코인 이자 금지</td>
+    </tr>
+    <tr>
+      <td>게임스탑(GME)</td>
+      <td><span class="badge gray">? 혼조</span></td>
+      <td>매출 감소에도 비트코인 매입 지속, 투기적 움직임</td>
+    </tr>
+    <tr>
+      <td>제프리스</td>
+      <td><span class="badge yellow">루머 폭등 후 반락</span></td>
+      <td>일본 SMFG 인수설(FT) → 블룸버그 즉각 부인</td>
+    </tr>
+  </table>
+
+  <div class="chart-container fade-in">
+    <canvas id="sectorChart" height="220"></canvas>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- 6. 코인/규제 -->
+<div class="section fade-in">
+  <div class="section-label">Crypto Regulation</div>
+  <h2 class="section-title">🪙 클래리티 법안: 위기인가, 기회인가</h2>
+
+  <table class="data-table">
+    <tr><th>항목</th><th>내용</th></tr>
+    <tr><td>스테이블코인 이자</td><td>패시브 이자 지급 전면 금지</td></tr>
+    <tr><td>영향</td><td>코인베이스(USDC 매출 비중 20%), 로빈후드 급락</td></tr>
+    <tr><td>테더 대응</td><td>회계법인 첫 정식 감사 발표 → 투명성 강조</td></tr>
+    <tr><td>강연자 견해</td><td>단기 하락이지만 <span class="badge blue">장기적으론 긍정적</span></td></tr>
+  </table>
+
+  <p style="margin-top:12px;">규제가 생기면 "합법적 시장"이 된다. 장기적으로는 기관 자금이 안심하고 들어올 수 있는 환경을 만들 수 있다는 역발상 시각이다.</p>
+</div>
+
+<hr class="divider">
+
+<!-- 7. 투자 전략 -->
+<div class="section fade-in">
+  <div class="section-label">Investment Strategy</div>
+  <h2 class="section-title">🧭 지금 어떻게 움직여야 하나</h2>
+
+  <!-- VIX 투자법 시각화 -->
+  <div class="simulator">
+    <h3>📊 VIX 투자 전략 가이드</h3>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:14px;">현재 VIX 수준을 입력하면 대응 전략을 안내합니다.</p>
+    <div class="sim-row">
+      <span class="sim-label">현재 VIX</span>
+      <input type="range" id="vixSlider" min="10" max="50" value="26" step="1" oninput="updateVixSim()">
+      <span class="sim-val" id="vixVal">26</span>
+    </div>
+    <div class="sim-result" id="vixResult"></div>
+    <button class="reset-btn" onclick="resetVixSim()">↺ 초기화</button>
+  </div>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:16px;margin-top:16px;">
+    <div style="font-weight:700;margin-bottom:10px;font-size:14px;">✅ 지금 당장의 체크리스트</div>
+    <div style="font-size:13px;line-height:2;color:var(--text);">
+      ☐ <strong>현금 비중 확대</strong> — 총알을 아껴라<br>
+      ☐ <strong>모멘텀 추격 금지</strong> — 뉴스에 휩쓸리지 마라<br>
+      ☐ <strong>VIX 20 이하 안착 확인</strong> — 그때가 진짜 매수 타이밍<br>
+      ☐ <strong>에너지·방산 일부 유지</strong> — 지정학 프리미엄 지속<br>
+      ☐ <strong>소프트웨어·코인 관련주 관망</strong> — 사모신용 리스크 해소 전<br>
+      ☐ <strong>DHS 예산 3월 말 통과 여부 주시</strong> — 셧다운 리스크
+    </div>
+  </div>
+</div>
+
+<!-- =========== QUIZ SECTION =========== -->
+<div class="quiz-section fade-in">
+  <div class="quiz-header">
+    <div class="quiz-icon">📝</div>
+    <div class="quiz-title">이해도 점검 시험 (10문제)</div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card">
+    <div class="q-num">Q01 <span class="q-badge q-easy">쉬움</span> 객관식</div>
+    <div class="q-text">오늘(3/24) IGV(소프트웨어 ETF)의 하락률은 얼마였나?</div>
+    <div class="q-options">
+      <button class="q-option" onclick="checkOpt(this,'a','q1')"><span class="opt-key">A</span> –1.05%</button>
+      <button class="q-option" onclick="checkOpt(this,'b','q1')"><span class="opt-key">B</span> –2.17%</button>
+      <button class="q-option" onclick="checkOpt(this,'c','q1')"><span class="opt-key">C</span> –4.29%</button>
+      <button class="q-option" onclick="checkOpt(this,'d','q1')"><span class="opt-key">D</span> –6.50%</button>
+    </div>
+    <div class="q-feedback" id="fb_q1"></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card">
+    <div class="q-num">Q02 <span class="q-badge q-easy">쉬움</span> OX</div>
+    <div class="q-text">VIX 지수가 20 이하로 내려와 안착할 때가 매수 적기라고 강연자는 설명했다. (O/X)</div>
+    <div class="q-options">
+      <button class="q-option" onclick="checkOpt(this,'o','q2')"><span class="opt-key">O</span> 맞다</button>
+      <button class="q-option" onclick="checkOpt(this,'x','q2')"><span class="opt-key">X</span> 틀리다</button>
+    </div>
+    <div class="q-feedback" id="fb_q2"></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card">
+    <div class="q-num">Q03 <span class="q-badge q-easy">쉬움</span> 객관식</div>
+    <div class="q-text">아폴로(Apollo)가 적용한 환매 상한(캡)은 몇 %인가?</div>
+    <div class="q-options">
+      <button class="q-option" onclick="checkOpt(this,'a','q3')"><span class="opt-key">A</span> 3%</button>
+      <button class="q-option" onclick="checkOpt(this,'b','q3')"><span class="opt-key">B</span> 5%</button>
+      <button class="q-option" onclick="checkOpt(this,'c','q3')"><span class="opt-key">C</span> 10%</button>
+      <button class="q-option" onclick="checkOpt(this,'d','q3')"><span class="opt-key">D</span> 15%</button>
+    </div>
+    <div class="q-feedback" id="fb_q3"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card">
+    <div class="q-num">Q04 <span class="q-badge q-med">보통</span> 객관식</div>
+    <div class="q-text">스태그플레이션(Stagflation)의 올바른 정의는?</div>
+    <div class="q-options">
+      <button class="q-option" onclick="checkOpt(this,'a','q4')"><span class="opt-key">A</span> 고성장 + 저물가</button>
+      <button class="q-option" onclick="checkOpt(this,'b','q4')"><span class="opt-key">B</span> 경기 침체 + 물가 상승 동시 발생</button>
+      <button class="q-option" onclick="checkOpt(this,'c','q4')"><span class="opt-key">C</span> 저성장 + 저물가</button>
+      <button class="q-option" onclick="checkOpt(this,'d','q4')"><span class="opt-key">D</span> 고성장 + 고물가</button>
+    </div>
+    <div class="q-feedback" id="fb_q4"></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card">
+    <div class="q-num">Q05 <span class="q-badge q-med">보통</span> 단답형</div>
+    <div class="q-text">FCC(미국 통신위원회)가 수입을 전면 금지한 라우터의 원산지 국가는 어디인가?</div>
+    <input type="text" class="q-input" id="inp_q5" placeholder="국가명 입력">
+    <button class="q-submit" onclick="checkText('q5','중국')">제출</button>
+    <div class="q-feedback" id="fb_q5"></div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card">
+    <div class="q-num">Q06 <span class="q-badge q-med">보통</span> 객관식</div>
+    <div class="q-text">오늘 급등한 AAOI의 상승 원인으로 가장 적절한 것은?</div>
+    <div class="q-options">
+      <button class="q-option" onclick="checkOpt(this,'a','q6')"><span class="opt-key">A</span> 이란과 평화협정 체결</button>
+      <button class="q-option" onclick="checkOpt(this,'b','q6')"><span class="opt-key">B</span> ARM AI CPU 관련 계약 수주</button>
+      <button class="q-option" onclick="checkOpt(this,'c','q6')"><span class="opt-key">C</span> 코인 관련 법안 통과 수혜</button>
+      <button class="q-option" onclick="checkOpt(this,'d','q6')"><span class="opt-key">D</span> 게임스탑 협력사로 선정</button>
+    </div>
+    <div class="q-feedback" id="fb_q6"></div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-card">
+    <div class="q-num">Q07 <span class="q-badge q-med">보통</span> OX</div>
+    <div class="q-text">강연자는 클래리티 법안 통과를 단기·장기 모두 코인 시장에 부정적이라고 평가했다. (O/X)</div>
+    <div class="q-options">
+      <button class="q-option" onclick="checkOpt(this,'o','q7')"><span class="opt-key">O</span> 맞다</button>
+      <button class="q-option" onclick="checkOpt(this,'x','q7')"><span class="opt-key">X</span> 틀리다</button>
+    </div>
+    <div class="q-feedback" id="fb_q7"></div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-card">
+    <div class="q-num">Q08 <span class="q-badge q-med">보통</span> 객관식</div>
+    <div class="q-text">현재 사모신용 펀드가 자금을 집중 투입한 분야로 가장 큰 위험 요인은?</div>
+    <div class="q-options">
+      <button class="q-option" onclick="checkOpt(this,'a','q8')"><span class="opt-key">A</span> 부동산 모기지</button>
+      <button class="q-option" onclick="checkOpt(this,'b','q8')"><span class="opt-key">B</span> 원자재 선물</button>
+      <button class="q-option" onclick="checkOpt(this,'c','q8')"><span class="opt-key">C</span> AI·소프트웨어 스타트업</button>
+      <button class="q-option" onclick="checkOpt(this,'d','q8')"><span class="opt-key">D</span> 국채</button>
+    </div>
+    <div class="q-feedback" id="fb_q8"></div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-card">
+    <div class="q-num">Q09 <span class="q-badge q-hard">어려움</span> 단답형</div>
+    <div class="q-text">벵가드 전문가가 유가 $150 돌파 시 연준이 취할 수 있다고 언급한 조치는 무엇인가?</div>
+    <input type="text" class="q-input" id="inp_q9" placeholder="한 단어 또는 짧은 구로 입력">
+    <button class="q-submit" onclick="checkText('q9','금리 인하')">제출</button>
+    <div class="q-feedback" id="fb_q9"></div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-card">
+    <div class="q-num">Q10 <span class="q-badge q-hard">어려움</span> 객관식</div>
+    <div class="q-text">강연자가 "정보를 판단할 때 가장 중요한 기준"으로 강조한 것은?</div>
+    <div class="q-options">
+      <button class="q-option" onclick="checkOpt(this,'a','q10')"><span class="opt-key">A</span> 얼마나 최신 정보인가</button>
+      <button class="q-option" onclick="checkOpt(this,'b','q10')"><span class="opt-key">B</span> 누가 그 말을 했는가(정보의 출처)</button>
+      <button class="q-option" onclick="checkOpt(this,'c','q10')"><span class="opt-key">C</span> 주요 언론에 보도됐는가</button>
+      <button class="q-option" onclick="checkOpt(this,'d','q10')"><span class="opt-key">D</span> 여러 번 반복 보도됐는가</button>
+    </div>
+    <div class="q-feedback" id="fb_q10"></div>
+  </div>
+
+  <div style="text-align:center;margin-top:20px;">
+    <button class="q-submit" onclick="showScore()" style="padding:12px 32px;font-size:14px;">채점하기</button>
+  </div>
+  <div class="score-board" id="scoreBoard">
+    <div class="score-big" id="scoreNum">0/10</div>
+    <div class="score-sub" id="scoreSub">결과 분석 중...</div>
+  </div>
+
+  <!-- ANSWERS -->
+  <div class="answers-section">
+    <div class="answers-title">🔑 정답 및 해설</div>
+
+    <div class="answer-item">
+      <strong>Q01 · 쉬움</strong>
+      <div class="answer-q">IGV 하락률은 얼마였나?</div>
+      <div class="answer-a">정답: C — –4.29%</div>
+      <div class="answer-exp">강연에서 "오늘도 무려 4.29% 빠졌고"라고 명시. 최근 1개월 기준 지속적 하락세.</div>
+    </div>
+
+    <div class="answer-item">
+      <strong>Q02 · 쉬움</strong>
+      <div class="answer-q">VIX 20 이하 안착 시 매수 타이밍? (O/X)</div>
+      <div class="answer-a">정답: O (맞다)</div>
+      <div class="answer-exp">"VIX가 20 아래로 치고서 완전히 내려오는 그런 상태를 보여줄 때 줍줍이 가능한 상태"라고 직접 언급.</div>
+    </div>
+
+    <div class="answer-item">
+      <strong>Q03 · 쉬움</strong>
+      <div class="answer-q">아폴로 환매 캡은?</div>
+      <div class="answer-a">정답: B — 5%</div>
+      <div class="answer-exp">"11.2%의 환매 요청이 있었는데 5% 캡을 적용"이라고 명시. 모건스탠리도 동일하게 5% 캡 적용.</div>
+    </div>
+
+    <div class="answer-item">
+      <strong>Q04 · 보통</strong>
+      <div class="answer-q">스태그플레이션의 정의는?</div>
+      <div class="answer-a">정답: B — 경기 침체 + 물가 상승 동시 발생</div>
+      <div class="answer-exp">경기가 나쁠 때는 물가도 내려가는 것이 정상이지만, 스태그플레이션은 두 악재가 동시에 발생해 중앙은행이 금리를 올릴 수도 내릴 수도 없는 딜레마 상황을 만든다.</div>
+    </div>
+
+    <div class="answer-item">
+      <strong>Q05 · 보통</strong>
+      <div class="answer-q">FCC가 수입 금지한 라우터 원산지는?</div>
+      <div class="answer-a">정답: 중국</div>
+      <div class="answer-exp">"FCC에서 라우터 수입할 때 중국산 라우터는 안 된다"고 못을 박았으며, 이로 인해 넷기어가 급등.</div>
+    </div>
+
+    <div class="answer-item">
+      <strong>Q06 · 보통</strong>
+      <div class="answer-q">AAOI 급등 원인은?</div>
+      <div class="answer-a">정답: B — ARM AI CPU 관련 계약 수주</div>
+      <div class="answer-exp">"ARM이 AI용 CPU를 만들었다 하면서 AAOI는 그 계약을 따냈습니다"라고 직접 설명.</div>
+    </div>
+
+    <div class="answer-item">
+      <strong>Q07 · 보통</strong>
+      <div class="answer-q">클래리티 법안이 장기적으로도 부정적? (O/X)</div>
+      <div class="answer-a">정답: X (틀리다)</div>
+      <div class="answer-exp">강연자는 "단기적으로는 하락이지만 장기적으로 이거는 오히려 좋다"고 역발상 관점을 제시. "전화위복의 기회"라고 표현.</div>
+    </div>
+
+    <div class="answer-item">
+      <strong>Q08 · 보통</strong>
+      <div class="answer-q">사모신용이 집중 투입한 분야는?</div>
+      <div class="answer-a">정답: C — AI·소프트웨어 스타트업</div>
+      <div class="answer-exp">"2008년은 부동산 모기지, 이번엔 AI 특히 소프트웨어 쪽에 돈이 많이 깔려 있다"고 비교 설명. 이것이 더 무서운 이유.</div>
+    </div>
+
+    <div class="answer-item">
+      <strong>Q09 · 어려움</strong>
+      <div class="answer-q">유가 $150 돌파 시 연준의 조치는?</div>
+      <div class="answer-a">정답: 금리 인하</div>
+      <div class="answer-exp">"유가 $150 돌파 → 전 세계 경제 주저앉음 → 연준 어쩔 수 없이 금리 인하 가능성"이라는 연쇄 시나리오를 설명. 통상적 인플레 대응(금리 인상)과 반대되는 비정상적 상황.</div>
+    </div>
+
+    <div class="answer-item">
+      <strong>Q10 · 어려움</strong>
+      <div class="answer-q">정보 판단 시 가장 중요한 기준은?</div>
+      <div class="answer-a">정답: B — 누가 그 말을 했는가(정보의 출처)</div>
+      <div class="answer-exp">"무엇을 판단할 때 그 소스가 누구한테 나왔냐, 누가 말했느냐가 정말 중요하다"고 강조. 사모신용 회사가 자사를 '안전하다'고 말하는 것은 당사자 발언이라 신뢰도가 낮다는 맥락.</div>
+    </div>
+  </div>
+</div>
+
+<footer class="mag-footer">
+  CIA.chat 멤버미팅 분석 요약 · 2026.03.24<br>
+  본 문서는 교육 목적으로 작성되었으며 투자 권유가 아닙니다.
+</footer>
+
+<script>
+// ===== ANSWERS =====
+const answers = {
+  q1: 'c', q2: 'o', q3: 'b', q4: 'b', q6: 'b', q7: 'x', q8: 'c', q10: 'b'
+};
+const feedbacks = {
+  q1: { c: '정답입니다! IGV는 오늘 –4.29% 하락하며 소프트웨어 섹터의 지속적 부진을 보여줬습니다.' },
+  q2: { o: '정답입니다! VIX가 20 아래로 내려와 안착할 때 매수 타이밍을 잡으라고 강조했습니다.' },
+  q3: { b: '정답입니다! 11.2% 환매 요청에 5% 캡을 적용했습니다.' },
+  q4: { b: '정답입니다! 경기 침체와 물가 상승이 동시에 발생하는 최악의 조합입니다.' },
+  q6: { b: '정답입니다! ARM이 AI CPU를 공개하고 AAOI가 관련 계약을 수주했습니다.' },
+  q7: { x: '정답입니다! 강연자는 단기 하락이지만 장기적으로는 긍정적이라는 역발상 시각을 제시했습니다.' },
+  q8: { c: '정답입니다! 2008년 부동산과 달리 이번엔 AI·소프트웨어에 자금이 집중되어 있습니다.' },
+  q10: { b: '정답입니다! "누가 말했느냐"가 정보 신뢰도의 핵심이라고 강조했습니다.' },
+};
+
+let answered = {};
+let score = 0;
+
+function checkOpt(btn, val, qid) {
+  if (answered[qid]) return;
+  answered[qid] = val;
+  const correct = answers[qid];
+  const allBtns = btn.closest('.q-options').querySelectorAll('.q-option');
+  allBtns.forEach(b => b.disabled = true);
+  const fb = document.getElementById('fb_' + qid);
+  if (val === correct) {
+    btn.classList.add('correct');
+    fb.textContent = '✅ ' + (feedbacks[qid]?.[val] || '정답입니다!');
+    fb.className = 'q-feedback show correct-fb';
+    score++;
+  } else {
+    btn.classList.add('wrong');
+    // highlight correct
+    allBtns.forEach(b => {
+      const bval = b.querySelector('.opt-key').nextSibling?.textContent?.trim();
+      if (b.querySelector('.opt-key').textContent === correct.toUpperCase()) {
+        b.classList.add('correct');
+      }
+    });
+    fb.textContent = '❌ 오답입니다. ' + (feedbacks[qid]?.[correct] || '');
+    fb.className = 'q-feedback show wrong-fb';
+  }
+}
+
+function checkText(qid, correctAnswers) {
+  if (answered[qid]) return;
+  const inp = document.getElementById('inp_' + qid);
+  const val = inp.value.trim();
+  if (!val) { alert('답을 입력해주세요.'); return; }
+  answered[qid] = val;
+  inp.disabled = true;
+  inp.nextElementSibling.disabled = true;
+  const fb = document.getElementById('fb_' + qid);
+  const possibles = Array.isArray(correctAnswers) ? correctAnswers : [correctAnswers];
+  const isCorrect = possibles.some(ans => val.includes(ans) || ans.includes(val));
+  if (isCorrect) {
+    fb.textContent = '✅ 정답입니다!';
+    fb.className = 'q-feedback show correct-fb';
+    score++;
+  } else {
+    fb.textContent = `❌ 오답입니다. 정답: ${possibles[0]}`;
+    fb.className = 'q-feedback show wrong-fb';
+  }
+}
+
+function showScore() {
+  const board = document.getElementById('scoreBoard');
+  const num = document.getElementById('scoreNum');
+  const sub = document.getElementById('scoreSub');
+  num.textContent = score + '/10';
+  const pct = score * 10;
+  let msg = '';
+  if (pct >= 90) msg = '🏆 완벽한 이해! 실전 투자자 수준입니다.';
+  else if (pct >= 70) msg = '👍 좋습니다! 핵심 개념을 잘 파악했습니다.';
+  else if (pct >= 50) msg = '📖 절반 이상! 해설을 다시 읽어보세요.';
+  else msg = '🔄 처음부터 다시 복습해보세요.';
+  sub.textContent = msg;
+  board.classList.add('show');
+  board.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// ===== FLOW DIAGRAM =====
+function toggleFlow(el) {
+  const wasActive = el.classList.contains('active');
+  document.querySelectorAll('.flow-step').forEach(s => s.classList.remove('active'));
+  if (!wasActive) el.classList.add('active');
+}
+
+// ===== OIL SIMULATOR =====
+function updateOilSim() {
+  const oil = parseInt(document.getElementById('oilSlider').value);
+  document.getElementById('oilVal').textContent = '$' + oil;
+  const result = document.getElementById('oilResult');
+  let inflStr, growthStr, fedStr, stockStr, oilClass;
+  if (oil < 85) {
+    inflStr = '완화 (↓ 인플레 압력)'; growthStr = '긍정적'; fedStr = '인상 가능성 낮음'; stockStr = '기술주 유리'; oilClass = 'safe';
+  } else if (oil < 105) {
+    inflStr = '중립~소폭 상승'; growthStr = '보통'; fedStr = '현 수준 유지'; stockStr = '에너지 유리, 기술 혼조'; oilClass = 'safe';
+  } else if (oil < 130) {
+    inflStr = '⚠️ 상승 압력 강화'; growthStr = '둔화 우려'; fedStr = '딜레마 (스태그플레이션)'; stockStr = '방산·에너지 유리, 기술 하락'; oilClass = '';
+  } else if (oil < 150) {
+    inflStr = '🔴 급등 (스태그플레이션)'; growthStr = '침체 가능'; fedStr = '딜레마 심화'; stockStr = '전 섹터 타격'; oilClass = 'danger';
+  } else {
+    inflStr = '🚨 위기 수준'; growthStr = '글로벌 경기침체'; fedStr = '금리 인하 강제 가능성'; stockStr = '폭락, 안전자산만 상승'; oilClass = 'danger';
+  }
+  result.innerHTML = `
+    <div class="sim-result-row"><span class="key">물가 영향</span><span class="val ${oilClass}">${inflStr}</span></div>
+    <div class="sim-result-row"><span class="key">경제 성장</span><span class="val ${oilClass}">${growthStr}</span></div>
+    <div class="sim-result-row"><span class="key">연준 행동</span><span class="val">${fedStr}</span></div>
+    <div class="sim-result-row"><span class="key">주식시장</span><span class="val">${stockStr}</span></div>
+  `;
+}
+function resetOilSim() {
+  document.getElementById('oilSlider').value = 100;
+  updateOilSim();
+}
+updateOilSim();
+
+// ===== VIX SIMULATOR =====
+function updateVixSim() {
+  const vix = parseInt(document.getElementById('vixSlider').value);
+  document.getElementById('vixVal').textContent = vix;
+  const result = document.getElementById('vixResult');
+  let status, action, risk, color;
+  if (vix <= 15) {
+    status = '😌 매우 낮음 (과도한 낙관)'; action = '신중 — 역설적으로 하락 리스크'; risk = '저'; color = 'safe';
+  } else if (vix <= 20) {
+    status = '✅ 정상 범위 (안정)'; action = '적극 매수 타이밍'; risk = '저~중'; color = 'safe';
+  } else if (vix <= 30) {
+    status = '⚠️ 불안 (현재 수준)'; action = '현금 보유 + 관망'; risk = '중~고'; color = '';
+  } else if (vix <= 40) {
+    status = '🔴 공포 구간'; action = '총알 아끼기, 분할 매수 준비'; risk = '고'; color = 'danger';
+  } else {
+    status = '🚨 극단적 공포 (역발상 기회)'; action = '대형 우량주 분할 매수 시작'; risk = '매우 고 → 저로 전환 중'; color = 'danger';
+  }
+  result.innerHTML = `
+    <div class="sim-result-row"><span class="key">현재 상태</span><span class="val ${color}">${status}</span></div>
+    <div class="sim-result-row"><span class="key">권장 행동</span><span class="val">${action}</span></div>
+    <div class="sim-result-row"><span class="key">리스크 수준</span><span class="val ${color}">${risk}</span></div>
+  `;
+}
+function resetVixSim() {
+  document.getElementById('vixSlider').value = 26;
+  updateVixSim();
+}
+updateVixSim();
+
+// ===== CHART CONFIGS =====
+const chartConfigs = {};
+
+chartConfigs['marketChart'] = () => {
+  new Chart(document.getElementById('marketChart'), {
+    type: 'bar',
+    data: {
+      labels: ['S&P500', '나스닥', '다우', '러셀', 'VIX'],
+      datasets: [{
+        label: '당일 변화 방향',
+        data: [-0.3, -0.5, -0.2, -0.4, 26],
+        backgroundColor: ['#e11d48','#e11d48','#e11d48','#e11d48','#f59e0b'],
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.dataIndex === 4 ? `VIX: ${ctx.raw}` : `${ctx.raw}%` } } },
+      scales: { y: { ticks: { font: { size: 11 } }, grid: { color: '#f0f0f0' } }, x: { ticks: { font: { size: 11 } }, grid: { display: false } } }
+    }
+  });
+};
+
+chartConfigs['creditChart'] = () => {
+  new Chart(document.getElementById('creditChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['AI·소프트웨어', '부동산·인프라', '에너지', '기타'],
+      datasets: [{
+        data: [45, 25, 15, 15],
+        backgroundColor: ['#e11d48', '#1a1a1a', '#2563eb', '#6b7280'],
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 12 } },
+        title: { display: true, text: '사모신용 펀드 자산 추정 노출 구성', font: { size: 12 }, color: '#777' }
+      }
+    }
+  });
+};
+
+chartConfigs['sectorChart'] = () => {
+  new Chart(document.getElementById('sectorChart'), {
+    type: 'bar',
+    data: {
+      labels: ['에너지', '방산/희토류', '넷기어', 'AAOI', 'IGV(소프트)', '코인베이스', 'GME'],
+      datasets: [{
+        label: '추정 변화율',
+        data: [2.1, 3.2, 8.5, 6.3, -4.29, -7.5, -1.2],
+        backgroundColor: ctx => ctx.raw >= 0 ? '#2563eb' : '#e11d48',
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: { legend: { display: false }, title: { display: true, text: '오늘의 섹터별 추정 등락 (단위: %)', font: { size: 12 }, color: '#777' } },
+      scales: {
+        y: { ticks: { font: { size: 11 }, callback: v => v + '%' }, grid: { color: '#f0f0f0' } },
+        x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// ===== INTERSECTION OBSERVERS =====
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+</script>
+</body>
+</html>
