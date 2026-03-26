@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA Real Invest — 2026.03.26 마켓 브리핑</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Source+Serif+4:wght@300;400;600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --c1: #e11d48;
+    --c2: #1a1a1a;
+    --c3: #6b7280;
+    --c4: #2563eb;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:'Source Serif 4',serif;font-size:16px;line-height:1.7}
+
+  /* MASTHEAD */
+  .masthead{background:var(--text);color:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
+  .masthead-brand{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:900;letter-spacing:0.08em}
+  .masthead-meta{font-family:'DM Sans',sans-serif;font-size:0.72rem;color:#aaa;text-align:right;line-height:1.4}
+
+  /* HERO */
+  .hero{padding:36px 20px 28px;border-bottom:3px solid var(--text)}
+  .hero-kicker{font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+  .hero-title{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;line-height:1.2;margin-bottom:14px}
+  .hero-title em{font-style:italic;color:var(--accent)}
+  .hero-sub{font-family:'DM Sans',sans-serif;font-size:0.88rem;color:var(--text2);line-height:1.6}
+  .hero-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+  .tag{font-family:'DM Sans',sans-serif;font-size:0.68rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:3px 10px;border:1px solid var(--border);border-radius:2px;color:var(--text2)}
+  .tag.hot{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+  /* DIVIDER */
+  .divider{height:1px;background:var(--border);margin:0 20px}
+  .divider-bold{height:3px;background:var(--text);margin:0 20px}
+
+  /* SECTION */
+  .section{padding:28px 20px}
+  .section-label{font-family:'DM Sans',sans-serif;font-size:0.68rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+  .section-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;line-height:1.25;margin-bottom:14px}
+  .section-body{font-size:0.9rem;line-height:1.75;color:#333}
+  .section-body p{margin-bottom:12px}
+
+  /* STAT CARDS */
+  .stat-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+  .stat-card{background:var(--bg2);border:1px solid var(--border);padding:14px 12px;border-radius:2px}
+  .stat-card.accent{background:var(--accent);border-color:var(--accent);color:#fff}
+  .stat-card.dark{background:var(--text);border-color:var(--text);color:#fff}
+  .stat-num{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:900;line-height:1}
+  .stat-label{font-family:'DM Sans',sans-serif;font-size:0.7rem;margin-top:4px;opacity:0.75;line-height:1.3}
+  .stat-card.accent .stat-num,.stat-card.dark .stat-num{color:#fff}
+
+  /* PULL QUOTE */
+  .pull-quote{border-left:4px solid var(--accent);padding:14px 16px;margin:20px 0;background:var(--bg2)}
+  .pull-quote p{font-family:'Playfair Display',serif;font-size:1.05rem;font-style:italic;line-height:1.6;color:var(--text)}
+  .pull-quote cite{font-family:'DM Sans',sans-serif;font-size:0.72rem;color:var(--text2);display:block;margin-top:6px}
+
+  /* TABLE */
+  .tbl-wrap{overflow-x:auto;margin:16px 0}
+  table{width:100%;border-collapse:collapse;font-family:'DM Sans',sans-serif;font-size:0.8rem}
+  thead tr{background:var(--accent);color:#fff}
+  th{padding:9px 10px;text-align:left;font-weight:600;letter-spacing:0.05em}
+  td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--text)}
+  tr:nth-child(even) td{background:var(--bg2)}
+  .up{color:#16a34a;font-weight:600}
+  .down{color:var(--accent);font-weight:600}
+
+  /* CHART CONTAINER */
+  .fade-in{opacity:0;transform:translateY(18px);transition:opacity 0.7s ease,transform 0.7s ease}
+  .fade-in.visible{opacity:1;transform:translateY(0)}
+  .chart-container{position:relative;max-height:340px;margin:16px 0}
+  .chart-container canvas{opacity:0;transition:opacity 0.4s ease;max-height:300px}
+  .chart-container.chart-ready canvas{opacity:1}
+
+  /* ALERT BOX */
+  .alert{padding:14px 16px;margin:16px 0;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.82rem;line-height:1.6}
+  .alert-warn{background:#fff7ed;border:1px solid #fed7aa;border-left:4px solid #f97316}
+  .alert-danger{background:#fff1f2;border:1px solid #fecdd3;border-left:4px solid var(--accent)}
+  .alert-info{background:#eff6ff;border:1px solid #bfdbfe;border-left:4px solid var(--c4)}
+  .alert strong{display:block;margin-bottom:3px;font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase}
+
+  /* INTERACTIVE */
+  .sim-box{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:18px;margin:16px 0}
+  .sim-title{font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  .slider-wrap{margin:10px 0}
+  .slider-wrap label{font-family:'DM Sans',sans-serif;font-size:0.78rem;color:var(--text2);display:flex;justify-content:space-between;margin-bottom:4px}
+  .slider-wrap label span{font-weight:600;color:var(--text)}
+  input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer;height:4px}
+  .result-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+  .result-cell{background:#fff;border:1px solid var(--border);padding:10px;border-radius:2px;text-align:center}
+  .result-cell .val{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700}
+  .result-cell .lbl{font-family:'DM Sans',sans-serif;font-size:0.68rem;color:var(--text2);margin-top:2px}
+  .scenario-bar{display:flex;border-radius:3px;overflow:hidden;height:28px;margin:10px 0}
+  .scenario-bar .seg{display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-size:0.7rem;font-weight:600;color:#fff;transition:flex 0.4s ease}
+  .reset-btn{font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:600;background:var(--text);color:#fff;border:none;padding:6px 14px;cursor:pointer;border-radius:2px;margin-top:10px;letter-spacing:0.06em;text-transform:uppercase}
+  .reset-btn:hover{background:var(--accent)}
+
+  /* BADGE SECTION */
+  .badge-list{display:flex;flex-direction:column;gap:8px;margin:14px 0}
+  .badge-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:2px}
+  .badge-icon{font-size:1.2rem;flex-shrink:0;margin-top:1px}
+  .badge-text{font-family:'DM Sans',sans-serif;font-size:0.8rem;line-height:1.5}
+  .badge-text strong{display:block;font-size:0.78rem;color:var(--text)}
+
+  /* FOOTER */
+  footer{background:var(--text);color:#aaa;padding:24px 20px;font-family:'DM Sans',sans-serif;font-size:0.72rem;text-align:center;line-height:1.8}
+  footer strong{color:#fff}
+
+  /* FLIP QUIZ */
+  .quiz-section{padding:28px 20px;background:var(--bg2)}
+  .quiz-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;margin-bottom:4px}
+  .quiz-sub{font-family:'DM Sans',sans-serif;font-size:0.78rem;color:var(--text2);margin-bottom:20px}
+  .qcard{background:#fff;border:1px solid var(--border);border-radius:4px;margin-bottom:12px;overflow:hidden}
+  .qcard-q{padding:14px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .qcard-q-num{font-family:'DM Sans',sans-serif;font-size:0.7rem;font-weight:700;color:var(--accent);flex-shrink:0;margin-top:2px}
+  .qcard-q-text{font-family:'DM Sans',sans-serif;font-size:0.85rem;line-height:1.5;flex:1}
+  .qcard-q-arrow{color:var(--text2);font-size:0.8rem;flex-shrink:0;transition:transform 0.3s;margin-top:2px}
+  .qcard.open .qcard-q-arrow{transform:rotate(180deg)}
+  .qcard-a{display:none;padding:0 16px 14px;border-top:1px solid var(--border);margin-top:-2px}
+  .qcard.open .qcard-a{display:block}
+  .answer-badge{font-family:'DM Sans',sans-serif;font-size:0.68rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;display:block}
+  .qcard-a p{font-family:'DM Sans',sans-serif;font-size:0.82rem;line-height:1.6;color:#333}
+  .difficulty{display:inline-block;font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:2px 7px;border-radius:20px;margin-left:8px}
+  .easy{background:#dcfce7;color:#166534}
+  .medium{background:#fef9c3;color:#854d0e}
+  .hard{background:#fee2e2;color:#991b1b}
+
+  /* HORIZONTAL RULE DECO */
+  .deco-hr{display:flex;align-items:center;gap:10px;padding:0 20px;margin:8px 0}
+  .deco-hr span{font-family:'DM Sans',sans-serif;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text2);white-space:nowrap}
+  .deco-hr::before,.deco-hr::after{content:'';flex:1;height:1px;background:var(--border)}
+
+  /* PROGRESS BARS */
+  .prog-list{margin:12px 0}
+  .prog-item{margin-bottom:10px}
+  .prog-label{font-family:'DM Sans',sans-serif;font-size:0.78rem;display:flex;justify-content:space-between;margin-bottom:4px}
+  .prog-label span:last-child{font-weight:600}
+  .prog-track{height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+  .prog-fill{height:100%;border-radius:4px;background:var(--accent);transition:width 1.2s ease}
+
+  @media(max-width:360px){
+    .hero-title{font-size:1.65rem}
+    .stat-row{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-brand">NOVA REAL INVEST</div>
+  <div class="masthead-meta">마켓 브리핑<br>2026. 03. 26</div>
+</div>
+
+<!-- HERO -->
+<div class="hero fade-in">
+  <div class="hero-kicker">오늘의 메인 스테이지</div>
+  <h1 class="hero-title">구글, 메모리주를 흔들다<br><em>SpaceX IPO</em>의 블랙홀</h1>
+  <p class="hero-sub">전쟁 리스크 페이드아웃 속 AI 슈퍼사이클은 지속되는가. 테슬라 주주가 밤잠 설치게 될 스페이스X 상장의 비밀과 최대 수혜 종목 분석.</p>
+  <div class="hero-tags">
+    <span class="tag hot">SpaceX IPO</span>
+    <span class="tag hot">ARM CPU</span>
+    <span class="tag hot">TurboQuant</span>
+    <span class="tag">스태그플레이션</span>
+    <span class="tag">바벨전략</span>
+    <span class="tag">유가</span>
+  </div>
+</div>
+
+<!-- MARKET SNAPSHOT -->
+<div class="divider-bold"></div>
+<div class="section fade-in">
+  <div class="section-label">시장 스냅샷</div>
+  <h2 class="section-title">오늘의 지수 & 주요 수치</h2>
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="stat-num">25.33</div>
+      <div class="stat-label">VIX 공포지수<br>▼ 6% 하락 (아직 20 미돌파)</div>
+    </div>
+    <div class="stat-card accent">
+      <div class="stat-num">3,400↑</div>
+      <div class="stat-label">상승 종목 수<br>하락 1,921개</div>
+    </div>
+    <div class="stat-card dark">
+      <div class="stat-num">$97</div>
+      <div class="stat-label">WTI 유가<br>고점 $120 → 현재 조정 중</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">31.27</div>
+      <div class="stat-label">옵션 풋/콜 비율<br>공포↔안도 반복 중</div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap fade-in">
+    <table>
+      <thead><tr><th>종목</th><th>이슈</th><th>등락</th></tr></thead>
+      <tbody>
+        <tr><td>AMD</td><td>CPU 가격 10~15% 인상 발표</td><td class="up">+7.26%</td></tr>
+        <tr><td>ARM</td><td>AI CPU 출시 & 매출 가이던스 $25B</td><td class="up">급등</td></tr>
+        <tr><td>Dell</td><td>AI 서버 매출 전년比 +342%</td><td class="up">급등</td></tr>
+        <tr><td>Tesla</td><td>SpaceX IPO 프리미엄 희석 우려</td><td class="up">+0.76%</td></tr>
+        <tr><td>Micron</td><td>Google TurboQuant 발표 충격</td><td class="down">▼4~5%</td></tr>
+        <tr><td>WD/Seagate</td><td>동일 메모리 수요 파괴 우려</td><td class="down">▼3%</td></tr>
+        <tr><td>Intel</td><td>CPU 가격 인상에도 회의론 지속</td><td class="down">지지부진</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="deco-hr"><span>거시 리스크</span></div>
+
+<!-- STAGFLATION -->
+<div class="section fade-in">
+  <div class="section-label">매크로 위협</div>
+  <h2 class="section-title">스태그플레이션 경고등</h2>
+  <div class="section-body">
+    <p>2월 수입물가지수가 전월 대비 <strong>+1.3%</strong> 폭등했습니다. 이는 시장 예상치의 <strong>2배</strong>에 달하는 수치이자 <strong>4년 내 최고치</strong>입니다. 비연료 물가도 2.5% 상승했습니다.</p>
+    <p>더 무서운 점은 이 데이터에 <strong>3월 중동전쟁·유가 폭등 효과가 전혀 반영되지 않았다</strong>는 것입니다. 진짜 충격파는 아직 오지 않았습니다.</p>
+  </div>
+
+  <div class="alert alert-danger fade-in">
+    <strong>🔴 Morgan Stanley 경고</strong>
+    유가가 $150에 도달하면 세계 경기공황 가능성. IMF급 위기 시나리오 배제 불가.
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card accent">
+      <div class="stat-num">+1.3%</div>
+      <div class="stat-label">2월 수입물가 MoM<br>예상치 0.65%의 2배</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">21%</div>
+      <div class="stat-label">10월 금리인상 확률<br>9월도 19.8%</div>
+    </div>
+  </div>
+
+  <!-- RECESSION CHART -->
+  <div class="section-label" style="margin-top:18px">기관별 경기침체 확률 (12개월 내)</div>
+  <div class="chart-container fade-in">
+    <canvas id="recessionChart" height="220"></canvas>
+  </div>
+
+  <div class="prog-list fade-in">
+    <div class="prog-item">
+      <div class="prog-label"><span>Moody's</span><span>48.6%</span></div>
+      <div class="prog-track"><div class="prog-fill" data-w="48.6" style="width:0%"></div></div>
+    </div>
+    <div class="prog-item">
+      <div class="prog-label"><span>EY</span><span>40%</span></div>
+      <div class="prog-track"><div class="prog-fill" data-w="40" style="width:0%"></div></div>
+    </div>
+    <div class="prog-item">
+      <div class="prog-label"><span>Goldman Sachs</span><span>30%</span></div>
+      <div class="prog-track"><div class="prog-fill" data-w="30" style="width:0%"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="deco-hr"><span>유가 시나리오 시뮬레이터</span></div>
+
+<!-- OIL SIMULATOR -->
+<div class="section fade-in">
+  <div class="section-label">인터랙티브 시뮬레이터</div>
+  <h2 class="section-title">유가 시나리오로 보는<br>시장 전망</h2>
+  <div class="section-body">
+    <p>시장의 진짜 방향은 뉴스가 아니라 <strong>가격</strong>이 말해줍니다. 유가 슬라이더를 움직여 각 구간별 시장 시나리오를 확인하세요.</p>
+  </div>
+
+  <div class="sim-box">
+    <div class="sim-title">🛢️ WTI 유가 시나리오 분석기</div>
+    <div class="slider-wrap">
+      <label>WTI 유가 <span id="oilVal">$97</span></label>
+      <input type="range" id="oilSlider" min="60" max="150" value="97" step="1">
+    </div>
+    <div class="scenario-bar" id="scenarioBar">
+      <div class="seg" id="bullSeg" style="background:#16a34a;flex:60">강세 60%</div>
+      <div class="seg" id="bearSeg" style="background:var(--accent);flex:40">약세 40%</div>
+    </div>
+    <div class="result-grid">
+      <div class="result-cell">
+        <div class="val" id="simSignal">⚠️ 주시</div>
+        <div class="lbl">투자 신호</div>
+      </div>
+      <div class="result-cell">
+        <div class="val" id="simRisk">중간</div>
+        <div class="lbl">리스크 레벨</div>
+      </div>
+      <div class="result-cell" style="grid-column:span 2">
+        <div class="lbl" id="simDesc" style="font-size:0.8rem;line-height:1.5;text-align:left;padding:6px 0">현재 유가 $97. 100불 돌파 여부 주시. 80불대 복귀 시 비중 확대 기회.</div>
+      </div>
+    </div>
+    <button class="reset-btn" onclick="document.getElementById('oilSlider').value=97;updateOil()">초기화</button>
+  </div>
+</div>
+
+<div class="deco-hr"><span>AI 슈퍼사이클</span></div>
+
+<!-- ARM & CPU -->
+<div class="section fade-in">
+  <div class="section-label">테크 호재 ①</div>
+  <h2 class="section-title">ARM, 35년 만에<br>AI CPU 출시</h2>
+  <div class="section-body">
+    <p>ARM이 스마트폰 라이선스 회사를 넘어 직접 AI CPU를 설계·판매하는 구조로 전환을 선언했습니다. 연간 매출 가이던스를 <strong>$25B</strong>로 제시 (기존 $4~6B 수준에서 폭등).</p>
+    <p>인텔·AMD도 기존 CPU 가격을 <strong>10~15% 인상</strong>하는 단가표를 고객사에 통보했습니다. 군말 없이 살 수밖에 없는 병목 현상이 CPU까지 확산된 것입니다. AMD는 하루에 <strong>+7.26%</strong> 급등.</p>
+  </div>
+
+  <div class="alert alert-info fade-in">
+    <strong>📌 공급 병목의 확산</strong>
+    그동안 메모리(HBM)에만 국한됐던 AI 서버 병목 현상이 CPU로까지 확대. 가격 인상 = 마진 개선 = 주가 상승으로 직결.
+  </div>
+
+  <!-- ARM Revenue Chart -->
+  <div class="section-label" style="margin-top:16px">ARM 연매출 추이 & 가이던스</div>
+  <div class="chart-container fade-in">
+    <canvas id="armChart" height="220"></canvas>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- GOOGLE TURBOQUANT -->
+<div class="section fade-in">
+  <div class="section-label">테크 호재 ② / 메모리주 충격</div>
+  <h2 class="section-title">구글 TurboQuant:<br>메모리 1/6, 속도 8배</h2>
+  <div class="section-body">
+    <p>Google이 <strong>TurboQuant 알고리즘</strong>을 발표했습니다. 대형 언어 모델(LLM)이 문서·대화 처리 시 GPU 메모리에 저장하는 KV 캐시를 기존 대비 <strong>6분의 1</strong>로 압축하는 기술입니다.</p>
+    <p>정확도 손실 없이 <strong>3bit 수준</strong>으로 캐시를 줄이며, 데이터가 작아진 만큼 처리 속도는 <strong>8배</strong>까지 빨라집니다. Micron·WD·Seagate 등 메모리 관련주는 수요 파괴 우려로 하락.</p>
+  </div>
+
+  <div class="pull-quote fade-in">
+    <p>"이는 수요 파괴가 아니라 공급 병목 완화일 뿐. 3~5년 펀더멘털 훼손이 아니다."</p>
+    <cite>— Lynch Equity (메모리주 하락에 대한 반론)</cite>
+  </div>
+
+  <!-- TURBOQUANT VISUAL -->
+  <div class="sim-box fade-in">
+    <div class="sim-title">🔬 TurboQuant 효과 시각화</div>
+    <div class="slider-wrap">
+      <label>LLM 모델 크기 (파라미터) <span id="modelSizeVal">70B</span></label>
+      <input type="range" id="modelSlider" min="7" max="400" value="70" step="1">
+    </div>
+    <div class="result-grid">
+      <div class="result-cell">
+        <div class="val" id="beforeMem">—</div>
+        <div class="lbl">기존 KV캐시 메모리</div>
+      </div>
+      <div class="result-cell">
+        <div class="val" id="afterMem" style="color:var(--accent)">—</div>
+        <div class="lbl">TurboQuant 적용 후</div>
+      </div>
+      <div class="result-cell">
+        <div class="val" id="speedUp">8×</div>
+        <div class="lbl">처리 속도 향상</div>
+      </div>
+      <div class="result-cell">
+        <div class="val" id="saving" style="color:#16a34a">—</div>
+        <div class="lbl">메모리 절감량</div>
+      </div>
+    </div>
+    <button class="reset-btn" onclick="document.getElementById('modelSlider').value=70;updateModel()">초기화</button>
+  </div>
+</div>
+
+<div class="deco-hr"><span>Dell & SMCI</span></div>
+
+<!-- DELL -->
+<div class="section fade-in">
+  <div class="section-label">AI 서버 수혜주</div>
+  <h2 class="section-title">Dell, AI 서버 매출<br>전년比 +342% 폭등</h2>
+  <div class="section-body">
+    <p>SMCI(슈퍼마이크로)의 컴플라이언스 이슈로 반사이익을 누리면서, 본래부터의 <strong>기술적 해자(경쟁 우위)</strong>도 주목받고 있습니다. 특히 <strong>액체냉각 스마트 플레이트 랙(Smart Plate Rack)</strong> 기술이 NVIDIA Blackwell 서버에 최적화돼 있다는 소문이 퍼지고 있습니다.</p>
+  </div>
+  <div class="alert alert-info fade-in">
+    <strong>💡 포인트</strong>
+    Dell = 단순 반사이익이 아님. NVIDIA Blackwell 최적화 + 액체냉각 기술 = 독자적 해자.
+  </div>
+</div>
+
+<div class="deco-hr"><span>SpaceX IPO — 블랙홀</span></div>
+
+<!-- SPACEX IPO -->
+<div class="section fade-in">
+  <div class="section-label">이번 주 최대 이슈</div>
+  <h2 class="section-title">SpaceX IPO:<br>인류 역사상 최대 공모</h2>
+  <div class="section-body">
+    <p>The Information 보도에 따르면, 일론 머스크가 <strong>2주 이내에 S-1(증권신고서)</strong>을 SEC에 제출할 예정입니다. 조달 목표는 <strong>$75B(약 100조원)</strong>으로, 역대 최대 IPO였던 사우디 아람코($29B)의 <strong>2배 이상</strong>입니다.</p>
+  </div>
+
+  <div class="chart-container fade-in">
+    <canvas id="ipoChart" height="220"></canvas>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card accent">
+      <div class="stat-num">$75B</div>
+      <div class="stat-label">SpaceX 조달 목표<br>역대 세계 최대</div>
+    </div>
+    <div class="stat-card dark">
+      <div class="stat-num">$29B</div>
+      <div class="stat-label">기존 최대 아람코<br>2019년 사우디 상장</div>
+    </div>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;margin:20px 0 10px">왜 테슬라 주주는 밤잠을 설칠까?</h3>
+  <div class="badge-list">
+    <div class="badge-item">
+      <div class="badge-icon">🔀</div>
+      <div class="badge-text"><strong>① 프리미엄 희석</strong>테슬라의 프리미엄은 펀더멘털이 아닌 "꿈팔이·미래팔이"였습니다. 더 강력한 꿈팔이(우주)가 등장한 것입니다. 자율주행·로보택시는 이제 '아무나 하는 것'이 됐습니다.</div>
+    </div>
+    <div class="badge-item">
+      <div class="badge-icon">🌀</div>
+      <div class="badge-text"><strong>② 기관의 의무 편입 = 블랙홀</strong>SpaceX가 ETF·우주·성장 지수에 편입되면, 대형 뮤추얼펀드와 기관은 의무적으로 SpaceX를 매수해야 합니다. 그 자금은 기존 보유 종목을 팔아 조달합니다. 가장 먼저 팔릴 후보는 테슬라.</div>
+    </div>
+    <div class="badge-item">
+      <div class="badge-icon">📉</div>
+      <div class="badge-text"><strong>③ 테슬라 PE 360배의 민낯</strong>테슬라 PE가 360.7배입니다. 돈을 잘 벌어서가 아니라 꿈에 투자한 것. 그 꿈의 상징이 SpaceX로 이동 중입니다.</div>
+    </div>
+  </div>
+
+  <!-- SpaceX Impact Simulator -->
+  <div class="sim-box fade-in" style="margin-top:20px">
+    <div class="sim-title">🚀 SpaceX IPO 자금 이동 시뮬레이터</div>
+    <div class="slider-wrap">
+      <label>SpaceX에 배분할 포트폴리오 비중 <span id="allocVal">5%</span></label>
+      <input type="range" id="allocSlider" min="1" max="20" value="5" step="1">
+    </div>
+    <div class="slider-wrap">
+      <label>내 총 포트폴리오 규모 <span id="portVal">1,000만원</span></label>
+      <input type="range" id="portSlider" min="100" max="10000" value="1000" step="100">
+    </div>
+    <div class="result-grid">
+      <div class="result-cell">
+        <div class="val" id="spxBuy">—</div>
+        <div class="lbl">SpaceX 매수금액</div>
+      </div>
+      <div class="result-cell">
+        <div class="val" id="sellAmt" style="color:var(--accent)">—</div>
+        <div class="lbl">기존 종목 매도 필요액</div>
+      </div>
+    </div>
+    <button class="reset-btn" onclick="document.getElementById('allocSlider').value=5;document.getElementById('portSlider').value=1000;updateAlloc()">초기화</button>
+  </div>
+</div>
+
+<div class="deco-hr"><span>투자 전략</span></div>
+
+<!-- BARBELL STRATEGY -->
+<div class="section fade-in">
+  <div class="section-label">바벨(Barbell) 전략</div>
+  <h2 class="section-title">불확실성 속<br>핵심 포트폴리오 구성</h2>
+  <div class="section-body">
+    <p>유가 리스크와 AI 슈퍼사이클이 공존하는 현재, 방어(헤지)와 성장을 동시에 추구하는 바벨 전략이 유효합니다.</p>
+  </div>
+
+  <div class="tbl-wrap fade-in">
+    <table>
+      <thead><tr><th>영역</th><th>전략</th><th>종목 예시</th></tr></thead>
+      <tbody>
+        <tr><td><strong>코어 🎯</strong></td><td>AI 인프라 장기 보유</td><td>NVIDIA, ARM, AMD, Dell</td></tr>
+        <tr><td><strong>헤지 🛡️</strong></td><td>AI + 유가 동시 수혜<br>유틸리티/에너지</td><td>AI 유틸리티, 원자력</td></tr>
+        <tr><td><strong>회피 ❌</strong></td><td>단기 투기 영역</td><td>SpaceX IPO 직접 투자<br>(이미 프리미엄 20% 선반영)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="alert alert-warn fade-in">
+    <strong>⚠️ 3년 관점 핵심 메시지</strong>
+    단기 유가·지정학 노이즈에 흔들리지 말 것. 3년 후 진정한 부를 결정하는 것은 <strong>AI 인프라</strong>. 하드웨어 대장주 중심의 코어 포지션을 유지하라.
+  </div>
+
+  <!-- VIX 진입 타이밍 차트 -->
+  <div class="section-label" style="margin-top:18px">VIX 진입 타이밍 가이드</div>
+  <div class="chart-container fade-in">
+    <canvas id="vixChart" height="220"></canvas>
+  </div>
+  <div class="section-body" style="margin-top:10px">
+    <p style="font-size:0.82rem;color:var(--text2)">VIX 20 이하 진입 시 공격적 매수. 현재 25.33 — 아직 안전 구간 미진입. 보수적 투자자는 20 이하 확인 후 진입 권장.</p>
+  </div>
+</div>
+
+<div class="deco-hr"><span>기타 주요 종목</span></div>
+
+<!-- OTHER STOCKS -->
+<div class="section fade-in">
+  <div class="section-label">섹터별 주목 이슈</div>
+  <h2 class="section-title">항공·제약·반려동물</h2>
+  <div class="badge-list">
+    <div class="badge-item">
+      <div class="badge-icon">✈️</div>
+      <div class="badge-text"><strong>JetBlue — M&A 매물로 등장</strong>Spirit와의 합병이 연방법원에서 무산된 후, "우리를 사가세요" 모드. United, Alaska, Southwest 등이 인수 후보로 거론 중.</div>
+    </div>
+    <div class="badge-item">
+      <div class="badge-icon">💊</div>
+      <div class="badge-text"><strong>Merck — Turnstone 현금 인수</strong>백혈병 치료제 Keytruda(키트루다) 특허 확장 전략. 인수 비용 지출에도 특허 가치로 주가 상승.</div>
+    </div>
+    <div class="badge-item">
+      <div class="badge-icon">🐕</div>
+      <div class="badge-text"><strong>Chewy — 기대 이상 실적</strong>반려동물 전문 플랫폼. 매출 가이던스 상향으로 강세. 경기 침체에도 반려동물 지출은 비탄력적.</div>
+    </div>
+  </div>
+</div>
+
+<div class="deco-hr"><span>리스크 요약</span></div>
+
+<!-- RISK SUMMARY -->
+<div class="section fade-in">
+  <div class="section-label">현재 3대 위험 요소</div>
+  <h2 class="section-title">동시에 터지면<br>패닉이 온다</h2>
+  <div class="badge-list">
+    <div class="badge-item">
+      <div class="badge-icon">🔥</div>
+      <div class="badge-text"><strong>① 인플레이션 재점화</strong>수입물가 1.3% 폭등 + 유가 상방 압력 → 금리 인하 지연 또는 인상 가능성. 10월 인상 확률 21%.</div>
+    </div>
+    <div class="badge-item">
+      <div class="badge-icon">💳</div>
+      <div class="badge-text"><strong>② 사모 크레딧 시장 문제</strong>은행권 유동성 문제 잠복. 저금리 시대에 과도하게 팽창한 사모신용(Private Credit) 부실화 우려.</div>
+    </div>
+    <div class="badge-item">
+      <div class="badge-icon">🌌</div>
+      <div class="badge-text"><strong>③ SpaceX IPO 블랙홀</strong>$75B+ 규모의 거대 자금 흡수 → 기관 포트폴리오 리밸런싱 → 성장주 매도 압력. 특히 테슬라에 직접 타격.</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider-bold"></div>
+
+<!-- QUIZ SECTION -->
+<div class="quiz-section fade-in">
+  <div class="section-label">복습 & 확인 문제</div>
+  <div class="quiz-title">📝 오늘의 핵심 10문제</div>
+  <div class="quiz-sub">문제를 클릭하면 정답과 해설이 펼쳐집니다.</div>
+
+  <!-- Q1 -->
+  <div class="qcard">
+    <div class="qcard-q" onclick="toggleQ(this)">
+      <span class="qcard-q-num">Q1 <span class="difficulty easy">쉬움</span></span>
+      <span class="qcard-q-text">오늘 미국 주식시장에서 상승한 종목 수는 대략 몇 개였는가?</span>
+      <span class="qcard-q-arrow">▼</span>
+    </div>
+    <div class="qcard-a">
+      <span class="answer-badge">정답</span>
+      <p><strong>약 3,400개</strong>가 상승하였고, 하락은 약 1,921개였습니다. 대체로 상승 종목이 더 많은 랠리 장세였습니다.</p>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="qcard">
+    <div class="qcard-q" onclick="toggleQ(this)">
+      <span class="qcard-q-num">Q2 <span class="difficulty easy">쉬움</span></span>
+      <span class="qcard-q-text">Google의 TurboQuant 알고리즘은 기존 대비 메모리 사용량을 얼마나 줄이는가?</span>
+      <span class="qcard-q-arrow">▼</span>
+    </div>
+    <div class="qcard-a">
+      <span class="answer-badge">정답</span>
+      <p><strong>6분의 1(약 83% 절감)</strong>로 줄입니다. 동시에 처리 속도는 8배 빨라지며, 정확도 손실은 없다고 발표되었습니다.</p>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="qcard">
+    <div class="qcard-q" onclick="toggleQ(this)">
+      <span class="qcard-q-num">Q3 <span class="difficulty easy">쉬움</span></span>
+      <span class="qcard-q-text">SpaceX의 이번 IPO 조달 목표 금액은 얼마인가? (OX 형식 — "$75B 이상이다")</span>
+      <span class="qcard-q-arrow">▼</span>
+    </div>
+    <div class="qcard-a">
+      <span class="answer-badge">O (정답)</span>
+      <p>조달 목표는 <strong>$75B(750억 달러)</strong> 이상으로 알려져 있습니다. 역대 세계 최대 IPO였던 사우디 아람코($29B)의 2배 이상 규모입니다.</p>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="qcard">
+    <div class="qcard-q" onclick="toggleQ(this)">
+      <span class="qcard-q-num">Q4 <span class="difficulty medium">보통</span></span>
+      <span class="qcard-q-text">오늘 발표된 2월 수입물가지수가 시장에 충격을 준 이유 두 가지는?</span>
+      <span class="qcard-q-arrow">▼</span>
+    </div>
+    <div class="qcard-a">
+      <span class="answer-badge">정답</span>
+      <p>① 전월 대비 <strong>+1.3%로 시장 예상치(약 0.65%)의 2배</strong>를 초과한 수치이자 <strong>4년 내 최고치</strong>였습니다. ② 이 데이터에는 3월 중동전쟁과 유가 폭등 효과가 <strong>아직 반영되지 않았다</strong>는 점에서 향후 충격이 더 클 수 있습니다.</p>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="qcard">
+    <div class="qcard-q" onclick="toggleQ(this)">
+      <span class="qcard-q-num">Q5 <span class="difficulty medium">보통</span></span>
+      <span class="qcard-q-text">Intel과 AMD가 CPU 가격을 인상했음에도, AMD만 주가가 크게 오르고 Intel은 부진한 이유는?</span>
+      <span class="qcard-q-arrow">▼</span>
+    </div>
+    <div class="qcard-a">
+      <span class="answer-badge">정답</span>
+      <p>Intel은 수년간의 경영·기술 문제로 <strong>시장 신뢰를 잃은 상태</strong>입니다. 반면 AMD는 서버·데이터센터 CPU 시장에서 경쟁력을 확보해 실질적 수혜가 기대되기 때문입니다. 가격 인상 능력(Pricing Power)이 있는 기업만 주가 상승으로 연결됩니다.</p>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="qcard">
+    <div class="qcard-q" onclick="toggleQ(this)">
+      <span class="qcard-q-num">Q6 <span class="difficulty medium">보통</span></span>
+      <span class="qcard-q-text">SpaceX IPO가 테슬라 주가에 부정적인 이유를 '기관 투자자 의무 편입' 논리로 설명하시오.</span>
+      <span class="qcard-q-arrow">▼</span>
+    </div>
+    <div class="qcard-a">
+      <span class="answer-badge">정답</span>
+      <p>SpaceX가 상장되면 우주·성장 ETF와 지수에 편입됩니다. 대형 뮤추얼펀드·기관은 이 지수를 추종하므로 <strong>의무적으로 SpaceX 주식을 매수</strong>해야 합니다. 그 자금을 마련하기 위해 기존 보유 종목을 매도해야 하는데, 같은 "꿈팔이·미래팔이" 컨셉의 테슬라가 가장 먼저 매도 대상이 될 수 있습니다. 이를 <strong>'블랙홀' 효과</strong>라고 합니다.</p>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="qcard">
+    <div class="qcard-q" onclick="toggleQ(this)">
+      <span class="qcard-q-num">Q7 <span class="difficulty medium">보통</span></span>
+      <span class="qcard-q-text">방송에서 제시된 '바벨 전략'에서 코어(Core) 영역과 헤지(Hedge) 영역은 각각 무엇인가?</span>
+      <span class="qcard-q-arrow">▼</span>
+    </div>
+    <div class="qcard-a">
+      <span class="answer-badge">정답</span>
+      <p><strong>코어</strong>: AI 인프라 장기 보유 (NVIDIA, ARM, AMD, Dell 등 AI 하드웨어 대장주). <strong>헤지</strong>: 유가 급등 리스크를 방어하면서 AI 성장도 함께 누릴 수 있는 AI 유틸리티·에너지 종목. 단순 에너지주는 유가 방향이 불확실하므로 "헤지이지 코어가 아니다"라는 점이 핵심입니다.</p>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="qcard">
+    <div class="qcard-q" onclick="toggleQ(this)">
+      <span class="qcard-q-num">Q8 <span class="difficulty medium">보통</span></span>
+      <span class="qcard-q-text">Dell의 AI 서버 매출이 급증한 두 가지 원인은? (반사이익 + 자체 경쟁력)</span>
+      <span class="qcard-q-arrow">▼</span>
+    </div>
+    <div class="qcard-a">
+      <span class="answer-badge">정답</span>
+      <p>① <strong>SMCI의 컴플라이언스 이슈</strong>로 인한 반사이익 (공급망 단일화 리스크 우려로 고객사 이탈). ② Dell 자체의 <strong>액체냉각 스마트 플레이트 랙 기술</strong>이 NVIDIA Blackwell 서버에 최적화되어 있다는 기술적 해자. 전년比 AI 서버 매출 <strong>+342%</strong> 폭증.</p>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="qcard">
+    <div class="qcard-q" onclick="toggleQ(this)">
+      <span class="qcard-q-num">Q9 <span class="difficulty hard">어려움</span></span>
+      <span class="qcard-q-text">Lynch Equity가 "Google TurboQuant 발표는 수요 파괴가 아니다"라고 주장하는 근거는 무엇인가? 그리고 이것이 장기 메모리주 투자에 시사하는 바는?</span>
+      <span class="qcard-q-arrow">▼</span>
+    </div>
+    <div class="qcard-a">
+      <span class="answer-badge">정답</span>
+      <p>TurboQuant는 특정 추론 방식의 메모리 효율을 높이는 것이지, AI 모델의 전체 메모리 수요 자체를 없애는 것이 아닙니다. AI 모델은 계속 커지고 있으며, 효율화는 <strong>병목 완화일 뿐 수요 제거가 아닙니다</strong>. 또한 이는 Google만의 독점 기술이므로 범용화까지 시간이 걸립니다. 따라서 3~5년 펀더멘털은 훼손되지 않으며, 오늘의 하락은 <strong>매수 기회</strong>일 수 있습니다.</p>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="qcard">
+    <div class="qcard-q" onclick="toggleQ(this)">
+      <span class="qcard-q-num">Q10 <span class="difficulty hard">어려움</span></span>
+      <span class="qcard-q-text">현재 방송에서 언급된 3대 동시 리스크가 모두 현실화될 경우 시장에 미치는 연쇄 충격 메커니즘을 서술하시오.</span>
+      <span class="qcard-q-arrow">▼</span>
+    </div>
+    <div class="qcard-a">
+      <span class="answer-badge">정답 (심화)</span>
+      <p>① <strong>인플레이션 재점화</strong>: 유가 상승 → 수입물가 상승 → 금리 인하 불가, 오히려 인상 압력 → 기업 밸류에이션 하락 → 성장주 직격. ② <strong>사모 크레딧 부실</strong>: 고금리 장기화 → 저신용 사모대출 부실 증가 → 금융시장 신용경색 → 은행 유동성 위기 → 공포 확산. ③ <strong>SpaceX 블랙홀</strong>: $75B+ 자금 흡수 → 기관 포트폴리오 대규모 리밸런싱 → 성장주·테슬라 매도 압력 → 주가 급락. 세 요인이 동시에 발생하면 <strong>공포가 공포를 부르는 패닉 장세</strong>로 전개될 수 있습니다. 방어적 자산 배분과 유가 모니터링이 최우선입니다.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <strong>NOVA Real Invest</strong> — 마켓 브리핑 요약 분석<br>
+  본 자료는 교육·정보 제공 목적이며, 투자 권유가 아닙니다.<br>
+  투자 결정은 본인의 책임하에 이루어져야 합니다.<br>
+  2026. 03. 26
+</footer>
+
+<script>
+// ─── FADE + CHART OBSERVER ───────────────────────────────────────
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// Progress bars
+const progObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.prog-fill').forEach(f => {
+        f.style.width = f.dataset.w + '%';
+      });
+      progObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.2 });
+document.querySelectorAll('.prog-list').forEach(el => progObs.observe(el));
+
+const chartConfigs = {};
+
+// Recession Chart
+chartConfigs['recessionChart'] = () => {
+  new Chart(document.getElementById('recessionChart'), {
+    type: 'bar',
+    data: {
+      labels: ["Moody's", "EY", "Goldman Sachs", "블랙락(추정)"],
+      datasets: [{
+        label: '12개월 내 경기침체 확률 (%)',
+        data: [48.6, 40, 30, 35],
+        backgroundColor: ['#e11d48','#f43f5e','#6b7280','#2563eb'],
+        borderRadius: 2,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.parsed.y + '%' } } },
+      scales: {
+        y: { beginAtZero: true, max: 60, ticks: { callback: v => v + '%', font: { size: 10 } }, grid: { color: '#f0f0f0' } },
+        x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// ARM Revenue Chart
+chartConfigs['armChart'] = () => {
+  new Chart(document.getElementById('armChart'), {
+    type: 'bar',
+    data: {
+      labels: ['~2022','2023','2024','2025E','가이던스'],
+      datasets: [{
+        label: 'ARM 연매출 ($ Billion)',
+        data: [2.7, 3.2, 4.2, 6.0, 25],
+        backgroundColor: ['#6b7280','#6b7280','#6b7280','#2563eb','#e11d48'],
+        borderRadius: 2,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y + 'B' } } },
+      scales: {
+        y: { beginAtZero: true, ticks: { callback: v => '$' + v + 'B', font: { size: 10 } }, grid: { color: '#f0f0f0' } },
+        x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// IPO Chart
+chartConfigs['ipoChart'] = () => {
+  new Chart(document.getElementById('ipoChart'), {
+    type: 'bar',
+    data: {
+      labels: ['알리바바\n2014', '아람코\n2019', 'SpaceX\n2026(목표)'],
+      datasets: [{
+        label: 'IPO 조달액 ($ Billion)',
+        data: [25, 29, 75],
+        backgroundColor: ['#6b7280','#6b7280','#e11d48'],
+        borderRadius: 2,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y + 'B' } },
+        annotation: {}
+      },
+      scales: {
+        y: { beginAtZero: true, ticks: { callback: v => '$' + v + 'B', font: { size: 10 } }, grid: { color: '#f0f0f0' } },
+        x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// VIX Guide Chart
+chartConfigs['vixChart'] = () => {
+  new Chart(document.getElementById('vixChart'), {
+    type: 'line',
+    data: {
+      labels: ['10','15','20','25','30','35','40'],
+      datasets: [{
+        label: 'VIX 수준',
+        data: [10,15,20,25,30,35,40],
+        borderColor: '#e11d48',
+        backgroundColor: 'rgba(225,29,72,0.07)',
+        fill: true,
+        tension: 0.3,
+        pointRadius: [3,3,6,8,3,3,3],
+        pointBackgroundColor: ['#6b7280','#6b7280','#16a34a','#e11d48','#6b7280','#6b7280','#6b7280'],
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => 'VIX ' + ctx.parsed.y } }
+      },
+      scales: {
+        y: { display: false },
+        x: { ticks: { font: { size: 10 } }, grid: { color: '#f0f0f0' } }
+      }
+    }
+  });
+};
+
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+// ─── OIL SIMULATOR ───────────────────────────────────────────────
+function updateOil() {
+  const v = parseInt(document.getElementById('oilSlider').value);
+  document.getElementById('oilVal').textContent = '$' + v;
+  let signal, risk, desc, bull, bear;
+  if (v <= 70) {
+    signal = '✅ 매수'; risk = '낮음'; bull = 80; bear = 20;
+    desc = `유가 $${v}: 전쟁 리스크 완화, 인플레 압력 약화. 주식시장 강세 국면. 공격적 진입 가능 구간.`;
+  } else if (v <= 80) {
+    signal = '🟢 진입'; risk = '보통'; bull = 70; bear = 30;
+    desc = `유가 $${v}: 80불 전후, 방송에서 제시한 핵심 진입 타이밍. 비중 확대 고려.`;
+  } else if (v <= 100) {
+    signal = '⚠️ 주시'; risk = '중간'; bull = 60; bear = 40;
+    desc = `유가 $${v}: 현재 구간. 100불 돌파 여부 모니터링. 보수적 접근, 하던 거 유지.`;
+  } else if (v <= 120) {
+    signal = '🟡 경계'; risk = '높음'; bull = 40; bear = 60;
+    desc = `유가 $${v}: 스태그플레이션 진입 신호. 금리 인상 가능성 확대. 헤지 비중 증가 필요.`;
+  } else {
+    signal = '🔴 위험'; risk = '매우높음'; bull = 20; bear = 80;
+    desc = `유가 $${v}: $120+ 초과 — 모건스탠리 경고 구간. 세계공황 시나리오 대비. 현금 비중 확대.`;
+  }
+  document.getElementById('simSignal').textContent = signal;
+  document.getElementById('simRisk').textContent = risk;
+  document.getElementById('simDesc').textContent = desc;
+  const bullSeg = document.getElementById('bullSeg');
+  const bearSeg = document.getElementById('bearSeg');
+  bullSeg.style.flex = bull;
+  bearSeg.style.flex = bear;
+  bullSeg.textContent = bull > 15 ? `강세 ${bull}%` : '';
+  bearSeg.textContent = bear > 15 ? `약세 ${bear}%` : '';
+}
+document.getElementById('oilSlider').addEventListener('input', updateOil);
+updateOil();
+
+// ─── MODEL SIZE SIMULATOR ─────────────────────────────────────────
+function updateModel() {
+  const v = parseInt(document.getElementById('modelSlider').value);
+  const units = v >= 1000 ? (v/1000).toFixed(1) + 'T' : v + 'B';
+  document.getElementById('modelSizeVal').textContent = units;
+  // Rough estimate: each B param ~= 2MB for KV cache at batch
+  const before = (v * 1.8).toFixed(0);
+  const after = (v * 0.3).toFixed(0);
+  const saved = (before - after).toFixed(0);
+  document.getElementById('beforeMem').textContent = before > 999 ? (before/1000).toFixed(1)+'TB' : before+'GB';
+  document.getElementById('afterMem').textContent = after > 999 ? (after/1000).toFixed(1)+'TB' : after+'GB';
+  document.getElementById('saving').textContent = saved > 999 ? (saved/1000).toFixed(1)+'TB' : saved+'GB';
+}
+document.getElementById('modelSlider').addEventListener('input', updateModel);
+updateModel();
+
+// ─── ALLOC SIMULATOR ─────────────────────────────────────────────
+function updateAlloc() {
+  const alloc = parseInt(document.getElementById('allocSlider').value);
+  const port = parseInt(document.getElementById('portSlider').value);
+  document.getElementById('allocVal').textContent = alloc + '%';
+  const portLabel = port >= 10000 ? '1억원' : (port/100).toFixed(0) + '백만원';
+  document.getElementById('portVal').textContent = port >= 10000 ? '1억원' : port.toLocaleString() + '만원';
+  const buyAmt = Math.round(port * alloc / 100);
+  document.getElementById('spxBuy').textContent = buyAmt.toLocaleString() + '만원';
+  document.getElementById('sellAmt').textContent = buyAmt.toLocaleString() + '만원';
+}
+document.getElementById('allocSlider').addEventListener('input', updateAlloc);
+document.getElementById('portSlider').addEventListener('input', updateAlloc);
+updateAlloc();
+
+// ─── QUIZ TOGGLE ─────────────────────────────────────────────────
+function toggleQ(el) {
+  const card = el.closest('.qcard');
+  card.classList.toggle('open');
+}
+</script>
+</body>
+</html>
