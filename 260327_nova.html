@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>나스닥 조정장 진입 분석 — CIA.chat 멤버미팅 2026.03.26</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Serif+KR:wght@300;400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --chart1: #e11d48;
+    --chart2: #1a1a1a;
+    --chart3: #6b7280;
+    --chart4: #2563eb;
+    --table-bg: #fafafa;
+    --table-header: #e11d48;
+    --border: #e5e5e5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', 'Noto Serif KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 0 60px;
+    line-height: 1.7;
+  }
+
+  /* ── HEADER ── */
+  .masthead {
+    background: var(--text);
+    color: #fff;
+    padding: 36px 24px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .masthead::before {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 160px; height: 160px;
+    border: 2px solid rgba(225,29,72,0.4);
+    border-radius: 50%;
+  }
+  .issue-tag {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 12px;
+  }
+  .masthead h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .masthead h1 span { color: var(--accent2); }
+  .masthead-meta {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 14px;
+  }
+
+  /* ── ALERT BANNER ── */
+  .alert-banner {
+    background: var(--accent);
+    color: #fff;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .alert-banner .dot {
+    width: 8px; height: 8px;
+    background: #fff;
+    border-radius: 50%;
+    animation: blink 1.2s infinite;
+    flex-shrink: 0;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  /* ── SECTION ── */
+  section { padding: 28px 20px; border-bottom: 1px solid var(--border); }
+  section:last-of-type { border-bottom: none; }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 14px;
+  }
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  p { font-size: 14px; color: var(--text); margin-bottom: 10px; line-height: 1.75; }
+  p:last-child { margin-bottom: 0; }
+
+  /* ── DEFINITION TERM ── */
+  .term {
+    background: #fff7f8;
+    border-left: 3px solid var(--accent);
+    padding: 10px 14px;
+    margin: 12px 0;
+    font-size: 13px;
+    border-radius: 0 6px 6px 0;
+  }
+  .term strong { color: var(--accent); font-size: 12px; letter-spacing: 1px; display: block; margin-bottom: 3px; }
+
+  /* ── STAT GRID ── */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 16px 0;
+  }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 12px;
+    text-align: center;
+  }
+  .stat-card .val {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+  }
+  .stat-card .val.neg { color: var(--accent); }
+  .stat-card .val.pos { color: #16a34a; }
+  .stat-card .val.warn { color: #d97706; }
+  .stat-card .lbl { font-size: 11px; color: var(--text2); margin-top: 4px; line-height: 1.4; }
+
+  /* ── TRIGGER CARDS ── */
+  .trigger-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .trigger-card::before {
+    content: attr(data-num);
+    position: absolute;
+    right: 16px; top: 12px;
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: rgba(225,29,72,0.07);
+    line-height: 1;
+  }
+  .trigger-card .tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(225,29,72,0.08);
+    padding: 3px 8px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+  .trigger-card h3 { font-size: 15px; margin-bottom: 6px; }
+  .trigger-card p { font-size: 13px; color: #444; margin: 0; }
+
+  /* ── CHART CONTAINER ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin: 16px 0;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas {
+    opacity: 1;
+  }
+  .chart-title {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  /* ── FLOOR INDICATOR ── */
+  .floor-visual {
+    margin: 16px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .floor-row {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    gap: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .floor-row:not(:last-child) { border-bottom: 1px solid var(--border); }
+  .floor-row:hover { background: #fff5f6; }
+  .floor-badge {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .floor-row.current .floor-badge { background: var(--accent); color: #fff; }
+  .floor-row.warn1 .floor-badge { background: #fef3c7; color: #92400e; }
+  .floor-row.warn2 .floor-badge { background: #fee2e2; color: #991b1b; }
+  .floor-row.danger .floor-badge { background: #1a1a1a; color: #fff; }
+  .floor-info { flex: 1; }
+  .floor-info .fl-title { font-size: 13px; font-weight: 600; }
+  .floor-info .fl-desc { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  .floor-pct { font-family: 'DM Sans'; font-weight: 700; font-size: 15px; color: var(--accent); }
+
+  /* ── INTERACTIVE SIMULATOR ── */
+  .simulator {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    border-radius: 14px;
+    padding: 20px;
+    color: #fff;
+    margin: 16px 0;
+  }
+  .simulator h3 { color: #fff; font-size: 16px; margin-bottom: 4px; }
+  .simulator .sub { font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 18px; }
+  .sim-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+  .sim-label .val { font-weight: 700; color: var(--accent2); }
+  input[type=range] {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.2);
+    outline: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    box-shadow: 0 0 0 3px rgba(225,29,72,0.3);
+  }
+  .sim-result {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .sim-result .res-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .sim-result .res-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .sim-result .res-row .key { color: rgba(255,255,255,0.6); }
+  .sim-result .res-row .val { font-weight: 600; }
+  .sim-result .res-row .val.good { color: #4ade80; }
+  .sim-result .res-row .val.bad { color: var(--accent2); }
+  .sim-result .res-row .val.neutral { color: #fbbf24; }
+  .reset-btn {
+    margin-top: 14px;
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { background: rgba(255,255,255,0.05); color: #fff; }
+
+  /* ── PARADOX BOX ── */
+  .paradox-box {
+    background: var(--bg2);
+    border-radius: 12px;
+    padding: 18px;
+    margin: 14px 0;
+    border: 1px solid var(--border);
+  }
+  .paradox-box .p-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .paradox-visual {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 12px 0;
+    overflow-x: auto;
+    padding: 4px 0;
+  }
+  .pv-item {
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .pv-item .icon {
+    font-size: 22px;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .pv-item .label {
+    font-size: 10px;
+    color: var(--text2);
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+  .pv-arrow {
+    font-size: 18px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* ── STRATEGY TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 14px 0;
+  }
+  th {
+    background: var(--table-header);
+    color: #fff;
+    padding: 10px 10px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+  td {
+    background: var(--table-bg);
+    padding: 9px 10px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  .tag-buy { color: #16a34a; font-weight: 700; font-size: 11px; }
+  .tag-hold { color: #d97706; font-weight: 700; font-size: 11px; }
+  .tag-sell { color: var(--accent); font-weight: 700; font-size: 11px; }
+  .tag-watch { color: var(--chart4); font-weight: 700; font-size: 11px; }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    position: relative;
+    padding-left: 24px;
+    margin: 14px 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px; top: 6px; bottom: 6px;
+    width: 2px;
+    background: var(--border);
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 18px;
+  }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -20px; top: 5px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--border);
+  }
+  .tl-item.active::before {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .tl-date { font-size: 10px; color: var(--accent); font-weight: 600; letter-spacing: 1px; margin-bottom: 2px; }
+  .tl-content { font-size: 13px; }
+  .tl-content strong { font-weight: 600; }
+
+  /* ── QUOTE BOX ── */
+  .quote-box {
+    border-left: 4px solid var(--accent);
+    padding: 12px 16px;
+    margin: 16px 0;
+    background: #fff7f8;
+    border-radius: 0 10px 10px 0;
+  }
+  .quote-box p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--text);
+    margin: 0;
+  }
+  .quote-source { font-size: 11px; color: var(--text2); margin-top: 6px !important; font-style: normal; }
+
+  /* ── SCENARIO TABS ── */
+  .tabs {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 16px;
+    gap: 0;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 10px 8px;
+    background: none;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text2);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+  }
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── FOOTER ── */
+  .doc-footer {
+    background: var(--text);
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+    padding: 20px;
+    font-size: 11px;
+    line-height: 1.8;
+  }
+  .doc-footer strong { color: rgba(255,255,255,0.7); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 6px 0 14px;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .divider span { font-size: 10px; color: var(--text2); letter-spacing: 1.5px; white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<!-- ── MASTHEAD ── -->
+<div class="masthead">
+  <div class="issue-tag">CIA.chat · 멤버 미팅 리포트 · 2026.03.26</div>
+  <h1>[충격] 나스닥<br><span>조정장 공식 진입</span></h1>
+  <div class="masthead-meta">발행일 2026년 3월 27일 · 발표자: 노바 · 3가지 조건식 긴급 대응법</div>
+</div>
+
+<!-- ── ALERT ── -->
+<div class="alert-banner">
+  <div class="dot"></div>
+  나스닥 고점 대비 −10.9% · 조정장 공식 진입 확인
+</div>
+
+<!-- ── 1. 시장 현황 ── -->
+<section>
+  <div class="section-label fade-in">Market Status</div>
+  <h2 class="fade-in">오늘의 시장,<br>한눈에 정리</h2>
+
+  <div class="stat-grid fade-in">
+    <div class="stat-card">
+      <div class="val neg">−10.9%</div>
+      <div class="lbl">나스닥 고점 대비<br>낙폭 (조정장 진입)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val warn">$108</div>
+      <div class="lbl">브렌트유 가격<br>(지속 상승 중)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val warn">27.59</div>
+      <div class="lbl">VIX 공포지수<br>(불안 구간)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val warn">4.4%</div>
+      <div class="lbl">미국 10년물 국채 금리<br>(4.4% 돌파)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val neg">−17%</div>
+      <div class="lbl">마이크론 주가<br>고점 대비 하락</div>
+    </div>
+    <div class="stat-card">
+      <div class="val neg">4.2%</div>
+      <div class="lbl">월스트리트<br>인플레이션 전망치</div>
+    </div>
+  </div>
+
+  <p class="fade-in">주식·채권·암호화폐·에너지 전 자산군에 걸쳐 충격이 동시에 발생했습니다. 지정학 리스크, AI 하드웨어 패러다임 전환, 규제 리스크 세 가지가 <strong>같은 날 한꺼번에</strong> 터졌습니다.</p>
+
+  <!-- CHART: 조정·하락장 기준 -->
+  <div class="divider fade-in"><span>낙폭 기준선</span></div>
+  <p class="chart-title fade-in">나스닥 낙폭 단계별 시장 분류</p>
+  <div class="chart-container fade-in">
+    <canvas id="correctionChart" height="220"></canvas>
+  </div>
+</section>
+
+<!-- ── 2. 3대 트리거 ── -->
+<section>
+  <div class="section-label fade-in">3 Major Triggers</div>
+  <h2 class="fade-in">오늘 폭락의<br>3가지 대형 뇌관</h2>
+
+  <div class="trigger-card fade-in" data-num="01">
+    <span class="tag">지정학적 리스크</span>
+    <h3>이란, 트럼프 15개 조항 휴전안 전면 거부</h3>
+    <p>트럼프 대통령이 제시한 15개 조항의 휴전 조건을 이란이 전면 거절. 브렌트유 $108 유지, 에너지 관련주는 전쟁 개시 후 누적 +40% 상승. 인플레이션 전망 4.2%로 급상향.</p>
+  </div>
+
+  <div class="trigger-card fade-in" data-num="02">
+    <span class="tag">AI 하드웨어 패러다임</span>
+    <h3>구글 TurbQuant 발표 — 메모리 6배 절감</h3>
+    <p>구글이 새로운 AI 추론 최적화 기술을 발표, 메모리 사용량 6배 절감·속도 8배 향상. 반도체 슈퍼사이클 종료 공포 확산 → 마이크론 고점 대비 −17%. (단, 제번스 역설에 따라 장기적 수요는 오히려 증가 전망)</p>
+  </div>
+
+  <div class="trigger-card fade-in" data-num="03">
+    <span class="tag">규제 리스크</span>
+    <h3>반도체 보안법 통과 + 메타·구글 소송 패소</h3>
+    <p>① 하원 외교위원회, 반도체 수출 규제 강화 법안 통과 → 엔비디아 중국 수출 원천 차단 우려. ② 메타·알파벳, 소셜미디어 중독 알고리즘 배심원 재판 패소 → 유사 소송 2천 건 대기 중.</p>
+  </div>
+
+  <!-- CHART: 3대 트리거 영향 종목 -->
+  <div class="divider fade-in"><span>트리거별 주요 종목 영향</span></div>
+  <div class="chart-container fade-in">
+    <canvas id="triggerChart" height="220"></canvas>
+  </div>
+</section>
+
+<!-- ── 3. 경제 연쇄반응 ── -->
+<section>
+  <div class="section-label fade-in">Macro Chain Reaction</div>
+  <h2 class="fade-in">연쇄 도미노:<br>어디까지 퍼지나</h2>
+
+  <div class="timeline fade-in">
+    <div class="tl-item active">
+      <div class="tl-date">지정학 리스크</div>
+      <div class="tl-content"><strong>이란 전쟁 지속</strong> → 유가 $108 고착화</div>
+    </div>
+    <div class="tl-item active">
+      <div class="tl-date">에너지·인플레이션</div>
+      <div class="tl-content"><strong>유가 고착 → 인플레이션 4.2% 전망</strong> → 금리 인하 기대 소멸</div>
+    </div>
+    <div class="tl-item active">
+      <div class="tl-date">금리·부채</div>
+      <div class="tl-content"><strong>10년물 4.4% 돌파</strong> → 모기지 금리 상승 → 주택담보대출 연체 급증</div>
+    </div>
+    <div class="tl-item active">
+      <div class="tl-date">헤지펀드 레버리지</div>
+      <div class="tl-content"><strong>저금리 시절 국채 담보 레버리지</strong>로 소프트웨어·크립토 투자 → 담보가치 하락 → 마진콜·강제청산</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">잠재 리스크</div>
+      <div class="tl-content"><strong>패닉셀 가능성</strong> — 기관 유동성 체계적 이탈 지속 중</div>
+    </div>
+  </div>
+
+  <div class="term fade-in">
+    <strong>📌 모기지 딜린퀀시(Delinquency)</strong>
+    미국에서 주택담보대출 원리금을 3개월 이상 미납한 상태. 금리 상승으로 변동금리(ARM) 대출자 중 연체자가 급증 중.
+  </div>
+
+  <div class="term fade-in">
+    <strong>📌 마진콜(Margin Call)</strong>
+    레버리지(빚)를 이용해 투자했을 때 담보 자산 가치가 하락하면 증권사가 추가 담보를 요구하는 것. 이에 응하지 못하면 보유 자산이 강제로 매도됨.
+  </div>
+</section>
+
+<!-- ── 4. 제번스 역설 ── -->
+<section>
+  <div class="section-label fade-in">Jevons Paradox</div>
+  <h2 class="fade-in">메모리 6배 절감?<br>"오히려 더 쓴다"</h2>
+
+  <p class="fade-in">구글의 TurbQuant 발표로 "반도체 수요가 줄 것"이라는 시장 공포가 번졌습니다. 하지만 발표자는 <strong>제번스 역설</strong>로 이를 반박합니다.</p>
+
+  <div class="paradox-box fade-in">
+    <div class="p-title">⚡ 제번스 역설(Jevons Paradox)</div>
+    <p style="font-size:13px; margin-bottom:10px;">19세기 경제학자 제번스가 증기기관 효율화 사례에서 발견한 현상. <strong>"기술 효율이 높아지면 자원 사용량이 오히려 늘어난다."</strong></p>
+
+    <div class="paradox-visual">
+      <div class="pv-item"><span class="icon">🔧</span><span class="label">기술 효율<br>향상</span></div>
+      <div class="pv-arrow">→</div>
+      <div class="pv-item"><span class="icon">💰</span><span class="label">사용 단가<br>하락</span></div>
+      <div class="pv-arrow">→</div>
+      <div class="pv-item"><span class="icon">📈</span><span class="label">수요·사용량<br>폭발</span></div>
+      <div class="pv-arrow">→</div>
+      <div class="pv-item"><span class="icon">🏭</span><span class="label">전체 자원<br>소비 증가</span></div>
+    </div>
+
+    <p style="font-size:13px; margin-top:8px; color:#555;">데이터센터 CEO 입장에서, 메모리 6배 절감이 아닌 <em>"같은 비용으로 6배 더 많은 AI를 돌리자"</em>로 사고합니다. 결론: 반도체·메모리 장기 수요는 유지 또는 증가.</p>
+  </div>
+
+  <div class="chart-container fade-in">
+    <canvas id="jevonsChart" height="220"></canvas>
+  </div>
+</section>
+
+<!-- ── 5. 유가 시나리오 시뮬레이터 ── -->
+<section>
+  <div class="section-label fade-in">Oil Price Simulator</div>
+  <h2 class="fade-in">유가로 판단하라:<br>실시간 시나리오</h2>
+
+  <p class="fade-in">발표자는 "지금은 유가 하나만 봐도 투자 진입 여부가 판단 된다"고 강조합니다. 아래 슬라이더로 유가 시나리오를 직접 조작해 보세요.</p>
+
+  <div class="simulator fade-in">
+    <h3>🛢️ 브렌트유 가격 시나리오</h3>
+    <div class="sub">슬라이더를 움직여 각 시나리오별 시장 영향을 확인하세요</div>
+
+    <div class="sim-label">
+      <span>브렌트유 가격</span>
+      <span class="val" id="oilVal">$108</span>
+    </div>
+    <input type="range" id="oilSlider" min="60" max="150" value="108" step="1">
+
+    <div class="sim-result" id="simResult">
+      <div class="res-row">
+        <span class="key">시장 국면</span>
+        <span class="val" id="resPhase">위험 구간</span>
+      </div>
+      <div class="res-row">
+        <span class="key">인플레이션 압력</span>
+        <span class="val" id="resInflation">매우 높음</span>
+      </div>
+      <div class="res-row">
+        <span class="key">S&P 500 방향</span>
+        <span class="val" id="resSP">하락 압력 지속</span>
+      </div>
+      <div class="res-row">
+        <span class="key">금리 인하 가능성</span>
+        <span class="val" id="resRate">희박</span>
+      </div>
+      <div class="res-row">
+        <span class="key">투자 전략</span>
+        <span class="val" id="resStrategy">현금 유지 / 관망</span>
+      </div>
+    </div>
+    <button class="reset-btn" onclick="resetSim()">↩ 현재값($108)으로 초기화</button>
+  </div>
+</section>
+
+<!-- ── 6. 투자 전략 ── -->
+<section>
+  <div class="section-label fade-in">Investment Strategy</div>
+  <h2 class="fade-in">노바의 3가지<br>긴급 대응 조건식</h2>
+
+  <div class="tabs fade-in">
+    <button class="tab-btn active" onclick="switchTab('base')">기본 시나리오</button>
+    <button class="tab-btn" onclick="switchTab('bull')">호전 시나리오</button>
+    <button class="tab-btn" onclick="switchTab('bear')">악화 시나리오</button>
+  </div>
+
+  <div class="tab-panel active" id="tab-base">
+    <p style="font-size:13px; margin-bottom:12px;">현재 상황 유지 시 권고 전략입니다.</p>
+    <table>
+      <tr><th>종목/자산</th><th>전략</th><th>근거</th></tr>
+      <tr>
+        <td>현금</td>
+        <td class="tag-hold">최우선 확보</td>
+        <td>지하 1~3층 중 어디서 끝날지 불확실</td>
+      </tr>
+      <tr>
+        <td>에너지 관련주</td>
+        <td class="tag-hold">비중 유지</td>
+        <td>유가 고착, 전쟁 지속 수혜. 단 전재산 투입 금지</td>
+      </tr>
+      <tr>
+        <td>반도체 (엔비디아·마이크론)</td>
+        <td class="tag-watch">지켜보기</td>
+        <td>보안법 통과 여부 확인 후 진입. 시장 반등 시 가장 빠른 상승</td>
+      </tr>
+      <tr>
+        <td>우주(SpaceX 관련)</td>
+        <td class="tag-buy">모멘텀↑</td>
+        <td>2주 내 IPO 신청 예정. 국방부 계약 수혜</td>
+      </tr>
+      <tr>
+        <td>메타·소셜미디어</td>
+        <td class="tag-sell">리스크 회피</td>
+        <td>6월 15일 연방 재판 종료 전까지 불확실성 과다</td>
+      </tr>
+      <tr>
+        <td>넷플릭스</td>
+        <td class="tag-hold">홀드</td>
+        <td>$26.99로 요금 인상 성공 → 프라이싱 파워 확인</td>
+      </tr>
+      <tr>
+        <td>레버리지/마진</td>
+        <td class="tag-sell">절대 금지</td>
+        <td>지하 몇 층인지 모르는 상태에서 레버리지는 강제 청산 위험</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="tab-panel" id="tab-bull">
+    <div class="quote-box fade-in">
+      <p>"유가가 60~70불로 오면 S&P 6,700~6,800 금방 갑니다."</p>
+      <div class="quote-source">— 노바, 2026.03.26</div>
+    </div>
+    <p style="font-size:13px; margin-bottom:12px;"><strong>조건:</strong> 4월 6일 이전 이란 협상 타결, 유가 $80 이하 하락</p>
+    <table>
+      <tr><th>지표</th><th>예상값</th></tr>
+      <tr><td>브렌트유</td><td style="color:#16a34a; font-weight:700;">$60~80</td></tr>
+      <tr><td>S&P 500 타겟</td><td style="color:#16a34a; font-weight:700;">6,700~6,800</td></tr>
+      <tr><td>반도체</td><td style="color:#16a34a; font-weight:700;">F1처럼 급반등 예상</td></tr>
+      <tr><td>투자 전략</td><td style="color:#16a34a; font-weight:700;">반도체 잽싸게 진입</td></tr>
+    </table>
+  </div>
+
+  <div class="tab-panel" id="tab-bear">
+    <div class="quote-box fade-in">
+      <p>"브렌트유 120~140불 되면 올해는 끝난 거야."</p>
+      <div class="quote-source">— 노바, 2026.03.26</div>
+    </div>
+    <p style="font-size:13px; margin-bottom:12px;"><strong>조건:</strong> 4월 6일 전 이스라엘-이란 전면전 발발, 유가 $120~140</p>
+    <table>
+      <tr><th>지표</th><th>예상값</th></tr>
+      <tr><td>브렌트유</td><td style="color:var(--accent); font-weight:700;">$120~140</td></tr>
+      <tr><td>10년물 금리</td><td style="color:var(--accent); font-weight:700;">4.7% 이상</td></tr>
+      <tr><td>모기지 금리</td><td style="color:var(--accent); font-weight:700;">8% 이상</td></tr>
+      <tr><td>어닝 리세션</td><td style="color:var(--accent); font-weight:700;">현실화 가능</td></tr>
+      <tr><td>투자 전략</td><td style="color:var(--accent); font-weight:700;">에너지·방산 방어 포지션</td></tr>
+    </table>
+  </div>
+
+  <!-- CHART: 유가별 S&P 시나리오 -->
+  <div class="divider fade-in"><span>유가 구간별 시장 영향도</span></div>
+  <div class="chart-container fade-in">
+    <canvas id="scenarioChart" height="220"></canvas>
+  </div>
+</section>
+
+<!-- ── 7. 주요 일정 ── -->
+<section>
+  <div class="section-label fade-in">Key Dates</div>
+  <h2 class="fade-in">반드시 체크할<br>핵심 일정</h2>
+
+  <div class="timeline fade-in">
+    <div class="tl-item active">
+      <div class="tl-date">2026.04.06</div>
+      <div class="tl-content"><strong>이란 협상 데드라인</strong> — 트럼프 대통령 설정. 기한 내 미타결 시 에너지 시설 공격 경고</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">2026.04월 중</div>
+      <div class="tl-content"><strong>SpaceX IPO 신청</strong> — 2주 내 신청서 제출 예정. 세컨더리 마켓 신규 진입 비권고 (밸류에이션 과도 + 180일 락업)</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">2026.06.15</div>
+      <div class="tl-content"><strong>메타·구글 연방 재판 종료</strong> — 소셜미디어 중독 소송 판결. 2천 건 유사 소송 선례 결정. 이후 빅테크 재진입 검토</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">진행 중</div>
+      <div class="tl-content"><strong>반도체 보안법 입법 경과</strong> — 하원 외교위 통과. 본회의·상원 통과 여부 지속 모니터링</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 8. 요약 ── -->
+<section>
+  <div class="section-label fade-in">Summary</div>
+  <h2 class="fade-in">결론 — 지금<br>당장 해야 할 것</h2>
+
+  <div class="stat-grid fade-in">
+    <div class="stat-card" style="grid-column: span 2;">
+      <div class="val" style="font-size:18px; color:var(--text);">💰 현금 확보가 최우선</div>
+      <div class="lbl" style="margin-top:6px;">레버리지·마진 절대 사용 금지. 지하 몇 층인지 모르는 상태</div>
+    </div>
+    <div class="stat-card">
+      <div class="val" style="font-size:18px;">🛢️</div>
+      <div class="lbl">유가만 봐도 진입 판단 가능. $80 이하 → 매수 검토</div>
+    </div>
+    <div class="stat-card">
+      <div class="val" style="font-size:18px;">🚀</div>
+      <div class="lbl">우주·방산: 폭락장 속 모멘텀 유지 섹터</div>
+    </div>
+    <div class="stat-card">
+      <div class="val" style="font-size:18px;">💻</div>
+      <div class="lbl">반도체(엔비디아·마이크론): 반등 시 F1급 속도. 지금은 관망</div>
+    </div>
+    <div class="stat-card">
+      <div class="val" style="font-size:18px;">⚠️</div>
+      <div class="lbl">메타·소셜미디어: 6월 15일 재판 전까지 접근 자제</div>
+    </div>
+  </div>
+
+  <div class="quote-box fade-in">
+    <p>"인간의 욕심은 끝이 없다. 그래서 주식시장이 올라가는 거예요."</p>
+    <div class="quote-source">— 노바, 2026.03.26 멤버 미팅</div>
+  </div>
+</section>
+
+<div class="doc-footer">
+  <strong>CIA.chat 멤버 미팅 분석 리포트</strong><br>
+  2026년 3월 26일(목) 발표 내용 기반 · 정리일 2026.03.27<br>
+  본 문서는 투자 권유가 아닌 교육·정보 목적으로 작성되었습니다.
+</div>
+
+<script>
+// ── FADE IN OBSERVER ──
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// ── CHART CONFIGS ──
+const chartConfigs = {};
+
+chartConfigs['correctionChart'] = () => {
+  new Chart(document.getElementById('correctionChart'), {
+    type: 'bar',
+    data: {
+      labels: ['현재 낙폭\n−10.9%', '조정장 기준\n−10%', '하락장 기준\n−20%', '침체 구간\n−30%+'],
+      datasets: [{
+        label: '낙폭 (%)',
+        data: [10.9, 10, 20, 30],
+        backgroundColor: ['#e11d48', '#f59e0b', '#dc2626', '#1a1a1a'],
+        borderRadius: 6,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => `−${ctx.raw}%`
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 35,
+          ticks: { callback: v => `${v}%`, font: { size: 10 } },
+          grid: { color: '#e5e5e5' }
+        },
+        x: {
+          ticks: { font: { size: 10 }, maxRotation: 0 },
+          grid: { display: false }
+        }
+      },
+      animation: { duration: 900, easing: 'easeOutQuart' }
+    }
+  });
+};
+
+chartConfigs['triggerChart'] = () => {
+  new Chart(document.getElementById('triggerChart'), {
+    type: 'bar',
+    data: {
+      labels: ['마이크론', '메타', '구글', '엔비디아', '에너지'],
+      datasets: [{
+        label: '오늘 주가 변동 (%)',
+        data: [-17, -9.5, -3.44, -6.2, +2.1],
+        backgroundColor: ctx => ctx.raw < 0 ? '#e11d48' : '#16a34a',
+        borderRadius: 5,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => `${ctx.raw > 0 ? '+' : ''}${ctx.raw}%` } }
+      },
+      scales: {
+        y: {
+          ticks: { callback: v => `${v}%`, font: { size: 10 } },
+          grid: { color: '#e5e5e5' }
+        },
+        x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+      },
+      animation: { duration: 900, easing: 'easeOutQuart' }
+    }
+  });
+};
+
+chartConfigs['jevonsChart'] = () => {
+  new Chart(document.getElementById('jevonsChart'), {
+    type: 'line',
+    data: {
+      labels: ['2020', '2021', '2022', '2023', '2024', '2025(E)', '2026(E)'],
+      datasets: [
+        {
+          label: '메모리 단위당 효율 (배)',
+          data: [1, 1.5, 2.2, 3.1, 4.5, 7, 12],
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37,99,235,0.07)',
+          borderWidth: 2,
+          pointRadius: 4,
+          fill: true,
+          tension: 0.4
+        },
+        {
+          label: '전세계 AI 메모리 수요 지수',
+          data: [1, 1.8, 3.1, 5.5, 9.2, 15, 24],
+          borderColor: '#e11d48',
+          backgroundColor: 'rgba(225,29,72,0.07)',
+          borderWidth: 2,
+          pointRadius: 4,
+          fill: true,
+          tension: 0.4
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { font: { size: 10 }, boxWidth: 12 } },
+        tooltip: { mode: 'index', intersect: false }
+      },
+      scales: {
+        y: {
+          ticks: { font: { size: 10 } },
+          grid: { color: '#e5e5e5' }
+        },
+        x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+      },
+      animation: { duration: 900, easing: 'easeOutQuart' }
+    }
+  });
+};
+
+chartConfigs['scenarioChart'] = () => {
+  new Chart(document.getElementById('scenarioChart'), {
+    type: 'bar',
+    data: {
+      labels: ['$60~70\n(전쟁 종료)', '$70~80\n(협상 진전)', '$80~100\n(현상 유지)', '$100~120\n(긴장 고조)', '$120+\n(전면전)'],
+      datasets: [{
+        label: 'S&P 500 방향성',
+        data: [+8, +4, -2, -8, -18],
+        backgroundColor: ctx => {
+          const v = ctx.raw;
+          if (v > 5) return '#16a34a';
+          if (v > 0) return '#4ade80';
+          if (v > -5) return '#f59e0b';
+          if (v > -10) return '#ef4444';
+          return '#1a1a1a';
+        },
+        borderRadius: 5,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => `예상 수익률 ${ctx.raw > 0 ? '+' : ''}${ctx.raw}%` } }
+      },
+      scales: {
+        y: {
+          ticks: { callback: v => `${v}%`, font: { size: 10 } },
+          grid: { color: '#e5e5e5' }
+        },
+        x: { ticks: { font: { size: 9 }, maxRotation: 0 }, grid: { display: false } }
+      },
+      animation: { duration: 900 }
+    }
+  });
+};
+
+// ── CHART OBSERVER ──
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+// ── OIL SIMULATOR ──
+const slider = document.getElementById('oilSlider');
+const oilVal = document.getElementById('oilVal');
+
+function updateSim(v) {
+  oilVal.textContent = `$${v}`;
+  const phase = document.getElementById('resPhase');
+  const inflation = document.getElementById('resInflation');
+  const sp = document.getElementById('resSP');
+  const rate = document.getElementById('resRate');
+  const strategy = document.getElementById('resStrategy');
+
+  const clr = (el, cls) => {
+    el.className = 'val ' + cls;
+  };
+
+  if (v <= 70) {
+    phase.textContent = '🟢 기회 구간'; clr(phase, 'good');
+    inflation.textContent = '낮음'; clr(inflation, 'good');
+    sp.textContent = '6,700~6,800 빠른 회복'; clr(sp, 'good');
+    rate.textContent = '금리 인하 재개 가능'; clr(rate, 'good');
+    strategy.textContent = '반도체 적극 매수 기회'; clr(strategy, 'good');
+  } else if (v <= 85) {
+    phase.textContent = '🟡 진입 검토 구간'; clr(phase, 'neutral');
+    inflation.textContent = '보통'; clr(inflation, 'neutral');
+    sp.textContent = '점진적 회복 기대'; clr(sp, 'neutral');
+    rate.textContent = '제한적 인하 가능'; clr(rate, 'neutral');
+    strategy.textContent = '단계적 분할 매수 검토'; clr(strategy, 'neutral');
+  } else if (v <= 110) {
+    phase.textContent = '🔴 위험 구간 (현재)'; clr(phase, 'bad');
+    inflation.textContent = '매우 높음 (4.2%+)'; clr(inflation, 'bad');
+    sp.textContent = '하락 압력 지속'; clr(sp, 'bad');
+    rate.textContent = '인하 불가능'; clr(rate, 'bad');
+    strategy.textContent = '현금 유지 / 관망'; clr(strategy, 'bad');
+  } else {
+    phase.textContent = '💀 위기 구간'; clr(phase, 'bad');
+    inflation.textContent = '통제 불가 수준'; clr(inflation, 'bad');
+    sp.textContent = '어닝 리세션 현실화'; clr(sp, 'bad');
+    rate.textContent = '8%+ 모기지 가능'; clr(rate, 'bad');
+    strategy.textContent = '에너지·방산 방어 포지션만'; clr(strategy, 'bad');
+  }
+}
+
+slider.addEventListener('input', e => updateSim(+e.target.value));
+updateSim(108);
+
+function resetSim() {
+  slider.value = 108;
+  updateSim(108);
+}
+
+// ── TABS ──
+function switchTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

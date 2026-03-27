@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📝 시험문제 — 나스닥 조정장 분석 (2026.03.26)</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff; --bg2: #fafafa;
+    --text: #1a1a1a; --text2: #777777;
+    --accent: #e11d48; --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --correct: #16a34a; --wrong: #dc2626; --neutral: #2563eb;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 0 60px;
+    line-height: 1.7;
+  }
+
+  .masthead {
+    background: var(--text);
+    color: #fff;
+    padding: 32px 22px 24px;
+  }
+  .issue-tag { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent2); margin-bottom: 10px; }
+  .masthead h1 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 900; line-height: 1.2; }
+  .masthead h1 span { color: var(--accent2); }
+  .masthead-meta { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 12px; }
+
+  .score-bar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .score-bar .label { font-size: 12px; color: var(--text2); }
+  .score-bar .score { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--accent); }
+  .score-bar .out-of { font-size: 13px; color: var(--text2); }
+  .progress-wrap { background: var(--border); border-radius: 4px; height: 6px; margin-top: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width 0.4s ease; }
+
+  .controls {
+    padding: 12px 20px;
+    display: flex; gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .ctrl-btn {
+    flex: 1; padding: 10px 6px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 12px; font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text);
+  }
+  .ctrl-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .ctrl-btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* ── QUESTION CARD ── */
+  .q-card {
+    margin: 16px 20px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .q-header {
+    padding: 14px 16px 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .q-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--accent);
+    padding: 2px 9px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .q-meta { flex: 1; }
+  .q-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 5px; }
+  .q-tag {
+    font-size: 9px; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase; padding: 2px 7px; border-radius: 20px;
+  }
+  .tag-easy { background: #dcfce7; color: #166534; }
+  .tag-mid { background: #fef9c3; color: #854d0e; }
+  .tag-hard { background: #fee2e2; color: #991b1b; }
+  .tag-ox { background: #e0e7ff; color: #3730a3; }
+  .tag-mc { background: #f3e8ff; color: #6b21a8; }
+  .tag-sa { background: #fce7f3; color: #9d174d; }
+  .q-text { font-size: 14px; font-weight: 600; line-height: 1.5; }
+
+  .q-options { padding: 0 16px 14px; }
+  .opt-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 9px 10px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+    font-size: 13px;
+  }
+  .opt-item:hover:not(.answered) { background: var(--bg2); border-color: var(--border); }
+  .opt-label {
+    font-weight: 700; color: var(--accent); flex-shrink: 0;
+    width: 20px; text-align: center;
+    font-size: 12px;
+  }
+  .opt-item.selected { background: rgba(225,29,72,0.06); border-color: var(--accent2); }
+  .opt-item.correct-ans { background: rgba(22,163,74,0.08); border-color: var(--correct); }
+  .opt-item.correct-ans .opt-label { color: var(--correct); }
+  .opt-item.wrong-ans { background: rgba(220,38,38,0.06); border-color: var(--wrong); }
+
+  .q-answer {
+    display: none;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 14px 16px;
+  }
+  .q-answer.show { display: block; }
+  .ans-title { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--correct); margin-bottom: 6px; }
+  .ans-title.wrong-title { color: var(--wrong); }
+  .ans-text { font-size: 13px; line-height: 1.65; color: #444; }
+  .ans-answer { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+
+  .ox-btns { display: flex; gap: 8px; padding: 0 16px 14px; }
+  .ox-btn {
+    flex: 1; padding: 12px;
+    border-radius: 8px; border: 1px solid var(--border);
+    font-size: 22px; cursor: pointer; text-align: center;
+    background: var(--bg2); transition: all 0.15s;
+  }
+  .ox-btn:hover:not(.answered) { transform: scale(1.04); }
+  .ox-btn.selected-o { background: rgba(22,163,74,0.1); border-color: var(--correct); }
+  .ox-btn.selected-x { background: rgba(220,38,38,0.1); border-color: var(--wrong); }
+  .ox-btn.correct-ox { background: rgba(22,163,74,0.15); border-color: var(--correct); }
+
+  .sa-input-wrap { padding: 0 16px 14px; }
+  .sa-input {
+    width: 100%; padding: 10px 12px;
+    border: 1px solid var(--border); border-radius: 8px;
+    font-size: 13px; font-family: 'DM Sans', sans-serif;
+    resize: none; outline: none;
+    transition: border-color 0.2s;
+  }
+  .sa-input:focus { border-color: var(--accent); }
+  .sa-submit {
+    margin-top: 8px; width: 100%; padding: 10px;
+    background: var(--accent); color: #fff; border: none;
+    border-radius: 8px; font-size: 13px; font-weight: 600;
+    cursor: pointer;
+  }
+  .sa-submit:hover { background: var(--accent2); }
+
+  /* Answer section divider */
+  .ans-divider {
+    border: none; border-top: 1px dashed var(--border);
+    margin: 0; padding: 0;
+  }
+  /* Separator between questions and answers */
+  .section-sep {
+    background: var(--text);
+    color: #fff;
+    padding: 20px 22px;
+    margin-top: 24px;
+    text-align: center;
+  }
+  .section-sep h2 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900; }
+  .section-sep p { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+
+  .answer-card {
+    margin: 12px 20px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--bg2);
+  }
+  .answer-card .a-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+  }
+  .a-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 12px; font-weight: 700;
+    color: #fff; background: var(--text);
+    padding: 2px 9px; border-radius: 20px; flex-shrink: 0;
+  }
+  .a-q-text { font-size: 13px; font-weight: 600; flex: 1; color: var(--text2); }
+  .answer-card .a-body { padding: 12px 14px; }
+  .a-correct { font-size: 14px; font-weight: 700; color: var(--correct); margin-bottom: 6px; }
+  .a-explain { font-size: 13px; color: #444; line-height: 1.65; }
+
+  .doc-footer {
+    background: var(--text); color: rgba(255,255,255,0.4);
+    text-align: center; padding: 20px;
+    font-size: 11px; line-height: 1.8; margin-top: 24px;
+  }
+  .doc-footer strong { color: rgba(255,255,255,0.7); }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="issue-tag">CIA.chat · 시험문제 · 2026.03.26</div>
+  <h1>📝 나스닥 조정장<br><span>시험문제 10선</span></h1>
+  <div class="masthead-meta">CIA.chat 멤버미팅 2026-03-26 강의 기반 · 문제+정답 분리 수록</div>
+</div>
+
+<div class="score-bar">
+  <div>
+    <div class="label">현재 점수 (인터랙티브 채점)</div>
+    <div class="progress-wrap" style="width:200px;"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+  <div style="text-align:right;">
+    <div class="score"><span id="scoreNum">0</span></div>
+    <div class="out-of">/ 100점</div>
+  </div>
+</div>
+
+<div class="controls">
+  <button class="ctrl-btn" onclick="revealAll()">📋 모든 정답 보기</button>
+  <button class="ctrl-btn primary" onclick="resetAll()">🔄 전체 초기화</button>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!--              문제 섹션                  -->
+<!-- ═══════════════════════════════════════ -->
+
+<!-- Q1 -->
+<div class="q-card" id="q1">
+  <div class="q-header">
+    <div class="q-num">Q1</div>
+    <div class="q-meta">
+      <div class="q-tags">
+        <span class="q-tag tag-mc">객관식</span>
+        <span class="q-tag tag-easy">쉬움</span>
+      </div>
+      <div class="q-text">나스닥이 고점 대비 10% 이상 하락했을 때의 공식 명칭은?</div>
+    </div>
+  </div>
+  <div class="q-options" id="q1-opts">
+    <div class="opt-item" onclick="selectOpt(1,this,'A')"><span class="opt-label">A</span> 하락장 (Bear Market)</div>
+    <div class="opt-item" onclick="selectOpt(1,this,'B')"><span class="opt-label">B</span> 조정장 (Correction)</div>
+    <div class="opt-item" onclick="selectOpt(1,this,'C')"><span class="opt-label">C</span> 침체장 (Recession Market)</div>
+    <div class="opt-item" onclick="selectOpt(1,this,'D')"><span class="opt-label">D</span> 공황장 (Crash Market)</div>
+  </div>
+  <div class="q-answer" id="q1-ans">
+    <div class="ans-title">✅ 정답</div>
+    <div class="ans-answer">B. 조정장 (Correction)</div>
+    <div class="ans-text">10% 이상 하락 시 조정장, 20% 이상 하락 시 하락장(Bear Market)으로 분류합니다. 강의 당시 나스닥은 −10.9%로 조정장에 공식 진입했습니다.</div>
+  </div>
+</div>
+
+<!-- Q2 -->
+<div class="q-card" id="q2">
+  <div class="q-header">
+    <div class="q-num">Q2</div>
+    <div class="q-meta">
+      <div class="q-tags"><span class="q-tag tag-ox">OX</span><span class="q-tag tag-easy">쉬움</span></div>
+      <div class="q-text">구글의 TurbQuant 발표로 메모리 사용량이 6배 절감된다면, 장기적으로 전체 메모리 수요도 6분의 1로 줄어든다.</div>
+    </div>
+  </div>
+  <div class="ox-btns" id="q2-ox">
+    <div class="ox-btn" onclick="selectOX(2,this,'O')">⭕ O (맞다)</div>
+    <div class="ox-btn" onclick="selectOX(2,this,'X')">❌ X (틀리다)</div>
+  </div>
+  <div class="q-answer" id="q2-ans">
+    <div class="ans-title">✅ 정답</div>
+    <div class="ans-answer">X (틀리다)</div>
+    <div class="ans-text">제번스 역설(Jevons Paradox)에 의해, 기술 효율이 높아지면 사용 비용이 낮아져 오히려 수요가 폭발적으로 증가합니다. 데이터센터 CEO는 "6배 절약"이 아니라 "같은 돈으로 6배 더 많은 AI"를 돌립니다.</div>
+  </div>
+</div>
+
+<!-- Q3 -->
+<div class="q-card" id="q3">
+  <div class="q-header">
+    <div class="q-num">Q3</div>
+    <div class="q-meta">
+      <div class="q-tags"><span class="q-tag tag-mc">객관식</span><span class="q-tag tag-mid">보통</span></div>
+      <div class="q-text">강의에서 언급된 오늘 폭락의 '3대 대형 트리거'로 올바르게 묶인 것은?</div>
+    </div>
+  </div>
+  <div class="q-options" id="q3-opts">
+    <div class="opt-item" onclick="selectOpt(3,this,'A')"><span class="opt-label">A</span> 금리 인상 + 달러 강세 + 중국 경기침체</div>
+    <div class="opt-item" onclick="selectOpt(3,this,'B')"><span class="opt-label">B</span> 이란 휴전안 거부(지정학) + TurbQuant(AI 하드웨어) + 반도체 보안법·소셜미디어 소송(규제)</div>
+    <div class="opt-item" onclick="selectOpt(3,this,'C')"><span class="opt-label">C</span> 연준 매파 발언 + 빅테크 실적 쇼크 + 부동산 위기</div>
+    <div class="opt-item" onclick="selectOpt(3,this,'D')"><span class="opt-label">D</span> 트럼프 관세 + 중국 수출 제한 + 달러 약세</div>
+  </div>
+  <div class="q-answer" id="q3-ans">
+    <div class="ans-title">✅ 정답</div>
+    <div class="ans-answer">B</div>
+    <div class="ans-text">① 지정학: 이란의 트럼프 15개 조항 휴전안 거부 ② AI 하드웨어: 구글 TurbQuant 발표(메모리 6배 절감) ③ 규제: 반도체 보안법 외교위 통과 + 메타·알파벳 소셜미디어 중독 배심원 패소</div>
+  </div>
+</div>
+
+<!-- Q4 -->
+<div class="q-card" id="q4">
+  <div class="q-header">
+    <div class="q-num">Q4</div>
+    <div class="q-meta">
+      <div class="q-tags"><span class="q-tag tag-sa">단답형</span><span class="q-tag tag-mid">보통</span></div>
+      <div class="q-text">강의에서 언급된 '제번스 역설'이란 무엇인지 한 문장으로 설명하세요.</div>
+    </div>
+  </div>
+  <div class="sa-input-wrap">
+    <textarea class="sa-input" id="q4-input" rows="3" placeholder="여기에 답변을 입력하세요..."></textarea>
+    <button class="sa-submit" onclick="showSA(4)">정답 확인</button>
+  </div>
+  <div class="q-answer" id="q4-ans">
+    <div class="ans-title">📌 모범 답안</div>
+    <div class="ans-text">기술 효율이 향상되면 자원 사용 비용이 낮아져, 사용량이 줄어드는 것이 아니라 오히려 수요가 폭발적으로 증가하는 역설적 현상. (예: 증기기관 효율 향상 → 석탄 사용량 급증)</div>
+  </div>
+</div>
+
+<!-- Q5 -->
+<div class="q-card" id="q5">
+  <div class="q-header">
+    <div class="q-num">Q5</div>
+    <div class="q-meta">
+      <div class="q-tags"><span class="q-tag tag-mc">객관식</span><span class="q-tag tag-mid">보통</span></div>
+      <div class="q-text">강의에서 발표자가 제시한 '투자 진입 판단의 핵심 지표'는?</div>
+    </div>
+  </div>
+  <div class="q-options" id="q5-opts">
+    <div class="opt-item" onclick="selectOpt(5,this,'A')"><span class="opt-label">A</span> 나스닥 주가지수</div>
+    <div class="opt-item" onclick="selectOpt(5,this,'B')"><span class="opt-label">B</span> 미국 10년물 국채 금리</div>
+    <div class="opt-item" onclick="selectOpt(5,this,'C')"><span class="opt-label">C</span> 브렌트유 가격</div>
+    <div class="opt-item" onclick="selectOpt(5,this,'D')"><span class="opt-label">D</span> VIX 공포지수</div>
+  </div>
+  <div class="q-answer" id="q5-ans">
+    <div class="ans-title">✅ 정답</div>
+    <div class="ans-answer">C. 브렌트유 가격</div>
+    <div class="ans-text">"유가만 봐도 드가 마라 드가 마라가 판단된다"고 명시했습니다. 유가가 $80 이하 → 매수 검토, $60~70 → S&P 6,700~6,800 빠른 회복 전망.</div>
+  </div>
+</div>
+
+<!-- Q6 -->
+<div class="q-card" id="q6">
+  <div class="q-header">
+    <div class="q-num">Q6</div>
+    <div class="q-meta">
+      <div class="q-tags"><span class="q-tag tag-ox">OX</span><span class="q-tag tag-mid">보통</span></div>
+      <div class="q-text">발표자는 현재 메타(Meta) 주식을 보유 중이며, 지금 당장 매수를 권장하고 있다.</div>
+    </div>
+  </div>
+  <div class="ox-btns" id="q6-ox">
+    <div class="ox-btn" onclick="selectOX(6,this,'O')">⭕ O (맞다)</div>
+    <div class="ox-btn" onclick="selectOX(6,this,'X')">❌ X (틀리다)</div>
+  </div>
+  <div class="q-answer" id="q6-ans">
+    <div class="ans-title">✅ 정답</div>
+    <div class="ans-answer">X (틀리다)</div>
+    <div class="ans-text">발표자는 약 3개월 전 메타 주식을 고점 대비 10% 하락 시 매도했습니다. 또한 6월 15일 연방 재판 종료 전까지 메타 등 소셜미디어는 리스크 회피를 권고했습니다.</div>
+  </div>
+</div>
+
+<!-- Q7 -->
+<div class="q-card" id="q7">
+  <div class="q-header">
+    <div class="q-num">Q7</div>
+    <div class="q-meta">
+      <div class="q-tags"><span class="q-tag tag-mc">객관식</span><span class="q-tag tag-mid">보통</span></div>
+      <div class="q-text">넷플릭스 주가가 오른 직접적인 이유로 강의에서 언급된 것은?</div>
+    </div>
+  </div>
+  <div class="q-options" id="q7-opts">
+    <div class="opt-item" onclick="selectOpt(7,this,'A')"><span class="opt-label">A</span> 신규 구독자 폭발적 증가</div>
+    <div class="opt-item" onclick="selectOpt(7,this,'B')"><span class="opt-label">B</span> $26.99로 요금 인상 성공 (프라이싱 파워 확인)</div>
+    <div class="opt-item" onclick="selectOpt(7,this,'C')"><span class="opt-label">C</span> AI 콘텐츠 추천 알고리즘 개선</div>
+    <div class="opt-item" onclick="selectOpt(7,this,'D')"><span class="opt-label">D</span> 경쟁사 디즈니+ 서비스 종료</div>
+  </div>
+  <div class="q-answer" id="q7-ans">
+    <div class="ans-title">✅ 정답</div>
+    <div class="ans-answer">B. $26.99 요금 인상 성공</div>
+    <div class="ans-text">기술주 전반이 폭락하는 가운데 넷플릭스가 요금을 $26.99로 인상해도 이용자가 따라오는 '프라이싱 파워'를 입증한 것이 주가 상승의 직접 원인.</div>
+  </div>
+</div>
+
+<!-- Q8 -->
+<div class="q-card" id="q8">
+  <div class="q-header">
+    <div class="q-num">Q8</div>
+    <div class="q-meta">
+      <div class="q-tags"><span class="q-tag tag-sa">단답형</span><span class="q-tag tag-hard">어려움</span></div>
+      <div class="q-text">헤지펀드들이 저금리 시절 소프트웨어·크립토에 과도하게 투자했다가 현재 강제 청산 위기에 처한 구조적 이유를 설명하세요. (2가지 이상)</div>
+    </div>
+  </div>
+  <div class="sa-input-wrap">
+    <textarea class="sa-input" id="q8-input" rows="4" placeholder="여기에 답변을 입력하세요..."></textarea>
+    <button class="sa-submit" onclick="showSA(8)">정답 확인</button>
+  </div>
+  <div class="q-answer" id="q8-ans">
+    <div class="ans-title">📌 모범 답안</div>
+    <div class="ans-text">① <strong>레버리지 구조</strong>: 저금리 환경에서 국채를 담보로 레버리지를 끌어 소프트웨어·크립토에 투자 → 구독 기반 수익(SaaS)이 예측 가능한 현금흐름이라 담보 적합성이 높다고 판단<br>② <strong>고금리 전환</strong>: 인플레이션으로 금리가 급등하면서 담보 자산(소프트웨어 주가·크립토) 가치 하락<br>③ <strong>마진콜 연쇄</strong>: 담보가치 하락 → 추가 담보 요구(마진콜) → 자산 강제 청산 → 주가 추가 하락의 악순환</div>
+  </div>
+</div>
+
+<!-- Q9 -->
+<div class="q-card" id="q9">
+  <div class="q-header">
+    <div class="q-num">Q9</div>
+    <div class="q-meta">
+      <div class="q-tags"><span class="q-tag tag-mc">객관식</span><span class="q-tag tag-hard">어려움</span></div>
+      <div class="q-text">발표자가 현재 시장에서 '레버리지(마진)를 절대 사용하면 안 된다'고 강조한 핵심 근거는?</div>
+    </div>
+  </div>
+  <div class="q-options" id="q9-opts">
+    <div class="opt-item" onclick="selectOpt(9,this,'A')"><span class="opt-label">A</span> 레버리지 수수료가 너무 높기 때문</div>
+    <div class="opt-item" onclick="selectOpt(9,this,'B')"><span class="opt-label">B</span> 나스닥 조정 후 반드시 추가 하락하기 때문</div>
+    <div class="opt-item" onclick="selectOpt(9,this,'C')"><span class="opt-label">C</span> 하락이 지하 1층에서 끝날지 2·3층까지 갈지 예측이 불가능한 불확실성 때문</div>
+    <div class="opt-item" onclick="selectOpt(9,this,'D')"><span class="opt-label">D</span> 연방법으로 개인 레버리지 거래가 곧 금지될 예정이기 때문</div>
+  </div>
+  <div class="q-answer" id="q9-ans">
+    <div class="ans-title">✅ 정답</div>
+    <div class="ans-answer">C. 하락 바닥이 어디인지 예측 불가능</div>
+    <div class="ans-text">"지하 1층에서 끝날지, 2층에서 끝날지, 3층에서 끝날지 알 수가 없다"는 표현으로 현재 시장의 불확실성을 강조. 레버리지 사용 시 강제 청산으로 원금 이상의 손실 가능.</div>
+  </div>
+</div>
+
+<!-- Q10 -->
+<div class="q-card" id="q10">
+  <div class="q-header">
+    <div class="q-num">Q10</div>
+    <div class="q-meta">
+      <div class="q-tags"><span class="q-tag tag-sa">단답형</span><span class="q-tag tag-hard">어려움</span></div>
+      <div class="q-text">발표자가 메타·구글 소셜미디어 소송을 '담배 소송'에 비유한 의미를 설명하고, 투자자 입장에서 이 소송이 중요한 이유를 서술하세요.</div>
+    </div>
+  </div>
+  <div class="sa-input-wrap">
+    <textarea class="sa-input" id="q10-input" rows="4" placeholder="여기에 답변을 입력하세요..."></textarea>
+    <button class="sa-submit" onclick="showSA(10)">정답 확인</button>
+  </div>
+  <div class="q-answer" id="q10-ans">
+    <div class="ans-title">📌 모범 답안</div>
+    <div class="ans-text"><strong>[비유의 의미]</strong> 20년 전 담배 산업이 '중독성 설계'로 집단 소송을 당해 규제 패러다임이 전환된 것처럼, 소셜미디어 알고리즘의 '중독 설계(심리학자 동원)'가 담배처럼 낙인찍힐 수 있다는 것.<br><br><strong>[투자 중요성]</strong> ① 유사 소송 2천 건 대기 중 → 패소 시 연쇄 손해배상 ② 알고리즘 강제 변경 시 광고 매출 구조 훼손 ③ 6월 15일 연방 재판이 업계 전체의 선례 → 판결 전까지 주가 불확실성 유지</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!--              정답·해설 섹션             -->
+<!-- ═══════════════════════════════════════ -->
+<div class="section-sep">
+  <h2>📋 정답 및 해설</h2>
+  <p>아래는 모든 문제의 정답과 상세 해설입니다</p>
+</div>
+
+<div class="answer-card">
+  <div class="a-header"><div class="a-num">Q1</div><div class="a-q-text">나스닥 고점 대비 10% 이상 하락 시 공식 명칭</div></div>
+  <div class="a-body"><div class="a-correct">✅ B. 조정장 (Correction)</div><div class="a-explain">주식 시장에서 고점 대비 −10%↑는 조정장, −20%↑는 하락장(Bear Market)으로 구분합니다. 당일 나스닥은 −10.9%로 조정장에 공식 진입했습니다.</div></div>
+</div>
+
+<div class="answer-card">
+  <div class="a-header"><div class="a-num">Q2</div><div class="a-q-text">TurbQuant으로 메모리 수요가 6분의 1로 줄어든다 (OX)</div></div>
+  <div class="a-body"><div class="a-correct">✅ X (틀리다)</div><div class="a-explain">제번스 역설 — 효율 향상 → 비용 하락 → 수요 폭증. 기업은 절약 대신 더 많은 AI를 돌리는 방향을 선택합니다.</div></div>
+</div>
+
+<div class="answer-card">
+  <div class="a-header"><div class="a-num">Q3</div><div class="a-q-text">오늘 폭락의 3대 대형 트리거</div></div>
+  <div class="a-body"><div class="a-correct">✅ B</div><div class="a-explain">① 이란의 트럼프 15개 조항 거부(지정학) ② 구글 TurbQuant(AI 하드웨어 패러다임) ③ 반도체 보안법 + 소셜미디어 소송 패소(규제 리스크)</div></div>
+</div>
+
+<div class="answer-card">
+  <div class="a-header"><div class="a-num">Q4</div><div class="a-q-text">제번스 역설 설명 (단답형)</div></div>
+  <div class="a-body"><div class="a-correct">📌 핵심 키워드</div><div class="a-explain">기술 효율 향상 → 단위 비용 하락 → 수요·사용량 역증가. 19세기 영국 경제학자 윌리엄 스탠리 제번스가 증기기관 효율화 연구에서 발견한 역설.</div></div>
+</div>
+
+<div class="answer-card">
+  <div class="a-header"><div class="a-num">Q5</div><div class="a-q-text">투자 진입 판단의 핵심 지표</div></div>
+  <div class="a-body"><div class="a-correct">✅ C. 브렌트유 가격</div><div class="a-explain">발표자 기준: $80 이하 → 매수 검토 가능 / $60~70 → 공격적 매수 / $120+ → 올해 포기 수준 위기.</div></div>
+</div>
+
+<div class="answer-card">
+  <div class="a-header"><div class="a-num">Q6</div><div class="a-q-text">발표자가 메타 보유 중이며 매수 권장 (OX)</div></div>
+  <div class="a-body"><div class="a-correct">✅ X (틀리다)</div><div class="a-explain">3개월 전 고점 대비 −10%에 매도 완료. 6월 15일 연방 재판 전까지 리스크 회피 권고.</div></div>
+</div>
+
+<div class="answer-card">
+  <div class="a-header"><div class="a-num">Q7</div><div class="a-q-text">넷플릭스 주가 상승 이유</div></div>
+  <div class="a-body"><div class="a-correct">✅ B. $26.99 요금 인상 성공</div><div class="a-explain">폭락장에서도 요금 인상이 가능한 '프라이싱 파워(Pricing Power)'를 입증. 인플레이션 환경에서도 가격 전가 능력이 있는 기업이 강세.</div></div>
+</div>
+
+<div class="answer-card">
+  <div class="a-header"><div class="a-num">Q8</div><div class="a-q-text">헤지펀드 강제청산 구조적 이유 (단답형)</div></div>
+  <div class="a-body"><div class="a-correct">📌 핵심 키워드</div><div class="a-explain">저금리 국채 담보 레버리지 → SaaS/크립토 투자 → 금리 급등 → 담보가치 하락 → 마진콜 → 강제청산 악순환. 담보물과 투자처가 모두 동시에 하락하는 이중 충격이 핵심.</div></div>
+</div>
+
+<div class="answer-card">
+  <div class="a-header"><div class="a-num">Q9</div><div class="a-q-text">레버리지 금지 핵심 근거</div></div>
+  <div class="a-body"><div class="a-correct">✅ C. 하락 바닥 예측 불가능</div><div class="a-explain">"지하 1층~3층 중 어디서 끝날지 모른다" = 하락의 바닥을 알 수 없는 상황. 레버리지는 예측 불가능한 시장에서 강제 청산 위험을 극대화합니다.</div></div>
+</div>
+
+<div class="answer-card">
+  <div class="a-header"><div class="a-num">Q10</div><div class="a-q-text">담배 소송 비유 + 투자 중요성 (단답형)</div></div>
+  <div class="a-body"><div class="a-correct">📌 핵심 키워드</div><div class="a-explain">담배 = 중독 설계 → 소송 → 규제 패러다임 전환. 소셜미디어 = 심리학자 동원 알고리즘 중독 설계 → 소송. 투자자 관점: 2천 건 대기 소송, 알고리즘 강제 변경 시 광고 매출 훼손, 6월 15일 연방 판결이 업계 선례 결정.</div></div>
+</div>
+
+<div class="doc-footer">
+  <strong>CIA.chat 멤버 미팅 시험문제</strong><br>
+  2026년 3월 26일(목) 발표 기반 · 정리일 2026.03.27<br>
+  본 문서는 교육 목적으로 작성되었으며 투자 권유가 아닙니다.
+</div>
+
+<script>
+const correctAnswers = {
+  1: 'B', 3: 'B', 5: 'C', 7: 'B', 9: 'C'
+};
+const correctOX = { 2: 'X', 6: 'X' };
+const totalScore = { mc: 0, ox: 0, sa: 0 };
+const maxPossible = 100;
+let currentScore = 0;
+
+function updateScore(add) {
+  currentScore += add;
+  if (currentScore < 0) currentScore = 0;
+  document.getElementById('scoreNum').textContent = currentScore;
+  const pct = (currentScore / maxPossible) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+function selectOpt(qNum, el, choice) {
+  const opts = document.getElementById(`q${qNum}-opts`);
+  if (opts.classList.contains('answered')) return;
+  opts.classList.add('answered');
+
+  const allOpts = opts.querySelectorAll('.opt-item');
+  const correct = correctAnswers[qNum];
+
+  allOpts.forEach(o => {
+    const lbl = o.querySelector('.opt-label').textContent;
+    if (lbl === correct) o.classList.add('correct-ans');
+  });
+
+  if (choice === correct) {
+    el.classList.add('correct-ans');
+    updateScore(10);
+  } else {
+    el.classList.add('wrong-ans');
+  }
+
+  document.getElementById(`q${qNum}-ans`).classList.add('show');
+}
+
+function selectOX(qNum, el, choice) {
+  const wrap = document.getElementById(`q${qNum}-ox`);
+  if (wrap.classList.contains('answered')) return;
+  wrap.classList.add('answered');
+
+  const correct = correctOX[qNum];
+  const btns = wrap.querySelectorAll('.ox-btn');
+
+  btns.forEach(b => {
+    if ((b.textContent.includes('O') && correct === 'O') ||
+        (b.textContent.includes('X') && correct === 'X')) {
+      b.classList.add('correct-ox');
+    }
+  });
+
+  if (choice === correct) {
+    el.classList.add(choice === 'O' ? 'selected-o' : 'selected-x');
+    updateScore(10);
+  } else {
+    el.classList.add(choice === 'O' ? 'selected-o' : 'selected-x');
+  }
+
+  document.getElementById(`q${qNum}-ans`).classList.add('show');
+}
+
+function showSA(qNum) {
+  const inp = document.getElementById(`q${qNum}-input`);
+  if (inp && inp.value.trim().length < 10) {
+    inp.style.borderColor = '#dc2626';
+    inp.placeholder = '10자 이상 입력 후 확인하세요';
+    return;
+  }
+  inp.style.borderColor = '#16a34a';
+  document.getElementById(`q${qNum}-ans`).classList.add('show');
+  updateScore(10);
+}
+
+function revealAll() {
+  document.querySelectorAll('.q-answer').forEach(a => a.classList.add('show'));
+  currentScore = 100;
+  document.getElementById('scoreNum').textContent = 100;
+  document.getElementById('progressFill').style.width = '100%';
+}
+
+function resetAll() {
+  location.reload();
+}
+</script>
+</body>
+</html>
