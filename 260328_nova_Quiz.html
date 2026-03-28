@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시험 문제 — 나스닥 조정장 분석 (2026.03.28)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:wght@300;400;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff; --bg2: #fafafa;
+    --text: #1a1a1a; --text2: #777777;
+    --accent: #e11d48; --accent2: #f43f5e;
+    --border: #e5e5e5; --blue: #2563eb;
+    --green: #16a34a; --yellow: #d97706;
+    --serif: 'Playfair Display', Georgia, serif;
+    --body: 'Source Serif 4', Georgia, serif;
+    --mono: 'DM Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--body); font-size: 16px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+
+  .masthead { background: var(--text); color: #fff; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; }
+  .masthead-logo { font-family: var(--serif); font-size: 1.1rem; font-weight: 900; color: var(--accent2); }
+  .masthead-date { font-family: var(--mono); font-size: 0.68rem; color: #aaa; letter-spacing: 0.04em; }
+
+  .hero { background: var(--text); color: #fff; padding: 32px 20px 28px; }
+  .hero-tag { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.14em; color: var(--accent2); text-transform: uppercase; margin-bottom: 10px; display: inline-block; border: 1px solid var(--accent); padding: 3px 8px; border-radius: 2px; }
+  .hero h1 { font-family: var(--serif); font-size: clamp(1.4rem, 5vw, 1.9rem); font-weight: 900; line-height: 1.2; color: #fff; margin-bottom: 10px; }
+  .hero h1 span { color: var(--accent2); }
+  .hero p { font-size: 0.88rem; color: #bbb; font-style: italic; }
+
+  .notice { background: rgba(225,29,72,0.07); border-left: 3px solid var(--accent); padding: 14px 16px; margin: 20px; border-radius: 0 6px 6px 0; }
+  .notice p { font-size: 0.85rem; color: var(--text); margin: 0; }
+  .notice strong { color: var(--accent); }
+
+  .container { max-width: 680px; margin: 0 auto; padding: 0 18px; }
+
+  /* DIFF BADGES */
+  .diff { display: inline-block; padding: 2px 8px; border-radius: 3px; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; margin-left: 6px; vertical-align: middle; }
+  .diff.easy { background: rgba(22,163,74,0.12); color: var(--green); }
+  .diff.mid { background: rgba(37,99,235,0.12); color: var(--blue); }
+  .diff.hard { background: rgba(225,29,72,0.12); color: var(--accent); }
+
+  /* QUESTION CARD */
+  .q-section { padding: 20px 0 8px; }
+  .q-section-header { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid var(--accent); }
+
+  .q-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 18px 16px; margin-bottom: 14px; position: relative; overflow: hidden; }
+  .q-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--border); }
+  .q-card.easy::before { background: var(--green); }
+  .q-card.mid::before { background: var(--blue); }
+  .q-card.hard::before { background: var(--accent); }
+
+  .q-num { font-family: var(--serif); font-size: 0.75rem; font-weight: 700; color: var(--text2); margin-bottom: 6px; }
+  .q-text { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 12px; line-height: 1.5; }
+  .q-type { font-family: var(--mono); font-size: 0.6rem; color: var(--text2); letter-spacing: 0.06em; margin-bottom: 8px; }
+
+  /* OPTIONS */
+  .options { display: flex; flex-direction: column; gap: 7px; margin-bottom: 12px; }
+  .opt { background: #fff; border: 1px solid var(--border); border-radius: 5px; padding: 9px 12px; font-size: 0.87rem; color: var(--text); cursor: pointer; transition: all 0.18s; display: flex; align-items: flex-start; gap: 8px; }
+  .opt:hover { border-color: var(--blue); background: rgba(37,99,235,0.04); }
+  .opt.selected { border-color: var(--blue); background: rgba(37,99,235,0.08); }
+  .opt.correct { border-color: var(--green); background: rgba(22,163,74,0.08); }
+  .opt.wrong { border-color: var(--accent); background: rgba(225,29,72,0.06); }
+  .opt-key { font-family: var(--mono); font-size: 0.72rem; font-weight: 500; color: var(--text2); min-width: 18px; flex-shrink: 0; padding-top: 1px; }
+
+  /* SHORT ANSWER */
+  .short-input { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 5px; font-family: var(--body); font-size: 0.9rem; color: var(--text); background: #fff; outline: none; transition: border 0.18s; margin-bottom: 10px; }
+  .short-input:focus { border-color: var(--blue); }
+
+  /* OX */
+  .ox-wrap { display: flex; gap: 10px; margin-bottom: 12px; }
+  .ox-btn { flex: 1; padding: 12px; border: 2px solid var(--border); border-radius: 6px; font-family: var(--serif); font-size: 1.4rem; font-weight: 900; text-align: center; cursor: pointer; transition: all 0.18s; background: #fff; }
+  .ox-btn:hover { transform: scale(1.03); }
+  .ox-btn.o { color: var(--blue); }
+  .ox-btn.x { color: var(--accent); }
+  .ox-btn.o.selected, .ox-btn.o.correct { border-color: var(--blue); background: rgba(37,99,235,0.08); }
+  .ox-btn.x.selected, .ox-btn.x.correct { border-color: var(--accent); background: rgba(225,29,72,0.08); }
+  .ox-btn.wrong { opacity: 0.4; }
+
+  /* ANSWER BOX */
+  .ans-btn { display: inline-block; padding: 7px 16px; border: 1px solid var(--border); border-radius: 4px; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: all 0.18s; background: transparent; color: var(--text2); margin-top: 2px; }
+  .ans-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .ans-box { display: none; background: var(--text); color: #fff; border-radius: 6px; padding: 14px 16px; margin-top: 10px; }
+  .ans-box.show { display: block; }
+  .ans-box .ans-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent2); margin-bottom: 6px; }
+  .ans-box .ans-text { font-size: 0.88rem; color: #fff; line-height: 1.6; }
+  .ans-box .ans-text strong { color: var(--accent2); }
+
+  /* SCORE BAR */
+  .score-section { background: var(--bg2); border-top: 1px solid var(--border); padding: 24px 20px; text-align: center; margin-top: 20px; }
+  .score-label { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text2); margin-bottom: 8px; }
+  .score-val { font-family: var(--serif); font-size: 2.5rem; font-weight: 900; color: var(--accent); }
+  .score-desc { font-size: 0.85rem; color: var(--text2); margin-top: 6px; }
+  .submit-btn { display: block; width: 100%; padding: 14px; background: var(--accent); color: #fff; border: none; border-radius: 6px; font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; margin-top: 20px; transition: background 0.18s; }
+  .submit-btn:hover { background: var(--accent2); }
+  .reset-all { display: block; width: 100%; padding: 10px; background: transparent; color: var(--text2); border: 1px solid var(--border); border-radius: 6px; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; margin-top: 10px; transition: all 0.18s; }
+  .reset-all:hover { border-color: var(--text2); color: var(--text); }
+
+  footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 20px; text-align: center; }
+  footer p { font-size: 0.75rem; color: var(--text2); }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-logo">NOVA MARKET BRIEF — 시험</div>
+  <div class="masthead-date">2026.03.28 · 10문항</div>
+</div>
+
+<div class="hero">
+  <div class="hero-tag">이해도 확인 퀴즈</div>
+  <h1>나스닥 조정장 분석<br><span>10문제 시험</span></h1>
+  <p>객관식 · 단답형 · OX — 쉬움 30% / 보통 50% / 어려움 20%</p>
+</div>
+
+<div class="notice">
+  <p>⚠️ <strong>주의:</strong> 문제를 먼저 풀고 [정답 확인] 버튼을 누르세요. 문제와 정답(해설)이 이 파일에 함께 있으나, 버튼을 누르기 전까지 정답은 숨겨져 있습니다.</p>
+</div>
+
+<div class="container">
+
+<!-- ───── 쉬움 ───── -->
+<div class="q-section">
+  <div class="q-section-header">🟢 쉬움 (3문제)</div>
+
+  <!-- Q1 -->
+  <div class="q-card easy">
+    <div class="q-num">문제 1 <span class="diff easy">쉬움</span></div>
+    <div class="q-type">[ 객관식 ]</div>
+    <div class="q-text">주식 시장에서 고점 대비 <strong>10% 이상</strong> 하락한 상태를 무엇이라고 하는가?</div>
+    <div class="options" id="q1-opts">
+      <div class="opt" data-q="1" data-v="1"><span class="opt-key">①</span> 하락장 (Bear Market)</div>
+      <div class="opt" data-q="1" data-v="2"><span class="opt-key">②</span> 조정장 (Correction)</div>
+      <div class="opt" data-q="1" data-v="3"><span class="opt-key">③</span> 횡보장 (Sideways Market)</div>
+      <div class="opt" data-q="1" data-v="4"><span class="opt-key">④</span> 과열장 (Bubble Market)</div>
+    </div>
+    <button class="ans-btn" data-target="ans1">정답 확인</button>
+    <div class="ans-box" id="ans1">
+      <div class="ans-label">정답 & 해설</div>
+      <div class="ans-text">정답: <strong>② 조정장 (Correction)</strong><br>고점 대비 -10% 이상은 조정장, -20% 이상은 하락장(Bear Market)이라 한다. 현재 나스닥과 다우존스는 조정장에 진입했으며, S&P 500은 -9%로 직전이다.</div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card easy">
+    <div class="q-num">문제 2 <span class="diff easy">쉬움</span></div>
+    <div class="q-type">[ OX 문제 ]</div>
+    <div class="q-text">2026년 3월 28일 기준, S&P 500은 2022년 이후 최장기 5주 연속 하락을 기록했다. (O/X)</div>
+    <div class="ox-wrap" id="q2-ox">
+      <div class="ox-btn o" data-q="2" data-v="O">O</div>
+      <div class="ox-btn x" data-q="2" data-v="X">X</div>
+    </div>
+    <button class="ans-btn" data-target="ans2">정답 확인</button>
+    <div class="ans-box" id="ans2">
+      <div class="ans-label">정답 & 해설</div>
+      <div class="ans-text">정답: <strong>O (맞음)</strong><br>방송에서 "S&P 500은 2022년 이후로 최장기 5주 연속 하락"이라고 명시했다. 이는 당시 시장에서 전례 없는 장기 하락으로 받아들여졌다.</div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card easy">
+    <div class="q-num">문제 3 <span class="diff easy">쉬움</span></div>
+    <div class="q-type">[ 단답형 ]</div>
+    <div class="q-text">이번 유가 급등의 직접적 원인인 지리적 병목 지점의 이름은? (해협 이름)</div>
+    <input class="short-input" type="text" placeholder="답을 입력하세요...">
+    <button class="ans-btn" data-target="ans3">정답 확인</button>
+    <div class="ans-box" id="ans3">
+      <div class="ans-label">정답 & 해설</div>
+      <div class="ans-text">정답: <strong>호르무즈 해협 (Strait of Hormuz)</strong><br>이란이 호르무즈 해협을 봉쇄하면서 전 세계 원유 공급의 약 20%가 차단됐다. 이 해협은 페르시아만 원유의 대부분이 통과하는 핵심 물류 통로다.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ───── 보통 ───── -->
+<div class="q-section">
+  <div class="q-section-header">🔵 보통 (5문제)</div>
+
+  <!-- Q4 -->
+  <div class="q-card mid">
+    <div class="q-num">문제 4 <span class="diff mid">보통</span></div>
+    <div class="q-type">[ 객관식 ]</div>
+    <div class="q-text">방송에서 언급된 맥쿼리(Macquarie)의 전망에 따르면, 전쟁이 6월까지 지속될 경우 브렌트유가 <strong>$200</strong>에 도달할 확률은 얼마인가?</div>
+    <div class="options" id="q4-opts">
+      <div class="opt" data-q="4" data-v="1"><span class="opt-key">①</span> 약 10%</div>
+      <div class="opt" data-q="4" data-v="2"><span class="opt-key">②</span> 약 25%</div>
+      <div class="opt" data-q="4" data-v="3"><span class="opt-key">③</span> 약 40%</div>
+      <div class="opt" data-q="4" data-v="4"><span class="opt-key">④</span> 약 60%</div>
+    </div>
+    <button class="ans-btn" data-target="ans4">정답 확인</button>
+    <div class="ans-box" id="ans4">
+      <div class="ans-label">정답 & 해설</div>
+      <div class="ans-text">정답: <strong>③ 약 40%</strong><br>맥쿼리는 전쟁이 6월까지 지속될 경우 유가가 $200에 도달할 확률을 40%로 추산했다. 이는 현재 가격($112)의 약 2배로, 실현될 경우 글로벌 경제 공황이 우려된다.</div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card mid">
+    <div class="q-num">문제 5 <span class="diff mid">보통</span></div>
+    <div class="q-type">[ 객관식 ]</div>
+    <div class="q-text">기관 투자자들의 알고리즘 매매 시스템이 주가 지수 조정장 진입 시 자동으로 실행하는 행동으로 맞는 것은?</div>
+    <div class="options" id="q5-opts">
+      <div class="opt" data-q="5" data-v="1"><span class="opt-key">①</span> 주가가 10% 하락하면 자동 매수를 실행해 지수를 방어한다.</div>
+      <div class="opt" data-q="5" data-v="2"><span class="opt-key">②</span> 조정장 진입 시 리스크를 줄이기 위해 기계적으로 매도를 실행해 하락을 심화시킨다.</div>
+      <div class="opt" data-q="5" data-v="3"><span class="opt-key">③</span> 연준에 금리 인하를 자동으로 요청하는 신호를 보낸다.</div>
+      <div class="opt" data-q="5" data-v="4"><span class="opt-key">④</span> 알고리즘은 조정장에서 작동을 중지하도록 설계되어 있다.</div>
+    </div>
+    <button class="ans-btn" data-target="ans5">정답 확인</button>
+    <div class="ans-box" id="ans5">
+      <div class="ans-label">정답 & 해설</div>
+      <div class="ans-text">정답: <strong>② 조정장 진입 시 기계적 매도 실행</strong><br>NOVA는 "지수가 고점 대비 10% 빠지면 기관 알고리즘이 기계적으로 리스크를 줄이도록 매도를 실행한다"고 설명했다. 이 매도가 추가 매도를 유발하는 연쇄 하락이 발생한다. 현재 기관의 80% 이상이 AI 기반 알고리즘 매매를 사용한다.</div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card mid">
+    <div class="q-num">문제 6 <span class="diff mid">보통</span></div>
+    <div class="q-type">[ OX 문제 ]</div>
+    <div class="q-text">방송에서 언급된 Anthropic의 <strong>Claude Miter OS</strong>는 이미 출시되어 시장에서 사용되고 있으며, 이 때문에 사이버보안 주식이 하락했다. (O/X)</div>
+    <div class="ox-wrap" id="q6-ox">
+      <div class="ox-btn o" data-q="6" data-v="O">O</div>
+      <div class="ox-btn x" data-q="6" data-v="X">X</div>
+    </div>
+    <button class="ans-btn" data-target="ans6">정답 확인</button>
+    <div class="ans-box" id="ans6">
+      <div class="ans-label">정답 & 해설</div>
+      <div class="ans-text">정답: <strong>X (틀림)</strong><br>"아직 출시도 안 했어. 소문만 있는 거야."라고 명시됐다. 아직 미출시 상태에서 개발 중이라는 정보(유출)만으로 팔로알토, 지스케일, iHack ETF 등 사이버보안 관련주가 하락했다. 소문만으로도 시장에 충격을 줄 수 있다는 사례다.</div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-card mid">
+    <div class="q-num">문제 7 <span class="diff mid">보통</span></div>
+    <div class="q-type">[ 단답형 ]</div>
+    <div class="q-text">경기 침체(Stagnation)와 인플레이션(Inflation)이 <strong>동시에</strong> 발생하는 최악의 경제 상황을 일컫는 경제 용어는 무엇인가?</div>
+    <input class="short-input" type="text" placeholder="답을 입력하세요...">
+    <button class="ans-btn" data-target="ans7">정답 확인</button>
+    <div class="ans-box" id="ans7">
+      <div class="ans-label">정답 & 해설</div>
+      <div class="ans-text">정답: <strong>스태그플레이션 (Stagflation)</strong><br>방송에서 미시간대 소비심리 악화 + 기대 인플레이션 상승을 "전형적인 스태그플레이션의 징조"라고 언급했다. 소비가 줄면서 경기가 침체되는 동시에 물가가 오르는 딜레마 상황이다.</div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-card mid">
+    <div class="q-num">문제 8 <span class="diff mid">보통</span></div>
+    <div class="q-type">[ 객관식 ]</div>
+    <div class="q-text">방송에서 제시된 4월 생존 플레이북에서 강조된 투자 전략으로 <strong>잘못된</strong> 것은?</div>
+    <div class="options" id="q8-opts">
+      <div class="opt" data-q="8" data-v="1"><span class="opt-key">①</span> 현금 비중을 늘려 기회를 기다린다.</div>
+      <div class="opt" data-q="8" data-v="2"><span class="opt-key">②</span> 에너지·전력 유틸리티 롱 포지션 유지, 단 휴전 시 즉시 익절.</div>
+      <div class="opt" data-q="8" data-v="3"><span class="opt-key">③</span> 손실 중인 종목에 추가 매수(물타기)로 평균 매입 단가를 낮춘다.</div>
+      <div class="opt" data-q="8" data-v="4"><span class="opt-key">④</span> 프라이싱 파워(가격 전가력) 보유 기업 중심으로 포트폴리오 압축.</div>
+    </div>
+    <button class="ans-btn" data-target="ans8">정답 확인</button>
+    <div class="ans-box" id="ans8">
+      <div class="ans-label">정답 & 해설</div>
+      <div class="ans-text">정답: <strong>③ 물타기</strong><br>NOVA는 명시적으로 "절대 물타기 하지 마세요"라고 경고했다. 하락하는 시장에서 손실 종목에 추가 매수하면 손실이 더 커질 수 있다. 반면 수익 중인 종목에 추가 매수하는 '불타기'는 허용 가능한 전략으로 구분했다.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ───── 어려움 ───── -->
+<div class="q-section">
+  <div class="q-section-header">🔴 어려움 (2문제)</div>
+
+  <!-- Q9 -->
+  <div class="q-card hard">
+    <div class="q-num">문제 9 <span class="diff hard">어려움</span></div>
+    <div class="q-type">[ 객관식 ]</div>
+    <div class="q-text">방송에서 언급된 3월 31일(분기말+월말)의 시장 특성에 대한 설명으로 <strong>가장 적절한</strong> 것은?</div>
+    <div class="options" id="q9-opts">
+      <div class="opt" data-q="9" data-v="1"><span class="opt-key">①</span> 거래량이 줄어들어 시장이 안정적으로 움직이는 경향이 있다.</div>
+      <div class="opt" data-q="9" data-v="2"><span class="opt-key">②</span> 기관 펀드매니저들이 ETF·펀드 리밸런싱과 수익률 관리를 위해 대규모 매매를 실시해 변동성이 극대화된다.</div>
+      <div class="opt" data-q="9" data-v="3"><span class="opt-key">③</span> 개인 투자자들이 절세를 위해 손실 종목을 매도하는 'Tax Loss Selling'이 주요 원인이다.</div>
+      <div class="opt" data-q="9" data-v="4"><span class="opt-key">④</span> 연준의 통화정책 회의가 분기말마다 개최되어 금리 결정이 나온다.</div>
+    </div>
+    <button class="ans-btn" data-target="ans9">정답 확인</button>
+    <div class="ans-box" id="ans9">
+      <div class="ans-label">정답 & 해설</div>
+      <div class="ans-text">정답: <strong>② 기관 리밸런싱에 의한 변동성 극대화</strong><br>NOVA는 "분기말에 기관 펀드매니저들이 ETF·펀드 전부를 리밸런싱하고 수익률 관리표를 손님들에게 제출하기 위해 팔고 살 걸 팔고 사는 일을 한다"고 설명했다. 이번 분기말은 월말과 겹쳐 특히 자금 흐름이 '일사불란하게' 움직일 것으로 예상됐다. 이 특성을 아는 투자자는 이를 '기회'로도 활용할 수 있다.</div>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-card hard">
+    <div class="q-num">문제 10 <span class="diff hard">어려움</span></div>
+    <div class="q-type">[ 단답형 + 서술 ]</div>
+    <div class="q-text">방송에서 언급된 <strong>"바벨 전략(Barbell Strategy)"</strong>의 개념을 설명하고, 현재 시장 상황에서 이 전략의 양쪽 극단에 해당하는 구체적인 자산 유형을 각각 1가지 이상 제시하시오.</div>
+    <input class="short-input" type="text" placeholder="바벨 전략의 개념: ...">
+    <input class="short-input" type="text" placeholder="안전 자산 (예: ...)" style="margin-top:6px;">
+    <input class="short-input" type="text" placeholder="위험 자산 (예: ...)" style="margin-top:6px;">
+    <button class="ans-btn" data-target="ans10">정답 확인</button>
+    <div class="ans-box" id="ans10">
+      <div class="ans-label">정답 & 해설</div>
+      <div class="ans-text">
+        <strong>바벨 전략 개념:</strong> 포트폴리오를 바벨(아령) 모양처럼 두 극단으로만 구성하는 전략. 중간 위험 자산은 배제하고, 극도로 안전한 자산과 고위험·고수익 자산으로만 이분화한다.<br><br>
+        <strong>안전 극단 (예시):</strong> 현금, 에너지주(엑슨모빌·할리버튼), 전력 유틸리티(ETR·AGX), 프라이싱 파워 기업(넷플릭스·코스트코)<br><br>
+        <strong>위험 극단 (예시):</strong> 저평가된 성장주(엔비디아·마이크론), 압축적 테크 포지션<br><br>
+        <em>NOVA는 "에너지·전력·인프라·독점적 프라이싱 파워 기업" 중심으로 바벨 전략을 실행하고 있다고 언급했다. 빅테크·여행·소비재 등 중간 위험 자산은 이번 위기에서 가장 큰 타격을 받았다.</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCORE -->
+<div class="score-section">
+  <div class="score-label">채점 결과</div>
+  <div class="score-val" id="scoreVal">—</div>
+  <div class="score-desc" id="scoreDesc">모든 문제를 풀고 채점 버튼을 누르세요.</div>
+  <button class="submit-btn" id="scoreBtn">📊 채점하기 (객관식·OX 자동 채점)</button>
+  <button class="reset-all" id="resetAll">↺ 전체 초기화</button>
+</div>
+
+</div><!-- /container -->
+
+<footer>
+  <p>NOVA 유튜브 라이브(2026.03.28) 내용 기반 시험 문제 · 교육 목적 자료</p>
+</footer>
+
+<script>
+// ─── 정답 데이터 ───
+const answers = {
+  q1: '2', // 조정장
+  q2: 'O',
+  q4: '3', // 40%
+  q5: '2', // 기계적 매도
+  q6: 'X',
+  q8: '3', // 물타기
+  q9: '2', // 기관 리밸런싱
+};
+
+let userAnswers = {};
+
+// ─── 객관식 클릭 ───
+document.querySelectorAll('.opt').forEach(opt => {
+  opt.addEventListener('click', () => {
+    const q = opt.dataset.q;
+    const v = opt.dataset.v;
+    document.querySelectorAll(`.opt[data-q="${q}"]`).forEach(o => o.classList.remove('selected'));
+    opt.classList.add('selected');
+    userAnswers['q' + q] = v;
+  });
+});
+
+// ─── OX 클릭 ───
+document.querySelectorAll('.ox-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const q = btn.dataset.q;
+    const v = btn.dataset.v;
+    document.querySelectorAll(`.ox-btn[data-q="${q}"]`).forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    userAnswers['q' + q] = v;
+  });
+});
+
+// ─── 정답 확인 버튼 ───
+document.querySelectorAll('.ans-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = document.getElementById(btn.dataset.target);
+    if (target.classList.contains('show')) {
+      target.classList.remove('show');
+      btn.textContent = '정답 확인';
+    } else {
+      target.classList.add('show');
+      btn.textContent = '닫기';
+    }
+  });
+});
+
+// ─── 채점 ───
+document.getElementById('scoreBtn').addEventListener('click', () => {
+  let correct = 0;
+  let total = Object.keys(answers).length;
+
+  Object.entries(answers).forEach(([qKey, ans]) => {
+    const num = qKey.replace('q', '');
+    const userAns = userAnswers[qKey];
+
+    // 객관식
+    const opts = document.querySelectorAll(`.opt[data-q="${num}"]`);
+    if (opts.length > 0) {
+      opts.forEach(o => {
+        o.classList.remove('correct', 'wrong');
+        if (o.dataset.v === ans) o.classList.add('correct');
+        else if (o.dataset.v === userAns && userAns !== ans) o.classList.add('wrong');
+      });
+    }
+
+    // OX
+    const oxBtns = document.querySelectorAll(`.ox-btn[data-q="${num}"]`);
+    if (oxBtns.length > 0) {
+      oxBtns.forEach(b => {
+        b.classList.remove('correct', 'wrong');
+        if (b.dataset.v === ans) b.classList.add('correct');
+        else if (b.dataset.v === userAns && userAns !== ans) b.classList.add('wrong');
+      });
+    }
+
+    if (userAns === ans) correct++;
+  });
+
+  const pct = Math.round((correct / total) * 100);
+  document.getElementById('scoreVal').textContent = `${correct} / ${total}`;
+  let grade = '';
+  if (pct >= 90) grade = '🏆 탁월합니다! 시장 분석 완전 이해';
+  else if (pct >= 70) grade = '✅ 좋습니다! 핵심 개념 대부분 파악';
+  else if (pct >= 50) grade = '📖 분석 내용 복습이 필요합니다';
+  else grade = '🔄 처음부터 다시 읽어보세요';
+  document.getElementById('scoreDesc').textContent = `${pct}점 — ${grade}`;
+});
+
+// ─── 전체 초기화 ───
+document.getElementById('resetAll').addEventListener('click', () => {
+  userAnswers = {};
+  document.querySelectorAll('.opt').forEach(o => o.classList.remove('selected', 'correct', 'wrong'));
+  document.querySelectorAll('.ox-btn').forEach(b => b.classList.remove('selected', 'correct', 'wrong'));
+  document.querySelectorAll('.short-input').forEach(i => i.value = '');
+  document.querySelectorAll('.ans-box').forEach(a => { a.classList.remove('show'); });
+  document.querySelectorAll('.ans-btn').forEach(b => b.textContent = '정답 확인');
+  document.getElementById('scoreVal').textContent = '—';
+  document.getElementById('scoreDesc').textContent = '모든 문제를 풀고 채점 버튼을 누르세요.';
+});
+</script>
+</body>
+</html>
