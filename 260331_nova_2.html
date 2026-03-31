@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>레짐 체인지 — 중동 위기·연준·AI 효율성 혁명이 뒤흔드는 월가</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-alt: #fafafa;
+  --text: #1a1a1a;
+  --text-sub: #777777;
+  --accent: #e11d48;
+  --accent2: #f43f5e;
+  --chart1: #e11d48;
+  --chart2: #1a1a1a;
+  --chart3: #6b7280;
+  --chart4: #2563eb;
+  --table-bg: #fafafa;
+  --table-header: #e11d48;
+  --table-border: #e5e5e5;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.hero {
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 50%, #16213e 100%);
+  color: #fff;
+  padding: 56px 20px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle at 30% 70%, rgba(225,29,72,0.15) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(37,99,235,0.1) 0%, transparent 40%);
+  animation: heroGlow 8s ease-in-out infinite alternate;
+}
+@keyframes heroGlow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(5deg); }
+}
+.hero-content { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+.hero-tag {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 20px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1.35;
+  margin-bottom: 14px;
+  letter-spacing: -0.5px;
+}
+.hero .subtitle {
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+  font-weight: 300;
+  line-height: 1.6;
+}
+.hero .meta {
+  margin-top: 20px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+}
+
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 18px;
+}
+
+.section {
+  padding: 36px 0;
+  border-bottom: 1px solid var(--table-border);
+}
+.section:last-child { border-bottom: none; }
+
+.section-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 42px;
+  font-weight: 900;
+  color: var(--accent);
+  opacity: 0.15;
+  line-height: 1;
+  margin-bottom: -8px;
+}
+
+h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--text);
+  line-height: 1.3;
+}
+h2 .accent { color: var(--accent); }
+
+h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 24px 0 10px;
+  padding-left: 12px;
+  border-left: 3px solid var(--accent);
+}
+
+p { margin-bottom: 14px; color: var(--text); font-weight: 400; }
+.text-sub { color: var(--text-sub); font-size: 13px; }
+
+.highlight-box {
+  background: linear-gradient(135deg, #fff5f7 0%, #fef2f4 100%);
+  border-left: 4px solid var(--accent);
+  padding: 16px 18px;
+  margin: 20px 0;
+  border-radius: 0 8px 8px 0;
+  font-size: 14px;
+}
+.highlight-box strong { color: var(--accent); }
+
+.stat-row {
+  display: flex;
+  gap: 10px;
+  margin: 18px 0;
+  flex-wrap: wrap;
+}
+.stat-card {
+  flex: 1;
+  min-width: 100px;
+  background: var(--bg-alt);
+  border: 1px solid var(--table-border);
+  border-radius: 10px;
+  padding: 14px 12px;
+  text-align: center;
+}
+.stat-card .val {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--accent);
+}
+.stat-card .label {
+  font-size: 11px;
+  color: var(--text-sub);
+  margin-top: 2px;
+  line-height: 1.3;
+}
+.stat-card.up .val { color: var(--accent); }
+.stat-card.down .val { color: var(--chart4); }
+.stat-card.neutral .val { color: var(--chart2); }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0;
+  font-size: 13px;
+}
+thead th {
+  background: var(--table-header);
+  color: #fff;
+  padding: 10px 10px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 12px;
+}
+tbody td {
+  padding: 10px;
+  border-bottom: 1px solid var(--table-border);
+  background: var(--table-bg);
+}
+tbody tr:hover td { background: #f0f0f0; }
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.badge-red { background: #fee2e2; color: #dc2626; }
+.badge-green { background: #dcfce7; color: #16a34a; }
+.badge-blue { background: #dbeafe; color: #2563eb; }
+.badge-gray { background: #f3f4f6; color: #6b7280; }
+
+.quote-block {
+  position: relative;
+  padding: 20px 18px 20px 24px;
+  margin: 22px 0;
+  background: var(--bg-alt);
+  border-radius: 8px;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--text-sub);
+}
+.quote-block::before {
+  content: '"';
+  position: absolute;
+  top: 4px; left: 8px;
+  font-family: 'Playfair Display', serif;
+  font-size: 48px;
+  color: var(--accent);
+  opacity: 0.25;
+}
+
+.chart-container {
+  position: relative;
+  max-height: 340px;
+  margin: 18px 0;
+  background: var(--bg-alt);
+  border-radius: 10px;
+  padding: 14px;
+  border: 1px solid var(--table-border);
+}
+.chart-container canvas {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  max-height: 300px;
+}
+.chart-container.chart-ready canvas {
+  opacity: 1;
+}
+.chart-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.callout {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  color: #fff;
+  padding: 24px 20px;
+  border-radius: 12px;
+  margin: 22px 0;
+}
+.callout h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  margin-bottom: 10px;
+  color: #fff;
+}
+.callout p { color: rgba(255,255,255,0.8); margin-bottom: 8px; }
+.callout .tag {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.flow-diagram {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 18px 0;
+}
+.flow-item {
+  background: var(--bg-alt);
+  border: 1px solid var(--table-border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 13px;
+  text-align: center;
+  font-weight: 500;
+}
+.flow-arrow {
+  text-align: center;
+  font-size: 20px;
+  color: var(--accent);
+  line-height: 1.4;
+}
+
+.footer {
+  background: var(--bg-alt);
+  padding: 28px 20px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-sub);
+  border-top: 1px solid var(--table-border);
+}
+
+@media (max-width: 480px) {
+  .hero h1 { font-size: 23px; }
+  .stat-row { gap: 8px; }
+  .stat-card { min-width: 80px; padding: 10px 8px; }
+  .stat-card .val { font-size: 18px; }
+  table { font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-content">
+    <span class="hero-tag">Deep Dive Analysis</span>
+    <h1>레짐 체인지<br>중동 위기·연준·AI 혁명이<br>뒤흔드는 월가</h1>
+    <p class="subtitle">유가 100달러 쇼크, 마이크론 30% 폭락, 자본의 대순환 —<br>세 가지 체제 전환이 만드는 새로운 시장 지형도</p>
+    <p class="meta">2026년 3월 31일 · 미국 증시 심층 분석</p>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- EXECUTIVE SUMMARY -->
+<div class="section fade-in">
+  <div class="section-num">00</div>
+  <h2>Executive <span class="accent">Summary</span></h2>
+  <p>현재 글로벌 금융시장은 세 가지 <strong>레짐 체인지(체제 전환)</strong>가 동시다발적으로 진행되고 있다. ① 미-이란 전쟁에 따른 호르무즈 해협 봉쇄와 유가 급등이 촉발한 <strong>에너지 인플레이션 체제</strong>, ② 파월 연준 의장의 금리 동결 선언이라는 <strong>통화정책 전환</strong>, ③ 구글 터보퀀트 알고리즘이 보여준 <strong>AI 하드웨어 수요 파괴</strong>. 이 세 축이 자본의 대순환(Great Rotation)을 촉발하며 시장 판도를 근본적으로 재편하고 있다.</p>
+  
+  <div class="stat-row">
+    <div class="stat-card up">
+      <div class="val">$102.88</div>
+      <div class="label">WTI 원유 가격<br>(2022년 이후 최고)</div>
+    </div>
+    <div class="stat-card up">
+      <div class="val">+55%</div>
+      <div class="label">브렌트유 3월<br>월간 상승률</div>
+    </div>
+    <div class="stat-card down">
+      <div class="val">-30%</div>
+      <div class="label">마이크론 8거래일<br>낙폭</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 1: OIL SHOCK -->
+<div class="section fade-in">
+  <div class="section-num">01</div>
+  <h2>중동 전쟁과 <span class="accent">오일 쇼크</span></h2>
+  
+  <p>미-이란 전쟁이 5주 차에 접어들면서 <strong>호르무즈 해협이 완전 봉쇄</strong>되었다. 이 해협은 전 세계 해상 석유 무역의 약 21%가 통과하는 핵심 항로로, 봉쇄의 파급효과는 즉각적이었다.</p>
+
+  <h3>유가 급등 현황</h3>
+  <div class="stat-row">
+    <div class="stat-card up">
+      <div class="val">$112.78</div>
+      <div class="label">브렌트유</div>
+    </div>
+    <div class="stat-card up">
+      <div class="val">$102.88</div>
+      <div class="label">WTI</div>
+    </div>
+    <div class="stat-card neutral">
+      <div class="val">30+</div>
+      <div class="label">VIX 공포지수</div>
+    </div>
+  </div>
+
+  <p>브렌트유는 3월 한 달간 <strong>55% 폭등</strong>하며 1988년 이후 역대 최고 월간 상승률을 기록했다. VIX(변동성 지수)가 장중 30을 돌파하며 시장은 극도의 패닉 상태에 진입했다.</p>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">📊 유가 급등 추이 (3월 시뮬레이션)</div>
+    <canvas id="oilChart" height="240"></canvas>
+  </div>
+
+  <h3>정치적 불확실성 — 혼조 신호</h3>
+  <p>트럼프 대통령은 이란의 카르고섬과 석유 시설 파괴를 경고하면서 동시에 15개 항목의 평화 계획에 진전이 있다고 발표하는 <strong>모순적 메시지</strong>를 내놓았다. 이 불확실성이 시장 변동성을 극대화시킨 핵심 요인이다.</p>
+
+  <div class="highlight-box">
+    <strong>핵심 포인트:</strong> 단순한 유가 상승이 아니라, 에너지 중심의 인플레이션 고착화(스태그플레이션) 우려가 시장을 지배하고 있다. 자본은 일방적으로 붕괴하는 게 아니라 <strong>특정 섹터로 급격히 대피</strong>하는 중이다.
+  </div>
+</div>
+
+<!-- SECTION 2: FED POLICY -->
+<div class="section fade-in">
+  <div class="section-num">02</div>
+  <h2>연준의 <span class="accent">역발상</span> 통화정책</h2>
+
+  <p>유가가 100달러를 돌파한 상황에서 교과서적 대응은 즉각적 금리 인상이다. 그러나 파월 연준 의장은 하버드 대학 연설에서 <strong>"유가 쇼크에도 불구하고 금리 인상은 필요 없다"</strong>고 선언했다.</p>
+
+  <h3>파월의 논리: 통화정책 시차(Lag Effect)</h3>
+  
+  <div class="flow-diagram fade-in">
+    <div class="flow-item">🛢️ 유가 쇼크 발생 (단기적 충격)</div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-item">📈 금리 인상 시 → 효과 발현까지 수개월 소요</div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-item">⚠️ 유가 충격 종료 시점에 과도한 긴축이 경제 타격</div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-item" style="border-color:var(--accent); border-width:2px;">🎯 결론: 단기 에너지 노이즈를 관통(look through)하며 동결 유지</div>
+  </div>
+
+  <p>파월은 "장기 인플레이션 기대가 잘 고정되어 있다"고 판단, 유가 충격이 끝난 뒤 과도한 긴축이 초래할 <strong>시스템적 침체</strong>를 방지하는 전략을 택했다.</p>
+
+  <h3>시장 반응: 극적 선회</h3>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">📊 금리 인상 확률 vs 10년물 국채 금리 변화</div>
+    <canvas id="fedChart" height="220"></canvas>
+  </div>
+
+  <table class="fade-in">
+    <thead>
+      <tr><th>지표</th><th>변화 전</th><th>변화 후</th><th>방향</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>연내 금리 인상 확률</td><td>50%대</td><td>2.2%</td><td><span class="badge badge-green">↓ 급락</span></td></tr>
+      <tr><td>10년물 국채 금리</td><td>4%+</td><td>4% 이하</td><td><span class="badge badge-green">↓ 하락</span></td></tr>
+      <tr><td>채권 시장</td><td>—</td><td>강한 랠리</td><td><span class="badge badge-green">↑ 상승</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="highlight-box">
+    <strong>추가 변수:</strong> 후임 연준 의장으로 지명된 <strong>케빈 워시</strong>가 더 낮은 금리를 선호한다는 점도 시장에 안도감을 제공했다.
+  </div>
+</div>
+
+<!-- SECTION 3: AI DISRUPTION -->
+<div class="section fade-in">
+  <div class="section-num">03</div>
+  <h2>AI 반도체 <span class="accent">패러다임 붕괴</span></h2>
+
+  <p>금리 인하 기대에도 불구하고 기술주가 대폭락한 것은 금리 이슈를 압도하는 <strong>거대한 기술적 지각 변동</strong>이 발생했기 때문이다. 그 중심에 구글의 <strong>터보퀀트(TurboQuant)</strong> 알고리즘이 있다.</p>
+
+  <h3>터보퀀트란?</h3>
+  <p>LLM(대형 언어 모델) 구동 시 필요한 메모리 요구량을 <strong>6배 압축</strong>하는 기술이다. 이는 AI 인프라 수요 자체를 파괴하는 '파괴적 혁신'으로, 대규모 하드웨어 투자의 전제를 근본적으로 뒤흔들었다.</p>
+
+  <div class="callout fade-in">
+    <span class="tag">파괴적 혁신</span>
+    <h4>비유: 도서관 vs 킨들</h4>
+    <p>거대한 종이책 도서관을 짓기 위해 전 세계 나무를 벌채하고 있었는데, 누군가 얇은 전자책 킨들을 발명해버린 상황. 극강의 효율성을 위해 만든 AI 기술이 역설적으로 <strong>AI 하드웨어 생태계를 스스로 파괴</strong>하고 있다.</p>
+  </div>
+
+  <h3>주요 반도체·기술주 피해 현황</h3>
+  <div class="chart-container fade-in">
+    <div class="chart-title">📊 주요 종목 낙폭 (고점 대비 / 당일 기준)</div>
+    <canvas id="techDropChart" height="240"></canvas>
+  </div>
+
+  <table class="fade-in">
+    <thead>
+      <tr><th>종목</th><th>상황</th><th>낙폭</th><th>비고</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>엔비디아</strong></td><td>고점 대비 하락</td><td><span class="badge badge-red">-21%+</span></td><td>공식 베어마켓 진입</td></tr>
+      <tr><td><strong>마이크론</strong></td><td>8거래일 폭락</td><td><span class="badge badge-red">-30%</span></td><td>사상 최대 실적에도 폭락</td></tr>
+      <tr><td><strong>마이크론</strong> (당일)</td><td>일일 하락</td><td><span class="badge badge-red">~-10%</span></td><td>메모리 수요 파괴 반영</td></tr>
+      <tr><td><strong>웨스턴디지털</strong></td><td>동반 하락</td><td><span class="badge badge-red">하락</span></td><td>메모리/저장 섹터 전반 약세</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 4: CYBERSECURITY -->
+<div class="section fade-in">
+  <div class="section-num">04</div>
+  <h2>사이버 보안주: <span class="accent">역발상 수혜</span></h2>
+
+  <p>모든 기술주가 타격을 받은 건 아니다. 엔트로픽의 새로운 AI 모델 <strong>미토스(Mythos)</strong>가 사이버 공격을 고도화할 수 있다는 우려가 초기 보안주 약세를 야기했으나, 이후 반전이 일어났다.</p>
+
+  <div class="stat-row">
+    <div class="stat-card" style="border: 2px solid var(--accent);">
+      <div class="val" style="color:#16a34a;">+5%</div>
+      <div class="label">팔로알토<br>네트웍스</div>
+    </div>
+    <div class="stat-card" style="border: 2px solid var(--accent);">
+      <div class="val" style="color:#16a34a;">+4%</div>
+      <div class="label">크라우드<br>스트라이크</div>
+    </div>
+    <div class="stat-card neutral">
+      <div class="val">$10M</div>
+      <div class="label">니케시 아로라 CEO<br>자사주 매입</div>
+    </div>
+  </div>
+
+  <p>팔로알토 네트웍스 CEO 니케시 아로라가 <strong>1,000만 달러 규모의 자사주를 매입</strong>한 것은 강력한 자신감의 표현이다. 울프 리서치는 AI가 오히려 보안 수요를 폭증시킬 것이라는 분석을 내놓으며 보안주 랠리를 견인했다.</p>
+
+  <div class="highlight-box">
+    <strong>투자 시사점:</strong> "창이 날카로워질수록 더 튼튼한 방패가 필요하다." AI 공격 고도화 → 보안 지출 증가는 불가피한 구조적 트렌드다.
+  </div>
+</div>
+
+<!-- SECTION 5: GREAT ROTATION -->
+<div class="section fade-in">
+  <div class="section-num">05</div>
+  <h2>자본의 <span class="accent">Great Rotation</span></h2>
+
+  <p>기술주에서 이탈한 자본은 원자재·대체자산·방어 섹터로 급격히 이동하고 있다. 이것이 바로 <strong>자본의 대순환(Great Rotation)</strong>이다.</p>
+
+  <h3>섹터별 자금 이동 현황</h3>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">📊 섹터별 자금 흐름 시뮬레이션 (자금 유입/유출)</div>
+    <canvas id="rotationChart" height="240"></canvas>
+  </div>
+
+  <table class="fade-in">
+    <thead>
+      <tr><th>종목/섹터</th><th>변동</th><th>배경</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>알코아</strong> (Alcoa)</td>
+        <td><span class="badge badge-green">+11%</span></td>
+        <td>UAE·바레인 알루미늄 제련소 타격 → 미국 내 안전자산 수혜</td>
+      </tr>
+      <tr>
+        <td><strong>시스코</strong> (Sysco)</td>
+        <td><span class="badge badge-red">-12~15%</span></td>
+        <td>$291억 인수 + $210억 부채 조달 → 고금리 리스크 폭탄</td>
+      </tr>
+      <tr>
+        <td><strong>블랙스톤·KKR</strong></td>
+        <td><span class="badge badge-green">자금 유입</span></td>
+        <td>401(k) 대체자산 편입 허용 정책 수혜</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>시스코: 최악의 타이밍</h3>
+  <p>식품 유통업체 시스코가 제트롤레스토란 디포를 <strong>$291억에 인수</strong>하면서 $210억의 부채를 끌어온 것은, 고금리 환경에서 극도로 위험한 레버리지 승부수였다. 시장은 이를 즉각 -12~15% 폭락으로 심판했다.</p>
+
+  <h3>401(k) 정책 변화와 대체자산</h3>
+  <p>미 노동부가 401(k) 퇴직연금에 <strong>사모펀드와 암호화폐 편입을 허용</strong>하는 가이드라인 초안을 발표했다. 블랙스톤, KKR 등 대체자산 운용사들은 미국인의 노후 자금이라는 거대한 자금 풀에 접근 가능해졌다.</p>
+</div>
+
+<!-- SECTION 6: INVESTMENT MAP -->
+<div class="section fade-in">
+  <div class="section-num">06</div>
+  <h2>투자 <span class="accent">시사점</span> 종합</h2>
+
+  <h3>현 시장 환경 평가</h3>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">📊 현 시장 환경 — 리스크 팩터 레이더</div>
+    <canvas id="radarChart" height="260"></canvas>
+  </div>
+
+  <h3>섹터별 포지셔닝 전략</h3>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">📊 섹터별 투자 매력도 (현 환경 기준)</div>
+    <canvas id="sectorChart" height="240"></canvas>
+  </div>
+
+  <table class="fade-in">
+    <thead>
+      <tr><th>전략</th><th>대응 방향</th><th>핵심 종목/섹터</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-red">회피</span></td>
+        <td>AI 하드웨어/메모리 반도체 비중 축소</td>
+        <td>마이크론, 웨스턴디지털, 순수 메모리 기업</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-red">경계</span></td>
+        <td>고레버리지 M&A 추진 기업 회피</td>
+        <td>시스코 등 고부채 인수 기업</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-green">주목</span></td>
+        <td>사이버 보안 섹터 비중 확대</td>
+        <td>팔로알토, 크라우드스트라이크</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-green">주목</span></td>
+        <td>원자재·에너지 인플레 수혜주</td>
+        <td>알코아, 에너지 생산 기업</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-blue">관찰</span></td>
+        <td>대체자산(PE/크립토) 401(k) 수혜</td>
+        <td>블랙스톤, KKR</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-blue">관찰</span></td>
+        <td>엔비디아 — 플랫폼 지위는 유지, 밸류에이션 조정 관찰</td>
+        <td>엔비디아 (바닥 확인 후 재진입 검토)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 7: 3 REGIME CHANGES -->
+<div class="section fade-in">
+  <div class="section-num">07</div>
+  <h2>세 가지 <span class="accent">레짐 체인지</span> 종합</h2>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">📊 레짐 체인지 임팩트 비교</div>
+    <canvas id="impactChart" height="220"></canvas>
+  </div>
+
+  <div class="callout fade-in">
+    <span class="tag">핵심 질문</span>
+    <h4>오일 쇼크 vs AI 효율성 — 어느 쪽이 빠른가?</h4>
+    <p>지정학적 위기가 만든 인플레이션과 공급망 붕괴를 구원할 열쇠가, 역설적으로 오늘 반도체 주가를 폭락시킨 구글 터보퀀트 같은 <strong>극한의 AI 효율성</strong>일 수 있다.</p>
+    <p>오일 쇼크가 세상을 멈추는 속도보다 AI가 자원 소모를 줄여 효율화하는 속도가 더 빠를 수 있을지 — 이것이 향후 시장의 가장 중요한 변수다.</p>
+  </div>
+
+  <div class="quote-block fade-in">
+    정치적 레짐 체인지를 시도하다가 월스트리트의 경제적 레짐 체인지를 촉발한 셈이다. 배가 침몰하는 게 아니라, 사람들이 살겠다고 한쪽으로 몰리면서 극단적으로 기울어진 상태다.
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<footer class="footer">
+  <p>본 문서는 유튜브 콘텐츠 기반 분석 자료이며 투자 권유가 아닙니다.<br>모든 투자 판단은 본인의 책임 하에 이루어져야 합니다.</p>
+  <p style="margin-top:8px;">© 2026 Market Analysis Report</p>
+</footer>
+
+<script>
+// Observer 1: 일반 섹션 fade-in
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// 차트 생성 함수를 딕셔너리에 저장
+const chartConfigs = {};
+
+// 1. 유가 급등 추이 (라인 차트)
+chartConfigs['oilChart'] = () => {
+  new Chart(document.getElementById('oilChart'), {
+    type: 'line',
+    data: {
+      labels: ['3/3', '3/5', '3/7', '3/10', '3/12', '3/14', '3/17', '3/19', '3/21', '3/24', '3/26', '3/28', '3/31'],
+      datasets: [
+        {
+          label: '브렌트유 ($)',
+          data: [72.8, 76.5, 81.2, 85.0, 89.3, 93.7, 97.5, 101.2, 105.8, 108.5, 110.3, 111.9, 112.78],
+          borderColor: '#e11d48',
+          backgroundColor: 'rgba(225,29,72,0.08)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 3,
+          pointBackgroundColor: '#e11d48',
+          borderWidth: 2.5
+        },
+        {
+          label: 'WTI ($)',
+          data: [66.3, 69.8, 73.5, 77.2, 81.0, 85.5, 89.2, 93.0, 96.8, 99.2, 100.8, 101.9, 102.88],
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37,99,235,0.05)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 3,
+          pointBackgroundColor: '#2563eb',
+          borderWidth: 2.5
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1800, easing: 'easeInOutQuart' },
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11, family: "'Noto Sans KR'" }, padding: 15, usePointStyle: true } }
+      },
+      scales: {
+        y: { beginAtZero: false, grid: { color: '#f0f0f0' }, ticks: { font: { size: 11 } } },
+        x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 45 } }
+      }
+    }
+  });
+};
+
+// 2. 연준 금리 반응 (바 차트)
+chartConfigs['fedChart'] = () => {
+  new Chart(document.getElementById('fedChart'), {
+    type: 'bar',
+    data: {
+      labels: ['금리 인상 확률 (%)', '10년물 국채 (%)', '채권 시장 변동'],
+      datasets: [
+        {
+          label: '변화 전',
+          data: [50, 4.15, 0],
+          backgroundColor: '#6b7280',
+          borderRadius: 4
+        },
+        {
+          label: '변화 후',
+          data: [2.2, 3.92, 3.5],
+          backgroundColor: '#e11d48',
+          borderRadius: 4
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1500, easing: 'easeInOutQuart', delay: (ctx) => ctx.dataIndex * 150 },
+      animations: { y: { from: 0 } },
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11, family: "'Noto Sans KR'" }, padding: 15, usePointStyle: true } }
+      },
+      scales: {
+        y: { beginAtZero: true, grid: { color: '#f0f0f0' }, ticks: { font: { size: 11 } } },
+        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+};
+
+// 3. 기술주 낙폭 (가로 바)
+chartConfigs['techDropChart'] = () => {
+  new Chart(document.getElementById('techDropChart'), {
+    type: 'bar',
+    data: {
+      labels: ['마이크론 (8거래일)', '엔비디아 (고점대비)', '시스코 (당일)', '마이크론 (당일)', '웨스턴디지털'],
+      datasets: [{
+        label: '하락률 (%)',
+        data: [-30, -21, -15, -10, -8],
+        backgroundColor: ['#e11d48', '#f43f5e', '#1a1a1a', '#e11d48', '#6b7280'],
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1500, easing: 'easeInOutQuart', delay: (ctx) => ctx.dataIndex * 150 },
+      animations: { x: { from: 0 } },
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        x: { grid: { color: '#f0f0f0' }, ticks: { font: { size: 11 }, callback: v => v + '%' } },
+        y: { grid: { display: false }, ticks: { font: { size: 11, family: "'Noto Sans KR'" } } }
+      }
+    }
+  });
+};
+
+// 4. 섹터별 자금 흐름 (바 차트)
+chartConfigs['rotationChart'] = () => {
+  new Chart(document.getElementById('rotationChart'), {
+    type: 'bar',
+    data: {
+      labels: ['AI 반도체', '메모리', '기술 성장주', '사이버 보안', '원자재/소재', '에너지', '대체자산'],
+      datasets: [{
+        label: '자금 흐름 (상대적 강도)',
+        data: [-85, -70, -50, 45, 75, 90, 60],
+        backgroundColor: ctx => {
+          const v = ctx.raw;
+          return v < 0 ? '#e11d48' : '#2563eb';
+        },
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1500, easing: 'easeInOutQuart', delay: (ctx) => ctx.dataIndex * 150 },
+      animations: { y: { from: 0 } },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ctx.raw > 0 ? '유입 +' + ctx.raw : '유출 ' + ctx.raw
+          }
+        }
+      },
+      scales: {
+        y: { grid: { color: '#f0f0f0' }, ticks: { font: { size: 11 } } },
+        x: { grid: { display: false }, ticks: { font: { size: 10, family: "'Noto Sans KR'" }, maxRotation: 45 } }
+      }
+    }
+  });
+};
+
+// 5. 리스크 레이더 차트
+chartConfigs['radarChart'] = () => {
+  new Chart(document.getElementById('radarChart'), {
+    type: 'radar',
+    data: {
+      labels: ['지정학 리스크', '인플레이션', '변동성(VIX)', '기술주 밸류에이션', '정책 불확실성', '유동성 위험'],
+      datasets: [{
+        label: '현재 수준',
+        data: [95, 88, 82, 75, 85, 60],
+        backgroundColor: 'rgba(225,29,72,0.15)',
+        borderColor: '#e11d48',
+        borderWidth: 2,
+        pointBackgroundColor: '#e11d48',
+        pointRadius: 4
+      }, {
+        label: '1개월 전',
+        data: [40, 45, 35, 65, 50, 40],
+        backgroundColor: 'rgba(107,114,128,0.1)',
+        borderColor: '#6b7280',
+        borderWidth: 1.5,
+        borderDash: [4, 4],
+        pointBackgroundColor: '#6b7280',
+        pointRadius: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1800, easing: 'easeInOutQuart', delay: (ctx) => ctx.dataIndex * 120 },
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11, family: "'Noto Sans KR'" }, padding: 15, usePointStyle: true } }
+      },
+      scales: {
+        r: {
+          beginAtZero: true,
+          max: 100,
+          ticks: { stepSize: 25, font: { size: 9 }, backdropColor: 'transparent' },
+          pointLabels: { font: { size: 11, family: "'Noto Sans KR'" } },
+          grid: { color: '#e5e5e5' }
+        }
+      }
+    }
+  });
+};
+
+// 6. 섹터별 투자 매력도 (가로 바)
+chartConfigs['sectorChart'] = () => {
+  new Chart(document.getElementById('sectorChart'), {
+    type: 'bar',
+    data: {
+      labels: ['에너지 생산', '원자재/소재', '사이버 보안', '대체자산 운용', '방산', '유틸리티', '기술 성장주', 'AI 반도체'],
+      datasets: [{
+        label: '투자 매력도',
+        data: [92, 85, 82, 78, 75, 65, 35, 25],
+        backgroundColor: ['#e11d48','#e11d48','#2563eb','#2563eb','#6b7280','#6b7280','#1a1a1a','#1a1a1a'],
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1500, easing: 'easeInOutQuart', delay: (ctx) => ctx.dataIndex * 150 },
+      animations: { x: { from: 0 } },
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        x: { beginAtZero: true, max: 100, grid: { color: '#f0f0f0' }, ticks: { font: { size: 11 } } },
+        y: { grid: { display: false }, ticks: { font: { size: 11, family: "'Noto Sans KR'" } } }
+      }
+    }
+  });
+};
+
+// 7. 레짐 체인지 임팩트 (도넛)
+chartConfigs['impactChart'] = () => {
+  new Chart(document.getElementById('impactChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['① 에너지 인플레이션 체제', '② 통화정책 전환', '③ AI 효율성 혁명'],
+      datasets: [{
+        data: [40, 25, 35],
+        backgroundColor: ['#e11d48', '#1a1a1a', '#2563eb'],
+        borderWidth: 2,
+        borderColor: '#ffffff',
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { animateRotate: true, animateScale: true, duration: 2000, easing: 'easeInOutQuart' },
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11, family: "'Noto Sans KR'" }, padding: 12, usePointStyle: true } }
+      }
+    }
+  });
+};
+
+// Observer 2: 차트 전용
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const canvas = entry.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        setTimeout(() => {
+          chartConfigs[canvas.id]();
+          entry.target.classList.add('chart-ready');
+          delete chartConfigs[canvas.id];
+        }, 200);
+      }
+      chartObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.25 });
+
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+</script>
+
+</body>
+</html>
