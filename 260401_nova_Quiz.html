@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIA.chat 2026.03.31 | 시험문제 10선</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans KR',sans-serif;background:#fff;color:#1a1a1a;line-height:1.75}
+.hero{background:#1a1a1a;padding:40px 20px;text-align:center}
+.hero h1{font-family:'Playfair Display',serif;color:#fff;font-size:26px;font-weight:900}
+.hero h1 span{color:#e11d48}
+.hero p{color:#999;font-size:13px;margin-top:6px}
+.container{max-width:640px;margin:0 auto;padding:20px 16px}
+.q-card{background:#fafafa;border:1px solid #e5e5e5;border-radius:10px;padding:18px;margin:14px 0;position:relative}
+.q-num{display:inline-block;background:#e11d48;color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:3px;margin-bottom:8px}
+.q-diff{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:3px;margin-left:6px}
+.diff-easy{background:#dcfce7;color:#166534}
+.diff-mid{background:#fef3c7;color:#92400e}
+.diff-hard{background:#fef2f2;color:#991b1b}
+.q-type{display:inline-block;font-size:10px;color:#777;margin-left:6px}
+.q-text{font-size:15px;font-weight:500;margin:8px 0 12px}
+.q-options{list-style:none;padding:0}
+.q-options li{padding:8px 12px;margin:4px 0;border:1px solid #e5e5e5;border-radius:6px;font-size:14px;cursor:pointer;transition:all 0.2s}
+.q-options li:hover{background:#fef2f2;border-color:#e11d48}
+.q-options li.selected{background:#fef2f2;border-color:#e11d48;font-weight:600}
+.q-options li.correct{background:#dcfce7;border-color:#166534}
+.q-options li.wrong{background:#fef2f2;border-color:#991b1b;text-decoration:line-through}
+.q-input{width:100%;padding:10px;border:1px solid #e5e5e5;border-radius:6px;font-size:14px;font-family:inherit}
+.q-input:focus{outline:none;border-color:#e11d48}
+.ox-btns{display:flex;gap:10px}
+.ox-btn{flex:1;padding:12px;border:2px solid #e5e5e5;border-radius:8px;text-align:center;font-size:20px;font-weight:900;cursor:pointer;transition:all 0.2s}
+.ox-btn:hover{border-color:#e11d48}
+.ox-btn.selected{border-color:#e11d48;background:#fef2f2}
+.ox-btn.correct{border-color:#166534;background:#dcfce7}
+.ox-btn.wrong{border-color:#991b1b;background:#fef2f2}
+.answer-box{display:none;margin-top:12px;padding:14px;background:#1a1a1a;color:#ccc;border-radius:8px;font-size:13px;line-height:1.7}
+.answer-box strong{color:#e11d48}
+.answer-box.show{display:block}
+.check-btn{background:#e11d48;color:#fff;border:none;padding:8px 20px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;margin-top:10px}
+.check-btn:hover{background:#f43f5e}
+.score-box{background:#1a1a1a;color:#fff;border-radius:12px;padding:24px;text-align:center;margin:30px 0}
+.score-box .big{font-family:'Playfair Display',serif;font-size:48px;font-weight:900;color:#e11d48}
+.score-box p{color:#999;font-size:13px;margin-top:6px}
+.footer{text-align:center;padding:20px;font-size:12px;color:#999}
+</style>
+</head>
+<body>
+
+<div class="hero">
+<h1>📝 시험문제 <span>10선</span></h1>
+<p>CIA.chat 멤버미팅 2026.03.31 기반 · 쉬움 3 / 보통 5 / 어려움 2</p>
+</div>
+
+<div class="container">
+
+<div class="score-box" id="scoreBox" style="display:none">
+<p>최종 점수</p>
+<div class="big" id="finalScore">0/10</div>
+<p id="scoreMsg"></p>
+</div>
+
+<!-- Q1 -->
+<div class="q-card" data-answer="2">
+<span class="q-num">Q1</span><span class="q-diff diff-easy">쉬움</span><span class="q-type">객관식</span>
+<div class="q-text">2026년 3월 31일, 가장 큰 폭의 상승률을 기록한 미국 주요 지수는?</div>
+<ul class="q-options">
+<li data-idx="1" onclick="selectOpt(this)">① 다우존스 (+2.49%)</li>
+<li data-idx="2" onclick="selectOpt(this)">② 나스닥 (+3.83%)</li>
+<li data-idx="3" onclick="selectOpt(this)">③ S&P 500 (+2.91%)</li>
+<li data-idx="4" onclick="selectOpt(this)">④ 러셀 2000 (+4.12%)</li>
+</ul>
+<button class="check-btn" onclick="checkAnswer(this)">정답 확인</button>
+<div class="answer-box"><strong>정답: ② 나스닥 (+3.83%)</strong><br>나스닥이 +3.83%로 가장 큰 상승폭을 기록했으며, 이는 작년 6월 이후 최대 일간 상승이었다. 메가캡·반도체 중심의 기술주가 지수를 견인했다.</div>
+</div>
+
+<!-- Q2 -->
+<div class="q-card" data-answer="3">
+<span class="q-num">Q2</span><span class="q-diff diff-easy">쉬움</span><span class="q-type">객관식</span>
+<div class="q-text">VIX 지수가 이날 마감한 수치와, 시장 안정의 기준으로 언급된 수치는?</div>
+<ul class="q-options">
+<li data-idx="1" onclick="selectOpt(this)">① 20.25 마감 / 15 기준</li>
+<li data-idx="2" onclick="selectOpt(this)">② 30.50 마감 / 25 기준</li>
+<li data-idx="3" onclick="selectOpt(this)">③ 25.25 마감 / 20 기준</li>
+<li data-idx="4" onclick="selectOpt(this)">④ 28.00 마감 / 22 기준</li>
+</ul>
+<button class="check-btn" onclick="checkAnswer(this)">정답 확인</button>
+<div class="answer-box"><strong>정답: ③ 25.25 마감 / 20 기준</strong><br>VIX는 전일 30대에서 -17.5% 급락하여 25.25로 마감했다. 시장 안정은 VIX가 20 이하로 내려와야 판단할 수 있다고 언급됐다.</div>
+</div>
+
+<!-- Q3 -->
+<div class="q-card" data-answer="O">
+<span class="q-num">Q3</span><span class="q-diff diff-easy">쉬움</span><span class="q-type">OX</span>
+<div class="q-text">엔비디아가 마벨(Marvell)에 투자한 금액은 20억 달러(2빌리언)이다.</div>
+<div class="ox-btns">
+<div class="ox-btn" data-val="O" onclick="selectOX(this)">⭕</div>
+<div class="ox-btn" data-val="X" onclick="selectOX(this)">❌</div>
+</div>
+<button class="check-btn" onclick="checkOX(this)">정답 확인</button>
+<div class="answer-box"><strong>정답: ⭕ O</strong><br>엔비디아는 마벨에 $2B(20억 달러)를 투자했으며, 이는 GPU를 넘어 네트워킹·통신·커스터마이즈드 GPU 방향으로의 AI 인프라 확장 투자이다.</div>
+</div>
+
+<!-- Q4 -->
+<div class="q-card" data-answer="3">
+<span class="q-num">Q4</span><span class="q-diff diff-mid">보통</span><span class="q-type">객관식</span>
+<div class="q-text">JOLTS 구인건수가 이번에 기록한 수준은 어느 시점 이후 최저치인가?</div>
+<ul class="q-options">
+<li data-idx="1" onclick="selectOpt(this)">① 2019년 12월 이후</li>
+<li data-idx="2" onclick="selectOpt(this)">② 2021년 3월 이후</li>
+<li data-idx="3" onclick="selectOpt(this)">③ 2020년 3월(팬데믹) 이후</li>
+<li data-idx="4" onclick="selectOpt(this)">④ 2018년 6월 이후</li>
+</ul>
+<button class="check-btn" onclick="checkAnswer(this)">정답 확인</button>
+<div class="answer-box"><strong>정답: ③ 2020년 3월(팬데믹) 이후</strong><br>JOLTS 구인건수가 팬데믹 시작 시점인 2020년 3월 이후 최저치를 기록했으며, 이는 미국 고용 시장의 확장성이 중단됐음을 보여준다.</div>
+</div>
+
+<!-- Q5 -->
+<div class="q-card" data-answer="2">
+<span class="q-num">Q5</span><span class="q-diff diff-mid">보통</span><span class="q-type">객관식</span>
+<div class="q-text">시장이 하락할 때 바이오 M&A가 활발해지는 이유로 가장 적절한 것은?</div>
+<ul class="q-options">
+<li data-idx="1" onclick="selectOpt(this)">① 바이오 기업의 매출이 급증하기 때문</li>
+<li data-idx="2" onclick="selectOpt(this)">② 주가 하락으로 인수 비용이 상대적으로 저렴해지기 때문</li>
+<li data-idx="3" onclick="selectOpt(this)">③ 정부의 바이오 보조금이 증가하기 때문</li>
+<li data-idx="4" onclick="selectOpt(this)">④ 금리 인하로 바이오 기업 대출이 쉬워지기 때문</li>
+</ul>
+<button class="check-btn" onclick="checkAnswer(this)">정답 확인</button>
+<div class="answer-box"><strong>정답: ②</strong><br>시장이 안 좋으면 바이오주는 특히 크게 하락한다(잡주 성격). 대형 제약사 입장에서 "생각보다 많이 싸졌네"라며 프리미엄 140%를 얹어줘도 저렴하게 인수할 수 있는 기회가 된다.</div>
+</div>
+
+<!-- Q6 -->
+<div class="q-card" data-answer="X">
+<span class="q-num">Q6</span><span class="q-diff diff-mid">보통</span><span class="q-type">OX</span>
+<div class="q-text">컨스텔레이션 에너지(CEG)의 쓰리마일 아일랜드 원전 재가동은 약 2년 내 완료될 것으로 예상된다.</div>
+<div class="ox-btns">
+<div class="ox-btn" data-val="O" onclick="selectOX(this)">⭕</div>
+<div class="ox-btn" data-val="X" onclick="selectOX(this)">❌</div>
+</div>
+<button class="check-btn" onclick="checkOX(this)">정답 확인</button>
+<div class="answer-box"><strong>정답: ❌ X</strong><br>쓰리마일 아일랜드 원전 재가동은 2031년으로 예상되어 약 5년이 소요된다. 이는 원자력이 막대한 시간과 비용이 필요하다는 것을 보여주며, 가이던스 실망의 원인이 됐다.</div>
+</div>
+
+<!-- Q7 -->
+<div class="q-card" data-answer="short" data-short="프리캐시플로우">
+<span class="q-num">Q7</span><span class="q-diff diff-mid">보통</span><span class="q-type">단답형</span>
+<div class="q-text">워런 버핏과 미팅 분석자가 공통으로 강조한, 기업 투자에서 가장 중요한 재무 지표는? (한글로 작성)</div>
+<input class="q-input" type="text" placeholder="정답을 입력하세요">
+<button class="check-btn" onclick="checkShort(this)">정답 확인</button>
+<div class="answer-box"><strong>정답: 프리캐시플로우 (Free Cash Flow)</strong><br>"돈이 돈을 만드는 세상"이라는 표현처럼, 압도적인 현금 흐름을 가진 기업만이 현 시장에서 입증된 승자가 될 수 있다. 실적과 현금흐름이 곧 주가의 방어력이다.</div>
+</div>
+
+<!-- Q8 -->
+<div class="q-card" data-answer="3">
+<span class="q-num">Q8</span><span class="q-diff diff-mid">보통</span><span class="q-type">객관식</span>
+<div class="q-text">모건 스탠리가 S&P 500 12개월 목표를 하향한 핵심 이유는?</div>
+<ul class="q-options">
+<li data-idx="1" onclick="selectOpt(this)">① AI 버블 붕괴 우려</li>
+<li data-idx="2" onclick="selectOpt(this)">② 연준의 급격한 금리 인상 전망</li>
+<li data-idx="3" onclick="selectOpt(this)">③ 유가 $150~$180 시나리오에서 경제 체력 미흡</li>
+<li data-idx="4" onclick="selectOpt(this)">④ 중국의 미국 국채 대량 매도 가능성</li>
+</ul>
+<button class="check-btn" onclick="checkAnswer(this)">정답 확인</button>
+<div class="answer-box"><strong>정답: ③</strong><br>모건 스탠리는 2차 타격 시 유가가 $150~$180까지 상승할 수 있으며, 이 경우 S&P 500이 최대 25% 폭락(베어마켓 진입)할 수 있다고 경고했다. 전쟁이 끝나도(총알을 빼도) 경제 회복(재활)은 별개의 문제라는 비유를 사용했다.</div>
+</div>
+
+<!-- Q9 -->
+<div class="q-card" data-answer="2">
+<span class="q-num">Q9</span><span class="q-diff diff-hard">어려움</span><span class="q-type">객관식</span>
+<div class="q-text">오늘 시장 반등 시 섹터별 움직임 순서가 올바른 것은?</div>
+<ul class="q-options">
+<li data-idx="1" onclick="selectOpt(this)">① 테크 → 바이오 → 은행 → 필수소비재</li>
+<li data-idx="2" onclick="selectOpt(this)">② 은행 → 필수소비재 → 바이오 → 부동산 → 산업재 → 테크</li>
+<li data-idx="3" onclick="selectOpt(this)">③ 바이오 → 은행 → 테크 → 부동산 → 필수소비재</li>
+<li data-idx="4" onclick="selectOpt(this)">④ 산업재 → 테크 → 은행 → 임의소비재 → 바이오</li>
+</ul>
+<button class="check-btn" onclick="checkAnswer(this)">정답 확인</button>
+<div class="answer-box"><strong>정답: ②</strong><br>은행(금리 민감) → 필수소비재(XLP) → 바이오 → 부동산 → 산업재 → 테크 → 임의소비재 순으로 움직였다. 이 순서는 스마트머니의 위험 인식과 자금 배분 우선순위를 반영한다.</div>
+</div>
+
+<!-- Q10 -->
+<div class="q-card" data-answer="1">
+<span class="q-num">Q10</span><span class="q-diff diff-hard">어려움</span><span class="q-type">객관식</span>
+<div class="q-text">미팅에서 제시된 4가지 진입 전략 중, '시장의 바닥 형성' 신호로 해석되는 것은?</div>
+<ul class="q-options">
+<li data-idx="1" onclick="selectOpt(this)">① VIX가 20을 찍고 하락하는 시점에 진입</li>
+<li data-idx="2" onclick="selectOpt(this)">② RSI 50 돌파 후 즉시 진입</li>
+<li data-idx="3" onclick="selectOpt(this)">③ 2-3-5 분할 매수로 점진 진입</li>
+<li data-idx="4" onclick="selectOpt(this)">④ 리스크 온으로 전액 즉시 진입</li>
+</ul>
+<button class="check-btn" onclick="checkAnswer(this)">정답 확인</button>
+<div class="answer-box"><strong>정답: ① VIX 20 하회 확인</strong><br>VIX 20을 찍고 내려가는 것은 단순 반등이 아닌 '바닥 형성'의 신호로 해석된다. RSI 50 돌파는 턴어라운드 시그널이고, 2-3-5는 점진 진입, 리스크 온은 즉시 진입 전략이다. VIX 20은 가장 보수적이면서 구조적 전환을 확인하는 방법이다.</div>
+</div>
+
+<!-- Score Button -->
+<div style="text-align:center;margin:24px 0">
+<button class="check-btn" style="padding:12px 32px;font-size:15px" onclick="calcScore()">📊 최종 점수 확인</button>
+</div>
+
+</div>
+
+<div class="footer">
+<p>CIA.chat 멤버미팅 2026.03.31 시험문제</p>
+</div>
+
+<script>
+function selectOpt(el) {
+  const card = el.closest('.q-card');
+  if (card.dataset.done) return;
+  card.querySelectorAll('.q-options li').forEach(li => li.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function selectOX(el) {
+  const card = el.closest('.q-card');
+  if (card.dataset.done) return;
+  card.querySelectorAll('.ox-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function checkAnswer(btn) {
+  const card = btn.closest('.q-card');
+  if (card.dataset.done) return;
+  const selected = card.querySelector('.q-options li.selected');
+  if (!selected) { alert('답을 선택해주세요!'); return; }
+  const correct = card.dataset.answer;
+  card.dataset.done = 'true';
+  if (selected.dataset.idx === correct) {
+    selected.classList.add('correct');
+    card.dataset.result = 'correct';
+  } else {
+    selected.classList.add('wrong');
+    card.querySelector(`.q-options li[data-idx="${correct}"]`).classList.add('correct');
+    card.dataset.result = 'wrong';
+  }
+  card.querySelector('.answer-box').classList.add('show');
+  btn.style.display = 'none';
+}
+
+function checkOX(btn) {
+  const card = btn.closest('.q-card');
+  if (card.dataset.done) return;
+  const selected = card.querySelector('.ox-btn.selected');
+  if (!selected) { alert('O 또는 X를 선택해주세요!'); return; }
+  const correct = card.dataset.answer;
+  card.dataset.done = 'true';
+  if (selected.dataset.val === correct) {
+    selected.classList.add('correct');
+    card.dataset.result = 'correct';
+  } else {
+    selected.classList.add('wrong');
+    card.querySelector(`.ox-btn[data-val="${correct}"]`).classList.add('correct');
+    card.dataset.result = 'wrong';
+  }
+  card.querySelector('.answer-box').classList.add('show');
+  btn.style.display = 'none';
+}
+
+function checkShort(btn) {
+  const card = btn.closest('.q-card');
+  if (card.dataset.done) return;
+  const input = card.querySelector('.q-input');
+  const val = input.value.trim().replace(/\s/g,'');
+  if (!val) { alert('정답을 입력해주세요!'); return; }
+  card.dataset.done = 'true';
+  const answer = card.dataset.short.replace(/\s/g,'');
+  if (val.includes('프리캐시') || val.includes('FCF') || val.includes('freecash') || val.toLowerCase().includes('free cash') || val.includes('현금흐름')) {
+    input.style.borderColor = '#166534';
+    input.style.background = '#dcfce7';
+    card.dataset.result = 'correct';
+  } else {
+    input.style.borderColor = '#991b1b';
+    input.style.background = '#fef2f2';
+    card.dataset.result = 'wrong';
+  }
+  card.querySelector('.answer-box').classList.add('show');
+  btn.style.display = 'none';
+}
+
+function calcScore() {
+  const cards = document.querySelectorAll('.q-card');
+  let total = 0, correct = 0;
+  cards.forEach(c => {
+    total++;
+    if (c.dataset.result === 'correct') correct++;
+  });
+  const box = document.getElementById('scoreBox');
+  box.style.display = 'block';
+  document.getElementById('finalScore').textContent = correct + '/' + total;
+  const msg = document.getElementById('scoreMsg');
+  if (correct >= 9) msg.textContent = '🏆 탁월합니다! 시장을 깊이 이해하고 있습니다.';
+  else if (correct >= 7) msg.textContent = '👍 좋습니다! 핵심을 잘 파악하고 있습니다.';
+  else if (correct >= 5) msg.textContent = '📖 보통입니다. 리포트를 한번 더 읽어보세요.';
+  else msg.textContent = '📚 분석 내용을 다시 정독해보시길 권합니다.';
+  box.scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
