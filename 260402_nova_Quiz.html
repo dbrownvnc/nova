@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA Real Invest 복습 퀴즈 (2026.04.02)</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff; --bg2: #fafafa; --text: #1a1a1a; --text2: #777777;
+  --accent: #e11d48; --accent2: #f43f5e; --green: #16a34a; --blue: #2563eb;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+.hero{background:linear-gradient(135deg,#0f0f0f,#1a1a2e);color:#fff;padding:40px 20px;text-align:center}
+.hero h1{font-family:'Playfair Display',serif;font-size:24px;margin-bottom:6px}
+.hero p{font-size:13px;color:rgba(255,255,255,.5)}
+.container{max-width:680px;margin:0 auto;padding:20px 18px}
+.quiz-card{background:var(--bg2);border:1px solid #e5e5e5;border-radius:12px;padding:20px;margin-bottom:18px;transition:border-color .3s}
+.quiz-card.correct{border-color:var(--green);background:#f0fdf4}
+.quiz-card.wrong{border-color:var(--accent);background:#fef2f2}
+.q-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.q-num{background:var(--accent);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.q-diff{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600}
+.q-easy{background:#dcfce7;color:#166534}
+.q-mid{background:#fef3c7;color:#92400e}
+.q-hard{background:#fee2e2;color:#991b1b}
+.q-type{font-size:10px;color:var(--text2);margin-left:auto}
+.q-text{font-size:14px;font-weight:500;margin-bottom:14px;line-height:1.6}
+.options{display:flex;flex-direction:column;gap:8px}
+.opt-btn{display:block;width:100%;text-align:left;padding:10px 14px;border:2px solid #e5e5e5;border-radius:8px;background:#fff;font-size:13px;cursor:pointer;transition:all .2s;font-family:'Noto Sans KR',sans-serif;color:var(--text)}
+.opt-btn:hover{border-color:var(--accent);background:#fff5f5}
+.opt-btn.selected{border-color:var(--accent);background:rgba(225,29,72,.05);font-weight:600}
+.opt-btn.correct-answer{border-color:var(--green);background:#dcfce7}
+.opt-btn.wrong-answer{border-color:var(--accent);background:#fee2e2}
+.opt-btn:disabled{cursor:default;opacity:1}
+.ox-row{display:flex;gap:10px}
+.ox-btn{flex:1;padding:14px;border:2px solid #e5e5e5;border-radius:8px;background:#fff;font-size:16px;font-weight:700;cursor:pointer;text-align:center;transition:all .2s;font-family:'Noto Sans KR',sans-serif}
+.ox-btn:hover{border-color:var(--accent)}
+.short-input{width:100%;padding:10px 14px;border:2px solid #e5e5e5;border-radius:8px;font-size:14px;font-family:'Noto Sans KR',sans-serif;outline:none;transition:border-color .2s}
+.short-input:focus{border-color:var(--accent)}
+.submit-row{display:flex;gap:8px;margin-top:10px}
+.check-btn{background:var(--accent);color:#fff;border:none;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Noto Sans KR',sans-serif}
+.check-btn:hover{background:var(--accent2)}
+.explanation{display:none;margin-top:14px;padding:14px;background:#fff;border-radius:8px;border-left:3px solid var(--blue);font-size:13px;line-height:1.7}
+.explanation.show{display:block}
+.explanation strong{color:var(--blue)}
+.score-bar{background:var(--bg2);border:1px solid #e5e5e5;border-radius:12px;padding:20px;text-align:center;margin:20px 0}
+.score-bar .big{font-family:'Playfair Display',serif;font-size:48px;font-weight:900;color:var(--accent)}
+.score-bar .lbl{font-size:13px;color:var(--text2);margin-top:4px}
+.reset-btn{display:block;margin:20px auto;background:var(--text);color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Noto Sans KR',sans-serif}
+.footer{text-align:center;padding:30px 20px;font-size:11px;color:var(--text2);border-top:1px solid #e5e5e5;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="hero">
+  <h1>📝 복습 퀴즈</h1>
+  <p>NOVA Real Invest — 2026.04.02 방송 내용 기반 10문제</p>
+</div>
+<div class="container">
+
+<div class="score-bar" id="scoreBar" style="display:none">
+  <div class="big" id="scoreNum">0/10</div>
+  <div class="lbl">정답률</div>
+</div>
+
+<div id="quizArea"></div>
+
+<button class="reset-btn" onclick="resetQuiz()">🔄 전체 초기화</button>
+
+</div>
+<div class="footer">NOVA Real Invest 분석 요약 기반 퀴즈 | 2026.04.02</div>
+
+<script>
+const quizData = [
+  {
+    num: 1, type: '객관식', diff: 'easy',
+    q: 'NOVA가 2025년 12월 31일 마지막 방송에서 2026년 집중 키워드로 제시한 두 가지는?',
+    options: ['에너지와 금', 'AI 인프라와 우주경제', '부동산과 채권', '소비재와 방산'],
+    answer: 1,
+    explain: 'NOVA는 2025년 마지막 방송에서 2026년 집중해야 할 키워드로 AI 인프라와 우주경제를 제시했으며, 바이오까지 포함해 "초월적 인프라" 3가지로 분류했다.'
+  },
+  {
+    num: 2, type: 'OX', diff: 'easy',
+    q: '오늘 발표된 ISM 제조 PMI 물가지수는 78.3%로, 2022년 이후 가장 높은 수준을 기록했다.',
+    answer: true,
+    explain: 'ISM 제조 PMI 물가지수가 78.3%로 급등했으며, 이는 2022년 "인플레이션은 일시적(Transitional)"이라던 시기 이후 가장 높은 수준이다.'
+  },
+  {
+    num: 3, type: '객관식', diff: 'mid',
+    q: 'Oracle이 하루 만에 해고한 인원은 전 세계 직원의 몇 %에 해당하는가?',
+    options: ['8%', '12%', '18%', '25%'],
+    answer: 2,
+    explain: 'Oracle은 3만 명을 해고했으며, 이는 전 세계 직원의 약 18%에 해당한다. 이 중 약 12,000명이 인도 지역이다.'
+  },
+  {
+    num: 4, type: '객관식', diff: 'mid',
+    q: '일라이릴리 경구용 비만 치료제가 게임 체인저로 평가받는 핵심 이유는?',
+    options: ['체중 감량 효과가 주사제보다 뛰어나서', '소분자(Small molecule) 구조로 대량 생산 및 대중화 가능', 'FDA 승인이 거부되어 희소성이 높아서', '미국에서만 독점 생산이 가능해서'],
+    answer: 1,
+    explain: '소분자 구조이기 때문에 인도 등에서 대량 생산이 가능하고, 주사 대신 경구 복용으로 접근성이 혁신적으로 개선되었다. 아스피린·비타민 수준의 대중화가 가능하다는 점이 핵심이다.'
+  },
+  {
+    num: 5, type: 'OX', diff: 'easy',
+    q: 'NOVA는 현재 바벨 전략에서 에너지 섹터를 제외했다.',
+    answer: true,
+    explain: '종전 기대감 속에서 에너지 섹터에 무방비로 접근하면 "바벨에 깔릴 수 있다"며 에너지를 바벨 전략에서 제외했다.'
+  },
+  {
+    num: 6, type: '단답형', diff: 'mid',
+    q: 'SpaceX IPO의 추산 기업가치는 약 몇 조 달러(trillion)인가? (숫자만 입력)',
+    answer: '1.75',
+    accept: ['1.75', '1.7', '1.8'],
+    explain: 'SpaceX IPO의 추산 금액은 약 $1.75 trillion이며, 6월 상장을 목표로 하고 있다.'
+  },
+  {
+    num: 7, type: '객관식', diff: 'mid',
+    q: '글로벌 펀드매니저 중 향후 스태그플레이션을 예상하는 비율은?',
+    options: ['31%', '41%', '51%', '61%'],
+    answer: 2,
+    explain: '글로벌 펀드매니저의 51%가 향후 글로벌 경제의 스태그플레이션을 예상하고 있다. Bank of America, Morgan Stanley, Goldman Sachs 등도 40% 이상의 확률을 제시했다.'
+  },
+  {
+    num: 8, type: '객관식', diff: 'hard',
+    q: 'ADP 민간고용이 예상치를 상회했음에도 고용시장 전망이 부정적인 이유로 NOVA가 제시한 현상은?',
+    options: ['High-Hiring, High-Firing', 'Low-Hiring, Low-Firing', 'High-Hiring, Low-Firing', 'Low-Hiring, High-Firing'],
+    answer: 1,
+    explain: '현재 고용시장은 "Low-Hiring, Low-Firing" 상태로, 기업들이 신규 채용도 안 하지만 해고도 자제하는 소극적 상태이다. 추세적으로 고용은 계속 하락 중이며, 이는 경기 침체의 전형적 전조 현상이다.'
+  },
+  {
+    num: 9, type: 'OX', diff: 'hard',
+    q: 'Oracle의 대규모 해고는 비용 절감 목적으로, 절감된 인건비는 배당 확대에 사용될 예정이다.',
+    answer: false,
+    explain: 'Oracle의 해고로 확보된 프리캐시플로우는 배당이 아니라 AI 인프라 자본지출(CapEx)로 투입된다. 데이터센터 등 AI 인프라 기업으로의 전환이 목적이다.'
+  },
+  {
+    num: 10, type: '단답형', diff: 'mid',
+    q: 'Bank of America가 전망한 2030년까지의 AI CapEx 총 규모는? (예: 1.4T 형식으로 입력)',
+    answer: '1.4T',
+    accept: ['1.4T', '1.4t', '1.4', '$1.4T', '1.4조', '1조4천억'],
+    explain: 'Bank of America는 2030년까지 AI 자본지출이 $1.4 trillion에 달할 것으로 전망했다.'
+  }
+];
+
+let answers = {};
+let revealed = {};
+
+function renderQuiz() {
+  const area = document.getElementById('quizArea');
+  area.innerHTML = '';
+  quizData.forEach((q, idx) => {
+    const diffClass = q.diff === 'easy' ? 'q-easy' : q.diff === 'mid' ? 'q-mid' : 'q-hard';
+    const diffLabel = q.diff === 'easy' ? '쉬움' : q.diff === 'mid' ? '보통' : '어려움';
+
+    let inputHTML = '';
+    if (q.type === '객관식') {
+      inputHTML = '<div class="options">' + q.options.map((o, oi) =>
+        `<button class="opt-btn" data-q="${idx}" data-o="${oi}" onclick="selectOption(${idx},${oi})">${['①','②','③','④'][oi]} ${o}</button>`
+      ).join('') + '</div>';
+    } else if (q.type === 'OX') {
+      inputHTML = '<div class="ox-row"><button class="ox-btn" data-q="'+idx+'" data-o="true" onclick="selectOX('+idx+',true)">⭕ O</button><button class="ox-btn" data-q="'+idx+'" data-o="false" onclick="selectOX('+idx+',false)">❌ X</button></div>';
+    } else {
+      inputHTML = '<input type="text" class="short-input" id="short'+idx+'" placeholder="정답을 입력하세요">';
+    }
+
+    area.innerHTML += `
+      <div class="quiz-card" id="card${idx}">
+        <div class="q-header">
+          <div class="q-num">${q.num}</div>
+          <span class="q-diff ${diffClass}">${diffLabel}</span>
+          <span class="q-type">${q.type}</span>
+        </div>
+        <div class="q-text">${q.q}</div>
+        ${inputHTML}
+        <div class="submit-row">
+          <button class="check-btn" onclick="checkAnswer(${idx})">정답 확인</button>
+        </div>
+        <div class="explanation" id="exp${idx}"><strong>해설:</strong> ${q.explain}</div>
+      </div>`;
+  });
+}
+
+function selectOption(qi, oi) {
+  if (revealed[qi]) return;
+  answers[qi] = oi;
+  document.querySelectorAll(`.opt-btn[data-q="${qi}"]`).forEach(btn => {
+    btn.classList.toggle('selected', +btn.dataset.o === oi);
+  });
+}
+
+function selectOX(qi, val) {
+  if (revealed[qi]) return;
+  answers[qi] = val;
+  document.querySelectorAll(`.ox-btn[data-q="${qi}"]`).forEach(btn => {
+    btn.style.borderColor = (btn.dataset.o === String(val)) ? '#e11d48' : '#e5e5e5';
+    btn.style.background = (btn.dataset.o === String(val)) ? 'rgba(225,29,72,0.05)' : '#fff';
+  });
+}
+
+function checkAnswer(idx) {
+  if (revealed[idx]) return;
+  const q = quizData[idx];
+  const card = document.getElementById('card' + idx);
+  const exp = document.getElementById('exp' + idx);
+  let isCorrect = false;
+
+  if (q.type === '객관식') {
+    if (answers[idx] === undefined) { alert('답을 선택해주세요.'); return; }
+    isCorrect = answers[idx] === q.answer;
+    document.querySelectorAll(`.opt-btn[data-q="${idx}"]`).forEach(btn => {
+      const oi = +btn.dataset.o;
+      btn.disabled = true;
+      if (oi === q.answer) btn.classList.add('correct-answer');
+      else if (oi === answers[idx] && !isCorrect) btn.classList.add('wrong-answer');
+    });
+  } else if (q.type === 'OX') {
+    if (answers[idx] === undefined) { alert('O 또는 X를 선택해주세요.'); return; }
+    isCorrect = answers[idx] === q.answer;
+    document.querySelectorAll(`.ox-btn[data-q="${idx}"]`).forEach(btn => {
+      btn.disabled = true;
+      const bval = btn.dataset.o === 'true';
+      if (bval === q.answer) { btn.style.borderColor = '#16a34a'; btn.style.background = '#dcfce7'; }
+      else if (bval === answers[idx] && !isCorrect) { btn.style.borderColor = '#e11d48'; btn.style.background = '#fee2e2'; }
+    });
+  } else {
+    const input = document.getElementById('short' + idx);
+    const userAns = input.value.trim();
+    if (!userAns) { alert('답을 입력해주세요.'); return; }
+    isCorrect = q.accept.some(a => userAns.toLowerCase().includes(a.toLowerCase()));
+    input.disabled = true;
+    input.style.borderColor = isCorrect ? '#16a34a' : '#e11d48';
+    input.style.background = isCorrect ? '#dcfce7' : '#fee2e2';
+  }
+
+  card.classList.add(isCorrect ? 'correct' : 'wrong');
+  exp.classList.add('show');
+  revealed[idx] = isCorrect;
+  updateScore();
+}
+
+function updateScore() {
+  const total = Object.keys(revealed).length;
+  const correct = Object.values(revealed).filter(v => v).length;
+  if (total > 0) {
+    document.getElementById('scoreBar').style.display = 'block';
+    document.getElementById('scoreNum').textContent = correct + '/' + total;
+  }
+}
+
+function resetQuiz() {
+  answers = {};
+  revealed = {};
+  document.getElementById('scoreBar').style.display = 'none';
+  renderQuiz();
+}
+
+renderQuiz();
+</script>
+</body>
+</html>
