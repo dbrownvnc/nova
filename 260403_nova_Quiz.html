@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시험문제 10선 — 테슬라·사모신용·AI인프라 | 2026.04.02</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans KR',sans-serif;background:#ffffff;color:#1a1a1a;line-height:1.75;max-width:680px;margin:0 auto;padding:20px 18px}
+.hero{background:linear-gradient(135deg,#0f0f0f,#2d1a24);color:#fff;padding:40px 20px;border-radius:14px;text-align:center;margin-bottom:30px}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(20px,5vw,30px);font-weight:800;margin-bottom:8px}
+.hero p{font-size:13px;color:rgba(255,255,255,.6)}
+.q-card{background:#fafafa;border-radius:10px;padding:18px 16px;margin-bottom:16px;border-left:3px solid #e11d48;position:relative}
+.q-card.easy{border-left-color:#10b981}
+.q-card.medium{border-left-color:#f59e0b}
+.q-card.hard{border-left-color:#e11d48}
+.q-num{font-family:'Playfair Display',serif;font-size:28px;font-weight:800;color:rgba(225,29,72,.12);position:absolute;top:10px;right:14px}
+.q-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;padding:2px 8px;border-radius:3px;margin-bottom:8px;color:#fff}
+.q-badge.easy{background:#10b981}
+.q-badge.medium{background:#f59e0b}
+.q-badge.hard{background:#e11d48}
+.q-text{font-size:14.5px;font-weight:600;margin-bottom:10px}
+.q-opts{list-style:none;padding:0}
+.q-opts li{font-size:13.5px;padding:6px 0 6px 20px;position:relative;cursor:pointer;border-radius:6px;transition:background .2s}
+.q-opts li:hover{background:rgba(225,29,72,.05)}
+.q-opts li::before{content:attr(data-label);position:absolute;left:0;font-weight:700;color:#e11d48}
+.answer-box{display:none;background:#fff;border:1px solid #e5e5e5;border-radius:8px;padding:14px;margin-top:10px;font-size:13px;line-height:1.7}
+.answer-box .ans-tag{display:inline-block;background:#e11d48;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:3px;margin-bottom:6px}
+.show-btn{background:none;border:1px solid #e11d48;color:#e11d48;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;margin-top:8px;transition:all .2s}
+.show-btn:hover{background:#e11d48;color:#fff}
+.score-box{background:linear-gradient(135deg,#0f0f0f,#2d1a24);color:#fff;border-radius:14px;padding:24px 20px;text-align:center;margin:24px 0}
+.score-box .big{font-family:'Playfair Display',serif;font-size:48px;font-weight:800;color:#f43f5e}
+.score-box p{font-size:13px;color:rgba(255,255,255,.6);margin-top:4px}
+.all-btn{display:block;width:100%;background:#e11d48;color:#fff;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;margin:20px 0}
+.all-btn:hover{background:#f43f5e}
+footer{text-align:center;font-size:11px;color:#777;padding:20px 0;border-top:1px solid #e5e5e5;margin-top:30px}
+</style>
+</head>
+<body>
+
+<div class="hero">
+<h1>📝 시험문제 10선</h1>
+<p>CIA.chat 멤버미팅 2026.04.02 내용 기반 · 난이도: 쉬움 30% · 보통 50% · 어려움 20%</p>
+</div>
+
+<div id="quizArea">
+
+<!-- Q1 쉬움 -->
+<div class="q-card easy">
+<div class="q-num">01</div>
+<span class="q-badge easy">쉬움</span>
+<div class="q-text">테슬라의 현재 미인도 악성 재고 규모는 약 몇 대인가?</div>
+<ul class="q-opts">
+<li data-label="①">약 2만 대</li>
+<li data-label="②">약 5만 대</li>
+<li data-label="③">약 10만 대</li>
+<li data-label="④">약 20만 대</li>
+</ul>
+<button class="show-btn" onclick="toggleAnswer(this)">정답 보기</button>
+<div class="answer-box">
+<span class="ans-tag">정답: ②</span>
+<p>테슬라의 미인도 재고는 약 <strong>5만 대</strong>. 생산량은 정상 수준이나 인도량이 월가 컨센서스를 크게 밑돌면서 재고가 쌓이고 있다. 4/22 어닝 쇼크 가능성이 제기된다.</p>
+</div>
+</div>
+
+<!-- Q2 쉬움 -->
+<div class="q-card easy">
+<div class="q-num">02</div>
+<span class="q-badge easy">쉬움</span>
+<div class="q-text">다음 중 '전쟁 내러티브 시 진입해야 하는 섹터'로 올바른 것은?</div>
+<ul class="q-opts">
+<li data-label="①">항공·크루즈 섹터</li>
+<li data-label="②">임의소비재 섹터</li>
+<li data-label="③">에너지 섹터</li>
+<li data-label="④">소프트웨어 섹터</li>
+</ul>
+<button class="show-btn" onclick="toggleAnswer(this)">정답 보기</button>
+<div class="answer-box">
+<span class="ans-tag">정답: ③</span>
+<p>전쟁 내러티브가 시작되면 <strong>에너지 섹터</strong>에 진입하라는 것이 핵심 공식. 에너지는 2026 YTD +35% 이상 상승하며 안전자산 역할을 수행했다. 반면 항공·크루즈·소비재는 유가 상승 피해 섹터.</p>
+</div>
+</div>
+
+<!-- Q3 쉬움 -->
+<div class="q-card easy">
+<div class="q-num">03</div>
+<span class="q-badge easy">쉬움</span>
+<div class="q-text">(O/X) 코인베이스는 OCC로부터 국가신탁회사 조건부 승인을 받았다.</div>
+<button class="show-btn" onclick="toggleAnswer(this)">정답 보기</button>
+<div class="answer-box">
+<span class="ans-tag">정답: O</span>
+<p>코인베이스가 OCC(통화감독청)로부터 <strong>국가신탁회사 조건부 승인</strong>을 받았다. 이를 통해 401k 등 기관 자금이 암호화폐 시장으로 유입될 수 있는 제도적 경로가 열렸다.</p>
+</div>
+</div>
+
+<!-- Q4 보통 -->
+<div class="q-card medium">
+<div class="q-num">04</div>
+<span class="q-badge medium">보통</span>
+<div class="q-text">블루아울의 사모신용 펀드가 설정한 환매 캡(Gate)은 몇 %인가?</div>
+<ul class="q-opts">
+<li data-label="①">2%</li>
+<li data-label="②">5%</li>
+<li data-label="③">10%</li>
+<li data-label="④">15%</li>
+</ul>
+<button class="show-btn" onclick="toggleAnswer(this)">정답 보기</button>
+<div class="answer-box">
+<span class="ans-tag">정답: ②</span>
+<p>블루아울은 <strong>5% 환매 캡</strong>을 설정하여 투자자들의 대규모 인출을 제한했다. AI 도입으로 소프트웨어 업종의 비즈니스 모델이 붕괴되면서 사모신용에 대한 불안이 다른 회사로 전이되는 '게이트' 현상이 발생 중.</p>
+</div>
+</div>
+
+<!-- Q5 보통 -->
+<div class="q-card medium">
+<div class="q-num">05</div>
+<span class="q-badge medium">보통</span>
+<div class="q-text">호르무즈 해협 봉쇄 시 원유 외에 반도체 산업에 직접 영향을 줄 수 있는 물질은?</div>
+<ul class="q-opts">
+<li data-label="①">니켈</li>
+<li data-label="②">헬륨</li>
+<li data-label="③">리튬</li>
+<li data-label="④">네온</li>
+</ul>
+<button class="show-btn" onclick="toggleAnswer(this)">정답 보기</button>
+<div class="answer-box">
+<span class="ans-tag">정답: ②</span>
+<p><strong>헬륨</strong>은 반도체 제조 공정에 사용되는 핵심 소재. 호르무즈 해협을 통해 운송되며, 현재 원유보다 더 급등한 상태. 비료도 해당 경로를 통해 운송된다.</p>
+</div>
+</div>
+
+<!-- Q6 보통 -->
+<div class="q-card medium">
+<div class="q-num">06</div>
+<span class="q-badge medium">보통</span>
+<div class="q-text">테슬라의 에너지 저장장치(ESS) 부문이 전분기 대비 얼마나 감소했는가?</div>
+<p style="font-size:13px;color:#777">단답형으로 답하시오.</p>
+<button class="show-btn" onclick="toggleAnswer(this)">정답 보기</button>
+<div class="answer-box">
+<span class="ans-tag">정답: -38% (마이너스 38%)</span>
+<p>자동차 판매 부진보다 더 충격적인 것은 ESS 부문이 전분기 대비 <strong>38% 급감</strong>한 것. 자동차가 안 팔려도 ESS에서 수익을 낼 수 있다는 내러티브가 무너지고 있다.</p>
+</div>
+</div>
+
+<!-- Q7 보통 -->
+<div class="q-card medium">
+<div class="q-num">07</div>
+<span class="q-badge medium">보통</span>
+<div class="q-text">수입 의약품 관세 정책에서 '약가 인하 합의'도 안 하고 '미국 내 제조 계획'도 없는 기업에 부과되는 관세율은?</div>
+<ul class="q-opts">
+<li data-label="①">20%</li>
+<li data-label="②">50%</li>
+<li data-label="③">75%</li>
+<li data-label="④">100%</li>
+</ul>
+<button class="show-btn" onclick="toggleAnswer(this)">정답 보기</button>
+<div class="answer-box">
+<span class="ans-tag">정답: ④</span>
+<p>약가 인하 합의 → 면제, 미합의+제조계획 有 → 20%(4년 내 이행), 미합의+제조계획 無 → <strong>100% 관세</strong>. 대형회사에는 120일 유예 기간이 주어진다.</p>
+</div>
+</div>
+
+<!-- Q8 보통 -->
+<div class="q-card medium">
+<div class="q-num">08</div>
+<span class="q-badge medium">보통</span>
+<div class="q-text">(O/X) 챌린저스 레이오프 설문에서 해고 원인 1위는 '경기 침체'였다.</div>
+<button class="show-btn" onclick="toggleAnswer(this)">정답 보기</button>
+<div class="answer-box">
+<span class="ans-tag">정답: X</span>
+<p>챌린저스 레이오프 설문에서 해고 원인 1위는 <strong>AI</strong>. AI 도입 가속화로 인한 인력 대체가 고용 시장 구조를 바꾸고 있다.</p>
+</div>
+</div>
+
+<!-- Q9 어려움 -->
+<div class="q-card hard">
+<div class="q-num">09</div>
+<span class="q-badge hard">어려움</span>
+<div class="q-text">다음 중 '시나리오 B(Bear Case)' 발생 시 유가가 $110 이상에서 고착될 경우 발생하는 결과로 가장 적절한 것은?</div>
+<ul class="q-opts">
+<li data-label="①">연준이 즉시 금리를 인하할 것이다</li>
+<li data-label="②">2027년 연준 금리인하가 완전히 소멸된다</li>
+<li data-label="③">소비재 섹터가 반등할 것이다</li>
+<li data-label="④">에너지 섹터가 폭락할 것이다</li>
+</ul>
+<button class="show-btn" onclick="toggleAnswer(this)">정답 보기</button>
+<div class="answer-box">
+<span class="ans-tag">정답: ②</span>
+<p>유가 $110 고착 시 인플레이션 압력이 지속되어 <strong>2027년까지 연준의 금리인하가 완전히 불가능</strong>해진다. 스태그플레이션 고착화 시나리오로 이어지며, 이 경우 금융·소비재·여행 섹터에 풋 옵션이 권장된다.</p>
+</div>
+</div>
+
+<!-- Q10 어려움 -->
+<div class="q-card hard">
+<div class="q-num">10</div>
+<span class="q-badge hard">어려움</span>
+<div class="q-text">아마존의 글로벌스타(GSAT) 인수 협상과 관련하여, 현재 GSAT 위성 서비스 네트워크 용량의 약 85%를 점유하고 있는 기업과 그 이유를 서술하시오.</div>
+<button class="show-btn" onclick="toggleAnswer(this)">정답 보기</button>
+<div class="answer-box">
+<span class="ans-tag">정답: 애플(Apple)</span>
+<p><strong>애플</strong>이 글로벌스타 지분 약 20%를 보유하고 있으며, 아이폰의 <strong>긴급 SOS 위성 서비스</strong>에 GSAT 네트워크를 활용하고 있다. 이로 인해 네트워크 용량의 약 85%를 애플이 점유. 아마존이 GSAT을 인수하더라도 이 트래픽 구조의 교통정리가 필요한 상황이다. 아마존의 인수 목적은 스페이스X 견제를 위한 위성 밴드 스펙트럼 확보.</p>
+</div>
+</div>
+
+</div>
+
+<button class="all-btn" onclick="toggleAll()">📖 전체 정답 보기 / 숨기기</button>
+
+<div class="score-box">
+<div class="big" id="scoreNum">?</div>
+<p>정답을 확인하며 자가 채점해보세요</p>
+</div>
+
+<footer>
+<p>CIA.chat 멤버미팅 2026.04.02 기반 · 학습 목적 시험문제</p>
+</footer>
+
+<script>
+function toggleAnswer(btn) {
+  const box = btn.nextElementSibling;
+  box.style.display = box.style.display === 'block' ? 'none' : 'block';
+  btn.textContent = box.style.display === 'block' ? '정답 숨기기' : '정답 보기';
+}
+let allShown = false;
+function toggleAll() {
+  allShown = !allShown;
+  document.querySelectorAll('.answer-box').forEach(b => b.style.display = allShown ? 'block' : 'none');
+  document.querySelectorAll('.show-btn').forEach(b => b.textContent = allShown ? '정답 숨기기' : '정답 보기');
+}
+</script>
+</body>
+</html>

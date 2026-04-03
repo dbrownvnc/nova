@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>테슬라 악성재고 · 사모신용 뱅크런 · AI 인프라 3대장 | 2026.04.02</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#ffffff;--bg2:#fafafa;--text:#1a1a1a;--text2:#777777;
+--accent:#e11d48;--accent2:#f43f5e;
+--chart1:#e11d48;--chart2:#1a1a1a;--chart3:#6b7280;--chart4:#2563eb;
+--tbl-bg:#fafafa;--tbl-hd:#e11d48;--tbl-bd:#e5e5e5;
+}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);line-height:1.75;-webkit-font-smoothing:antialiased}
+.fade-in{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+.chart-container{position:relative;max-height:340px}
+.chart-container canvas{opacity:0;transition:opacity .4s ease;max-height:300px}
+.chart-container.chart-ready canvas{opacity:1}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,#0f0f0f 0%,#1a1a1a 50%,#2d1a24 100%);color:#fff;padding:60px 20px 50px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 70%,rgba(225,29,72,.12) 0%,transparent 50%);animation:heroGlow 8s ease-in-out infinite alternate}
+@keyframes heroGlow{0%{transform:translate(0,0)}100%{transform:translate(5%,-5%)}}
+.hero-label{display:inline-block;background:var(--accent);color:#fff;font-size:11px;font-weight:700;letter-spacing:2px;padding:4px 14px;border-radius:2px;margin-bottom:18px;text-transform:uppercase}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(24px,6vw,42px);font-weight:800;line-height:1.25;margin-bottom:14px;letter-spacing:-.5px}
+.hero h1 em{font-style:normal;color:var(--accent2)}
+.hero-sub{color:rgba(255,255,255,.6);font-size:13px;font-weight:300}
+.hero-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:18px}
+.hero-tags span{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:4px 12px;border-radius:20px;font-size:11px;color:rgba(255,255,255,.7)}
+
+/* Layout */
+.container{max-width:680px;margin:0 auto;padding:0 18px}
+section{padding:36px 0 24px}
+.section-num{font-family:'Playfair Display',serif;font-size:48px;font-weight:900;color:rgba(225,29,72,.10);line-height:1;margin-bottom:-10px}
+h2{font-family:'Playfair Display',serif;font-size:clamp(20px,5vw,28px);font-weight:700;color:var(--text);line-height:1.3;margin-bottom:6px;letter-spacing:-.3px}
+h2 .hl{color:var(--accent)}
+h3{font-size:16px;font-weight:700;color:var(--text);margin:22px 0 8px;padding-left:12px;border-left:3px solid var(--accent)}
+.lead{font-size:15px;color:var(--text2);margin-bottom:20px;font-weight:300}
+p{font-size:14.5px;margin-bottom:14px}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--tbl-bd),transparent);margin:10px 0}
+
+/* Cards */
+.insight-card{background:var(--bg2);border-radius:10px;padding:18px 16px;margin:16px 0;border-left:3px solid var(--accent);position:relative}
+.insight-card.warn{border-left-color:#f59e0b;background:#fffbeb}
+.insight-card.green{border-left-color:#10b981;background:#ecfdf5}
+.insight-card .tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.insight-card.warn .tag{color:#d97706}
+.insight-card.green .tag{color:#059669}
+.insight-card p{margin:0;font-size:13.5px}
+
+/* Key Metric */
+.metric-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:16px 0}
+.metric-box{background:var(--bg2);border-radius:8px;padding:14px 12px;text-align:center;border:1px solid var(--tbl-bd)}
+.metric-box .val{font-family:'Playfair Display',serif;font-size:24px;font-weight:800;color:var(--accent)}
+.metric-box .val.up{color:#10b981}
+.metric-box .val.down{color:var(--accent)}
+.metric-box .label{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px}
+th{background:var(--tbl-hd);color:#fff;padding:10px 8px;text-align:left;font-weight:600;font-size:12px}
+td{padding:9px 8px;border-bottom:1px solid var(--tbl-bd);background:var(--tbl-bg)}
+tr:hover td{background:#f0f0f0}
+
+/* Scenario Cards */
+.scenario-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+@media(max-width:500px){.scenario-grid{grid-template-columns:1fr}}
+.scenario-card{border-radius:10px;padding:16px 14px;position:relative;overflow:hidden}
+.scenario-card.bull{background:linear-gradient(135deg,#ecfdf5,#d1fae5);border:1px solid #a7f3d0}
+.scenario-card.bear{background:linear-gradient(135deg,#fef2f2,#fee2e2);border:1px solid #fecaca}
+.scenario-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.scenario-card.bull h4{color:#059669}
+.scenario-card.bear h4{color:#dc2626}
+.scenario-card ul{list-style:none;padding:0}
+.scenario-card li{font-size:12.5px;padding:3px 0;padding-left:16px;position:relative}
+.scenario-card li::before{content:'→';position:absolute;left:0;color:var(--text2)}
+
+/* Interactive Sim */
+.sim-box{background:linear-gradient(135deg,#1a1a1a,#2d2d2d);border-radius:12px;padding:20px 16px;margin:20px 0;color:#fff}
+.sim-box h3{color:#fff;border-left-color:var(--accent2);font-size:15px;margin-top:0}
+.sim-box label{font-size:12px;color:rgba(255,255,255,.7);display:block;margin:10px 0 4px}
+.sim-box input[type=range]{width:100%;accent-color:var(--accent);margin:4px 0}
+.sim-box .sim-output{background:rgba(255,255,255,.06);border-radius:8px;padding:14px;margin-top:14px;border:1px solid rgba(255,255,255,.1)}
+.sim-box .sim-val{font-family:'Playfair Display',serif;font-size:28px;font-weight:800;margin-bottom:4px}
+.sim-box .sim-label{font-size:11px;color:rgba(255,255,255,.5)}
+.sim-box .sim-verdict{font-size:13px;margin-top:10px;padding:8px 12px;border-radius:6px;font-weight:600}
+.sim-box .sim-verdict.safe{background:rgba(16,185,129,.15);color:#34d399}
+.sim-box .sim-verdict.caution{background:rgba(245,158,11,.15);color:#fbbf24}
+.sim-box .sim-verdict.danger{background:rgba(239,68,68,.15);color:#f87171}
+.sim-box select{background:#333;color:#fff;border:1px solid #555;padding:6px 10px;border-radius:6px;font-size:13px;width:100%;margin-top:4px}
+.sim-box button{background:var(--accent);color:#fff;border:none;padding:8px 18px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;margin-top:10px}
+.sim-box button:hover{background:var(--accent2)}
+
+/* Flow Diagram */
+.flow-wrap{display:flex;flex-direction:column;align-items:center;gap:0;margin:16px 0}
+.flow-node{background:var(--bg2);border:2px solid var(--tbl-bd);border-radius:10px;padding:12px 18px;text-align:center;font-size:13px;font-weight:600;width:85%;max-width:300px;position:relative;transition:all .3s}
+.flow-node:hover{border-color:var(--accent);transform:scale(1.02)}
+.flow-node.red{border-color:var(--accent);background:#fef2f2}
+.flow-node.green{border-color:#10b981;background:#ecfdf5}
+.flow-arrow{font-size:20px;color:var(--text2);padding:4px 0}
+
+/* Flip cards */
+.flip-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+@media(max-width:500px){.flip-grid{grid-template-columns:1fr}}
+.flip-card{perspective:600px;height:120px;cursor:pointer}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-front,.flip-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:12px;text-align:center;font-size:12.5px}
+.flip-front{background:var(--bg2);border:1px solid var(--tbl-bd);font-weight:600;color:var(--text)}
+.flip-back{background:var(--accent);color:#fff;transform:rotateY(180deg);font-weight:500;line-height:1.5}
+
+/* Pentagon Index */
+.penta-meter{margin:16px 0;padding:16px;background:var(--bg2);border-radius:10px;border:1px solid var(--tbl-bd)}
+.penta-bar-track{height:28px;background:#e5e5e5;border-radius:14px;overflow:hidden;position:relative;margin:8px 0}
+.penta-bar-fill{height:100%;border-radius:14px;transition:width 1s ease;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;font-size:11px;font-weight:700;color:#fff}
+.penta-zones{display:flex;justify-content:space-between;font-size:10px;color:var(--text2);margin-top:4px}
+
+/* Footer */
+footer{background:var(--bg2);padding:30px 20px;text-align:center;font-size:11px;color:var(--text2);border-top:1px solid var(--tbl-bd);margin-top:30px}
+footer .logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:800;color:var(--text);margin-bottom:6px}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:4px}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+<div class="hero-label">CIA.chat 멤버미팅 · 2026.04.02</div>
+<h1>테슬라 <em>5만대 악성재고</em> 폭탄<br>사모신용 <em>뱅크런</em> 사태 경고</h1>
+<p class="hero-sub">폭락장에서도 굳건한 'AI 인프라 3대장' — 주말 지정학 리스크 대비 전략</p>
+<div class="hero-tags">
+<span>🛢️ 유가 폭등</span><span>🔴 호르무즈 해협</span><span>🤖 AI 인프라</span><span>🚀 우주 테마</span><span>💊 의약품 관세</span>
+</div>
+</header>
+
+<main class="container">
+
+<!-- ========== 1. 지정학 리스크 ========== -->
+<section>
+<div class="section-num fade-in">01</div>
+<h2 class="fade-in">지정학적 폭풍 — <span class="hl">호르무즈 해협</span>과 유가</h2>
+<p class="lead fade-in">성금요일 휴장 + 롱위크엔드, 중동 리스크가 시장을 압도하고 있다</p>
+
+<div class="insight-card warn fade-in">
+<span class="tag">⚠️ 핵심 리스크</span>
+<p>트럼프 대통령이 4월 1일 밤 연설에서 <strong>"2~3주 안에 극도로 강하게 타격, 석기시대로 되돌리겠다"</strong>고 발언 → VIX 25 돌파 후 23으로 마감. 이란은 호르무즈 해협 전체 모니터링 돌입, 오만도 통과 프로토콜 논의 중.</p>
+</div>
+
+<div class="metric-row fade-in">
+<div class="metric-box"><div class="val down">+11.93%</div><div class="label">금 5일 수익률</div></div>
+<div class="metric-box"><div class="val down">+11.41%</div><div class="label">WTI 일간 상승</div></div>
+<div class="metric-box"><div class="val">25 → 23</div><div class="label">VIX 장중→마감</div></div>
+</div>
+
+<h3 class="fade-in">호르무즈 해협 — 석유만의 문제가 아니다</h3>
+<p class="fade-in">호르무즈 해협이 막히면 원유뿐 아니라 <strong>비료, 헬륨</strong>까지 영향을 받는다. 특히 헬륨은 반도체 제조 공정의 핵심 소재로, 현재 원유보다 더 급등한 상태. 반도체 공급망 교란으로 이어질 수 있는 잠재 리스크다.</p>
+
+<div class="insight-card fade-in">
+<span class="tag">기관 동향</span>
+<p>롱위크엔드 진입 전 기관들이 리스크 회피 매도 → 개인 투자자들이 물량을 흡수한 것으로 관측. 유가 폭등·폭락 어느 쪽이든 충격 가능성이 존재한다.</p>
+</div>
+
+<!-- Pentagon P-Index -->
+<h3 class="fade-in">펜타곤 P자 지수 — 주말 모니터링 필수</h3>
+<div class="penta-meter fade-in">
+<p style="font-size:13px;margin-bottom:8px"><strong>현재 지수: 55</strong> — "Something might happen" 구간</p>
+<div class="penta-bar-track">
+<div class="penta-bar-fill" id="pentaFill" style="width:55%;background:linear-gradient(90deg,#10b981,#f59e0b,#ef4444)">55</div>
+</div>
+<div class="penta-zones">
+<span>0 — 정상</span>
+<span>50 — 경계</span>
+<span>70 — 작전개시</span>
+<span>100</span>
+</div>
+<p style="font-size:12px;color:var(--text2);margin-top:8px">P자(피자) 주문량 기반 군사 활동 대리지표. 55는 '평소보다 많은 주문' 단계. 70 이상 진입 시 "Something is happening" — 실제 작전 개시 신호로 해석.</p>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ========== 2. 섹터 로테이션 ========== -->
+<section>
+<div class="section-num fade-in">02</div>
+<h2 class="fade-in">2026 Q1 <span class="hl">승자와 패자</span></h2>
+<p class="lead fade-in">전쟁 내러티브 → 에너지로 들어간다. 기계적으로 메모리할 공식.</p>
+
+<div class="chart-container fade-in">
+<canvas id="sectorChart" height="250"></canvas>
+</div>
+
+<div class="insight-card green fade-in">
+<span class="tag">📌 전쟁 트레이딩 공식</span>
+<p><strong>전쟁 내러티브 시작 → 에너지 섹터 진입</strong><br>에너지 피해 섹터(항공·크루즈·임의소비재) → 숏/인버스 진입<br>30~50% 수익 구간 확보 가능. 기계적으로 대응할 것.</p>
+</div>
+
+<h3 class="fade-in">진정한 승자: 에너지 대형주</h3>
+<p class="fade-in">엑슨모빌 등 대형 에너지주는 YTD 30% 이상 상승. 배당 수익까지 포함하면 안전자산으로서의 매력이 부각되고 있다. 1~3월 내내 "에너지 = 안전자산" 내러티브가 시장을 지배했다.</p>
+
+<h3 class="fade-in">직격탄: 소비·여행 섹터</h3>
+<p class="fade-in">나이키, 항공, 크루즈 등 임의소비재 섹터는 YTD -5% 이하 하락 지속. 원인: 연료비 폭등, 가처분소득 감소. 소비자의 잉여현금흐름(Free Cash Flow)이 사실상 고갈된 상태.</p>
+
+<table class="fade-in">
+<thead><tr><th>구분</th><th>섹터</th><th>YTD 성과</th><th>전략</th></tr></thead>
+<tbody>
+<tr><td style="color:#10b981;font-weight:700">🟢 승자</td><td>에너지 (XLE)</td><td style="color:#10b981;font-weight:600">+35%↑</td><td>전쟁 시 진입</td></tr>
+<tr><td style="color:#10b981;font-weight:700">🟢 승자</td><td>엑슨모빌·셰브론</td><td style="color:#10b981;font-weight:600">+30%↑</td><td>배당+성장</td></tr>
+<tr><td style="color:var(--accent);font-weight:700">🔴 패자</td><td>항공·크루즈</td><td style="color:var(--accent);font-weight:600">-5%↓</td><td>전쟁 시 숏</td></tr>
+<tr><td style="color:var(--accent);font-weight:700">🔴 패자</td><td>임의소비재 (나이키 등)</td><td style="color:var(--accent);font-weight:600">-5%↓</td><td>피해야 할 섹터</td></tr>
+</tbody>
+</table>
+</section>
+
+<div class="divider"></div>
+
+<!-- ========== 3. 테슬라 ========== -->
+<section>
+<div class="section-num fade-in">03</div>
+<h2 class="fade-in">테슬라 <span class="hl">5만대 악성재고</span> 폭탄</h2>
+<p class="lead fade-in">생산은 정상, 그러나 인도량 급감. 4/22 어닝 쇼크 가능성.</p>
+
+<div class="chart-container fade-in">
+<canvas id="teslaChart" height="220"></canvas>
+</div>
+
+<div class="metric-row fade-in">
+<div class="metric-box"><div class="val down">~50,000대</div><div class="label">미인도 재고</div></div>
+<div class="metric-box"><div class="val down">-38%</div><div class="label">ESS 전분기 대비</div></div>
+<div class="metric-box"><div class="val">4/22</div><div class="label">Q1 어닝 발표</div></div>
+</div>
+
+<h3 class="fade-in">핵심 문제: 돈이 없다</h3>
+<p class="fade-in">유가 폭등 시 전기차 수요가 증가해야 정상이지만(2020년 사례), 3월 오히려 수요가 급감했다. 이는 <strong>소비자의 가처분소득이 바닥났음</strong>을 의미한다. 유가와 무관하게 자동차를 살 여력 자체가 없는 상태.</p>
+
+<p class="fade-in">더 충격적인 건 자동차가 아닌 <strong>에너지 저장장치(ESS)</strong> 부문이 전분기 대비 -38% 급감한 것. 자동차가 안 팔려도 ESS에서 벌어야 했는데 그마저 무너지고 있다. 로보택시·옵티머스는 아직 수익화되지 않은 내러티브 단계.</p>
+
+<div class="insight-card warn fade-in">
+<span class="tag">어닝 쇼크 경고</span>
+<p>매출 하락세는 2024년부터 시작. 프리캐시플로우 악화. 4월 22일 Q1 실적발표에서 월가 컨센서스를 크게 밑돌 가능성이 높다. 일론 머스크의 "이빨 깔기"에 주목.</p>
+</div>
+
+<!-- Tesla Timeline Flow -->
+<h3 class="fade-in">테슬라 위기 타임라인</h3>
+<div class="flow-wrap fade-in">
+<div class="flow-node">2024년 — 매출 하락세 시그널 시작</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-node">2025년 — 프리캐시플로우 악화 심화</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-node red">2026 Q1 — 재고 5만대 · ESS -38%</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-node red">4/22 어닝 — 쇼크 가능성 ⚡</div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ========== 4. 사모신용 뱅크런 ========== -->
+<section>
+<div class="section-num fade-in">04</div>
+<h2 class="fade-in">블루아울 <span class="hl">사모신용 뱅크런</span></h2>
+<p class="lead fade-in">-8.6% 급락. AI 도입으로 소프트웨어 비즈니스 모델 붕괴 → 전염 리스크.</p>
+
+<p class="fade-in">블루아울(Blue Owl)이 오늘 -8.6% 이상 급락했다. 이미 2개월 이상 연속 사건이 반복되고 있다. 핵심 리스크는 AI 도입 가속화로 기존 소프트웨어 업종의 비즈니스 모델이 붕괴되면서, 사모신용(Private Credit)에 투자된 자금의 상환 요구가 폭증하고 있는 것.</p>
+
+<div class="insight-card fade-in">
+<span class="tag">게이트 발동</span>
+<p>블루아울은 <strong>5% 환매 캡(Gate)</strong>을 설정해 인출을 제한. 그러나 불안 심리가 다른 사모신용 회사로 전이되고 있다. 리먼 사태와 같은 <strong>신뢰 붕괴 → 뱅크런</strong> 메커니즘과 본질적으로 동일.</p>
+</div>
+
+<!-- Trust Collapse Flow -->
+<h3 class="fade-in">신뢰 붕괴 메커니즘</h3>
+<div class="flow-wrap fade-in">
+<div class="flow-node">AI 도입 가속 → SW 업종 수익 모델 붕괴</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-node">사모신용 펀드 투자자 → 환매 요청 폭증</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-node red">5% 환매 캡 Gate 발동</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-node red">불안 전이 → 다른 사모신용 펀드로 확산</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-node" style="border-color:#f59e0b;background:#fffbeb">시스템적 리스크 — 신뢰 붕괴 시 뱅크런</div>
+</div>
+
+<p class="fade-in">금융 시스템은 견고해 보이지만 본질은 <strong>사람들 간의 신뢰</strong>. 은행 예금은 장부상 숫자일 뿐 실제 현금은 대출로 나가있다. 정부·기업·은행에 대한 신뢰가 무너지면 리먼 사태는 아주 쉽게 재발할 수 있다.</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ========== 5. AI 인프라 3대장 ========== -->
+<section>
+<div class="section-num fade-in">05</div>
+<h2 class="fade-in">폭락장 속 <span class="hl">AI 인프라 3대장</span></h2>
+<p class="lead fade-in">인텔 · SBAC · 펭귄솔루션 — 펀더멘탈로 회복력 증명</p>
+
+<div class="chart-container fade-in">
+<canvas id="aiChart" height="220"></canvas>
+</div>
+
+<table class="fade-in">
+<thead><tr><th>종목</th><th>카탈리스트</th><th>오늘 움직임</th></tr></thead>
+<tbody>
+<tr><td><strong>인텔 (INTC)</strong></td><td>AI 반도체 기대감 + 재평가</td><td style="color:#10b981">상승</td></tr>
+<tr><td><strong>SBA Communications (SBAC)</strong></td><td>대형 펀드 인수 제안</td><td style="color:#10b981">+14%</td></tr>
+<tr><td><strong>펭귄솔루션</strong></td><td>AI 데이터센터 장비 사업 확대 → 실적 발표</td><td style="color:#10b981">상승</td></tr>
+</tbody>
+</table>
+
+<p class="fade-in">2025.12.31 연말 방송에서 제시한 2026년 키워드가 그대로 실현되고 있다: <strong>"AI 중에 딱딱한 것(인프라·반도체)"</strong>과 <strong>"우주"</strong>. 소프트웨어가 흔들려도 인프라는 건재.</p>
+
+<h3 class="fade-in">우주 테마 — 아마존 × 글로벌스타</h3>
+<p class="fade-in">아마존이 글로벌스타(GSAT) 인수 협상에 나섰다. 스페이스X 견제 목적으로 위성 밴드 스펙트럼을 확보하려는 전략. 애플이 GSAT 지분 20%를 보유하고 있으며, 아이폰 위성 SOS 서비스 네트워크 용량의 85%를 애플이 점유 중이라 교통정리가 필요한 상황.</p>
+<p class="fade-in">폭락장에서도 우주 테마는 펀더멘탈로 증명 중. 작은 우주 관련 기업을 발굴하면 M&A 프리미엄까지 노릴 수 있다.</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ========== 6. 주말 시나리오 ========== -->
+<section>
+<div class="section-num fade-in">06</div>
+<h2 class="fade-in">위크엔드 윈도우 — <span class="hl">시나리오 A/B</span></h2>
+<p class="lead fade-in">유가가 핵심 변수. 유가로 시장 방향과 액션을 결정한다.</p>
+
+<div class="scenario-grid fade-in">
+<div class="scenario-card bull">
+<h4>🟢 시나리오 A — Bull Case</h4>
+<ul>
+<li>외교적 합의·협약 도출</li>
+<li>유가 $85~90로 하락</li>
+<li>AI·클라우드·반도체·대형 성장주 진입</li>
+<li>한국 ETF(EWY·KORU) 동시 진입</li>
+<li>유가 $90 이하 시 "쏟아붓기" 신호</li>
+</ul>
+</div>
+<div class="scenario-card bear">
+<h4>🔴 시나리오 B — Bear Case</h4>
+<ul>
+<li>2차전 시작, 유가 $110~120 돌파</li>
+<li>유가 $110 고착 → 2027년 금리인하 완전 소멸</li>
+<li>풋 옵션: 금융(소형 투자회사)</li>
+<li>풋 옵션: 임의소비재·여행 섹터</li>
+<li>현금이 최고의 포지션</li>
+</ul>
+</div>
+</div>
+
+<!-- Interactive Oil Price Simulator -->
+<div class="sim-box fade-in" id="oilSim">
+<h3>🛢️ 유가 시나리오 시뮬레이터</h3>
+<label>WTI 유가 ($)</label>
+<input type="range" id="oilPrice" min="70" max="130" value="95" oninput="updateOilSim()">
+<div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.4)"><span>$70</span><span>$90</span><span>$110</span><span>$130</span></div>
+<div class="sim-output">
+<div class="sim-val" id="oilVal" style="color:var(--accent2)">$95</div>
+<div class="sim-label">현재 설정 유가</div>
+<div id="oilVerdict" class="sim-verdict caution">⚠️ 경계 구간 — 관망. 방향 확인 후 진입.</div>
+<div id="oilAction" style="margin-top:8px;font-size:12px;color:rgba(255,255,255,.6)"></div>
+</div>
+<button onclick="document.getElementById('oilPrice').value=95;updateOilSim()">초기화</button>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ========== 7. 거시경제 현실 체크 ========== -->
+<section>
+<div class="section-num fade-in">07</div>
+<h2 class="fade-in">거시경제 <span class="hl">리얼리티 체크</span></h2>
+<p class="lead fade-in">물가는 오르고 돈은 없다 — 스태그플레이션 내러티브 심화</p>
+
+<div class="metric-row fade-in">
+<div class="metric-box"><div class="val down">적자</div><div class="label">무역수지 (관세 1년 후)</div></div>
+<div class="metric-box"><div class="val">동결</div><div class="label">연준 금리 전망</div></div>
+<div class="metric-box"><div class="val">#1 AI</div><div class="label">레이오프 원인 1위</div></div>
+</div>
+
+<p class="fade-in">주간 실업수당 청구는 양호했으나, <strong>챌린저스 레이오프</strong> 수치가 급증. 설문 결과 해고 원인 1위는 <strong>AI</strong>. AI가 고용시장 구조를 실시간으로 바꾸고 있다.</p>
+
+<p class="fade-in">관세 시행 1년이 지났지만 무역적자는 여전. 수입이 줄어 적자폭은 감소했으나 흑자 전환에는 실패. 연준은 금리인하도 인상도 불가능한 딜레마 — 사실상 동결 고착화 전망.</p>
+
+<h3 class="fade-in">IGV(소프트웨어 ETF) — 바닥 형성 신호</h3>
+<p class="fade-in">IGV가 6개월 차트에서 <strong>동일 지지선을 3번 터치</strong>. "여기 이하로는 내려가지 않겠다"는 시장의 적극적 의사 표현. 거시 환경은 최악이지만 주식시장은 나름 바닥을 다지는 중.</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ========== 8. 의약품 관세 + 핀테크 ========== -->
+<section>
+<div class="section-num fade-in">08</div>
+<h2 class="fade-in">의약품 100% 관세 · <span class="hl">핀테크 기회</span></h2>
+
+<h3 class="fade-in">수입 의약품 관세 정책 — 3단계 구조</h3>
+
+<!-- Drug tariff flow -->
+<div class="flow-wrap fade-in">
+<div class="flow-node green">약가 인하 합의 완료 → 관세 면제 🟢</div>
+<div class="flow-arrow">or</div>
+<div class="flow-node" style="border-color:#f59e0b;background:#fffbeb">미합의 + 미국 내 제조 계획 有 → 20% 관세 (4년 내 이행 조건)</div>
+<div class="flow-arrow">or</div>
+<div class="flow-node red">미합의 + 제조 투자 계획 無 → 100% 관세 🔴</div>
+</div>
+
+<p class="fade-in">대형 제약사에 120일 유예가 제공되며, 이미 약가 인하에 합의한 기업은 면제 경로 진입. 본질적으로 국가의 가격 통제라는 점에서 "사회주의적"이지만, 소비자 이익 측면에서는 긍정적 평가도 가능. 트럼프 대통령의 가장 큰 업적이 될 수 있다는 평가.</p>
+
+<h3 class="fade-in">코인베이스 OCC 조건부 승인</h3>
+<div class="insight-card green fade-in">
+<span class="tag">✅ 새로운 기회</span>
+<p>코인베이스가 <strong>OCC(통화감독청) 국가신탁회사 조건부 승인</strong>을 받았다. 기관 자금(401k 등)이 암호화폐로 유입될 수 있는 제도적 경로가 열린 것. 핀테크 섹터의 새로운 카탈리스트.</p>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ========== 9. 전략 요약 ========== -->
+<section>
+<div class="section-num fade-in">09</div>
+<h2 class="fade-in">주말 대비 <span class="hl">액션 플랜</span></h2>
+
+<!-- Strategy Simulator -->
+<div class="sim-box fade-in" id="strategySim">
+<h3>🎯 전략 시뮬레이터</h3>
+<label>현재 포트폴리오 현금 비중 (%)</label>
+<input type="range" id="cashRatio" min="0" max="100" value="50" step="5" oninput="updateStrategySim()">
+<div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.4)"><span>0%</span><span>50%</span><span>100%</span></div>
+<label>예상 시나리오 선택</label>
+<select id="scenarioSelect" onchange="updateStrategySim()">
+<option value="bull">🟢 시나리오 A — 외교 합의 (유가 하락)</option>
+<option value="bear">🔴 시나리오 B — 2차전 (유가 폭등)</option>
+<option value="neutral" selected>⚪ 모르겠다 — 관망</option>
+</select>
+<div class="sim-output">
+<div class="sim-val" id="cashVal" style="color:var(--accent2)">50%</div>
+<div class="sim-label">현금 비중</div>
+<div id="strategyVerdict" class="sim-verdict caution"></div>
+<div id="strategyAction" style="margin-top:8px;font-size:12px;color:rgba(255,255,255,.6);line-height:1.7"></div>
+</div>
+<button onclick="document.getElementById('cashRatio').value=50;document.getElementById('scenarioSelect').value='neutral';updateStrategySim()">초기화</button>
+</div>
+
+<!-- Summary Table -->
+<table class="fade-in">
+<thead><tr><th>포지션</th><th>대상</th><th>조건</th></tr></thead>
+<tbody>
+<tr><td style="font-weight:700;color:#10b981">🛡️ 방어</td><td>에너지 (XLE), 금, 현금</td><td>기본 유지</td></tr>
+<tr><td style="font-weight:700;color:#10b981">🛡️ 홀드</td><td>현금</td><td>불확실성 구간 최우선</td></tr>
+<tr><td style="font-weight:700;color:#2563eb">🔵 바이더딥</td><td>AI 인프라·반도체·메모리·우주</td><td>유가 하락 확인 시</td></tr>
+<tr><td style="font-weight:700;color:var(--accent)">🔴 회피</td><td>임의소비재·항공·크루즈</td><td>어닝 시즌 마진 압박</td></tr>
+<tr><td style="font-weight:700;color:#7c3aed">🟣 관심</td><td>핀테크·코인베이스</td><td>OCC 승인 후속 진행</td></tr>
+</tbody>
+</table>
+
+<div class="insight-card fade-in">
+<span class="tag">📌 핵심 공식 메모리</span>
+<p>
+① 전쟁 내러티브 → 에너지 진입, 소비재 숏<br>
+② AI 반도체 ≈ 한국 ETF(KORU, EWY) — 마이크론 대용<br>
+③ 유가가 전략의 핵심 조건식<br>
+④ 주말 P자 지수 모니터링 필수
+</p>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ========== 10. 핵심 개념 플립카드 ========== -->
+<section>
+<div class="section-num fade-in">10</div>
+<h2 class="fade-in">핵심 개념 <span class="hl">플립카드</span></h2>
+<p class="lead fade-in">카드를 터치/클릭하면 뒤집힙니다</p>
+
+<div class="flip-grid fade-in">
+<div class="flip-card" onclick="this.classList.toggle('flipped')">
+<div class="flip-inner">
+<div class="flip-front">🍕 P자 지수란?</div>
+<div class="flip-back">펜타곤 근처 피자 배달 주문량 기반 군사 활동 대리지표. 55 이상 = 경계, 70 이상 = 작전 개시.</div>
+</div>
+</div>
+<div class="flip-card" onclick="this.classList.toggle('flipped')">
+<div class="flip-inner">
+<div class="flip-front">🔒 환매 캡(Gate)이란?</div>
+<div class="flip-back">펀드가 대규모 환매 요청을 감당하지 못할 때 인출 한도를 제한하는 조치. 블루아울은 5%로 설정.</div>
+</div>
+</div>
+<div class="flip-card" onclick="this.classList.toggle('flipped')">
+<div class="flip-inner">
+<div class="flip-front">📦 ESS란?</div>
+<div class="flip-back">Energy Storage System. 테슬라의 배터리 저장장치 사업. 자동차 외 핵심 수익원이었으나 Q1 -38% 급감.</div>
+</div>
+</div>
+<div class="flip-card" onclick="this.classList.toggle('flipped')">
+<div class="flip-inner">
+<div class="flip-front">🏛️ OCC 신탁 승인이란?</div>
+<div class="flip-back">미국 통화감독청(OCC) 국가신탁회사 승인. 기관투자자의 암호화폐 수탁 서비스를 제도적으로 허용.</div>
+</div>
+</div>
+<div class="flip-card" onclick="this.classList.toggle('flipped')">
+<div class="flip-inner">
+<div class="flip-front">📡 글로벌스타(GSAT)?</div>
+<div class="flip-back">위성통신 기업. 애플 긴급SOS 서비스 파트너. 아마존이 스페이스X 견제를 위해 인수 협상 중.</div>
+</div>
+</div>
+<div class="flip-card" onclick="this.classList.toggle('flipped')">
+<div class="flip-inner">
+<div class="flip-front">💀 스태그플레이션?</div>
+<div class="flip-back">경기침체(Stagnation) + 인플레이션이 동시에 오는 최악의 시나리오. 유가 상승 + 소비 감소 상태.</div>
+</div>
+</div>
+</div>
+</section>
+
+<footer>
+<div class="logo">CIA.chat 멤버미팅 요약</div>
+<p>2026년 4월 2일 방송 내용 기반 · 투자 의사결정의 책임은 본인에게 있습니다</p>
+<p style="margin-top:6px">Stay safe, invest smart 🌱</p>
+</footer>
+</main>
+
+<script>
+// ===== Intersection Observers =====
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+const chartConfigs = {};
+
+// ===== Chart 1: Sector YTD =====
+chartConfigs['sectorChart'] = () => {
+  new Chart(document.getElementById('sectorChart'), {
+    type: 'bar',
+    data: {
+      labels: ['에너지(XLE)', '엑슨모빌', '유틸리티', 'AI인프라', '소비재', '항공', '크루즈', '나이키'],
+      datasets: [{
+        label: 'YTD 수익률 (%)',
+        data: [35, 30, 12, 8, -5, -8, -10, -7],
+        backgroundColor: ctx => ctx.parsed.y >= 0 ? '#10b981' : '#e11d48',
+        borderRadius: 4,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ctx.parsed.y + '%' } }
+      },
+      scales: {
+        y: { grid: { color: '#f0f0f0' }, ticks: { callback: v => v + '%', font: { size: 11 } } },
+        x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 45 } }
+      },
+      animation: { duration: 1200, easing: 'easeOutQuart' }
+    }
+  });
+};
+
+// ===== Chart 2: Tesla =====
+chartConfigs['teslaChart'] = () => {
+  new Chart(document.getElementById('teslaChart'), {
+    type: 'line',
+    data: {
+      labels: ['Q1\'24', 'Q2\'24', 'Q3\'24', 'Q4\'24', 'Q1\'25', 'Q2\'25', 'Q3\'25', 'Q4\'25', 'Q1\'26'],
+      datasets: [
+        {
+          label: '생산량 (만대)',
+          data: [43, 41, 47, 50, 44, 46, 48, 50, 49],
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37,99,235,.08)',
+          fill: true, tension: 0.3, pointRadius: 3
+        },
+        {
+          label: '인도량 (만대)',
+          data: [39, 44, 46, 48, 40, 42, 43, 44, 38],
+          borderColor: '#e11d48',
+          backgroundColor: 'rgba(225,29,72,.08)',
+          fill: true, tension: 0.3, pointRadius: 3
+        },
+        {
+          label: '월가 컨센서스',
+          data: [41, 43, 46, 49, 44, 45, 47, 48, 46],
+          borderColor: '#6b7280',
+          borderDash: [5, 5],
+          pointRadius: 2, fill: false, tension: 0.3
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 10 }, boxWidth: 12 } } },
+      scales: {
+        y: { grid: { color: '#f0f0f0' }, ticks: { font: { size: 11 } } },
+        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+      },
+      animation: { duration: 1400, easing: 'easeOutQuart' }
+    }
+  });
+};
+
+// ===== Chart 3: AI Infra =====
+chartConfigs['aiChart'] = () => {
+  new Chart(document.getElementById('aiChart'), {
+    type: 'bar',
+    data: {
+      labels: ['SBAC', '인텔', '펭귄솔루션', 'AI인프라ETF', '글로벌스타'],
+      datasets: [{
+        label: '오늘 변동 (%)',
+        data: [14, 4.5, 6.2, 3.1, 8.7],
+        backgroundColor: ['#e11d48', '#2563eb', '#10b981', '#6b7280', '#7c3aed'],
+        borderRadius: 6,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '+' + ctx.parsed.x + '%' } } },
+      scales: {
+        x: { grid: { color: '#f0f0f0' }, ticks: { callback: v => '+' + v + '%', font: { size: 11 } } },
+        y: { grid: { display: false }, ticks: { font: { size: 11, weight: '600' } } }
+      },
+      animation: { duration: 1000, easing: 'easeOutQuart' }
+    }
+  });
+};
+
+// Chart Observer
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+// ===== Oil Simulator =====
+function updateOilSim() {
+  const p = parseInt(document.getElementById('oilPrice').value);
+  document.getElementById('oilVal').textContent = '$' + p;
+  const v = document.getElementById('oilVerdict');
+  const a = document.getElementById('oilAction');
+  if (p <= 85) {
+    v.className = 'sim-verdict safe';
+    v.textContent = '✅ 안전 구간 — 적극 매수 신호';
+    a.textContent = '▸ AI 클라우드·반도체·대형 성장주 진입\n▸ 한국 ETF (EWY, KORU) 동시 진입\n▸ 에너지 섹터 이익 실현 고려';
+  } else if (p <= 95) {
+    v.className = 'sim-verdict safe';
+    v.textContent = '🟢 Bull Case — 외교 합의 기대. 공격적 진입 가능.';
+    a.textContent = '▸ AI 인프라·반도체 비중 확대\n▸ 우주 테마 관심 지속\n▸ 유가 $90 이하 확인 시 쏟아붓기';
+  } else if (p <= 105) {
+    v.className = 'sim-verdict caution';
+    v.textContent = '⚠️ 경계 구간 — 관망. 방향 확인 후 대응.';
+    a.textContent = '▸ 현금 비중 최대한 유지\n▸ 에너지 방어적 보유\n▸ 소비재·여행 섹터 회피';
+  } else if (p <= 115) {
+    v.className = 'sim-verdict danger';
+    v.textContent = '🔴 Bear Case — 2차전 시나리오. 방어 모드.';
+    a.textContent = '▸ 금융(소형 투자회사) 풋 옵션\n▸ 임의소비재·여행 섹터 풋\n▸ 2027년 금리인하 소멸 리스크';
+  } else {
+    v.className = 'sim-verdict danger';
+    v.textContent = '🚨 극단 시나리오 — 전면전. 현금 최우선.';
+    a.textContent = '▸ 모든 리스크 자산 축소\n▸ 금·달러 안전자산 집중\n▸ 스태그플레이션 본격화 대비';
+  }
+  a.style.whiteSpace = 'pre-line';
+}
+updateOilSim();
+
+// ===== Strategy Simulator =====
+function updateStrategySim() {
+  const cash = parseInt(document.getElementById('cashRatio').value);
+  const sc = document.getElementById('scenarioSelect').value;
+  document.getElementById('cashVal').textContent = cash + '%';
+  const v = document.getElementById('strategyVerdict');
+  const a = document.getElementById('strategyAction');
+  
+  if (sc === 'bull') {
+    if (cash >= 60) {
+      v.className = 'sim-verdict safe'; v.textContent = '✅ 충분한 현금. 유가 $90 이하 확인 후 공격 진입 가능.';
+      a.innerHTML = '▸ AI 인프라·반도체 50% + 우주 20% + 한국ETF 30%<br>▸ 유가 하락 확인 시 현금→주식 전환<br>▸ 에너지 포지션 축소 고려';
+    } else {
+      v.className = 'sim-verdict caution'; v.textContent = '⚠️ 현금 부족. 리밸런싱 후 Bull 진입 추천.';
+      a.innerHTML = '▸ 에너지·방어주 일부 매도 → 현금 확보<br>▸ 확인 후 AI 인프라 집중';
+    }
+  } else if (sc === 'bear') {
+    if (cash >= 50) {
+      v.className = 'sim-verdict caution'; v.textContent = '⚠️ 방어 모드 적합. 풋 옵션으로 헤지.';
+      a.innerHTML = '▸ 현금 유지가 최우선<br>▸ 금융·소비재·여행 풋 옵션 고려<br>▸ 에너지 방어적 보유';
+    } else {
+      v.className = 'sim-verdict danger'; v.textContent = '🔴 위험! 현금 비중 즉시 확대 필요.';
+      a.innerHTML = '▸ 리스크 자산 매도 → 최소 50% 현금 확보<br>▸ 인버스 ETF 검토<br>▸ 레버리지 포지션 즉시 정리';
+    }
+  } else {
+    if (cash >= 40) {
+      v.className = 'sim-verdict safe'; v.textContent = '✅ 관망 전략 적합. 주말 P자 지수 확인 후 결정.';
+      a.innerHTML = '▸ 방어(에너지·금·현금) 유지<br>▸ P자 지수 70 이상 → Bear 모드 전환<br>▸ 유가 $90 이하 → Bull 모드 전환';
+    } else {
+      v.className = 'sim-verdict caution'; v.textContent = '⚠️ 현금 추가 확보 권장. 불확실성 구간.';
+      a.innerHTML = '▸ 최소 40% 이상 현금 확보 권장<br>▸ 약한 포지션 정리';
+    }
+  }
+}
+updateStrategySim();
+</script>
+</body>
+</html>
