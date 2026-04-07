@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>시험문제 — 테슬라·스태그플레이션·바이너리 마켓</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --blue: #2563eb;
+    --green: #16a34a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.75; }
+
+  .hero {
+    background: var(--text);
+    color: #fff;
+    padding: 40px 20px 30px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(-45deg, transparent, transparent 28px, rgba(225,29,72,0.07) 28px, rgba(225,29,72,0.07) 29px);
+  }
+  .hero-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 3px 10px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 5vw, 32px);
+    font-weight: 900;
+    line-height: 1.3;
+    position: relative;
+  }
+  .hero h1 em { color: var(--accent); font-style: normal; }
+  .hero-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 8px;
+    position: relative;
+  }
+
+  .info-bar {
+    background: var(--bg2);
+    border-bottom: 2px solid var(--accent);
+    padding: 12px 20px;
+    display: flex;
+    gap: 20px;
+    font-size: 12px;
+    color: var(--text2);
+    font-weight: 500;
+  }
+  .info-bar span strong { color: var(--text); }
+
+  /* QUESTION SECTION */
+  .q-section {
+    padding: 28px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .q-section:nth-child(even) { background: var(--bg2); }
+
+  .q-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .q-num {
+    background: var(--accent);
+    color: #fff;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .q-type {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text2);
+    text-transform: uppercase;
+  }
+  .q-stars { color: #f59e0b; font-size: 13px; }
+  .q-text {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+  .choices {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .choices li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13.5px;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: #fff;
+  }
+  .choices li:hover { border-color: var(--accent); background: #fff8f9; }
+  .choices li .num {
+    width: 22px; height: 22px;
+    border: 1.5px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    color: var(--text2);
+  }
+
+  /* OX */
+  .ox-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 6px;
+  }
+  .ox-btn {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    text-align: center;
+    font-size: 22px;
+    cursor: pointer;
+    background: #fff;
+    transition: all 0.15s;
+  }
+  .ox-btn:hover { border-color: var(--accent); }
+
+  /* BLANK */
+  .blank-input {
+    display: inline-block;
+    border-bottom: 2px solid var(--accent);
+    min-width: 80px;
+    padding: 2px 6px;
+    font-size: 14px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .divider {
+    border: none;
+    border-top: 3px solid var(--accent);
+    margin: 0;
+  }
+
+  /* ANSWER SECTION */
+  .ans-section {
+    padding: 28px 20px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .ans-section:nth-child(even) { background: var(--bg2); }
+
+  .ans-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .ans-num {
+    background: var(--blue);
+    color: #fff;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .ans-correct {
+    display: inline-block;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: var(--green);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 4px;
+  }
+  .ans-explain {
+    font-size: 13.5px;
+    color: var(--text);
+    margin-top: 8px;
+    padding: 12px 14px;
+    background: #f8fafc;
+    border-left: 3px solid var(--blue);
+    border-radius: 0 6px 6px 0;
+    line-height: 1.7;
+  }
+
+  .section-title {
+    text-align: center;
+    padding: 32px 20px 24px;
+    background: var(--bg2);
+    border-bottom: 2px solid var(--border);
+  }
+  .section-title h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+  .section-title p { font-size: 12px; color: var(--text2); }
+
+  .footer {
+    background: var(--text);
+    color: rgba(255,255,255,0.45);
+    text-align: center;
+    padding: 24px 20px;
+    font-size: 11px;
+    line-height: 1.7;
+  }
+  .footer strong { color: rgba(255,255,255,0.75); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-tag">시험문제 · 총 10문제</div>
+  <h1>테슬라 <em>$145</em> 경고 &<br>스태그플레이션 바이너리 마켓</h1>
+  <div class="hero-sub">NOVA Real Invest 2026.04.07 방송 기반</div>
+</div>
+
+<div class="info-bar">
+  <span><strong>총 문항:</strong> 10개</span>
+  <span><strong>난이도:</strong> ⭐~⭐⭐⭐</span>
+  <span><strong>유형:</strong> 객관식·단답·OX·빈칸·서술</span>
+</div>
+
+<!-- ====== 문제지 ====== -->
+<div class="section-title">
+  <h2>📋 문제지</h2>
+  <p>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+</div>
+
+<!-- Q1 -->
+<div class="q-section">
+  <div class="q-header">
+    <div class="q-num">1</div>
+    <div>
+      <div class="q-type">객관식 (4지선다)</div>
+      <div class="q-stars">⭐ 쉬움</div>
+    </div>
+  </div>
+  <div class="q-text">JP모건이 기관 최초로 제시한 테슬라의 12개월 목표주가는 얼마입니까?</div>
+  <ul class="choices">
+    <li><span class="num">①</span> $200</li>
+    <li><span class="num">②</span> $145</li>
+    <li><span class="num">③</span> $250</li>
+    <li><span class="num">④</span> $175</li>
+  </ul>
+</div>
+
+<!-- Q2 -->
+<div class="q-section">
+  <div class="q-header">
+    <div class="q-num">2</div>
+    <div>
+      <div class="q-type">객관식 (4지선다)</div>
+      <div class="q-stars">⭐ 쉬움</div>
+    </div>
+  </div>
+  <div class="q-text">이란과의 협상에서 트럼프 대통령이 설정한 최후통첩(데드라인) 시간은 언제입니까?</div>
+  <ul class="choices">
+    <li><span class="num">①</span> 월요일 오후 5시 ET</li>
+    <li><span class="num">②</span> 화요일 오후 8시 ET</li>
+    <li><span class="num">③</span> 수요일 오전 9시 ET</li>
+    <li><span class="num">④</span> 금요일 오후 3시 ET</li>
+  </ul>
+</div>
+
+<!-- Q3 -->
+<div class="q-section">
+  <div class="q-header">
+    <div class="q-num">3</div>
+    <div>
+      <div class="q-type">객관식 (4지선다)</div>
+      <div class="q-stars">⭐ 쉬움</div>
+    </div>
+  </div>
+  <div class="q-text">HSBC와 시티은행이 경고한 10년물 미국 국채금리의 위험 마지노선은 몇 %입니까?</div>
+  <ul class="choices">
+    <li><span class="num">①</span> 3.5%</li>
+    <li><span class="num">②</span> 4.0%</li>
+    <li><span class="num">③</span> 4.5%</li>
+    <li><span class="num">④</span> 5.0%</li>
+  </ul>
+</div>
+
+<!-- Q4 -->
+<div class="q-section">
+  <div class="q-header">
+    <div class="q-num">4</div>
+    <div>
+      <div class="q-type">단답형</div>
+      <div class="q-stars">⭐⭐ 보통</div>
+    </div>
+  </div>
+  <div class="q-text">방송에서 2022년 10월 당시 물가 수준과 동일하다고 경고한 <strong>ISM 서비스업 물가지수</strong>의 수치는 얼마입니까?</div>
+  <div style="margin-top:10px; font-size:14px; color:var(--text2)">답: ________________</div>
+</div>
+
+<!-- Q5 -->
+<div class="q-section">
+  <div class="q-header">
+    <div class="q-num">5</div>
+    <div>
+      <div class="q-type">OX 문제</div>
+      <div class="q-stars">⭐⭐ 보통</div>
+    </div>
+  </div>
+  <div class="q-text">웰스파고와 시티은행은 2026년 연내 최소 두 차례 금리인하를 예상하고 있다.</div>
+  <div class="ox-row">
+    <div class="ox-btn">⭕ 맞다</div>
+    <div class="ox-btn">❌ 틀리다</div>
+  </div>
+</div>
+
+<!-- Q6 -->
+<div class="q-section">
+  <div class="q-header">
+    <div class="q-num">6</div>
+    <div>
+      <div class="q-type">빈칸 채우기</div>
+      <div class="q-stars">⭐⭐ 보통</div>
+    </div>
+  </div>
+  <div class="q-text">
+    AI 인프라 자금은 기존의 GPU 중심 투자에서 (<span class="blank-input">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>)·메모리·전력·쿨링 솔루션으로 이동하고 있으며, 이 분야의 공급 부족은 (<span class="blank-input">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>)년까지 지속될 전망이다.
+  </div>
+</div>
+
+<!-- Q7 -->
+<div class="q-section">
+  <div class="q-header">
+    <div class="q-num">7</div>
+    <div>
+      <div class="q-type">객관식 (5지선다)</div>
+      <div class="q-stars">⭐⭐ 보통</div>
+    </div>
+  </div>
+  <div class="q-text">휴전 시나리오가 현실화될 경우, 가장 큰 수혜를 받을 것으로 예상되는 섹터는?</div>
+  <ul class="choices">
+    <li><span class="num">①</span> 에너지(원유·가스)</li>
+    <li><span class="num">②</span> 방위산업</li>
+    <li><span class="num">③</span> 항공·크루즈</li>
+    <li><span class="num">④</span> 반도체</li>
+    <li><span class="num">⑤</span> 금(골드) 관련주</li>
+  </ul>
+</div>
+
+<!-- Q8 -->
+<div class="q-section">
+  <div class="q-header">
+    <div class="q-num">8</div>
+    <div>
+      <div class="q-type">객관식 (4지선다)</div>
+      <div class="q-stars">⭐⭐ 보통</div>
+    </div>
+  </div>
+  <div class="q-text">바벨(Barbell) 투자 전략에서 권장하는 현금 보유 비중은 얼마입니까? (VIX 24 이상 기준)</div>
+  <ul class="choices">
+    <li><span class="num">①</span> 10~20%</li>
+    <li><span class="num">②</span> 30~50%</li>
+    <li><span class="num">③</span> 5~10%</li>
+    <li><span class="num">④</span> 60~70%</li>
+  </ul>
+</div>
+
+<!-- Q9 -->
+<div class="q-section">
+  <div class="q-header">
+    <div class="q-num">9</div>
+    <div>
+      <div class="q-type">단답형</div>
+      <div class="q-stars">⭐⭐⭐ 어려움</div>
+    </div>
+  </div>
+  <div class="q-text">모건스탠리가 탑픽(Top Pick)으로 선정한 데이터 스토리지 기업 두 곳을 쓰시오. 이 기업들이 주목받는 이유도 함께 설명하시오.</div>
+  <div style="margin-top:10px; font-size:14px; color:var(--text2)">
+    기업: ________________ / ________________<br>
+    이유: _______________________________________________
+  </div>
+</div>
+
+<!-- Q10 -->
+<div class="q-section">
+  <div class="q-header">
+    <div class="q-num">10</div>
+    <div>
+      <div class="q-type">서술형</div>
+      <div class="q-stars">⭐⭐⭐ 어려움</div>
+    </div>
+  </div>
+  <div class="q-text">카니발 크루즈가 1분기 사상 최대 예약을 기록했음에도 주가가 하락한 이유를 <strong>수익 구조의 시간 불일치</strong> 측면에서 설명하고, 이것이 왜 스태그플레이션 국면에서 더 위험한지 서술하시오.</div>
+  <div style="margin-top:10px; padding:12px; border:1px solid var(--border); border-radius:6px; min-height:80px; background:#fff; font-size:13px; color:var(--text2)">
+    답을 여기에 작성하세요...
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ====== 정답지 ====== -->
+<div class="section-title">
+  <h2>📝 정답 및 해설</h2>
+  <p>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+</div>
+
+<!-- A1 -->
+<div class="ans-section">
+  <div class="ans-header">
+    <div class="ans-num">1</div>
+    <span class="ans-correct">정답: ②  $145</span>
+  </div>
+  <div class="ans-explain">
+    JP모건은 기관 중 최초로 테슬라 12개월 목표주가를 <strong>$145</strong>로 제시했습니다. 방송 시점 현재가 $352 대비 약 59% 하락을 의미하는 수준으로, 고금리 지속에 따른 수요 감소, 솔라에너지 세금감면 폐지, 저가형 모델 지연, 중국 시장 BYD 열세가 근거로 제시되었습니다.
+  </div>
+</div>
+
+<!-- A2 -->
+<div class="ans-section">
+  <div class="ans-header">
+    <div class="ans-num">2</div>
+    <span class="ans-correct">정답: ②  화요일 오후 8시 ET</span>
+  </div>
+  <div class="ans-explain">
+    트럼프 대통령은 이란에 대해 화요일(4/8) 미국 동부시간(ET) 오후 8시까지 협상안을 수용하라고 최후통첩을 설정했습니다. 부동산 거래에서 오퍼 카운터 마감이 통상 오후 8시인 관행을 따른 것으로 분석됩니다. 이란은 45일 휴전을 역제안했으나 트럼프는 거부했습니다.
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="ans-section">
+  <div class="ans-header">
+    <div class="ans-num">3</div>
+    <span class="ans-correct">정답: ③  4.5%</span>
+  </div>
+  <div class="ans-explain">
+    HSBC와 시티(Citi)는 공동으로 10년물 미국 국채금리 <strong>4.5%</strong>를 위험 마지노선으로 경고했습니다. 이 선을 넘으면 주가 밸류에이션뿐 아니라 채권 가격 자체가 붕괴되는 전면적 자산 가치 재평가가 시작된다고 경고. 방송 시점 금리는 4.4% 수준으로 불과 10~15bp 여유만 남은 상태였습니다.
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="ans-section">
+  <div class="ans-header">
+    <div class="ans-num">4</div>
+    <span class="ans-correct">정답: 70.7</span>
+  </div>
+  <div class="ans-explain">
+    ISM 서비스업 물가지수가 <strong>70.7</strong>로 나왔으며, 이는 2022년 10월 이후 최고치입니다. 2022년 10월은 주식시장이 가장 고통스러운 바닥이었던 시점인데, 현재는 그 수준과 동일한 물가 압력이 본격적인 조정도 오기 전에 나타나고 있다는 점에서 더욱 위험하다는 분석입니다.
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="ans-section">
+  <div class="ans-header">
+    <div class="ans-num">5</div>
+    <span class="ans-correct">정답: ❌ 틀리다</span>
+  </div>
+  <div class="ans-explain">
+    웰스파고와 시티는 <strong>2026년 연내 금리인하 전망을 공식 철회</strong>하고 동결 기조를 발표했습니다. 웰스파고는 원래 올해 두 차례 금리인하를 예상했으나 ISM 물가지수 급등과 전쟁발 인플레이션을 반영해 전망을 완전히 바꿨습니다. "2026년 꿈깨"라는 표현이 방송에서 사용되었습니다.
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="ans-section">
+  <div class="ans-header">
+    <div class="ans-num">6</div>
+    <span class="ans-correct">정답: 스토리지 / 2029년</span>
+  </div>
+  <div class="ans-explain">
+    AI 인프라 자금은 GPU에서 <strong>스토리지·메모리·전력·쿨링</strong>으로 이동 중이며, 공급 부족은 <strong>2029년까지 3년간</strong> 지속 전망입니다. 엔비디아조차 메모리 확보에 고전하고 있으며, 모건스탠리는 씨게이트(Seagate)·웨스턴디지털(Western Digital)을 탑픽으로 선정했습니다.
+  </div>
+</div>
+
+<!-- A7 -->
+<div class="ans-section">
+  <div class="ans-header">
+    <div class="ans-num">7</div>
+    <span class="ans-correct">정답: ③  항공·크루즈</span>
+  </div>
+  <div class="ans-explain">
+    휴전 시나리오에서는 유가가 $80~90으로 급락하면서 <strong>항공·크루즈</strong> 섹터가 최대 수혜를 받게 됩니다. 반대로 에너지 섹터는 타격을 받습니다. 확전 시나리오에서는 에너지·방산이 급등하고 경기 민감주·금리 민감주가 급락합니다. 섹터별 방향성을 미리 파악해두는 것이 핵심 전략입니다.
+  </div>
+</div>
+
+<!-- A8 -->
+<div class="ans-section">
+  <div class="ans-header">
+    <div class="ans-num">8</div>
+    <span class="ans-correct">정답: ②  30~50%</span>
+  </div>
+  <div class="ans-explain">
+    VIX(공포지수)가 24 이상을 유지하는 현재 상황에서는 최소 <strong>30%</strong>, 이상적으로는 <strong>50%</strong>의 현금 보유를 권고합니다. VIX 20 이하로 떨어져야 적극적인 투자 신호로 볼 수 있습니다. 이것이 바벨 전략에서 중앙(현금)을 두터이 유지하는 이유입니다. 당일 옵션 시장에서도 콜 26 vs 풋 25로 거래량이 줄어들어 시장 자체가 방향성 베팅을 자제하는 모습이었습니다.
+  </div>
+</div>
+
+<!-- A9 -->
+<div class="ans-section">
+  <div class="ans-header">
+    <div class="ans-num">9</div>
+    <span class="ans-correct">정답: 씨게이트(Seagate) / 웨스턴디지털(Western Digital)</span>
+  </div>
+  <div class="ans-explain">
+    모건스탠리는 <strong>씨게이트(Seagate)</strong>와 <strong>웨스턴디지털(Western Digital)</strong>을 탑픽으로 선정했습니다. 선정 이유는 AI 데이터 폭증으로 인해 엔비디아조차 메모리·스토리지 확보에 어려움을 겪을 만큼 공급이 부족한 반면, 수요는 폭발적으로 증가하고 있기 때문입니다. 이러한 수급 불균형은 강력한 가격 결정력(Pricing Power)을 제공하며, 공급 부족 상황은 2029년까지 3년간 지속될 전망입니다.
+  </div>
+</div>
+
+<!-- A10 -->
+<div class="ans-section">
+  <div class="ans-header">
+    <div class="ans-num">10</div>
+    <span class="ans-correct">정답: 서술형 — 모범 답안</span>
+  </div>
+  <div class="ans-explain">
+    <strong>[수익 구조의 시간 불일치]</strong><br><br>
+    카니발 크루즈는 승선권을 1~2년 전에 선매각합니다. 즉, 수익은 과거의 낮은 가격에 이미 확정되어 있는 반면, 비용(연료비·식재료·항만비 등)은 현재 시점에서 집행됩니다.<br><br>
+    예를 들어 2년 전 $100에 팔린 티켓의 원가를 $50으로 계산했다면 $50 이익을 예상했겠지만, 유가 폭등으로 현재 원가가 $120이 되면 오히려 $20의 손실이 발생합니다. 1분기 사상 최대 예약 = 매출 선확보, 그러나 현재 운항 비용 폭증 = 수익성 역전이라는 딜레마입니다.<br><br>
+    <strong>[스태그플레이션 국면에서 더 위험한 이유]</strong><br><br>
+    스태그플레이션 환경에서는 ① 물가가 지속 상승해 운항 원가가 계속 오르고, ② 동시에 경기침체로 신규 예약자의 지갑이 얇아져 향후 티켓을 더 높은 가격에 팔기도 어렵습니다. 즉, 과거 저가 판매 + 현재 고비용 + 미래 수요 위축이 동시에 압박하는 삼중고 구조에 놓이게 됩니다. 이 때문에 1분기 실적이 좋아 보여도 시장은 가이던스 하향을 선반영해 주가가 하락합니다.
+  </div>
+</div>
+
+<div class="footer">
+  <strong>NOVA Real Invest 방송 시험문제</strong><br>
+  본 문제는 2026년 4월 7일 방송 내용을 기반으로 작성된 학습 자료입니다.<br>
+  투자 교육 목적으로만 활용하세요.
+</div>
+
+</body>
+</html>
