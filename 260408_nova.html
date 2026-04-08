@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>유가 $115 폭등·스태그플레이션 공포 | CIA.chat 멤버미팅 분석</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --sub: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --blue: #2563eb;
+    --gray: #6b7280;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 18px 60px;
+  }
+
+  /* HEADER */
+  .cover {
+    border-bottom: 3px solid var(--accent);
+    padding: 40px 0 28px;
+    margin-bottom: 36px;
+  }
+  .cover-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 3px 10px;
+    margin-bottom: 14px;
+  }
+  .cover h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 5vw, 30px);
+    font-weight: 900;
+    line-height: 1.25;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+  .cover-meta {
+    font-size: 12px;
+    color: var(--sub);
+    letter-spacing: 0.5px;
+  }
+  .cover-meta span { margin-right: 14px; }
+
+  /* SECTIONS */
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 40px 0 14px;
+    padding-left: 12px;
+    border-left: 4px solid var(--accent);
+    line-height: 1.3;
+  }
+  h3 {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 22px 0 8px;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  p { margin-bottom: 12px; color: var(--text); }
+
+  /* CARD */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px 20px;
+    margin: 16px 0;
+  }
+  .card.highlight { border-left: 4px solid var(--accent); }
+
+  /* SCENARIO GRID */
+  .scenario-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .scenario-box {
+    border-radius: 6px;
+    padding: 16px;
+    border: 1px solid var(--border);
+  }
+  .scenario-box.bad { border-top: 3px solid #dc2626; }
+  .scenario-box.worst { border-top: 3px solid #991b1b; }
+  .scenario-box.best { border-top: 3px solid #16a34a; }
+  .scenario-box .label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .scenario-box.bad .label { color: #dc2626; }
+  .scenario-box.worst .label { color: #991b1b; }
+  .scenario-box.best .label { color: #16a34a; }
+  .scenario-box .title { font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+  .scenario-box .desc { font-size: 12px; color: var(--sub); line-height: 1.5; }
+
+  /* STOCK TABLE */
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  thead tr { background: var(--accent); color: #fff; }
+  thead th { padding: 10px 12px; text-align: left; font-weight: 700; }
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:nth-child(even) { background: var(--bg2); }
+  tbody td { padding: 10px 12px; }
+  .up { color: #16a34a; font-weight: 700; }
+  .down { color: #dc2626; font-weight: 700; }
+
+  /* TAGS */
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .tag {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    color: var(--sub);
+  }
+  .tag.hot { background: #fff1f2; border-color: var(--accent2); color: var(--accent); }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 30px 0;
+  }
+  .divider.thick {
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+
+  /* FADE-IN + CHART */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin: 20px 0;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas { opacity: 1; }
+
+  /* SIMULATOR */
+  .sim-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+  }
+  .sim-box h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sim-box h4::before {
+    content: '⚙';
+    font-size: 16px;
+  }
+  .slider-row { margin-bottom: 14px; }
+  .slider-row label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--sub);
+    margin-bottom: 4px;
+  }
+  .slider-row label span { font-weight: 700; color: var(--text); }
+  input[type=range] {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+  }
+  .sim-result {
+    background: #fff;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-top: 14px;
+    font-size: 13px;
+  }
+  .sim-result .res-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .sim-result .res-row:last-child { border-bottom: none; }
+  .sim-result .res-label { color: var(--sub); }
+  .sim-result .res-val { font-weight: 700; }
+  .sim-result .res-val.red { color: #dc2626; }
+  .sim-result .res-val.green { color: #16a34a; }
+  .sim-result .res-val.blue { color: var(--blue); }
+  .reset-btn {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 7px 18px;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: background 0.2s;
+  }
+  .reset-btn:hover { background: var(--accent); color: #fff; }
+
+  /* TERM BOX */
+  .term {
+    display: inline;
+    border-bottom: 1px dashed var(--accent);
+    cursor: help;
+    color: var(--accent);
+    font-weight: 500;
+    font-size: 0.95em;
+  }
+
+  /* KEY NUMBERS */
+  .kn-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 16px 0; }
+  .kn-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px;
+    text-align: center;
+  }
+  .kn-card .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .kn-card .unit { font-size: 11px; color: var(--sub); }
+
+  /* CONCLUSION */
+  .conclusion {
+    background: #fff1f2;
+    border: 1px solid var(--accent2);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 24px 0;
+  }
+  .conclusion .c-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .conclusion ul { padding-left: 18px; }
+  .conclusion li { margin-bottom: 7px; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover fade-in">
+  <div class="cover-tag">CIA.CHAT 멤버미팅 분석</div>
+  <h1>유가 $115 폭등 &<br>스태그플레이션 공포</h1>
+  <div class="cover-meta">
+    <span>📅 2026년 4월 8일</span>
+    <span>🎥 YouTube 라이브</span>
+    <span>💹 시장 분석</span>
+  </div>
+</div>
+
+<!-- KEY NUMBERS -->
+<div class="kn-grid fade-in">
+  <div class="kn-card">
+    <div class="num">$115</div>
+    <div class="unit">장중 유가 최고가 (WTI)</div>
+  </div>
+  <div class="kn-card">
+    <div class="num">$112</div>
+    <div class="unit">장 마감 유가 (소폭 하락)</div>
+  </div>
+  <div class="kn-card">
+    <div class="num">7,500</div>
+    <div class="unit">UBS S&P500 목표가</div>
+  </div>
+  <div class="kn-card">
+    <div class="num">2주</div>
+    <div class="unit">파키스탄 중재 휴전 제안 기간</div>
+  </div>
+</div>
+
+<div class="divider thick"></div>
+
+<!-- 1. 시장 개요 -->
+<h2>① 오늘 시장 개요: 롤러코스터</h2>
+<p>4월 7일(화) 미국 시장은 <strong>"희망과 공포가 반반 섞인 하루"</strong>였다. 이란-미국 긴장이 극에 달한 가운데, 오전에는 핵무기 카드 언급까지 나오며 공포가 최고조에 달했고, 유가는 장중 $115까지 치솟았다. 그러나 파키스탄의 2주 긴장완화 중재안이 나오면서 시장이 기적적으로 반등했다.</p>
+
+<div class="card highlight fade-in">
+  <strong>📌 핵심 변수: 트럼프의 입</strong><br>
+  오후 6시 32분, 트럼프 대통령이 2주간 폭격 중단(B안)을 수락한다는 소식이 트루스소셜에 올라오면서 SPY는 즉각 +1.66% 반등. 단, 이란 핵 협상 재개 여부는 미지수.
+</div>
+
+<!-- 유가 시나리오 차트 -->
+<div class="chart-container fade-in">
+  <canvas id="oilChart" height="220"></canvas>
+</div>
+
+<div class="divider"></div>
+
+<!-- 2. 지정학 리스크 -->
+<h2>② 이란-미국 지정학 리스크</h2>
+
+<h3>오늘의 핵심 이벤트</h3>
+<p>미군 전투기가 이란 최대 수출 거점인 <strong>카르그 섬(Kharg Island) 50곳</strong>을 이미 타격한 사실이 보도됐다. 이에 따라 호르무즈 해협 봉쇄 가능성이 시장의 주요 공포 요인으로 부상했다.</p>
+
+<div class="scenario-grid fade-in">
+  <div class="scenario-box worst">
+    <div class="label">A안 — 최악</div>
+    <div class="title">2주 휴전 연장</div>
+    <div class="desc">시장을 더 지겹게 만드는 시나리오. 리버레이션 데이처럼 기대만 잔뜩 높이고 지지부진한 장 지속. 불확실성 장기화.</div>
+  </div>
+  <div class="scenario-box bad">
+    <div class="label">B안 — 위험</div>
+    <div class="title">전면 타격 개시</div>
+    <div class="desc">유가 $130~$150, VIX 25~30까지 급등. 패닉셀 가능성 높음. 단, 이란 문제 조기 봉합 가능성도 존재.</div>
+  </div>
+  <div class="scenario-box best" style="grid-column: 1 / -1;">
+    <div class="label">C안 — 베스트</div>
+    <div class="title">전격 핵 합의</div>
+    <div class="desc">이란 핵 협상 타결 시 유가 급락, 시장 반등. 가능성은 낮지만 최선의 시나리오. 현 시점에서 가능할지는 불투명.</div>
+  </div>
+</div>
+
+<p style="font-size:12px; color:var(--sub);">※ 트럼프 대통령이 최종 수락한 것은 A안(2주 휴전)으로, 진행자는 이를 "최악"으로 평가</p>
+
+<div class="divider"></div>
+
+<!-- 3. 스태그플레이션 -->
+<h2>③ 스태그플레이션 공포</h2>
+
+<div class="card fade-in">
+  <strong>스태그플레이션(Stagflation)</strong>이란?<br>
+  <span style="font-size:13px; color:var(--sub);">경기 침체(Stagnation) + 인플레이션(Inflation)이 동시에 발생하는 최악의 조합. 금리를 올리면 경기가 더 나빠지고, 내리면 물가가 더 오르는 딜레마 상황.</span>
+</div>
+
+<h3>Fed(연준) 딜레마</h3>
+<p>Fed 굴스비 총재가 직접 언급: <em>"이란 전쟁으로 스태그플레이션 쇼크가 오는 것 같다. 연준의 입지가 힘들다."</em></p>
+<div class="tag-row">
+  <span class="tag hot">금리인하 불가</span>
+  <span class="tag hot">경기 둔화</span>
+  <span class="tag hot">물가 상승</span>
+  <span class="tag">연준 딜레마</span>
+</div>
+
+<h3>실생활 물가 전가 증거</h3>
+<p>델타항공·아메리칸에어라인이 연료비 급등을 이유로 위탁수화물 요금 인상. 진행자는 이를 <strong>"매크로(거시경제) 충격이 마이크로(실생활) 가격에 전가되는 첫 가시적 신호"</strong>로 해석.</p>
+
+<!-- 스태그플레이션 시뮬레이터 -->
+<div class="sim-box fade-in">
+  <h4>스태그플레이션 시나리오 시뮬레이터</h4>
+  <div class="slider-row">
+    <label>유가 (WTI) <span id="oilVal">$112</span></label>
+    <input type="range" id="oilSlider" min="80" max="160" value="112" step="1">
+  </div>
+  <div class="slider-row">
+    <label>GDP 성장률 <span id="gdpVal">1.5%</span></label>
+    <input type="range" id="gdpSlider" min="-2" max="4" value="1.5" step="0.1">
+  </div>
+  <div class="sim-result" id="simResult">
+    <div class="res-row"><span class="res-label">예상 CPI 상승률</span><span class="res-val red" id="cpiVal">-</span></div>
+    <div class="res-row"><span class="res-label">VIX 예상 범위</span><span class="res-val red" id="vixVal">-</span></div>
+    <div class="res-row"><span class="res-label">연준 금리 행동</span><span class="res-val blue" id="fedVal">-</span></div>
+    <div class="res-row"><span class="res-label">S&P500 방향</span><span class="res-val" id="spVal">-</span></div>
+    <div class="res-row"><span class="res-label">시장 국면</span><span class="res-val" id="phaseVal">-</span></div>
+  </div>
+  <button class="reset-btn" onclick="resetSim()">초기화</button>
+</div>
+
+<div class="divider"></div>
+
+<!-- 4. 섹터별 이슈 -->
+<h2>④ 주요 섹터별 이슈</h2>
+
+<h3>헬스케어 — 메디케어 어드밴티지 인상</h3>
+<p>1월 0.09% 인상에 그쳐 관련 보험주가 폭락했으나, 이번에 <strong>2.48%</strong>로 현실화되면서 CVS·UNH·휴마나 등 일제히 강반등.</p>
+
+<table class="fade-in">
+  <thead>
+    <tr><th>종목</th><th>등락률</th><th>비고</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>UNH (유나이티드헬스)</td><td class="up">+10.5%</td><td>메디케어 어드밴티지 수혜</td></tr>
+    <tr><td>HUM (휴마나)</td><td class="up">+12.0%</td><td>메디케어 어드밴티지 수혜</td></tr>
+    <tr><td>CVS Health</td><td class="up">+6.7%</td><td>메디케어 어드밴티지 수혜</td></tr>
+    <tr><td>TSLA (테슬라)</td><td class="down">하락</td><td>인도량 부진, Terrafab=인텔 의존</td></tr>
+    <tr><td>INTC (인텔)</td><td class="up">+4.2%</td><td>테슬라 Terrafab 제조 계약</td></tr>
+    <tr><td>AVGO (브로드컴)</td><td class="up">상승</td><td>구글·앤트로픽 TPU 계약</td></tr>
+  </tbody>
+</table>
+
+<!-- 헬스케어 메디케어 인상 차트 -->
+<div class="chart-container fade-in">
+  <canvas id="healthChart" height="220"></canvas>
+</div>
+
+<div class="divider"></div>
+
+<!-- 5. AI 인프라 -->
+<h2>⑤ AI 인프라 — 구조적 트렌드 지속</h2>
+
+<h3>브로드컴(AVGO) × 구글 × 앤트로픽 TPU 계약</h3>
+<p>구글이 2031년까지 7세대·8세대 TPU 공급 계약을 브로드컴과 확정. 8세대는 TSMC 2나노 공정 기반 설계 중. 앤트로픽(Claude 개발사)도 동일 공급망 활용.</p>
+
+<div class="card fade-in">
+  <strong>GPU → ASIC → TPU 진화 흐름</strong>
+  <div style="margin-top:10px; font-size:13px; color:var(--sub);">
+    <strong style="color:var(--text);">GPU</strong> — 범용 AI 연산 (누구나 사용)<br>
+    <strong style="color:var(--text);">ASIC</strong> — 특정 업무 전용 칩 (효율↑, 범용성↓)<br>
+    <strong style="color:var(--text);">TPU</strong> — 구글이 밀고 있는 AI 전용 칩 (학습→추론 단계 전환)
+  </div>
+</div>
+
+<h3>원자력 에너지 — 유일한 선택지</h3>
+<p>유가 고착화 + 지정학 리스크 지속 시, AI 데이터센터 전력 공급은 <strong>원자력 외 대안 없음</strong>. 아마존·마이크로소프트가 원자력 계약 지속 체결 중.</p>
+
+<h3>테슬라 Terrafab — 실망스러운 진실</h3>
+<p>인텔이 18A 공정 + 제조·패키징 풀스택 제공. "테슬라는 땅만 주고 공장은 인텔이 짓는 구조." 테슬람(테슬라 신봉자)들의 믿음이 예전만 못한 이유. 스페이스X IPO로 자금 이탈 가능성도 언급.</p>
+
+<div class="divider"></div>
+
+<!-- 6. 월가 전망 비교 -->
+<h2>⑥ 월가 전망 충돌: UBS vs 골드만삭스</h2>
+
+<div class="chart-container fade-in">
+  <canvas id="outlookChart" height="220"></canvas>
+</div>
+
+<div class="scenario-grid fade-in">
+  <div class="scenario-box worst">
+    <div class="label">UBS — 비관론</div>
+    <div class="title">S&P500 → 7,500</div>
+    <div class="desc">에너지 가격 = 보이지 않는 세금. 소비자·기업 모두 허리띠 졸라매기. 연준은 아무것도 못 함.</div>
+  </div>
+  <div class="scenario-box best">
+    <div class="label">골드만삭스 — 낙관론</div>
+    <div class="title">Mag7 지금 사야</div>
+    <div class="desc">매그니피센트7이 가장 먼저 반등. 지금이 매수 기회. 엔비디아 주봉 삼각형 수렴 → 목표가 $300.</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 7. 결론 -->
+<h2>⑦ 투자자 행동 강령 & 결론</h2>
+
+<div class="conclusion fade-in">
+  <div class="c-title">📋 오늘의 핵심 메시지</div>
+  <ul>
+    <li><strong>헤드라인 지정학 리스크</strong>와 스태그플레이션 공포는 당분간 지속 예상</li>
+    <li>시장 전체가 한꺼번에 움직이지 않음 → <strong>호재성 뉴스 한두 개에 개별 종목만 반응</strong></li>
+    <li>공포에 배팅하지 말 것. <strong>구조적 수혜주(AI, 헬스케어, 원자력)를 저점 매수 기회로 활용</strong></li>
+    <li>AI 인프라 계속 진행 중. 헬스케어·바이오 반등 관찰</li>
+    <li>엔비디아 주봉: 삼각형 수렴(웨지) 패턴 → 진행자 목표가 $300 (현재 ~$181)</li>
+    <li>주요 이벤트(이란 합의 여부, Fed 발언) 확인 후 방향성 결정</li>
+  </ul>
+</div>
+
+<p style="font-size:12px; color:var(--sub); text-align:center; margin-top:30px;">
+  ※ 이 문서는 CIA.chat 멤버미팅 유튜브 방송 내용을 정리한 분석 자료입니다.<br>
+  투자 권고가 아니며, 모든 투자 판단은 본인의 책임입니다.
+</p>
+
+<script>
+// ─── FADE OBSERVER ───
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// ─── CHART CONFIGS ───
+const chartConfigs = {};
+
+chartConfigs['oilChart'] = () => {
+  new Chart(document.getElementById('oilChart'), {
+    type: 'line',
+    data: {
+      labels: ['개장 전', '오전 9시', '오전 11시', '오후 1시', '오후 3시', '오후 5시(파키스탄)', '오후 6시(휴전수락)'],
+      datasets: [{
+        label: '유가 WTI ($)',
+        data: [108, 113, 115, 113, 111, 112, 112],
+        borderColor: '#e11d48',
+        backgroundColor: 'rgba(225,29,72,0.08)',
+        tension: 0.4,
+        fill: true,
+        pointRadius: 4,
+        pointBackgroundColor: '#e11d48'
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        title: { display: true, text: '4/7 유가(WTI) 장중 흐름 (추정)', font: { size: 13 }, color: '#1a1a1a' },
+        tooltip: { callbacks: { label: ctx => `$${ctx.parsed.y}` } }
+      },
+      scales: {
+        y: { min: 100, max: 120, ticks: { callback: v => `$${v}` }, grid: { color: '#e5e5e5' } },
+        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+};
+
+chartConfigs['healthChart'] = () => {
+  new Chart(document.getElementById('healthChart'), {
+    type: 'bar',
+    data: {
+      labels: ['UNH', 'HUM', 'CVS'],
+      datasets: [
+        { label: '1월 메디케어 인상률(%)', data: [0.09, 0.09, 0.09], backgroundColor: '#6b7280' },
+        { label: '최종 메디케어 인상률(%)', data: [2.48, 2.48, 2.48], backgroundColor: '#e11d48' },
+        { label: '오늘 주가 등락(%)', data: [10.5, 12.0, 6.7], backgroundColor: '#2563eb' }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        title: { display: true, text: '메디케어 인상률 변화 & 주가 반응', font: { size: 13 }, color: '#1a1a1a' },
+        legend: { position: 'bottom', labels: { font: { size: 11 } } },
+        tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y}%` } }
+      },
+      scales: {
+        y: { grid: { color: '#e5e5e5' }, ticks: { callback: v => `${v}%` } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+};
+
+chartConfigs['outlookChart'] = () => {
+  new Chart(document.getElementById('outlookChart'), {
+    type: 'bar',
+    data: {
+      labels: ['현재 수준 (추정)', 'UBS 목표', '골드만삭스 시사'],
+      datasets: [{
+        label: 'S&P500 목표 지수',
+        data: [5200, 7500, 6200],
+        backgroundColor: ['#6b7280', '#e11d48', '#2563eb'],
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        title: { display: true, text: 'S&P500 전망 비교 (UBS vs 골드만삭스)', font: { size: 13 }, color: '#1a1a1a' },
+        tooltip: { callbacks: { label: ctx => `S&P500: ${ctx.parsed.x.toLocaleString()}` } }
+      },
+      scales: {
+        x: { min: 4000, grid: { color: '#e5e5e5' }, ticks: { callback: v => v.toLocaleString() } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+};
+
+// ─── CHART OBSERVER ───
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+// ─── STAGFLATION SIMULATOR ───
+function calcSim() {
+  const oil = parseFloat(document.getElementById('oilSlider').value);
+  const gdp = parseFloat(document.getElementById('gdpSlider').value);
+
+  document.getElementById('oilVal').textContent = `$${oil}`;
+  document.getElementById('gdpVal').textContent = `${gdp.toFixed(1)}%`;
+
+  // CPI 추정 (단순 모델)
+  const cpi = (1.5 + (oil - 80) * 0.04).toFixed(1);
+  // VIX 추정
+  let vixLow, vixHigh;
+  if (oil > 140) { vixLow = 28; vixHigh = 40; }
+  else if (oil > 120) { vixLow = 22; vixHigh = 32; }
+  else if (oil > 100) { vixLow = 15; vixHigh = 25; }
+  else { vixLow = 12; vixHigh = 18; }
+
+  // Fed action
+  let fed, spDir, phase;
+  if (gdp < 0 && oil > 120) {
+    fed = "동결 불가피 (딜레마 극심)";
+    spDir = "하방 압력 강함";
+    phase = "🔴 스태그플레이션";
+  } else if (gdp < 1 && oil > 100) {
+    fed = "동결 유지";
+    spDir = "횡보 또는 약세";
+    phase = "🟠 위험 국면";
+  } else if (gdp >= 2 && oil < 100) {
+    fed = "인하 가능성 열림";
+    spDir = "상방 기대";
+    phase = "🟢 정상 성장";
+  } else {
+    fed = "관망 (데이터 의존)";
+    spDir = "섹터별 차별화";
+    phase = "🟡 혼조 국면";
+  }
+
+  document.getElementById('cpiVal').textContent = `${cpi}% 예상`;
+  document.getElementById('cpiVal').className = `res-val ${parseFloat(cpi) > 3 ? 'red' : 'green'}`;
+  document.getElementById('vixVal').textContent = `${vixLow}~${vixHigh}`;
+  document.getElementById('vixVal').className = `res-val ${vixHigh > 25 ? 'red' : 'blue'}`;
+  document.getElementById('fedVal').textContent = fed;
+  document.getElementById('spVal').textContent = spDir;
+  document.getElementById('spVal').className = `res-val ${spDir.includes('하방') ? 'red' : spDir.includes('상방') ? 'green' : ''}`;
+  document.getElementById('phaseVal').textContent = phase;
+}
+
+function resetSim() {
+  document.getElementById('oilSlider').value = 112;
+  document.getElementById('gdpSlider').value = 1.5;
+  calcSim();
+}
+
+document.getElementById('oilSlider').addEventListener('input', calcSim);
+document.getElementById('gdpSlider').addEventListener('input', calcSim);
+calcSim();
+</script>
+</body>
+</html>

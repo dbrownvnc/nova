@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시험문제 & 정답 | CIA.chat 멤버미팅 2026.04.08</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff; --bg2: #fafafa;
+    --text: #1a1a1a; --sub: #777777;
+    --accent: #e11d48; --accent2: #f43f5e;
+    --border: #e5e5e5; --blue: #2563eb;
+    --green: #16a34a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px; line-height: 1.75;
+    max-width: 680px; margin: 0 auto;
+    padding: 0 18px 80px;
+  }
+  .cover {
+    border-bottom: 3px solid var(--accent);
+    padding: 40px 0 24px; margin-bottom: 30px;
+  }
+  .cover-tag {
+    display: inline-block; background: var(--accent);
+    color: #fff; font-size: 10px; font-weight: 700;
+    letter-spacing: 2px; padding: 3px 10px; margin-bottom: 12px;
+  }
+  .cover h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 5vw, 28px); font-weight: 900;
+    line-height: 1.25; margin-bottom: 10px;
+  }
+  .cover-meta { font-size: 12px; color: var(--sub); }
+  .cover-meta span { margin-right: 12px; }
+
+  /* SECTION DIVIDER */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-weight: 700;
+    margin: 40px 0 20px;
+    padding: 14px 18px;
+    border-left: 5px solid var(--accent);
+    background: var(--bg2);
+    border-radius: 0 6px 6px 0;
+  }
+  .section-title .badge {
+    display: inline-block;
+    background: var(--accent); color: #fff;
+    font-size: 11px; font-weight: 700;
+    padding: 2px 10px; border-radius: 20px;
+    margin-right: 8px; font-family: 'Noto Sans KR', sans-serif;
+    letter-spacing: 0.5px;
+  }
+
+  /* QUESTION */
+  .q-block {
+    border: 1px solid var(--border);
+    border-radius: 8px; margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .q-header {
+    padding: 14px 18px;
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+  }
+  .q-num {
+    min-width: 32px; height: 32px;
+    background: var(--accent); color: #fff;
+    border-radius: 50%; display: flex;
+    align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px; flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .q-text { font-weight: 500; font-size: 14px; line-height: 1.6; }
+  .diff-badge {
+    display: inline-block; font-size: 10px;
+    padding: 1px 7px; border-radius: 10px;
+    font-weight: 700; margin-left: 6px;
+    vertical-align: middle;
+  }
+  .easy { background: #dcfce7; color: #15803d; }
+  .mid { background: #fef3c7; color: #b45309; }
+  .hard { background: #fee2e2; color: #b91c1c; }
+
+  /* OPTIONS */
+  .q-options {
+    padding: 14px 18px;
+    display: grid; grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .opt {
+    border: 1px solid var(--border);
+    border-radius: 6px; padding: 10px 14px;
+    font-size: 13px; cursor: pointer;
+    transition: all 0.18s;
+    display: flex; align-items: flex-start; gap: 10px;
+    background: #fff; position: relative;
+    user-select: none;
+  }
+  .opt:hover { border-color: var(--accent2); background: #fff1f2; }
+  .opt.selected { border-color: var(--accent); background: #fff1f2; }
+  .opt.correct { border-color: var(--green); background: #f0fdf4; }
+  .opt.wrong { border-color: #dc2626; background: #fef2f2; }
+  .opt-label {
+    min-width: 20px; height: 20px;
+    border-radius: 50%; border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* SHORT ANSWER */
+  .q-short { padding: 14px 18px; }
+  .short-input {
+    width: 100%; border: 1px solid var(--border);
+    border-radius: 6px; padding: 10px 14px;
+    font-size: 14px; font-family: 'Noto Sans KR', sans-serif;
+    outline: none; transition: border 0.2s;
+    color: var(--text);
+  }
+  .short-input:focus { border-color: var(--accent); }
+
+  /* OX */
+  .q-ox { padding: 14px 18px; display: flex; gap: 12px; }
+  .ox-btn {
+    flex: 1; padding: 14px;
+    border: 2px solid var(--border);
+    border-radius: 8px; text-align: center;
+    font-size: 28px; cursor: pointer;
+    transition: all 0.2s; background: #fff;
+  }
+  .ox-btn:hover { border-color: var(--accent2); }
+  .ox-btn.selected { border-color: var(--accent); background: #fff1f2; }
+  .ox-btn.correct { border-color: var(--green); background: #f0fdf4; }
+  .ox-btn.wrong { border-color: #dc2626; background: #fef2f2; }
+  .ox-label { font-size: 11px; display: block; margin-top: 4px; color: var(--sub); font-family: 'Noto Sans KR', sans-serif; }
+
+  /* FEEDBACK */
+  .feedback {
+    display: none; padding: 12px 18px;
+    border-top: 1px solid var(--border);
+    font-size: 13px; line-height: 1.6;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb { background: #f0fdf4; color: #15803d; }
+  .feedback.wrong-fb { background: #fef2f2; color: #b91c1c; }
+  .feedback strong { display: block; margin-bottom: 4px; }
+
+  /* SUBMIT BTN */
+  .check-btn {
+    display: block; width: 100%;
+    padding: 11px;
+    background: var(--accent); color: #fff;
+    border: none; border-radius: 0 0 8px 8px;
+    font-size: 13px; font-weight: 700;
+    cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
+    transition: background 0.2s;
+  }
+  .check-btn:hover { background: var(--accent2); }
+  .check-btn:disabled { background: #ccc; cursor: default; }
+
+  /* SCORE */
+  .score-bar {
+    position: sticky; bottom: 0;
+    background: var(--text); color: #fff;
+    padding: 14px 18px;
+    display: flex; justify-content: space-between;
+    align-items: center; border-radius: 12px 12px 0 0;
+    margin: 0 -18px;
+    z-index: 10;
+  }
+  .score-bar .score-label { font-size: 13px; opacity: 0.8; }
+  .score-bar .score-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 900;
+    color: var(--accent2);
+  }
+  .score-bar .reset-all {
+    background: transparent; border: 1px solid rgba(255,255,255,0.3);
+    color: #fff; padding: 6px 14px; border-radius: 20px;
+    font-size: 12px; cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
+    transition: background 0.2s;
+  }
+  .score-bar .reset-all:hover { background: rgba(255,255,255,0.1); }
+
+  .divider { height: 1px; background: var(--border); margin: 10px 0 24px; }
+  .type-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+    color: var(--sub); text-transform: uppercase; margin-bottom: 4px;
+    padding: 0 18px;
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="cover-tag">시험문제 & 정답 해설</div>
+  <h1>CIA.chat 멤버미팅<br>이해도 확인 퀴즈</h1>
+  <div class="cover-meta">
+    <span>📅 2026.04.08</span>
+    <span>📝 총 10문항</span>
+    <span>🟢 쉬움 3 / 🟡 보통 5 / 🔴 어려움 2</span>
+  </div>
+</div>
+
+<!-- ═══ 파트 1: 객관식 ═══ -->
+<div class="section-title"><span class="badge">객관식</span>5문항</div>
+
+<!-- Q1 -->
+<div class="q-block" id="q1">
+  <div class="q-header">
+    <div class="q-num">1</div>
+    <div class="q-text">오늘 유가(WTI)가 장중 최고 얼마까지 올랐는가? <span class="diff-badge easy">쉬움</span></div>
+  </div>
+  <div class="q-options">
+    <div class="opt" onclick="selectOpt('q1','a')"><div class="opt-label">A</div>$105</div>
+    <div class="opt" onclick="selectOpt('q1','b')"><div class="opt-label">B</div>$110</div>
+    <div class="opt" onclick="selectOpt('q1','c')"><div class="opt-label">C</div>$115</div>
+    <div class="opt" onclick="selectOpt('q1','d')"><div class="opt-label">D</div>$120</div>
+  </div>
+  <div class="feedback" id="q1-fb"></div>
+  <button class="check-btn" onclick="checkMC('q1','c','장중 최고 $115까지 치솟았다가 $112로 내려왔다고 방송에서 언급됐습니다.')">정답 확인</button>
+</div>
+
+<!-- Q2 -->
+<div class="q-block" id="q2">
+  <div class="q-header">
+    <div class="q-num">2</div>
+    <div class="q-text">파키스탄이 중재 제안한 긴장 완화 기간은? <span class="diff-badge easy">쉬움</span></div>
+  </div>
+  <div class="q-options">
+    <div class="opt" onclick="selectOpt('q2','a')"><div class="opt-label">A</div>3일</div>
+    <div class="opt" onclick="selectOpt('q2','b')"><div class="opt-label">B</div>1주</div>
+    <div class="opt" onclick="selectOpt('q2','c')"><div class="opt-label">C</div>2주</div>
+    <div class="opt" onclick="selectOpt('q2','d')"><div class="opt-label">D</div>1개월</div>
+  </div>
+  <div class="feedback" id="q2-fb"></div>
+  <button class="check-btn" onclick="checkMC('q2','c','파키스탄 총리가 2주 동안의 긴장 완화 및 휴전을 전격 제안했습니다.')">정답 확인</button>
+</div>
+
+<!-- Q3 -->
+<div class="q-block" id="q3">
+  <div class="q-header">
+    <div class="q-num">3</div>
+    <div class="q-text">메디케어 어드밴티지가 최종 확정된 인상률은? <span class="diff-badge mid">보통</span></div>
+  </div>
+  <div class="q-options">
+    <div class="opt" onclick="selectOpt('q3','a')"><div class="opt-label">A</div>0.09%</div>
+    <div class="opt" onclick="selectOpt('q3','b')"><div class="opt-label">B</div>1.25%</div>
+    <div class="opt" onclick="selectOpt('q3','c')"><div class="opt-label">C</div>2.48%</div>
+    <div class="opt" onclick="selectOpt('q3','d')"><div class="opt-label">D</div>5.00%</div>
+  </div>
+  <div class="feedback" id="q3-fb"></div>
+  <button class="check-btn" onclick="checkMC('q3','c','1월에는 0.09%에 그쳐 보험주가 폭락했으나, 이번에 2.48%로 현실화되면서 UNH +10.5%, HUM +12%, CVS +6.7% 급등했습니다.')">정답 확인</button>
+</div>
+
+<!-- Q4 -->
+<div class="q-block" id="q4">
+  <div class="q-header">
+    <div class="q-num">4</div>
+    <div class="q-text">브로드컴(AVGO)이 구글과 계약한 내용으로 올바른 것은? <span class="diff-badge mid">보통</span></div>
+  </div>
+  <div class="q-options">
+    <div class="opt" onclick="selectOpt('q4','a')"><div class="opt-label">A</div>GPU 공급 계약 (2029년까지)</div>
+    <div class="opt" onclick="selectOpt('q4','b')"><div class="opt-label">B</div>7·8세대 TPU 공급 계약 (2031년까지)</div>
+    <div class="opt" onclick="selectOpt('q4','c')"><div class="opt-label">C</div>원자력 에너지 공동 개발 계약</div>
+    <div class="opt" onclick="selectOpt('q4','d')"><div class="opt-label">D</div>클라우드 서버 임대 계약</div>
+  </div>
+  <div class="feedback" id="q4-fb"></div>
+  <button class="check-btn" onclick="checkMC('q4','b','구글은 2031년까지 7세대·8세대 TPU를 브로드컴으로부터 공급받겠다는 계약을 확정했습니다. 8세대는 TSMC 2나노 공정 기반으로 설계 중입니다.')">정답 확인</button>
+</div>
+
+<!-- Q5 -->
+<div class="q-block" id="q5">
+  <div class="q-header">
+    <div class="q-num">5</div>
+    <div class="q-text">UBS가 제시한 S&P500 목표 지수는? <span class="diff-badge mid">보통</span></div>
+  </div>
+  <div class="q-options">
+    <div class="opt" onclick="selectOpt('q5','a')"><div class="opt-label">A</div>6,000</div>
+    <div class="opt" onclick="selectOpt('q5','b')"><div class="opt-label">B</div>6,500</div>
+    <div class="opt" onclick="selectOpt('q5','c')"><div class="opt-label">C</div>7,000</div>
+    <div class="opt" onclick="selectOpt('q5','d')"><div class="opt-label">D</div>7,500</div>
+  </div>
+  <div class="feedback" id="q5-fb"></div>
+  <button class="check-btn" onclick="checkMC('q5','d','UBS는 에너지 가격 급등이 소비자·기업 모두에 보이지 않는 세금으로 작용한다며 S&P500 목표를 7,500으로 제시했습니다.')">정답 확인</button>
+</div>
+
+<!-- ═══ 파트 2: OX ═══ -->
+<div class="section-title"><span class="badge">OX 문제</span>3문항</div>
+
+<!-- Q6 -->
+<div class="q-block" id="q6">
+  <div class="q-header">
+    <div class="q-num">6</div>
+    <div class="q-text">미국 정부는 미군의 카르그 섬 타격 사실을 공식 확인했다. <span class="diff-badge mid">보통</span></div>
+  </div>
+  <div class="q-ox">
+    <div class="ox-btn" onclick="selectOX('q6','O')">⭕<span class="ox-label">맞다 (O)</span></div>
+    <div class="ox-btn" onclick="selectOX('q6','X')">❌<span class="ox-label">틀리다 (X)</span></div>
+  </div>
+  <div class="feedback" id="q6-fb"></div>
+  <button class="check-btn" onclick="checkOX('q6','X','X(틀리다). 미국 행정부는 카르그 섬 타격은 공식 확인하지 않았습니다. 파키스탄의 2주 중재안 수락만 확인해줬습니다.')">정답 확인</button>
+</div>
+
+<!-- Q7 -->
+<div class="q-block" id="q7">
+  <div class="q-header">
+    <div class="q-num">7</div>
+    <div class="q-text">테슬라의 Terrafab 반도체 공장 제조는 인텔이 담당한다. <span class="diff-badge easy">쉬움</span></div>
+  </div>
+  <div class="q-ox">
+    <div class="ox-btn" onclick="selectOX('q7','O')">⭕<span class="ox-label">맞다 (O)</span></div>
+    <div class="ox-btn" onclick="selectOX('q7','X')">❌<span class="ox-label">틀리다 (X)</span></div>
+  </div>
+  <div class="feedback" id="q7-fb"></div>
+  <button class="check-btn" onclick="checkOX('q7','O','O(맞다). 인텔이 18A 공정과 제조·패키징 풀스택을 제공합니다. "테슬라는 땅만 줄 뿐 공장은 인텔이 짓는 구조"라고 진행자가 표현했습니다.')">정답 확인</button>
+</div>
+
+<!-- Q8 -->
+<div class="q-block" id="q8">
+  <div class="q-header">
+    <div class="q-num">8</div>
+    <div class="q-text">스태그플레이션 상황에서 연준은 금리를 내려 경기를 부양하면 된다. <span class="diff-badge hard">어려움</span></div>
+  </div>
+  <div class="q-ox">
+    <div class="ox-btn" onclick="selectOX('q8','O')">⭕<span class="ox-label">맞다 (O)</span></div>
+    <div class="ox-btn" onclick="selectOX('q8','X')">❌<span class="ox-label">틀리다 (X)</span></div>
+  </div>
+  <div class="feedback" id="q8-fb"></div>
+  <button class="check-btn" onclick="checkOX('q8','X','X(틀리다). 스태그플레이션의 핵심은 딜레마입니다. 금리를 내리면 물가가 더 오르고, 올리면 경기가 더 침체됩니다. 굴스비 총재도 "연준 입지가 힘들다"고 직접 언급했습니다.')">정답 확인</button>
+</div>
+
+<!-- ═══ 파트 3: 단답형 ═══ -->
+<div class="section-title"><span class="badge">단답형</span>2문항</div>
+
+<!-- Q9 -->
+<div class="q-block" id="q9">
+  <div class="q-header">
+    <div class="q-num">9</div>
+    <div class="q-text">진행자가 유가 고착화 시 AI 데이터센터 전력의 유일한 해결책으로 제시한 것은? <span class="diff-badge mid">보통</span></div>
+  </div>
+  <div class="q-short">
+    <input type="text" class="short-input" id="q9-input" placeholder="답을 입력하세요..." oninput="clearFb('q9')">
+  </div>
+  <div class="feedback" id="q9-fb"></div>
+  <button class="check-btn" onclick="checkShort('q9', ['원자력', '원자력에너지', '핵에너지', '원자력 에너지'], '원자력(에너지)입니다. 유가 급등과 지정학 리스크가 지속될 경우 선택의 여지가 없다며, 아마존·마이크로소프트도 원자력 계약을 지속 체결 중이라고 언급했습니다.')">정답 확인</button>
+</div>
+
+<!-- Q10 -->
+<div class="q-block" id="q10">
+  <div class="q-header">
+    <div class="q-num">10</div>
+    <div class="q-text">엔비디아 주봉 차트에서 진행자가 언급한 기술적 패턴 명칭과 목표 주가는? <span class="diff-badge hard">어려움</span></div>
+  </div>
+  <div class="q-short">
+    <input type="text" class="short-input" id="q10-input" placeholder="예: ○○○ 패턴, $○○○" oninput="clearFb('q10')">
+  </div>
+  <div class="feedback" id="q10-fb"></div>
+  <button class="check-btn" onclick="checkShort('q10', ['웨지','웨지 패턴','wedge','삼각형','삼각형 수렴','300','$300'], '삼각형(웨지) 수렴 패턴이며 목표가 $300입니다. 당시 주가는 ~$181이었고, 진행자는 "삼각형 만들고 300불 간다"고 설명했습니다.')">정답 확인</button>
+</div>
+
+<!-- SCORE BAR -->
+<div class="score-bar">
+  <div>
+    <div class="score-label">현재 점수</div>
+    <div class="score-num"><span id="scoreDisplay">0</span> / 10</div>
+  </div>
+  <button class="reset-all" onclick="resetAll()">전체 초기화</button>
+</div>
+
+<script>
+let state = {}; // {qId: {answered, correct}}
+let score = 0;
+
+function updateScore() {
+  score = Object.values(state).filter(v => v.correct).length;
+  document.getElementById('scoreDisplay').textContent = score;
+}
+
+// MC
+function selectOpt(qId, val) {
+  if (state[qId]?.answered) return;
+  document.querySelectorAll(`#${qId} .opt`).forEach(o => o.classList.remove('selected'));
+  document.querySelector(`#${qId} .opt[onclick*="'${val}'"]`).classList.add('selected');
+  state[qId] = state[qId] || {};
+  state[qId].selected = val;
+}
+
+function checkMC(qId, correct, explanation) {
+  if (state[qId]?.answered) return;
+  if (!state[qId]?.selected) { alert('보기를 선택하세요.'); return; }
+  const sel = state[qId].selected;
+  const isCorrect = sel === correct;
+  state[qId].answered = true;
+  state[qId].correct = isCorrect;
+
+  document.querySelectorAll(`#${qId} .opt`).forEach(o => {
+    const v = o.getAttribute('onclick').match(/'([a-d])'\)/)[1];
+    if (v === correct) o.classList.add('correct');
+    else if (v === sel && !isCorrect) o.classList.add('wrong');
+  });
+
+  const fb = document.getElementById(`${qId}-fb`);
+  fb.className = `feedback show ${isCorrect ? 'correct-fb' : 'wrong-fb'}`;
+  fb.innerHTML = `<strong>${isCorrect ? '✅ 정답!' : '❌ 오답'}</strong>${explanation}`;
+  document.querySelector(`#${qId} .check-btn`).disabled = true;
+  updateScore();
+}
+
+// OX
+function selectOX(qId, val) {
+  if (state[qId]?.answered) return;
+  document.querySelectorAll(`#${qId} .ox-btn`).forEach(b => b.classList.remove('selected'));
+  document.querySelector(`#${qId} .ox-btn[onclick*="'${val}'"]`).classList.add('selected');
+  state[qId] = state[qId] || {};
+  state[qId].selected = val;
+}
+
+function checkOX(qId, correct, explanation) {
+  if (state[qId]?.answered) return;
+  if (!state[qId]?.selected) { alert('O 또는 X를 선택하세요.'); return; }
+  const sel = state[qId].selected;
+  const isCorrect = sel === correct;
+  state[qId].answered = true;
+  state[qId].correct = isCorrect;
+
+  document.querySelectorAll(`#${qId} .ox-btn`).forEach(b => {
+    const v = b.getAttribute('onclick').match(/'([OX])'\)/)[1];
+    if (v === correct) b.classList.add('correct');
+    else if (v === sel && !isCorrect) b.classList.add('wrong');
+  });
+
+  const fb = document.getElementById(`${qId}-fb`);
+  fb.className = `feedback show ${isCorrect ? 'correct-fb' : 'wrong-fb'}`;
+  fb.innerHTML = `<strong>${isCorrect ? '✅ 정답!' : '❌ 오답'}</strong>${explanation}`;
+  document.querySelector(`#${qId} .check-btn`).disabled = true;
+  updateScore();
+}
+
+// SHORT
+function clearFb(qId) {
+  if (!state[qId]?.answered) {
+    document.getElementById(`${qId}-fb`).className = 'feedback';
+  }
+}
+
+function checkShort(qId, keywords, explanation) {
+  if (state[qId]?.answered) return;
+  const val = document.getElementById(`${qId}-input`).value.trim();
+  if (!val) { alert('답을 입력하세요.'); return; }
+  const isCorrect = keywords.some(k => val.includes(k));
+  state[qId] = { answered: true, correct: isCorrect };
+
+  const fb = document.getElementById(`${qId}-fb`);
+  fb.className = `feedback show ${isCorrect ? 'correct-fb' : 'wrong-fb'}`;
+  fb.innerHTML = `<strong>${isCorrect ? '✅ 정답!' : '❌ 오답'}</strong>${explanation}`;
+  document.querySelector(`#${qId} .check-btn`).disabled = true;
+  document.getElementById(`${qId}-input`).disabled = true;
+  updateScore();
+}
+
+// RESET
+function resetAll() {
+  if (!confirm('모든 답안을 초기화할까요?')) return;
+  state = {}; score = 0;
+  document.querySelectorAll('.opt').forEach(o => o.className = 'opt');
+  document.querySelectorAll('.ox-btn').forEach(b => b.className = 'ox-btn');
+  document.querySelectorAll('.feedback').forEach(f => f.className = 'feedback');
+  document.querySelectorAll('.check-btn').forEach(b => b.disabled = false);
+  document.querySelectorAll('.short-input').forEach(i => { i.value = ''; i.disabled = false; });
+  updateScore();
+}
+
+// re-attach onclick for opts/ox (already inline, no issue)
+updateScore();
+</script>
+</body>
+</html>
