@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시험문제 — 유가 대폭락 타코 랠리 2026.04.08</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff; --bg2:#fafafa; --text:#1a1a1a; --text2:#777;
+    --accent:#e11d48; --accent2:#f43f5e; --border:#e5e5e5;
+    --correct:#16a34a; --wrong:#e11d48;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body {
+    background:var(--bg); color:var(--text);
+    font-family:'Noto Sans KR',sans-serif;
+    font-size:15px; line-height:1.75;
+    max-width:680px; margin:0 auto; padding:0 18px 60px;
+  }
+  .hero {
+    border-bottom:3px solid var(--accent);
+    padding:40px 0 24px; margin-bottom:30px;
+  }
+  .kicker {
+    font-size:11px; letter-spacing:2.5px; text-transform:uppercase;
+    color:var(--accent); font-weight:700; margin-bottom:12px;
+  }
+  .hero h1 {
+    font-family:'Playfair Display',serif;
+    font-size:clamp(24px,7vw,34px); font-weight:900; line-height:1.2;
+  }
+  .hero p { font-size:13px; color:var(--text2); margin-top:10px; }
+
+  /* PROGRESS */
+  .progress-wrap { margin-bottom:24px; }
+  .progress-bar { height:6px; background:var(--border); border-radius:3px; overflow:hidden; margin-top:6px; }
+  .progress-fill { height:100%; background:var(--accent); border-radius:3px; transition:width 0.4s ease; width:0%; }
+  .progress-label { font-size:12px; color:var(--text2); display:flex; justify-content:space-between; }
+
+  /* SCORE CARD */
+  .score-card {
+    display:none; background:var(--text); color:#fff;
+    border-radius:10px; padding:28px 22px; text-align:center; margin-bottom:28px;
+  }
+  .score-card.show { display:block; }
+  .score-big { font-family:'Playfair Display',serif; font-size:56px; font-weight:900; color:#4ade80; }
+  .score-msg { font-size:14px; color:#ccc; margin-top:8px; }
+
+  /* QUESTION CARD */
+  .q-card {
+    border:1px solid var(--border); border-radius:8px;
+    margin-bottom:20px; overflow:hidden;
+    background:var(--bg2);
+  }
+  .q-header {
+    display:flex; align-items:center; gap:12px;
+    padding:16px 16px 12px; border-bottom:1px solid var(--border);
+  }
+  .q-num {
+    width:28px; height:28px; border-radius:50%;
+    background:var(--accent); color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px; font-weight:700; flex-shrink:0;
+  }
+  .q-num.easy { background:#16a34a; }
+  .q-num.medium { background:#f59e0b; }
+  .q-num.hard { background:var(--accent); }
+  .q-type {
+    font-size:10px; letter-spacing:1.5px; text-transform:uppercase;
+    color:var(--text2); font-weight:600;
+  }
+  .q-diff { font-size:10px; margin-left:auto; padding:2px 8px; border-radius:10px; font-weight:600; }
+  .q-diff.easy { background:#f0fdf4; color:#16a34a; }
+  .q-diff.medium { background:#fffbeb; color:#d97706; }
+  .q-diff.hard { background:#fef2f2; color:var(--accent); }
+  .q-body { padding:16px; }
+  .q-text { font-size:14px; font-weight:500; margin-bottom:14px; line-height:1.6; }
+  .options { display:flex; flex-direction:column; gap:8px; }
+  .opt-btn {
+    width:100%; text-align:left; padding:11px 14px;
+    border:1px solid var(--border); border-radius:6px;
+    background:var(--bg); color:var(--text);
+    font-family:'Noto Sans KR',sans-serif; font-size:13px;
+    cursor:pointer; transition:border-color 0.15s, background 0.15s;
+  }
+  .opt-btn:hover:not(:disabled) { border-color:var(--accent); background:#fff5f7; }
+  .opt-btn.correct { border-color:var(--correct); background:#f0fdf4; color:var(--correct); font-weight:700; }
+  .opt-btn.wrong { border-color:var(--wrong); background:#fef2f2; color:var(--wrong); }
+  .opt-btn:disabled { cursor:default; }
+  .short-input {
+    width:100%; padding:10px 14px; border:1px solid var(--border);
+    border-radius:6px; font-family:'Noto Sans KR',sans-serif; font-size:14px;
+    background:var(--bg); color:var(--text);
+    transition:border-color 0.15s;
+  }
+  .short-input:focus { outline:none; border-color:var(--accent); }
+  .short-input.correct { border-color:var(--correct); background:#f0fdf4; }
+  .short-input.wrong { border-color:var(--wrong); background:#fef2f2; }
+  .ox-row { display:flex; gap:10px; }
+  .ox-btn {
+    flex:1; padding:12px; border:2px solid var(--border);
+    border-radius:8px; font-size:22px; font-weight:900;
+    background:var(--bg); cursor:pointer; transition:all 0.15s;
+    font-family:'Playfair Display',serif;
+  }
+  .ox-btn:hover:not(:disabled) { border-color:var(--accent); background:#fff5f7; }
+  .ox-btn.correct { border-color:var(--correct); background:#f0fdf4; color:var(--correct); }
+  .ox-btn.wrong { border-color:var(--wrong); background:#fef2f2; color:var(--wrong); }
+  .ox-btn:disabled { cursor:default; }
+  .submit-btn {
+    margin-top:10px; width:100%; padding:11px;
+    background:var(--accent); color:#fff; border:none;
+    border-radius:6px; font-family:'Noto Sans KR',sans-serif;
+    font-size:14px; font-weight:700; cursor:pointer;
+    transition:background 0.15s;
+  }
+  .submit-btn:hover { background:var(--accent2); }
+  .submit-btn:disabled { background:#ccc; cursor:default; }
+  .explanation {
+    display:none; margin-top:14px; padding:12px 14px;
+    background:#fff; border:1px solid var(--border);
+    border-left:4px solid; border-radius:0 6px 6px 0;
+    font-size:13px; line-height:1.6;
+  }
+  .explanation.show { display:block; }
+  .explanation.correct-exp { border-left-color:var(--correct); }
+  .explanation.wrong-exp { border-left-color:var(--wrong); }
+  .exp-label { font-weight:700; font-size:12px; margin-bottom:4px; }
+  .exp-label.c { color:var(--correct); }
+  .exp-label.w { color:var(--wrong); }
+
+  /* RESET */
+  .reset-area { text-align:center; margin-top:28px; }
+  .reset-btn {
+    padding:12px 32px; background:var(--text); color:#fff;
+    border:none; border-radius:6px; font-family:'Noto Sans KR',sans-serif;
+    font-size:14px; font-weight:700; cursor:pointer;
+    transition:background 0.15s;
+  }
+  .reset-btn:hover { background:#333; }
+
+  .divider { border:none; border-top:1px solid var(--border); margin:32px 0; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="kicker">NOVA Real Invest · 2026.04.08 방송 퀴즈</div>
+  <h1>유가 대폭락 &amp;<br>타코 랠리 시험문제</h1>
+  <p>총 10문제 · 객관식 / 단답형 / OX · 즉시 채점 및 해설 제공</p>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span id="progText">0 / 10 완료</span>
+    <span id="scoreText">점수: 0점</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<div class="score-card" id="scoreCard">
+  <div style="font-size:13px;color:#aaa;margin-bottom:6px;">최종 점수</div>
+  <div class="score-big" id="finalScore">0 / 10</div>
+  <div class="score-msg" id="scoreMsg"></div>
+</div>
+
+<!-- Q1 -->
+<div class="q-card" id="q1">
+  <div class="q-header">
+    <div class="q-num easy">1</div>
+    <div><div class="q-type">객관식</div></div>
+    <div class="q-diff easy">쉬움</div>
+  </div>
+  <div class="q-body">
+    <div class="q-text">오늘(2026.04.08) 다우존스 산업평균지수는 몇 포인트 이상 폭등했는가?</div>
+    <div class="options">
+      <button class="opt-btn" onclick="checkMC('q1',this,'A')">A. 약 500포인트</button>
+      <button class="opt-btn" onclick="checkMC('q1',this,'B')">B. 약 900포인트</button>
+      <button class="opt-btn" onclick="checkMC('q1',this,'C')">C. 약 1,325포인트 이상</button>
+      <button class="opt-btn" onclick="checkMC('q1',this,'D')">D. 약 2,000포인트</button>
+    </div>
+    <div class="explanation" id="q1-exp">
+      <div class="exp-label c">✅ 정답: C</div>
+      다우존스 산업평균지수는 1,325포인트 이상 폭등하며 2.85% 상승했다. 이는 2025년 4월(리버레이션 데이) 이후 가장 큰 일간 상승이었다.
+    </div>
+  </div>
+</div>
+
+<!-- Q2 -->
+<div class="q-card" id="q2">
+  <div class="q-header">
+    <div class="q-num easy">2</div>
+    <div><div class="q-type">OX 퀴즈</div></div>
+    <div class="q-diff easy">쉬움</div>
+  </div>
+  <div class="q-body">
+    <div class="q-text">오늘 유가 폭락의 규모는 2020년 팬데믹 당시와 유사한 수준이었다. (O/X)</div>
+    <div class="ox-row">
+      <button class="ox-btn" onclick="checkOX('q2',this,'O')">O</button>
+      <button class="ox-btn" onclick="checkOX('q2',this,'X')">X</button>
+    </div>
+    <div class="explanation" id="q2-exp">
+      <div class="exp-label c">✅ 정답: O</div>
+      WTI 원유가 $117에서 $94 수준으로 16% 이상 폭락했으며, 방송에서 "2020년 팬데믹 때랑 똑같이 움직인 날"이라고 표현했다.
+    </div>
+  </div>
+</div>
+
+<!-- Q3 -->
+<div class="q-card" id="q3">
+  <div class="q-header">
+    <div class="q-num easy">3</div>
+    <div><div class="q-type">객관식</div></div>
+    <div class="q-diff easy">쉬움</div>
+  </div>
+  <div class="q-body">
+    <div class="q-text">오늘 시장의 급등 원인을 중재한 국가는 어디인가?</div>
+    <div class="options">
+      <button class="opt-btn" onclick="checkMC('q3',this,'A')">A. 사우디아라비아</button>
+      <button class="opt-btn" onclick="checkMC('q3',this,'B')">B. 파키스탄</button>
+      <button class="opt-btn" onclick="checkMC('q3',this,'C')">C. 터키</button>
+      <button class="opt-btn" onclick="checkMC('q3',this,'D')">D. 아랍에미리트</button>
+    </div>
+    <div class="explanation" id="q3-exp">
+      <div class="exp-label c">✅ 정답: B</div>
+      파키스탄이 중재자 역할을 하여 이란의 메시지를 전달했고, 트럼프 대통령이 이에 OK 사인을 주면서 2주간 조건부 휴전이 성립되었다.
+    </div>
+  </div>
+</div>
+
+<!-- Q4 -->
+<div class="q-card" id="q4">
+  <div class="q-header">
+    <div class="q-num medium">4</div>
+    <div><div class="q-type">단답형</div></div>
+    <div class="q-diff medium">보통</div>
+  </div>
+  <div class="q-body">
+    <div class="q-text">"TACO"는 무엇의 약자인가? (영어로 입력)</div>
+    <input class="short-input" id="q4-input" placeholder="Trump Always ...">
+    <button class="submit-btn" id="q4-btn" onclick="checkShort('q4', ['trump always chickens out', 'trump always chicken out'])">제출</button>
+    <div class="explanation" id="q4-exp">
+      <div class="exp-label c">✅ 정답</div>
+      <strong>Trump Always Chickens Out</strong> — 트럼프 대통령이 최대 압박 후 결국 타협한다는 월가의 투자 공식이다.
+    </div>
+  </div>
+</div>
+
+<!-- Q5 -->
+<div class="q-card" id="q5">
+  <div class="q-header">
+    <div class="q-num medium">5</div>
+    <div><div class="q-type">객관식</div></div>
+    <div class="q-diff medium">보통</div>
+  </div>
+  <div class="q-body">
+    <div class="q-text">방송에서 KORU ETF가 마이크론(MU)과 동일하게 움직이는 이유로 설명된 것은?</div>
+    <div class="options">
+      <button class="opt-btn" onclick="checkMC('q5',this,'A')">A. KORU가 마이크론 단일 종목으로 구성되어 있어서</button>
+      <button class="opt-btn" onclick="checkMC('q5',this,'B')">B. KORU는 EWY의 3배 레버리지이며, EWY의 최대 비중이 삼성전자·SK하이닉스이기 때문</button>
+      <button class="opt-btn" onclick="checkMC('q5',this,'C')">C. 마이크론과 KORU가 같은 운용사의 ETF이기 때문</button>
+      <button class="opt-btn" onclick="checkMC('q5',this,'D')">D. 반도체 지수를 공동 추종하기 때문</button>
+    </div>
+    <div class="explanation" id="q5-exp">
+      <div class="exp-label c">✅ 정답: B</div>
+      MU = EWY = KORU의 등식. EWY는 한국 주식 ETF로 삼성전자·SK하이닉스 비중이 가장 높으며, KORU는 EWY의 3배 레버리지 ETF다. 따라서 마이크론이 오를 때 한국 반도체도 동반 폭등한다.
+    </div>
+  </div>
+</div>
+
+<!-- Q6 -->
+<div class="q-card" id="q6">
+  <div class="q-header">
+    <div class="q-num medium">6</div>
+    <div><div class="q-type">OX 퀴즈</div></div>
+    <div class="q-diff medium">보통</div>
+  </div>
+  <div class="q-body">
+    <div class="q-text">오늘 시장 급등은 중동 전쟁의 완전한 종결을 의미하며, 유가는 앞으로 계속 하락할 것이다. (O/X)</div>
+    <div class="ox-row">
+      <button class="ox-btn" onclick="checkOX('q6',this,'X')">O</button>
+      <button class="ox-btn" onclick="checkOX('q6',this,'X')">X</button>
+    </div>
+    <div class="explanation" id="q6-exp">
+      <div class="exp-label c">✅ 정답: X</div>
+      방송에서 "시장은 평화를 산 것이 아니라 유가 급등 시나리오의 지연을 산 것"이라고 명확히 설명했다. 2주간 조건부 휴전일 뿐이며, 호르무즈 해협 완전 개방 등 핵심 이슈는 여전히 미해결이다.
+    </div>
+  </div>
+</div>
+
+<!-- Q7 -->
+<div class="q-card" id="q7">
+  <div class="q-header">
+    <div class="q-num medium">7</div>
+    <div><div class="q-type">객관식</div></div>
+    <div class="q-diff medium">보통</div>
+  </div>
+  <div class="q-body">
+    <div class="q-text">VIX(공포지수)가 몇 이하로 내려갈 때 본격적인 상승장 진입 시그널로 해석하는가?</div>
+    <div class="options">
+      <button class="opt-btn" onclick="checkMC('q7',this,'A')">A. 15</button>
+      <button class="opt-btn" onclick="checkMC('q7',this,'B')">B. 20</button>
+      <button class="opt-btn" onclick="checkMC('q7',this,'C')">C. 25</button>
+      <button class="opt-btn" onclick="checkMC('q7',this,'D')">D. 30</button>
+    </div>
+    <div class="explanation" id="q7-exp">
+      <div class="exp-label c">✅ 정답: B</div>
+      VIX는 30일 옵션의 콜·풋 비율을 반영한다. 20 이하로 내려가면 콜(상승 베팅)이 많아진다는 의미로, 완벽한 상승장 진입 준비 신호로 해석한다. 오늘 VIX는 21.04다.
+    </div>
+  </div>
+</div>
+
+<!-- Q8 -->
+<div class="q-card" id="q8">
+  <div class="q-header">
+    <div class="q-num medium">8</div>
+    <div><div class="q-type">단답형</div></div>
+    <div class="q-diff medium">보통</div>
+  </div>
+  <div class="q-body">
+    <div class="q-text">이번 주 금요일 발표 예정인 두 가지 경제지표는? (하나만 맞혀도 정답)</div>
+    <input class="short-input" id="q8-input" placeholder="예: CPI 또는 소비자...">
+    <button class="submit-btn" id="q8-btn" onclick="checkShort('q8', ['cpi','소비자물가','소비자물가지수','소비심리','소비자심리','소비자심리지수'])">제출</button>
+    <div class="explanation" id="q8-exp">
+      <div class="exp-label c">✅ 정답</div>
+      ① <strong>CPI (소비자물가지수)</strong> — 전쟁 기간이 포함된 첫 번째 물가 수치<br>
+      ② <strong>소비자 심리지수</strong> — 경기 전망을 가늠하는 선행 지표
+    </div>
+  </div>
+</div>
+
+<!-- Q9 -->
+<div class="q-card" id="q9">
+  <div class="q-header">
+    <div class="q-num hard">9</div>
+    <div><div class="q-type">객관식</div></div>
+    <div class="q-diff hard">어려움</div>
+  </div>
+  <div class="q-body">
+    <div class="q-text">이란이 미국에 제시한 카운터 오퍼(10개항 제안)에 포함된 내용이 아닌 것은?</div>
+    <div class="options">
+      <button class="opt-btn" onclick="checkMC('q9',this,'A')">A. 이란 군사 통제하에 조정된 선박 통행</button>
+      <button class="opt-btn" onclick="checkMC('q9',this,'B')">B. 선박당 암호화폐(비트코인) 통행료 부과</button>
+      <button class="opt-btn" onclick="checkMC('q9',this,'C')">C. 미 공기지 철수 요구</button>
+      <button class="opt-btn" onclick="checkMC('q9',this,'D')">D. 이란 핵시설 전면 개방 및 IAEA 감시 허용</button>
+    </div>
+    <div class="explanation" id="q9-exp">
+      <div class="exp-label c">✅ 정답: D</div>
+      이란은 ①이란 군사통제 조정 통행 ②암호화폐 통행료 ③미 공기지 철수를 요구했다. 핵시설 개방은 방송에서 언급되지 않은 내용이다. 특히 비트코인 통행료 요구는 상당히 이례적인 조건으로 주목받았다.
+    </div>
+  </div>
+</div>
+
+<!-- Q10 -->
+<div class="q-card" id="q10">
+  <div class="q-header">
+    <div class="q-num hard">10</div>
+    <div><div class="q-type">객관식</div></div>
+    <div class="q-diff hard">어려움</div>
+  </div>
+  <div class="q-body">
+    <div class="q-text">메타의 신규 AI 모델 "Muse Spark"에 대한 설명으로 옳은 것을 모두 고르면?</div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:10px;">※ 가장 적절한 것 하나를 선택하세요</div>
+    <div class="options">
+      <button class="opt-btn" onclick="checkMC('q10',this,'A')">A. 라마(LLaMA) 아키텍처를 기반으로 텍스트 성능만 개선한 모델이다</button>
+      <button class="opt-btn" onclick="checkMC('q10',this,'B')">B. 알렉산더 왕이 이끄는 팀이 9개월 만에 완전 신규 아키텍처로 개발했으며, 멀티모달 에이전트 기능과 API 유료화를 도입했다</button>
+      <button class="opt-btn" onclick="checkMC('q10',this,'C')">C. GPT-5에 대응하기 위해 구글과의 공동 프로젝트로 개발됐다</button>
+      <button class="opt-btn" onclick="checkMC('q10',this,'D')">D. 오픈소스로만 배포되며 상업적 이용이 불가능하다</button>
+    </div>
+    <div class="explanation" id="q10-exp">
+      <div class="exp-label c">✅ 정답: B</div>
+      Muse Spark는 알렉산더 왕이 메타 스포일리 인텔리전스 랩을 이끌며 약 9개월 만에 라마와 완전히 다른 신규 아키텍처로 개발했다. Complementary Mode로 여러 태스크를 병렬 처리하는 멀티모달 에이전트이며, API 유료화를 새롭게 도입했다.
+    </div>
+  </div>
+</div>
+
+<div class="reset-area">
+  <button class="reset-btn" onclick="resetAll()">↺ 처음부터 다시 풀기</button>
+</div>
+
+<hr class="divider">
+<div style="text-align:center;font-size:11px;color:var(--text2);padding-bottom:20px;">
+  NOVA Real Invest · 2026.04.08 방송 퀴즈 · 총 10문제
+</div>
+
+<script>
+let answered = {};
+let correctCount = 0;
+const ANSWERS = { q1:'C', q2:'O', q3:'B', q6:'X', q7:'B', q9:'D', q10:'B' };
+
+function updateProgress() {
+  const done = Object.keys(answered).length;
+  correctCount = Object.values(answered).filter(v => v).length;
+  document.getElementById('progText').textContent = `${done} / 10 완료`;
+  document.getElementById('scoreText').textContent = `점수: ${correctCount}점`;
+  document.getElementById('progressFill').style.width = (done / 10 * 100) + '%';
+  if (done === 10) showFinal();
+}
+
+function showFinal() {
+  const card = document.getElementById('scoreCard');
+  card.classList.add('show');
+  document.getElementById('finalScore').textContent = `${correctCount} / 10`;
+  const msgs = ['다시 도전해보세요! 💪', '조금만 더! 🔥', '절반 이상! 👏', '잘 하셨어요! ⭐', '훌륭합니다! 🎉', '완벽! 노바 레벨! 🏆'];
+  const idx = Math.min(Math.floor(correctCount / 2), 5);
+  document.getElementById('scoreMsg').textContent = msgs[idx];
+  card.scrollIntoView({ behavior:'smooth' });
+}
+
+function disableQ(id) {
+  const card = document.getElementById(id);
+  card.querySelectorAll('.opt-btn,.ox-btn,.short-input').forEach(el => el.disabled = true);
+  const btn = card.querySelector('.submit-btn');
+  if (btn) btn.disabled = true;
+}
+
+function showExp(id, isCorrect) {
+  const exp = document.getElementById(id + '-exp');
+  if (!exp) return;
+  exp.classList.add('show');
+  exp.classList.add(isCorrect ? 'correct-exp' : 'wrong-exp');
+}
+
+function checkMC(id, btn, selected) {
+  if (answered[id] !== undefined) return;
+  const correct = ANSWERS[id];
+  const isCorrect = selected === correct;
+  answered[id] = isCorrect;
+
+  const card = document.getElementById(id);
+  card.querySelectorAll('.opt-btn').forEach(b => {
+    b.disabled = true;
+    const letter = b.textContent.trim().charAt(0);
+    if (letter === correct) b.classList.add('correct');
+    else if (letter === selected && !isCorrect) b.classList.add('wrong');
+  });
+  showExp(id, isCorrect);
+  updateProgress();
+}
+
+function checkOX(id, btn, selected) {
+  if (answered[id] !== undefined) return;
+  const correct = ANSWERS[id];
+  const isCorrect = selected === correct;
+  answered[id] = isCorrect;
+
+  const card = document.getElementById(id);
+  const btns = card.querySelectorAll('.ox-btn');
+  btns.forEach((b, i) => {
+    b.disabled = true;
+    const val = i === 0 ? 'O' : 'X';
+    if (val === correct) b.classList.add('correct');
+    else if (val === selected && !isCorrect) b.classList.add('wrong');
+  });
+  showExp(id, isCorrect);
+  updateProgress();
+}
+
+function checkShort(id, acceptedArr) {
+  if (answered[id] !== undefined) return;
+  const input = document.getElementById(id + '-input');
+  const userVal = input.value.trim().toLowerCase();
+  if (!userVal) return;
+  const isCorrect = acceptedArr.some(a => userVal.includes(a.toLowerCase()));
+  answered[id] = isCorrect;
+  input.classList.add(isCorrect ? 'correct' : 'wrong');
+  showExp(id, isCorrect);
+  disableQ(id);
+  updateProgress();
+}
+
+function resetAll() {
+  answered = {};
+  correctCount = 0;
+  document.getElementById('scoreCard').classList.remove('show');
+  document.getElementById('progText').textContent = '0 / 10 완료';
+  document.getElementById('scoreText').textContent = '점수: 0점';
+  document.getElementById('progressFill').style.width = '0%';
+
+  // Reset all cards
+  for (let i = 1; i <= 10; i++) {
+    const card = document.getElementById('q'+i);
+    if (!card) continue;
+    card.querySelectorAll('.opt-btn,.ox-btn').forEach(b => {
+      b.disabled = false;
+      b.classList.remove('correct','wrong');
+    });
+    card.querySelectorAll('.short-input').forEach(inp => {
+      inp.disabled = false; inp.value = '';
+      inp.classList.remove('correct','wrong');
+    });
+    card.querySelectorAll('.submit-btn').forEach(b => b.disabled = false);
+    card.querySelectorAll('.explanation').forEach(e => {
+      e.classList.remove('show','correct-exp','wrong-exp');
+    });
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Q6 special: both buttons map to same correct answer X
+document.querySelectorAll('#q6 .ox-btn').forEach((btn, i) => {
+  btn.onclick = () => checkOX('q6', btn, i === 0 ? 'O' : 'X');
+});
+</script>
+</body>
+</html>
