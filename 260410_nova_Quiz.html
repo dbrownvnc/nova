@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>퀴즈 | CIA.chat 2026.04.10</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff; --bg2: #fafafa; --text: #1a1a1a;
+    --text2: #777777; --accent: #e11d48; --border: #e5e5e5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px; line-height: 1.7;
+    max-width: 680px; margin: 0 auto; padding: 0 18px 60px;
+  }
+  .hero {
+    background: var(--text); color: #fff;
+    margin: 0 -18px; padding: 36px 24px 28px;
+  }
+  .hero-label { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; color: #f43f5e; margin-bottom: 8px; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; }
+  .hero p { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 8px; }
+
+  .progress-bar {
+    background: var(--border); border-radius: 4px; height: 6px; margin: 20px 0 4px;
+  }
+  .progress-fill {
+    background: var(--accent); height: 100%; border-radius: 4px;
+    transition: width 0.4s ease; width: 0%;
+  }
+  .progress-label { font-size: 12px; color: var(--text2); margin-bottom: 18px; }
+
+  .q-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 22px; margin-bottom: 16px;
+    display: none;
+  }
+  .q-card.active { display: block; }
+  .q-num {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+  }
+  .q-type {
+    display: inline-block; font-size: 10px; padding: 2px 7px;
+    border-radius: 3px; background: var(--border); color: var(--text2);
+    font-weight: 700; margin-bottom: 10px;
+  }
+  .q-diff { margin-left: 6px; }
+  .diff-easy { background: #dcfce7; color: #16a34a; }
+  .diff-mid { background: #fef3c7; color: #ca8a04; }
+  .diff-hard { background: #fee2e2; color: #dc2626; }
+
+  .q-text { font-size: 15px; font-weight: 500; margin-bottom: 16px; line-height: 1.55; }
+
+  /* CHOICES */
+  .choices { list-style: none; }
+  .choice {
+    display: block; width: 100%;
+    background: var(--bg); border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 11px 14px; margin-bottom: 8px;
+    font-size: 14px; text-align: left; cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .choice:hover:not(:disabled) { border-color: var(--accent); background: #fff5f7; }
+  .choice.correct { background: #dcfce7; border-color: #16a34a; color: #15803d; font-weight: 700; }
+  .choice.wrong { background: #fee2e2; border-color: #dc2626; color: #dc2626; }
+  .choice:disabled { cursor: default; }
+
+  /* SHORT / OX INPUT */
+  .answer-input {
+    width: 100%; padding: 10px 14px; border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 14px; font-family: 'Noto Sans KR', sans-serif;
+    outline: none; margin-bottom: 10px;
+  }
+  .answer-input:focus { border-color: var(--accent); }
+  .ox-btns { display: flex; gap: 10px; }
+  .ox-btn {
+    flex: 1; padding: 12px; font-size: 22px; border-radius: 8px;
+    border: 1.5px solid var(--border); background: var(--bg);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .ox-btn:hover:not(:disabled) { border-color: var(--accent); background: #fff5f7; }
+  .ox-btn.correct { background: #dcfce7; border-color: #16a34a; }
+  .ox-btn.wrong { background: #fee2e2; border-color: #dc2626; }
+
+  .btn-submit {
+    background: var(--accent); color: #fff;
+    border: none; border-radius: 8px; padding: 11px 20px;
+    font-size: 14px; font-weight: 700; cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    margin-bottom: 10px;
+  }
+  .btn-submit:hover { background: #c0122f; }
+  .btn-submit:disabled { background: var(--border); color: var(--text2); cursor: default; }
+
+  .feedback {
+    border-radius: 8px; padding: 12px 14px; font-size: 13px;
+    line-height: 1.6; display: none; margin-top: 10px;
+  }
+  .feedback.show { display: block; }
+  .feedback.ok { background: #dcfce7; border-left: 3px solid #16a34a; color: #14532d; }
+  .feedback.ng { background: #fee2e2; border-left: 3px solid #dc2626; color: #7f1d1d; }
+
+  .btn-next {
+    background: var(--text); color: #fff;
+    border: none; border-radius: 8px; padding: 11px 24px;
+    font-size: 14px; font-weight: 700; cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif; margin-top: 12px;
+    display: none;
+  }
+  .btn-next.show { display: block; }
+
+  /* RESULT */
+  .result-card {
+    background: var(--text); color: #fff;
+    border-radius: 14px; padding: 32px 24px; text-align: center;
+    display: none; margin-top: 24px;
+  }
+  .result-card.show { display: block; }
+  .result-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px; font-weight: 900; color: #f43f5e;
+    line-height: 1;
+  }
+  .result-label { font-size: 14px; color: rgba(255,255,255,0.6); margin-top: 6px; }
+  .result-msg { font-size: 16px; font-weight: 700; margin-top: 14px; }
+  .btn-restart {
+    background: var(--accent); color: #fff;
+    border: none; border-radius: 8px; padding: 12px 28px;
+    font-size: 14px; font-weight: 700; cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif; margin-top: 20px;
+  }
+
+  /* ANSWER SHEET (hidden until done) */
+  .answer-sheet { margin-top: 32px; display: none; }
+  .answer-sheet.show { display: block; }
+  .as-title {
+    font-family: 'Playfair Display', serif; font-size: 20px;
+    font-weight: 700; border-top: 2px solid var(--text);
+    padding-top: 14px; margin-bottom: 16px;
+  }
+  .as-item {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px; margin-bottom: 10px;
+  }
+  .as-q { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .as-ans { font-size: 13px; color: var(--accent); font-weight: 700; }
+  .as-exp { font-size: 12px; color: var(--text2); margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-label">CIA.chat 멤버 방송 · 2026.04.10</div>
+  <h1>시험 문제 10선</h1>
+  <p>기관 vs 개미, CPI, 스태그플레이션, 아마존 CapEx… 오늘 핵심을 확인하세요.</p>
+</div>
+
+<div style="margin-top:20px;">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-label" id="progressLabel">0 / 10 완료</div>
+</div>
+
+<!-- Q1 -->
+<div class="q-card active" data-idx="0">
+  <div class="q-num">Question 01</div>
+  <span class="q-type">객관식</span><span class="q-type q-diff diff-easy">쉬움</span>
+  <div class="q-text">오늘(4월 10일) 기준 S&P 500의 연속 상승 거래일은 몇 일인가?</div>
+  <ul class="choices">
+    <li><button class="choice" data-ans="0">① 3거래일</button></li>
+    <li><button class="choice" data-ans="1">② 5거래일</button></li>
+    <li><button class="choice" data-ans="2">③ 7거래일</button></li>
+    <li><button class="choice" data-ans="3">④ 10거래일</button></li>
+  </ul>
+  <div class="feedback" id="fb0"></div>
+  <button class="btn-next" id="next0" onclick="nextQ(1)">다음 문제 →</button>
+</div>
+
+<!-- Q2 -->
+<div class="q-card" data-idx="1">
+  <div class="q-num">Question 02</div>
+  <span class="q-type">OX형</span><span class="q-type q-diff diff-easy">쉬움</span>
+  <div class="q-text">오늘 기관 투자자들은 엔비디아에 대해 <strong>풋옵션(하락 베팅)</strong>을 대규모로 매수했다.</div>
+  <div class="ox-btns">
+    <button class="ox-btn" data-ans="O">⭕</button>
+    <button class="ox-btn" data-ans="X">❌</button>
+  </div>
+  <div class="feedback" id="fb1"></div>
+  <button class="btn-next" id="next1" onclick="nextQ(2)">다음 문제 →</button>
+</div>
+
+<!-- Q3 -->
+<div class="q-card" data-idx="2">
+  <div class="q-num">Question 03</div>
+  <span class="q-type">객관식</span><span class="q-type q-diff diff-easy">쉬움</span>
+  <div class="q-text">미국 4분기 GDP 최종(파이널) 성장률 수치로 올바른 것은?</div>
+  <ul class="choices">
+    <li><button class="choice" data-ans="0">① 1.4%</button></li>
+    <li><button class="choice" data-ans="1">② 0.7%</button></li>
+    <li><button class="choice" data-ans="2">③ 0.5%</button></li>
+    <li><button class="choice" data-ans="3">④ 2.1%</button></li>
+  </ul>
+  <div class="feedback" id="fb2"></div>
+  <button class="btn-next" id="next2" onclick="nextQ(3)">다음 문제 →</button>
+</div>
+
+<!-- Q4 -->
+<div class="q-card" data-idx="3">
+  <div class="q-num">Question 04</div>
+  <span class="q-type">객관식</span><span class="q-type q-diff diff-mid">보통</span>
+  <div class="q-text">방송에서 '스태그플레이션'을 우려한 핵심 근거로 가장 거리가 먼 것은?</div>
+  <ul class="choices">
+    <li><button class="choice" data-ans="0">① 유가가 $98 수준으로 높게 유지되고 있다</button></li>
+    <li><button class="choice" data-ans="1">② GDP 성장률이 지속 하향 수정됐다</button></li>
+    <li><button class="choice" data-ans="2">③ FOMC 일부 위원이 금리 인상을 언급했다</button></li>
+    <li><button class="choice" data-ans="3">④ 엔비디아 주가가 연초 대비 보합 수준이다</button></li>
+  </ul>
+  <div class="feedback" id="fb3"></div>
+  <button class="btn-next" id="next3" onclick="nextQ(4)">다음 문제 →</button>
+</div>
+
+<!-- Q5 -->
+<div class="q-card" data-idx="4">
+  <div class="q-num">Question 05</div>
+  <span class="q-type">단답형</span><span class="q-type q-diff diff-mid">보통</span>
+  <div class="q-text">아마존 앤디 재시 CEO가 오늘 주주 서한에서 밝힌 AWS AI 서비스의 1분기 기준 연간 런레이트(run rate) 예상 금액은 얼마인가?</div>
+  <input type="text" class="answer-input" id="inp4" placeholder="예) 약 ___억 달러">
+  <button class="btn-submit" onclick="checkShort(4, ['150억', '150', '150억 달러', '$150B', '1500억'])">제출</button>
+  <div class="feedback" id="fb4"></div>
+  <button class="btn-next" id="next4" onclick="nextQ(5)">다음 문제 →</button>
+</div>
+
+<!-- Q6 -->
+<div class="q-card" data-idx="5">
+  <div class="q-num">Question 06</div>
+  <span class="q-type">객관식</span><span class="q-type q-diff diff-mid">보통</span>
+  <div class="q-text">오늘 개인 투자자(리테일)의 ETF 매도 규모에 대한 설명으로 맞는 것은?</div>
+  <ul class="choices">
+    <li><button class="choice" data-ans="0">① 1개월 내 최대 규모의 순매도</button></li>
+    <li><button class="choice" data-ans="1">② 6개월 내 최대 규모의 순매도</button></li>
+    <li><button class="choice" data-ans="2">③ 10개월 내 최대 규모의 순매도</button></li>
+    <li><button class="choice" data-ans="3">④ 역대 최대 규모의 순매도</button></li>
+  </ul>
+  <div class="feedback" id="fb5"></div>
+  <button class="btn-next" id="next5" onclick="nextQ(6)">다음 문제 →</button>
+</div>
+
+<!-- Q7 -->
+<div class="q-card" data-idx="6">
+  <div class="q-num">Question 07</div>
+  <span class="q-type">OX형</span><span class="q-type q-diff diff-mid">보통</span>
+  <div class="q-text">방송에서는 헤드라인 CPI(YoY)가 <strong>3.2% 이하</strong>로 나오면 안도 랠리(리스크 온)가 예상된다고 분석했다.</div>
+  <div class="ox-btns">
+    <button class="ox-btn" data-ans="O">⭕</button>
+    <button class="ox-btn" data-ans="X">❌</button>
+  </div>
+  <div class="feedback" id="fb6"></div>
+  <button class="btn-next" id="next6" onclick="nextQ(7)">다음 문제 →</button>
+</div>
+
+<!-- Q8 -->
+<div class="q-card" data-idx="7">
+  <div class="q-num">Question 08</div>
+  <span class="q-type">객관식</span><span class="q-type q-diff diff-mid">보통</span>
+  <div class="q-text">아마존이 오늘 발표한 신규 사업 또는 파트너십으로 <strong>언급되지 않은</strong> 것은?</div>
+  <ul class="choices">
+    <li><button class="choice" data-ans="0">① 일라이릴리 GLP-1 당일 배송 파트너십</button></li>
+    <li><button class="choice" data-ans="1">② 마스터스 골프 독점 중계권 확보</button></li>
+    <li><button class="choice" data-ans="2">③ 글로벌스타 위성 네트워크 인수 협상</button></li>
+    <li><button class="choice" data-ans="3">④ 테슬라와 자율주행 공동 개발 협약</button></li>
+  </ul>
+  <div class="feedback" id="fb7"></div>
+  <button class="btn-next" id="next7" onclick="nextQ(8)">다음 문제 →</button>
+</div>
+
+<!-- Q9 -->
+<div class="q-card" data-idx="8">
+  <div class="q-num">Question 09</div>
+  <span class="q-type">객관식</span><span class="q-type q-diff diff-hard">어려움</span>
+  <div class="q-text">제레미 시겔 교수가 언급한 '금리 동결 유지 조건'의 유가 기준으로 맞는 것은?</div>
+  <ul class="choices">
+    <li><button class="choice" data-ans="0">① 유가 $80 유지</button></li>
+    <li><button class="choice" data-ans="1">② 유가 $90 유지</button></li>
+    <li><button class="choice" data-ans="2">③ 유가 $100 유지</button></li>
+    <li><button class="choice" data-ans="3">④ 유가 $70 유지</button></li>
+  </ul>
+  <div class="feedback" id="fb8"></div>
+  <button class="btn-next" id="next8" onclick="nextQ(9)">다음 문제 →</button>
+</div>
+
+<!-- Q10 -->
+<div class="q-card" data-idx="9">
+  <div class="q-num">Question 10</div>
+  <span class="q-type">단답형</span><span class="q-type q-diff diff-hard">어려움</span>
+  <div class="q-text">방송에서 AI 데이터센터 테마의 '승자독식 결판'이 날 시점으로 언급된 기간은 대략 몇 년인가? (숫자만 입력)</div>
+  <input type="text" class="answer-input" id="inp9" placeholder="숫자만 입력 (예: 5)">
+  <button class="btn-submit" onclick="checkShort(9, ['3', '약 3', '3년'])">제출</button>
+  <div class="feedback" id="fb9"></div>
+  <button class="btn-next" id="next9" onclick="showResult()">결과 보기 →</button>
+</div>
+
+<!-- RESULT -->
+<div class="result-card" id="resultCard">
+  <div class="result-score" id="resultScore">0</div>
+  <div class="result-label">/ 10점</div>
+  <div class="result-msg" id="resultMsg"></div>
+  <button class="btn-restart" onclick="restartQuiz()">↺ 다시 풀기</button>
+</div>
+
+<!-- ANSWER SHEET -->
+<div class="answer-sheet" id="answerSheet">
+  <div class="as-title">📋 정답 및 해설</div>
+
+  <div class="as-item">
+    <div class="as-q">Q1. S&P 500 연속 상승 거래일</div>
+    <div class="as-ans">③ 7거래일</div>
+    <div class="as-exp">방송 시작부터 "오늘로서 7거래일째 상승으로 마감"이라고 명시.</div>
+  </div>
+  <div class="as-item">
+    <div class="as-q">Q2. 기관의 엔비디아 풋옵션 대량 매수</div>
+    <div class="as-ans">❌ (X)</div>
+    <div class="as-exp">기관은 엔비디아에 콜옵션(상승 베팅) 118,659건을 매수. 테슬라에 풋옵션 129,743건을 집중.</div>
+  </div>
+  <div class="as-item">
+    <div class="as-q">Q3. 4분기 GDP 최종 성장률</div>
+    <div class="as-ans">③ 0.5%</div>
+    <div class="as-exp">최초 추정 1.4% → 0.7% → 최종 0.5%로 매번 하향 수정됨.</div>
+  </div>
+  <div class="as-item">
+    <div class="as-q">Q4. 스태그플레이션 우려와 거리가 먼 것</div>
+    <div class="as-ans">④ 엔비디아 주가 보합</div>
+    <div class="as-exp">스태그플레이션 논리는 고유가·저성장·금리 인상 우려. 엔비디아 주가 흐름은 개별 종목 이슈.</div>
+  </div>
+  <div class="as-item">
+    <div class="as-q">Q5. AWS AI 연간 런레이트</div>
+    <div class="as-ans">약 150억 달러 ($15B)</div>
+    <div class="as-exp">"1분기 런레이트 기준 약 150억 달러"라고 앤디 재시가 주주서한에서 밝힘.</div>
+  </div>
+  <div class="as-item">
+    <div class="as-q">Q6. 개인 투자자 ETF 순매도 규모</div>
+    <div class="as-ans">③ 10개월 내 최대 규모</div>
+    <div class="as-exp">"10개월 단위로 봤을 때 최대 규모로 ETF를 순매도"라고 방송에서 직접 언급.</div>
+  </div>
+  <div class="as-item">
+    <div class="as-q">Q7. CPI 3.2% 이하 → 안도 랠리</div>
+    <div class="as-ans">⭕ (O)</div>
+    <div class="as-exp">"3.2 이하로 나오면 안도 랠리. 리스크 온" — 방송 직접 언급.</div>
+  </div>
+  <div class="as-item">
+    <div class="as-q">Q8. 아마존 미언급 사업</div>
+    <div class="as-ans">④ 테슬라와 자율주행 공동 개발</div>
+    <div class="as-exp">일라이릴리 당일 배송, 마스터스 독점, 글로벌스타 인수는 모두 언급됨. 테슬라 협약은 없음.</div>
+  </div>
+  <div class="as-item">
+    <div class="as-q">Q9. 제레미 시겔 금리 동결 조건 유가</div>
+    <div class="as-ans">② $90 유지</div>
+    <div class="as-exp">"유가가 90달러 정도 유지된다면 연준이 금리를 전혀 내리지 않을 것"이라고 인터뷰에서 발언.</div>
+  </div>
+  <div class="as-item">
+    <div class="as-q">Q10. AI 데이터센터 승자독식 결판 시점</div>
+    <div class="as-ans">3년</div>
+    <div class="as-exp">"AI 데이터 센터 이 화두는 3년 정도면 결판이 날 가능성이 있습니다"라고 방송에서 언급.</div>
+  </div>
+</div>
+
+<script>
+// ============================
+// QUIZ ENGINE
+// ============================
+const TOTAL = 10;
+let score = 0;
+let answered = new Array(TOTAL).fill(false);
+
+// correct answers (index-based for MCQ, string for OX)
+const correctAnswers = {
+  0: { type: 'mcq', ans: 2 },   // Q1
+  1: { type: 'ox', ans: 'X' },  // Q2
+  2: { type: 'mcq', ans: 2 },   // Q3
+  3: { type: 'mcq', ans: 3 },   // Q4
+  4: { type: 'short' },          // Q5 — handled separately
+  5: { type: 'mcq', ans: 2 },   // Q6
+  6: { type: 'ox', ans: 'O' },  // Q7
+  7: { type: 'mcq', ans: 3 },   // Q8
+  8: { type: 'mcq', ans: 1 },   // Q9
+  9: { type: 'short' },          // Q10 — handled separately
+};
+
+const explanations = [
+  "7거래일 연속 상승. 방송 시작부터 명시된 핵심 수치입니다.",
+  "기관은 엔비디아에 콜옵션(상승) 집중. 풋은 테슬라에 집중했습니다.",
+  "1.4% → 0.7% → 0.5%. 매 발표마다 하향 수정된 GDP 파이널 수치.",
+  "스태그플레이션 우려 근거는 고유가·저성장·금리 인상. 엔비디아 주가는 별개 이슈.",
+  "앤디 재시 주주서한: 1분기 런레이트 기준 약 $150억(15B) 달러.",
+  "방송에서 '10개월 단위로 최대 규모 ETF 순매도'라고 직접 언급.",
+  "3.2% 이하 → 안도 랠리(리스크 온) / 3.3% 이상 → 폭락(리스크 오프).",
+  "테슬라-아마존 자율주행 협약은 방송에 없음. 나머지 3가지는 모두 언급됨.",
+  "제레미 시겔: '유가 $90 유지 시 연준이 금리 전혀 안 내릴 것'.",
+  "'3년 정도면 AI 데이터센터 승자독식 결판' — 방송 후반부 직접 언급."
+];
+
+// MCQ handler
+document.querySelectorAll('.choice').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const card = this.closest('.q-card');
+    const idx = parseInt(card.dataset.idx);
+    if (answered[idx]) return;
+    answered[idx] = true;
+
+    const chosen = parseInt(this.dataset.ans);
+    const correct = correctAnswers[idx].ans;
+    const btns = card.querySelectorAll('.choice');
+    btns.forEach(b => b.disabled = true);
+
+    if (chosen === correct) {
+      this.classList.add('correct');
+      score++;
+      showFeedback(idx, true);
+    } else {
+      this.classList.add('wrong');
+      btns[correct].classList.add('correct');
+      showFeedback(idx, false);
+    }
+    updateProgress();
+    document.getElementById('next' + idx).classList.add('show');
+  });
+});
+
+// OX handler
+document.querySelectorAll('.ox-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const card = this.closest('.q-card');
+    const idx = parseInt(card.dataset.idx);
+    if (answered[idx]) return;
+    answered[idx] = true;
+
+    const chosen = this.dataset.ans;
+    const correct = correctAnswers[idx].ans;
+    const btns = card.querySelectorAll('.ox-btn');
+    btns.forEach(b => b.disabled = true);
+
+    if (chosen === correct) {
+      this.classList.add('correct');
+      score++;
+      showFeedback(idx, true);
+    } else {
+      this.classList.add('wrong');
+      btns[...btns].find(b => b.dataset.ans === correct).classList.add('correct');
+      showFeedback(idx, false);
+    }
+    updateProgress();
+    document.getElementById('next' + idx).classList.add('show');
+  });
+});
+
+function checkShort(idx, acceptedList) {
+  if (answered[idx]) return;
+  const inp = document.getElementById('inp' + idx);
+  const val = inp.value.trim();
+  if (!val) return;
+  answered[idx] = true;
+  inp.disabled = true;
+  document.querySelector(`#inp${idx} ~ .btn-submit`)||document.querySelectorAll('.btn-submit')[idx < 5 ? 0 : 1];
+  // disable submit button
+  const submitBtns = document.querySelectorAll('.btn-submit');
+  submitBtns.forEach(b => {
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes('(' + idx + ',')) b.disabled = true;
+  });
+
+  const matched = acceptedList.some(a => val.replace(/\s/g,'').toLowerCase().includes(a.replace(/\s/g,'').toLowerCase()));
+  if (matched) {
+    score++;
+    showFeedback(idx, true);
+  } else {
+    showFeedback(idx, false);
+  }
+  updateProgress();
+  document.getElementById('next' + idx).classList.add('show');
+}
+
+function showFeedback(idx, correct) {
+  const fb = document.getElementById('fb' + idx);
+  fb.classList.add('show');
+  if (correct) {
+    fb.classList.add('ok');
+    fb.innerHTML = '✅ <strong>정답입니다!</strong> ' + explanations[idx];
+  } else {
+    fb.classList.add('ng');
+    fb.innerHTML = '❌ <strong>오답입니다.</strong> ' + explanations[idx];
+  }
+}
+
+function nextQ(next) {
+  document.querySelector('.q-card.active').classList.remove('active');
+  if (next < TOTAL) {
+    document.querySelector(`[data-idx="${next}"]`).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function updateProgress() {
+  const done = answered.filter(Boolean).length;
+  document.getElementById('progressFill').style.width = (done / TOTAL * 100) + '%';
+  document.getElementById('progressLabel').textContent = `${done} / ${TOTAL} 완료`;
+}
+
+function showResult() {
+  document.querySelector('.q-card.active').classList.remove('active');
+  const rc = document.getElementById('resultCard');
+  rc.classList.add('show');
+  document.getElementById('resultScore').textContent = score;
+
+  let msg;
+  if (score >= 9) msg = '🏆 완벽합니다! 오늘 방송 완전히 이해하셨네요.';
+  else if (score >= 7) msg = '👍 훌륭합니다! 핵심을 잘 파악하셨습니다.';
+  else if (score >= 5) msg = '📚 절반 이상 정답! 복습하면 더 올라갑니다.';
+  else msg = '🔄 오늘 방송을 다시 한번 복습해 보세요.';
+  document.getElementById('resultMsg').textContent = msg;
+  document.getElementById('answerSheet').classList.add('show');
+  window.scrollTo({ top: rc.offsetTop - 20, behavior: 'smooth' });
+}
+
+function restartQuiz() {
+  score = 0;
+  answered = new Array(TOTAL).fill(false);
+  document.querySelectorAll('.q-card').forEach((c, i) => {
+    c.classList.remove('active');
+    c.querySelectorAll('.choice').forEach(b => { b.classList.remove('correct','wrong'); b.disabled = false; });
+    c.querySelectorAll('.ox-btn').forEach(b => { b.classList.remove('correct','wrong'); b.disabled = false; });
+    c.querySelectorAll('.feedback').forEach(f => { f.classList.remove('show','ok','ng'); f.innerHTML = ''; });
+    c.querySelectorAll('.btn-next').forEach(b => b.classList.remove('show'));
+    c.querySelectorAll('.answer-input').forEach(inp => { inp.value = ''; inp.disabled = false; });
+    c.querySelectorAll('.btn-submit').forEach(b => b.disabled = false);
+  });
+  document.querySelector('[data-idx="0"]').classList.add('active');
+  document.getElementById('resultCard').classList.remove('show');
+  document.getElementById('answerSheet').classList.remove('show');
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
