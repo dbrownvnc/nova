@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시험문제 & 정답 | 2026.04.14 시장 분석</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --blue: #2563eb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .cover {
+    background: var(--text);
+    color: #fff;
+    padding: 40px 20px 30px;
+  }
+  .cover-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--accent2);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .cover-title span { color: var(--accent2); }
+  .cover-sub { font-size: 13px; color: rgba(255,255,255,0.55); }
+
+  .mode-toggle {
+    display: flex;
+    gap: 0;
+    margin: 20px 20px 0;
+  }
+  .mode-btn {
+    flex: 1;
+    padding: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    color: var(--text2);
+    transition: all 0.2s;
+  }
+  .mode-btn:first-child { border-radius: 4px 0 0 4px; }
+  .mode-btn:last-child { border-radius: 0 4px 4px 0; }
+  .mode-btn.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  .section-info {
+    padding: 12px 20px;
+    font-size: 12px;
+    color: var(--text2);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+  }
+
+  /* ─── QUIZ CARD ─── */
+  .q-card {
+    margin: 16px 20px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .q-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+  }
+  .q-num {
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .q-num.easy { background: #10b981; }
+  .q-num.medium { background: #f59e0b; }
+  .q-num.hard { background: var(--accent); }
+  .q-type-badge {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 99px;
+    font-weight: 600;
+    margin-left: auto;
+  }
+  .badge-obj { background: #dbeafe; color: #1d4ed8; }
+  .badge-short { background: #dcfce7; color: #166534; }
+  .badge-ox { background: #fef3c7; color: #92400e; }
+
+  .q-body { padding: 16px; }
+  .q-text { font-size: 14px; font-weight: 500; margin-bottom: 12px; color: var(--text); }
+
+  /* Options */
+  .q-options { display: grid; gap: 8px; }
+  .q-opt {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--bg2);
+    color: var(--text);
+  }
+  .q-opt:hover { border-color: var(--accent); background: #fff1f2; }
+  .q-opt.selected { border-color: var(--blue); background: #eff6ff; }
+  .q-opt.correct { border-color: #10b981; background: #dcfce7 !important; color: #065f46; font-weight: 600; }
+  .q-opt.wrong { border-color: var(--accent); background: #fee2e2 !important; color: #991b1b; }
+
+  /* Short answer */
+  .q-input-wrap { display: flex; gap: 8px; }
+  .q-input {
+    flex: 1;
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+  }
+  .q-input:focus { border-color: var(--accent); }
+  .q-input.correct { border-color: #10b981; background: #dcfce7; }
+  .q-input.wrong { border-color: var(--accent); background: #fee2e2; }
+
+  /* OX */
+  .ox-wrap { display: flex; gap: 10px; }
+  .ox-btn {
+    flex: 1;
+    padding: 12px;
+    font-size: 22px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg2);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .ox-btn:hover { border-color: var(--accent); }
+  .ox-btn.selected { border-color: var(--blue); background: #eff6ff; }
+  .ox-btn.correct { border-color: #10b981; background: #dcfce7; }
+  .ox-btn.wrong { border-color: var(--accent); background: #fee2e2; }
+
+  /* Submit btn */
+  .q-submit {
+    margin-top: 10px;
+    padding: 8px 18px;
+    background: var(--text);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .q-submit:hover { background: var(--accent); }
+  .q-submit:disabled { background: var(--border); color: var(--text2); cursor: default; }
+
+  /* Feedback */
+  .q-feedback {
+    display: none;
+    margin-top: 12px;
+    padding: 12px 14px;
+    border-radius: 4px;
+    font-size: 13px;
+    border-left: 4px solid;
+  }
+  .q-feedback.show { display: block; }
+  .q-feedback.ok { background: #f0fdf4; border-color: #10b981; color: #065f46; }
+  .q-feedback.ng { background: #fff1f2; border-color: var(--accent); color: #991b1b; }
+
+  /* Answer Section */
+  .answer-section { display: none; }
+  .answer-section.show { display: block; }
+
+  .a-card {
+    margin: 16px 20px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .a-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: var(--text);
+    color: #fff;
+  }
+  .a-num {
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .a-header-q { font-size: 13px; color: rgba(255,255,255,0.8); flex: 1; }
+  .a-body { padding: 16px; }
+  .a-answer {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .a-explain { font-size: 13px; color: var(--text2); line-height: 1.7; }
+  .a-explain strong { color: var(--text); }
+
+  /* Score Panel */
+  .score-panel {
+    display: none;
+    margin: 20px;
+    padding: 20px;
+    background: var(--text);
+    color: #fff;
+    border-radius: 6px;
+    text-align: center;
+  }
+  .score-panel.show { display: block; }
+  .score-big {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--accent2);
+  }
+  .score-label { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+  .score-msg { font-size: 15px; margin-top: 12px; }
+  .btn-retry {
+    margin-top: 16px;
+    padding: 10px 24px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  footer {
+    background: var(--text);
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+    padding: 20px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin-top: 30px;
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="cover-label">Quiz · 2026.04.14</div>
+  <h1 class="cover-title">시장 분석<br><span>시험문제 10선</span></h1>
+  <p class="cover-sub">🟢 쉬움 3문제 · 🟡 보통 5문제 · 🔴 어려움 2문제</p>
+</div>
+
+<div class="mode-toggle">
+  <button class="mode-btn active" onclick="setMode('quiz')">📝 인터랙티브 퀴즈</button>
+  <button class="mode-btn" onclick="setMode('answer')">📋 문제+정답 보기</button>
+</div>
+
+<div class="section-info">
+  문제를 풀고 '확인' 버튼을 누르면 즉각 피드백이 제공됩니다.
+</div>
+
+<!-- SCORE PANEL -->
+<div class="score-panel" id="scorePanel">
+  <div class="score-big" id="scoreNum">0/10</div>
+  <div class="score-label">정답 / 총 문항</div>
+  <div class="score-msg" id="scoreMsg"></div>
+  <button class="btn-retry" onclick="retryQuiz()">↺ 다시 풀기</button>
+</div>
+
+<!-- QUIZ SECTION -->
+<div id="quizSection">
+
+<!-- Q1 -->
+<div class="q-card">
+  <div class="q-header">
+    <div class="q-num easy">1</div>
+    <span style="font-size:13px;font-weight:600;">오늘 오라클(Oracle)의 주가 상승률은?</span>
+    <span class="q-type-badge badge-obj">객관식</span>
+  </div>
+  <div class="q-body">
+    <div class="q-text">오늘(2026.04.14) 오라클(ORCL) 주가는 몇 % 상승했는가?</div>
+    <div class="q-options" data-answer="2">
+      <div class="q-opt" data-idx="0">① 5.4%</div>
+      <div class="q-opt" data-idx="1">② 9.5%</div>
+      <div class="q-opt" data-idx="2">③ 12.7%</div>
+      <div class="q-opt" data-idx="3">④ 39.5%</div>
+    </div>
+    <button class="q-submit" onclick="checkObj(this, 1)">확인</button>
+    <div class="q-feedback">
+      <span class="fb-text"></span>
+    </div>
+  </div>
+</div>
+
+<!-- Q2 -->
+<div class="q-card">
+  <div class="q-header">
+    <div class="q-num easy">2</div>
+    <span style="font-size:13px;font-weight:600;">호르무즈 해협 통과 선박 수</span>
+    <span class="q-type-badge badge-short">단답형</span>
+  </div>
+  <div class="q-body">
+    <div class="q-text">전쟁 전 하루 약 <u>  A  </u>척이 통과하던 호르무즈 해협은 현재 <u>  B  </u>척 미만으로 줄었다. A와 B를 각각 쓰시오.</div>
+    <div class="q-input-wrap">
+      <input type="text" class="q-input" id="q2inp" placeholder="예: A=100, B=10">
+    </div>
+    <button class="q-submit" onclick="checkShort(this, 2, ['100', '10'])">확인</button>
+    <div class="q-feedback"><span class="fb-text"></span></div>
+  </div>
+</div>
+
+<!-- Q3 -->
+<div class="q-card">
+  <div class="q-header">
+    <div class="q-num easy">3</div>
+    <span style="font-size:13px;font-weight:600;">골드만삭스 EPS 발표</span>
+    <span class="q-type-badge badge-ox">O/X</span>
+  </div>
+  <div class="q-body">
+    <div class="q-text">골드만삭스는 오늘 1분기 EPS 17.55달러를 발표하며 역대 사상 최고 기록을 달성했다.</div>
+    <div class="ox-wrap" data-answer="X">
+      <div class="ox-btn" data-val="O" onclick="selectOX(this)">⭕</div>
+      <div class="ox-btn" data-val="X" onclick="selectOX(this)">❌</div>
+    </div>
+    <button class="q-submit" onclick="checkOX(this, 3, 'X')">확인</button>
+    <div class="q-feedback"><span class="fb-text"></span></div>
+  </div>
+</div>
+
+<!-- Q4 -->
+<div class="q-card">
+  <div class="q-header">
+    <div class="q-num medium">4</div>
+    <span style="font-size:13px;font-weight:600;">오라클 oPower 절감액</span>
+    <span class="q-type-badge badge-obj">객관식</span>
+  </div>
+  <div class="q-body">
+    <div class="q-text">오라클의 oPower AI 플랫폼이 2025년 한 해 동안 절감한 비용은?</div>
+    <div class="q-options" data-answer="1">
+      <div class="q-opt" data-idx="0">① 약 1억 달러</div>
+      <div class="q-opt" data-idx="1">② 약 3억 6,900만 달러</div>
+      <div class="q-opt" data-idx="2">③ 약 5억 달러</div>
+      <div class="q-opt" data-idx="3">④ 약 10억 달러</div>
+    </div>
+    <button class="q-submit" onclick="checkObj(this, 4)">확인</button>
+    <div class="q-feedback"><span class="fb-text"></span></div>
+  </div>
+</div>
+
+<!-- Q5 -->
+<div class="q-card">
+  <div class="q-header">
+    <div class="q-num medium">5</div>
+    <span style="font-size:13px;font-weight:600;">인텔 3대 호재</span>
+    <span class="q-type-badge badge-obj">객관식</span>
+  </div>
+  <div class="q-body">
+    <div class="q-text">인텔(Intel)의 9일 연속 상승을 이끈 3대 호재로 <strong>틀린 것</strong>은?</div>
+    <div class="q-options" data-answer="2">
+      <div class="q-opt" data-idx="0">① 아일랜드 Fab34 재매입 (아폴로에서 환수)</div>
+      <div class="q-opt" data-idx="1">② 일론 머스크 Terraform 프로젝트 칩 제조 수주</div>
+      <div class="q-opt" data-idx="2">③ 엔비디아 GPU 공동 개발 파트너십 체결</div>
+      <div class="q-opt" data-idx="3">④ 구글 Zion6 CPU 기반 AI 인프라 파트너십</div>
+    </div>
+    <button class="q-submit" onclick="checkObj(this, 5)">확인</button>
+    <div class="q-feedback"><span class="fb-text"></span></div>
+  </div>
+</div>
+
+<!-- Q6 -->
+<div class="q-card">
+  <div class="q-header">
+    <div class="q-num medium">6</div>
+    <span style="font-size:13px;font-weight:600;">Bull/Base/Bear 시나리오 확률</span>
+    <span class="q-type-badge badge-obj">객관식</span>
+  </div>
+  <div class="q-body">
+    <div class="q-text">방송에서 제시된 Bull / Base / Bear 케이스의 확률 조합으로 올바른 것은?</div>
+    <div class="q-options" data-answer="3">
+      <div class="q-opt" data-idx="0">① 30% / 50% / 20%</div>
+      <div class="q-opt" data-idx="1">② 50% / 30% / 20%</div>
+      <div class="q-opt" data-idx="2">③ 20% / 40% / 40%</div>
+      <div class="q-opt" data-idx="3">④ 40% / 40% / 20%</div>
+    </div>
+    <button class="q-submit" onclick="checkObj(this, 6)">확인</button>
+    <div class="q-feedback"><span class="fb-text"></span></div>
+  </div>
+</div>
+
+<!-- Q7 -->
+<div class="q-card">
+  <div class="q-header">
+    <div class="q-num medium">7</div>
+    <span style="font-size:13px;font-weight:600;">베어 케이스 유가</span>
+    <span class="q-type-badge badge-short">단답형</span>
+  </div>
+  <div class="q-body">
+    <div class="q-text">Bear Case(최악 시나리오)에서 예상되는 유가 수준과, 이 경우 S&P500 타겟을 각각 쓰시오.</div>
+    <div class="q-input-wrap">
+      <input type="text" class="q-input" id="q7inp" placeholder="예: 유가 $120, S&P 6000">
+    </div>
+    <button class="q-submit" onclick="checkShort(this, 7, ['120', '6000', '6,000'])">확인</button>
+    <div class="q-feedback"><span class="fb-text"></span></div>
+  </div>
+</div>
+
+<!-- Q8 -->
+<div class="q-card">
+  <div class="q-header">
+    <div class="q-num medium">8</div>
+    <span style="font-size:13px;font-weight:600;">카운터드론 시장 규모</span>
+    <span class="q-type-badge badge-obj">객관식</span>
+  </div>
+  <div class="q-body">
+    <div class="q-text">현재 약 66억 달러 규모인 카운터드론 시장은 2030년까지 얼마로 성장할 것으로 예상되는가?</div>
+    <div class="q-options" data-answer="2">
+      <div class="q-opt" data-idx="0">① 약 100억 달러</div>
+      <div class="q-opt" data-idx="1">② 약 150억 달러</div>
+      <div class="q-opt" data-idx="2">③ 약 200억 달러</div>
+      <div class="q-opt" data-idx="3">④ 약 300억 달러</div>
+    </div>
+    <button class="q-submit" onclick="checkObj(this, 8)">확인</button>
+    <div class="q-feedback"><span class="fb-text"></span></div>
+  </div>
+</div>
+
+<!-- Q9 (Hard) -->
+<div class="q-card">
+  <div class="q-header">
+    <div class="q-num hard">9</div>
+    <span style="font-size:13px;font-weight:600;">FICC와 경기 시그널 (어려움)</span>
+    <span class="q-type-badge badge-obj">객관식</span>
+  </div>
+  <div class="q-body">
+    <div class="q-text">골드만삭스의 FICC 매출이 전년 대비 10% 감소했을 때, 이것이 시사하는 거시경제적 의미로 가장 적절한 것은?</div>
+    <div class="q-options" data-answer="1">
+      <div class="q-opt" data-idx="0">① AI 투자 수요 급감으로 반도체 업황 악화</div>
+      <div class="q-opt" data-idx="1">② 미국 채권·달러·원자재 시장의 신뢰도 약화 — 경기 위축 신호</div>
+      <div class="q-opt" data-idx="2">③ 주식 시장이 과열되어 채권으로 자금 이동</div>
+      <div class="q-opt" data-idx="3">④ 연준의 금리 인하 가능성이 높아짐을 의미</div>
+    </div>
+    <button class="q-submit" onclick="checkObj(this, 9)">확인</button>
+    <div class="q-feedback"><span class="fb-text"></span></div>
+  </div>
+</div>
+
+<!-- Q10 (Hard) -->
+<div class="q-card">
+  <div class="q-header">
+    <div class="q-num hard">10</div>
+    <span style="font-size:13px;font-weight:600;">시장 선반영 원리 (어려움)</span>
+    <span class="q-type-badge badge-ox">O/X</span>
+  </div>
+  <div class="q-body">
+    <div class="q-text">주식시장에서 "선반영(Discount)"이란 현재 발생한 사건을 뒤늦게 주가에 반영하는 현상을 말한다.</div>
+    <div class="ox-wrap" data-answer="X">
+      <div class="ox-btn" data-val="O" onclick="selectOX(this)">⭕</div>
+      <div class="ox-btn" data-val="X" onclick="selectOX(this)">❌</div>
+    </div>
+    <button class="q-submit" onclick="checkOX(this, 10, 'X')">확인</button>
+    <div class="q-feedback"><span class="fb-text"></span></div>
+  </div>
+</div>
+
+<div style="text-align:center; padding: 16px 20px;">
+  <button onclick="showScore()" style="padding:12px 32px; background:var(--accent); color:#fff; border:none; border-radius:4px; font-size:14px; font-weight:700; cursor:pointer;">📊 최종 점수 확인</button>
+</div>
+
+</div><!-- end quizSection -->
+
+
+<!-- ANSWER SECTION -->
+<div class="answer-section" id="answerSection">
+
+<div class="a-card">
+  <div class="a-header">
+    <div class="a-num">1</div>
+    <div class="a-header-q">오라클 오늘 주가 상승률</div>
+    <span style="font-size:10px;padding:2px 7px;background:rgba(225,29,72,0.3);color:#f43f5e;border-radius:99px;">쉬움</span>
+  </div>
+  <div class="a-body">
+    <div class="a-answer">정답: ③ 12.7%</div>
+    <div class="a-explain">Oracle(ORCL)은 오늘 <strong>12.7%</strong> 상승했다. 이는 oPower AI 플랫폼 발표로 기관 투자자들이 'AI가 실제로 기업 비용을 절감한다'는 점을 재평가하면서 매수에 나선 결과다.</div>
+  </div>
+</div>
+
+<div class="a-card">
+  <div class="a-header">
+    <div class="a-num">2</div>
+    <div class="a-header-q">호르무즈 해협 통과 선박 수</div>
+    <span style="font-size:10px;padding:2px 7px;background:rgba(225,29,72,0.3);color:#f43f5e;border-radius:99px;">쉬움</span>
+  </div>
+  <div class="a-body">
+    <div class="a-answer">정답: A = 100척, B = 10척</div>
+    <div class="a-explain">전쟁 전에는 하루 <strong>100척</strong>이 호르무즈 해협을 통과했으나, 이란-미국 갈등 이후 <strong>10척 미만</strong>으로 급감했다. 통과하는 선박 대부분은 이란과 우호적인 국가의 선박이며, 미국 선박은 사실상 통과하지 못하고 있다.</div>
+  </div>
+</div>
+
+<div class="a-card">
+  <div class="a-header">
+    <div class="a-num">3</div>
+    <div class="a-header-q">골드만삭스 EPS 역대 최고 여부</div>
+    <span style="font-size:10px;padding:2px 7px;background:rgba(225,29,72,0.3);color:#f43f5e;border-radius:99px;">쉬움</span>
+  </div>
+  <div class="a-body">
+    <div class="a-answer">정답: ❌ (X)</div>
+    <div class="a-explain">골드만삭스의 1Q 2026 EPS 17.55달러는 역대 <strong>두 번째</strong> 기록이지, 최고 기록이 아니다. 역대 최고 기록은 별도로 존재한다. 주가는 오히려 하락했는데, 이는 FICC 부문 매출 전년 대비 10% 감소와 부정적인 가이던스 때문이다.</div>
+  </div>
+</div>
+
+<div class="a-card">
+  <div class="a-header">
+    <div class="a-num">4</div>
+    <div class="a-header-q">Oracle oPower 절감액</div>
+    <span style="font-size:10px;padding:2px 7px;background:rgba(245,158,11,0.3);color:#b45309;border-radius:99px;">보통</span>
+  </div>
+  <div class="a-body">
+    <div class="a-answer">정답: ② 약 3억 6,900만 달러</div>
+    <div class="a-explain">오라클 oPower AI 플랫폼(Oracle Utility oPower AI Platform)은 2025년 한 해 동안 유틸리티 기업의 비용 <strong>3억 6,900만 달러(약 $369M)</strong>를 절감했다. 이 수치가 중요한 이유는 AI가 단순 콘텐츠 생성을 넘어 실제 기업 비용을 줄여주는 단계에 진입했음을 입증하기 때문이다.</div>
+  </div>
+</div>
+
+<div class="a-card">
+  <div class="a-header">
+    <div class="a-num">5</div>
+    <div class="a-header-q">인텔 3대 호재 중 틀린 것</div>
+    <span style="font-size:10px;padding:2px 7px;background:rgba(245,158,11,0.3);color:#b45309;border-radius:99px;">보통</span>
+  </div>
+  <div class="a-body">
+    <div class="a-answer">정답: ③ 엔비디아 GPU 공동 개발 파트너십 체결</div>
+    <div class="a-explain">인텔의 실제 3대 호재는 ① 아일랜드 <strong>Fab34 재매입</strong>, ② 일론 머스크 <strong>Terraform 칩 제조 수주</strong>, ③ <strong>구글 Zion6 CPU 기반 AI 인프라 파트너십</strong>이다. 엔비디아와의 공동 개발은 언급되지 않았다.</div>
+  </div>
+</div>
+
+<div class="a-card">
+  <div class="a-header">
+    <div class="a-num">6</div>
+    <div class="a-header-q">시나리오 확률 조합</div>
+    <span style="font-size:10px;padding:2px 7px;background:rgba(245,158,11,0.3);color:#b45309;border-radius:99px;">보통</span>
+  </div>
+  <div class="a-body">
+    <div class="a-answer">정답: ④ 40% / 40% / 20%</div>
+    <div class="a-explain">방송에서 제시된 확률은 <strong>Bull Case 40%, Base Case 40%, Bear Case 20%</strong>이다. 낙관과 기본 시나리오가 동일한 40% 확률을 가지며, 최악 시나리오는 20%로 설정됐다.</div>
+  </div>
+</div>
+
+<div class="a-card">
+  <div class="a-header">
+    <div class="a-num">7</div>
+    <div class="a-header-q">Bear Case 유가 & S&P 타겟</div>
+    <span style="font-size:10px;padding:2px 7px;background:rgba(245,158,11,0.3);color:#b45309;border-radius:99px;">보통</span>
+  </div>
+  <div class="a-body">
+    <div class="a-answer">정답: 유가 $120, S&P500 약 6,000</div>
+    <div class="a-explain">Bear Case에서는 이란 협상 완전 결렬 + 군사 충돌 재발로 유가가 <strong>$120까지 급등</strong>한다. 이 경우 스태그플레이션(물가↑ + 경기침체) 현실화, 금리 인하 무기한 연기(내년까지), S&P500은 <strong>6,000 수준</strong>이면 다행인 상황이 된다.</div>
+  </div>
+</div>
+
+<div class="a-card">
+  <div class="a-header">
+    <div class="a-num">8</div>
+    <div class="a-header-q">카운터드론 시장 2030년 규모</div>
+    <span style="font-size:10px;padding:2px 7px;background:rgba(245,158,11,0.3);color:#b45309;border-radius:99px;">보통</span>
+  </div>
+  <div class="a-body">
+    <div class="a-answer">정답: ③ 약 200억 달러</div>
+    <div class="a-explain">현재 약 <strong>66억 달러</strong> 규모인 카운터드론 시장은 2030년까지 <strong>200억 달러</strong>로 3배 이상 성장할 것으로 예상된다. 미국의 Safer Skies Act(SSA)로 18,000개 지방경찰서와 6,000개 교정시설에 드론 요격 시스템 보급이 확대되기 때문이다.</div>
+  </div>
+</div>
+
+<div class="a-card">
+  <div class="a-header">
+    <div class="a-num">9</div>
+    <div class="a-header-q">FICC 매출 감소의 거시 의미</div>
+    <span style="font-size:10px;padding:2px 7px;background:rgba(225,29,72,0.3);color:#991b1b;border-radius:99px;">어려움</span>
+  </div>
+  <div class="a-body">
+    <div class="a-answer">정답: ② 미국 채권·달러·원자재 시장 신뢰도 약화</div>
+    <div class="a-explain">FICC(Fixed Income, Currencies, Commodities)는 채권·통화·원자재 거래 부문이다. 이 부문의 매출이 감소했다는 것은 <strong>미국 채권·달러가 예전만 못하다</strong>는 의미로, 미국의 국력 약화를 간접 반영한다. 방송에서는 이를 "미국 달러가 맞탱이가 가고 있다"고 표현했다. 이는 은행이 경기 침체 시그널을 보내고 있음을 뜻한다.</div>
+  </div>
+</div>
+
+<div class="a-card">
+  <div class="a-header">
+    <div class="a-num">10</div>
+    <div class="a-header-q">주식시장 선반영(Discount) 개념</div>
+    <span style="font-size:10px;padding:2px 7px;background:rgba(225,29,72,0.3);color:#991b1b;border-radius:99px;">어려움</span>
+  </div>
+  <div class="a-body">
+    <div class="a-answer">정답: ❌ (X)</div>
+    <div class="a-explain">선반영(Discount)이란 <strong>현재 사건이 아닌 미래의 예상 결과를 미리 주가에 반영</strong>하는 현상이다. 2차 세계대전 당시 미군 상병(1942년 7~8월) 이전인 <strong>1942년 5월에 이미 증시가 바닥</strong>을 친 것이 대표적 사례다. 주식시장은 오늘의 뉴스가 아닌 3~6개월 후의 미래를 사고 판다.</div>
+  </div>
+</div>
+
+</div><!-- end answerSection -->
+
+<footer>
+  본 퀴즈는 2026.04.14 방송 내용을 바탕으로 출제되었습니다.<br>
+  투자 판단은 반드시 본인의 책임 하에 이루어져야 합니다.
+</footer>
+
+<script>
+let answers = {};
+let submitted = {};
+
+function setMode(mode) {
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  if (mode === 'quiz') {
+    document.querySelectorAll('.mode-btn')[0].classList.add('active');
+    document.getElementById('quizSection').style.display = 'block';
+    document.getElementById('answerSection').classList.remove('show');
+  } else {
+    document.querySelectorAll('.mode-btn')[1].classList.add('active');
+    document.getElementById('quizSection').style.display = 'none';
+    document.getElementById('answerSection').classList.add('show');
+  }
+}
+
+function selectOX(btn) {
+  const wrap = btn.closest('.ox-wrap');
+  if (wrap.dataset.locked) return;
+  wrap.querySelectorAll('.ox-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  wrap.dataset.selected = btn.dataset.val;
+}
+
+function getFeedbackEl(btn) {
+  return btn.closest('.q-body').querySelector('.q-feedback');
+}
+
+function checkObj(btn, qNum) {
+  if (submitted[qNum]) return;
+  const card = btn.closest('.q-card');
+  const opts = card.querySelectorAll('.q-opt');
+  const answerIdx = +card.querySelector('.q-options').dataset.answer;
+  let selected = -1;
+  opts.forEach(o => { if (o.classList.contains('selected')) selected = +o.dataset.idx; });
+  if (selected === -1) { alert('보기를 선택해주세요.'); return; }
+
+  submitted[qNum] = true;
+  opts.forEach(o => {
+    const idx = +o.dataset.idx;
+    if (idx === answerIdx) o.classList.add('correct');
+    else if (idx === selected && selected !== answerIdx) o.classList.add('wrong');
+  });
+
+  const isCorrect = selected === answerIdx;
+  if (isCorrect) answers[qNum] = true;
+  showFeedback(btn, isCorrect, isCorrect ? '정답입니다! ✅' : `오답입니다. ❌ 정답은 ④번 답안을 확인하세요.`);
+  btn.disabled = true;
+}
+
+function checkShort(btn, qNum, keywords) {
+  if (submitted[qNum]) return;
+  const inp = btn.closest('.q-body').querySelector('.q-input');
+  const val = inp.value.trim();
+  if (!val) { alert('답을 입력해주세요.'); return; }
+
+  submitted[qNum] = true;
+  const isCorrect = keywords.some(k => val.includes(k));
+  inp.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (isCorrect) answers[qNum] = true;
+  showFeedback(btn, isCorrect, isCorrect ? '정답입니다! ✅' : `오답입니다. ❌ 정답지를 확인해보세요.`);
+  btn.disabled = true;
+  inp.disabled = true;
+}
+
+function checkOX(btn, qNum, correct) {
+  if (submitted[qNum]) return;
+  const wrap = btn.closest('.q-body').querySelector('.ox-wrap');
+  const selected = wrap.dataset.selected;
+  if (!selected) { alert('O 또는 X를 선택해주세요.'); return; }
+
+  submitted[qNum] = true;
+  wrap.dataset.locked = '1';
+  const isCorrect = selected === correct;
+  wrap.querySelectorAll('.ox-btn').forEach(b => {
+    if (b.dataset.val === correct) b.classList.add('correct');
+    else if (b.dataset.val === selected && !isCorrect) b.classList.add('wrong');
+  });
+  if (isCorrect) answers[qNum] = true;
+  showFeedback(btn, isCorrect, isCorrect ? '정답입니다! ✅' : `오답입니다. ❌ 정답은 ${correct === 'O' ? '⭕' : '❌'}입니다.`);
+  btn.disabled = true;
+}
+
+function showFeedback(btn, ok, msg) {
+  const fb = getFeedbackEl(btn);
+  fb.className = 'q-feedback show ' + (ok ? 'ok' : 'ng');
+  fb.querySelector('.fb-text').textContent = msg;
+}
+
+// Option click
+document.querySelectorAll('.q-options').forEach(opts => {
+  opts.querySelectorAll('.q-opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      if (opts.dataset.locked) return;
+      opts.querySelectorAll('.q-opt').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+    });
+  });
+});
+
+function showScore() {
+  const count = Object.keys(answers).length;
+  const panel = document.getElementById('scorePanel');
+  panel.classList.add('show');
+  document.getElementById('scoreNum').textContent = count + '/10';
+  const msgs = ['더 공부가 필요해요! 📚', '조금 더 노력해보세요! 💪', '절반 이상 맞혔어요! 👍', '잘 했어요! 🎉', '거의 다 맞혔네요! 🌟', '완벽한 점수! 🏆'];
+  const idx = Math.min(5, Math.floor(count / 2));
+  document.getElementById('scoreMsg').textContent = msgs[idx];
+  panel.scrollIntoView({ behavior: 'smooth' });
+}
+
+function retryQuiz() {
+  answers = {};
+  submitted = {};
+  document.getElementById('scorePanel').classList.remove('show');
+  document.querySelectorAll('.q-opt').forEach(o => o.className = 'q-opt');
+  document.querySelectorAll('.q-input').forEach(i => { i.value=''; i.className='q-input'; i.disabled=false; });
+  document.querySelectorAll('.ox-btn').forEach(b => b.className = 'ox-btn');
+  document.querySelectorAll('.ox-wrap').forEach(w => { delete w.dataset.selected; delete w.dataset.locked; });
+  document.querySelectorAll('.q-feedback').forEach(f => f.className = 'q-feedback');
+  document.querySelectorAll('.q-submit').forEach(b => b.disabled = false);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
