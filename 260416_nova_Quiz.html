@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>시험문제 | 증시 바벨전략 분석</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg2: #fafafa;
+      --text: #1a1a1a;
+      --text2: #777777;
+      --accent: #e11d48;
+      --accent2: #f43f5e;
+      --border: #e5e5e5;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Source Serif 4', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+
+    .masthead {
+      background: var(--text);
+      color: #fff;
+      text-align: center;
+      padding: 36px 20px 28px;
+      border-bottom: 4px solid var(--accent);
+    }
+    .masthead .kicker {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 10px;
+    }
+    .masthead h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(20px, 5vw, 30px);
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+    .masthead .sub { font-size: 13px; color: #aaa; font-style: italic; }
+
+    .container { max-width: 680px; margin: 0 auto; padding: 0 20px; }
+
+    /* ─── SECTION DIVIDER ─── */
+    .sec-header {
+      background: var(--accent);
+      color: #fff;
+      padding: 16px 20px;
+      margin: 32px -20px 24px;
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
+    /* ─── QUESTION CARD ─── */
+    .q-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 3px;
+      padding: 20px 18px;
+      margin-bottom: 20px;
+    }
+    .q-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .q-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .q-diff {
+      font-size: 14px;
+      letter-spacing: 0.5px;
+    }
+    .q-type {
+      display: inline-block;
+      background: var(--text);
+      color: #fff;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 2px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .q-text {
+      font-size: 15.5px;
+      line-height: 1.7;
+      margin-bottom: 14px;
+      color: var(--text);
+      font-weight: 600;
+    }
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .choice {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 14.5px;
+      color: #333;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 9px 12px;
+    }
+    .choice-num {
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+      width: 20px;
+    }
+    .blank-box {
+      display: inline-block;
+      border-bottom: 2px solid var(--accent);
+      width: 80px;
+      height: 22px;
+      vertical-align: bottom;
+      background: #fff0f3;
+    }
+    .write-line {
+      border: 1px solid var(--border);
+      background: #fff;
+      min-height: 48px;
+      border-radius: 3px;
+      padding: 8px 12px;
+      font-size: 14px;
+      color: #aaa;
+      font-style: italic;
+    }
+
+    /* ─── ANSWER SECTION ─── */
+    .ans-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-left: 4px solid #2563eb;
+      border-radius: 3px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+    .ans-header {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .ans-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 900;
+      color: #2563eb;
+    }
+    .ans-correct {
+      display: inline-block;
+      background: #2563eb;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 2px;
+      letter-spacing: 0.5px;
+    }
+    .ans-explain {
+      font-size: 14.5px;
+      color: #333;
+      line-height: 1.7;
+    }
+    .ans-explain strong { color: var(--accent); }
+
+    .ornament {
+      text-align: center;
+      color: var(--accent);
+      font-size: 18px;
+      margin: 8px 0 20px;
+      letter-spacing: 8px;
+    }
+
+    footer {
+      background: var(--text);
+      color: #888;
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      margin-top: 36px;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: none; }
+
+    .score-info {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 14px 18px;
+      margin: 16px 0 28px;
+      font-size: 14px;
+      color: var(--text2);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .score-info span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    .dot-easy { background: #16a34a; }
+    .dot-mid { background: #d97706; }
+    .dot-hard { background: #dc2626; }
+  </style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="kicker">미국 증시 분석 · 시험문제</div>
+  <h1>증시 바벨전략 & 시장 분석<br>시험문제 10선</h1>
+  <div class="sub">2026년 4월 15일 뉴욕 시장 기준 · 노바 라이브 방송 기반</div>
+</div>
+
+<div class="container">
+
+  <!-- 문제지 -->
+  <div class="sec-header">📋 시험문제 (총 10문제)</div>
+
+  <div class="score-info fade-in">
+    <span><span class="dot dot-easy"></span> 쉬움(⭐) × 3문항</span>
+    <span><span class="dot dot-mid"></span> 보통(⭐⭐) × 5문항</span>
+    <span><span class="dot dot-hard"></span> 어려움(⭐⭐⭐) × 2문항</span>
+  </div>
+
+  <div class="ornament">◆ ◇ ◆</div>
+
+  <!-- Q1 -->
+  <div class="q-card fade-in">
+    <div class="q-meta">
+      <span class="q-num">01</span>
+      <span class="q-diff">⭐ 쉬움</span>
+      <span class="q-type">객관식</span>
+    </div>
+    <div class="q-text">2026년 4월 15일 기준, 주식 시장을 상승시킨 '3대 기폭제'에 해당하지 않는 것은?</div>
+    <div class="choices">
+      <div class="choice"><span class="choice-num">①</span> 지정학적 리스크 완화 (중동 전쟁 완화 기대)</div>
+      <div class="choice"><span class="choice-num">②</span> 연준의 긴급 금리 인하 발표</div>
+      <div class="choice"><span class="choice-num">③</span> 대형 은행들의 1분기 호실적 발표</div>
+      <div class="choice"><span class="choice-num">④</span> AI 관련 내러티브 지속 및 투자 확대</div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card fade-in">
+    <div class="q-meta">
+      <span class="q-num">02</span>
+      <span class="q-diff">⭐ 쉬움</span>
+      <span class="q-type">객관식</span>
+    </div>
+    <div class="q-text">모건스탠리와 뱅크오브아메리카의 1분기 2026년 실적에서 공통적으로 30% 급증한 항목은?</div>
+    <div class="choices">
+      <div class="choice"><span class="choice-num">①</span> 대출 이자 수익</div>
+      <div class="choice"><span class="choice-num">②</span> 주식 트레이딩 수익</div>
+      <div class="choice"><span class="choice-num">③</span> 부동산 투자 수익</div>
+      <div class="choice"><span class="choice-num">④</span> 외환 거래 수익</div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card fade-in">
+    <div class="q-meta">
+      <span class="q-num">03</span>
+      <span class="q-diff">⭐ 쉬움</span>
+      <span class="q-type">OX문제</span>
+    </div>
+    <div class="q-text">다음 설명이 맞으면 O, 틀리면 X로 답하시오.<br><br>"테슬라의 AI5 칩 '테이프아웃(Tape-out)' 완료는 칩 제조가 완전히 끝났다는 의미이며, 즉시 양산이 가능한 상태를 뜻한다."</div>
+    <div class="choices">
+      <div class="choice"><span class="choice-num">O</span> 맞다 — 이미 양산 가능한 상태</div>
+      <div class="choice"><span class="choice-num">X</span> 틀리다 — 설계도 완성·제조사 전달 단계이며 실제 제조 전</div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card fade-in">
+    <div class="q-meta">
+      <span class="q-num">04</span>
+      <span class="q-diff">⭐⭐ 보통</span>
+      <span class="q-type">객관식</span>
+    </div>
+    <div class="q-text">신발 회사 올버드(Allbirds)가 AI 기업 전환 선언 후 주가가 단 하루 최고 600% 폭등한 사례를 분석한 내용으로 가장 적절한 것은?</div>
+    <div class="choices">
+      <div class="choice"><span class="choice-num">①</span> AI 서비스 전환으로 실제 매출이 급증할 것이 확실하기 때문</div>
+      <div class="choice"><span class="choice-num">②</span> 1999년 닷컴버블과 유사한 투기적 자본이 'AI' 라벨만으로 몰린 극단적 위험 신호</div>
+      <div class="choice"><span class="choice-num">③</span> 엔비디아와의 파트너십 체결로 실질적 AI 역량이 검증됐기 때문</div>
+      <div class="choice"><span class="choice-num">④</span> SEC의 새로운 규제로 신규 AI 기업이 상장 혜택을 받기 때문</div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card fade-in">
+    <div class="q-meta">
+      <span class="q-num">05</span>
+      <span class="q-diff">⭐⭐ 보통</span>
+      <span class="q-type">빈칸채우기</span>
+    </div>
+    <div class="q-text">다음 괄호를 채우시오.<br><br>
+    미 10년물 국채 금리는 <span class="blank-box"></span>% 수준을 유지하고 있으며, WTI 유가는 전쟁 발발 전 약 $64에서 현재 $<span class="blank-box"></span>로 약 <span class="blank-box"></span>% 이상 높은 상태다. 이는 채권·원자재 시장이 중동 평화의 완전한 실현을 아직 <span class="blank-box"></span>하고 있다는 신호다.</div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card fade-in">
+    <div class="q-meta">
+      <span class="q-num">06</span>
+      <span class="q-diff">⭐⭐ 보통</span>
+      <span class="q-type">단답형</span>
+    </div>
+    <div class="q-text">연준(Fed)이 발간한 경기 보고서로, 미국 전역의 경기 상황을 지역 연준이 기업·가계 인터뷰 등을 통해 수집해 발표하는 문서의 이름은?</div>
+    <div class="write-line">정답을 적으시오</div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-card fade-in">
+    <div class="q-meta">
+      <span class="q-num">07</span>
+      <span class="q-diff">⭐⭐ 보통</span>
+      <span class="q-type">객관식</span>
+    </div>
+    <div class="q-text">SEC가 폐지한 '25,000달러 패턴 트레이딩 규정'에 관한 설명으로 옳은 것은?</div>
+    <div class="choices">
+      <div class="choice"><span class="choice-num">①</span> 계좌 잔액이 25,000달러 미만이면 하루에 주식을 살 수 없게 한 규정</div>
+      <div class="choice"><span class="choice-num">②</span> 25,000달러 미만 계좌는 5일 내 데이트레이딩(패턴 트레이딩)을 3회 이상 할 수 없도록 제한한 규정</div>
+      <div class="choice"><span class="choice-num">③</span> 25,000달러 이상 계좌에만 공매도를 허용한 규정</div>
+      <div class="choice"><span class="choice-num">④</span> 25,000달러 이상 투자 시 세금을 면제해 준 규정</div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-card fade-in">
+    <div class="q-meta">
+      <span class="q-num">08</span>
+      <span class="q-diff">⭐⭐ 보통</span>
+      <span class="q-type">단답형</span>
+    </div>
+    <div class="q-text">ASML이 발표한 2026년 연간 가이던스에서 강조한 AI 반도체 시장의 구조적 특성 한 가지를 서술하시오.</div>
+    <div class="write-line">정답을 적으시오</div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-card fade-in">
+    <div class="q-meta">
+      <span class="q-num">09</span>
+      <span class="q-diff">⭐⭐⭐ 어려움</span>
+      <span class="q-type">서술형</span>
+    </div>
+    <div class="q-text">현재 주식 시장만 강하게 상승하는 반면, 채권 시장(금리 유지)과 원자재 시장(유가 고공행진)이 이와 다른 신호를 보내는 현상을 '시장 디커플링(비동조화)'이라고 한다. 이 세 시장이 서로 다른 신호를 보내는 이유를 거시경제적 관점에서 두 가지 이상 서술하시오.</div>
+    <div class="write-line" style="min-height:80px">정답을 적으시오</div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-card fade-in">
+    <div class="q-meta">
+      <span class="q-num">10</span>
+      <span class="q-diff">⭐⭐⭐ 어려움</span>
+      <span class="q-type">서술형</span>
+    </div>
+    <div class="q-text">'바벨 전략(Barbell Strategy)'의 개념을 설명하고, 현재 시장 상황에서 이 전략이 왜 유효한지, 그리고 포트폴리오 구성 시 공격적 영역과 방어적 영역에 어떤 자산을 배치해야 하는지 구체적으로 서술하시오.</div>
+    <div class="write-line" style="min-height:90px">정답을 적으시오</div>
+  </div>
+
+  <!-- 정답지 -->
+  <div class="sec-header">📝 정답 및 해설</div>
+  <div class="ornament">◆ ◇ ◆</div>
+
+  <!-- A1 -->
+  <div class="ans-card fade-in">
+    <div class="ans-header">
+      <span class="ans-num">01</span>
+      <span class="ans-correct">정답: ②</span>
+    </div>
+    <div class="ans-explain">
+      연준은 이 시기 <strong>금리 인하를 발표하지 않았다</strong>. 오히려 연준 무살렘 위원은 에너지 충격으로 인해 연말 물가가 3%에 달할 수 있다며 금리 동결 장기화 가능성을 시사했다. 3대 기폭제는 ①지정학 리스크 완화, ③금융주 호실적, ④AI 내러티브 지속이다.
+    </div>
+  </div>
+
+  <!-- A2 -->
+  <div class="ans-card fade-in">
+    <div class="ans-header">
+      <span class="ans-num">02</span>
+      <span class="ans-correct">정답: ②</span>
+    </div>
+    <div class="ans-explain">
+      <strong>주식 트레이딩 수익이 전년 동기 대비 30% 급증</strong>했다. 이는 1~3월 시장 변동성이 극도로 확대되면서 트레이딩 빈도와 규모가 함께 증가한 결과다. 뱅크오브아메리카 EPS 1.11달러, 모건스탠리 EPS 3.43달러가 이를 반영했다.
+    </div>
+  </div>
+
+  <!-- A3 -->
+  <div class="ans-card fade-in">
+    <div class="ans-header">
+      <span class="ans-num">03</span>
+      <span class="ans-correct">정답: X</span>
+    </div>
+    <div class="ans-explain">
+      테이프아웃(Tape-out)은 <strong>반도체 설계 도면 완성 후 제조사에 전달</strong>하는 단계를 의미한다. 이후 반도체 제조사가 실제 웨이퍼를 생산하고, 검증·수정 과정을 거쳐야 최종 양산이 가능하다. 즉시 양산 가능한 상태가 아니라 설계 완료·이관 단계다.
+    </div>
+  </div>
+
+  <!-- A4 -->
+  <div class="ans-card fade-in">
+    <div class="ans-header">
+      <span class="ans-num">04</span>
+      <span class="ans-correct">정답: ②</span>
+    </div>
+    <div class="ans-explain">
+      올버드는 구체적인 AI 사업 계획 없이 신발 자산 매각(3,900만 달러)과 5,000만 달러 전환사채 조달 계획만 발표했다. 이는 <strong>1999년 닷컴버블 당시 무관한 기업들이 사명에 '.com'을 붙이거나 인터넷 전환을 선언해 주가가 폭등하던 구조와 동일</strong>하다. 극도의 위험 신호로 절대 투자 금지 대상이다.
+    </div>
+  </div>
+
+  <!-- A5 -->
+  <div class="ans-card fade-in">
+    <div class="ans-header">
+      <span class="ans-num">05</span>
+      <span class="ans-correct">정답: 4.28 / 91 / 40 / 인정(신뢰)하지 않고 있다</span>
+    </div>
+    <div class="ans-explain">
+      미 10년물 국채 금리 <strong>4.28%</strong>는 여전히 높은 수준이며, WTI 유가는 전쟁 발발 전 $64에서 현재 <strong>$91</strong>로 약 <strong>40% 이상</strong> 높다. 채권·원자재 트레이더들은 중동 전쟁의 완전한 종식을 아직 인정하지 않고 있으며, 인플레이션 상방 리스크가 열려 있다고 보고 있다.
+    </div>
+  </div>
+
+  <!-- A6 -->
+  <div class="ans-card fade-in">
+    <div class="ans-header">
+      <span class="ans-num">06</span>
+      <span class="ans-correct">정답: 베이지북 (Beige Book)</span>
+    </div>
+    <div class="ans-explain">
+      <strong>베이지북(Beige Book)</strong>은 미 연방준비제도(Fed)가 연 8회 FOMC 전에 발간하는 경기동향 보고서다. 12개 지역 연방준비은행이 기업, 소매업자, 금융기관 등을 인터뷰해 수집한 정성적 경기 데이터를 담는다. 이번 베이지북은 저소득·중산층 고통 심화, 푸드뱅크 수요 급증, 기업 비용 증가를 경고했다.
+    </div>
+  </div>
+
+  <!-- A7 -->
+  <div class="ans-card fade-in">
+    <div class="ans-header">
+      <span class="ans-num">07</span>
+      <span class="ans-correct">정답: ②</span>
+    </div>
+    <div class="ans-explain">
+      기존 미국 PDT(Pattern Day Trader) 규정은 <strong>계좌 잔액이 25,000달러 미만이면 5거래일 내 데이트레이딩을 3회 이상 할 수 없도록</strong> 제한했다. SEC가 이 규정을 폐지하면서 소액 계좌 보유자도 자유롭게 데이트레이딩이 가능해졌다. 이에 따라 로빈후드, 위불 등 소액 투자자 중심 플랫폼 주가가 장후 폭등했다.
+    </div>
+  </div>
+
+  <!-- A8 -->
+  <div class="ans-card fade-in">
+    <div class="ans-header">
+      <span class="ans-num">08</span>
+      <span class="ans-correct">정답: 수요가 공급을 초과하는 병목 현상이 2026년 연간으로도 지속될 것이다</span>
+    </div>
+    <div class="ans-explain">
+      ASML은 매출 사상 최고치 경신과 함께 <strong>"AI 반도체 관련 수요가 공급 능력을 초과하는 병목 현상(Bottleneck)이 2026년 내내 지속될 것"</strong>이라고 가이던스를 발표했다. 이는 초거대 AI 모델 개발을 위한 하이퍼스케일러들의 자본지출(CapEx)이 여전히 압도적으로 강하다는 것을 의미한다.
+    </div>
+  </div>
+
+  <!-- A9 -->
+  <div class="ans-card fade-in">
+    <div class="ans-header">
+      <span class="ans-num">09</span>
+      <span class="ans-correct">정답: 서술형 (핵심 키워드 기준 채점)</span>
+    </div>
+    <div class="ans-explain">
+      <strong>[핵심 논점 2가지 이상 포함 시 만점]</strong><br><br>
+      ① <strong>중동 전쟁 미종결 / 호르무즈 해협 불안</strong> — 원자재 시장은 지정학 리스크가 아직 해소되지 않았다고 판단해 유가가 고공행진을 유지한다. 전쟁 전($64) 대비 현재 유가($91)는 약 42% 높다.<br><br>
+      ② <strong>인플레이션 상방 리스크</strong> — 에너지 비용 상승은 시차를 두고 물가에 반영된다. 채권 금리(4.28%)가 내려오지 않는 것은 시장이 연준의 빠른 금리 인하를 기대하지 않는다는 신호다.<br><br>
+      ③ <strong>주식 시장의 감정적 '리스크온'</strong> — 주식은 단기 호재(AI, 실적)에 과민 반응하는 반면, 채권과 원자재는 구조적·장기 위험 요인을 더 냉철하게 반영한다.
+    </div>
+  </div>
+
+  <!-- A10 -->
+  <div class="ans-card fade-in">
+    <div class="ans-header">
+      <span class="ans-num">10</span>
+      <span class="ans-correct">정답: 서술형 (핵심 구성요소 기준 채점)</span>
+    </div>
+    <div class="ans-explain">
+      <strong>[개념 + 이유 + 구성 3요소 서술 시 만점]</strong><br><br>
+      <strong>① 개념</strong> — 바벨 전략은 포트폴리오의 양 끝단에 서로 상반된 위험도의 자산을 배치해 고위험·고수익 자산과 저위험·안정 자산을 동시에 보유하는 전략이다. 중간 위험(애매한) 자산은 최소화한다.<br><br>
+      <strong>② 유효한 이유</strong> — 현재처럼 AI 강세장(상승 모멘텀)과 채권·유가 고공행진(불확실성) 이 공존하는 국면에서는 어느 한쪽에 쏠리면 한 방향이 어긋났을 때 큰 손실을 입는다. 양방향 노출로 리스크를 분산한다.<br><br>
+      <strong>③ 구성</strong> — 공격 영역: 엔비디아·ASML 등 AI 코어, 브로드컴·마블 등 맞춤형 인프라, 소량의 양자컴퓨팅. 방어 영역: 고배당 금융주, 배당 ETF, 금·은·구리 원자재, 현금(유동성 유지).
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <strong style="color:#f43f5e">본 문제는 교육 목적으로 작성되었습니다.</strong><br>
+  노바 라이브 방송 분석 기반 · 2026.04.15 · 투자 결과의 책임은 본인에게 있습니다.
+</footer>
+
+<script>
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 60);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+</script>
+</body>
+</html>

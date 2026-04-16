@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>증시 바벨 전략 분석 | 2026.04.15</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg2: #fafafa;
+      --text: #1a1a1a;
+      --text2: #777777;
+      --accent: #e11d48;
+      --accent2: #f43f5e;
+      --border: #e5e5e5;
+      --c1: #e11d48;
+      --c2: #1a1a1a;
+      --c3: #6b7280;
+      --c4: #2563eb;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Source Serif 4', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+
+    /* ─── HEADER ─────────────────────── */
+    .masthead {
+      background: var(--text);
+      color: #fff;
+      text-align: center;
+      padding: 36px 20px 28px;
+      border-bottom: 4px solid var(--accent);
+    }
+    .masthead .kicker {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 10px;
+      font-family: 'Source Serif 4', serif;
+    }
+    .masthead h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22px, 6vw, 36px);
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .masthead .dateline {
+      font-size: 12px;
+      color: #aaa;
+      letter-spacing: 1.5px;
+    }
+    .masthead .subtitle {
+      font-size: 14px;
+      color: #ccc;
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    /* ─── LAYOUT ─────────────────────── */
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* ─── SECTION LABELS ─────────────── */
+    .section-label {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      margin-bottom: 14px;
+      font-family: 'Source Serif 4', serif;
+    }
+
+    section {
+      padding: 36px 0 28px;
+      border-bottom: 1px solid var(--border);
+    }
+    section:last-of-type { border-bottom: none; }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(18px, 4.5vw, 24px);
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      font-weight: 700;
+      margin: 22px 0 10px;
+      color: var(--text);
+    }
+
+    p {
+      margin-bottom: 14px;
+      color: var(--text);
+      font-size: 15.5px;
+    }
+
+    strong { color: var(--accent); font-weight: 600; }
+
+    /* ─── PULL QUOTE ─────────────────── */
+    .pull-quote {
+      border-left: 4px solid var(--accent);
+      padding: 14px 20px;
+      margin: 24px 0;
+      background: var(--bg2);
+      font-size: 17px;
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ─── STAT CARDS ─────────────────── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .stat-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--accent);
+      padding: 16px;
+      border-radius: 2px;
+    }
+    .stat-card .label {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text2);
+      margin-bottom: 6px;
+    }
+    .stat-card .value {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-card .sub {
+      font-size: 12px;
+      color: var(--text2);
+      margin-top: 4px;
+    }
+
+    /* ─── SIGNAL TABLE ─────────────────── */
+    .signal-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      font-size: 14px;
+    }
+    .signal-table thead {
+      background: var(--accent);
+      color: #fff;
+    }
+    .signal-table thead th {
+      padding: 10px 12px;
+      text-align: left;
+      font-family: 'Source Serif 4', serif;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .signal-table tbody tr {
+      border-bottom: 1px solid var(--border);
+    }
+    .signal-table tbody tr:nth-child(even) {
+      background: var(--bg2);
+    }
+    .signal-table tbody td {
+      padding: 10px 12px;
+      vertical-align: top;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 2px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .badge-bull { background: #dcfce7; color: #15803d; }
+    .badge-bear { background: #fee2e2; color: #b91c1c; }
+    .badge-warn { background: #fef9c3; color: #854d0e; }
+
+    /* ─── CHART ──────────────────────── */
+    .chart-container {
+      position: relative;
+      max-height: 340px;
+      margin: 20px 0;
+    }
+    .chart-container canvas {
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      max-height: 300px;
+    }
+    .chart-container.chart-ready canvas {
+      opacity: 1;
+    }
+    .chart-label {
+      font-size: 12px;
+      color: var(--text2);
+      text-align: center;
+      margin-top: -4px;
+      margin-bottom: 8px;
+      font-style: italic;
+    }
+
+    /* ─── BARBELL VISUAL ─────────────── */
+    .barbell-wrap {
+      margin: 24px 0;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 20px 16px;
+    }
+    .barbell-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .barbell-row {
+      display: flex;
+      align-items: stretch;
+      gap: 6px;
+      min-height: 80px;
+    }
+    .bb-side {
+      flex: 2;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 4px;
+      padding: 12px 10px;
+    }
+    .bb-side.right {
+      background: var(--c4);
+    }
+    .bb-bar {
+      flex: 1;
+      background: var(--text);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .bb-bar-inner {
+      width: 4px;
+      height: 100%;
+      background: var(--text2);
+    }
+    .bb-side-title {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      opacity: 0.85;
+    }
+    .bb-item {
+      font-size: 13px;
+      padding: 2px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+    .bb-item:last-child { border: none; }
+
+    .bb-center {
+      flex: 0.6;
+      background: #1a1a1a;
+      color: #fff;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 6px;
+      text-align: center;
+    }
+    .bb-center-label {
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 4px;
+    }
+    .bb-center-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    /* ─── WARNING BOX ─────────────────── */
+    .warn-box {
+      border: 2px solid var(--accent);
+      background: #fff0f3;
+      padding: 16px 18px;
+      margin: 20px 0;
+      border-radius: 2px;
+    }
+    .warn-box .warn-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .warn-box p {
+      font-size: 14px;
+      margin-bottom: 0;
+      color: #5a0a1e;
+    }
+
+    /* ─── FADE-IN ─────────────────────── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── FOOTER ─────────────────────── */
+    footer {
+      background: var(--text);
+      color: #888;
+      text-align: center;
+      padding: 24px 20px;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+    }
+    footer strong { color: var(--accent2); }
+
+    /* ─── DIVIDER ─────────────────────── */
+    .ornament {
+      text-align: center;
+      color: var(--accent);
+      font-size: 20px;
+      margin: 4px 0 16px;
+      letter-spacing: 8px;
+    }
+
+    .numbered-list {
+      counter-reset: item;
+      padding: 0;
+      list-style: none;
+      margin: 14px 0;
+    }
+    .numbered-list li {
+      counter-increment: item;
+      padding: 8px 0 8px 42px;
+      position: relative;
+      border-bottom: 1px dashed var(--border);
+      font-size: 15px;
+    }
+    .numbered-list li:last-child { border: none; }
+    .numbered-list li::before {
+      content: counter(item);
+      position: absolute;
+      left: 0;
+      top: 8px;
+      width: 28px;
+      height: 28px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Playfair Display', serif;
+      line-height: 28px;
+      text-align: center;
+    }
+
+    .horizon-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 8px 0;
+      font-size: 14px;
+    }
+    .horizon-bar .hb-label {
+      width: 110px;
+      flex-shrink: 0;
+      color: var(--text2);
+      font-size: 13px;
+    }
+    .horizon-bar .hb-track {
+      flex: 1;
+      height: 10px;
+      background: #f0f0f0;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .horizon-bar .hb-fill {
+      height: 100%;
+      border-radius: 5px;
+      background: var(--accent);
+      transition: width 1.2s ease;
+    }
+    .horizon-bar .hb-val {
+      width: 40px;
+      text-align: right;
+      font-size: 13px;
+      color: var(--text);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="kicker">미국 증시 심층 분석 · 2026년 4월 15일</div>
+  <h1>증시는 미친 듯 오르는데<br>채권·유가는 비상?</h1>
+  <div class="subtitle">닷컴버블 데자뷰 속 내 계좌 지키는 '완벽한 바벨 전략'</div>
+  <div class="dateline">뉴욕 시간 기준 · 노바 라이브 방송 분석</div>
+</div>
+
+<div class="container">
+
+  <!-- ① 시장 개황 -->
+  <section>
+    <div class="fade-in">
+      <span class="section-label">시장 개황</span>
+      <div class="ornament">◆ ◇ ◆</div>
+      <h2>역사상 가장 빠른 초매도→초매수 전환</h2>
+      <p>2026년 4월 15일, S&P 500과 나스닥은 <strong>사상 최고치</strong>에 근접하며 강세를 연출했다. 불과 2주 전 CNN 공포·탐욕 지수가 <strong>13</strong>까지 하락하며 공황 분위기를 조성했던 시장이, RSI 기준 역사상 가장 빠른 속도로 초매수 구간으로 진입한 것이다.</p>
+      <p>이 같은 V자 랠리의 배경에는 세 가지 기폭제가 동시에 작동했다.</p>
+    </div>
+
+    <div class="stat-grid fade-in">
+      <div class="stat-card">
+        <div class="label">CNN 공포지수 저점</div>
+        <div class="value">13</div>
+        <div class="sub">약 2주 전 기록</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">테슬라 당일 상승률</div>
+        <div class="value">+7.63%</div>
+        <div class="sub">AI5 칩 테이프아웃</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">모건스탠리 EPS</div>
+        <div class="value">$3.43</div>
+        <div class="sub">1Q 2026 실적</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">뱅크오브아메리카 EPS</div>
+        <div class="value">$1.11</div>
+        <div class="sub">1Q 2026 실적</div>
+      </div>
+    </div>
+
+    <!-- 차트 1: 3대 기폭제 레이더 -->
+    <div class="fade-in">
+      <h3>3대 상승 기폭제 강도 분석</h3>
+    </div>
+    <div class="chart-container fade-in">
+      <canvas id="radarChart" height="240"></canvas>
+    </div>
+    <p class="chart-label fade-in">※ 각 요인별 시장 영향도를 상대 점수로 환산 (주관적 평가)</p>
+  </section>
+
+  <!-- ② 금융주 실적 -->
+  <section>
+    <div class="fade-in">
+      <span class="section-label">금융주 실적</span>
+      <div class="ornament">◆ ◇ ◆</div>
+      <h2>대형 은행의 잔치, 그 이면의 경고</h2>
+      <p>모건스탠리와 뱅크오브아메리카는 1분기 호실적을 발표했다. 두 은행의 공통점은 <strong>주식 트레이딩 수익이 전년 대비 30% 급증</strong>했다는 점이다. 이는 1~3월 시장 변동성 폭발로 인해 트레이딩 빈도가 극적으로 증가했기 때문이다.</p>
+
+      <div class="pull-quote">
+        "은행이 돈을 못 번다는 건 다른 아이들은 다 죽었다는 얘기예요. 은행 실적이 좋다고 해서 실물 경기가 좋은 건 아닙니다."
+      </div>
+
+      <p>반면 실물 경제의 바닥권에서는 저소득층과 소상공인의 고통이 심화되고 있다. 연준 베이지북은 <strong>푸드뱅크 수요 급증</strong>과 기업 비용 지속 증가를 명시했다.</p>
+    </div>
+
+    <!-- 차트 2: 은행 EPS 비교 -->
+    <div class="fade-in"><h3>주요 은행 1Q 2026 EPS 비교</h3></div>
+    <div class="chart-container fade-in">
+      <canvas id="bankChart" height="220"></canvas>
+    </div>
+    <p class="chart-label fade-in">※ 주당순이익(EPS) 기준. 트레이딩 수익 30%↑가 공통 요인</p>
+
+    <div class="fade-in">
+      <div class="warn-box">
+        <div class="warn-title">⚠️ 은행 실적의 함정</div>
+        <p>대형 은행 실적 호조는 시장 변동성이 클수록 수익이 늘어나는 트레이딩 비즈니스 특성에 기인한다. 이는 건강한 경기 확장이 아닌, 극도의 시장 불확실성이 만들어 낸 결과일 수 있다. 가이던스 불확실성도 여전하다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ③ AI 내러티브 -->
+  <section>
+    <div class="fade-in">
+      <span class="section-label">AI 섹터 분석</span>
+      <div class="ornament">◆ ◇ ◆</div>
+      <h2>AI, 이 시장을 움직이는 유일한 엔진</h2>
+      <p>AI 인프라 투자 사이클은 현재 세 개의 층위로 분화되고 있다.</p>
+
+      <ul class="numbered-list">
+        <li><strong>코어 펀더멘탈 자본층</strong> — 엔비디아, ASML 등 구조적 성장 플레이어. ASML은 1분기 매출 사상 최고치를 경신하며 수요가 공급을 초과하는 병목 현상이 2026년 연간으로도 지속될 것이라고 가이던스를 제시했다.</li>
+        <li><strong>하이퍼스케일러 맞춤형 인프라층</strong> — 브로드컴, 마블, 마이크론 등. 메타·구글 등 빅테크가 엔비디아 의존도를 낮추기 위해 자체 AI 칩 설계에 박차를 가하면서 수혜. 테슬라도 자율주행·휴머노이드 로봇 전용 <strong>AI5 칩 테이프아웃</strong>을 완료했다.</li>
+        <li><strong>초고위험 모멘텀 자본층</strong> — 양자컴퓨팅 관련주. 엔비디아가 양자컴퓨팅 오픈소스 AI 모델(아이징)을 공개하면서 관련 종목이 급등 촉매제가 됐다.</li>
+      </ul>
+    </div>
+
+    <!-- 차트 3: AI 인프라 자본 분류 -->
+    <div class="fade-in"><h3>AI 인프라 투자 유형별 특성</h3></div>
+    <div class="chart-container fade-in">
+      <canvas id="aiChart" height="240"></canvas>
+    </div>
+    <p class="chart-label fade-in">※ 투자 안정성 vs 기대 수익률 포지셔닝 (상대 평가)</p>
+  </section>
+
+  <!-- ④ 닷컴버블 경고 -->
+  <section>
+    <div class="fade-in">
+      <span class="section-label">위험 신호</span>
+      <div class="ornament">◆ ◇ ◆</div>
+      <h2>올버드 +600%: 1999년의 데자뷰</h2>
+      <p>신발 브랜드 올버드(Allbirds)는 기존 신발 사업 자산을 <strong>3,900만 달러</strong>에 매각하고 5,000만 달러 전환사채를 조달해 AI 서비스 기업으로 전환하겠다고 발표했다. 구체적 사업 계획 없이 'AI'라는 단어만으로 주가가 <strong>3달러 → 23달러</strong>로 급등, 하루 최고 <strong>600%</strong> 폭등을 기록했다.</p>
+      <p>이는 1999년 닷컴버블 당시 무관한 업종의 기업들이 사명에 '.com'이나 '인터넷'을 붙이는 것만으로 주가가 폭등하던 현상과 구조적으로 동일하다.</p>
+      <div class="pull-quote">
+        "AI라는 라벨만 붙었다고 매수 자금이 몰리는 건 극단적인 위험 신호입니다. 이건 진짜 투기, 도박입니다."
+      </div>
+    </div>
+
+    <div class="fade-in">
+      <h3>닷컴버블(1999) vs 현재 AI 버블 징후 비교</h3>
+      <table class="signal-table">
+        <thead>
+          <tr>
+            <th>항목</th>
+            <th>1999 닷컴버블</th>
+            <th>2026 AI 버블 징후</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>기업 전환 사례</td>
+            <td>사명에 '.com' 추가</td>
+            <td>신발회사 → AI 선언</td>
+          </tr>
+          <tr>
+            <td>주가 반응</td>
+            <td>수백 % 급등</td>
+            <td>올버드 +600%</td>
+          </tr>
+          <tr>
+            <td>구체적 계획</td>
+            <td>없음</td>
+            <td>없음 (계획만 발표)</td>
+          </tr>
+          <tr>
+            <td>자본 성격</td>
+            <td>투기적 모멘텀</td>
+            <td>투기적 모멘텀</td>
+          </tr>
+          <tr>
+            <td>시장 신호</td>
+            <td><span class="badge badge-bear">극도 경계</span></td>
+            <td><span class="badge badge-bear">극도 경계</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ⑤ 시장 비동조화 -->
+  <section>
+    <div class="fade-in">
+      <span class="section-label">거시경제 경고</span>
+      <div class="ornament">◆ ◇ ◆</div>
+      <h2>시장 디커플링: 주식만 혼자 달리는 상황</h2>
+      <p>정상적인 위험자산 랠리 국면이라면 주식이 오를 때 채권 금리가 내리고 원자재 가격도 안정되어야 한다. 그러나 현재 상황은 다르다.</p>
+    </div>
+
+    <div class="fade-in">
+      <div class="horizon-bar">
+        <span class="hb-label">미 10년물 국채</span>
+        <div class="hb-track"><div class="hb-fill" style="width:85%;background:#e11d48"></div></div>
+        <span class="hb-val">4.28%</span>
+      </div>
+      <div class="horizon-bar">
+        <span class="hb-label">WTI 유가</span>
+        <div class="hb-track"><div class="hb-fill" style="width:72%;background:#e11d48"></div></div>
+        <span class="hb-val">$91</span>
+      </div>
+      <div class="horizon-bar">
+        <span class="hb-label">전쟁 전 유가</span>
+        <div class="hb-track"><div class="hb-fill" style="width:50%;background:#6b7280"></div></div>
+        <span class="hb-val">$64</span>
+      </div>
+      <div class="horizon-bar">
+        <span class="hb-label">RSI (나스닥)</span>
+        <div class="hb-track"><div class="hb-fill" style="width:90%;background:#2563eb"></div></div>
+        <span class="hb-val">~70</span>
+      </div>
+    </div>
+
+    <!-- 차트 4: 유가 추이 -->
+    <div class="fade-in"><h3>유가(WTI) 구간별 추이</h3></div>
+    <div class="chart-container fade-in">
+      <canvas id="oilChart" height="220"></canvas>
+    </div>
+    <p class="chart-label fade-in">※ 전쟁 전 $64 대비 현재 $91로 약 +42% 수준 (호르무즈 해협 불안 지속)</p>
+
+    <div class="fade-in">
+      <p>채권 트레이더와 원자재 트레이더들은 <strong>중동 전쟁의 완전한 종전과 호르무즈 해협의 완전 개방이 아직 멀었다</strong>고 판단하며, 인플레이션 상방 리스크가 여전히 열려 있다는 신호를 보내고 있다.</p>
+      <p>연준 무살렘 위원은 에너지 충격이 시차를 두고 인플레이션에 반영될 것이라며, <strong>연말 물가 3% 수준</strong>을 예측했다. 금리 동결 장기화가 현실화될 경우 주식 시장에 메가톤급 충격이 될 수 있다.</p>
+    </div>
+
+    <div class="fade-in">
+      <h3>주요 시장 신호 현황표</h3>
+      <table class="signal-table">
+        <thead>
+          <tr><th>지표</th><th>현재 수준</th><th>신호</th><th>해석</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>나스닥 RSI</td>
+            <td>~70</td>
+            <td><span class="badge badge-warn">주의</span></td>
+            <td>초매수 구간 진입</td>
+          </tr>
+          <tr>
+            <td>미 10년물 금리</td>
+            <td>4.28%</td>
+            <td><span class="badge badge-bear">부정적</span></td>
+            <td>여전히 높은 수준 유지</td>
+          </tr>
+          <tr>
+            <td>WTI 유가</td>
+            <td>$91</td>
+            <td><span class="badge badge-bear">부정적</span></td>
+            <td>전쟁 전比 +42%</td>
+          </tr>
+          <tr>
+            <td>은행 실적</td>
+            <td>호실적</td>
+            <td><span class="badge badge-bull">긍정적</span></td>
+            <td>트레이딩 수익 +30%</td>
+          </tr>
+          <tr>
+            <td>ASML 가이던스</td>
+            <td>수요>공급</td>
+            <td><span class="badge badge-bull">긍정적</span></td>
+            <td>AI 인프라 투자 지속</td>
+          </tr>
+          <tr>
+            <td>베이지북</td>
+            <td>서민 악화</td>
+            <td><span class="badge badge-bear">부정적</span></td>
+            <td>푸드뱅크 수요 급증</td>
+          </tr>
+          <tr>
+            <td>SEC 데이트레이딩</td>
+            <td>25K 규정 폐지</td>
+            <td><span class="badge badge-warn">주의</span></td>
+            <td>소액 투자자 변동성↑</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ⑥ 바벨 전략 -->
+  <section>
+    <div class="fade-in">
+      <span class="section-label">포트폴리오 전략</span>
+      <div class="ornament">◆ ◇ ◆</div>
+      <h2>완벽한 바벨 전략: 공격과 방어의 균형</h2>
+      <p>바벨 전략이란 포트폴리오의 양 끝단에 서로 상반된 성격의 자산을 배치하는 전략이다. 현재처럼 강세장과 불확실성이 공존하는 국면에서 유효하다.</p>
+    </div>
+
+    <div class="barbell-wrap fade-in">
+      <div class="barbell-title">⚖️ 바벨 전략 포트폴리오 구성</div>
+      <div class="barbell-row">
+        <div class="bb-side">
+          <div class="bb-side-title">🔴 공격적 성장 앵커</div>
+          <div class="bb-item">엔비디아 / ASML</div>
+          <div class="bb-item">브로드컴 / 마블</div>
+          <div class="bb-item">테슬라 (AI·로봇)</div>
+          <div class="bb-item">양자컴퓨팅 소량</div>
+        </div>
+        <div class="bb-center">
+          <div class="bb-center-label">현금</div>
+          <div class="bb-center-val">유동성</div>
+          <div class="bb-center-label" style="margin-top:6px">기회대기</div>
+        </div>
+        <div class="bb-side right">
+          <div class="bb-side-title">🔵 방어적 헷지</div>
+          <div class="bb-item">금융주 (배당)</div>
+          <div class="bb-item">고배당 ETF</div>
+          <div class="bb-item">금 / 은 / 구리</div>
+          <div class="bb-item">에너지 관련</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 차트 5: 바벨 전략 비중 예시 -->
+    <div class="fade-in"><h3>바벨 전략 비중 예시 (5:3:2)</h3></div>
+    <div class="chart-container fade-in">
+      <canvas id="barbellChart" height="220"></canvas>
+    </div>
+    <p class="chart-label fade-in">※ 개인 리스크 성향에 따라 조정 (예: 7:2:1 또는 6:3:1)</p>
+
+    <div class="fade-in">
+      <h3>전략별 투자 성격 정리</h3>
+      <table class="signal-table">
+        <thead>
+          <tr><th>유형</th><th>대표 종목</th><th>성격</th><th>비중 가이드</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>AI 코어</td>
+            <td>NVDA, ASML</td>
+            <td>안정적 구조적 성장</td>
+            <td>40~50%</td>
+          </tr>
+          <tr>
+            <td>맞춤형 인프라</td>
+            <td>AVGO, MRVL</td>
+            <td>생태계 다변화 수혜</td>
+            <td>20~30%</td>
+          </tr>
+          <tr>
+            <td>퀀텀/신흥</td>
+            <td>양자컴퓨팅</td>
+            <td>초고위험 초고수익</td>
+            <td>10~20%</td>
+          </tr>
+          <tr>
+            <td>방어 헷지</td>
+            <td>배당주, 금</td>
+            <td>하방 보호·인플레 헤지</td>
+            <td>10~20%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ⑦ 결론 -->
+  <section>
+    <div class="fade-in">
+      <span class="section-label">종합 시사점</span>
+      <div class="ornament">◆ ◇ ◆</div>
+      <h2>현상의 화려함에 취하되, 중력을 잊지 마라</h2>
+
+      <p>S&P 500 7,000 시대와 AI라는 구조적 성장 동력은 <strong>부정할 수 없는 현실</strong>이다. 그러나 채권 시장과 원자재 시장이 보내는 신호는 여전히 불안하다.</p>
+
+      <ul class="numbered-list">
+        <li><strong>AI 인프라는 장기 구조적 테마</strong>다. 단기 노이즈에 흔들리지 않고 코어 포지션을 유지하라.</li>
+        <li><strong>채권 금리(4.28%)와 유가($91)는 경고 신호</strong>다. 완전한 중동 평화와 인플레이션 안정 없이는 주식의 상승세가 취약하다.</li>
+        <li><strong>올버드류의 'AI 편승' 종목은 절대 투자 금지.</strong> 1999년 닷컴버블의 재연을 보고 있다.</li>
+        <li><strong>SEC의 25,000달러 패턴 트레이딩 규제 폐지</strong>는 소액 투자자의 단기 변동성을 키울 수 있다. 로빈후드, 위불 등 수혜주에 주목.</li>
+        <li><strong>베이지북 경고(서민 경제 악화)와 연준의 금리 동결 장기화 가능성</strong>은 주식 시장의 핵심 하방 리스크다.</li>
+        <li><strong>자본은 소리 없이, 냉철하게 흐른다.</strong> 계좌 자랑이 넘쳐날 때가 시장 고점의 심리적 신호다.</li>
+      </ul>
+
+      <div class="pull-quote">
+        "자본은 가장 안전하고 확실하게 돈을 벌 수 있는 곳으로 서서히, 천천히, 냉철하게 뱀처럼 움직입니다."
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <strong>본 문서는 투자 권유가 아닌 교육·정보 목적으로 작성되었습니다.</strong><br>
+  투자 결과에 대한 책임은 투자자 본인에게 있습니다. · 노바 라이브 방송 기반 분석 · 2026.04.15
+</footer>
+
+<script>
+// ─── Observer 1: fade-in ───────────────────────────────
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// ─── Chart Configs (정의만, 호출 금지) ────────────────
+const chartConfigs = {};
+
+// 차트1: 레이더 - 3대 기폭제
+chartConfigs['radarChart'] = () => {
+  new Chart(document.getElementById('radarChart'), {
+    type: 'radar',
+    data: {
+      labels: ['지정학 완화', 'AI 내러티브', '금융주 실적', '매크로 안도', '유동성'],
+      datasets: [{
+        label: '시장 영향도',
+        data: [75, 95, 80, 65, 70],
+        backgroundColor: 'rgba(225,29,72,0.2)',
+        borderColor: '#e11d48',
+        pointBackgroundColor: '#e11d48',
+        pointRadius: 5,
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1800, easing: 'easeInOutQuart', delay: ctx => ctx.dataIndex * 120 },
+      scales: {
+        r: {
+          min: 0, max: 100,
+          ticks: { stepSize: 25, font: { size: 10 }, color: '#777' },
+          pointLabels: { font: { size: 12, family: 'Source Serif 4' }, color: '#1a1a1a' },
+          grid: { color: '#e5e5e5' }
+        }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+};
+
+// 차트2: 바 - 은행 EPS
+chartConfigs['bankChart'] = () => {
+  new Chart(document.getElementById('bankChart'), {
+    type: 'bar',
+    data: {
+      labels: ['뱅크오브아메리카', '모건스탠리'],
+      datasets: [{
+        label: '1Q 2026 EPS ($)',
+        data: [1.11, 3.43],
+        backgroundColor: ['#e11d48', '#2563eb'],
+        borderRadius: 3,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1500, easing: 'easeInOutQuart', delay: ctx => ctx.dataIndex * 150 },
+      animations: { y: { from: 0 } },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` EPS: $${ctx.parsed.y}`
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { callback: v => '$' + v, font: { size: 11 }, color: '#777' },
+          grid: { color: '#f0f0f0' }
+        },
+        x: { ticks: { font: { size: 12 }, color: '#1a1a1a' }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// 차트3: 바(가로) - AI 인프라 투자 유형
+chartConfigs['aiChart'] = () => {
+  new Chart(document.getElementById('aiChart'), {
+    type: 'bar',
+    data: {
+      labels: ['AI 코어\n(NVDA/ASML)', '맞춤형 인프라\n(AVGO/MRVL)', '양자컴퓨팅\n(모멘텀)'],
+      datasets: [
+        {
+          label: '안정성',
+          data: [90, 65, 20],
+          backgroundColor: '#2563eb',
+          borderRadius: 3
+        },
+        {
+          label: '기대수익률',
+          data: [70, 75, 95],
+          backgroundColor: '#e11d48',
+          borderRadius: 3
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1500, easing: 'easeInOutQuart', delay: ctx => ctx.dataIndex * 150 },
+      animations: { y: { from: 0 } },
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: { font: { size: 12 }, color: '#1a1a1a', padding: 12 }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true, max: 100,
+          ticks: { callback: v => v + 'pt', font: { size: 11 }, color: '#777' },
+          grid: { color: '#f0f0f0' }
+        },
+        x: { ticks: { font: { size: 11 }, color: '#1a1a1a' }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// 차트4: 라인 - 유가 추이
+chartConfigs['oilChart'] = () => {
+  new Chart(document.getElementById('oilChart'), {
+    type: 'line',
+    data: {
+      labels: ['전쟁 전\n(2월초)', '80불\n돌파', '전고점\n(130불 가능)', '현재\n$91'],
+      datasets: [
+        {
+          label: 'WTI 유가 ($)',
+          data: [64, 80, null, 91],
+          borderColor: '#e11d48',
+          backgroundColor: 'rgba(225,29,72,0.1)',
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: '#e11d48',
+          pointRadius: 6,
+          borderWidth: 2.5,
+          spanGaps: true
+        },
+        {
+          label: '안전권 기준선 ($80)',
+          data: [80, 80, 80, 80],
+          borderColor: '#6b7280',
+          borderDash: [6, 4],
+          pointRadius: 0,
+          borderWidth: 1.5,
+          fill: false,
+          tension: 0
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1800, easing: 'easeInOutQuart' },
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: { font: { size: 12 }, color: '#1a1a1a', padding: 12 }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: false,
+          min: 55,
+          ticks: { callback: v => '$' + v, font: { size: 11 }, color: '#777' },
+          grid: { color: '#f0f0f0' }
+        },
+        x: { ticks: { font: { size: 11 }, color: '#1a1a1a' }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// 차트5: 도넛 - 바벨 전략
+chartConfigs['barbellChart'] = () => {
+  new Chart(document.getElementById('barbellChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['AI 코어 (50%)', '맞춤형 인프라 (30%)', '방어 헷지/현금 (20%)'],
+      datasets: [{
+        data: [50, 30, 20],
+        backgroundColor: ['#e11d48', '#2563eb', '#6b7280'],
+        borderWidth: 3,
+        borderColor: '#fff'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { animateRotate: true, animateScale: true, duration: 2000, easing: 'easeInOutQuart' },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 12 }, color: '#1a1a1a', padding: 14 }
+        }
+      },
+      cutout: '55%'
+    }
+  });
+};
+
+// ─── Observer 2: 차트 전용 ─────────────────────────────
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const canvas = entry.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        setTimeout(() => {
+          chartConfigs[canvas.id]();
+          entry.target.classList.add('chart-ready');
+          delete chartConfigs[canvas.id];
+        }, 200);
+      }
+      chartObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.25 });
+
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+</script>
+</body>
+</html>
