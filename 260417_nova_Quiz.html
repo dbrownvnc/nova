@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIA.chat 멤버미팅 2026-04-16 복습 퀴즈</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-sub: #fafafa;
+    --text: #1a1a1a;
+    --text-sub: #777777;
+    --accent: #e11d48;
+    --accent-sub: #f43f5e;
+    --border: #e5e5e5;
+    --green: #16a34a;
+    --red: #dc2626;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+  .container { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+
+  /* HERO */
+  .hero {
+    background: var(--text);
+    color: #fff;
+    padding: 50px 20px 55px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at 70% 30%, rgba(225,29,72,0.18), transparent 50%);
+  }
+  .hero-inner { position: relative; z-index: 1; }
+  .hero-kicker {
+    color: var(--accent-sub);
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 6vw, 40px);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 14px;
+  }
+  .hero h1 em { color: var(--accent-sub); font-style: italic; font-weight: 400; }
+  .hero-sub { font-size: 13px; color: #bbb; max-width: 420px; margin: 0 auto; }
+  .hero-stats {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #888;
+  }
+  .hero-stats span strong {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    color: var(--accent-sub);
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 4px;
+  }
+
+  /* MODE TABS */
+  .mode-bar {
+    display: flex;
+    border: 1px solid var(--border);
+    margin: 30px 0;
+    background: #fff;
+  }
+  .mode-btn {
+    flex: 1;
+    padding: 14px;
+    background: var(--bg-sub);
+    border: none;
+    font-family: inherit;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-sub);
+    cursor: pointer;
+    font-weight: 500;
+    border-right: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  .mode-btn:last-child { border-right: none; }
+  .mode-btn.active { background: var(--text); color: #fff; }
+
+  /* SECTION TITLE */
+  .sec-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 40px 0 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sec-title::before {
+    content: '';
+    display: inline-block;
+    width: 30px; height: 2px;
+    background: var(--accent);
+  }
+  .sec-sub {
+    color: var(--text-sub);
+    font-size: 13px;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  /* QUESTION CARD */
+  .q-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    margin-bottom: 18px;
+    padding: 22px 20px;
+    position: relative;
+  }
+  .q-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .q-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+  .q-badges { display: flex; gap: 6px; }
+  .badge {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    padding: 3px 10px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .b-type { background: var(--text); color: #fff; }
+  .b-easy { background: #dcfce7; color: #166534; }
+  .b-med { background: #fef3c7; color: #92400e; }
+  .b-hard { background: #fee2e2; color: #991b1b; }
+
+  .q-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 16px;
+    line-height: 1.65;
+  }
+
+  .options { list-style: none; }
+  .options li {
+    padding: 10px 14px;
+    margin-bottom: 6px;
+    background: var(--bg-sub);
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .options li:hover {
+    border-color: var(--accent);
+    background: #fff;
+  }
+  .options li.selected {
+    border-color: var(--accent);
+    background: #fff;
+  }
+  .options li.correct {
+    background: #dcfce7;
+    border-color: var(--green);
+  }
+  .options li.wrong {
+    background: #fee2e2;
+    border-color: var(--red);
+  }
+  .opt-letter {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 20px;
+  }
+
+  .short-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    background: var(--bg-sub);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.2s;
+  }
+  .short-input:focus { border-color: var(--accent); background: #fff; }
+
+  .ox-wrap { display: flex; gap: 10px; margin-top: 8px; }
+  .ox-btn {
+    flex: 1;
+    padding: 14px;
+    background: var(--bg-sub);
+    border: 1px solid var(--border);
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .ox-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .ox-btn.selected { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .check-btn {
+    margin-top: 14px;
+    background: var(--text);
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    font-family: inherit;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .check-btn:hover { background: var(--accent); }
+
+  .feedback {
+    margin-top: 14px;
+    padding: 14px 16px;
+    background: var(--bg-sub);
+    border-left: 3px solid var(--accent);
+    font-size: 13px;
+    line-height: 1.7;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback strong { color: var(--accent); }
+  .feedback .verdict {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .feedback .verdict.ok { color: var(--green); }
+  .feedback .verdict.no { color: var(--red); }
+
+  /* ANSWER SECTION (mode B) */
+  .answer-list { display: none; }
+  .mode-answers .answer-list { display: block; }
+  .mode-answers .q-list { display: none; }
+
+  .ans-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    padding: 20px;
+    margin-bottom: 14px;
+  }
+  .ans-num {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 14px;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .ans-q { font-size: 14px; color: var(--text); margin-bottom: 10px; font-weight: 500; }
+  .ans-a {
+    background: var(--bg-sub);
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    font-size: 13px;
+  }
+  .ans-a strong { color: var(--accent); }
+  .ans-exp {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.7;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+  }
+
+  /* SCORE */
+  .score-box {
+    position: sticky;
+    bottom: 16px;
+    background: var(--text);
+    color: #fff;
+    padding: 14px 18px;
+    margin: 24px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    letter-spacing: 1px;
+    z-index: 10;
+  }
+  .score-box .big {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent-sub);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--text);
+    color: #aaa;
+    padding: 40px 20px;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-top: 50px;
+  }
+  footer .serif {
+    font-family: 'Playfair Display', serif;
+    color: var(--accent-sub);
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: block;
+  }
+  footer a { color: var(--accent-sub); text-decoration: none; }
+
+  @media (max-width: 480px) {
+    .hero-stats { gap: 18px; font-size: 10px; }
+    .q-card { padding: 18px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-kicker">CIA.CHAT · QUIZ · 2026.04.16</div>
+    <h1>복습 <em>퀴즈</em></h1>
+    <p class="hero-sub">10문제로 오늘 방송의 핵심을 확인하세요.<br>객관식 · 단답형 · OX 혼합</p>
+    <div class="hero-stats">
+      <span>TOTAL<strong>10</strong></span>
+      <span>쉬움<strong>3</strong></span>
+      <span>보통<strong>5</strong></span>
+      <span>어려움<strong>2</strong></span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- MODE TABS -->
+<div class="mode-bar">
+  <button class="mode-btn active" data-mode="quiz">📝 문제 풀기</button>
+  <button class="mode-btn" data-mode="answers">📖 정답 & 해설</button>
+</div>
+
+<!-- MODE A: QUIZ -->
+<div id="quizArea">
+
+<h2 class="sec-title">문제</h2>
+<p class="sec-sub">각 문항을 선택·입력한 후 "정답 확인"을 누르세요.</p>
+
+<div class="q-list">
+
+<!-- Q1 EASY 객관식 -->
+<div class="q-card" data-q="1">
+  <div class="q-meta">
+    <span class="q-num">Q 01</span>
+    <div class="q-badges">
+      <span class="badge b-type">객관식</span>
+      <span class="badge b-easy">쉬움</span>
+    </div>
+  </div>
+  <div class="q-text">나스닥이 이번에 기록한 12거래일 연속 상승은 몇 년 이후 처음 있는 일인가?</div>
+  <ul class="options">
+    <li data-val="A"><span class="opt-letter">A.</span> 1999년</li>
+    <li data-val="B"><span class="opt-letter">B.</span> 2005년</li>
+    <li data-val="C"><span class="opt-letter">C.</span> 2009년</li>
+    <li data-val="D"><span class="opt-letter">D.</span> 2020년</li>
+  </ul>
+  <button class="check-btn">정답 확인</button>
+  <div class="feedback"></div>
+</div>
+
+<!-- Q2 EASY OX -->
+<div class="q-card" data-q="2">
+  <div class="q-meta">
+    <span class="q-num">Q 02</span>
+    <div class="q-badges">
+      <span class="badge b-type">OX</span>
+      <span class="badge b-easy">쉬움</span>
+    </div>
+  </div>
+  <div class="q-text">TSMC는 올해 연간 성장 가이던스를 30% 이상으로 상향했고, HPC·AI 수요가 극도로 강하다고 밝혔다.</div>
+  <div class="ox-wrap">
+    <button class="ox-btn" data-val="O">O</button>
+    <button class="ox-btn" data-val="X">X</button>
+  </div>
+  <button class="check-btn">정답 확인</button>
+  <div class="feedback"></div>
+</div>
+
+<!-- Q3 EASY 단답형 -->
+<div class="q-card" data-q="3">
+  <div class="q-meta">
+    <span class="q-num">Q 03</span>
+    <div class="q-badges">
+      <span class="badge b-type">단답형</span>
+      <span class="badge b-easy">쉬움</span>
+    </div>
+  </div>
+  <div class="q-text">현재 미국 항공사들이 보유한 항공유 재고는 약 몇 주 분량인가? (숫자만)</div>
+  <input type="text" class="short-input" placeholder="예: 8">
+  <button class="check-btn">정답 확인</button>
+  <div class="feedback"></div>
+</div>
+
+<!-- Q4 MED 객관식 -->
+<div class="q-card" data-q="4">
+  <div class="q-meta">
+    <span class="q-num">Q 04</span>
+    <div class="q-badges">
+      <span class="badge b-type">객관식</span>
+      <span class="badge b-med">보통</span>
+    </div>
+  </div>
+  <div class="q-text">TSMC 순이익이 YoY +58%의 미친 실적을 기록했음에도 당일 주가가 -3.13% 하락한 가장 핵심적 이유는?</div>
+  <ul class="options">
+    <li data-val="A"><span class="opt-letter">A.</span> AI 수요가 이미 정점을 찍었다는 시장의 공포</li>
+    <li data-val="B"><span class="opt-letter">B.</span> 그동안 미리 선반영된 가격에 대한 차익 실현</li>
+    <li data-val="C"><span class="opt-letter">C.</span> 대만 환율 급등에 따른 환차손</li>
+    <li data-val="D"><span class="opt-letter">D.</span> 경쟁사인 AMD가 예상을 뛰어넘는 실적을 발표</li>
+  </ul>
+  <button class="check-btn">정답 확인</button>
+  <div class="feedback"></div>
+</div>
+
+<!-- Q5 MED 객관식 -->
+<div class="q-card" data-q="5">
+  <div class="q-meta">
+    <span class="q-num">Q 05</span>
+    <div class="q-badges">
+      <span class="badge b-type">객관식</span>
+      <span class="badge b-med">보통</span>
+    </div>
+  </div>
+  <div class="q-text">방송에서 설명한 "AI 파동의 2차 확산"에 해당하는 대표적 IPO 사례는?</div>
+  <ul class="options">
+    <li data-val="A"><span class="opt-letter">A.</span> 메디슨에어(MAIR) — 첫날 +18.5%, 1999년 UPS 이후 최대 산업재 IPO</li>
+    <li data-val="B"><span class="opt-letter">B.</span> 올버즈 — +600% 폭등</li>
+    <li data-val="C"><span class="opt-letter">C.</span> 마이지엄 — AI 리브랜딩 후 +146%</li>
+    <li data-val="D"><span class="opt-letter">D.</span> 찰스슈왑 — 자금 유입 확대</li>
+  </ul>
+  <button class="check-btn">정답 확인</button>
+  <div class="feedback"></div>
+</div>
+
+<!-- Q6 MED OX -->
+<div class="q-card" data-q="6">
+  <div class="q-meta">
+    <span class="q-num">Q 06</span>
+    <div class="q-badges">
+      <span class="badge b-type">OX</span>
+      <span class="badge b-med">보통</span>
+    </div>
+  </div>
+  <div class="q-text">유가가 상승해도 코어 PPI 등 물가 지표에는 즉시 반영되지 않으며, 일반적으로 2~3개월의 시차를 두고 다른 제품·서비스 가격에 전이된다.</div>
+  <div class="ox-wrap">
+    <button class="ox-btn" data-val="O">O</button>
+    <button class="ox-btn" data-val="X">X</button>
+  </div>
+  <button class="check-btn">정답 확인</button>
+  <div class="feedback"></div>
+</div>
+
+<!-- Q7 MED 단답형 -->
+<div class="q-card" data-q="7">
+  <div class="q-meta">
+    <span class="q-num">Q 07</span>
+    <div class="q-badges">
+      <span class="badge b-type">단답형</span>
+      <span class="badge b-med">보통</span>
+    </div>
+  </div>
+  <div class="q-text">방송에서 지목한 엔비디아(NVDA) 주가의 핵심 저항선(테스트 라인) 가격은 얼마인가? (달러 표기, 숫자만)</div>
+  <input type="text" class="short-input" placeholder="예: 150">
+  <button class="check-btn">정답 확인</button>
+  <div class="feedback"></div>
+</div>
+
+<!-- Q8 MED 객관식 -->
+<div class="q-card" data-q="8">
+  <div class="q-meta">
+    <span class="q-num">Q 08</span>
+    <div class="q-badges">
+      <span class="badge b-type">객관식</span>
+      <span class="badge b-med">보통</span>
+    </div>
+  </div>
+  <div class="q-text">찰스슈왑(Charles Schwab)이 오늘 미국 금융주 실적 발표에서 부진한 근본 원인으로 설명된 것은?</div>
+  <ul class="options">
+    <li data-val="A"><span class="opt-letter">A.</span> 신용 카드 연체율 급증</li>
+    <li data-val="B"><span class="opt-letter">B.</span> 주식 수수료 경쟁 심화</li>
+    <li data-val="C"><span class="opt-letter">C.</span> 고객 예수금이 MMF·단기 채권 등 고금리 상품으로 이동</li>
+    <li data-val="D"><span class="opt-letter">D.</span> 대규모 부실 대출 상각</li>
+  </ul>
+  <button class="check-btn">정답 확인</button>
+  <div class="feedback"></div>
+</div>
+
+<!-- Q9 HARD 객관식 -->
+<div class="q-card" data-q="9">
+  <div class="q-meta">
+    <span class="q-num">Q 09</span>
+    <div class="q-badges">
+      <span class="badge b-type">객관식</span>
+      <span class="badge b-hard">어려움</span>
+    </div>
+  </div>
+  <div class="q-text">방송에서 제시한 베이스 케이스(Base Case, 45% 확률) 시나리오의 S&amp;P 500 예상 박스권은?</div>
+  <ul class="options">
+    <li data-val="A"><span class="opt-letter">A.</span> 6,300 ~ 6,600</li>
+    <li data-val="B"><span class="opt-letter">B.</span> 6,900 ~ 7,150</li>
+    <li data-val="C"><span class="opt-letter">C.</span> 7,400 ~ 7,700</li>
+    <li data-val="D"><span class="opt-letter">D.</span> 7,000 ~ 7,500</li>
+  </ul>
+  <button class="check-btn">정답 확인</button>
+  <div class="feedback"></div>
+</div>
+
+<!-- Q10 HARD 단답형 -->
+<div class="q-card" data-q="10">
+  <div class="q-meta">
+    <span class="q-num">Q 10</span>
+    <div class="q-badges">
+      <span class="badge b-type">단답형</span>
+      <span class="badge b-hard">어려움</span>
+    </div>
+  </div>
+  <div class="q-text">호르무즈 해협 우회로 인해 해상 운임이 폭등하고 유조선 수요가 급증한 결과, 방송에서 언급된 "비웨시(BWES)" ETF의 연초 이후 수익률(YTD)은 약 몇 %인가? (숫자만, 소수점 없이)</div>
+  <input type="text" class="short-input" placeholder="예: 100">
+  <button class="check-btn">정답 확인</button>
+  <div class="feedback"></div>
+</div>
+
+</div><!-- /q-list -->
+
+<div class="score-box">
+  <span>SCORE</span>
+  <span class="big"><span id="scoreNum">0</span> / 10</span>
+</div>
+
+</div><!-- /quizArea -->
+
+<!-- MODE B: ANSWERS -->
+<div id="answerArea" style="display:none;">
+
+<h2 class="sec-title">정답 & 해설</h2>
+<p class="sec-sub">각 문항의 정답과 근거를 확인하세요.</p>
+
+<div class="ans-card">
+  <div class="ans-num">Q 01 · 쉬움 · 객관식</div>
+  <div class="ans-q">나스닥 12거래일 연속 상승은 몇 년 이후 처음 있는 일인가?</div>
+  <div class="ans-a"><strong>정답:</strong> C. 2009년</div>
+  <div class="ans-exp">방송에서 "2009년 이후로 12거래일 상승이라는 경이로운 기록"이라고 명시. 글로벌 금융위기 이후 회복 랠리 시점과 비교되는 기록이다.</div>
+</div>
+
+<div class="ans-card">
+  <div class="ans-num">Q 02 · 쉬움 · OX</div>
+  <div class="ans-q">TSMC는 연간 가이던스를 30% 이상 상향, HPC·AI 수요가 극도로 강하다고 밝혔다.</div>
+  <div class="ans-a"><strong>정답:</strong> O</div>
+  <div class="ans-exp">TSMC는 순이익 YoY +58% 기록 외에도 성장 가이던스를 30% 이상으로 상향하고, HPC(High Performance Computing)와 AI 애플리케이션 수요가 "극도로 강하다"고 코멘트. 월스트리트 일각의 AI 버블 주장을 숫자로 반박한 사례다.</div>
+</div>
+
+<div class="ans-card">
+  <div class="ans-num">Q 03 · 쉬움 · 단답형</div>
+  <div class="ans-q">미국 항공사 항공유 재고 분량은?</div>
+  <div class="ans-a"><strong>정답:</strong> 6 (주)</div>
+  <div class="ans-exp">호르무즈 해협 통항 제약으로 원유 공급이 차질을 빚으면서 "비행기에 들어갈 오일이 6주 분량밖에 없다"고 언급. 이 재고가 소진되면 항공 운항 자체에 제약이 발생할 수 있다.</div>
+</div>
+
+<div class="ans-card">
+  <div class="ans-num">Q 04 · 보통 · 객관식</div>
+  <div class="ans-q">TSMC가 +58% 실적에도 주가가 -3.13% 하락한 핵심 이유?</div>
+  <div class="ans-a"><strong>정답:</strong> B. 그동안 선반영된 가격에 대한 차익 실현</div>
+  <div class="ans-exp">방송 표현대로 "지금까지 쌓아 올린 주가는 미리 가불에 가불을 해온 것"이고, 실제 뉴스로 입증되자 차익 실현이 진행됐다는 설명. 실적 자체는 의심의 여지 없이 강하다.</div>
+</div>
+
+<div class="ans-card">
+  <div class="ans-num">Q 05 · 보통 · 객관식</div>
+  <div class="ans-q">AI 파동 2차 확산의 대표 IPO는?</div>
+  <div class="ans-a"><strong>정답:</strong> A. 메디슨에어(MAIR)</div>
+  <div class="ans-exp">오늘 IPO 첫날 +18.5% 폭등. 1999년 UPS 이후 최대 규모의 산업재(Industrial) IPO로 분류. GPU·파운드리(1차) → 전력·냉각 인프라(2차)로 AI 투자 파동이 확산되고 있음을 보여주는 상징적 사례.</div>
+</div>
+
+<div class="ans-card">
+  <div class="ans-num">Q 06 · 보통 · OX</div>
+  <div class="ans-q">유가 상승은 2~3개월 시차 후 물가에 전이된다.</div>
+  <div class="ans-a"><strong>정답:</strong> O</div>
+  <div class="ans-exp">방송에서 "유가가 올라서 피해를 보는 다른 제품·서비스 물가는 한 번에 오지 않고, 보통 2~3개월이 걸려서 뒤늦게 반영된다"고 설명. 따라서 현재 코어 PPI가 큰 충격을 받지 않아도 시차 충격을 경계해야 한다.</div>
+</div>
+
+<div class="ans-card">
+  <div class="ans-num">Q 07 · 보통 · 단답형</div>
+  <div class="ans-q">엔비디아의 핵심 저항선 가격?</div>
+  <div class="ans-a"><strong>정답:</strong> 210 (달러)</div>
+  <div class="ans-exp">방송에서 박스권 상단을 210달러로 지목. "210을 찢어야 한다"며 돌파 시 단기 타겟 280~300달러 구간을 제시. 매도 고려 시 280달러부터 분할 매도 전략도 유효하다고 언급.</div>
+</div>
+
+<div class="ans-card">
+  <div class="ans-num">Q 08 · 보통 · 객관식</div>
+  <div class="ans-q">찰스슈왑 부진의 근본 원인은?</div>
+  <div class="ans-a"><strong>정답:</strong> C. 고객 예수금이 고금리 상품으로 이동</div>
+  <div class="ans-exp">MMF(머니마켓펀드)나 단기 채권으로 고객 자금이 이동하면서, 은행이 지급해야 하는 이자 부담이 늘어 수익성에 타격. 수수료가 아닌 자금 이동이 핵심 이슈다.</div>
+</div>
+
+<div class="ans-card">
+  <div class="ans-num">Q 09 · 어려움 · 객관식</div>
+  <div class="ans-q">베이스 케이스(45%) S&amp;P 500 박스권은?</div>
+  <div class="ans-a"><strong>정답:</strong> B. 6,900 ~ 7,150</div>
+  <div class="ans-exp">방송에서 제시한 세 가지 시나리오 중 기본 확률 45%의 베이스 케이스 타겟. 7,000선 주변 숨고르기 박스권. 빅테크 실적 모멘텀과 유가·인플레 불안의 작용·반작용 예상.</div>
+</div>
+
+<div class="ans-card">
+  <div class="ans-num">Q 10 · 어려움 · 단답형</div>
+  <div class="ans-q">BWES ETF의 YTD 수익률은?</div>
+  <div class="ans-a"><strong>정답:</strong> 663 (%)</div>
+  <div class="ans-exp">유조선 관련 ETF인 BWES의 연초 이후 수익률이 +663%로, 방송에서 "코루인 줄 알았다"고 표현할 만큼 급등. 호르무즈 우회(희망봉 루트) 해상 운임 폭등과 원유 저장 수요 급증이 배경. 전쟁 고착화 시 추가 상방 가능성 언급.</div>
+</div>
+
+</div><!-- /answerArea -->
+
+</div><!-- /container -->
+
+<footer>
+  <span class="serif">CIA.chat · Quiz</span>
+  <div><a href="./CIA_멤버미팅_20260416_분석.html">← 분석 문서로 돌아가기</a></div>
+  <div style="margin-top:14px;">멤버미팅 2026.04.16 · 본 자료는 투자 권유가 아닙니다</div>
+</footer>
+
+<script>
+  // mode switching
+  const modeBtns = document.querySelectorAll('.mode-btn');
+  const quizArea = document.getElementById('quizArea');
+  const answerArea = document.getElementById('answerArea');
+  modeBtns.forEach(b => {
+    b.addEventListener('click', () => {
+      modeBtns.forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      if (b.dataset.mode === 'quiz') {
+        quizArea.style.display = 'block';
+        answerArea.style.display = 'none';
+      } else {
+        quizArea.style.display = 'none';
+        answerArea.style.display = 'block';
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  // answers
+  const answers = {
+    1: { type:'mc', correct:'C', expl:'방송에서 "2009년 이후 12거래일 상승이라는 기록"이라고 언급. 글로벌 금융위기 회복 랠리 이후 최장 기록이다.' },
+    2: { type:'ox', correct:'O', expl:'TSMC는 성장 가이던스를 30% 이상으로 상향했고 HPC·AI 수요가 극도로 강하다고 밝혔다.' },
+    3: { type:'short', correct:['6','6주'], expl:'호르무즈 해협 통항 제약으로 항공유 재고가 6주 분량까지 감소.' },
+    4: { type:'mc', correct:'B', expl:'실적은 강하지만 주가가 이미 선반영되어 차익 실현이 진행된 것이 핵심. AI 자체는 여전히 견조.' },
+    5: { type:'mc', correct:'A', expl:'메디슨에어(MAIR) IPO 첫날 +18.5%. 1999년 UPS 이후 최대 산업재 IPO. AI 파동이 전력·냉각 인프라로 확산되는 대표 사례.' },
+    6: { type:'ox', correct:'O', expl:'유가는 보통 2~3개월 시차를 두고 다른 물가에 반영. 현재 코어 PPI 안정에도 경계가 필요한 이유.' },
+    7: { type:'short', correct:['210','210달러','$210','210$'], expl:'엔비디아 박스권 상단 210달러가 저항선. 돌파 시 단기 타겟 280~300달러 구간 제시.' },
+    8: { type:'mc', correct:'C', expl:'고객 예수금이 MMF와 단기 채권으로 이동하면서 은행의 이자 지급 부담이 증가. 수수료 감소가 아닌 자금 이동이 핵심.' },
+    9: { type:'mc', correct:'B', expl:'베이스 케이스는 확률 45%로 S&P 500이 6,900~7,150 박스권에서 숨고르기 하는 시나리오.' },
+    10:{ type:'short', correct:['663','663%'], expl:'BWES ETF YTD +663%. 호르무즈 우회로 인한 해상 운임 폭등과 원유 저장 수요 급증이 배경.' }
+  };
+
+  // option selection
+  document.querySelectorAll('.options').forEach(opts => {
+    opts.addEventListener('click', (e) => {
+      const li = e.target.closest('li');
+      if (!li) return;
+      opts.querySelectorAll('li').forEach(x => x.classList.remove('selected'));
+      li.classList.add('selected');
+    });
+  });
+
+  // ox selection
+  document.querySelectorAll('.ox-wrap').forEach(wrap => {
+    wrap.addEventListener('click', (e) => {
+      const btn = e.target.closest('.ox-btn');
+      if (!btn) return;
+      wrap.querySelectorAll('.ox-btn').forEach(x => x.classList.remove('selected'));
+      btn.classList.add('selected');
+    });
+  });
+
+  // check button
+  const answered = new Set();
+  const correctSet = new Set();
+  const scoreEl = document.getElementById('scoreNum');
+
+  document.querySelectorAll('.check-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('.q-card');
+      const qNum = parseInt(card.dataset.q);
+      const ans = answers[qNum];
+      const fb = card.querySelector('.feedback');
+      let userAns = null;
+      let isCorrect = false;
+
+      if (ans.type === 'mc') {
+        const sel = card.querySelector('.options li.selected');
+        if (!sel) { alert('선택지를 골라주세요'); return; }
+        userAns = sel.dataset.val;
+        isCorrect = (userAns === ans.correct);
+        card.querySelectorAll('.options li').forEach(li => {
+          li.classList.remove('correct','wrong');
+          if (li.dataset.val === ans.correct) li.classList.add('correct');
+          else if (li.classList.contains('selected') && !isCorrect) li.classList.add('wrong');
+        });
+      } else if (ans.type === 'ox') {
+        const sel = card.querySelector('.ox-btn.selected');
+        if (!sel) { alert('O 또는 X를 선택하세요'); return; }
+        userAns = sel.dataset.val;
+        isCorrect = (userAns === ans.correct);
+      } else if (ans.type === 'short') {
+        const input = card.querySelector('.short-input');
+        userAns = input.value.trim().toLowerCase().replace(/\s/g,'');
+        if (!userAns) { alert('답을 입력하세요'); return; }
+        isCorrect = ans.correct.some(c => c.toLowerCase().replace(/\s/g,'') === userAns);
+      }
+
+      fb.classList.add('show');
+      const correctText = Array.isArray(ans.correct) ? ans.correct[0] : ans.correct;
+      fb.innerHTML = `
+        <span class="verdict ${isCorrect?'ok':'no'}">${isCorrect?'✓ 정답':'✗ 오답'}</span>
+        <div><strong>정답:</strong> ${correctText}</div>
+        <div style="margin-top:6px;">${ans.expl}</div>
+      `;
+
+      if (!answered.has(qNum)) {
+        answered.add(qNum);
+        if (isCorrect) correctSet.add(qNum);
+        scoreEl.textContent = correctSet.size;
+      } else {
+        // allow re-check to update
+        if (isCorrect) correctSet.add(qNum);
+        else correctSet.delete(qNum);
+        scoreEl.textContent = correctSet.size;
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
