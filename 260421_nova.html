@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA 리얼 인베스트 분석 리포트 | 2026.04.21</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --chart1: #e11d48;
+    --chart2: #1a1a1a;
+    --chart3: #6b7280;
+    --chart4: #2563eb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  /* ── Header ── */
+  .site-header {
+    background: var(--text);
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .site-header .logo { font-family: 'Playfair Display', serif; font-size: 15px; letter-spacing: 0.04em; }
+
+  .hero {
+    background: var(--text);
+    color: #fff;
+    padding: 36px 20px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.12;
+  }
+  .hero-kicker {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    margin-bottom: 14px;
+    font-weight: 700;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 6vw, 32px);
+    line-height: 1.25;
+    margin-bottom: 12px;
+  }
+  .hero h1 em { color: var(--accent2); font-style: normal; }
+  .hero-meta { font-size: 12px; color: #aaa; letter-spacing: 0.06em; }
+
+  /* ── Layout ── */
+  .container { max-width: 680px; margin: 0 auto; padding: 0 20px; }
+
+  /* ── Section Labels ── */
+  .section-label {
+    display: flex; align-items: center; gap: 10px;
+    margin: 32px 0 16px;
+  }
+  .section-label .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px; font-weight: 900;
+    color: var(--accent); line-height: 1;
+    opacity: 0.25;
+  }
+  .section-label h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; font-weight: 700;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 2px;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 2px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+  }
+  .card-title {
+    font-weight: 700; font-size: 13px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+  .card p { font-size: 14px; color: var(--text); }
+
+  /* ── Key Number Strip ── */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 20px 0;
+  }
+  .kpi {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 14px 10px;
+    text-align: center;
+  }
+  .kpi .val {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 900;
+    color: var(--accent);
+    display: block;
+  }
+  .kpi .lbl { font-size: 10px; color: var(--text2); letter-spacing: 0.06em; }
+
+  /* ── Divider ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 28px 0;
+  }
+
+  /* ── Pull Quote ── */
+  .pull-quote {
+    border-left: 4px solid var(--accent);
+    padding: 12px 18px;
+    margin: 20px 0;
+    background: #fff5f7;
+  }
+  .pull-quote p {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px; font-style: italic;
+    color: var(--text); line-height: 1.5;
+  }
+  .pull-quote cite {
+    display: block; margin-top: 6px;
+    font-size: 11px; color: var(--text2);
+    font-style: normal;
+  }
+
+  /* ── Chart containers ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin: 20px 0;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas { opacity: 1; }
+
+  /* ── Tag Badges ── */
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+  .tag {
+    font-size: 11px; padding: 3px 9px;
+    border-radius: 1px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .tag-red { background: #ffe4e9; color: var(--accent); }
+  .tag-dark { background: #e8e8e8; color: var(--text); }
+  .tag-blue { background: #dbeafe; color: #2563eb; }
+
+  /* ── Ticker Movement ── */
+  .ticker-list { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
+  .ticker-item {
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    border-radius: 2px;
+  }
+  .ticker-sym { font-weight: 700; font-size: 13px; }
+  .ticker-name { font-size: 11px; color: var(--text2); }
+  .ticker-chg {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px; font-weight: 700;
+  }
+  .up { color: #16a34a; }
+  .down { color: var(--accent); }
+
+  /* ── Earnings Table ── */
+  .earnings-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 13px; }
+  .earnings-table th {
+    background: var(--accent); color: #fff;
+    padding: 8px 10px; text-align: left;
+    font-weight: 700; font-size: 11px; letter-spacing: 0.06em;
+  }
+  .earnings-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+  }
+  .earnings-table tr:nth-child(even) td { background: #fff; }
+
+  /* ── Scenario ── */
+  .scenario-grid { display: flex; flex-direction: column; gap: 10px; margin: 14px 0; }
+  .scenario-item {
+    display: flex; align-items: stretch;
+    border: 1px solid var(--border); border-radius: 2px; overflow: hidden;
+  }
+  .scenario-side {
+    width: 6px;
+    flex-shrink: 0;
+  }
+  .bull .scenario-side { background: #16a34a; }
+  .base .scenario-side { background: #2563eb; }
+  .bear .scenario-side { background: var(--accent); }
+  .scenario-body { padding: 12px 14px; flex: 1; }
+  .scenario-header { display: flex; justify-content: space-between; margin-bottom: 4px; }
+  .scenario-name { font-weight: 700; font-size: 13px; }
+  .scenario-pct {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-weight: 900;
+  }
+  .bull .scenario-pct { color: #16a34a; }
+  .base .scenario-pct { color: #2563eb; }
+  .bear .scenario-pct { color: var(--accent); }
+  .scenario-desc { font-size: 12px; color: var(--text2); }
+
+  /* ── Interactive Sim ── */
+  .sim-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 18px;
+    margin: 20px 0;
+  }
+  .sim-box h3 {
+    font-size: 13px; font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+  .sim-row {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+  }
+  .sim-row label { font-size: 12px; color: var(--text2); flex: 1; }
+  .sim-row input[type=range] {
+    flex: 2; accent-color: var(--accent);
+    height: 4px;
+  }
+  .sim-row .val-disp {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px; font-weight: 700;
+    color: var(--accent);
+    min-width: 50px; text-align: right;
+  }
+  .sim-result {
+    background: var(--text);
+    color: #fff;
+    border-radius: 2px;
+    padding: 14px;
+    margin-top: 12px;
+    text-align: center;
+  }
+  .sim-result .big {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px; font-weight: 900;
+    color: var(--accent2);
+    display: block;
+  }
+  .sim-result .sub { font-size: 11px; color: #aaa; }
+  .reset-btn {
+    display: inline-block; margin-top: 8px;
+    background: var(--accent); color: #fff;
+    border: none; cursor: pointer;
+    padding: 5px 14px; font-size: 11px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    border-radius: 1px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .reset-btn:hover { background: var(--accent2); }
+
+  /* ── Footer ── */
+  .footer {
+    background: var(--text);
+    color: #aaa;
+    text-align: center;
+    padding: 24px 20px;
+    font-size: 11px;
+    margin-top: 40px;
+    letter-spacing: 0.06em;
+  }
+  .footer strong { color: #fff; }
+
+  /* ── Infra Diagram ── */
+  .infra-diagram {
+    margin: 16px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .infra-center {
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 24px;
+    font-weight: 700; font-size: 13px;
+    border-radius: 2px;
+    text-align: center;
+  }
+  .infra-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .infra-node {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--accent);
+    padding: 8px 12px;
+    font-size: 12px; font-weight: 600;
+    border-radius: 1px;
+    text-align: center;
+  }
+  .connector { color: var(--accent); font-size: 18px; line-height: 1; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <span class="logo">NOVA Real Invest</span>
+  <span>2026.04.21 · 경제 분석 리포트</span>
+</header>
+
+<div class="hero">
+  <span class="hero-kicker">긴급 분석</span>
+  <h1>팀 쿡 사임 & AI 패권 전쟁<br><em>나스닥 13일 랠리의 끝</em></h1>
+  <p class="hero-meta">미국 시각 2026년 4월 20일(월) · 뉴욕 7:30 기준</p>
+</div>
+
+<div class="container">
+
+  <!-- 오늘의 시장 요약 -->
+  <div class="section-label">
+    <span class="num">01</span>
+    <h2>오늘의 시장 요약</h2>
+  </div>
+
+  <div class="kpi-row fade-in">
+    <div class="kpi">
+      <span class="val">13일</span>
+      <span class="lbl">나스닥 연속 상승<br>(오늘로 종료)</span>
+    </div>
+    <div class="kpi">
+      <span class="val">18.87</span>
+      <span class="lbl">공포지수(VIX)<br>20 미만 유지</span>
+    </div>
+    <div class="kpi">
+      <span class="val">34년</span>
+      <span class="lbl">만에 본 연속 상승<br>거래일 기록</span>
+    </div>
+  </div>
+
+  <div class="card fade-in">
+    <div class="card-title">📉 전체 지수 하락 마감</div>
+    <p>다우, 나스닥, S&amp;P 500 모두 마이너스 마감. <strong>나스닥 13일 연속 상승 랠리 종료.</strong> 표면적 원인은 호르무즈 해협 재봉쇄 공포이나, 실질적으로는 <strong>인플레이션 재점화 우려</strong>가 더 크게 작용.</p>
+  </div>
+
+  <div class="card fade-in">
+    <div class="card-title">📈 예외 — 상승 섹터</div>
+    <p>에너지 섹터 상승, 러셀(소형주) 신고가. SPAC·IPO 시장 재부각 (팬데믹 이후 유사 현상). 바이오 섹터 폭등세.</p>
+  </div>
+
+  <!-- 차트: 시나리오 확률 -->
+  <div class="section-label">
+    <span class="num">02</span>
+    <h2>거시경제 3대 시나리오</h2>
+  </div>
+
+  <div class="scenario-grid fade-in">
+    <div class="scenario-item bull">
+      <div class="scenario-side"></div>
+      <div class="scenario-body">
+        <div class="scenario-header">
+          <span class="scenario-name">🟢 강세 시나리오</span>
+          <span class="scenario-pct">35%</span>
+        </div>
+        <p class="scenario-desc">이란과 갑작스러운 휴전 완성, 지정학 리스크 해소. S&amp;P 반등.</p>
+      </div>
+    </div>
+    <div class="scenario-item base">
+      <div class="scenario-side"></div>
+      <div class="scenario-body">
+        <div class="scenario-header">
+          <span class="scenario-name">🔵 기본 시나리오</span>
+          <span class="scenario-pct">45%</span>
+        </div>
+        <p class="scenario-desc">이란과 협상 장기화, 박스권 횡보. 모멘텀 변화 없이 지수 제한적 움직임.</p>
+      </div>
+    </div>
+    <div class="scenario-item bear">
+      <div class="scenario-side"></div>
+      <div class="scenario-body">
+        <div class="scenario-header">
+          <span class="scenario-name">🔴 약세 시나리오</span>
+          <span class="scenario-pct">20%</span>
+        </div>
+        <p class="scenario-desc">휴전 완전 실패, 유가 120달러 재진입. 베어마켓 진입 위험.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-container fade-in">
+    <canvas id="scenarioChart" height="220"></canvas>
+  </div>
+
+  <!-- 지정학 리스크 -->
+  <div class="section-label">
+    <span class="num">03</span>
+    <h2>지정학 리스크 — 호르무즈</h2>
+  </div>
+
+  <div class="card fade-in">
+    <div class="card-title">🚢 미 해군 이란 상선 납포</div>
+    <p>미 해군이 대구경 기관포 위협사격 후 이란 상선 나포, 기관실 파괴. 위성 마린타임 트래픽 데이터 상 이란 우방국 방향 항로만 개방 확인. 사실상 재봉쇄 상태.</p>
+  </div>
+
+  <div class="card fade-in">
+    <div class="card-title">⛽ 2차 원자재 충격 전망</div>
+    <p>유가 상승 충격은 2~3개월 후 소비재·유통·항공 업종에 파급. 기업 마진 파괴 및 가이던스 하향 조정 우려. 항공주 자금 유출 지속.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 팀쿡 사임 -->
+  <div class="section-label">
+    <span class="num">04</span>
+    <h2>팀 쿡 사임 — 애플의 대격변</h2>
+  </div>
+
+  <div class="pull-quote fade-in">
+    <p>"팀 쿡은 9월 1일 CEO 직 사임, 존 터너스 하드웨어 부사장이 CEO로 승격. 쿡은 이사회 의장(체어맨)으로 잔류."</p>
+    <cite>애플 공식 발표 (회계연도 기준 9월 시작에 맞춤)</cite>
+  </div>
+
+  <div class="card fade-in">
+    <div class="card-title">📊 팀 쿡 시대 (2011~2026) 유산</div>
+    <p>글로벌 공급망 구축(폭스콘·인도), 반도체 대만·한국 분업, 시가총액 극대화, 아이폰·아이패드로 매출 다변화 성공.</p>
+  </div>
+
+  <div class="card fade-in">
+    <div class="card-title">🔮 존 터너스 시대 — 하드웨어 혁신 예상</div>
+    <p>하드웨어 엔지니어링 출신 CEO → <strong>폴더블폰, AI 칩 내장 맥 컴퓨터, 스포츠·헬스 웨어러블</strong> 가속화 전망. 팀 쿡의 나이키 주식 대량 매수와 연계 가능성 (애플-나이키 웨어러블 협력?).</p>
+  </div>
+
+  <!-- AI 인프라 군비 경쟁 -->
+  <div class="section-label">
+    <span class="num">05</span>
+    <h2>AI 인프라 군비 경쟁</h2>
+  </div>
+
+  <div class="infra-diagram fade-in">
+    <div class="infra-center">AI 인프라 패권</div>
+    <div class="connector">▼</div>
+    <div class="infra-row">
+      <div class="infra-node">아마존<br>트레이니엄 칩<br>$250억 → 엔트로픽</div>
+      <div class="infra-node">구글+마벨<br>TPU·NPU<br>공동 개발</div>
+      <div class="infra-node">엔비디아+브로드컴<br>ASIC GPU<br>파트너십</div>
+    </div>
+  </div>
+
+  <div class="ticker-list fade-in">
+    <div class="ticker-item">
+      <div>
+        <div class="ticker-sym">MRVL (마벨)</div>
+        <div class="ticker-name">구글 TPU 공동개발 발표</div>
+      </div>
+      <div class="ticker-chg up">+5.8%</div>
+    </div>
+    <div class="ticker-item">
+      <div>
+        <div class="ticker-sym">BLD (탑빌드)</div>
+        <div class="ticker-name">QXO 인수 발표 ($170억, 프리미엄 23%)</div>
+      </div>
+      <div class="ticker-chg up">+19.4%</div>
+    </div>
+    <div class="ticker-item">
+      <div>
+        <div class="ticker-sym">QXO</div>
+        <div class="ticker-name">탑빌드 인수 자금 집행</div>
+      </div>
+      <div class="ticker-chg down">-33.1%</div>
+    </div>
+    <div class="ticker-item">
+      <div>
+        <div class="ticker-sym">CNPS</div>
+        <div class="ticker-name">사이키델릭 치료제 패스트트랙 수혜</div>
+      </div>
+      <div class="ticker-chg up">+42%</div>
+    </div>
+  </div>
+
+  <!-- 핵심 투자 테마 -->
+  <div class="section-label">
+    <span class="num">06</span>
+    <h2>핵심 투자 테마 (노바 제시)</h2>
+  </div>
+
+  <div class="card fade-in">
+    <div class="card-title">🏗️ AI × 미국 경제 인프라 교집합</div>
+    <div class="tag-row">
+      <span class="tag tag-red">물리 인프라</span>
+      <span class="tag tag-dark">AI 인프라</span>
+      <span class="tag tag-blue">에너지</span>
+    </div>
+    <p>AI 데이터 센터 + 공장 건설 수요 폭증 → 철강(STLD), 건축자재(QXO·BLD), 에너지 섹터. 전쟁 여부와 무관하게 수혜. 트럼프 국산 정책과도 부합.</p>
+  </div>
+
+  <div class="card fade-in">
+    <div class="card-title">⚡ 2027년 재생에너지 사이클 준비</div>
+    <p>트럼프 정권 말기(2027년~)부터 재생에너지(수소·태양열·천연가스)에 대한 기대감 재점화 가능성. 지금부터 분산 매수 고려.</p>
+  </div>
+
+  <!-- 금리 전망 인터랙티브 -->
+  <div class="section-label">
+    <span class="num">07</span>
+    <h2>금리 인하 시뮬레이터</h2>
+  </div>
+
+  <p style="font-size:13px;color:var(--text2);margin-bottom:10px;">CME 페드워치 기준 최초 금리 인하 시점: <strong style="color:var(--accent)">2027년 6월 (확률 39.5%)</strong>. 아래 슬라이더로 가정을 바꿔 포트폴리오 영향을 가늠해보세요.</p>
+
+  <div class="sim-box fade-in">
+    <h3>📊 금리 인하 영향 시뮬레이터</h3>
+    <div class="sim-row">
+      <label>금리 인하 폭 (bps)</label>
+      <input type="range" id="rateCut" min="25" max="200" step="25" value="25">
+      <span class="val-disp" id="rateCutVal">25bps</span>
+    </div>
+    <div class="sim-row">
+      <label>현재 포트폴리오 ($)</label>
+      <input type="range" id="portfolio" min="10000" max="500000" step="10000" value="100000">
+      <span class="val-disp" id="portfolioVal">$100,000</span>
+    </div>
+    <div class="sim-row">
+      <label>기술주 비중 (%)</label>
+      <input type="range" id="techRatio" min="0" max="100" step="5" value="50">
+      <span class="val-disp" id="techRatioVal">50%</span>
+    </div>
+    <div class="sim-result">
+      <span class="sub">예상 기술주 포트폴리오 추가 수익</span>
+      <span class="big" id="simOutput">+$3,750</span>
+      <span class="sub">※ 금리 인하 시 기술주 평균 반응 추정치 기반 (참고용)</span>
+    </div>
+    <button class="reset-btn" onclick="resetSim()">초기화</button>
+  </div>
+
+  <!-- 이번 주 실적 발표 -->
+  <div class="section-label">
+    <span class="num">08</span>
+    <h2>이번 주 주요 실적 발표</h2>
+  </div>
+
+  <div class="chart-container fade-in">
+    <canvas id="earningsChart" height="220"></canvas>
+  </div>
+
+  <table class="earnings-table fade-in">
+    <thead>
+      <tr><th>요일</th><th>종목</th><th>주요 관전 포인트</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>화요일</td><td>유나이티드 헬스케어<br>유나이티드 에어라인<br>RTX, GE 에어로스페이스</td><td>매출 첫 감소 여부, 마진</td></tr>
+      <tr><td>수요일</td><td>테슬라<br>버티브, IBM<br>서비스나우, 보잉</td><td>EPS 33~40센트 달성 여부<br>로보택시 타임라인 발표</td></tr>
+      <tr><td>목요일</td><td>인텔<br>AT&amp;T</td><td>AI 칩 대응 전략</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card fade-in">
+    <div class="card-title">🚗 테슬라 핵심 체크포인트</div>
+    <p>EPS 컨센서스 33~40센트(매우 낮음, 달성 가능성 있음). 야적장 5만대 재고 해명 필요. 로보택시 2026년 말 출시 일정 재확인 또는 연기 여부가 주가 향방 결정.</p>
+  </div>
+
+  <!-- 케빈 워시 청문회 -->
+  <div class="section-label">
+    <span class="num">09</span>
+    <h2>케빈 워시 연준 의장 청문회</h2>
+  </div>
+
+  <div class="card fade-in">
+    <div class="card-title">⚠️ 자산 신고 50% 미제출 논란</div>
+    <p>청문회 제출 서류에서 본인 재산의 50%를 미공개. 보유 종목에 쿠팡 포함(이로 인해 쿠팡 주가 일시 폭등). 내일 청문회에서 공격적 추궁 예상, 통과 불확실성 증가.</p>
+  </div>
+
+  <div class="card fade-in">
+    <div class="card-title">💬 금일 발언 — 연준 독립성</div>
+    <p>"트럼프 행정부의 압박에도 연준의 독립성은 필요하다." 발언이 시장에 부정적 영향. 내일 청문회 발언 주목.</p>
+  </div>
+
+  <!-- 결론 -->
+  <div class="section-label">
+    <span class="num">10</span>
+    <h2>투자 결론 & 대응 전략</h2>
+  </div>
+
+  <div class="pull-quote fade-in">
+    <p>"거시적 공포가 클리어되지 않았다. 그러나 사람들은 욕심쟁이고, 생각보다 전쟁을 두려워하지 않는다. 하던 거 하십시오."</p>
+    <cite>노바 요약 결론</cite>
+  </div>
+
+  <div class="card fade-in">
+    <div class="card-title">✅ 핵심 포인트 정리</div>
+    <p>
+      ① AI × 미국 인프라 교집합 종목 지속 보유 (철강·건축자재·반도체·에너지)<br>
+      ② 애플: 존 터너스 체제 → 하드웨어 혁신 기대<br>
+      ③ 아마존(엔트로픽 연계), 구글(TPU+엔트로픽 지분) 지속 관심<br>
+      ④ 2027년부터 재생에너지 선점 준비<br>
+      ⑤ 이번 주 테슬라·유나이티드헬스 실적 결과가 단기 방향 결정
+    </p>
+  </div>
+
+</div><!-- /container -->
+
+<footer class="footer">
+  <strong>NOVA Real Invest</strong> · 본 리포트는 투자 참고용이며 투자 권유가 아닙니다.<br>
+  분석 기준일: 2026.04.21 · 원본 방송 내용 기반 정리
+</footer>
+
+<script>
+// ── Fade-in Observer ──
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// ── Chart Configs ──
+const chartConfigs = {};
+
+chartConfigs['scenarioChart'] = () => {
+  new Chart(document.getElementById('scenarioChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['강세 시나리오', '기본 시나리오', '약세 시나리오'],
+      datasets: [{
+        data: [35, 45, 20],
+        backgroundColor: ['#16a34a', '#2563eb', '#e11d48'],
+        borderWidth: 0,
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            font: { family: 'Noto Sans KR', size: 12 },
+            padding: 14,
+            color: '#1a1a1a'
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` ${ctx.label}: ${ctx.parsed}%`
+          }
+        }
+      }
+    }
+  });
+};
+
+chartConfigs['earningsChart'] = () => {
+  new Chart(document.getElementById('earningsChart'), {
+    type: 'bar',
+    data: {
+      labels: ['화(UNH)', '화(UAL)', '수(TSLA)', '수(Vertiv)', '수(IBM)', '목(Intel)'],
+      datasets: [{
+        label: '시장 기대 EPS 민감도 (1=높음)',
+        data: [4, 3, 5, 3, 3, 2],
+        backgroundColor: ['#e11d48','#f43f5e','#e11d48','#6b7280','#1a1a1a','#2563eb'],
+        borderRadius: 2,
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` 주목도: ${ctx.parsed.y}/5`
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true, max: 6,
+          ticks: { stepSize: 1, font: { size: 11 }, color: '#777' },
+          grid: { color: '#e5e5e5' }
+        },
+        x: {
+          ticks: { font: { size: 10 }, color: '#1a1a1a' },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+};
+
+// ── Chart Observer ──
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+// ── Simulator ──
+const defaults = { rateCut: 25, portfolio: 100000, techRatio: 50 };
+function updateSim() {
+  const rc = +document.getElementById('rateCut').value;
+  const pf = +document.getElementById('portfolio').value;
+  const tr = +document.getElementById('techRatio').value;
+  document.getElementById('rateCutVal').textContent = rc + 'bps';
+  document.getElementById('portfolioVal').textContent = '$' + pf.toLocaleString();
+  document.getElementById('techRatioVal').textContent = tr + '%';
+  // Simple model: each 25bps cut → ~1.5% tech portfolio gain
+  const techPF = pf * (tr / 100);
+  const gain = techPF * (rc / 25) * 0.015;
+  document.getElementById('simOutput').textContent = '+$' + Math.round(gain).toLocaleString();
+}
+function resetSim() {
+  document.getElementById('rateCut').value = defaults.rateCut;
+  document.getElementById('portfolio').value = defaults.portfolio;
+  document.getElementById('techRatio').value = defaults.techRatio;
+  updateSim();
+}
+['rateCut','portfolio','techRatio'].forEach(id => {
+  document.getElementById(id).addEventListener('input', updateSim);
+});
+updateSim();
+</script>
+</body>
+</html>
