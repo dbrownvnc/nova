@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>퀴즈 — CIA.chat 멤버미팅 2026.04.21</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff; --bg2: #fafafa; --text: #1a1a1a; --text2: #777777;
+    --accent: #e11d48; --accent2: #f43f5e; --border: #e5e5e5;
+    --green: #16a34a; --green-bg: #f0fdf4; --red-bg: #fff1f2;
+    --blue: #2563eb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-size: 15px; line-height: 1.7; }
+
+  /* STICKY SCORE BAR */
+  .score-bar {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--text); color: #fff;
+    padding: 10px 20px;
+    display: flex; align-items: center; gap: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  }
+  .score-bar .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px; font-weight: 700;
+    color: var(--accent2); white-space: nowrap;
+  }
+  .score-stats {
+    display: flex; gap: 12px; flex-wrap: wrap; flex: 1;
+    font-size: 12.5px;
+  }
+  .score-stat { white-space: nowrap; }
+  .score-stat strong { color: var(--accent2); }
+  .progress-wrap { flex: 1; min-width: 80px; }
+  .progress-bar {
+    height: 6px; background: rgba(255,255,255,0.15);
+    border-radius: 3px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; width: 0%;
+    border-radius: 3px;
+    background: var(--accent);
+    transition: width 0.4s ease, background 0.4s ease;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--text); color: #fff;
+    padding: 40px 24px 32px;
+    text-align: center;
+  }
+  .hero-tag {
+    display: inline-block; background: var(--accent);
+    color: #fff; font-size: 11px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 2px; margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 5vw, 28px); font-weight: 900; line-height: 1.25;
+    margin-bottom: 8px;
+  }
+  .hero p { font-size: 13px; color: rgba(255,255,255,0.5); }
+
+  /* QUIZ LIST */
+  .quiz-list { max-width: 680px; margin: 0 auto; padding: 24px 20px 60px; }
+
+  /* QUESTION CARD */
+  .q-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 22px 20px; margin-bottom: 20px;
+  }
+  .q-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .q-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 900; color: var(--accent); line-height: 1;
+  }
+  .q-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+  .badge {
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    padding: 3px 9px; border-radius: 20px; text-transform: uppercase;
+  }
+  .badge-type { background: #f1f5f9; color: #475569; }
+  .badge-easy { background: #dcfce7; color: #166534; }
+  .badge-med { background: #fef9c3; color: #854d0e; }
+  .badge-hard { background: #fee2e2; color: #991b1b; }
+  .q-text { font-size: 15px; font-weight: 500; margin-bottom: 16px; line-height: 1.6; }
+
+  /* OPTIONS */
+  .options { display: flex; flex-direction: column; gap: 9px; }
+  .opt-btn {
+    display: flex; align-items: center; gap: 10px;
+    background: #fff; border: 1.5px solid var(--border);
+    border-radius: 7px; padding: 11px 14px;
+    font-size: 14px; font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text); cursor: pointer; text-align: left;
+    transition: border-color 0.2s, background 0.2s;
+    width: 100%;
+  }
+  .opt-btn:not(:disabled):hover { border-color: var(--accent); background: #fff5f7; }
+  .opt-btn .opt-label {
+    min-width: 24px; height: 24px;
+    background: var(--bg2); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: var(--text2);
+    flex-shrink: 0;
+  }
+  .opt-btn.correct { background: var(--green-bg) !important; border-color: var(--green) !important; }
+  .opt-btn.correct .opt-label { background: var(--green); color: #fff; }
+  .opt-btn.wrong { background: var(--red-bg) !important; border-color: var(--accent) !important; }
+  .opt-btn.wrong .opt-label { background: var(--accent); color: #fff; }
+  .opt-btn:disabled { cursor: not-allowed; opacity: 0.85; }
+
+  /* OX BUTTONS */
+  .ox-btns { display: flex; gap: 12px; }
+  .ox-btn {
+    flex: 1; padding: 16px; font-size: 28px;
+    background: #fff; border: 1.5px solid var(--border);
+    border-radius: 8px; cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .ox-btn:not(:disabled):hover { border-color: var(--accent); background: #fff5f7; }
+  .ox-btn.correct { background: var(--green-bg) !important; border-color: var(--green) !important; }
+  .ox-btn.wrong { background: var(--red-bg) !important; border-color: var(--accent) !important; }
+  .ox-btn:disabled { cursor: not-allowed; opacity: 0.85; }
+
+  /* SHORT ANSWER */
+  .short-wrap { display: flex; gap: 8px; }
+  .short-input {
+    flex: 1; padding: 10px 14px;
+    border: 1.5px solid var(--border); border-radius: 7px;
+    font-size: 14px; font-family: 'Noto Sans KR', sans-serif;
+    background: #fff; color: var(--text); outline: none;
+    transition: border-color 0.2s;
+  }
+  .short-input:focus { border-color: var(--accent); }
+  .short-input:disabled { background: var(--bg2); cursor: not-allowed; }
+  .submit-btn {
+    padding: 10px 18px; background: var(--accent);
+    color: #fff; border: none; border-radius: 7px;
+    font-size: 13px; font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 700; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .submit-btn:hover { background: var(--accent2); }
+  .submit-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+  /* RESULT BADGE */
+  .result-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12.5px; font-weight: 700;
+    padding: 4px 12px; border-radius: 20px; margin-top: 10px;
+  }
+  .result-badge.correct-badge { background: var(--green-bg); color: var(--green); }
+  .result-badge.wrong-badge { background: var(--red-bg); color: var(--accent); }
+
+  /* EXPLANATION */
+  .explanation {
+    display: none;
+    margin-top: 14px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 6px;
+    padding: 14px 16px;
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: var(--text);
+  }
+  .explanation.show { display: block; }
+  .explanation .ex-title {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+  }
+
+  /* FINAL MODAL */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6); z-index: 999;
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: #fff; border-radius: 16px;
+    padding: 36px 28px; max-width: 380px; width: 90%;
+    text-align: center; animation: popIn 0.4s ease;
+  }
+  @keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .modal-emoji { font-size: 52px; margin-bottom: 12px; }
+  .modal h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px; font-weight: 900; margin-bottom: 8px;
+  }
+  .modal .score-big {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px; font-weight: 900;
+    color: var(--accent); line-height: 1; margin: 12px 0;
+  }
+  .modal .grade {
+    font-size: 16px; font-weight: 700; margin-bottom: 8px;
+  }
+  .modal .msg { font-size: 13.5px; color: var(--text2); margin-bottom: 24px; }
+  .retry-btn {
+    background: var(--accent); color: #fff; border: none;
+    border-radius: 8px; padding: 14px 32px;
+    font-size: 15px; font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 700; cursor: pointer; width: 100%;
+    transition: background 0.2s;
+  }
+  .retry-btn:hover { background: var(--accent2); }
+</style>
+</head>
+<body>
+
+<!-- STICKY SCORE BAR -->
+<div class="score-bar">
+  <div class="logo">CIA.chat Quiz</div>
+  <div class="score-stats">
+    <div class="score-stat">푼 문제 <strong id="statSolved">0</strong>/10</div>
+    <div class="score-stat">맞힌 문제 <strong id="statCorrect">0</strong></div>
+    <div class="score-stat">정답률 <strong id="statPct">0%</strong></div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Interactive Quiz</div>
+  <h1>CIA.chat 멤버미팅<br>2026.04.21 핵심 10문제</h1>
+  <p>이란 휴전 · 유나이티드헬스 폭등 · 테슬라 시나리오 · 포트폴리오 전략</p>
+</div>
+
+<!-- QUIZ -->
+<div class="quiz-list" id="quizList"></div>
+
+<!-- FINAL MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-emoji" id="modalEmoji">🎉</div>
+    <h2>최종 결과</h2>
+    <div class="score-big" id="modalScore">0 / 10</div>
+    <div class="grade" id="modalGrade"></div>
+    <div class="msg" id="modalMsg"></div>
+    <button class="retry-btn" onclick="retryQuiz()">🔄 다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id: 1, type: 'mc', difficulty: 'easy',
+    question: '오늘(4월 21일) 방송에서 전체 시장을 한 줄로 정의한 표현은?',
+    options: ['A. 매크로가 걷히고 실적이 빛을 발한 날', 'B. 기업들이 아무리 좋은 실적을 내도 소용이 없는 날', 'C. 이란 협상 타결로 랠리가 이어진 날', 'D. VIX 지수가 급락하며 위험자산이 강세였던 날'],
+    answer: 1,
+    explanation: '강사는 "기업들이 아무리 좋은 실적을 내도 소용이 없는 날이었다"고 정의했습니다. 매크로 경제의 먹구름이 여전히 걷히지 않았기 때문입니다.'
+  },
+  {
+    id: 2, type: 'mc', difficulty: 'easy',
+    question: '오늘 시장을 뒤흔든 3대 외부 충격 중 하나가 아닌 것은?',
+    options: ['A. JD 밴스의 파키스탄 불참(백악관 잔류) 확인', 'B. 이란의 협상 대표단 파견 거부', 'C. 케빈 워시의 매파적 청문회 발언', 'D. 연준의 갑작스러운 금리 인상 발표'],
+    answer: 3,
+    explanation: '3대 외부 충격은 ① JD 밴스 파키스탄 불참, ② 이란 협상 교착, ③ 케빈 워시 청문회 매파 발언입니다. 실제 금리 인상 발표는 없었습니다.'
+  },
+  {
+    id: 3, type: 'mc', difficulty: 'med',
+    question: '유나이티드헬스(UNH)의 시장 컨센서스 EPS와 실제 발표 EPS는 각각 얼마였나?',
+    options: ['A. 컨센서스 $3.00 / 실제 $5.20', 'B. 컨센서스 $0.66 / 실제 $7.23', 'C. 컨센서스 $4.50 / 실제 $8.10', 'D. 컨센서스 $1.20 / 실제 $3.90'],
+    answer: 1,
+    explanation: '강사가 직접 언급: "컨센서스가 66전이었다. 근데 EPS가 7.23이다." 어닝 서프라이즈의 핵심은 시장 기대치가 매우 낮았다는 점입니다.'
+  },
+  {
+    id: 4, type: 'mc', difficulty: 'med',
+    question: '케빈 워시가 청문회에서 언급한 금리 정책 철학은 누구의 방식을 따른 것인가?',
+    options: ['A. 벤 버냉키의 양적완화 방식', 'B. 재닛 옐런의 고용 중심 접근', 'C. 폴 볼커의 극단적 금리 인상 방식', 'D. 앨런 그린스펀의 점진적 조정 방식'],
+    answer: 2,
+    explanation: '케빈 워시는 "폴 볼커 방식대로 해야 한다"고 밝혔습니다. 볼커는 1970~80년대에 인플레이션을 잡기 위해 금리를 20%까지 올린 것으로 유명합니다. 강사는 이를 "주식시장이 망가지든 채권시장이 망가지든 상관없는" 구조적 매파 성향으로 해석했습니다.'
+  },
+  {
+    id: 5, type: 'mc', difficulty: 'med',
+    question: 'TSCO(트랙터 서플라이)에서 매출이 11% 급감한 카테고리는?',
+    options: ['A. 트랙터·농기계', 'B. 펫(반려동물) 서플라이', 'C. 건축자재', 'D. 의류·신발'],
+    answer: 1,
+    explanation: '강사가 명확히 언급: "어디서 빠졌냐 살펴봤더니 펫에서 빠졌다. 반려동물 카테고리가 매출이 11% 급강하했다." 관세로 인한 가격 인상을 소비자에게 전가하지 못한 것이 원인입니다.'
+  },
+  {
+    id: 6, type: 'ox', difficulty: 'easy',
+    question: '트럼프 대통령은 트루스 소셜을 통해 이란과의 휴전을 이틀 연장한다고 공지했다.',
+    answer: 'O',
+    explanation: '맞습니다. 파키스탄이 이틀 더 연장을 요청했고 트럼프가 이를 수용했습니다. 트루스 소셜에 "새로운 안이 올 때까지 시즈파이어(휴전)"라고 게재했습니다.'
+  },
+  {
+    id: 7, type: 'mc', difficulty: 'hard',
+    question: '에어비스(AVIS) 유통주식 중 공매도(Short) 포지션이 차지하는 비율은 대략 얼마인가?',
+    options: ['A. 약 30%', 'B. 약 55%', 'C. 약 70%', 'D. 약 86%'],
+    answer: 3,
+    explanation: '강사는 "에어비스 유통주식의 무려 86% 이상이 숏"이라고 설명했습니다. 이로 인해 공매도 세력이 패닉 바이백에 나서면서 숏스퀴즈가 발생, 이번 달에만 41억 달러의 손실이 났습니다.'
+  },
+  {
+    id: 8, type: 'mc', difficulty: 'hard',
+    question: '테슬라 Bull 시나리오에서 주가가 8~15% 급등하려면 반드시 확인돼야 할 두 가지 조건은?',
+    options: ['A. 마진 15% 유지 + 에너지 매출 증가', 'B. 마진 17% 방어 + 로봇택시 설비투자 200억달러 이상 발표', 'C. EPS 흑자 전환 + 신규 모델 발표', 'D. 머스크 복귀 선언 + 중국 공장 증설'],
+    answer: 1,
+    explanation: '강사가 직접 제시한 Bull 시나리오 조건: "마진 17% 방어, 설비 투자 200억 달러 이상 로봇택시 확장 계획 발표 + 로봇택시가 진짜 할 생각이 있구나를 확인해 줘야 한다."'
+  },
+  {
+    id: 9, type: 'short', difficulty: 'med',
+    question: '이번 주(4월 24일) 발표 예정이며, 케빈 워시 발언 이후 금리 방향을 결정할 핵심 물가 지표는?',
+    keywords: ['pce', 'PCE', '개인소비지출'],
+    answer: 'PCE',
+    explanation: '강사는 "이번 금요일 PCE 이 숫자가 어떻게 나올 것인가"를 반드시 체크해야 할 3대 이벤트 중 하나로 꼽았습니다. PCE(개인소비지출 물가)는 연준이 가장 중요하게 보는 인플레이션 지표입니다.'
+  },
+  {
+    id: 10, type: 'ox', difficulty: 'med',
+    question: '4월 30일 애플 실적 발표는 팀 쿡의 마지막 어닝콜이 될 것으로 예상되며, 이때 AI 디바이스 전략이 핵심 관전 포인트다.',
+    answer: 'O',
+    explanation: '강사는 "4월 30일 날 애플의 마지막 팀 쿡의 어닝콜을 볼 수 있게 될 것이다. 이때 무슨 얘기를 할 건지, AI에 대해 어떤 생각을 갖고 있고 AI 디바이스를 만들 건지 질문이 많을 것"이라고 강조했습니다.'
+  }
+];
+
+let state = { solved: 0, correct: 0 };
+
+function updateScoreBar() {
+  document.getElementById('statSolved').textContent = state.solved;
+  document.getElementById('statCorrect').textContent = state.correct;
+  const pct = state.solved === 0 ? 0 : Math.round((state.correct / state.solved) * 100);
+  document.getElementById('statPct').textContent = pct + '%';
+  const fill = document.getElementById('progressFill');
+  fill.style.width = (state.solved / 10 * 100) + '%';
+  fill.style.background = pct >= 70 ? '#16a34a' : pct >= 40 ? '#f59e0b' : '#e11d48';
+}
+
+function showExplanation(qid) {
+  document.getElementById('exp-' + qid).classList.add('show');
+}
+
+function markResult(qid, correct) {
+  state.solved++;
+  if (correct) state.correct++;
+  updateScoreBar();
+
+  const badge = document.getElementById('badge-' + qid);
+  badge.textContent = correct ? '✓ 정답!' : '✗ 오답';
+  badge.className = 'result-badge ' + (correct ? 'correct-badge' : 'wrong-badge');
+  badge.style.display = 'inline-flex';
+
+  showExplanation(qid);
+
+  if (state.solved === 10) {
+    setTimeout(showModal, 700);
+  }
+}
+
+function handleMC(qid, chosen, answer) {
+  const buttons = document.querySelectorAll(`.opt-btn[data-qid="${qid}"]`);
+  buttons.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === answer) btn.classList.add('correct');
+    else if (i === chosen) btn.classList.add('wrong');
+  });
+  markResult(qid, chosen === answer);
+}
+
+function handleOX(qid, chosen, answer) {
+  const buttons = document.querySelectorAll(`.ox-btn[data-qid="${qid}"]`);
+  buttons.forEach(btn => {
+    btn.disabled = true;
+    const val = btn.getAttribute('data-val');
+    if (val === answer) btn.classList.add('correct');
+    else if (val === chosen) btn.classList.add('wrong');
+  });
+  markResult(qid, chosen === answer);
+}
+
+function handleShort(qid, keywords) {
+  const input = document.getElementById('input-' + qid);
+  const submitBtn = document.getElementById('submit-' + qid);
+  const val = input.value.trim().toLowerCase();
+  input.disabled = true;
+  submitBtn.disabled = true;
+
+  const correct = keywords.some(k => val.includes(k.toLowerCase()));
+  markResult(qid, correct);
+
+  if (!correct) {
+    input.style.border = '1.5px solid var(--accent)';
+    const hint = document.createElement('p');
+    hint.style.fontSize = '12px';
+    hint.style.color = 'var(--accent)';
+    hint.style.marginTop = '6px';
+    hint.textContent = '정답: ' + keywords[keywords.length - 1];
+    input.parentNode.insertAdjacentElement('afterend', hint);
+  } else {
+    input.style.border = '1.5px solid #16a34a';
+  }
+}
+
+function diffBadge(d) {
+  if (d === 'easy') return '<span class="badge badge-easy">쉬움</span>';
+  if (d === 'med') return '<span class="badge badge-med">보통</span>';
+  return '<span class="badge badge-hard">어려움</span>';
+}
+
+function typeBadge(t) {
+  const map = { mc: '객관식', ox: 'O/X', short: '단답형' };
+  return `<span class="badge badge-type">${map[t]||t}</span>`;
+}
+
+function renderQuiz() {
+  const list = document.getElementById('quizList');
+  list.innerHTML = '';
+  QUIZ_DATA.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'card-' + q.id;
+
+    let inputHtml = '';
+    if (q.type === 'mc') {
+      inputHtml = `<div class="options">` + q.options.map((opt, i) =>
+        `<button class="opt-btn" data-qid="${q.id}" onclick="handleMC(${q.id},${i},${q.answer})">
+          <span class="opt-label">${String.fromCharCode(65+i)}</span>
+          <span>${opt.substring(3)}</span>
+        </button>`
+      ).join('') + `</div>`;
+    } else if (q.type === 'ox') {
+      inputHtml = `<div class="ox-btns">
+        <button class="ox-btn" data-qid="${q.id}" data-val="O" onclick="handleOX(${q.id},'O','${q.answer}')">⭕ O</button>
+        <button class="ox-btn" data-qid="${q.id}" data-val="X" onclick="handleOX(${q.id},'X','${q.answer}')">❌ X</button>
+      </div>`;
+    } else {
+      inputHtml = `<div class="short-wrap">
+        <input class="short-input" type="text" id="input-${q.id}" placeholder="정답을 입력하세요" />
+        <button class="submit-btn" id="submit-${q.id}" onclick="handleShort(${q.id},${JSON.stringify(q.keywords)})">제출</button>
+      </div>`;
+    }
+
+    card.innerHTML = `
+      <div class="q-header">
+        <div class="q-num">Q${q.id}</div>
+        <div class="q-badges">${typeBadge(q.type)}${diffBadge(q.difficulty)}</div>
+      </div>
+      <div class="q-text">${q.question}</div>
+      ${inputHtml}
+      <span class="result-badge" id="badge-${q.id}" style="display:none;"></span>
+      <div class="explanation" id="exp-${q.id}">
+        <div class="ex-title">📖 해설</div>
+        ${q.explanation}
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+function showModal() {
+  const pct = Math.round((state.correct / 10) * 100);
+  let grade, emoji, msg;
+  if (pct >= 90) { grade = 'S 등급 — 만점에 가까운 실력!'; emoji = '🏆'; msg = '시장 분석 마스터 수준입니다. 오늘 방송 내용을 완벽히 소화했군요!'; }
+  else if (pct >= 70) { grade = 'A 등급 — 우수한 이해도!'; emoji = '🎉'; msg = '핵심 내용을 잘 이해했습니다. 틀린 문제만 복습하면 완벽해요!'; }
+  else if (pct >= 50) { grade = 'B 등급 — 준수한 실력!'; emoji = '💪'; msg = '절반 이상 맞혔습니다. 어려운 문제를 다시 한 번 살펴보세요.'; }
+  else { grade = 'C 등급 — 복습이 필요해요!'; emoji = '📚'; msg = '분석 리포트를 다시 읽고 재도전하면 분명 좋아질 거예요!'; }
+
+  document.getElementById('modalEmoji').textContent = emoji;
+  document.getElementById('modalScore').textContent = state.correct + ' / 10';
+  document.getElementById('modalGrade').textContent = grade;
+  document.getElementById('modalMsg').textContent = msg;
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function retryQuiz() {
+  state = { solved: 0, correct: 0 };
+  updateScoreBar();
+  document.getElementById('modalOverlay').classList.remove('show');
+  renderQuiz();
+}
+
+renderQuiz();
+updateScoreBar();
+</script>
+</body>
+</html>
