@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIA.chat 멤버미팅 분석 | 2026.04.23</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --red: #e11d48;
+    --red2: #f43f5e;
+    --border: #e5e5e5;
+    --blue: #2563eb;
+    --gray: #6b7280;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  /* HEADER */
+  .hero {
+    background: var(--text);
+    color: #fff;
+    padding: 40px 20px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: var(--red);
+    opacity: 0.12;
+  }
+  .hero-tag {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red2);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 900;
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+  .hero h1 span { color: var(--red2); }
+  .hero-meta {
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 14px;
+    border-top: 1px solid #333;
+    padding-top: 12px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  /* SECTION */
+  .section {
+    padding: 28px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section:nth-child(even) { background: var(--bg2); }
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--red);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    line-height: 1.35;
+  }
+  .section p {
+    color: var(--text);
+    margin-bottom: 10px;
+    font-size: 14.5px;
+  }
+  /* CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 14px 0;
+  }
+  .card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+  }
+  .card.red { border-left: 3px solid var(--red); }
+  .card.blue { border-left: 3px solid var(--blue); }
+  .card.gray { border-left: 3px solid var(--gray); }
+  .card-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .card-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--red);
+  }
+  .card-value.green { color: #16a34a; }
+  .card-value.blue { color: var(--blue); }
+  .card-sub { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  /* TAG */
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 4px;
+    margin: 3px 3px 3px 0;
+  }
+  .tag-red { background: #fef2f2; color: var(--red); border: 1px solid #fecaca; }
+  .tag-blue { background: #eff6ff; color: var(--blue); border: 1px solid #bfdbfe; }
+  .tag-gray { background: #f9fafb; color: var(--gray); border: 1px solid #e5e7eb; }
+  .tag-green { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+  /* QUOTE */
+  .quote {
+    border-left: 3px solid var(--red);
+    padding: 10px 14px;
+    background: #fef2f2;
+    margin: 12px 0;
+    font-size: 13.5px;
+    font-style: italic;
+    color: #7f1d1d;
+    border-radius: 0 6px 6px 0;
+  }
+  /* TABLE */
+  .tbl { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+  .tbl th { background: var(--red); color: #fff; padding: 8px 10px; text-align: left; font-weight: 600; font-size: 12px; }
+  .tbl td { padding: 8px 10px; border-bottom: 1px solid var(--border); background: var(--bg2); }
+  .tbl tr:last-child td { border-bottom: none; }
+  .up { color: #16a34a; font-weight: 700; }
+  .down { color: var(--red); font-weight: 700; }
+  /* CHART */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin: 14px 0;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas { opacity: 1; }
+  .chart-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text2);
+    text-align: center;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  /* SIMULATOR */
+  .sim-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    margin: 14px 0;
+  }
+  .sim-box h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+  .sim-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .sim-label { font-size: 13px; color: var(--text2); flex: 1; min-width: 100px; }
+  .sim-val {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--red);
+    min-width: 60px;
+    text-align: right;
+  }
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+    margin: 4px 0 10px;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px; height: 16px;
+    background: var(--red);
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .result-box {
+    background: var(--text);
+    color: #fff;
+    border-radius: 8px;
+    padding: 14px;
+    margin-top: 12px;
+    font-size: 13px;
+  }
+  .result-box .big { font-size: 22px; font-family: 'Playfair Display', serif; color: var(--red2); }
+  .reset-btn {
+    display: block;
+    width: 100%;
+    padding: 9px;
+    background: var(--red);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .reset-btn:hover { background: var(--red2); }
+  /* FLOW DIAGRAM */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 12px 0;
+  }
+  .flow-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+  }
+  .flow-icon {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .flow-arrow {
+    text-align: center;
+    color: var(--red);
+    font-size: 18px;
+    line-height: 1;
+  }
+  /* SCENARIO */
+  .scenario-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 12px 0;
+  }
+  .scenario-card {
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 13px;
+  }
+  .scenario-card.bull { background: #f0fdf4; border: 1px solid #bbf7d0; }
+  .scenario-card.bear { background: #fef2f2; border: 1px solid #fecaca; }
+  .scenario-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .scenario-card.bull h4 { color: #16a34a; }
+  .scenario-card.bear h4 { color: var(--red); }
+  .scenario-card li { margin-left: 14px; margin-bottom: 4px; color: var(--text2); }
+  /* FOOTER */
+  .footer {
+    background: var(--text);
+    color: #aaa;
+    padding: 24px 20px;
+    font-size: 12px;
+    text-align: center;
+  }
+  /* TOGGLE */
+  .toggle-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--red);
+    background: transparent;
+    color: var(--red);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    margin: 4px;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: all 0.2s;
+  }
+  .toggle-btn.active { background: var(--red); color: #fff; }
+  .toggle-btn:hover { background: var(--red); color: #fff; }
+  .divider {
+    height: 3px;
+    background: linear-gradient(90deg, var(--red), transparent);
+    margin: 0;
+  }
+  @media (max-width: 400px) {
+    .card-grid, .scenario-row { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">CIA.chat · 멤버 미팅</div>
+  <h1>매크로의 천장,<br><span>지정학이 만든 나비효과</span></h1>
+  <div class="hero-meta">
+    <span>📅 2026년 4월 23일 목요일</span>
+    <span>🕖 뉴욕 현지 오후 7:24</span>
+    <span>🎯 CIA.chat 정기 멤버미팅</span>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 1. 시장 요약 -->
+<div class="section fade-in">
+  <div class="section-label">Market Overview</div>
+  <h2>오늘 뉴욕 증시 — 어제와 다른 하루</h2>
+
+  <p>어제 사상 최고치를 갱신한 뉴욕 증시가 오늘은 <strong>마이너스 전환</strong>했습니다. 오후 2시경 지정학 악재가 겹치며 급락했고, 소프트웨어·항공주가 직격탄을 맞았습니다.</p>
+
+  <div class="card-grid fade-in">
+    <div class="card red">
+      <div class="card-title">오늘 증시</div>
+      <div class="card-value">마이너스</div>
+      <div class="card-sub">오후 2시 일제 급락</div>
+    </div>
+    <div class="card blue">
+      <div class="card-title">VIX 지수</div>
+      <div class="card-value blue">~20</div>
+      <div class="card-sub">20선 재차 터치</div>
+    </div>
+    <div class="card blue">
+      <div class="card-title">10년물 국채금리</div>
+      <div class="card-value blue">상승</div>
+      <div class="card-sub">인플레 우려 반영</div>
+    </div>
+    <div class="card red">
+      <div class="card-title">브렌트유</div>
+      <div class="card-value">상승</div>
+      <div class="card-sub">호르무즈 리스크</div>
+    </div>
+  </div>
+
+  <p class="chart-title">섹터별 자금 흐름 (오늘)</p>
+  <div class="chart-container fade-in">
+    <canvas id="sectorChart" height="220"></canvas>
+  </div>
+</div>
+
+<!-- 2. 호르무즈 리스크 -->
+<div class="section fade-in">
+  <div class="section-label">Geopolitical Risk</div>
+  <h2>🔥 호르무즈 리스크 재점화</h2>
+
+  <p>오늘 시장 하락의 가장 큰 촉매는 <strong>호르무즈 해협 리스크 재점화</strong>였습니다. 트럼프 대통령의 초강경 발언부터 이란 협상 결렬까지 복수의 악재가 오후에 집중됐습니다.</p>
+
+  <div class="flow fade-in">
+    <div class="flow-item">
+      <div class="flow-icon" style="background:#fef2f2;">📢</div>
+      <div><strong>트럼프 "Shoot and Kill"</strong> — 작은 보트까지 즉각 사살 명령. 초강경 발언으로 시장 충격</div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-item">
+      <div class="flow-icon" style="background:#fef2f2;">✈️</div>
+      <div><strong>이스라엘 전면전 선언</strong> — "전면전 준비 완료" + 테헤란 방공망 가동 확인</div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-item">
+      <div class="flow-icon" style="background:#fef2f2;">🚪</div>
+      <div><strong>이란 협상 수석대표 갈리바프 사임</strong> — 혁명수비대 간섭으로 협상 와해. 협상 대표 공백</div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-item">
+      <div class="flow-icon" style="background:#fef2f2;">📉</div>
+      <div><strong>오후 2시 일제 급락</strong> — 소프트웨어·항공·운송 섹터 집중 매도</div>
+    </div>
+  </div>
+
+  <div class="quote">
+    "이란을 친 건 진짜 오판이죠. 마두로는 하룻밤에 잡아오니까 이란도 쉽다고 생각했던 것 같아요. 종교가 무서운 겁니다."
+  </div>
+
+  <p>장 마감 후 트럼프 대통령은 <strong>"이스라엘-레바논 휴전 3주 연장"</strong>을 발표했습니다. 장중에는 강경 포스팅을 올리다 마감 직후 유화 제스처를 취하는 전형적인 패턴이 반복됐습니다.</p>
+
+  <div class="scenario-row fade-in">
+    <div class="scenario-card bull">
+      <h4>🐂 불 시나리오</h4>
+      <ul>
+        <li>2~3주 내 호르무즈 사태 진정</li>
+        <li>유가 안정화</li>
+        <li>증시·반도체 재상승</li>
+        <li>에너지주 차익 실현</li>
+      </ul>
+    </div>
+    <div class="scenario-card bear">
+      <h4>🐻 베어 시나리오</h4>
+      <ul>
+        <li>이란 협상 완전 결렬</li>
+        <li>이스라엘 선제 타격</li>
+        <li>유가 추가 급등</li>
+        <li>인플레 재점화·금리 상승</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 3. AI 내전 — 승자와 패자 -->
+<div class="section fade-in">
+  <div class="section-label">AI Divergence</div>
+  <h2>⚡ 기술주 내전 — AI 승자 vs 패자</h2>
+
+  <p>AI 수혜가 <strong>소프트웨어에서 하드웨어·인프라로 이동</strong>하는 구조적 전환이 오늘 실적 발표에서 극명하게 드러났습니다. "딱따구리(물리적 AI 인프라)" 테마가 확인됐습니다.</p>
+
+  <table class="tbl fade-in">
+    <tr>
+      <th>종목</th>
+      <th>구분</th>
+      <th>오늘 변동</th>
+      <th>핵심 이슈</th>
+    </tr>
+    <tr>
+      <td><strong>인텔 (INTC)</strong></td>
+      <td><span class="tag tag-green">승자</span></td>
+      <td class="up">+19.2% (장후)</td>
+      <td>테슬라 캐펙스 수혜, CPU 공급 부족</td>
+    </tr>
+    <tr>
+      <td><strong>텍사스 인스트루먼 (TXN)</strong></td>
+      <td><span class="tag tag-green">승자</span></td>
+      <td class="up">2000년 닷컴 이후 최대 일간 상승</td>
+      <td>데이터센터 매출 +90% 폭증</td>
+    </tr>
+    <tr>
+      <td><strong>MXL (MaxLinear)</strong></td>
+      <td><span class="tag tag-green">승자</span></td>
+      <td class="up">+32% (장후)</td>
+      <td>광학 데이터센터 연결 솔루션</td>
+    </tr>
+    <tr>
+      <td><strong>URI (United Rentals)</strong></td>
+      <td><span class="tag tag-green">승자</span></td>
+      <td class="up">+22%</td>
+      <td>AI 데이터센터 건설 중장비 임대</td>
+    </tr>
+    <tr>
+      <td><strong>NEE (NextEra Energy)</strong></td>
+      <td><span class="tag tag-green">승자</span></td>
+      <td class="up">사상 최고가</td>
+      <td>데이터센터용 가스발전 프로젝트 수주</td>
+    </tr>
+    <tr>
+      <td><strong>IBM</strong></td>
+      <td><span class="tag tag-red">패자</span></td>
+      <td class="down">급락</td>
+      <td>AI 에이전트가 기술지원 대체 → 컨설팅 수요 소멸</td>
+    </tr>
+    <tr>
+      <td><strong>ServiceNow (NOW)</strong></td>
+      <td><span class="tag tag-red">패자</span></td>
+      <td class="down">급락</td>
+      <td>중동 계약 진행 중단, AI 대체 우려</td>
+    </tr>
+  </table>
+
+  <div class="quote">
+    "AI 에이전트가 소프트웨어를 잡아먹고 있습니다. 이게 캐니벌라이제이션(자기잠식) 효과입니다."
+  </div>
+
+  <p class="chart-title">AI 인프라 확산 경로 (딱따구리 테마)</p>
+  <div class="chart-container fade-in">
+    <canvas id="infraChart" height="220"></canvas>
+  </div>
+
+  <div style="margin-top:14px;">
+    <p><strong>딱따구리 AI 인프라 수혜 레이어</strong></p>
+    <div style="margin-top:8px;">
+      <span class="tag tag-blue">레이어0 — GPU/NPU</span>
+      <span class="tag tag-blue">레이어1 — CPU/메모리</span>
+      <span class="tag tag-blue">레이어2 — 네트워크/광학</span>
+      <span class="tag tag-blue">레이어3 — 전력/유틸리티</span>
+      <span class="tag tag-blue">레이어4 — 건설/중장비</span>
+    </div>
+  </div>
+</div>
+
+<!-- 4. IBM vs 인텔 비교 인터랙티브 -->
+<div class="section fade-in">
+  <div class="section-label">Case Study</div>
+  <h2>📊 IBM vs 인텔 — 같은 IT, 정반대 운명</h2>
+  <p>IBM은 AI 에이전트에게 수익모델을 빼앗겼고, 인텔은 AI 인프라 수요 폭발로 부활했습니다. 두 기업을 비교해 보세요.</p>
+
+  <div style="display:flex;gap:8px;margin:12px 0;" class="fade-in">
+    <button class="toggle-btn active" onclick="showCompare('ibm')" id="btn-ibm">IBM</button>
+    <button class="toggle-btn" onclick="showCompare('intel')" id="btn-intel">인텔</button>
+  </div>
+
+  <div id="compare-ibm" class="card red" style="display:block;">
+    <div class="card-title">IBM — AI에 잡아먹힌 컨설팅</div>
+    <p style="font-size:13px;margin-top:8px;">IBM의 수익 구조: 장비 판매 → 유지보수(메인터넌스) → 기술 지원 출장 비용 청구. 그런데 AI 에이전트가 장애 해결을 대신하면서 이 모델이 붕괴됐습니다.</p>
+    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+      <span class="tag tag-red">실적 미스</span>
+      <span class="tag tag-red">가이던스 하향</span>
+      <span class="tag tag-red">컨설팅 수요 소멸</span>
+    </div>
+  </div>
+  <div id="compare-intel" class="card blue" style="display:none;">
+    <div class="card-title">인텔 — 죽다 살아난 기업</div>
+    <p style="font-size:13px;margin-top:8px;">인텔은 CPU 수요 폭발(테슬라 캐펙스 수혜), 정부 지원, 파트너십으로 부활. 그러나 매출은 3년간 거의 정체—"죽다 살아난" 것이지 질적 성장은 아님. 장후 +19.2%.</p>
+    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+      <span class="tag tag-green">실적 서프라이즈</span>
+      <span class="tag tag-green">CPU 공급 부족</span>
+      <span class="tag tag-gray">매출 3년 정체</span>
+    </div>
+  </div>
+</div>
+
+<!-- 5. 테슬라 딜레마 -->
+<div class="section fade-in">
+  <div class="section-label">Tesla Dilemma</div>
+  <h2>🚗 테슬라 — "이도저도 아닌 기업"</h2>
+
+  <p>테슬라는 $25B 캐펙스 발표에도 주가가 하락했습니다. "꿈팔이" 기업이 꿈을 팔아도 먹히지 않는 이유는 무엇일까요?</p>
+
+  <div class="card-grid fade-in">
+    <div class="card gray">
+      <div class="card-title">선언된 프로젝트</div>
+      <div style="font-size:13px;margin-top:6px;">
+        FSD (완전자율주행)<br>
+        로봇 택시 (연말 전국 계획)<br>
+        옵티머스 (휴머노이드 로봇)<br>
+        테라팹 (반도체 자체 생산)
+      </div>
+    </div>
+    <div class="card red">
+      <div class="card-title">문제점</div>
+      <div style="font-size:13px;margin-top:6px;">
+        "다들 하고 있어" — 중국 로봇 무술대회, 마라톤<br>
+        로봇택시 12개 주 라이센스도 미확보<br>
+        캐펙스 $25B → 마이너스 전환 경고<br>
+        전환사채 발행 불가피
+      </div>
+    </div>
+  </div>
+
+  <div class="quote">
+    "5년 전엔 이 키워드가 먹혔어. 근데 지금은 다 하고 있어. 개나 소나 다 하고 있다고. 더 이상 혁신기업이 아닌 거야."
+  </div>
+
+  <!-- 캐펙스 딜레마 시뮬레이터 -->
+  <div class="sim-box fade-in">
+    <h3>🔢 테슬라 캐펙스 딜레마 시뮬레이터</h3>
+    <div class="sim-row">
+      <span class="sim-label">연간 캐펙스 ($B)</span>
+      <span class="sim-val" id="capexVal">25</span>
+    </div>
+    <input type="range" id="capexSlider" min="5" max="40" value="25" oninput="updateTesla()">
+
+    <div class="sim-row">
+      <span class="sim-label">연간 영업현금흐름 ($B)</span>
+      <span class="sim-val" id="ocfVal">8</span>
+    </div>
+    <input type="range" id="ocfSlider" min="1" max="20" value="8" oninput="updateTesla()">
+
+    <div class="result-box">
+      <div style="font-size:12px;color:#aaa;margin-bottom:6px;">예상 프리캐시플로우 (FCF)</div>
+      <div class="big" id="fcfResult">-$17B</div>
+      <div style="font-size:12px;margin-top:8px;" id="fcfComment">⚠️ 대규모 적자 — 전환사채 발행 불가피</div>
+    </div>
+    <button class="reset-btn" onclick="resetTesla()">↺ 초기값으로 리셋</button>
+  </div>
+
+  <div class="chart-container fade-in">
+    <p class="chart-title">메타·MS vs 테슬라 — AI 캐펙스 전략 비교</p>
+    <canvas id="capexChart" height="200"></canvas>
+  </div>
+</div>
+
+<!-- 6. 스마트 머니 흐름 -->
+<div class="section fade-in">
+  <div class="section-label">Smart Money</div>
+  <h2>💰 스마트 머니는 어디로?</h2>
+
+  <p>오늘 자금 흐름은 명확합니다. <span class="tag tag-green">인플로우</span> 반도체 하드웨어 / 에너지·유틸리티 / 산업재 (AI 인프라 건설). <span class="tag tag-red">아웃플로우</span> 소프트웨어 / 항공 / 운송.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="moneyFlowChart" height="220"></canvas>
+  </div>
+
+  <table class="tbl fade-in">
+    <tr>
+      <th>레이어</th>
+      <th>대표 종목</th>
+      <th>오늘 변동</th>
+    </tr>
+    <tr>
+      <td>반도체·CPU</td>
+      <td>인텔, TXN, SOX</td>
+      <td class="up">+7%~+19.2%</td>
+    </tr>
+    <tr>
+      <td>광학 네트워크</td>
+      <td>MXL (MaxLinear)</td>
+      <td class="up">+32% (장후)</td>
+    </tr>
+    <tr>
+      <td>산업재·건설</td>
+      <td>URI (United Rentals)</td>
+      <td class="up">+22%</td>
+    </tr>
+    <tr>
+      <td>전력·유틸리티</td>
+      <td>NEE, 오클로</td>
+      <td class="up">사상최고가</td>
+    </tr>
+    <tr>
+      <td>소프트웨어</td>
+      <td>IBM, ServiceNow</td>
+      <td class="down">급락</td>
+    </tr>
+    <tr>
+      <td>항공·운송</td>
+      <td>아메리칸 에어라인</td>
+      <td class="down">EPS 가이던스 적자 전환</td>
+    </tr>
+  </table>
+
+  <p><strong>아메리칸 에어라인 (AAL)</strong>: 유가 급등 → 미리 팔아둔 항공권 적자. EPS 기존 예상 +$2 → 실제 -$0.40 전환 경고. 일부 노선 취소 진행 중.</p>
+</div>
+
+<!-- 7. ETF & 투자 전략 -->
+<div class="section fade-in">
+  <div class="section-label">Investment Strategy</div>
+  <h2>📌 투자 전략 — 하던 거 하면 됩니다</h2>
+
+  <p>노바 2025년 12월 31일 제시 전략 유지. 단, 변동성 헤지 자산 편입 권고.</p>
+
+  <div class="card-grid fade-in">
+    <div class="card blue">
+      <div class="card-title">CORU (한국 3배 ETF)</div>
+      <div class="card-value green">$514</div>
+      <div class="card-sub">작년 4월 윤석열 구속 시 $40 이하 매수 추천 → 1년 만에 약 12배</div>
+    </div>
+    <div class="card blue">
+      <div class="card-title">DRAM ETF</div>
+      <div class="card-value blue">↑ 급등</div>
+      <div class="card-sub">Micron·삼성·SK하이닉스 구성 / 수수료 약 0.7%</div>
+    </div>
+    <div class="card gray">
+      <div class="card-title">SOX (필라델피아 반도체)</div>
+      <div class="card-value blue">~450</div>
+      <div class="card-sub">1차 목표 470 / 2차 490 / 손절 435</div>
+    </div>
+    <div class="card gray">
+      <div class="card-title">핵심 원칙</div>
+      <div style="font-size:13px;margin-top:6px;color:var(--text);">
+        <strong>프리캐시플로우 (FCF)</strong> 중심 종목 선별<br>
+        3배 ETF는 장기보유 금지
+      </div>
+    </div>
+  </div>
+
+  <!-- SOX 기술적 분석 시뮬레이터 -->
+  <div class="sim-box fade-in">
+    <h3>📐 SOX 기술적 분석 — 매매 계획</h3>
+    <div class="sim-row">
+      <span class="sim-label">진입 가격 ($)</span>
+      <span class="sim-val" id="entryVal">450</span>
+    </div>
+    <input type="range" id="entrySlider" min="400" max="500" value="450" step="1" oninput="updateSOX()">
+
+    <div class="sim-row">
+      <span class="sim-label">1차 목표가 ($)</span>
+      <span class="sim-val" id="t1Val">470</span>
+    </div>
+    <input type="range" id="t1Slider" min="420" max="550" value="470" step="1" oninput="updateSOX()">
+
+    <div class="sim-row">
+      <span class="sim-label">손절가 ($)</span>
+      <span class="sim-val" id="slVal">435</span>
+    </div>
+    <input type="range" id="slSlider" min="380" max="449" value="435" step="1" oninput="updateSOX()">
+
+    <div class="result-box">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div>
+          <div style="font-size:11px;color:#aaa;">목표 수익률</div>
+          <div class="big" id="profitRate" style="font-size:18px;color:#4ade80;">+4.4%</div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:#aaa;">손절 손실률</div>
+          <div class="big" id="lossRate" style="font-size:18px;color:#f87171;">-3.3%</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:#aaa;margin-top:8px;" id="rrRatio">Risk/Reward = 1.33</div>
+    </div>
+    <button class="reset-btn" onclick="resetSOX()">↺ 초기값으로 리셋</button>
+  </div>
+</div>
+
+<!-- 8. 다음주 관전 포인트 -->
+<div class="section fade-in">
+  <div class="section-label">Next Week</div>
+  <h2>🗓️ 수목주목 — 다음 주 핵심 일정</h2>
+
+  <div class="flow fade-in">
+    <div class="flow-item">
+      <div class="flow-icon" style="background:#eff6ff;color:var(--blue);font-weight:700;">수</div>
+      <div><strong>4월 29일 (수) — FOMC 연준 회의</strong><br><span style="font-size:12px;color:var(--text2);">제롬 파월 의장 발언 주목. 인플레 우려 vs 경기 둔화 사이 어디에 무게?</span></div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon" style="background:#eff6ff;color:var(--blue);font-weight:700;">목</div>
+      <div><strong>4월 30일 (목) — PCE + 2Q GDP 어드밴스드</strong><br><span style="font-size:12px;color:var(--text2);">PCE(연준 선호 물가지표) + 2분기 GDP 1차 추정치 동시 발표. 시장 방향 결정적</span></div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon" style="background:#fafafa;">📊</div>
+      <div><strong>기타</strong> — P&G, SLB(슐럼버거) 실적 + 소비자심리지수</div>
+    </div>
+  </div>
+
+  <div class="quote">
+    "수목주목. 수요일 목요일이 이번 주 가장 큰 빅이벤트입니다."
+  </div>
+</div>
+
+<!-- 9. 핵심 체크리스트 -->
+<div class="section fade-in">
+  <div class="section-label">Key Takeaways</div>
+  <h2>✅ 오늘의 핵심 요약</h2>
+
+  <div class="flow fade-in">
+    <div class="flow-item">
+      <div class="flow-icon" style="background:#fef2f2;">1</div>
+      <div>호르무즈 리스크 재점화 → 유가·인플레 우려 재부상. 방어적 포지션 유지</div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon" style="background:#f0fdf4;">2</div>
+      <div>딱따구리 AI 인프라(반도체·전력·건설)는 여전히 유효. 수혜 확산 중</div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon" style="background:#fef2f2;">3</div>
+      <div>소프트웨어·항공 아웃플로우 지속. IBM·ServiceNow AI 대체 현실화</div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon" style="background:#fef2f2;">4</div>
+      <div>테슬라 = 이도저도 아닌 기업. FCF 마이너스 전환 우려, 전환사채 발행 가능성</div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon" style="background:#eff6ff;">5</div>
+      <div>종목 선별 기준: <strong>프리캐시플로우(FCF)</strong> 최우선. 지수보다 개별 종목</div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon" style="background:#eff6ff;">6</div>
+      <div>다음주 수목주목 — 29일 FOMC / 30일 PCE·GDP 동시 발표</div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div style="font-family:'Playfair Display',serif;font-size:16px;color:#fff;margin-bottom:8px;">CIA.chat 멤버미팅 분석 리포트</div>
+  <div>2026년 4월 23일 · 뉴욕 오후 7:24 방송 기준</div>
+  <div style="margin-top:6px;color:#666;">본 문서는 투자 권유가 아닌 정보 공유 목적으로 작성됐습니다.</div>
+</div>
+
+<script>
+// ---- Compare Toggle ----
+function showCompare(who) {
+  document.getElementById('compare-ibm').style.display = who === 'ibm' ? 'block' : 'none';
+  document.getElementById('compare-intel').style.display = who === 'intel' ? 'block' : 'none';
+  document.getElementById('btn-ibm').classList.toggle('active', who === 'ibm');
+  document.getElementById('btn-intel').classList.toggle('active', who === 'intel');
+}
+
+// ---- Tesla Simulator ----
+function updateTesla() {
+  const capex = parseFloat(document.getElementById('capexSlider').value);
+  const ocf = parseFloat(document.getElementById('ocfSlider').value);
+  document.getElementById('capexVal').textContent = capex;
+  document.getElementById('ocfVal').textContent = ocf;
+  const fcf = ocf - capex;
+  document.getElementById('fcfResult').textContent = (fcf >= 0 ? '+' : '') + '$' + fcf + 'B';
+  document.getElementById('fcfResult').style.color = fcf >= 0 ? '#4ade80' : '#f87171';
+  let comment = '';
+  if (fcf >= 5) comment = '✅ 건전한 FCF — AI 투자 여력 충분';
+  else if (fcf >= 0) comment = '⚠️ FCF 소폭 흑자 — 추가 투자 여력 제한';
+  else if (fcf >= -10) comment = '⚠️ FCF 적자 — 차입 또는 전환사채 필요';
+  else comment = '🔴 대규모 FCF 적자 — 생존 위기 수준';
+  document.getElementById('fcfComment').textContent = comment;
+}
+function resetTesla() {
+  document.getElementById('capexSlider').value = 25;
+  document.getElementById('ocfSlider').value = 8;
+  updateTesla();
+}
+updateTesla();
+
+// ---- SOX Simulator ----
+function updateSOX() {
+  const entry = parseFloat(document.getElementById('entrySlider').value);
+  const t1 = parseFloat(document.getElementById('t1Slider').value);
+  const sl = parseFloat(document.getElementById('slSlider').value);
+  document.getElementById('entryVal').textContent = entry;
+  document.getElementById('t1Val').textContent = t1;
+  document.getElementById('slVal').textContent = sl;
+  const profit = ((t1 - entry) / entry * 100).toFixed(1);
+  const loss = ((sl - entry) / entry * 100).toFixed(1);
+  document.getElementById('profitRate').textContent = '+' + profit + '%';
+  document.getElementById('lossRate').textContent = loss + '%';
+  const rr = Math.abs(profit / loss).toFixed(2);
+  document.getElementById('rrRatio').textContent = 'Risk/Reward = ' + rr + (rr >= 1.5 ? ' ✅ 우량' : rr >= 1 ? ' ⚠️ 보통' : ' 🔴 비추천');
+}
+function resetSOX() {
+  document.getElementById('entrySlider').value = 450;
+  document.getElementById('t1Slider').value = 470;
+  document.getElementById('slSlider').value = 435;
+  updateSOX();
+}
+updateSOX();
+
+// ---- CHARTS ----
+const chartConfigs = {};
+
+chartConfigs['sectorChart'] = () => {
+  new Chart(document.getElementById('sectorChart'), {
+    type: 'bar',
+    data: {
+      labels: ['반도체HW', '에너지·유틸', '산업재', '금융', '소프트웨어', '항공·운송'],
+      datasets: [{
+        label: '자금 흐름 (상대적)',
+        data: [8, 6, 7, 2, -9, -7],
+        backgroundColor: [
+          '#16a34a','#16a34a','#16a34a','#6b7280','#e11d48','#e11d48'
+        ],
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false }, tooltip: { callbacks: {
+        label: ctx => ctx.raw > 0 ? '📈 인플로우 +' + ctx.raw : '📉 아웃플로우 ' + ctx.raw
+      }}},
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+        y: { grid: { color: '#f0f0f0' }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+};
+
+chartConfigs['infraChart'] = () => {
+  new Chart(document.getElementById('infraChart'), {
+    type: 'line',
+    data: {
+      labels: ['2023', '2024 상', '2024 하', '2025 초', '2025 말', '2026 현재'],
+      datasets: [
+        { label: 'GPU/LLM', data: [10, 40, 70, 80, 75, 80], borderColor: '#e11d48', backgroundColor: 'rgba(225,29,72,0.08)', tension: 0.4, fill: true, pointRadius: 3 },
+        { label: 'CPU/메모리', data: [5, 10, 30, 60, 80, 90], borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.06)', tension: 0.4, fill: true, pointRadius: 3 },
+        { label: '전력/건설', data: [2, 5, 10, 25, 55, 80], borderColor: '#16a34a', backgroundColor: 'rgba(22,163,74,0.06)', tension: 0.4, fill: true, pointRadius: 3 },
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12 } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+        y: { max: 100, grid: { color: '#f0f0f0' }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+};
+
+chartConfigs['moneyFlowChart'] = () => {
+  new Chart(document.getElementById('moneyFlowChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['인텔(+19.2%)', 'TXN(닷컴이후최대)', 'MXL(+32%)', 'URI(+22%)', 'NEE(최고가)', 'IBM(급락)', 'NOW(급락)', 'AAL(적자)'],
+      datasets: [{
+        data: [19, 15, 10, 10, 8, 13, 13, 12],
+        backgroundColor: [
+          '#16a34a','#4ade80','#86efac','#bbf7d0',
+          '#a7f3d0',
+          '#e11d48','#f43f5e','#fb7185'
+        ],
+        borderWidth: 2,
+        borderColor: '#fff'
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 10 }, boxWidth: 10 } },
+        tooltip: { callbacks: { label: ctx => ctx.label } }
+      }
+    }
+  });
+};
+
+chartConfigs['capexChart'] = () => {
+  new Chart(document.getElementById('capexChart'), {
+    type: 'bar',
+    data: {
+      labels: ['메타 (감원→캐펙스)', '마이크로소프트 (7% 희망퇴직)', '테슬라 ($25B 지출)'],
+      datasets: [{
+        label: '캐펙스 전략',
+        data: [8000, 7, 25],
+        backgroundColor: ['#2563eb', '#6b7280', '#e11d48'],
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: {
+          label: ctx => ctx.dataIndex === 0 ? '감원 8,000명으로 캐펙스 확보' : ctx.dataIndex === 1 ? '희망퇴직 최대 7%' : '캐펙스 $25B — FCF 마이너스 우려'
+        }}
+      },
+      scales: {
+        x: { grid: { color: '#f0f0f0' }, ticks: { display: false } },
+        y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+};
+
+// ---- Observers ----
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+</script>
+</body>
+</html>

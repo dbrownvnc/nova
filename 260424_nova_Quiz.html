@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIA.chat 멤버미팅 문제 | 2026.04.23</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --red: #e11d48;
+    --red2: #f43f5e;
+    --border: #e5e5e5;
+    --blue: #2563eb;
+    --gray: #6b7280;
+    --green: #16a34a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg2);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+    padding-bottom: 60px;
+  }
+
+  /* STICKY SCOREBOARD */
+  .scoreboard {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--text);
+    color: #fff;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .score-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: var(--red2);
+    font-weight: 700;
+    margin-right: 4px;
+    flex-shrink: 0;
+  }
+  .score-item {
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .score-num {
+    font-size: 18px;
+    font-weight: 700;
+    font-family: 'Playfair Display', serif;
+    line-height: 1;
+  }
+  .score-label { font-size: 10px; color: #aaa; }
+  .progress-wrap { flex: 1; min-width: 80px; }
+  .progress-bar-bg {
+    height: 6px;
+    background: #333;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--red);
+    border-radius: 3px;
+    transition: width 0.4s, background 0.4s;
+  }
+  .progress-label { font-size: 10px; color: #aaa; margin-top: 2px; text-align: right; }
+
+  /* HEADER */
+  .hero {
+    background: var(--text);
+    padding: 28px 20px 20px;
+    color: #fff;
+  }
+  .hero-tag { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--red2); font-weight: 700; margin-bottom: 8px; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; line-height: 1.3; margin-bottom: 6px; }
+  .hero-sub { font-size: 12px; color: #aaa; }
+
+  /* QUIZ CARD */
+  .quiz-wrap { padding: 14px 14px; }
+  .quiz-card {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 14px;
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .q-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--red);
+    flex-shrink: 0;
+  }
+  .badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .badge-easy { background: #f0fdf4; color: var(--green); border: 1px solid #bbf7d0; }
+  .badge-med { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
+  .badge-hard { background: #fef2f2; color: var(--red); border: 1px solid #fecaca; }
+  .badge-type { background: #eff6ff; color: var(--blue); border: 1px solid #bfdbfe; }
+  .q-text { font-size: 14.5px; font-weight: 500; margin-bottom: 14px; line-height: 1.6; }
+
+  /* OPTIONS */
+  .options { display: flex; flex-direction: column; gap: 7px; }
+  .opt-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--bg2);
+    color: var(--text);
+    font-size: 13.5px;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    line-height: 1.5;
+  }
+  .opt-btn:hover:not(:disabled) { border-color: var(--red); background: #fff5f5; }
+  .opt-btn:disabled { cursor: default; }
+  .opt-btn.correct { background: #f0fdf4; border-color: var(--green); color: var(--green); font-weight: 700; }
+  .opt-btn.wrong { background: #fef2f2; border-color: var(--red); color: var(--red); }
+  .opt-btn.reveal { background: #f0fdf4; border-color: var(--green); color: var(--green); font-weight: 700; }
+
+  /* OX */
+  .ox-wrap { display: flex; gap: 10px; }
+  .ox-btn {
+    flex: 1;
+    padding: 14px;
+    font-size: 28px;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    background: var(--bg2);
+    cursor: pointer;
+    text-align: center;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: all 0.2s;
+  }
+  .ox-btn:hover:not(:disabled) { border-color: var(--red); background: #fff5f5; }
+  .ox-btn:disabled { cursor: default; }
+  .ox-btn.correct { background: #f0fdf4; border-color: var(--green); }
+  .ox-btn.wrong { background: #fef2f2; border-color: var(--red); }
+
+  /* SHORT ANSWER */
+  .sa-wrap { display: flex; gap: 8px; align-items: flex-start; flex-wrap: wrap; }
+  .sa-input {
+    flex: 1;
+    min-width: 120px;
+    padding: 9px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg2);
+    color: var(--text);
+    outline: none;
+  }
+  .sa-input:focus { border-color: var(--red); }
+  .sa-input:disabled { background: #f9fafb; }
+  .submit-btn {
+    padding: 9px 16px;
+    background: var(--red);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    white-space: nowrap;
+  }
+  .submit-btn:hover { background: var(--red2); }
+  .submit-btn:disabled { background: var(--gray); cursor: default; }
+
+  /* FEEDBACK */
+  .feedback-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .fb-correct { background: #f0fdf4; color: var(--green); border: 1px solid #bbf7d0; }
+  .fb-wrong { background: #fef2f2; color: var(--red); border: 1px solid #fecaca; }
+
+  /* EXPLANATION */
+  .explanation {
+    display: none;
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: #fafafa;
+    border-left: 3px solid var(--red);
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+  }
+  .explanation.show { display: block; }
+  .expl-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--red); margin-bottom: 6px; }
+  .expl-body { color: var(--text); line-height: 1.65; }
+  .expl-ref { font-size: 11px; color: var(--text2); margin-top: 6px; border-top: 1px dashed var(--border); padding-top: 6px; }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal-box {
+    background: var(--bg);
+    border-radius: 16px;
+    padding: 30px 24px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .modal-emoji { font-size: 48px; margin-bottom: 12px; }
+  .modal-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 900; margin-bottom: 6px; }
+  .modal-score { font-size: 40px; font-family: 'Playfair Display', serif; color: var(--red); font-weight: 700; margin: 10px 0; }
+  .modal-grade { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .modal-msg { font-size: 14px; color: var(--text2); margin-bottom: 20px; }
+  .restart-btn {
+    display: block;
+    width: 100%;
+    padding: 13px;
+    background: var(--red);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .restart-btn:hover { background: var(--red2); }
+  .divider { height: 3px; background: linear-gradient(90deg, var(--red), transparent); }
+</style>
+</head>
+<body>
+
+<!-- SCOREBOARD -->
+<div class="scoreboard">
+  <div class="score-title">CIA.chat 퀴즈</div>
+  <div class="score-item">
+    <div class="score-num" id="sb-solved">0</div>
+    <div class="score-label">푼 문제</div>
+  </div>
+  <div class="score-item" style="color:#4ade80;">
+    <div class="score-num" id="sb-correct">0</div>
+    <div class="score-label">맞힌 수</div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+    <div class="progress-label" id="progressLabel">정답률 0%</div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="hero">
+  <div class="hero-tag">Interactive Quiz · 2026.04.23</div>
+  <h1>CIA.chat 멤버미팅<br>핵심 확인 문제</h1>
+  <div class="hero-sub">총 10문제 · 객관식 6 · 단답형 2~3 · OX 1~2 · 클릭 즉시 채점</div>
+</div>
+<div class="divider"></div>
+
+<!-- QUIZ AREA -->
+<div class="quiz-wrap" id="quizArea"></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-emoji" id="modalEmoji">🎯</div>
+    <div class="modal-title">최종 결과</div>
+    <div class="modal-score" id="modalScore">0 / 10</div>
+    <div class="modal-grade" id="modalGrade"></div>
+    <div class="modal-msg" id="modalMsg"></div>
+    <button class="restart-btn" onclick="restartQuiz()">↺ 다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id: 1,
+    type: 'mc',
+    difficulty: 'easy',
+    question: '오늘(4월 23일) 뉴욕 증시 급락의 직접적 촉매가 된 지정학적 사건은 무엇입니까?',
+    options: [
+      '① 미중 무역협상 결렬',
+      '② 트럼프의 "Shoot and Kill" 발언 및 이란 협상 와해',
+      '③ 러시아의 우크라이나 공세 강화',
+      '④ 북한의 미사일 발사'
+    ],
+    answer: 1,
+    explanation: '트럼프 대통령의 "Shoot and Kill(즉각 사살)" 명령 발언, 이스라엘 전면전 준비 선언, 이란 협상 수석대표 갈리바프 사임이 겹치면서 오후 2시경 시장이 일제히 급락했습니다.',
+    ref: '자막: "가장 큰 게 이거였습니다. 트럼프 대통령이 뭐라고 했죠? 다 쏴 이거였습니다."'
+  },
+  {
+    id: 2,
+    type: 'mc',
+    difficulty: 'easy',
+    question: '텍사스 인스트루먼트(TXN)의 오늘 데이터센터 매출 폭증폭은 몇 %였습니까?',
+    options: [
+      '① 30%',
+      '② 55%',
+      '③ 90%',
+      '④ 120%'
+    ],
+    answer: 2,
+    explanation: '방송에서 "데이터 센터 매출이 무려 90%나 폭증됐습니다"라고 언급됐습니다. 이 실적으로 2000년 닷컴 버블 이후 최대 일간 상승을 기록했습니다.',
+    ref: '자막: "데이터 센터 매출이 무려 90%나 폭증이 됐습니다."'
+  },
+  {
+    id: 3,
+    type: 'mc',
+    difficulty: 'med',
+    question: 'IBM이 급락한 핵심 이유로 방송에서 제시된 내용은 무엇입니까?',
+    options: [
+      '① 회계 부정 의혹 발생',
+      '② AI 에이전트가 기술 지원(컨설팅) 수요를 대체',
+      '③ 중국 정부의 IBM 제품 사용 금지 조치',
+      '④ 주요 임원진 대거 사임'
+    ],
+    answer: 1,
+    explanation: 'IBM의 수익 구조는 장비 판매 + 유지보수 + 기술 지원 출장 비용 청구에 기반하는데, AI 에이전트가 장애 해결을 대신하면서 이 모델이 붕괴됐습니다. "AI한테 물어보면 살려준단 말입니다"라고 설명됐습니다.',
+    ref: '자막: "AI한테 물어보면 아 이렇게 해봐 저렇게 해봐... 살려준단 말입니다. 그러니까 이런 현상이 지금 일어나고 있으니까."'
+  },
+  {
+    id: 4,
+    type: 'mc',
+    difficulty: 'med',
+    question: '인텔(INTC)이 오늘 장후 대폭 상승한 주된 이유로 지목된 것은?',
+    options: [
+      '① 엔비디아와의 합병 발표',
+      '② 중국 수출 규제 해제',
+      '③ 테슬라의 대규모 캐펙스($25B) 집행에 따른 CPU 수요 폭발',
+      '④ 미 정부 보조금 2배 증액 확정'
+    ],
+    answer: 2,
+    explanation: '"테슬라 덕분이다. 테슬라 덕분입니다. 이 테슬라가 쓰는 돈이 어마무시하잖아요."라고 명시됐습니다. 테슬라의 $25B 캐펙스 집행이 CPU 수요를 폭발시켰고, 공급도 못할 것 같다는 CEO 발언이 나왔습니다.',
+    ref: '자막: "이번에 이렇게 많이 된 이유가 뭐예요? 테슬라 덕분이다. 테슬라 덕분입니다."'
+  },
+  {
+    id: 5,
+    type: 'mc',
+    difficulty: 'med',
+    question: 'URI(United Rentals)가 오늘 AI 관련 섹터에서 22% 급등한 이유는?',
+    options: [
+      '① 자체 AI 소프트웨어 개발 발표',
+      '② AI 데이터센터 건설에 필요한 중장비 임대업체로 수혜',
+      '③ 아마존과의 물류 파트너십 체결',
+      '④ 미국 연방 인프라 법안 수혜 확정'
+    ],
+    answer: 1,
+    explanation: '"딱따구리예요. AI. 장비 대여업체. 건축하시는 분들은 다 압니다. 집을 짓든 빌딩을 짓든 이 집에서 다 빌려야 되는 거야." AI 데이터센터 건설 붐이 중장비 임대 수요를 급증시켰습니다.',
+    ref: '자막: "그런 거 빌려주는데 공사할 때 쓰는 중장비들을 빌려주는 데가 유나이티드 렌탈입니다. 그런데 얘네들이 왜 AI에 들어가? 제가 말씀드린 딱따구리예요."'
+  },
+  {
+    id: 6,
+    type: 'mc',
+    difficulty: 'hard',
+    question: '방송에서 메타와 마이크로소프트가 동시에 감원·희망퇴직을 단행한 이유로 설명된 것은?',
+    options: [
+      '① 경기 침체 대비 보수적 경영 전환',
+      '② 고정비 삭감으로 AI 캐펙스(설비투자) 재원 확보',
+      '③ 규제 당국의 인력 감축 권고',
+      '④ AI가 직원 업무를 100% 대체했기 때문'
+    ],
+    answer: 1,
+    explanation: '"얘네들 다 자르고 그 돈으로 캐펙스를 메꿔놓겠다라는 겁니다. 고정비를 삭감하는 거죠." 메타 8,000명 감원, MS 최대 7% 희망퇴직으로 AI 투자 재원을 마련하는 전략입니다.',
+    ref: '자막: "얘네들 다 자르고 그 돈으로 캐펙스를 메꿔놓겠다라는 겁니다."'
+  },
+  {
+    id: 7,
+    type: 'ox',
+    difficulty: 'easy',
+    question: '방송에서 테슬라(TSLA)는 현재 "혁신기업"으로 평가됐다.',
+    options: ['O', 'X'],
+    answer: 1,
+    explanation: '방송에서 "더 이상 혁신기업이 아니죠. 테슬라는"이라고 명확히 밝혔습니다. FSD·로봇택시·옵티머스·반도체 등 테슬라가 내세우는 분야를 중국을 비롯한 경쟁사가 모두 하고 있어, 더 이상 독점적 블루오션이 아니라는 것입니다.',
+    ref: '자막: "더 이상 혁신기업이 아니죠. 테슬라는. 더 이상 미래를 팔아먹지 못하는 거야."'
+  },
+  {
+    id: 8,
+    type: 'ox',
+    difficulty: 'med',
+    question: 'CORU(한국 3배 ETF)는 장기투자용으로 적합하다고 방송에서 권장됐다.',
+    options: ['O', 'X'],
+    answer: 1,
+    explanation: '"3배수기 때문에 그냥 들고 있으면 안 되는 겁니다. 나 들고 있으면 녹아. 다시 말씀드려요. 들고 있으면 안 됩니다."라고 명시됐습니다. 3배 ETF는 변동성으로 인한 decay(손실) 때문에 장기 보유 시 원금이 녹습니다.',
+    ref: '자막: "이거는 3배수기 때문에 그냥 들고 있으면 안 되는 겁니다. 들고 있으면 녹아."'
+  },
+  {
+    id: 9,
+    type: 'short',
+    difficulty: 'med',
+    question: '방송에서 "AI 인프라 확산 테마"를 설명하는 핵심 비유어(키워드)는 무엇인가요? (힌트: 새 이름)',
+    answer: '딱따구리',
+    acceptList: ['딱따구리', '딱따구리 테마'],
+    explanation: '"딱따구리"는 2025년 12월 31일 방송에서 제시된 개념으로, AI 인프라(반도체·전력·건설·네트워크)에 수혜가 확산되는 구조를 비유한 표현입니다. 나무를 파는 딱따구리처럼 인프라를 뚫고 들어가는 AI 수혜 흐름을 뜻합니다.',
+    ref: '자막: "제가 계속 말씀드리지만 딱따구리 딱따구리를 여러분이 기억하시면 됩니다."'
+  },
+  {
+    id: 10,
+    type: 'short',
+    difficulty: 'hard',
+    question: '방송에서 다음 주(4월 29~30일)를 "수목주목"이라고 강조한 이유를 핵심 발표 2개로 서술하세요.',
+    answer: 'FOMC(연준회의), PCE 또는 GDP',
+    acceptList: ['fomc', '연준', 'pce', 'gdp', '연준회의', '물가'],
+    explanation: '4월 29일(수) FOMC 연준 회의, 4월 30일(목) PCE(개인소비지출 물가지수) + 2분기 GDP 어드밴스드(1차 추정치)가 동시에 발표됩니다. 인플레이션과 성장률 데이터가 한꺼번에 쏟아지는 빅이벤트입니다.',
+    ref: '자막: "다음주 수요일날 연준회의가 있어요... 목요일날 PCE가 나옵니다. GDP도 나오고요."'
+  }
+];
+
+let state = { solved: 0, correct: 0 };
+
+function getDiffBadge(d) {
+  if (d === 'easy') return '<span class="badge badge-easy">쉬움</span>';
+  if (d === 'med') return '<span class="badge badge-med">보통</span>';
+  return '<span class="badge badge-hard">어려움</span>';
+}
+function getTypeBadge(t) {
+  if (t === 'mc') return '<span class="badge badge-type">객관식</span>';
+  if (t === 'ox') return '<span class="badge badge-type">OX</span>';
+  return '<span class="badge badge-type">단답형</span>';
+}
+
+function renderQuiz() {
+  const wrap = document.getElementById('quizArea');
+  wrap.innerHTML = '';
+  QUIZ_DATA.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'quiz-card';
+    card.id = 'card-' + q.id;
+
+    let optionsHTML = '';
+    if (q.type === 'mc') {
+      optionsHTML = '<div class="options">' +
+        q.options.map((opt, i) =>
+          `<button class="opt-btn" id="opt-${q.id}-${i}" onclick="checkMC(${q.id}, ${i})">${opt}</button>`
+        ).join('') + '</div>';
+    } else if (q.type === 'ox') {
+      optionsHTML = '<div class="ox-wrap">' +
+        `<button class="ox-btn" id="ox-${q.id}-0" onclick="checkOX(${q.id}, 0)">⭕</button>` +
+        `<button class="ox-btn" id="ox-${q.id}-1" onclick="checkOX(${q.id}, 1)">❌</button>` +
+        '</div>';
+    } else {
+      optionsHTML = `<div class="sa-wrap">
+        <input type="text" class="sa-input" id="sa-${q.id}" placeholder="정답 입력...">
+        <button class="submit-btn" id="sabtn-${q.id}" onclick="checkSA(${q.id})">제출</button>
+      </div>`;
+    }
+
+    card.innerHTML = `
+      <div class="card-header">
+        <span class="q-num">Q${idx + 1}</span>
+        ${getDiffBadge(q.difficulty)}
+        ${getTypeBadge(q.type)}
+      </div>
+      <div class="q-text">${q.question}</div>
+      ${optionsHTML}
+      <div class="feedback-badge" id="fb-${q.id}" style="display:none;"></div>
+      <div class="explanation" id="expl-${q.id}">
+        <div class="expl-title">✍️ 해설</div>
+        <div class="expl-body">${q.explanation}</div>
+        <div class="expl-ref">📌 근거: ${q.ref}</div>
+      </div>
+    `;
+    wrap.appendChild(card);
+  });
+}
+
+function showFeedback(qId, isCorrect) {
+  const fb = document.getElementById('fb-' + qId);
+  fb.style.display = 'inline-block';
+  fb.className = 'feedback-badge ' + (isCorrect ? 'fb-correct' : 'fb-wrong');
+  fb.textContent = isCorrect ? '✓ 정답!' : '✗ 오답';
+  document.getElementById('expl-' + qId).classList.add('show');
+}
+
+function updateScore(isCorrect) {
+  state.solved++;
+  if (isCorrect) state.correct++;
+  document.getElementById('sb-solved').textContent = state.solved + ' / 10';
+  document.getElementById('sb-correct').textContent = state.correct;
+  const rate = state.solved > 0 ? Math.round(state.correct / state.solved * 100) : 0;
+  const bar = document.getElementById('progressBar');
+  bar.style.width = rate + '%';
+  bar.style.background = rate < 40 ? '#e11d48' : rate < 70 ? '#f59e0b' : '#16a34a';
+  document.getElementById('progressLabel').textContent = '정답률 ' + rate + '%';
+  if (state.solved === 10) setTimeout(showModal, 600);
+}
+
+function checkMC(qId, selected) {
+  const q = QUIZ_DATA.find(q => q.id === qId);
+  const isCorrect = selected === q.answer;
+  for (let i = 0; i < q.options.length; i++) {
+    const btn = document.getElementById('opt-' + qId + '-' + i);
+    btn.disabled = true;
+    if (i === q.answer) btn.classList.add(isCorrect ? 'correct' : 'reveal');
+    else if (i === selected && !isCorrect) btn.classList.add('wrong');
+  }
+  showFeedback(qId, isCorrect);
+  updateScore(isCorrect);
+}
+
+function checkOX(qId, selected) {
+  const q = QUIZ_DATA.find(q => q.id === qId);
+  const isCorrect = selected === q.answer;
+  for (let i = 0; i <= 1; i++) {
+    const btn = document.getElementById('ox-' + qId + '-' + i);
+    btn.disabled = true;
+    if (i === q.answer) btn.classList.add(isCorrect ? 'correct' : 'reveal');
+    else if (i === selected && !isCorrect) btn.classList.add('wrong');
+  }
+  showFeedback(qId, isCorrect);
+  updateScore(isCorrect);
+}
+
+function checkSA(qId) {
+  const q = QUIZ_DATA.find(q => q.id === qId);
+  const input = document.getElementById('sa-' + qId);
+  const btn = document.getElementById('sabtn-' + qId);
+  const userAns = input.value.trim().toLowerCase();
+  const isCorrect = q.acceptList.some(a => userAns.includes(a.toLowerCase()));
+  input.disabled = true;
+  btn.disabled = true;
+  input.style.borderColor = isCorrect ? 'var(--green)' : 'var(--red)';
+  showFeedback(qId, isCorrect);
+  updateScore(isCorrect);
+}
+
+function showModal() {
+  const score = state.correct;
+  const rate = Math.round(score / 10 * 100);
+  let grade, msg, emoji;
+  if (score >= 9) { grade = 'A+ — 탁월'; msg = '완벽에 가까운 이해! 시장 프로급입니다 🎉'; emoji = '🏆'; }
+  else if (score >= 8) { grade = 'A — 우수'; msg = '훌륭합니다! 핵심을 잘 파악했습니다.'; emoji = '⭐'; }
+  else if (score >= 6) { grade = 'B — 양호'; msg = '기본기는 갖췄습니다. 틀린 문제 복습 권장!'; emoji = '📈'; }
+  else if (score >= 4) { grade = 'C — 보통'; msg = '한 번 더 읽어보세요. 꼭 다시 풀어보길!'; emoji = '📖'; }
+  else { grade = 'D — 분발'; msg = '다시 한번 방송을 정독해 주세요!'; emoji = '💪'; }
+  document.getElementById('modalEmoji').textContent = emoji;
+  document.getElementById('modalScore').textContent = score + ' / 10 (' + rate + '%)';
+  document.getElementById('modalGrade').textContent = grade;
+  document.getElementById('modalMsg').textContent = msg;
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function restartQuiz() {
+  state = { solved: 0, correct: 0 };
+  document.getElementById('sb-solved').textContent = '0 / 10';
+  document.getElementById('sb-correct').textContent = '0';
+  document.getElementById('progressBar').style.width = '0%';
+  document.getElementById('progressBar').style.background = 'var(--red)';
+  document.getElementById('progressLabel').textContent = '정답률 0%';
+  document.getElementById('modalOverlay').classList.remove('show');
+  renderQuiz();
+}
+
+// handle SA enter key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && e.target.classList.contains('sa-input')) {
+    const id = parseInt(e.target.id.replace('sa-', ''));
+    const btn = document.getElementById('sabtn-' + id);
+    if (btn && !btn.disabled) checkSA(id);
+  }
+});
+
+renderQuiz();
+</script>
+</body>
+</html>
