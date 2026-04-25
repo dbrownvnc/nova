@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>인텔 폭등 & 아펙스 위크 — 인터랙티브 퀴즈</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #ffffff;
+  --bg2: #fafafa;
+  --text: #1a1a1a;
+  --text2: #777777;
+  --accent: #e11d48;
+  --accent2: #f43f5e;
+  --border: #e5e5e5;
+  --green: #16a34a;
+  --green-bg: #f0fdf4;
+  --red: #dc2626;
+  --red-bg: #fef2f2;
+}
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 15px;
+  padding-bottom: 60px;
+}
+
+/* ── STICKY SCORE BAR ─────────────────────── */
+.score-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--text);
+  color: #fff;
+  padding: 12px 18px 0;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+.score-inner {
+  max-width: 680px;
+  margin: 0 auto;
+}
+.score-nums {
+  display: flex;
+  gap: 20px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.score-nums span b {
+  color: #fff;
+  font-size: 16px;
+  font-family: 'Playfair Display', serif;
+}
+.score-rate {
+  color: var(--accent2);
+  font-weight: 700;
+  font-size: 16px;
+  font-family: 'Playfair Display', serif;
+}
+.progress-track {
+  height: 5px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 0;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  transition: width 0.5s ease, background 0.4s;
+  background: var(--accent);
+  border-radius: 0;
+}
+
+/* ── HERO ───────────────────────────────────── */
+.hero {
+  background: linear-gradient(135deg, #1a1a1a 60%, #2d1a24);
+  color: #fff;
+  padding: 40px 20px 32px;
+}
+.hero-inner { max-width: 680px; margin: 0 auto; }
+.hero-tag {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  padding: 3px 11px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(22px, 6vw, 34px);
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+.hero p { color: rgba(255,255,255,0.6); font-size: 13px; }
+
+/* ── CONTAINER ──────────────────────────────── */
+.container { max-width: 680px; margin: 0 auto; padding: 0 16px; }
+
+/* ── QUIZ CARD ──────────────────────────────── */
+.quiz-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg2);
+  padding: 22px 20px;
+  margin: 20px 0;
+  transition: box-shadow 0.2s;
+}
+.quiz-card:first-of-type { margin-top: 28px; }
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.q-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--accent);
+  line-height: 1;
+}
+.diff-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+.diff-easy { background: #dcfce7; color: #166534; }
+.diff-mid  { background: #fef9c3; color: #854d0e; }
+.diff-hard { background: #fef2f2; color: var(--red); }
+.type-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 20px;
+  background: #eff6ff;
+  color: #1e40af;
+  letter-spacing: 0.5px;
+}
+.question-text {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.55;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+/* ── OPTIONS ──────────────────────────────── */
+.options { display: flex; flex-direction: column; gap: 9px; }
+.option-btn {
+  width: 100%;
+  text-align: left;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  color: var(--text);
+  line-height: 1.5;
+}
+.option-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: #fff5f7;
+}
+.option-btn.correct {
+  border-color: var(--green);
+  background: var(--green-bg);
+  color: var(--green);
+  font-weight: 700;
+}
+.option-btn.wrong {
+  border-color: var(--red);
+  background: var(--red-bg);
+  color: var(--red);
+}
+.option-btn:disabled { cursor: default; }
+
+/* ── OX BUTTONS ──────────────────────────── */
+.ox-row { display: flex; gap: 12px; }
+.ox-btn {
+  flex: 1;
+  padding: 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.ox-btn:hover:not(:disabled) { border-color: var(--accent); background: #fff5f7; }
+.ox-btn.correct { border-color: var(--green); background: var(--green-bg); }
+.ox-btn.wrong   { border-color: var(--red);   background: var(--red-bg); }
+.ox-btn:disabled { cursor: default; }
+
+/* ── SHORT ANSWER ─────────────────────────── */
+.short-row { display: flex; gap: 8px; margin-top: 4px; }
+.short-input {
+  flex: 1;
+  padding: 10px 13px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.short-input:focus { border-color: var(--accent); }
+.short-input.correct { border-color: var(--green); background: var(--green-bg); }
+.short-input.wrong   { border-color: var(--red);   background: var(--red-bg); }
+.submit-btn {
+  padding: 10px 18px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.submit-btn:hover { background: var(--accent2); }
+.submit-btn:disabled { background: #ccc; cursor: default; }
+
+/* ── RESULT BADGE ─────────────────────────── */
+.result-badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-top: 10px;
+}
+.badge-correct { background: var(--green-bg); color: var(--green); }
+.badge-wrong   { background: var(--red-bg);   color: var(--red); }
+
+/* ── EXPLANATION ──────────────────────────── */
+.explanation {
+  display: none;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-top: 14px;
+  font-size: 13px;
+  color: #333;
+  line-height: 1.65;
+}
+.explanation.show { display: block; }
+.expl-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text2);
+  margin-bottom: 6px;
+}
+.expl-answer {
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+/* ── FINAL MODAL ──────────────────────────── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.show { display: flex; }
+.modal-box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 36px 28px;
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+.modal-emoji { font-size: 52px; margin-bottom: 14px; }
+.modal-grade {
+  font-family: 'Playfair Display', serif;
+  font-size: 56px;
+  font-weight: 900;
+  color: var(--accent);
+  line-height: 1;
+}
+.modal-score {
+  font-size: 15px;
+  color: var(--text2);
+  margin: 8px 0 16px;
+}
+.modal-msg {
+  font-size: 14px;
+  line-height: 1.65;
+  margin-bottom: 22px;
+  color: var(--text);
+}
+.restart-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.restart-btn:hover { background: var(--accent2); }
+
+/* ── SECTION HEADER ──────────────────────── */
+.section-header {
+  padding: 28px 0 0;
+}
+.section-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+}
+.divider { height: 1px; background: var(--border); margin: 20px 0 0; }
+</style>
+</head>
+<body>
+
+<!-- STICKY SCORE BAR -->
+<div class="score-bar">
+  <div class="score-inner">
+    <div class="score-nums">
+      <span>푼 문제 <b id="solvedCount">0</b> / 10</span>
+      <span>맞힌 문제 <b id="correctCount">0</b></span>
+      <span class="score-rate" id="rateDisplay">정답률 0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Interactive Quiz · 10문제</div>
+    <h1>인텔 폭등 &amp;<br>아펙스 위크 시험</h1>
+    <p>NOVA Real Invest 2026.04.24 방송 기반 · 객관식 / 단답형 / OX 혼합</p>
+  </div>
+</div>
+
+<!-- QUIZ AREA -->
+<div class="container" id="quizArea"></div>
+
+<!-- FINAL MODAL -->
+<div class="modal-overlay" id="finalModal">
+  <div class="modal-box">
+    <div class="modal-emoji" id="modalEmoji">🎉</div>
+    <div class="modal-grade" id="modalGrade">A</div>
+    <div class="modal-score" id="modalScore">10문제 중 10문제 정답</div>
+    <div class="modal-msg" id="modalMsg"></div>
+    <button class="restart-btn" onclick="restartQuiz()">↺ 다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id: 1,
+    type: 'mcq',
+    difficulty: 'easy',
+    question: '오늘(2026년 4월 24일) 인텔(INTC)의 단일일 주가 상승률은 얼마였습니까?',
+    options: ['A. 14.0%', 'B. 18.5%', 'C. 23.6%', 'D. 39.0%'],
+    answer: 2,
+    explanation: '방송에서 "인텔이 오늘 하루 동안 23.6%가 올랐습니다"라고 명시했습니다. 이는 1987년 이후 처음 보는 단일일 상승률입니다.'
+  },
+  {
+    id: 2,
+    type: 'mcq',
+    difficulty: 'mid',
+    question: '인텔 폭등의 직접적인 배경으로 가장 거리가 먼 것은?',
+    options: [
+      'A. AI 서버용 CPU 재고 소진',
+      'B. 일론 머스크의 AI5 칩 인텔 위탁 생산',
+      'C. 인텔의 새 스마트폰 칩 출시',
+      'D. 멀티 에이전트 AI로 인한 CPU 수요 증가'
+    ],
+    answer: 2,
+    explanation: '방송은 ① AI 서버 CPU 재고 소진, ② 일론 머스크 AI5 칩 인텔 위탁, ③ 멀티 에이전트 전환으로 CPU 의존도 증가를 폭등 원인으로 꼽았습니다. 스마트폰 칩 출시는 언급되지 않았습니다.'
+  },
+  {
+    id: 3,
+    type: 'ox',
+    difficulty: 'easy',
+    question: '필라델피아 반도체 지수(SOXX)와 SMH는 오늘 기준으로 18거래일 연속 상승을 기록했다.',
+    answer: 'O',
+    explanation: '방송에서 "필라델피아 지수 SOXX 그리고 SMH 그리고 쏙슬 모두 다 18거래일 연속 상승을 보여주고 있습니다. 1994년 이후 처음 보는 열풍"이라고 명시했습니다.'
+  },
+  {
+    id: 4,
+    type: 'short',
+    difficulty: 'mid',
+    question: '과거 GPU 독점 모델에서 GPU:CPU 의존도는 몇 대 1이었으며, 멀티 에이전트 AI 시대에는 몇 대 1로 변화했습니까? (예: 8:1→4:1)',
+    answer: '8:1→4:1',
+    keywords: ['8', '4'],
+    explanation: '방송에서 "옛날에 GPU 독점 모델에서는 GPU에 대한 의존도가 CPU에 비교하면 8대 1이었어요. 이제는 추론의 영역으로 넘어가면서 4대 1이에요"라고 설명했습니다.'
+  },
+  {
+    id: 5,
+    type: 'mcq',
+    difficulty: 'mid',
+    question: '오늘 발표된 미시간 대학교 소비자심리지수는 몇 포인트였으며, 이는 어느 해 이후 최저치 수준입니까?',
+    options: [
+      'A. 52.1 — 1960년 이후',
+      'B. 49.8 — 1952년 이후',
+      'C. 47.3 — 1970년 이후',
+      'D. 55.0 — 1980년 이후'
+    ],
+    answer: 1,
+    explanation: '방송에서 "소비자 심리지수 49.8입니다. 50 이하에요. 1952년 이후로 최저치입니다"라고 명시했습니다.'
+  },
+  {
+    id: 6,
+    type: 'mcq',
+    difficulty: 'hard',
+    question: '아마존이 투자한 X2(xe2)의 핵심 사업 분야와 오늘 상장 첫날 등락률을 올바르게 짝지은 것은?',
+    options: [
+      'A. AI 소프트웨어 플랫폼 — +12.5%',
+      'B. 데이터센터 전문 전력 제공(SMR) — +26.96%',
+      'C. 반도체 팹 운영 — +18.4%',
+      'D. 광통신 장비 — +76.12%'
+    ],
+    answer: 1,
+    explanation: '방송에서 "x2 오늘 하루 동안 무려 26.96% 올라갔고, 데이터 센터 전문 전력 제공 업체입니다. 아마존이 투자했고 SMR(소형 모듈 원자로)을 하고 있는 거예요"라고 설명했습니다.'
+  },
+  {
+    id: 7,
+    type: 'ox',
+    difficulty: 'easy',
+    question: '구글(알파벳)은 엔트로픽에 최초 100억 달러 투자 외에 추가로 300억 달러를 더해 총 400억 달러 투자 계획을 발표했다.',
+    answer: 'O',
+    explanation: '방송에서 "구글이 엔트로픽에 최대 400억 달러의 투자 계획을 발표했습니다. 초기에 100억 달러 원래 투자하고 있었어요. 성과별 300억 추가를 해서 토탈 400억 달러"라고 명시했습니다.'
+  },
+  {
+    id: 8,
+    type: 'mcq',
+    difficulty: 'hard',
+    question: '방송에서 아펙스 위크(다음 주) 중 "최대 위험 구간"으로 꼽은 날과 그 이유로 올바른 것은?',
+    options: [
+      'A. 월요일 — 이란 핵협상 결과 발표',
+      'B. 화요일 — 비자·코카콜라 실적 발표',
+      'C. 수요일 — 연준 FOMC 발표 + 알파벳·MS·메타 동시 실적',
+      'D. 목요일 — 코어 PCE 발표 + 애플 실적'
+    ],
+    answer: 2,
+    explanation: '방송에서 "수요일날 연준회의 결과 발표와 기자회견이 있습니다. 장후에 알파벳, 마이크로소프트, 메타 동시에 발표됩니다. 최대 위험 구간입니다"라고 강조했습니다.'
+  },
+  {
+    id: 9,
+    type: 'short',
+    difficulty: 'mid',
+    question: '방송에서 AI 버블을 끝낼 수 있는 핵심 위험 요소로 지목한 것은 무엇입니까? (두 글자)',
+    answer: '전력',
+    keywords: ['전력', '전기'],
+    explanation: '방송에서 "AI 버블이 꺼지는 상태가 곧 올 겁니다. 정기(전력) 부족입니다. 정기 부족으로 AI 버블이 꺼질 확률이 상당히 높습니다"라고 명시했습니다.'
+  },
+  {
+    id: 10,
+    type: 'mcq',
+    difficulty: 'mid',
+    question: '방송에서 제시한 기본 시나리오(확률 가장 높음)에서 아펙스 위크 이후 S&P 500의 예상 박스권 범위는?',
+    options: [
+      'A. 6,500 ~ 6,800pt',
+      'B. 7,000 ~ 7,250pt',
+      'C. 7,400 ~ 7,600pt',
+      'D. 7,600 ~ 7,900pt'
+    ],
+    answer: 1,
+    explanation: '방송에서 "확률이 가장 높은 시나리오는 7000에서 7250을 S&P가 왔다 갔다 하는 박스권을 형성하는 거죠"라고 명시했습니다.'
+  }
+];
+
+let state = { solved: 0, correct: 0 };
+
+function getDiffLabel(d) {
+  if (d === 'easy') return { text: '쉬움', cls: 'diff-easy' };
+  if (d === 'mid')  return { text: '보통', cls: 'diff-mid' };
+  return { text: '어려움', cls: 'diff-hard' };
+}
+function getTypeLabel(t) {
+  if (t === 'mcq')   return '객관식';
+  if (t === 'ox')    return 'OX';
+  if (t === 'short') return '단답형';
+  return t;
+}
+
+function renderQuiz() {
+  const area = document.getElementById('quizArea');
+  area.innerHTML = '';
+  QUIZ_DATA.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'quiz-card';
+    card.id = 'card-' + q.id;
+    const diff = getDiffLabel(q.difficulty);
+    card.innerHTML = `
+      <div class="card-header">
+        <span class="q-num">${String(q.id).padStart(2,'0')}</span>
+        <span class="diff-badge ${diff.cls}">${diff.text}</span>
+        <span class="type-badge">${getTypeLabel(q.type)}</span>
+      </div>
+      <div class="question-text">${q.question}</div>
+      <div id="input-${q.id}">${renderInput(q)}</div>
+      <div class="explanation" id="expl-${q.id}">
+        <div class="expl-label">📖 해설</div>
+        <div class="expl-answer" id="expl-ans-${q.id}"></div>
+        <div>${q.explanation}</div>
+      </div>
+    `;
+    area.appendChild(card);
+
+    if (idx < QUIZ_DATA.length - 1) {
+      const div = document.createElement('div');
+      div.className = 'divider';
+      area.appendChild(div);
+    }
+  });
+
+  // Bind events
+  QUIZ_DATA.forEach(q => {
+    if (q.type === 'mcq') bindMCQ(q);
+    else if (q.type === 'ox') bindOX(q);
+    else if (q.type === 'short') bindShort(q);
+  });
+}
+
+function renderInput(q) {
+  if (q.type === 'mcq') {
+    return `<div class="options">${q.options.map((opt, i) =>
+      `<button class="option-btn" data-idx="${i}" data-qid="${q.id}">${opt}</button>`
+    ).join('')}</div>`;
+  }
+  if (q.type === 'ox') {
+    return `<div class="ox-row">
+      <button class="ox-btn" data-val="O" data-qid="${q.id}">⭕ O</button>
+      <button class="ox-btn" data-val="X" data-qid="${q.id}">❌ X</button>
+    </div>`;
+  }
+  if (q.type === 'short') {
+    return `<div class="short-row">
+      <input class="short-input" id="sinput-${q.id}" type="text" placeholder="답을 입력하세요" autocomplete="off">
+      <button class="submit-btn" id="ssub-${q.id}" data-qid="${q.id}">제출</button>
+    </div>`;
+  }
+  return '';
+}
+
+function showResult(qid, isCorrect, answerText) {
+  state.solved++;
+  if (isCorrect) state.solved !== undefined && state.correct++;
+  updateScoreBar();
+
+  const expl = document.getElementById('expl-' + qid);
+  const explAns = document.getElementById('expl-ans-' + qid);
+  const badge = document.createElement('div');
+  badge.className = 'result-badge ' + (isCorrect ? 'badge-correct' : 'badge-wrong');
+  badge.textContent = isCorrect ? '✓ 정답!' : '✗ 오답';
+  document.getElementById('input-' + qid).appendChild(badge);
+  explAns.textContent = '정답: ' + answerText;
+  expl.classList.add('show');
+
+  if (state.solved === QUIZ_DATA.length) {
+    setTimeout(showFinal, 600);
+  }
+}
+
+function bindMCQ(q) {
+  const btns = document.querySelectorAll(`.option-btn[data-qid="${q.id}"]`);
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const chosen = parseInt(btn.dataset.idx);
+      const isCorrect = chosen === q.answer;
+      btns.forEach(b => b.disabled = true);
+      if (isCorrect) {
+        btn.classList.add('correct');
+      } else {
+        btn.classList.add('wrong');
+        btns[q.answer].classList.add('correct');
+      }
+      showResult(q.id, isCorrect, q.options[q.answer]);
+    });
+  });
+}
+
+function bindOX(q) {
+  const btns = document.querySelectorAll(`.ox-btn[data-qid="${q.id}"]`);
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const chosen = btn.dataset.val;
+      const isCorrect = chosen === q.answer;
+      btns.forEach(b => b.disabled = true);
+      if (isCorrect) btn.classList.add('correct');
+      else {
+        btn.classList.add('wrong');
+        btns.forEach(b => { if (b.dataset.val === q.answer) b.classList.add('correct'); });
+      }
+      showResult(q.id, isCorrect, q.answer + ' (' + (q.answer === 'O' ? '맞다' : '틀리다') + ')');
+    });
+  });
+}
+
+function bindShort(q) {
+  const sub = document.getElementById('ssub-' + q.id);
+  const inp = document.getElementById('sinput-' + q.id);
+  function doSubmit() {
+    if (sub.disabled) return;
+    const val = inp.value.trim();
+    if (!val) return;
+    sub.disabled = true;
+    inp.disabled = true;
+    let isCorrect = false;
+    if (q.keywords) {
+      isCorrect = q.keywords.some(k => val.includes(k));
+    } else {
+      isCorrect = val === q.answer;
+    }
+    inp.classList.add(isCorrect ? 'correct' : 'wrong');
+    showResult(q.id, isCorrect, q.answer);
+  }
+  sub.addEventListener('click', doSubmit);
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') doSubmit(); });
+}
+
+function updateScoreBar() {
+  document.getElementById('solvedCount').textContent = state.solved;
+  document.getElementById('correctCount').textContent = state.correct;
+  const rate = state.solved > 0 ? Math.round((state.correct / state.solved) * 100) : 0;
+  document.getElementById('rateDisplay').textContent = '정답률 ' + rate + '%';
+  const fill = document.getElementById('progressFill');
+  fill.style.width = (state.solved / QUIZ_DATA.length * 100) + '%';
+  fill.style.background = rate >= 70 ? '#16a34a' : rate >= 40 ? '#f59e0b' : '#e11d48';
+}
+
+function showFinal() {
+  const rate = Math.round((state.correct / QUIZ_DATA.length) * 100);
+  let grade, emoji, msg;
+  if (rate >= 90)      { grade = 'A'; emoji = '🏆'; msg = '완벽한 이해도를 보여주셨습니다! 노바 방송의 핵심을 완전히 파악하셨습니다.'; }
+  else if (rate >= 70) { grade = 'B'; emoji = '🎯'; msg = '훌륭합니다! 핵심 내용을 잘 이해하셨습니다. 틀린 문제를 다시 한번 복습해보세요.'; }
+  else if (rate >= 50) { grade = 'C'; emoji = '📚'; msg = '절반 이상 맞히셨습니다. 방송 내용을 다시 한번 살펴보시면 더 좋을 것 같습니다.'; }
+  else                 { grade = 'D'; emoji = '💪'; msg = '다시 도전해보세요! 방송 내용을 꼼꼼히 복습하고 재시도를 권장드립니다.'; }
+  document.getElementById('modalEmoji').textContent = emoji;
+  document.getElementById('modalGrade').textContent = grade;
+  document.getElementById('modalScore').textContent = `10문제 중 ${state.correct}문제 정답 (${rate}%)`;
+  document.getElementById('modalMsg').textContent = msg;
+  document.getElementById('finalModal').classList.add('show');
+}
+
+function restartQuiz() {
+  state = { solved: 0, correct: 0 };
+  updateScoreBar();
+  document.getElementById('finalModal').classList.remove('show');
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Boot
+renderQuiz();
+</script>
+</body>
+</html>
