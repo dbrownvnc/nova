@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>엔비디아 $300 가즈아! | NOVA Real Invest 분석 리포트</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --table-bg: #fafafa;
+    --chart1: #e11d48;
+    --chart2: #1a1a1a;
+    --chart3: #6b7280;
+    --chart4: #2563eb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--text);
+    color: #fff;
+    padding: 52px 20px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.12;
+  }
+  .hero-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1.25;
+    margin-bottom: 14px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero-meta {
+    font-size: 12px;
+    color: #aaa;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .hero-meta b { color: #ddd; }
+
+  /* SUMMARY STRIP */
+  .summary-strip {
+    background: var(--accent);
+    color: #fff;
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+
+  /* SECTION */
+  section {
+    padding: 32px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    line-height: 1.3;
+  }
+  h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 20px 0 8px;
+    color: var(--text);
+  }
+  p { margin-bottom: 12px; color: var(--text); }
+
+  /* KEY METRICS */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 18px 0;
+  }
+  .metric-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 12px;
+    text-align: center;
+  }
+  .metric-card.highlight { border-color: var(--accent); background: #fff0f3; }
+  .metric-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .metric-label { font-size: 11px; color: var(--text2); margin-top: 4px; }
+
+  /* QUOTE */
+  .pull-quote {
+    border-left: 4px solid var(--accent);
+    background: var(--bg2);
+    padding: 14px 16px;
+    margin: 18px 0;
+    border-radius: 0 8px 8px 0;
+  }
+  .pull-quote p {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: var(--text);
+    margin: 0;
+  }
+  .pull-quote cite { font-size: 12px; color: var(--text2); font-style: normal; margin-top: 6px; display: block; }
+
+  /* TABLE */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 13px;
+  }
+  .data-table th {
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 700;
+  }
+  .data-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--table-bg);
+  }
+  .data-table tr:nth-child(even) td { background: #fff; }
+  .up { color: #16a34a; font-weight: 700; }
+  .down { color: var(--accent); font-weight: 700; }
+
+  /* FADE IN + CHART CONTAINER */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin: 16px 0;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas { opacity: 1; }
+
+  /* TAG BADGE */
+  .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .badge.gray { background: var(--chart3); }
+  .badge.blue { background: var(--chart4); }
+  .badge.green { background: #16a34a; }
+
+  /* ALERT BOX */
+  .alert {
+    background: #fff0f3;
+    border: 1px solid #fecdd3;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 16px 0;
+    font-size: 13.5px;
+  }
+  .alert-title {
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+  .alert.blue-alert {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+  }
+  .alert.blue-alert .alert-title { color: var(--chart4); }
+  .alert.green-alert {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+  }
+  .alert.green-alert .alert-title { color: #16a34a; }
+
+  /* INTERACTIVE SIMULATOR */
+  .simulator {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 16px;
+    margin: 18px 0;
+  }
+  .simulator h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+  .sim-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .sim-row label { font-size: 13px; color: var(--text2); min-width: 100px; }
+  .sim-row input[type=range] {
+    flex: 1;
+    min-width: 120px;
+    accent-color: var(--accent);
+  }
+  .sim-row .val {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 70px;
+    text-align: right;
+  }
+  .sim-result {
+    background: var(--text);
+    color: #fff;
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+    margin-top: 10px;
+  }
+  .sim-result .big { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; color: #f87171; }
+  .sim-result .sub { font-size: 12px; color: #aaa; margin-top: 4px; }
+  .sim-note { font-size: 12px; color: var(--text2); margin-top: 8px; text-align: center; }
+  .reset-btn {
+    display: block;
+    margin: 10px auto 0;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 16px;
+    font-size: 12px;
+    color: var(--text2);
+    cursor: pointer;
+  }
+  .reset-btn:hover { background: var(--border); }
+
+  /* SCENARIO TABLE */
+  .scenario-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin: 14px 0;
+  }
+  .scenario-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 10px;
+    text-align: center;
+  }
+  .scenario-card.danger { border-color: var(--accent); background: #fff0f3; }
+  .scenario-card.caution { border-color: #f59e0b; background: #fffbeb; }
+  .scenario-card.ok { border-color: #16a34a; background: #f0fdf4; }
+  .scenario-card .s-label { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
+  .scenario-card .s-oil { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900; }
+  .scenario-card.danger .s-oil { color: var(--accent); }
+  .scenario-card.caution .s-oil { color: #d97706; }
+  .scenario-card.ok .s-oil { color: #16a34a; }
+  .scenario-card .s-gas { font-size: 12px; color: var(--text2); margin-top: 4px; }
+
+  /* UPCOMING EVENT */
+  .event-list { list-style: none; margin: 14px 0; }
+  .event-list li {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .event-day {
+    background: var(--text);
+    color: #fff;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .event-day.red { background: var(--accent); }
+  .event-content { font-size: 13.5px; }
+  .event-content b { display: block; margin-bottom: 2px; }
+
+  /* WATCHLIST */
+  .watchlist {
+    display: grid;
+    gap: 10px;
+    margin: 14px 0;
+  }
+  .watch-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .watch-ticker {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 70px;
+  }
+  .watch-info { flex: 1; }
+  .watch-info b { display: block; font-size: 13px; }
+  .watch-info span { font-size: 12px; color: var(--text2); }
+  .watch-signal {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+    background: var(--accent);
+    color: #fff;
+  }
+  .watch-signal.neutral { background: var(--chart3); }
+
+  /* FOOTER */
+  footer {
+    background: var(--text);
+    color: #aaa;
+    padding: 28px 20px;
+    font-size: 12px;
+    line-height: 1.7;
+    text-align: center;
+  }
+  footer b { color: #fff; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">📊 NOVA Real Invest · 브리핑 리포트</div>
+  <h1>엔비디아 <span>$300</span> 가즈아!<br>OpenAI-MS 결별과<br>지금 사야 할 수혜주</h1>
+  <div class="hero-meta">
+    <span><b>방송일</b> 2026년 04월 28일</span>
+    <span><b>출처</b> NOVA Real Invest YouTube</span>
+    <span><b>카테고리</b> 미국주식 · AI인프라 · 거시경제</span>
+  </div>
+</div>
+
+<div class="summary-strip">
+  🔥 오늘 핵심: 나스닥·S&P 사상 최고치 경신 | 엔비디아 5조 달러 돌파 | 유가 $108 쇼크 | OpenAI-MS 비독점 전환 | 메모리 10년 슈퍼사이클
+</div>
+
+<!-- 1. 오늘의 시장 -->
+<section>
+  <div class="section-label">Market Overview</div>
+  <h2>오늘의 시장: 사상 최고치 경신</h2>
+  <p>나스닥과 S&P500이 오늘 사상 최고치를 동시에 갱신했다. 유가가 배럴당 $108까지 치솟는 악재 속에서도 AI 인프라 섹터가 전체 시장을 이끌었다.</p>
+
+  <div class="metrics-grid fade-in">
+    <div class="metric-card highlight">
+      <div class="metric-num">$216.61</div>
+      <div class="metric-label">엔비디아 종가 (+4%)</div>
+    </div>
+    <div class="metric-card highlight">
+      <div class="metric-num">$5.26T</div>
+      <div class="metric-label">엔비디아 시가총액</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-num">$108</div>
+      <div class="metric-label">브렌트유 (배럴당)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-num">$96</div>
+      <div class="metric-label">WTI 원유 (배럴당)</div>
+    </div>
+  </div>
+
+  <table class="data-table fade-in">
+    <tr><th>종목</th><th>등락률</th><th>주요 이슈</th></tr>
+    <tr><td>엔비디아 (NVDA)</td><td class="up">+4.0%</td><td>5조 달러 시총 돌파</td></tr>
+    <tr><td>마이크론 (MU)</td><td class="up">+5.6%</td><td>메모리 수요 급증</td></tr>
+    <tr><td>샌디스크 (SNDK)</td><td class="up">+8.1%</td><td>하이퍼스케일러 선주문</td></tr>
+    <tr><td>SK하이닉스</td><td class="up">+2.0%</td><td>AI 메모리 수혜</td></tr>
+    <tr><td>버라이존 (VZ)</td><td class="up">+3.5%</td><td>무선 가입자 5만5천 명 증가</td></tr>
+    <tr><td>도미노 피자 (DPZ)</td><td class="down">-8.9%</td><td>동일점포 매출 마이너스</td></tr>
+    <tr><td>포에 테크놀로지 (POET)</td><td class="down">-47%</td><td>마벨 계약 전면 취소</td></tr>
+  </table>
+</section>
+
+<!-- 2. 유가 쇼크 -->
+<section>
+  <div class="section-label">Oil Price Shock</div>
+  <h2>⚡ 유가 쇼크 — 호르무즈 해협 위기</h2>
+
+  <p>이란이 호르무즈 해협에 통행료 징수권을 주장하며 미국과 협상이 완전 결렬됐다. 트럼프 대통령은 특사 파견을 취소했고, 루비오 국무장관은 이란의 요구를 "말도 안 되는 얘기"라고 일축했다.</p>
+
+  <div class="pull-quote fade-in">
+    <p>"전쟁이 끝난다 하더라도 이란 시추공들이 이미 막히기 시작했다. 당장 어떻게 해도 큰일 났다."</p>
+    <cite>— NOVA, 방송 중 발언</cite>
+  </div>
+
+  <h3>투자은행 유가 전망</h3>
+  <div class="scenario-row fade-in">
+    <div class="scenario-card ok">
+      <div class="s-label">골드만삭스<br>4분기 전망</div>
+      <div class="s-oil">$90</div>
+      <div class="s-gas">기존 $80 → 상향</div>
+    </div>
+    <div class="scenario-card caution">
+      <div class="s-label">시티그룹<br>단기 목표</div>
+      <div class="s-oil">$120</div>
+      <div class="s-gas">봉쇄 지속 시</div>
+    </div>
+    <div class="scenario-card danger">
+      <div class="s-label">최악 시나리오<br>장기 봉쇄</div>
+      <div class="s-oil">$180</div>
+      <div class="s-gas">$150~$180 가능</div>
+    </div>
+  </div>
+
+  <!-- 유가 → 미국 주유소 가격 시뮬레이터 -->
+  <div class="simulator fade-in">
+    <h4>🛢️ 유가 → 미국 주유소 가격 시뮬레이터</h4>
+    <div class="sim-row">
+      <label>원유 가격 (배럴)</label>
+      <input type="range" id="oilSlider" min="60" max="180" value="108" step="2">
+      <div class="val" id="oilVal">$108</div>
+    </div>
+    <div class="sim-result">
+      <div class="sub">예상 미국 전국 평균 주유소 가격 (갤런당)</div>
+      <div class="big" id="gasResult">$8.00</div>
+      <div class="sub" id="caResult">캘리포니아 예상: $10.66</div>
+    </div>
+    <p class="sim-note">※ 현재 미국 평균 $4.11/갤런 기준 · 원유 $96=$4.11 비례 계산</p>
+    <button class="reset-btn" id="oilReset">↺ 초기화 ($108)</button>
+  </div>
+
+  <div class="chart-container fade-in">
+    <canvas id="oilChart" height="220"></canvas>
+  </div>
+</section>
+
+<!-- 3. 엔비디아 5조 달러 -->
+<section>
+  <div class="section-label">NVIDIA · AI Infrastructure</div>
+  <h2>🚀 엔비디아: 5조 달러 장벽 돌파</h2>
+
+  <p>엔비디아가 오늘 시가총액 <b>$5.264조</b>를 기록하며 저항선을 완전히 돌파했다. 2위인 구글(약 $4조)과는 <b>1조 달러 이상 차이</b>가 벌어졌다.</p>
+
+  <h3>왜 주가가 더 오를 수밖에 없나?</h3>
+  <div class="alert blue-alert fade-in">
+    <div class="alert-title">📈 ETF·펀드 리밸런싱 메커니즘</div>
+    전 세계 AI·기술주 ETF(QQQ, XLK, 한국 TIGER 등)는 매월·매분기 시가총액 비중에 따라 리밸런싱을 한다. 엔비디아의 시총이 4조→5조로 뛰면서 이들 펀드가 <b>추가 매수</b>를 해야 하는 구조가 작동한다.
+  </div>
+
+  <div class="chart-container fade-in">
+    <canvas id="mktCapChart" height="230"></canvas>
+  </div>
+
+  <div class="alert green-alert fade-in">
+    <div class="alert-title">💡 프리 캐시 플로우(FCF) 주목</div>
+    엔비디아는 막대한 FCF를 바탕으로 배당 증가 가능성이 언급됐다. 각종 회사 및 AI 기업에 투자도 지속하면서도 현금이 남는 구조.
+  </div>
+</section>
+
+<!-- 4. OpenAI-MS -->
+<section>
+  <div class="section-label">OpenAI · Microsoft</div>
+  <h2>🔓 OpenAI-MS 독점 해제: 수혜주는?</h2>
+
+  <p>오픈AI와 마이크로소프트의 <b>독점 라이선스 계약이 종료</b>되고 비독점 체제로 전환됐다. 오픈AI는 이제 아마존·구글 등 다른 플랫폼에도 라이선스를 제공할 수 있다.</p>
+
+  <div class="metrics-grid fade-in">
+    <div class="metric-card">
+      <div class="metric-num" style="font-size:18px;">비독점</div>
+      <div class="metric-label">OpenAI 라이선스 전환</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-num" style="font-size:18px; color: var(--chart4);">갭 채움</div>
+      <div class="metric-label">MSFT 차트 갭 완성</div>
+    </div>
+  </div>
+
+  <p>마이크로소프트 주가는 오늘 큰 움직임 없이 이전 갭을 채우는 모습을 보였다. NOVA는 이를 "장기적으로 나쁜 소식이 아니다"라고 평가했다. 마이크로소프트도 오픈AI 외 다른 AI 모델을 자유롭게 사용할 수 있게 되기 때문이다.</p>
+
+  <h3>엣지 AI 디바이스: 2028년 혁명</h3>
+  <div class="alert fade-in">
+    <div class="alert-title">📱 퀄컴 + 오픈AI + 미디어텍 = 에이전틱 AI 폰</div>
+    <ul style="padding-left:16px; font-size:13.5px; margin-top:6px;">
+      <li>공급망 정보에 따르면 퀄컴·오픈AI·미디어텍이 <b>AI 에이전트 코어 칩</b>을 개발 중</li>
+      <li>제조는 중국 <b>럭셰어(Luxshare)</b>가 담당 (애플 에어팟 조립사)</li>
+      <li><b>2028년 대량 생산</b> 목표</li>
+      <li>앱 없이 AI 에이전트가 직접 작동하는 스마트폰 — 가격은 기존 대비 30~40배 예상</li>
+      <li>애플이 2028년까지 대응 제품 내놓지 못하면 시장 잠식 위험</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 5. 메모리 10년 사이클 -->
+<section>
+  <div class="section-label">Memory Stocks · Super Cycle</div>
+  <h2>🧠 메모리 주식: 10년 슈퍼사이클 돌입</h2>
+
+  <p>기존 메모리 반도체 사이클은 2~3년이었다. 그러나 오늘 발표된 리포트에 따르면 에이전틱 AI의 <b>연산량 폭증</b>으로 이 사이클이 <b>10년으로 확장</b>됐다. 2030년까지 구조적 수요가 지속될 것이라는 전망이다.</p>
+
+  <div class="pull-quote fade-in">
+    <p>"하이퍼스케일러들이 '3년치 생산량 전부 우리가 샀다. 돈 보냈다'는 방식으로 선주문하고 있다. 이게 바로 인버스 SaaS다."</p>
+    <cite>— NOVA, 인버스 SaaS 개념 설명 중</cite>
+  </div>
+
+  <h3>인버스 SaaS(Inverse SaaS)란?</h3>
+  <p>SaaS(소프트웨어 구독)처럼 <b>하드웨어를 장기 구독 계약으로 선점·락인</b>하는 시대가 온 것이다. 소프트웨어 기업들이 침체하는 사이, AI 수요로 하드웨어 기업들이 구독형 캐시플로우를 확보하기 시작했다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="memCycleChart" height="220"></canvas>
+  </div>
+
+  <h3>수혜 종목</h3>
+  <div class="watchlist fade-in">
+    <div class="watch-item">
+      <div class="watch-ticker">MU</div>
+      <div class="watch-info"><b>마이크론 테크놀로지</b><span>오늘 +5.6% | HBM 메모리 선두</span></div>
+      <div class="watch-signal">매수</div>
+    </div>
+    <div class="watch-item">
+      <div class="watch-ticker">SNDK</div>
+      <div class="watch-info"><b>샌디스크</b><span>오늘 +8.1% | NAND 플래시 강자</span></div>
+      <div class="watch-signal">매수</div>
+    </div>
+    <div class="watch-item">
+      <div class="watch-ticker">EWY</div>
+      <div class="watch-info"><b>한국 ETF (삼성+SK 혼합)</b><span>선 돌파 후 상승 중</span></div>
+      <div class="watch-signal">매수</div>
+    </div>
+    <div class="watch-item">
+      <div class="watch-ticker">KORZ</div>
+      <div class="watch-info"><b>코루 (레버리지 한국 ETF)</b><span>28달러(25년4월)→$500~600 달성</span></div>
+      <div class="watch-signal neutral">고위험</div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. 포에 테크놀로지 경고 -->
+<section>
+  <div class="section-label">Risk Warning · Case Study</div>
+  <h2>⚠️ 포에 테크놀로지 -47%: 리스크 교훈</h2>
+  <p>광학 통신 칩 회사 포에 테크놀로지(POET)의 CFO가 마벨과의 <b>기밀 계약 세부사항을 인터뷰에서 공개</b>했고, 마벨은 이를 NDA 위반으로 보고 기존 발주물량을 <b>전면 취소</b>했다. 결과는 오늘 하루 <b>-47%</b>.</p>
+  <div class="alert fade-in">
+    <div class="alert-title">🚨 핵심 교훈</div>
+    너무 작은 회사, 단일 고객 의존도가 높은 기업은 리스크가 크다. 마벨이 포에의 기술 원천인 셀레스티얼 AI와 폴라리톤 테크놀로지를 직접 인수하면서 포에와의 계약 필요성이 사라진 구조였다. AI 섹터 내에서도 핵심 원천기술이 없는 소형주는 주의가 필요하다.
+  </div>
+</section>
+
+<!-- 7. 소비 양극화 -->
+<section>
+  <div class="section-label">Consumer · K-Economy</div>
+  <h2>📊 소비 양극화 신호: 피자 vs 통신</h2>
+
+  <p>오늘 버라이존(+3.5%)과 도미노 피자(-8.9%)의 대조적인 실적이 <b>K경제(빈익빈 부익부)</b> 현상을 보여줬다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="consumerChart" height="220"></canvas>
+  </div>
+
+  <div class="metrics-grid fade-in">
+    <div class="metric-card" style="border-color:#16a34a; background:#f0fdf4;">
+      <div class="metric-num" style="color:#16a34a;">+3.5%</div>
+      <div class="metric-label">버라이존 | 가입자 55,000명 증가<br><span style="color:var(--text2); font-size:11px;">AI 디바이스 교체 사이클 기대</span></div>
+    </div>
+    <div class="metric-card" style="border-color:var(--accent); background:#fff0f3;">
+      <div class="metric-num">-8.9%</div>
+      <div class="metric-label">도미노 피자 | 동일점포 매출 감소<br><span style="color:var(--text2); font-size:11px;">저소득층 지출 삭감 신호</span></div>
+    </div>
+  </div>
+
+  <p>NOVA는 미국에서 도미노 피자는 한국의 짜장면과 같은 포지셔닝이라고 설명했다. 짜장면을 안 시켜먹기 시작했다는 것은 <b>저소득층의 소비 위축</b>이 현실화됐다는 뜻이다.</p>
+</section>
+
+<!-- 8. 슈퍼위크 일정 -->
+<section>
+  <div class="section-label">Upcoming Events · Super Week</div>
+  <h2>📅 슈퍼위크 — 이번 주 주요 일정</h2>
+  <ul class="event-list fade-in">
+    <li>
+      <div class="event-day">화요일</div>
+      <div class="event-content"><b>소비재 실적 발표 + 소비자 신뢰지수</b>소비 둔화 실태 확인 가능</div>
+    </li>
+    <li>
+      <div class="event-day red">수요일</div>
+      <div class="event-content"><b>🔴 최대 이벤트 — 연준(Fed) 금리 결정 + 파월 기자회견</b>알파벳, 마이크로소프트, 메타, 아마존 실적 동시 발표 (장 마감 후) | AI 캐펙스 규모 발표 주목</div>
+    </li>
+    <li>
+      <div class="event-day">목요일</div>
+      <div class="event-content"><b>애플 실적 발표</b>아이폰 수요 둔화 여부 확인 · 팀쿡 마지막 실적 발표(9월 CEO 교체 예정)</div>
+    </li>
+  </ul>
+  <div class="alert fade-in">
+    <div class="alert-title">💡 수요일 포인트: AI 캐펙스 발표</div>
+    메가테크 4사가 AI 인프라 투자(캐펙스)를 더 늘릴지, 줄일지에 따라 AI·반도체·메모리주 전체가 크게 출렁인다. 어닝콜에서 "삼성·SK·마이크론과 메모리 계약 체결"이 언급되면 관련주 즉시 반응 예상.
+  </div>
+</section>
+
+<!-- 9. 수혜주 3종 -->
+<section>
+  <div class="section-label">Investment Strategy</div>
+  <h2>🎯 지금 사야 할 수혜주 3가지</h2>
+
+  <div class="watchlist fade-in">
+    <div class="watch-item">
+      <div class="watch-ticker">NVDA</div>
+      <div class="watch-info">
+        <b>엔비디아 — AI 인프라 핵심</b>
+        <span>5조 달러 저항선 돌파 · ETF 리밸런싱 매수 수요 · FCF 기반 배당 증가 가능</span>
+      </div>
+      <div class="watch-signal">★ 1순위</div>
+    </div>
+    <div class="watch-item">
+      <div class="watch-ticker">MU/EWY</div>
+      <div class="watch-info">
+        <b>메모리 주식 — 10년 슈퍼사이클</b>
+        <span>마이크론·샌디스크·SK하이닉스 · 2030년까지 구조적 수요 · 하이퍼스케일러 선주문</span>
+      </div>
+      <div class="watch-signal">★ 2순위</div>
+    </div>
+    <div class="watch-item">
+      <div class="watch-ticker">정유주</div>
+      <div class="watch-info">
+        <b>정유사 — 유가 수혜 방어주</b>
+        <span>고유가 구조에서 1분기 매출 호조 예상 · 가격 전가력 있는 정제업체 중심</span>
+      </div>
+      <div class="watch-signal neutral">방어형</div>
+    </div>
+  </div>
+
+  <!-- 수익률 시뮬레이터 -->
+  <div class="simulator fade-in">
+    <h4>💰 NVDA 목표가 수익률 계산기</h4>
+    <div class="sim-row">
+      <label>매수 단가 ($)</label>
+      <input type="range" id="buyPrice" min="100" max="250" value="210" step="1">
+      <div class="val" id="buyVal">$210</div>
+    </div>
+    <div class="sim-row">
+      <label>목표 단가 ($)</label>
+      <input type="range" id="targetPrice" min="210" max="450" value="300" step="5">
+      <div class="val" id="targetVal">$300</div>
+    </div>
+    <div class="sim-result">
+      <div class="sub">예상 수익률</div>
+      <div class="big" id="returnResult">+42.9%</div>
+      <div class="sub" id="returnNote">$210 → $300 목표</div>
+    </div>
+    <button class="reset-btn" id="nvdaReset">↺ 초기화</button>
+  </div>
+</section>
+
+<!-- 바이오 M&A -->
+<section>
+  <div class="section-label">M&A Signal · Healthcare</div>
+  <h2>💊 바이오 M&A: 자본 순환의 신호탄</h2>
+  <p>인도 제약사 <b>선파마(Sun Pharma)</b>가 오간원(OGN)을 주당 <b>$14 전액 현금</b>으로 인수 발표, 오간원 주가 +32% 폭등.</p>
+  <div class="alert green-alert fade-in">
+    <div class="alert-title">🔔 M&A 연쇄 신호</div>
+    NOVA는 바이오 M&A가 연일 한 건씩 터지는 것은 <b>자본 순환의 시작 신호</b>라고 강조했다. 이 흐름은 제약·바이오를 넘어 다른 섹터로 확산될 가능성이 높다. 이후 SPAC·IPO 시장 활성화로 이어질 수 있다.
+  </div>
+</section>
+
+<!-- 결론 -->
+<section style="border-bottom: none;">
+  <div class="section-label">Conclusion</div>
+  <h2>📌 결론 및 전략 원칙</h2>
+  <p>불확실성이 커지는 시기일수록 <b>AI 코어(엔비디아·메모리·인프라)</b>에 집중하는 원칙을 지켜야 한다. 유가 쇼크와 소비 양극화는 단기 노이즈지만, 에이전틱 AI로의 전환은 10년 이상의 구조적 트렌드다.</p>
+  <div class="alert blue-alert fade-in">
+    <div class="alert-title">🧭 핵심 전략 요약</div>
+    <ul style="padding-left:16px; font-size:13.5px; margin-top:6px;">
+      <li><b>집중</b>: AI 코어 (NVDA, 메모리주, AI 인프라)</li>
+      <li><b>방어</b>: 버라이존, 정유사 (유가 수혜 + 안정적 배당)</li>
+      <li><b>회피</b>: 소비재 전반, SaaS 소프트웨어 중소형주</li>
+      <li><b>모니터링</b>: 수요일 연준 금리 + 메가테크 AI 캐펙스 발표</li>
+      <li><b>주의</b>: 소형 원천기술 부재 주식 (포에 교훈)</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <b>⚠️ 투자 위험 고지</b><br>
+  본 리포트는 NOVA Real Invest YouTube 방송 내용을 정리한 교육·참고 자료입니다.<br>
+  투자 판단과 책임은 전적으로 투자자 본인에게 있습니다.<br>
+  과거 성과가 미래 수익을 보장하지 않습니다.<br><br>
+  © 2026 NOVA Real Invest 분석 리포트 | 2026.04.28
+</footer>
+
+<script>
+// ─────────────── Intersection Observer (fade-in + chart) ───────────────
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+const chartConfigs = {};
+
+// ─────────────── 유가 차트 ───────────────
+chartConfigs['oilChart'] = () => {
+  new Chart(document.getElementById('oilChart'), {
+    type: 'bar',
+    data: {
+      labels: ['전쟁 전\n(60불)', '현재\nWTI(96)', '현재\nBrent(108)', '골드만삭스\n목표(90)', '시티\n단기(120)', '최악\n시나리오(150)'],
+      datasets: [{
+        label: '유가 ($/배럴)',
+        data: [60, 96, 108, 90, 120, 150],
+        backgroundColor: ['#6b7280','#2563eb','#e11d48','#6b7280','#f59e0b','#dc2626'],
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: { legend: { display: false }, title: { display: true, text: '유가 시나리오 비교 ($/배럴)', color: '#1a1a1a', font: { size: 13 } } },
+      scales: { y: { beginAtZero: false, min: 50, ticks: { callback: v => '$'+v } } }
+    }
+  });
+};
+
+// ─────────────── 시가총액 비교 차트 ───────────────
+chartConfigs['mktCapChart'] = () => {
+  new Chart(document.getElementById('mktCapChart'), {
+    type: 'horizontalBar',
+    data: {
+      labels: ['엔비디아', '구글(Alphabet)', '애플', '마이크로소프트', '아마존', '메타'],
+      datasets: [{
+        label: '시가총액 (조 달러)',
+        data: [5.264, 4.0, 3.5, 3.2, 2.8, 1.8],
+        backgroundColor: ['#e11d48','#6b7280','#6b7280','#6b7280','#6b7280','#6b7280'],
+        borderRadius: 6
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: true,
+      plugins: { legend: { display: false }, title: { display: true, text: '빅테크 시가총액 비교 (조 달러)', color: '#1a1a1a', font: { size: 13 } } },
+      scales: { x: { ticks: { callback: v => '$'+v+'T' } } }
+    }
+  });
+};
+
+// ─────────────── 메모리 사이클 차트 ───────────────
+chartConfigs['memCycleChart'] = () => {
+  new Chart(document.getElementById('memCycleChart'), {
+    type: 'line',
+    data: {
+      labels: ['2022','2023','2024','2025','2026','2027','2028','2029','2030','2031','2032'],
+      datasets: [{
+        label: '기존 사이클 (2~3년)',
+        data: [100,60,40,90,100,65,45,90,100,65,40],
+        borderColor: '#6b7280', borderDash: [5,5], tension: 0.4, fill: false, pointRadius: 3
+      },{
+        label: '신규 수요 (AI 슈퍼사이클)',
+        data: [100,110,130,160,200,230,270,310,360,400,440],
+        borderColor: '#e11d48', tension: 0.4, fill: true,
+        backgroundColor: 'rgba(225,29,72,0.08)', pointRadius: 3
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: { title: { display: true, text: '메모리 수요 사이클 변화', color: '#1a1a1a', font: { size: 13 } } },
+      scales: { y: { ticks: { callback: v => v } } }
+    }
+  });
+};
+
+// ─────────────── 소비 양극화 차트 ───────────────
+chartConfigs['consumerChart'] = () => {
+  new Chart(document.getElementById('consumerChart'), {
+    type: 'bar',
+    data: {
+      labels: ['버라이존 (VZ)', '도미노 피자 (DPZ)', '포에 테크놀로지 (POET)'],
+      datasets: [{
+        label: '오늘 등락률 (%)',
+        data: [3.5, -8.9, -47],
+        backgroundColor: ['#16a34a','#e11d48','#dc2626'],
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: { legend: { display: false }, title: { display: true, text: '오늘 주요 종목 등락률 비교', color: '#1a1a1a', font: { size: 13 } } },
+      scales: { y: { ticks: { callback: v => v+'%' } } }
+    }
+  });
+};
+
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+// ─────────────── 유가 시뮬레이터 ───────────────
+const BASE_OIL = 96, BASE_GAS = 4.11, CA_RATIO = 1.333;
+const oilSlider = document.getElementById('oilSlider');
+const oilVal = document.getElementById('oilVal');
+const gasResult = document.getElementById('gasResult');
+const caResult = document.getElementById('caResult');
+
+function updateOil() {
+  const oil = parseInt(oilSlider.value);
+  oilVal.textContent = '$' + oil;
+  const gas = ((oil / BASE_OIL) * BASE_GAS).toFixed(2);
+  const ca = (gas * CA_RATIO).toFixed(2);
+  gasResult.textContent = '$' + gas;
+  caResult.textContent = '캘리포니아 예상: $' + ca;
+  const num = parseFloat(gas);
+  gasResult.style.color = num > 7 ? '#f87171' : num > 5 ? '#fbbf24' : '#4ade80';
+}
+oilSlider.addEventListener('input', updateOil);
+document.getElementById('oilReset').addEventListener('click', () => { oilSlider.value = 108; updateOil(); });
+updateOil();
+
+// ─────────────── NVDA 수익률 계산기 ───────────────
+const buyPrice = document.getElementById('buyPrice');
+const targetPrice = document.getElementById('targetPrice');
+const buyVal = document.getElementById('buyVal');
+const targetVal = document.getElementById('targetVal');
+const returnResult = document.getElementById('returnResult');
+const returnNote = document.getElementById('returnNote');
+
+function updateNvda() {
+  const buy = parseInt(buyPrice.value);
+  const tgt = parseInt(targetPrice.value);
+  buyVal.textContent = '$' + buy;
+  targetVal.textContent = '$' + tgt;
+  const ret = (((tgt - buy) / buy) * 100).toFixed(1);
+  returnResult.textContent = (ret > 0 ? '+' : '') + ret + '%';
+  returnNote.textContent = '$' + buy + ' → $' + tgt + ' 목표';
+  returnResult.style.color = ret > 0 ? '#4ade80' : '#f87171';
+}
+buyPrice.addEventListener('input', updateNvda);
+targetPrice.addEventListener('input', updateNvda);
+document.getElementById('nvdaReset').addEventListener('click', () => { buyPrice.value = 210; targetPrice.value = 300; updateNvda(); });
+updateNvda();
+</script>
+</body>
+</html>
