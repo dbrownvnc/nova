@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIA.chat 멤버 미팅 분석 — 2026.04.28</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --c1: #e11d48;
+    --c2: #1a1a1a;
+    --c3: #6b7280;
+    --c4: #2563eb;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--text);
+    color: #fff;
+    padding: 52px 20px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(225,29,72,.06) 40px,
+      rgba(225,29,72,.06) 41px
+    );
+  }
+  .hero-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 14px;
+    position: relative;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 6vw, 38px);
+    font-weight: 900;
+    line-height: 1.25;
+    position: relative;
+    margin-bottom: 16px;
+  }
+  .hero h1 em {
+    color: var(--accent);
+    font-style: italic;
+  }
+  .hero-meta {
+    font-size: 12px;
+    color: rgba(255,255,255,.55);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 5px; }
+
+  /* ── CONTAINER ── */
+  .container { max-width: 720px; margin: 0 auto; padding: 0 18px; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 36px 0 28px;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--border); }
+  .divider-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    margin-bottom: 20px;
+  }
+  .section-kicker {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 5vw, 26px);
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  /* ── SUMMARY BOX ── */
+  .summary-box {
+    background: var(--bg2);
+    border-left: 3px solid var(--accent);
+    padding: 18px 20px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 24px;
+    font-size: 14px;
+    line-height: 1.75;
+  }
+  .summary-box strong { color: var(--accent); }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title .tag {
+    font-size: 10px;
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 7px;
+    border-radius: 20px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .card p { font-size: 14px; color: var(--text); line-height: 1.7; }
+
+  /* ── SIGNAL ROW ── */
+  .signal-grid { display: grid; gap: 12px; }
+  .signal-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .signal-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .signal-icon.red { background: #fee2e2; }
+  .signal-icon.yellow { background: #fef9c3; }
+  .signal-icon.green { background: #dcfce7; }
+  .signal-text h4 { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+  .signal-text p { font-size: 12px; color: var(--text2); line-height: 1.55; }
+
+  /* ── STOCK TABLE ── */
+  .stock-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+  .stock-table th {
+    background: var(--accent);
+    color: #fff;
+    padding: 8px 10px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 12px;
+  }
+  .stock-table td {
+    padding: 9px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .stock-table tr:nth-child(even) td { background: var(--bg2); }
+  .up { color: #16a34a; font-weight: 700; }
+  .dn { color: var(--accent); font-weight: 700; }
+
+  /* ── FADE-IN ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── CHART ── */
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin-top: 16px;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas { opacity: 1; }
+
+  /* ── VALUE CHAIN ── */
+  .chain-grid { display: grid; gap: 10px; margin-top: 12px; }
+  .chain-item {
+    border-radius: 10px;
+    padding: 16px 18px;
+    border: 1px solid var(--border);
+  }
+  .chain-item.green-zone { border-color: #16a34a; background: #f0fdf4; }
+  .chain-item.yellow-zone { border-color: #ca8a04; background: #fefce8; }
+  .chain-item.red-zone { border-color: var(--accent); background: #fff1f2; }
+  .chain-label {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .chain-label.green-label { color: #16a34a; }
+  .chain-label.yellow-label { color: #ca8a04; }
+  .chain-label.red-label { color: var(--accent); }
+  .chain-item h3 { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+  .chain-item p { font-size: 12px; color: var(--text2); line-height: 1.6; }
+
+  /* ── BOTTLENECK ── */
+  .bottleneck-box {
+    background: var(--text);
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px 20px;
+    text-align: center;
+    margin: 20px 0;
+  }
+  .bottleneck-box h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    margin-bottom: 12px;
+    color: var(--accent);
+    font-style: italic;
+  }
+  .bottleneck-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .bottleneck-item {
+    background: rgba(255,255,255,.08);
+    border-radius: 8px;
+    padding: 14px 12px;
+  }
+  .bottleneck-item .bi-icon { font-size: 28px; margin-bottom: 6px; }
+  .bottleneck-item h4 { font-size: 14px; font-weight: 700; }
+  .bottleneck-item p { font-size: 11px; color: rgba(255,255,255,.6); margin-top: 3px; line-height: 1.5; }
+
+  /* ── SIMULATOR ── */
+  .simulator {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 20px;
+    margin-top: 20px;
+  }
+  .simulator h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sim-row {
+    margin-bottom: 14px;
+  }
+  .sim-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: var(--text2);
+  }
+  .sim-label span { color: var(--accent); font-weight: 700; }
+  input[type=range] {
+    width: 100%;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+  .sim-result {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 16px;
+  }
+  .sim-result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .sim-metric {
+    text-align: center;
+    padding: 10px;
+    background: var(--bg2);
+    border-radius: 6px;
+  }
+  .sim-metric .val {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .sim-metric .lbl { font-size: 10px; color: var(--text2); margin-top: 2px; }
+  .sim-metric.good .val { color: #16a34a; }
+  .sim-btn {
+    width: 100%;
+    margin-top: 12px;
+    padding: 10px;
+    background: var(--text);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .sim-btn:hover { background: #333; }
+
+  /* ── QUOTE ── */
+  .pull-quote {
+    border-left: 4px solid var(--accent);
+    margin: 24px 0;
+    padding: 14px 18px;
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.6;
+    background: var(--bg2);
+    border-radius: 0 8px 8px 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    text-align: center;
+    padding: 28px 20px;
+    margin-top: 48px;
+    font-size: 11px;
+    color: var(--text2);
+    line-height: 1.8;
+  }
+  footer strong { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">CIA.chat Members Briefing</div>
+  <h1>AI 버블의 균열,<br><em>돈은 어디로 흐르는가</em></h1>
+  <div class="hero-meta">
+    <span>📅 2026년 4월 28일 (화)</span>
+    <span>🕐 미국 시간 오후 6:37</span>
+    <span>🔴 멤버 전용 미팅</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 오늘의 핵심 요약 -->
+  <div class="divider fade-in"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+  <div class="section-header fade-in">
+    <div class="section-kicker">Today's Briefing Summary</div>
+    <h2>오늘의 핵심 3줄 요약</h2>
+  </div>
+  <div class="summary-box fade-in">
+    1. <strong>OpenAI 내부 메모 유출</strong>: 수익 성장이 내부 목표를 미달, CFO가 "컴퓨팅 비용을 감당하기 어려울 수 있다"고 경고 → AI 수익화 모델에 처음으로 균열 신호.<br><br>
+    2. <strong>UAE, OPEC·OPEC+ 전격 탈퇴</strong>: 유가 급등 → 미국 10년물 국채금리 4.3% 돌파, 성장주에 직격탄.<br><br>
+    3. <strong>자본의 방향 전환</strong>: 고밸류 AI 소프트웨어 → <strong>물리적 인프라(메모리·전력)</strong>로 스마트 머니 이동 중.
+  </div>
+
+  <!-- 오늘의 시장 이벤트 -->
+  <div class="divider fade-in"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+  <div class="section-header fade-in">
+    <div class="section-kicker">Market Events</div>
+    <h2>오늘의 주요 시장 이벤트</h2>
+  </div>
+
+  <div class="signal-grid fade-in">
+    <div class="signal-item">
+      <div class="signal-icon red">📉</div>
+      <div class="signal-text">
+        <h4>나스닥 기술주 하락 — 18연속 상승 마감</h4>
+        <p>NVIDIA, AMD, ARM 등 AI 대장주 급락. 나스닥 -1.59%. 18거래일 연속 상승 후 첫 조정. "AI 파이오니어" 종목들이 주도권을 잃기 시작.</p>
+      </div>
+    </div>
+    <div class="signal-item">
+      <div class="signal-icon red">🛢️</div>
+      <div class="signal-text">
+        <h4>UAE, OPEC·OPEC+ 전격 탈퇴 선언</h4>
+        <p>사우디아라비아 리더십 붕괴 신호. 유가 급등, 미국 10년물 국채금리 4.3%까지 상승. 고금리 환경이 성장주 밸류에이션 압박.</p>
+      </div>
+    </div>
+    <div class="signal-item">
+      <div class="signal-icon red">🤖</div>
+      <div class="signal-text">
+        <h4>OpenAI 내부 실적 미달 + 오라클 계약 파기 위기</h4>
+        <p>WSJ 단독 보도. 활성 사용자·매출 모두 내부 목표 미달. CFO 메모: "수익 성장이 가속되지 않으면 막대한 컴퓨팅 비용 감당 불가." 오라클·코어위브와의 클라우드 계약 파기 가능성.</p>
+      </div>
+    </div>
+    <div class="signal-item">
+      <div class="signal-icon green">🟢</div>
+      <div class="signal-text">
+        <h4>코카콜라 +5.6% · 비자 +3.6% — 실물·소비 방어주 강세</h4>
+        <p>코카콜라: 유기적 매출 +10%, 제로 슈가 +10%. 비자: 글로벌 네트워크 확장, 고금리에도 결제액 견조. "사람들은 먹고 쓰는 건 쓴다."</p>
+      </div>
+    </div>
+    <div class="signal-item">
+      <div class="signal-icon green">☕</div>
+      <div class="signal-text">
+        <h4>스타벅스 — 새 CEO 효과, 매장 매출 +6.2%</h4>
+        <p>소비 붕괴 우려를 깨고 트래픽 증가·동일점포 매출 +6.2%. "대빵이 중요하다" — 리더십의 힘을 실적으로 증명.</p>
+      </div>
+    </div>
+    <div class="signal-item">
+      <div class="signal-icon yellow">⚠️</div>
+      <div class="signal-text">
+        <h4>가이던스 악화 — UPS 아마존 물량 -8%, 코닝 보수적 전망</h4>
+        <p>UPS: 아마존 물량 급감, 전쟁·연료비 상승 경고. 코닝: 디스플레이 부문 약세. 과거 실적은 좋았지만 미래 가이던스가 보수적으로 급변.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 오늘의 주가 요약 차트 -->
+  <div class="divider fade-in"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+  <div class="section-header fade-in">
+    <div class="section-kicker">Market Performance</div>
+    <h2>주요 종목 등락률 (2026.04.28)</h2>
+  </div>
+
+  <div class="chart-container fade-in">
+    <canvas id="stockChart" height="240"></canvas>
+  </div>
+
+  <div style="overflow-x:auto; margin-top:16px;" class="fade-in">
+    <table class="stock-table">
+      <thead><tr><th>종목</th><th>섹터</th><th>등락률</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr><td>시게이트 (STX)</td><td>HDD·스토리지</td><td class="up">+12.4%</td><td>곡괭이·삽 플레이</td></tr>
+        <tr><td>BE Semiconductor</td><td>반도체 장비</td><td class="up">+9%</td><td>딱따구리 포트폴리오</td></tr>
+        <tr><td>산미나 (Sanmina)</td><td>EMS (위탁제조)</td><td class="up">↑폭등</td><td>JT시스템스 인수</td></tr>
+        <tr><td>코카콜라 (KO)</td><td>소비재</td><td class="up">+5.6%</td><td>실적 발표 호조</td></tr>
+        <tr><td>비자 (V)</td><td>결제</td><td class="up">+3.6%</td><td>글로벌 네트워크 확장</td></tr>
+        <tr><td>NVIDIA</td><td>AI GPU</td><td class="dn">↓급락</td><td>AI 수익화 우려</td></tr>
+        <tr><td>AMD</td><td>CPU/GPU</td><td class="dn">↓급락</td><td>동반 하락</td></tr>
+        <tr><td>ARM</td><td>반도체 설계</td><td class="dn">↓급락</td><td>동반 하락</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- OpenAI 위기 분석 -->
+  <div class="divider fade-in"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+  <div class="section-header fade-in">
+    <div class="section-kicker">Key Alert</div>
+    <h2>OpenAI 수익화 위기 — 왜 중요한가?</h2>
+  </div>
+
+  <div class="pull-quote fade-in">
+    "수익 성장이 가속화되지 않으면 향후 막대한 컴퓨팅 비용을 감당하기 어렵다" — OpenAI CFO 내부 메모 (WSJ 단독 보도)
+  </div>
+
+  <div class="card fade-in">
+    <div class="card-title">💰 수익화 문제의 구조 <span class="tag">핵심</span></div>
+    <p>OpenAI는 데이터센터·GPU에 막대한 자본을 투입 중이며 현재 100% 적자 상태. 내부적으로 수립한 손익분기점(Break-even) 도달 프로포마가 예상대로 작동하지 않고 있다는 경고. 즉 <strong>"아직 돈을 벌 수 있는지조차 불확실하다"</strong>는 신호가 처음으로 공식화된 것.</p>
+  </div>
+
+  <div class="card fade-in">
+    <div class="card-title">⚡ 전기료 변수 — 미·중 AI 경쟁의 핵심</div>
+    <p>미국 산업용 전기료는 민간보다 비싼 반면, 중국은 국가정책상 산업용 전기료가 매우 저렴하고 태양광 발전 세계 최고 수준. 젠슨 황이 "중국이 AI 1등이 될 것"이라고 경고한 이유. 트럼프 행정부의 신재생에너지 정책 후퇴는 이 관점에서 <strong>장기적 패착</strong>으로 진단.</p>
+  </div>
+
+  <!-- OpenAI 수익 시뮬레이터 -->
+  <div class="simulator fade-in">
+    <h3>🧮 AI 기업 손익분기점 시뮬레이터</h3>
+    <div class="sim-row">
+      <div class="sim-label">월 구독자 수 <span id="subVal">100만</span> 명</div>
+      <input type="range" id="subSlider" min="50" max="500" value="100" step="10">
+    </div>
+    <div class="sim-row">
+      <div class="sim-label">월 구독료 (달러) <span id="priceVal">$20</span></div>
+      <input type="range" id="priceSlider" min="10" max="50" value="20" step="1">
+    </div>
+    <div class="sim-row">
+      <div class="sim-label">월 서버·전기 비용 (백만 달러) <span id="costVal">$2,000M</span></div>
+      <input type="range" id="costSlider" min="500" max="5000" value="2000" step="100">
+    </div>
+    <div class="sim-result">
+      <div style="font-size:12px;color:var(--text2);margin-bottom:4px;">시뮬레이션 결과</div>
+      <div class="sim-result-grid">
+        <div class="sim-metric">
+          <div class="val" id="revenueVal">$20M</div>
+          <div class="lbl">월 매출</div>
+        </div>
+        <div class="sim-metric">
+          <div class="val" id="profitVal">-$1,980M</div>
+          <div class="lbl">월 손익</div>
+        </div>
+        <div class="sim-metric">
+          <div class="val" id="bepVal">1억 명</div>
+          <div class="lbl">손익분기 구독자 수</div>
+        </div>
+        <div class="sim-metric" id="judgeMet">
+          <div class="val" id="judgeVal">❌ 적자</div>
+          <div class="lbl">현황 판정</div>
+        </div>
+      </div>
+      <div id="simComment" style="font-size:12px;margin-top:10px;color:var(--text2);line-height:1.6;"></div>
+    </div>
+    <button class="sim-btn" onclick="resetSim()">↺ 초기값으로 리셋</button>
+  </div>
+
+  <!-- 자본 흐름 -->
+  <div class="divider fade-in"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+  <div class="section-header fade-in">
+    <div class="section-kicker">Smart Money Flow</div>
+    <h2>스마트 머니는 어디로 움직이는가</h2>
+  </div>
+
+  <div class="bottleneck-box fade-in">
+    <h3>AI의 두 가지 병목</h3>
+    <p style="font-size:13px;color:rgba(255,255,255,.7);">"결핍을 찾아라 — 여기에 지금 돈이 몰리고 있다"</p>
+    <div class="bottleneck-items">
+      <div class="bottleneck-item">
+        <div class="bi-icon">💾</div>
+        <h4>메모리 (Memory)</h4>
+        <p>HBM·DRAM·스토리지 — AI 연산의 병목. 마이크론, 시게이트, 산미나</p>
+      </div>
+      <div class="bottleneck-item">
+        <div class="bi-icon">⚡</div>
+        <h4>전력 (Electricity)</h4>
+        <p>데이터센터 전력 한계. 독립 전력망 = 차세대 인프라. 블룸에너지, SMR, 배터리 저장</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI 밸류체인 섹터별 투자 판단 -->
+  <div class="section-header fade-in" style="margin-top:28px;">
+    <div class="section-kicker">Investment Framework</div>
+    <h2>AI 밸류체인 투자 진단표</h2>
+  </div>
+
+  <div class="chain-grid fade-in">
+    <div class="chain-item green-zone">
+      <div class="chain-label green-label">✅ GREEN — 지금 돈이 몰리는 곳</div>
+      <h3>🦴 머슬·스켈리톤 — 물리적 인프라</h3>
+      <p>메모리(마이크론·STX), 전력 인프라(블룸에너지·SMR), 랙 조립(산미나·델), 산업용 반도체(NXPI·ON·TXN). 전력 자급 데이터센터 구축 역량 보유 기업이 최대 수혜.</p>
+    </div>
+    <div class="chain-item yellow-zone">
+      <div class="chain-label yellow-label">⚠️ YELLOW — 불확실, 선별 필요</div>
+      <h3>🧠 브레인 — AI 프로세서 설계</h3>
+      <p>NVIDIA·AMD·ARM 등 GPU·CPU. 빅테크의 캐펙스(투자지출)는 계속되나, OpenAI 수익화 우려로 단기 변동성 확대. 중장기 수요는 유효하나 지금은 조정 구간.</p>
+    </div>
+    <div class="chain-item red-zone">
+      <div class="chain-label red-label">🔴 RED — 리스크, 주의 필요</div>
+      <h3>💭 드림 — AI 소프트웨어·서비스</h3>
+      <p>OpenAI류 LLM 서비스. 단기 수익화 지연, 구독자 피로, 막대한 운영비용. 손익분기점 달성 시점 불명확. 현 시점 자금 집중 비권장.</p>
+    </div>
+  </div>
+
+  <!-- 반도체 섹터 디커플링 차트 -->
+  <div class="divider fade-in"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+  <div class="section-header fade-in">
+    <div class="section-kicker">Sector Decoupling</div>
+    <h2>반도체 섹터 내 디커플링 현상</h2>
+  </div>
+
+  <div class="summary-box fade-in">
+    <strong>핵심 관찰:</strong> 같은 "반도체" 카테고리 내에서도 明暗이 극명하게 갈리고 있다. AI 소프트웨어에 직접 종속된 GPU 설계주는 하락, 전력·메모리·EMS(위탁제조) 계열은 급등. 이것이 "곡괭이·삽 전략"의 실현이다.
+  </div>
+
+  <div class="chart-container fade-in">
+    <canvas id="decoupleChart" height="220"></canvas>
+  </div>
+
+  <!-- 거시경제 연결고리 -->
+  <div class="divider fade-in"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+  <div class="section-header fade-in">
+    <div class="section-kicker">Macro Context</div>
+    <h2>거시경제 연결고리 — 성장주를 누르는 3중 압박</h2>
+  </div>
+
+  <div class="chart-container fade-in">
+    <canvas id="macroChart" height="230"></canvas>
+  </div>
+
+  <div class="card fade-in" style="margin-top:16px;">
+    <div class="card-title">🔗 연쇄 작용 구조</div>
+    <p><strong>UAE 탈퇴 → 유가 급등 → 전기료 상승 → AI 데이터센터 운영비 급등 → OpenAI 수익화 위기 심화 → AI 소프트웨어 주가 하락.</strong><br><br>
+    동시에: 유가 급등 → 물가 상승 → 미 국채금리 상승 → 고밸류 성장주 할인율 상승 → 주가 추가 하락. 이중 압박 구조.</p>
+  </div>
+
+  <!-- 인터랙티브: 유가-전기료 영향 탐색기 -->
+  <div class="simulator fade-in">
+    <h3>⛽ 유가·전기료 → 데이터센터 비용 영향 탐색기</h3>
+    <div class="sim-row">
+      <div class="sim-label">국제유가 (달러/배럴) <span id="oilVal">$80</span></div>
+      <input type="range" id="oilSlider" min="50" max="120" value="80" step="1">
+    </div>
+    <div class="sim-row">
+      <div class="sim-label">미국 산업용 전기료 (¢/kWh) <span id="elecVal">12¢</span></div>
+      <input type="range" id="elecSlider" min="8" max="20" value="12" step="0.5">
+    </div>
+    <div class="sim-result">
+      <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">데이터센터 규모: 100MW 기준 월간 전력비용</div>
+      <div class="sim-result-grid">
+        <div class="sim-metric">
+          <div class="val" id="elecCostVal">$8.6M</div>
+          <div class="lbl">월 전력비용 (미국)</div>
+        </div>
+        <div class="sim-metric good">
+          <div class="val" id="chinaElecCost">$3.2M</div>
+          <div class="lbl">월 전력비용 (중국 추정)</div>
+        </div>
+        <div class="sim-metric">
+          <div class="val" id="elecGapVal">2.7배</div>
+          <div class="lbl">미·중 전력비 격차</div>
+        </div>
+        <div class="sim-metric">
+          <div class="val" id="yearlyGapVal">$64M</div>
+          <div class="lbl">연간 비용 차이</div>
+        </div>
+      </div>
+      <div id="oilComment" style="font-size:12px;margin-top:10px;color:var(--text2);line-height:1.6;"></div>
+    </div>
+    <button class="sim-btn" onclick="resetOilSim()">↺ 초기값으로 리셋</button>
+  </div>
+
+  <!-- 2026 투자 전략 -->
+  <div class="divider fade-in"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+  <div class="section-header fade-in">
+    <div class="section-kicker">2026 Strategy</div>
+    <h2>2026년 투자 핵심 원칙</h2>
+  </div>
+
+  <div class="signal-grid fade-in">
+    <div class="signal-item">
+      <div class="signal-icon red">📊</div>
+      <div class="signal-text">
+        <h4>실체가 없는 성장은 버려진다</h4>
+        <p>꿈·비전·모델 성능이 아닌 "숫자(이익)"가 기업을 판단하는 기준. EPS, 매출 성장, 가이던스가 핵심.</p>
+      </div>
+    </div>
+    <div class="signal-item">
+      <div class="signal-icon green">🎯</div>
+      <div class="signal-text">
+        <h4>결핍을 찾아라 — Hard Infrastructure</h4>
+        <p>AI가 성장할수록 반드시 필요해지는 것: 메모리, 전력, 랙·조립. 이 물리적 병목에 자본이 몰린다.</p>
+      </div>
+    </div>
+    <div class="signal-item">
+      <div class="signal-icon yellow">🏭</div>
+      <div class="signal-text">
+        <h4>데이터센터 독립 전력망이 차세대 핵심</h4>
+        <p>외부 전력망 의존 없이 독립적 발전 인프라(SMR, 배터리)를 갖춘 데이터센터가 미래 표준. 이 인프라 구축 기업이 메모리보다 더 큰 기회.</p>
+      </div>
+    </div>
+    <div class="signal-item">
+      <div class="signal-icon green">💳</div>
+      <div class="signal-text">
+        <h4>인플레이션 시대 — 소비 방어주·결제주 주목</h4>
+        <p>고유가·물가 상승기에도 코카콜라·비자류의 실물 소비는 견조. 이자 수입 증가로 결제 인프라 기업 수혜.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="pull-quote fade-in">
+    "곡괭이와 삽, 청바지 — AI 골드러시에서 진짜 돈 버는 건 인프라다."
+  </div>
+
+</div><!-- /container -->
+
+<footer>
+  <strong>CIA.chat 멤버 미팅 분석 리포트</strong><br>
+  2026년 4월 28일 · 본 문서는 원본 방송 내용을 요약·정리한 것으로 투자 권유가 아닙니다.<br>
+  모든 투자 판단과 책임은 본인에게 있습니다.
+</footer>
+
+<script>
+// ── INTERSECTION OBSERVER ──
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+const chartConfigs = {};
+
+chartConfigs['stockChart'] = () => {
+  const labels = ['시게이트\n(STX)', 'BE\nSemi', '코카콜라', '비자', 'NVIDIA', 'AMD', 'ARM'];
+  const values = [12.4, 9, 5.6, 3.6, -4.2, -5.1, -3.8];
+  const colors = values.map(v => v > 0 ? '#16a34a' : '#e11d48');
+  new Chart(document.getElementById('stockChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: '등락률 (%)',
+        data: values,
+        backgroundColor: colors,
+        borderRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: { label: ctx => ` ${ctx.raw > 0 ? '+' : ''}${ctx.raw}%` }
+        }
+      },
+      scales: {
+        y: {
+          grid: { color: '#e5e5e5' },
+          ticks: { callback: v => v + '%', font: { size: 11 } }
+        },
+        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+};
+
+chartConfigs['decoupleChart'] = () => {
+  new Chart(document.getElementById('decoupleChart'), {
+    type: 'bar',
+    data: {
+      labels: ['GPU 설계주\n(AI직결)', '메모리·스토리지', 'EMS·조립', '전력인프라', '산업용 반도체'],
+      datasets: [{
+        label: '방향성',
+        data: [-4.5, 10.2, 8.7, 7.3, 5.5],
+        backgroundColor: ['#e11d48', '#16a34a', '#16a34a', '#16a34a', '#2563eb'],
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: {
+          grid: { color: '#e5e5e5' },
+          ticks: { callback: v => v + '%', font: { size: 11 } }
+        },
+        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+};
+
+chartConfigs['macroChart'] = () => {
+  new Chart(document.getElementById('macroChart'), {
+    type: 'line',
+    data: {
+      labels: ['1월', '2월', '3월', '4월초', '4월말(현재)'],
+      datasets: [
+        {
+          label: '미 10년물 국채금리 (%)',
+          data: [4.0, 4.1, 4.15, 4.2, 4.3],
+          borderColor: '#e11d48',
+          backgroundColor: 'rgba(225,29,72,.08)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 4,
+        },
+        {
+          label: '국제유가 (달러, 개념도)',
+          data: [70, 72, 75, 78, 88],
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37,99,235,.07)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 4,
+          yAxisID: 'y2'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12 } }
+      },
+      scales: {
+        y: {
+          title: { display: true, text: '국채금리 (%)', font: { size: 10 } },
+          grid: { color: '#e5e5e5' },
+          ticks: { font: { size: 10 } }
+        },
+        y2: {
+          position: 'right',
+          title: { display: true, text: '유가 ($)', font: { size: 10 } },
+          grid: { drawOnChartArea: false },
+          ticks: { font: { size: 10 } }
+        },
+        x: { grid: { display: false }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+};
+
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+// ── SIMULATOR 1: OpenAI 손익 ──
+const subSlider = document.getElementById('subSlider');
+const priceSlider = document.getElementById('priceSlider');
+const costSlider = document.getElementById('costSlider');
+
+function updateSim() {
+  const subs = parseInt(subSlider.value);
+  const price = parseInt(priceSlider.value);
+  const cost = parseInt(costSlider.value);
+
+  document.getElementById('subVal').textContent = subs >= 100 ? (subs/100).toFixed(1) + '억' : subs + '만';
+  document.getElementById('priceVal').textContent = '$' + price;
+  document.getElementById('costVal').textContent = '$' + cost.toLocaleString() + 'M';
+
+  const revenue = (subs * 10000 * price) / 1e6; // in millions
+  const profit = revenue - cost;
+  const bep = Math.ceil(cost / price / 10000); // in 10k units
+
+  document.getElementById('revenueVal').textContent = '$' + revenue.toLocaleString(undefined, {maximumFractionDigits:0}) + 'M';
+  document.getElementById('profitVal').textContent = (profit >= 0 ? '+' : '') + '$' + profit.toLocaleString(undefined, {maximumFractionDigits:0}) + 'M';
+  document.getElementById('profitVal').style.color = profit >= 0 ? '#16a34a' : '#e11d48';
+
+  const bepDisp = bep >= 10000 ? (bep/10000).toFixed(1) + '억 명' : (bep/100).toFixed(0) + '만 명';
+  document.getElementById('bepVal').textContent = bepDisp;
+
+  if (profit >= 0) {
+    document.getElementById('judgeVal').textContent = '✅ 흑자';
+    document.getElementById('judgeVal').style.color = '#16a34a';
+    document.getElementById('simComment').textContent = '손익분기점 초과! 실제 OpenAI 수준(수억 달러 월 비용)에서는 구독자 수천만~수억 명이 필요합니다.';
+  } else {
+    document.getElementById('judgeVal').textContent = '❌ 적자';
+    document.getElementById('judgeVal').style.color = '#e11d48';
+    document.getElementById('simComment').textContent = `현재 월 ${Math.abs(profit).toLocaleString(undefined,{maximumFractionDigits:0})}M 달러 적자. 손익분기점 도달을 위해서는 구독자 약 ${bepDisp}이 필요합니다.`;
+  }
+}
+subSlider.addEventListener('input', updateSim);
+priceSlider.addEventListener('input', updateSim);
+costSlider.addEventListener('input', updateSim);
+updateSim();
+
+function resetSim() {
+  subSlider.value = 100; priceSlider.value = 20; costSlider.value = 2000;
+  updateSim();
+}
+
+// ── SIMULATOR 2: 유가·전기료 ──
+const oilSlider = document.getElementById('oilSlider');
+const elecSlider = document.getElementById('elecSlider');
+
+function updateOilSim() {
+  const oil = parseFloat(oilSlider.value);
+  const elec = parseFloat(elecSlider.value);
+
+  document.getElementById('oilVal').textContent = '$' + oil;
+  document.getElementById('elecVal').textContent = elec.toFixed(1) + '¢';
+
+  // 100MW 데이터센터, 월 730시간
+  const mwh = 100 * 730; // MWh/month
+  const usCost = mwh * elec / 100 / 1e6; // millions
+  const chinaElec = Math.max(3.5, elec * 0.37); // China ~37% of US rate
+  const chinaCost = mwh * chinaElec / 100 / 1e6;
+  const gap = usCost / chinaCost;
+  const yearlyGap = (usCost - chinaCost) * 12;
+
+  document.getElementById('elecCostVal').textContent = '$' + usCost.toFixed(1) + 'M';
+  document.getElementById('chinaElecCost').textContent = '$' + chinaCost.toFixed(1) + 'M';
+  document.getElementById('elecGapVal').textContent = gap.toFixed(1) + '배';
+  document.getElementById('yearlyGapVal').textContent = '$' + (yearlyGap).toFixed(0) + 'M';
+
+  let comment = '';
+  if (oil > 100) comment = '⚠️ 유가 100달러 돌파 시 전기료 연동 상승, AI 기업 운영비 급증. 중국 AI 기업 경쟁력 더욱 강화될 수 있습니다.';
+  else if (oil > 80) comment = '국제유가 상승으로 미국 전기료 압박 가중. 데이터센터 독립 전력망의 중요성이 커지는 구간입니다.';
+  else comment = '유가가 안정적인 구간. 그러나 미·중 전력비 격차는 여전히 구조적으로 존재합니다.';
+  document.getElementById('oilComment').textContent = comment;
+}
+oilSlider.addEventListener('input', updateOilSim);
+elecSlider.addEventListener('input', updateOilSim);
+updateOilSim();
+
+function resetOilSim() {
+  oilSlider.value = 80; elecSlider.value = 12;
+  updateOilSim();
+}
+</script>
+</body>
+</html>
