@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIA.chat 2026-04-30 | 이해도 테스트 10문제</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#ffffff; --bg2:#fafafa; --text:#1a1a1a; --text2:#777777;
+  --accent:#e11d48; --accent2:#f43f5e; --border:#e5e5e5;
+  --correct:#16a34a; --wrong:#dc2626;
+  --correct-bg:#dcfce7; --wrong-bg:#fee2e2;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;padding-bottom:60px;}
+
+/* STICKY HEADER */
+.score-bar{
+  position:sticky;top:0;z-index:100;
+  background:var(--text);
+  padding:12px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;
+  box-shadow:0 2px 10px rgba(0,0,0,.2);
+}
+.score-info{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+.score-item{
+  display:flex;flex-direction:column;align-items:center;
+  color:#fff;font-size:10px;font-weight:500;letter-spacing:.5px;
+}
+.score-item .num{
+  font-family:'Playfair Display',serif;
+  font-size:20px;font-weight:900;line-height:1;
+  color:#fff;
+}
+.progress-wrap{flex:1;min-width:80px;}
+.progress-track{
+  height:6px;background:rgba(255,255,255,.2);border-radius:3px;overflow:hidden;
+}
+.progress-fill{
+  height:100%;border-radius:3px;
+  transition:width .5s ease, background .5s;
+  background:var(--accent);
+  width:0%;
+}
+
+/* HERO */
+.hero{
+  background:var(--text);padding:40px 20px 32px;
+  border-bottom:3px solid var(--accent);
+}
+.hero-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent2);font-weight:700;margin-bottom:10px;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(22px,5vw,32px);font-weight:900;color:#fff;line-height:1.3;margin-bottom:8px;}
+.hero p{color:rgba(255,255,255,.6);font-size:13px;}
+
+/* QUIZ CONTAINER */
+.quiz-wrap{padding:24px 16px;max-width:700px;margin:0 auto;}
+
+/* QUESTION CARD */
+.q-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:14px;padding:22px 18px;margin-bottom:20px;
+  transition:box-shadow .2s;
+}
+.q-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.06);}
+.q-header{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;}
+.q-num{
+  font-family:'Playfair Display',serif;
+  font-size:13px;font-weight:700;
+  background:var(--accent);color:#fff;
+  padding:2px 10px;border-radius:20px;
+}
+.q-type{
+  font-size:10px;font-weight:700;letter-spacing:.5px;
+  padding:2px 9px;border-radius:20px;border:1px solid var(--border);
+  color:var(--text2);text-transform:uppercase;
+}
+.q-diff{font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px;}
+.diff-easy{background:#dbeafe;color:#1d4ed8;}
+.diff-medium{background:#fef9c3;color:#92400e;}
+.diff-hard{background:#fee2e2;color:#991b1b;}
+.q-text{font-size:15px;font-weight:500;margin-bottom:16px;line-height:1.6;}
+
+/* OPTIONS */
+.options{display:flex;flex-direction:column;gap:8px;}
+.opt-btn{
+  width:100%;text-align:left;
+  background:#fff;border:1.5px solid var(--border);
+  border-radius:10px;padding:12px 16px;
+  font-size:14px;font-family:'Noto Sans KR',sans-serif;
+  cursor:pointer;transition:all .2s;line-height:1.5;
+  color:var(--text);
+}
+.opt-btn:hover:not(:disabled){border-color:var(--accent);background:#fff5f7;transform:translateX(3px);}
+.opt-btn:disabled{cursor:default;}
+.opt-btn.correct{background:var(--correct-bg);border-color:var(--correct);color:var(--correct);}
+.opt-btn.wrong{background:var(--wrong-bg);border-color:var(--wrong);color:var(--wrong);}
+.opt-btn .badge{
+  font-size:11px;font-weight:700;margin-left:8px;
+  padding:1px 7px;border-radius:10px;
+}
+.badge-correct{background:var(--correct);color:#fff;}
+.badge-wrong{background:var(--wrong);color:#fff;}
+
+/* SHORT ANSWER */
+.short-wrap{display:flex;gap:8px;margin-top:4px;}
+.short-input{
+  flex:1;border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;font-size:14px;font-family:'Noto Sans KR',sans-serif;
+  outline:none;transition:border-color .2s;
+  background:#fff;
+}
+.short-input:focus{border-color:var(--accent);}
+.short-input:disabled{background:var(--bg2);color:var(--text2);}
+.submit-btn{
+  padding:10px 16px;background:var(--accent);color:#fff;
+  border:none;border-radius:10px;cursor:pointer;
+  font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;
+  white-space:nowrap;transition:background .2s;
+}
+.submit-btn:hover{background:var(--accent2);}
+.submit-btn:disabled{background:var(--border);cursor:default;color:var(--text2);}
+
+/* OX */
+.ox-wrap{display:flex;gap:10px;margin-top:4px;}
+.ox-btn{
+  flex:1;padding:14px;font-size:24px;font-weight:900;
+  border-radius:12px;border:1.5px solid var(--border);
+  background:#fff;cursor:pointer;transition:all .2s;
+  font-family:'Noto Sans KR',sans-serif;
+}
+.ox-btn:hover:not(:disabled){transform:scale(1.04);}
+.ox-btn:disabled{cursor:default;}
+.ox-btn.correct{background:var(--correct-bg);border-color:var(--correct);}
+.ox-btn.wrong{background:var(--wrong-bg);border-color:var(--wrong);}
+
+/* EXPLANATION */
+.explanation{
+  margin-top:14px;padding:12px 14px;
+  background:#fff;border-left:3px solid var(--accent);
+  border-radius:0 8px 8px 0;
+  font-size:13px;color:var(--text2);
+  display:none;line-height:1.7;
+}
+.explanation.show{display:block;}
+.explanation strong{color:var(--accent);}
+.explanation .answer-reveal{
+  font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px;
+}
+
+/* FINAL MODAL */
+.final-card{
+  display:none;
+  background:var(--text);color:#fff;
+  border-radius:16px;padding:32px 24px;
+  margin:20px 0;text-align:center;
+}
+.final-card.show{display:block;}
+.final-card h2{font-family:'Playfair Display',serif;font-size:28px;margin-bottom:8px;color:#fff;}
+.final-card .score-big{
+  font-family:'Playfair Display',serif;
+  font-size:56px;font-weight:900;color:var(--accent2);
+  line-height:1;margin:16px 0 8px;
+}
+.grade{font-size:20px;font-weight:700;margin-bottom:8px;}
+.message{color:rgba(255,255,255,.7);font-size:14px;margin-bottom:24px;}
+.retry-btn{
+  padding:12px 32px;background:var(--accent);color:#fff;
+  border:none;border-radius:30px;cursor:pointer;
+  font-size:15px;font-weight:700;font-family:'Noto Sans KR',sans-serif;
+  transition:background .2s;
+}
+.retry-btn:hover{background:var(--accent2);}
+</style>
+</head>
+<body>
+
+<!-- STICKY SCORE BAR -->
+<div class="score-bar">
+  <div class="score-info">
+    <div class="score-item">
+      <span class="num" id="sSolved">0</span>
+      <span>/ 10 풀이</span>
+    </div>
+    <div class="score-item">
+      <span class="num" id="sCorrect">0</span>
+      <span>정답</span>
+    </div>
+    <div class="score-item">
+      <span class="num" id="sRate">0%</span>
+      <span>정답률</span>
+    </div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-label">CIA.chat 멤버미팅 2026.04.30</div>
+  <h1>AI 수익화·자본 대이동<br>이해도 테스트</h1>
+  <p>10문제 · 객관식 6 · 단답형 3 · OX 1</p>
+</div>
+
+<div class="quiz-wrap" id="quizWrap"></div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id: 1, type: 'mc', difficulty: 'easy',
+    question: '2026년 4월 30일 기준, S&P 500 지수가 돌파한 수치와 YTD 상승률은?',
+    options: [
+      'A. 7,000pt 돌파 / YTD +8.5%',
+      'B. 7,200pt 돌파 / YTD +10.4%',
+      'C. 6,800pt 돌파 / YTD +12.1%',
+      'D. 7,500pt 돌파 / YTD +15.3%'
+    ],
+    answer: 1,
+    explanation: '방송에서 "S&P 500이 7209를 기록했으며, YTD 기준 이미 10.4% 상승했다"고 언급. 나스닥은 YTD 15.3% 상승이며, 이는 통상적인 연간 상승폭(10~12%)을 상반기도 안 된 시점에 달성한 것.'
+  },
+  {
+    id: 2, type: 'mc', difficulty: 'medium',
+    question: '오늘 방송에서 GDP 성장률이 예상보다 낮게(2.0%) 나왔음에도 경제를 버티게 해준 핵심 원인으로 지목된 것은?',
+    options: [
+      'A. 정부 재정지출 확대',
+      'B. 소비자 지출 증가',
+      'C. 데이터센터 건설로 인한 AI 인프라 투자',
+      'D. 수출 증가에 따른 무역수지 개선'
+    ],
+    answer: 2,
+    explanation: '"GDP가 어떻게 늘어나는지 알아? 데이터 센터 때문이야. 건축 쪽이 지금 장난이 아니야. AI 덕분에 지금 미국 경제가 움직이고 있다." — AI가 없었다면 최악의 상황이었을 것이라고 강조함.'
+  },
+  {
+    id: 3, type: 'mc', difficulty: 'medium',
+    question: '"전쟁 3줍줍" 법칙에 따르면, 미국 본토 외 전쟁 발발 시 올바른 투자 행동은?',
+    options: [
+      'A. 전쟁 직후 즉시 전량 매도하고 현금 보유',
+      'B. 전쟁 소문 단계에서 캐시 준비, 발발 3주 후부터 하락 시 분할 매수',
+      'C. 전쟁 이후 1년간 관망 후 매수',
+      'D. 방산주에만 집중 투자'
+    ],
+    answer: 1,
+    explanation: '"전쟁 소문 → 캐시 만들어놔야겠다. 전쟁이 일어나기 전에는 캐시. 전쟁 발발 후 3주 이후로는 내려갈 때마다 줍줍줍." 우크라이나-러시아 전쟁도 동일한 패턴이었다고 언급.'
+  },
+  {
+    id: 4, type: 'mc', difficulty: 'hard',
+    question: '케빈 왓시(Kevin Warsh)가 연준 의장이 될 경우 예상되는 2가지 정책 변화는?',
+    options: [
+      'A. 금리 인하 + 점도표 유지',
+      'B. 양적완화 + 경기부양 확대',
+      'C. 밸런스 시트 축소 가속화 + 점도표(dot plot) 폐지',
+      'D. 금리 인상 + 자산매입 재개'
+    ],
+    answer: 2,
+    explanation: '"밸런스 시트 축소를 가속화하겠다(시장 유동성 흡수) + 점도표를 없애버리겠다고 했다. 점도표가 없어지면 시장은 깜깜이가 된다. 지난 1~2년 상승의 원인 중 하나인 금리 인하 기대감이 사라지게 된다."'
+  },
+  {
+    id: 5, type: 'mc', difficulty: 'medium',
+    question: 'AI 인프라 투자 흐름의 진화 순서로 올바른 것은?',
+    options: [
+      'A. 온디바이스 → 클라우드 → 실물 인프라',
+      'B. GPU/클라우드 → 실물 인프라(건설·전력) → 온디바이스 AI',
+      'C. 실물 인프라 → GPU → 온디바이스',
+      'D. 반도체 → 클라우드 → GPU → 온디바이스'
+    ],
+    answer: 1,
+    explanation: '"구름 땅땅(Cloud to Ground)". 처음엔 언어 모델·GPU(엔비디아) 중심, 이후 데이터센터 건설·전력망(CAT, PWR, BE), 그리고 지금은 온디바이스 AI(QCOM, NXPI, AAPL) 방향으로 진화 중이라고 설명함.'
+  },
+  {
+    id: 6, type: 'mc', difficulty: 'hard',
+    question: '오늘 방송에서 메타(Meta)의 가장 큰 약점으로 지목된 것은?',
+    options: [
+      'A. AI 개발 인력 부족',
+      'B. 클라우드 수입원이 없어 광고에만 의존',
+      'C. 데이터센터 위치 문제',
+      'D. 규제 리스크 과다'
+    ],
+    answer: 1,
+    explanation: '"메타의 가장 큰 단점은 클라우드 수입원이 없다는 것. 광고로만 돈 벌어. 마이크로소프트는 Azure가 있고, 구글은 Google Cloud가 있는데, 메타는 없어." 이로 인해 채권 발행까지 하게 된다고 언급.'
+  },
+  {
+    id: 7, type: 'short', difficulty: 'medium',
+    question: '오늘 알파벳(GOOGL)의 주가 상승률은 약 몇 %였으며, 방송 진행자가 추천한 시점 대비 현재까지의 상승 폭은? (예: 상승률 X%, 추천가 A달러 → 현재 B달러)',
+    answer: '9.96%',
+    keywords: ['9.96', '10', '9.9'],
+    explanation: '"오늘 구글 9.96% 올랐다. 내가 추천했을 때(작년 약 150달러)에서 현재 384달러가 됐다." 150달러에서 384달러면 약 2.5배 이상 상승한 것.'
+  },
+  {
+    id: 8, type: 'short', difficulty: 'medium',
+    question: '일라이릴리(LLY)의 마운자로(Mounjaro) 판매량이 전년 대비 몇 % 폭증했다고 언급됐나요?',
+    answer: '125%',
+    keywords: ['125'],
+    explanation: '"마운자로 거의 125%나 폭증을 했어요." 오늘 LLY는 10% 급등. 헬스케어는 경기와 무관하게 사람들이 계속 아프고 살을 빼고 싶어하기 때문에 메가트렌드 종목으로 분류됨.'
+  },
+  {
+    id: 9, type: 'short', difficulty: 'hard',
+    question: '신재생에너지 반등의 3가지 이유를 간단히 나열하세요. (단어 키워드 수준도 OK)',
+    answer: '중동 전쟁 피로감(석유 대체 수요) / 중국 솔라·배터리 수출 급증 / 유럽 화석연료 탈피 정책',
+    keywords: ['전쟁', '중동', '중국', '유럽', 'EU', '솔라', '배터리'],
+    explanation: '"① 중동 전쟁으로 석유에 대한 피로감 → 태양광·ESS 관심 폭발, ② 중국 솔라 패널 3월 수출 2배 이상↑ + 배터리 수출 14%↑, ③ EU가 화석연료 탈피 정책 공식화." 세 가지 이유를 직접 설명함.'
+  },
+  {
+    id: 10, type: 'ox', difficulty: 'easy',
+    question: '오늘 방송에서 "불타기"보다 "물타기"를 권장했다. (OX)',
+    answer: 'X',
+    explanation: '"불타기는 하시는 거야. 물타기는 하는 거 아니다. 말이 달릴 때 채찍질을 하는 거지, 안 달리고 있는데 자꾸 때리면 안 돼." — 잘 오르는 종목에 추가 매수(불타기)를 권장하고, 하락 중인 종목에 추가 매수(물타기)는 반대함.'
+  }
+];
+
+let state = { solved: 0, correct: 0 };
+
+function updateScoreBar() {
+  document.getElementById('sSolved').textContent = state.solved;
+  document.getElementById('sCorrect').textContent = state.correct;
+  const rate = state.solved > 0 ? Math.round(state.correct / state.solved * 100) : 0;
+  document.getElementById('sRate').textContent = rate + '%';
+  const fill = document.getElementById('progressFill');
+  fill.style.width = (state.solved / 10 * 100) + '%';
+  fill.style.background = rate >= 70 ? '#16a34a' : rate >= 40 ? '#d97706' : '#dc2626';
+  if (state.solved === 10) showFinal();
+}
+
+function showExplanation(card, q, isCorrect) {
+  const exp = card.querySelector('.explanation');
+  exp.innerHTML = `
+    <div class="answer-reveal">
+      ${isCorrect ? '✅ 정답!' : '❌ 오답'} — 정답: <strong>${getAnswerText(q)}</strong>
+    </div>
+    <strong>📌 해설:</strong> ${q.explanation}
+  `;
+  exp.classList.add('show');
+}
+
+function getAnswerText(q) {
+  if (q.type === 'mc') return q.options[q.answer];
+  if (q.type === 'ox') return q.answer;
+  return q.answer;
+}
+
+function checkShortAnswer(input, q) {
+  const val = input.toLowerCase().replace(/\s/g, '');
+  return q.keywords.some(k => val.includes(k.toLowerCase()));
+}
+
+function showFinal() {
+  const rate = Math.round(state.correct / 10 * 100);
+  let grade, msg;
+  if (rate >= 90) { grade = 'A+'; msg = '🎉 완벽합니다! CIA.chat 방송을 완전히 흡수했네요!'; }
+  else if (rate >= 80) { grade = 'A'; msg = '🌟 훌륭합니다! 핵심 내용을 잘 파악하셨어요.'; }
+  else if (rate >= 70) { grade = 'B'; msg = '👍 좋습니다! 조금 더 복습하면 완벽해질 거예요.'; }
+  else if (rate >= 50) { grade = 'C'; msg = '📖 분석 리포트를 다시 한번 읽어보세요.'; }
+  else { grade = 'D'; msg = '💪 어려웠을 거예요! 리포트 복습 후 재도전하세요.'; }
+
+  const fc = document.getElementById('finalCard');
+  fc.innerHTML = `
+    <h2>테스트 완료!</h2>
+    <div class="score-big">${state.correct}<span style="font-size:28px;color:rgba(255,255,255,.5)"> / 10</span></div>
+    <div class="grade">등급 <span style="color:var(--accent2)">${grade}</span> · 정답률 ${rate}%</div>
+    <div class="message">${msg}</div>
+    <button class="retry-btn" onclick="location.reload()">↺ 다시 풀기</button>
+  `;
+  fc.classList.add('show');
+  fc.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function getDiffLabel(d) {
+  if (d === 'easy') return '<span class="q-diff diff-easy">쉬움</span>';
+  if (d === 'medium') return '<span class="q-diff diff-medium">보통</span>';
+  return '<span class="q-diff diff-hard">어려움</span>';
+}
+
+function getTypeLabel(t) {
+  if (t === 'mc') return '<span class="q-type">객관식</span>';
+  if (t === 'short') return '<span class="q-type">단답형</span>';
+  return '<span class="q-type">OX</span>';
+}
+
+function renderQuiz() {
+  const wrap = document.getElementById('quizWrap');
+  wrap.innerHTML = '';
+
+  QUIZ_DATA.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = `q${q.id}`;
+
+    let inputHtml = '';
+    if (q.type === 'mc') {
+      inputHtml = `<div class="options">${q.options.map((o, i) =>
+        `<button class="opt-btn" onclick="answerMC(${q.id},${i},this)">${o}</button>`
+      ).join('')}</div>`;
+    } else if (q.type === 'short') {
+      inputHtml = `
+        <div class="short-wrap">
+          <input class="short-input" id="input${q.id}" type="text" placeholder="답을 입력하세요...">
+          <button class="submit-btn" onclick="answerShort(${q.id})">제출</button>
+        </div>`;
+    } else {
+      inputHtml = `
+        <div class="ox-wrap">
+          <button class="ox-btn" onclick="answerOX(${q.id},'O',this)">⭕</button>
+          <button class="ox-btn" onclick="answerOX(${q.id},'X',this)">❌</button>
+        </div>`;
+    }
+
+    card.innerHTML = `
+      <div class="q-header">
+        <span class="q-num">Q${q.id}</span>
+        ${getTypeLabel(q.type)}
+        ${getDiffLabel(q.difficulty)}
+      </div>
+      <div class="q-text">${q.question}</div>
+      ${inputHtml}
+      <div class="explanation"></div>
+    `;
+    wrap.appendChild(card);
+  });
+
+  const fc = document.createElement('div');
+  fc.className = 'final-card';
+  fc.id = 'finalCard';
+  wrap.appendChild(fc);
+}
+
+function answerMC(qid, chosen, btn) {
+  const q = QUIZ_DATA[qid - 1];
+  const card = document.getElementById(`q${qid}`);
+  const btns = card.querySelectorAll('.opt-btn');
+  btns.forEach(b => b.disabled = true);
+
+  const isCorrect = chosen === q.answer;
+  if (isCorrect) {
+    btn.classList.add('correct');
+    btn.innerHTML += ' <span class="badge badge-correct">✓ 정답!</span>';
+    state.correct++;
+  } else {
+    btn.classList.add('wrong');
+    btn.innerHTML += ' <span class="badge badge-wrong">✗ 오답</span>';
+    btns[q.answer].classList.add('correct');
+    btns[q.answer].innerHTML += ' <span class="badge badge-correct">✓ 정답</span>';
+  }
+  state.solved++;
+  showExplanation(card, q, isCorrect);
+  updateScoreBar();
+}
+
+function answerShort(qid) {
+  const q = QUIZ_DATA[qid - 1];
+  const card = document.getElementById(`q${qid}`);
+  const input = document.getElementById(`input${qid}`);
+  const btn = card.querySelector('.submit-btn');
+  if (!input.value.trim()) return;
+
+  const isCorrect = checkShortAnswer(input, q);
+  input.disabled = true;
+  btn.disabled = true;
+  input.style.borderColor = isCorrect ? 'var(--correct)' : 'var(--wrong)';
+  input.style.background = isCorrect ? 'var(--correct-bg)' : 'var(--wrong-bg)';
+
+  if (isCorrect) state.correct++;
+  state.solved++;
+  showExplanation(card, q, isCorrect);
+  updateScoreBar();
+}
+
+function answerOX(qid, chosen, btn) {
+  const q = QUIZ_DATA[qid - 1];
+  const card = document.getElementById(`q${qid}`);
+  const btns = card.querySelectorAll('.ox-btn');
+  btns.forEach(b => b.disabled = true);
+
+  const isCorrect = chosen === q.answer;
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    btns[q.answer === 'O' ? 0 : 1].classList.add('correct');
+  }
+  if (isCorrect) state.correct++;
+  state.solved++;
+  showExplanation(card, q, isCorrect);
+  updateScoreBar();
+}
+
+renderQuiz();
+</script>
+</body>
+</html>

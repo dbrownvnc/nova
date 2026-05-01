@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIA.chat 멤버미팅 분석 리포트 | 2026.04.30</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --chart1: #e11d48;
+    --chart2: #1a1a1a;
+    --chart3: #6b7280;
+    --chart4: #2563eb;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--text);
+    color: #fff;
+    padding: 52px 24px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content:'';
+    position:absolute; top:-40px; right:-40px;
+    width:200px; height:200px;
+    background: var(--accent);
+    border-radius:50%;
+    opacity:.15;
+  }
+  .hero-label {
+    font-size:11px; letter-spacing:3px; text-transform:uppercase;
+    color: var(--accent2); font-weight:700; margin-bottom:12px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px,6vw,40px);
+    font-weight:900; line-height:1.2;
+    margin-bottom:10px;
+  }
+  .hero-sub {
+    color: rgba(255,255,255,.6);
+    font-size:13px; margin-top:14px;
+  }
+  .hero-date {
+    display:inline-block;
+    background: var(--accent);
+    color:#fff; font-size:11px; font-weight:700;
+    padding:4px 12px; border-radius:20px; margin-top:16px;
+  }
+
+  /* SECTION */
+  .section {
+    padding: 32px 20px 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section:last-child { border-bottom: none; }
+  .section-label {
+    font-size:10px; letter-spacing:3px; text-transform:uppercase;
+    color: var(--accent); font-weight:700; margin-bottom:8px;
+  }
+  .section h2 {
+    font-family:'Playfair Display',serif;
+    font-size:22px; font-weight:700;
+    margin-bottom:16px; line-height:1.3;
+  }
+  p { margin-bottom:12px; color: var(--text); }
+
+  /* STAT CARDS */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap:10px; margin: 16px 0;
+  }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius:10px;
+    padding:16px 14px;
+  }
+  .stat-card .label {
+    font-size:11px; color:var(--text2); font-weight:500; margin-bottom:4px;
+  }
+  .stat-card .value {
+    font-family:'Playfair Display',serif;
+    font-size:26px; font-weight:900; color:var(--accent);
+  }
+  .stat-card .note {
+    font-size:11px; color:var(--text2); margin-top:3px;
+  }
+  .stat-card.dark {
+    background: var(--text);
+    border-color: var(--text);
+  }
+  .stat-card.dark .label, .stat-card.dark .note { color:rgba(255,255,255,.5); }
+  .stat-card.dark .value { color:#fff; }
+
+  /* CHART */
+  .chart-container {
+    position:relative; max-height:340px;
+    margin: 16px 0 24px;
+    background: var(--bg2);
+    border:1px solid var(--border);
+    border-radius:12px; padding:16px;
+  }
+  .chart-container canvas {
+    opacity:0; transition:opacity .4s ease; max-height:300px;
+  }
+  .chart-container.chart-ready canvas { opacity:1; }
+  .chart-title {
+    font-size:12px; font-weight:700; color:var(--text2);
+    margin-bottom:10px; letter-spacing:.5px;
+  }
+
+  /* FADE IN */
+  .fade-in {
+    opacity:0; transform:translateY(18px);
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  .fade-in.visible { opacity:1; transform:translateY(0); }
+
+  /* CALLOUT */
+  .callout {
+    background: var(--bg2);
+    border-left: 4px solid var(--accent);
+    padding: 14px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+    font-size:14px;
+  }
+  .callout strong { color:var(--accent); }
+
+  /* RULE BOX */
+  .rule-box {
+    background: var(--text);
+    color:#fff;
+    border-radius:12px;
+    padding:20px 18px;
+    margin:16px 0;
+  }
+  .rule-box .rule-title {
+    font-family:'Playfair Display',serif;
+    font-size:18px; font-weight:900;
+    color: var(--accent2); margin-bottom:8px;
+  }
+  .rule-box p { color:rgba(255,255,255,.85); margin-bottom:6px; }
+
+  /* TABLE */
+  table {
+    width:100%; border-collapse:collapse;
+    margin:16px 0; font-size:13px;
+    background: var(--bg2);
+  }
+  th {
+    background: var(--accent); color:#fff;
+    padding:10px 12px; text-align:left; font-weight:700;
+  }
+  td {
+    padding:9px 12px;
+    border-bottom:1px solid var(--border);
+  }
+  tr:last-child td { border-bottom:none; }
+  .up { color:#16a34a; font-weight:700; }
+  .down { color:var(--accent); font-weight:700; }
+  .neutral { color:var(--text2); }
+
+  /* CRITERIA */
+  .criteria-grid {
+    display:grid; gap:10px; margin:14px 0;
+  }
+  .criteria-card {
+    border:1px solid var(--border);
+    border-radius:10px; padding:14px 16px;
+    display:flex; align-items:flex-start; gap:12px;
+  }
+  .criteria-icon {
+    width:36px; height:36px;
+    background: var(--accent);
+    color:#fff; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px; flex-shrink:0;
+  }
+  .criteria-card h4 { font-size:14px; font-weight:700; margin-bottom:4px; }
+  .criteria-card p { font-size:13px; color:var(--text2); margin-bottom:0; }
+
+  /* SIMULATOR */
+  .simulator {
+    background: var(--bg2);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:20px;
+    margin:16px 0;
+  }
+  .simulator h3 {
+    font-family:'Playfair Display',serif;
+    font-size:17px; font-weight:700; margin-bottom:14px;
+    color:var(--text);
+  }
+  .sim-row {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 0; border-bottom:1px solid var(--border);
+  }
+  .sim-row:last-of-type { border-bottom:none; }
+  .sim-label { font-size:13px; font-weight:500; flex:1; }
+  .sim-toggle {
+    display:flex; gap:6px;
+  }
+  .sim-toggle button {
+    padding:5px 12px; border-radius:20px; border:1px solid var(--border);
+    background:#fff; font-size:12px; cursor:pointer;
+    font-family:'Noto Sans KR',sans-serif;
+    transition: all .2s;
+  }
+  .sim-toggle button.active-yes {
+    background: #16a34a; color:#fff; border-color:#16a34a;
+  }
+  .sim-toggle button.active-no {
+    background: var(--accent); color:#fff; border-color:var(--accent);
+  }
+  .sim-result {
+    margin-top:16px; padding:14px;
+    border-radius:8px; text-align:center;
+    font-weight:700; font-size:14px;
+    transition: all .3s;
+  }
+  .sim-result.buy { background:#dcfce7; color:#16a34a; }
+  .sim-result.hold { background:#fef9c3; color:#854d0e; }
+  .sim-result.pass { background:#fee2e2; color:#991b1b; }
+
+  /* FOOTER */
+  .footer {
+    padding:28px 20px;
+    text-align:center;
+    color:var(--text2);
+    font-size:12px;
+    border-top:1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">CIA.chat 멤버미팅 분석 리포트</div>
+  <h1>4월의 변곡점:<br>AI 수익화의 증명과<br>자본 대이동</h1>
+  <p class="hero-sub">빅테크 실적 발표가 거시경제 지표를 압도한 날의 기록</p>
+  <span class="hero-date">2026년 4월 30일 (미국 시간 목요일 오후 7:40)</span>
+</div>
+
+<!-- 시장 요약 -->
+<div class="section">
+  <div class="section-label">Market Overview</div>
+  <h2>2020년 팬데믹 이후 최고의 월간 성적</h2>
+  <p>오늘 S&P 500 지수가 <strong>7,209</strong>를 기록하며 일부 기관이 연간 목표치로 제시했던 7,200선을 이미 돌파했습니다. 나스닥도 장중 역대 최고치를 터치했습니다.</p>
+
+  <div class="stat-grid fade-in">
+    <div class="stat-card">
+      <div class="label">S&P 500 YTD 상승률</div>
+      <div class="value">+10.4%</div>
+      <div class="note">5월도 안 된 시점</div>
+    </div>
+    <div class="stat-card dark">
+      <div class="label">나스닥 YTD 상승률</div>
+      <div class="value">+15.3%</div>
+      <div class="note">역대 최고치 장중 터치</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">GDP 성장률 (실제)</div>
+      <div class="value">2.0%</div>
+      <div class="note">예상 2.2% 하회</div>
+    </div>
+    <div class="stat-card dark">
+      <div class="label">근원 PCE (YoY)</div>
+      <div class="value">3.3%</div>
+      <div class="note">연준 목표 2% 대비 위험</div>
+    </div>
+  </div>
+
+  <div class="callout fade-in">
+    <strong>핵심 포인트:</strong> 통상 연간 10~12% 상승이면 "많이 올랐다"고 하는데, 상반기도 안 된 시점에 이미 그 수준을 돌파. 팬데믹 이후 최고의 월간 성적.
+  </div>
+
+  <div class="chart-container fade-in" id="container-ytd">
+    <div class="chart-title">📊 YTD 수익률 비교 (S&P vs Nasdaq)</div>
+    <canvas id="chartYTD" height="220"></canvas>
+  </div>
+
+  <p>시즈널리티상 4~6월은 상승 기조가 뚜렷하며, 트럼프 정권 하에서는 6월까지 상승세가 이어지는 패턴이 확인됩니다. SPY 대비 RSP(동일 가중치)가 아직 회복 중이라는 점에서, 상승이 빅테크 중심으로 집중되어 있음을 알 수 있습니다.</p>
+</div>
+
+<!-- 거시경제 vs 실적 -->
+<div class="section">
+  <div class="section-label">Macro vs Earnings</div>
+  <h2>거시 역풍을 실적으로 무너뜨린 빅테크</h2>
+
+  <p>오늘 PCE와 GDP 등 매크로 지표는 좋지 않았음에도, 빅테크 4사(구글·메타·마이크로소프트·아마존)의 실적 발표가 이를 완전히 덮어버렸습니다. <strong>"실적이 매크로를 밀어버렸다"</strong>는 표현이 정확합니다.</p>
+
+  <div class="callout fade-in">
+    <strong>GDP가 2.0%인 이유:</strong> 데이터센터 건설 붐이 GDP를 지탱하고 있습니다. AI 인프라 투자가 없었다면 미국 경제는 훨씬 더 심각한 상황이었을 것입니다.
+  </div>
+
+  <table class="fade-in">
+    <thead><tr><th>지표</th><th>실제</th><th>예상/목표</th><th>평가</th></tr></thead>
+    <tbody>
+      <tr><td>GDP 성장률</td><td>2.0%</td><td>2.2%</td><td class="down">하회</td></tr>
+      <tr><td>근원 PCE (YoY)</td><td>3.3%</td><td>2.0%</td><td class="down">위험</td></tr>
+      <tr><td>일부 섹터 PCE (연율)</td><td>4.3%</td><td>2.0%</td><td class="down">경고</td></tr>
+      <tr><td>주간 신규 실업수당</td><td>양호</td><td>-</td><td class="up">긍정적</td></tr>
+    </tbody>
+  </table>
+
+  <p>근원 PCE가 연율 4.3%, YoY 3.3%라는 수치는 연준 목표(2%)의 약 1.5~2배로, 인플레이션이 여전히 심각한 수준임을 보여줍니다.</p>
+</div>
+
+<!-- 연준 리스크 -->
+<div class="section">
+  <div class="section-label">Fed Risk</div>
+  <h2>케빈 왓시 체제: 시장의 '깜깜이' 시대</h2>
+
+  <p>제롬 파월이 5월 15일 퇴임 후 케빈 왓시(Kevin Warsh)가 연준 의장직을 맡을 가능성이 높습니다. 왓시의 발언이 현실화되면 시장에 상당한 충격이 예상됩니다.</p>
+
+  <div class="rule-box fade-in">
+    <div class="rule-title">⚠️ 왓시 리스크 2가지</div>
+    <p><strong>① 밸런스 시트 축소 가속:</strong> 금리는 동결하되, 시장의 유동성을 강하게 흡수(긴축). 시장에 풀린 돈을 빨아들이는 효과.</p>
+    <p><strong>② 점도표(dot plot) 폐지:</strong> 연준의 선제적 금리 방향 신호가 사라지면, 시장은 방향을 잃게 됨. 지난 1~2년간 주가 상승의 주요 원인 중 하나가 "금리인하 기대감(점도표)"이었음.</p>
+  </div>
+
+  <p>점도표가 폐지되면 시장은 연준의 다음 행보를 예측할 수 없게 됩니다. 투자자 입장에서는 "불 끄고 북글씨 써야 하는" 상황이 됩니다.</p>
+</div>
+
+<!-- 오늘의 승자/패자 -->
+<div class="section">
+  <div class="section-label">Today's Winners & Losers</div>
+  <h2>실적이 증명한 종목들</h2>
+
+  <div class="chart-container fade-in" id="container-stocks">
+    <div class="chart-title">📈 오늘의 주요 종목 등락률 (%)</div>
+    <canvas id="chartStocks" height="240"></canvas>
+  </div>
+
+  <table class="fade-in">
+    <thead><tr><th>종목</th><th>등락</th><th>코멘트</th></tr></thead>
+    <tbody>
+      <tr><td>GOOGL (알파벳)</td><td class="up">+9.96%</td><td>AI 수익화 증명, 150→384불</td></tr>
+      <tr><td>PWR (퀀타서비스)</td><td class="up">+15.78%</td><td>전력망 공사, 데이터센터 수혜</td></tr>
+      <tr><td>CAT (캐터필러)</td><td class="up">+9.9%</td><td>건설중장비, AI 인프라 직접 수혜</td></tr>
+      <tr><td>LLY (일라이릴리)</td><td class="up">+10%</td><td>마운자로 125% 폭증</td></tr>
+      <tr><td>QCOM / NXPI</td><td class="up">급등</td><td>온디바이스 AI 칩 기대감</td></tr>
+      <tr><td>AAPL (애플)</td><td class="up">반등</td><td>마진 48%, 9월 AI 이벤트 예고</td></tr>
+      <tr><td>NVDA (엔비디아)</td><td class="down">하락</td><td>빅테크 자체칩 개발 우려</td></tr>
+      <tr><td>RBLX (로블락스)</td><td class="down">폭락</td><td>연령인증 도입 → DAU 감소</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 핵심 투자 원칙 -->
+<div class="section">
+  <div class="section-label">Investment Rules</div>
+  <h2>시장의 핵심 법칙들</h2>
+
+  <div class="rule-box fade-in">
+    <div class="rule-title">📌 전쟁 3줍줍 법칙</div>
+    <p>미국 본토 전쟁(9/11, 남북전쟁 등)이 아닌 이상, 전쟁 루머가 돌면 <strong>캐시를 준비</strong>하고, 전쟁 발발 후 <strong>3주</strong>부터는 하락 시마다 분할 매수.</p>
+    <p>우크라이나·러시아 전쟁도 동일한 패턴을 보였음.</p>
+  </div>
+
+  <div class="callout fade-in">
+    <strong>구름 땅땅 (Cloud to Ground):</strong> AI 투자 흐름이 클라우드(데이터센터)에서 실물 인프라(땅, 전력, 건설)로 이동 중. 산업재(XLI) 비중 확대 필요.
+  </div>
+
+  <div class="callout fade-in">
+    <strong>불타기 vs 물타기:</strong> 잘 달리는 말에 채찍질(불타기)을 하고, 안 달리는 말을 계속 때리는(물타기) 실수는 하지 말 것.
+  </div>
+</div>
+
+<!-- 종목 선별 기준 -->
+<div class="section">
+  <div class="section-label">Stock Screening</div>
+  <h2>지금 담아야 할 종목의 3가지 조건</h2>
+
+  <div class="criteria-grid fade-in">
+    <div class="criteria-card">
+      <div class="criteria-icon">①</div>
+      <div>
+        <h4>AI 수익 가시성</h4>
+        <p>AI에 돈을 쓰면서도 매출·이익이 실제로 늘고 있는가? (ROI가 보여야 함)</p>
+      </div>
+    </div>
+    <div class="criteria-card">
+      <div class="criteria-icon">②</div>
+      <div>
+        <h4>인플레이션 무관</h4>
+        <p>물가가 올라도 수익 구조가 흔들리지 않는가? 그게 아니면 포트폴리오에서 제거.</p>
+      </div>
+    </div>
+    <div class="criteria-card">
+      <div class="criteria-icon">③</div>
+      <div>
+        <h4>경기 무관 메가트렌드</h4>
+        <p>경기 침체와 관계없이 수요가 지속되는가? (예: 헬스케어, 필수 인프라)</p>
+      </div>
+    </div>
+  </div>
+
+  <p>세 가지 중 <strong>최소 2개 이상</strong>을 충족해야 "스위트 스팟" 종목. 1개 이하라면 포트폴리오에서 제거하거나 비중 축소를 고려.</p>
+
+  <!-- 인터랙티브 종목 스크리너 -->
+  <div class="simulator fade-in">
+    <h3>🔎 종목 스크리너: 3가지 기준 체크</h3>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:14px;">관심 종목에 각 기준을 충족하는지 체크해보세요.</p>
+    <div class="sim-row">
+      <span class="sim-label">① AI 수익 가시성 (돈을 벌고 있나?)</span>
+      <div class="sim-toggle">
+        <button onclick="setToggle(0,'yes',this)" id="t0y">Yes</button>
+        <button onclick="setToggle(0,'no',this)" id="t0n">No</button>
+      </div>
+    </div>
+    <div class="sim-row">
+      <span class="sim-label">② 인플레이션 무관 (물가 올라도 OK?)</span>
+      <div class="sim-toggle">
+        <button onclick="setToggle(1,'yes',this)" id="t1y">Yes</button>
+        <button onclick="setToggle(1,'no',this)" id="t1n">No</button>
+      </div>
+    </div>
+    <div class="sim-row">
+      <span class="sim-label">③ 경기 무관 메가트렌드 (불황 관계없나?)</span>
+      <div class="sim-toggle">
+        <button onclick="setToggle(2,'yes',this)" id="t2y">Yes</button>
+        <button onclick="setToggle(2,'no',this)" id="t2n">No</button>
+      </div>
+    </div>
+    <div id="simResult" class="sim-result hold">기준을 선택하면 결과가 나타납니다.</div>
+    <button onclick="resetSim()" style="margin-top:10px;padding:6px 14px;border:1px solid var(--border);background:#fff;border-radius:6px;cursor:pointer;font-size:12px;font-family:'Noto Sans KR',sans-serif;">↺ 초기화</button>
+  </div>
+</div>
+
+<!-- AI 투자 구조 진화 -->
+<div class="section">
+  <div class="section-label">AI Investment Structure</div>
+  <h2>AI 투자 흐름: 클라우드 → 온디바이스</h2>
+
+  <p>AI 투자 단계는 크게 세 단계로 전환 중입니다.</p>
+
+  <table class="fade-in">
+    <thead><tr><th>단계</th><th>내용</th><th>대표 수혜주</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1단계</strong></td><td>알고리즘·플랫폼·클라우드<br><small>언어 모델, GPU 집중</small></td><td>NVDA, 클라우드 3사</td></tr>
+      <tr><td><strong>2단계</strong></td><td>인프라 실물화<br><small>데이터센터 건설, 전력망</small></td><td>CAT, PWR, BE, ETN</td></tr>
+      <tr><td><strong>3단계</strong> 🔜</td><td>온디바이스 AI<br><small>스마트폰·자동차 칩, IoT</small></td><td>QCOM, NXPI, AAPL</td></tr>
+    </tbody>
+  </table>
+
+  <div class="chart-container fade-in" id="container-sector">
+    <div class="chart-title">📊 4월 월간 주요 섹터 성과</div>
+    <canvas id="chartSector" height="220"></canvas>
+  </div>
+
+  <div class="callout fade-in">
+    <strong>엔비디아 주의 신호:</strong> 빅테크들이 자체 AI 칩(ASIC, TPU) 개발을 선언하면서 최대 고객이 이탈할 가능성. 210불이 마지노선. 1년 박스 횡보 재현 우려.
+  </div>
+</div>
+
+<!-- 구글 vs 클로드 -->
+<div class="section">
+  <div class="section-label">AI Platform Competition</div>
+  <h2>인프라 있는 자가 이긴다</h2>
+
+  <p>AI 플랫폼 경쟁에서 핵심은 <strong>기존 클라우드 인프라 보유 여부</strong>와 <strong>현금 확보 능력</strong>입니다.</p>
+
+  <table class="fade-in">
+    <thead><tr><th>회사</th><th>인프라</th><th>현금</th><th>평가</th></tr></thead>
+    <tbody>
+      <tr><td>구글 (GOOGL)</td><td>✅ Google Cloud</td><td>✅ 풍부</td><td class="up">최강</td></tr>
+      <tr><td>마이크로소프트</td><td>✅ Azure</td><td>✅ 충분</td><td class="up">강</td></tr>
+      <tr><td>아마존</td><td>✅ AWS</td><td>✅ 충분</td><td class="up">강</td></tr>
+      <tr><td>메타</td><td>❌ 없음(광고만)</td><td>채권 발행 중</td><td class="neutral">불안</td></tr>
+      <tr><td>Claude(Anthropic)</td><td>❌ 세빵살이</td><td>자금 한계</td><td class="neutral">토큰비↑</td></tr>
+    </tbody>
+  </table>
+
+  <p>구글 Gemini는 Google Drive·Workspace와의 연동, 자체 클라우드를 바탕으로 비용 효율이 높습니다. 오늘 방송에서 직접 업그레이드했을 정도로 체감 품질이 좋다는 평가.</p>
+</div>
+
+<!-- 헬스케어 -->
+<div class="section">
+  <div class="section-label">Healthcare</div>
+  <h2>일라이릴리: 경기 무관 메가트렌드</h2>
+
+  <p>마운자로(Mounjaro) 판매량이 전년 대비 <strong>125% 폭증</strong>하며 오늘 10% 상승. 헬스케어는 경기에 무관하게 사람들이 계속 아프고 살을 빼고 싶어하기 때문에 메가캡 방어주이자 성장주 역할을 동시에 수행합니다.</p>
+
+  <div class="callout fade-in">
+    <strong>바운스 신호:</strong> 2주 전 거꾸로 된 헤드앤숄더(역 H&S) 패턴을 언급하며 반등 가능성 제시. 오늘 실적으로 증명. 한국에서도 마운자로 출시 시작.
+  </div>
+</div>
+
+<!-- 신재생에너지 -->
+<div class="section">
+  <div class="section-label">Renewable Energy</div>
+  <h2>신재생에너지 반등의 3가지 이유</h2>
+
+  <div class="criteria-grid fade-in">
+    <div class="criteria-card">
+      <div class="criteria-icon">🌍</div>
+      <div>
+        <h4>중동 전쟁 피로감</h4>
+        <p>이란·호르무즈 해협 갈등으로 석유 의존도를 줄이려는 글로벌 수요 폭발. 태양광·ESS(에너지 저장시스템) 관심 급증.</p>
+      </div>
+    </div>
+    <div class="criteria-card">
+      <div class="criteria-icon">🇨🇳</div>
+      <div>
+        <h4>중국 솔라·배터리 수출 급증</h4>
+        <p>미국향 수출은 관세로 막혔지만, 3월 기준 중국 솔라 패널 수출 2배↑, 배터리 수출 14%↑. 전 세계 수요 증거.</p>
+      </div>
+    </div>
+    <div class="criteria-card">
+      <div class="criteria-icon">🇪🇺</div>
+      <div>
+        <h4>유럽의 화석연료 탈피 정책</h4>
+        <p>EU 차원에서 신재생에너지로의 전환을 공식화. 장기 수요 기반 확보.</p>
+      </div>
+    </div>
+  </div>
+
+  <p>트럼프 정책으로 미국 내 신재생에너지는 두 손 발이 묶인 상태지만, 퍼스트 솔라(FSLR) 등은 오늘도 이미 거꾸로 된 헤드앤숄더 패턴을 보여주고 있습니다. 정권 교체 시 강력한 상승 여력이 잠재되어 있습니다.</p>
+</div>
+
+<!-- 원자력 -->
+<div class="section">
+  <div class="section-label">Nuclear Power</div>
+  <h2>원자력: 스토리 vs 실적 구분이 핵심</h2>
+
+  <table class="fade-in">
+    <thead><tr><th>구분</th><th>종목</th><th>특징</th></tr></thead>
+    <tbody>
+      <tr><td>실적 기반</td><td>TLN, NNE, NEE, GEV</td><td class="up">실제 수익 창출 능력 있음</td></tr>
+      <tr><td>스토리 기반</td><td>OKLO, SMR</td><td class="neutral">계약 이벤트에 주가 연동</td></tr>
+    </tbody>
+  </table>
+
+  <p>오늘 원자력 섹터 주요 수익: OKLO +12%, SMR +11%, LEU +10%, TLN +6%, CEG +5.39%</p>
+
+  <div class="callout fade-in">
+    <strong>GEV 사례:</strong> 오래전부터 추천된 종목으로 이미 1,000불 이상 상승. 월스트리트도 대형 원자력 기업(TLN, NNE, NEE, GEV)을 선호. 소형 원자력(SMR, OKLO)은 내러티브 중심이므로 계약 성사 여부가 핵심.
+  </div>
+
+  <p>IPO 종목은 180일(Lock-up 해제) 이후 기관 투자자들의 매도 물량이 나올 수 있으므로, 6개월 후 옥석 확인 후 진입하는 전략 권장.</p>
+</div>
+
+<!-- 전력 인프라 -->
+<div class="section">
+  <div class="section-label">Power Infrastructure</div>
+  <h2>데이터센터 = 발전소 없으면 불가</h2>
+
+  <p>데이터센터는 단독으로 지을 수 없습니다. 전력망 문제가 해결되지 않으면 건설이 불가능하며, 이미 버지니아 노스(북버지니아) 지역은 데이터센터 과부하로 정전 사태가 발생 중입니다.</p>
+
+  <div class="stat-grid fade-in">
+    <div class="stat-card dark">
+      <div class="label">버지니아 3년간 전기세 상승</div>
+      <div class="value">+80%</div>
+      <div class="note">데이터센터 수요 과부하</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">PWR 오늘 상승률</div>
+      <div class="value">+15.78%</div>
+      <div class="note">전력망 공사 수혜</div>
+    </div>
+  </div>
+
+  <p>수혜 종목: <strong>BE(블룸에너지)</strong> - 3단 뛰기 급등, <strong>ETN(이튼)</strong> - 실적 + 주가 강세, <strong>GNRC(제너랙)</strong> - 발전기, <strong>FSLR(퍼스트솔라)</strong></p>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p>본 리포트는 CIA.chat 2026-04-30 멤버미팅 방송 내용을 바탕으로 작성되었습니다.</p>
+  <p style="margin-top:6px;">투자는 본인 판단 하에 진행하시기 바랍니다. 📊</p>
+</div>
+
+<script>
+// ======== SIMULATOR ========
+let picks = [null, null, null];
+function setToggle(idx, val, btn) {
+  picks[idx] = val;
+  const yBtn = document.getElementById(`t${idx}y`);
+  const nBtn = document.getElementById(`t${idx}n`);
+  yBtn.className = ''; nBtn.className = '';
+  if(val==='yes') yBtn.classList.add('active-yes');
+  else nBtn.classList.add('active-no');
+  updateSim();
+}
+function updateSim() {
+  const r = document.getElementById('simResult');
+  const yes = picks.filter(p=>p==='yes').length;
+  const chosen = picks.filter(p=>p!==null).length;
+  if(chosen<3){r.className='sim-result hold';r.textContent=`${chosen}/3 기준 선택 중... (최소 2개 이상 필요)`;return;}
+  if(yes>=2){
+    r.className='sim-result buy';
+    r.textContent=`✅ 스위트 스팟! (${yes}/3 충족) → 불타기 대상`;
+  } else {
+    r.className='sim-result pass';
+    r.textContent=`❌ (${yes}/3 충족) → 포트폴리오 제거 또는 비중 축소 검토`;
+  }
+}
+function resetSim(){
+  picks=[null,null,null];
+  ['t0y','t0n','t1y','t1n','t2y','t2n'].forEach(id=>{
+    document.getElementById(id).className='';
+  });
+  const r=document.getElementById('simResult');
+  r.className='sim-result hold';r.textContent='기준을 선택하면 결과가 나타납니다.';
+}
+
+// ======== CHART CONFIGS ========
+const chartConfigs = {};
+
+chartConfigs['chartYTD'] = () => {
+  new Chart(document.getElementById('chartYTD'), {
+    type: 'bar',
+    data: {
+      labels: ['S&P 500 YTD','나스닥 YTD','연간 평균 상승','연준 PCE 목표','실제 YoY PCE'],
+      datasets: [{
+        data: [10.4, 15.3, 11, 2, 3.3],
+        backgroundColor: ['#e11d48','#1a1a1a','#6b7280','#2563eb','#f43f5e'],
+        borderRadius: 6,
+      }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:true,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw}%`}}},
+      scales:{
+        y:{ticks:{callback:v=>v+'%'},grid:{color:'#f0f0f0'}},
+        x:{ticks:{font:{size:10}}}
+      }
+    }
+  });
+};
+
+chartConfigs['chartStocks'] = () => {
+  new Chart(document.getElementById('chartStocks'), {
+    type: 'bar',
+    data: {
+      labels: ['GOOGL','PWR','CAT','LLY','ETN','AAPL','NVDA'],
+      datasets: [{
+        data: [9.96, 15.78, 9.9, 10, 8.5, 2, -1.5],
+        backgroundColor: d => d.raw < 0 ? '#e11d48' : '#1a1a1a',
+        borderRadius: 5,
+      }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:true,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw}%`}}},
+      scales:{
+        y:{ticks:{callback:v=>v+'%'},grid:{color:'#f0f0f0'}},
+        x:{ticks:{font:{size:11}}}
+      }
+    }
+  });
+};
+
+chartConfigs['chartSector'] = () => {
+  new Chart(document.getElementById('chartSector'), {
+    type: 'doughnut',
+    data: {
+      labels: ['산업재(XLI)','에너지','유틸리티','헬스케어','빅테크'],
+      datasets: [{
+        data: [12, 5, 10, 9, 13],
+        backgroundColor: ['#e11d48','#1a1a1a','#6b7280','#2563eb','#f43f5e'],
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:true,
+      plugins:{
+        legend:{position:'right',labels:{font:{size:11},boxWidth:12}},
+        tooltip:{callbacks:{label:c=>`${c.label}: +${c.raw}%`}}
+      }
+    }
+  });
+};
+
+// ======== INTERSECTION OBSERVERS ========
+const fadeObs = new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('visible'),i*80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+},{threshold:0.12});
+document.querySelectorAll('.fade-in').forEach(el=>fadeObs.observe(el));
+
+const chartObs = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const canvas = e.target.querySelector('canvas');
+      if(canvas && chartConfigs[canvas.id]){
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+},{threshold:0.15});
+document.querySelectorAll('.chart-container').forEach(el=>chartObs.observe(el));
+</script>
+</body>
+</html>
