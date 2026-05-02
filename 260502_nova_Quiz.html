@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA Real Invest — 시험문제 2026.05.02</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --correct: #16a34a;
+    --correct-bg: #dcfce7;
+    --wrong: #dc2626;
+    --wrong-bg: #fee2e2;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 60px;
+  }
+
+  /* ── Sticky Score Bar ── */
+  #scoreBar {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: var(--text);
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 3px solid var(--accent);
+    flex-wrap: wrap;
+  }
+  #scoreBar .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--accent2);
+    flex-shrink: 0;
+  }
+  #scoreBar .stats {
+    display: flex;
+    gap: 14px;
+    font-size: 12px;
+    flex-wrap: wrap;
+  }
+  #scoreBar .stats span { color: #aaa; }
+  #scoreBar .stats strong { color: #fff; }
+  .progress-wrap {
+    flex: 1;
+    min-width: 80px;
+    background: #333;
+    border-radius: 20px;
+    height: 6px;
+    overflow: hidden;
+  }
+  #progressBar {
+    height: 100%;
+    width: 0%;
+    border-radius: 20px;
+    transition: width 0.5s ease, background 0.5s ease;
+    background: #e11d48;
+  }
+
+  /* ── Header ── */
+  .quiz-hero {
+    background: var(--text);
+    color: #fff;
+    padding: 36px 20px 28px;
+    text-align: center;
+  }
+  .quiz-hero .kicker {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 10px;
+  }
+  .quiz-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 900;
+    line-height: 1.25;
+    margin-bottom: 10px;
+  }
+  .quiz-hero p { font-size: 13px; color: #aaa; }
+
+  /* ── Main ── */
+  main { max-width: 680px; margin: 0 auto; padding: 20px 16px; }
+
+  /* ── Question Card ── */
+  .q-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 22px 20px;
+    margin-bottom: 18px;
+  }
+  .q-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .q-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    background: #fff0f3;
+    border: 1px solid var(--accent);
+    border-radius: 20px;
+    padding: 2px 10px;
+  }
+  .q-type {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: var(--text);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+  .q-diff {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+  .diff-easy   { background: #dcfce7; color: #16a34a; }
+  .diff-medium { background: #fef9c3; color: #a16207; }
+  .diff-hard   { background: #fee2e2; color: #dc2626; }
+  .q-text {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+
+  /* ── Options ── */
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text);
+    transition: border-color 0.18s, background 0.18s;
+    line-height: 1.55;
+  }
+  .opt-btn:hover:not(:disabled) { border-color: var(--accent); background: #fff5f7; }
+  .opt-btn .opt-label {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 1px;
+    transition: background 0.18s;
+  }
+  .opt-btn.correct {
+    background: var(--correct-bg);
+    border-color: var(--correct);
+  }
+  .opt-btn.correct .opt-label { background: var(--correct); color: #fff; }
+  .opt-btn.wrong {
+    background: var(--wrong-bg);
+    border-color: var(--wrong);
+  }
+  .opt-btn.wrong .opt-label { background: var(--wrong); color: #fff; }
+  .opt-btn:disabled { cursor: default; }
+  .result-badge {
+    margin-left: auto;
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    align-self: center;
+  }
+  .badge-correct { background: var(--correct); color: #fff; }
+  .badge-wrong   { background: var(--wrong);   color: #fff; }
+
+  /* ── Short answer ── */
+  .short-wrap { display: flex; gap: 8px; }
+  .short-input {
+    flex: 1;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text);
+    background: #fff;
+    outline: none;
+    transition: border-color 0.18s;
+  }
+  .short-input:focus { border-color: var(--accent); }
+  .short-input:disabled { background: var(--bg2); }
+  .submit-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.18s;
+    flex-shrink: 0;
+  }
+  .submit-btn:hover:not(:disabled) { background: var(--accent2); }
+  .submit-btn:disabled { background: var(--border); color: var(--text2); cursor: default; }
+
+  /* ── OX ── */
+  .ox-wrap { display: flex; gap: 10px; }
+  .ox-btn {
+    flex: 1;
+    border: 2px solid var(--border);
+    background: #fff;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 26px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: border-color 0.18s, background 0.18s;
+    font-family: 'Playfair Display', serif;
+  }
+  .ox-btn:hover:not(:disabled) { border-color: var(--accent); background: #fff5f7; }
+  .ox-btn.correct { background: var(--correct-bg); border-color: var(--correct); }
+  .ox-btn.wrong   { background: var(--wrong-bg);   border-color: var(--wrong); }
+  .ox-btn:disabled { cursor: default; }
+
+  /* ── Explanation ── */
+  .explanation {
+    display: none;
+    margin-top: 14px;
+    background: #fffbf0;
+    border: 1px solid #fcd34d;
+    border-left: 4px solid #f59e0b;
+    border-radius: 4px;
+    padding: 14px 16px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .explanation .ex-title {
+    font-weight: 700;
+    color: #d97706;
+    margin-bottom: 6px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .explanation.show { display: block; }
+
+  /* ── Short answer result ── */
+  .short-result {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    display: none;
+  }
+  .short-result.correct-text { color: var(--correct); }
+  .short-result.wrong-text   { color: var(--wrong); }
+  .short-result.show { display: block; }
+
+  /* ── Final Modal ── */
+  #finalOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    z-index: 500;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  #finalOverlay.show { display: flex; }
+  #finalCard {
+    background: #fff;
+    border-radius: 10px;
+    padding: 36px 28px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  #finalCard .final-emoji { font-size: 54px; margin-bottom: 12px; }
+  #finalCard .final-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  #finalCard .final-total { font-size: 14px; color: var(--text2); margin-bottom: 14px; }
+  #finalCard .final-grade {
+    display: inline-block;
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    background: var(--text);
+    color: #fff;
+    padding: 6px 22px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+  #finalCard .final-msg {
+    font-size: 14px;
+    color: var(--text2);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  #retryBtn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 13px 28px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  #retryBtn:hover { background: var(--accent2); }
+
+  @media (max-width: 400px) {
+    .quiz-hero h1 { font-size: 21px; }
+    .opt-btn { font-size: 13px; }
+    .short-wrap { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Sticky Score Bar -->
+<div id="scoreBar">
+  <div class="logo">NOVA QUIZ</div>
+  <div class="stats">
+    <span>푼 문제 <strong id="sSolved">0</strong> / 10</span>
+    <span>맞힌 문제 <strong id="sCorrect">0</strong></span>
+    <span>정답률 <strong id="sPct">0%</strong></span>
+  </div>
+  <div class="progress-wrap">
+    <div id="progressBar"></div>
+  </div>
+</div>
+
+<!-- Hero -->
+<div class="quiz-hero">
+  <div class="kicker">NOVA Real Invest — 2026.05.02 Live</div>
+  <h1>오늘 방송 핵심<br>인터랙티브 퀴즈 10문제</h1>
+  <p>객관식 · 단답형 · OX | 클릭 한 번으로 즉시 채점 · 해설 자동 표시</p>
+</div>
+
+<main id="quizMain"></main>
+
+<!-- Final Modal -->
+<div id="finalOverlay">
+  <div id="finalCard">
+    <div class="final-emoji" id="finalEmoji">🏆</div>
+    <div class="final-score" id="finalScore">0</div>
+    <div class="final-total">/ 10점</div>
+    <div class="final-grade" id="finalGrade">A</div>
+    <div class="final-msg" id="finalMsg"></div>
+    <button id="retryBtn" onclick="resetQuiz()">↺ 다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id: 1,
+    type: 'mc',
+    difficulty: 'easy',
+    question: '오늘(2026년 5월 1일 기준) 나스닥이 처음으로 돌파한 수치는 얼마입니까?',
+    options: ['20,000', '22,500', '25,000', '28,000'],
+    answer: 2,
+    explanation: '노바는 방송에서 "오늘 나스닥이 25,000을 드디어 뚫어냈습니다"라고 발표했습니다. S&P 500도 기관 연간 목표치인 7,200을 5월 1일에 이미 달성했다고 언급했습니다.'
+  },
+  {
+    id: 2,
+    type: 'mc',
+    difficulty: 'medium',
+    question: '노바가 "가장 위험한 신호"로 지목한 것은 무엇입니까?',
+    options: ['이란 전쟁 지속', '유가 $80 돌파', '30년물 국채금리 5% 접근', 'EU 자동차 관세 25% 예고'],
+    answer: 2,
+    explanation: '노바는 채팅창에 "30년물 국채금리 5%"를 쓰라고 강조하며 이것이 민간 기업 모두에게 "살벌한 신호"라고 했습니다. 이 수준에서는 크레딧카드 금리가 20%까지 오르고 은행 대출이 불가능해진다고 설명했습니다.'
+  },
+  {
+    id: 3,
+    type: 'mc',
+    difficulty: 'medium',
+    question: '구글 클라우드 매출이 전년 동기 대비 얼마나 증가했습니까?',
+    options: ['약 29%', '약 43%', '약 63%', '약 85%'],
+    answer: 2,
+    explanation: '노바는 "구글 클라우드 매출이 63%나 증가를 했습니다. 거의 20빌리언(200억 달러)이죠"라고 언급했습니다. 이를 두고 "AI가 돈이 되네가 아니라 대박인데 이거예요"라고 표현했습니다.'
+  },
+  {
+    id: 4,
+    type: 'mc',
+    difficulty: 'hard',
+    question: '노바가 메타(Meta)의 약점으로 지목한 것은 무엇입니까?',
+    options: [
+      'AI 기술력이 경쟁사보다 현저히 낮음',
+      '클라우드 유통망(채널)이 없어 AI 수익화가 불가',
+      '규제 리스크로 인한 미국 사업 축소',
+      '자사주 매입 중단으로 주가 지지력 약화'
+    ],
+    answer: 1,
+    explanation: '노바는 구글(구글워크스페이스), 마이크로소프트(애저), 아마존(AWS)과 달리 메타는 클라우드 유통망이 없다고 설명했습니다. "AI를 만들어도 팔 곳이 없는 상황"으로, 파리바게뜨처럼 브랜치(지점)가 없는 상태라고 비유했습니다. Meta AI 자체는 우수하지만 수익화 채널이 없다는 것이 핵심입니다.'
+  },
+  {
+    id: 5,
+    type: 'ox',
+    difficulty: 'easy',
+    question: 'SanDisk(SNDK)는 현재 3년치 물량이 모두 계약 완료(솔드아웃)된 상태이다.',
+    options: ['O', 'X'],
+    answer: 0,
+    explanation: '노바는 "샌디스크가 3년치 다 계약이 된 거예요. 3년치"라고 말했습니다. 또한 5가지 계약으로 420억 달러(42B$) 매출을 확보했고, 선급금으로 110억 달러(11B$)를 이미 수령했다고 설명했습니다.'
+  },
+  {
+    id: 6,
+    type: 'mc',
+    difficulty: 'medium',
+    question: '노바가 현재 AI 밸류체인의 가장 큰 병목(Bottleneck) 문제로 지목한 것은 무엇입니까?',
+    options: ['전력 공급 부족', '반도체(메모리) 공급 부족', '데이터센터 부지 확보', 'AI 인재 부족'],
+    answer: 1,
+    explanation: '"반도체지, 반도체야, 반도체라고"라고 노바가 강조했습니다. 전력 문제는 2~3년 후 2차 쇼크가 올 것이라고 예고했으며, 현재 당장의 1차 문제는 메모리를 포함한 반도체 공급 부족이라고 설명했습니다.'
+  },
+  {
+    id: 7,
+    type: 'short',
+    difficulty: 'medium',
+    question: '애플이 이번 분기에 발표한 자사주 매입 규모는 얼마(달러)였습니까? (숫자+단위로 답하세요, 예: 500억 달러)',
+    answer: ['1000억달러', '천억달러', '1000억 달러', '천억 달러', '101b', '100b', '1000억', '천억'],
+    explanation: '"애플 2분기 매출 101밀리언달러(천억 달러)를 이만큼 번 걸 바로 천억 자사주 매입으로 승인하고 배당까지 인상해버립니다"라고 노바가 언급했습니다. 애플이 막대한 현금(캐시)을 AI 투자 대신 주주 환원에 사용하는 전략입니다.'
+  },
+  {
+    id: 8,
+    type: 'mc',
+    difficulty: 'hard',
+    question: '노바는 맥 미니(Mac Mini) 가격이 인상된 이유를 무엇으로 설명했습니까?',
+    options: [
+      '원자재 비용 상승과 원화 약세',
+      '에이전틱 AI 실행 수요 급증으로 인한 품귀현상',
+      '애플의 신규 M4 칩 원가 상승',
+      '팀 쿡의 가격 정책 변경 지시'
+    ],
+    answer: 1,
+    explanation: '노바는 "에이전틱 AI 때문에 오픈클로우, 니모클로우를 돌리려면 맥 미니가 지금 가장 인기가 좋다. 가성비 짱이야"라고 설명했습니다. 품귀현상으로 시작가가 7K로 인상됐다고 언급했습니다. 로컬 에이전틱 AI 실행 수요가 공급을 초과했기 때문입니다.'
+  },
+  {
+    id: 9,
+    type: 'mc',
+    difficulty: 'easy',
+    question: '다음 주 일정 중 노바가 가장 중요하다고 강조한 이벤트는 무엇입니까?',
+    options: [
+      '월요일 팔란티어 실적',
+      '화요일 AMD 실적',
+      '수요일 월트디즈니 실적',
+      '금요일 비농업 고용보고서(NFP)'
+    ],
+    answer: 3,
+    explanation: '"제일 중요한 건 금요일인 것 같아요. 금요일날 비농업고용보고서가 나와야 금리 경로가 사람들이 추측할 수 있게 됩니다"라고 노바가 말했습니다. 예상치는 +6만 건이며, 실업률 4.3%가 위험 임계치라고 경고했습니다.'
+  },
+  {
+    id: 10,
+    type: 'ox',
+    difficulty: 'hard',
+    question: '노바는 AI 스토리텔링(내러티브) 투자 시대가 지나가고, 이제는 실제 수익화 증거가 중요한 시장이 됐다고 평가하며 이를 "주식시장이 건강해진 것"이라고 긍정적으로 표현했다.',
+    options: ['O', 'X'],
+    answer: 0,
+    explanation: '노바는 "이제 주식시장이 어느 정도 건강해진 거다"라고 말했습니다. 밈 주식, 꿈팔이, 미래팔이 등 스토리만으로 주가가 오르던 시대가 끝나고 실제 실적·현금 흐름이 중요해진 것을 "반갑다"고 표현했습니다. "모든 사람들이 이걸로 이제 정신을 차려야 됩니다"라고도 언급했습니다.'
+  }
+];
+
+let state = { solved: 0, correct: 0, answeredIds: new Set() };
+
+function diffLabel(d) {
+  if (d === 'easy')   return '<span class="q-diff diff-easy">쉬움</span>';
+  if (d === 'medium') return '<span class="q-diff diff-medium">보통</span>';
+  return '<span class="q-diff diff-hard">어려움</span>';
+}
+function typeLabel(t) {
+  if (t === 'mc')    return '객관식';
+  if (t === 'ox')    return 'O / X';
+  if (t === 'short') return '단답형';
+  return t;
+}
+
+function buildQuiz() {
+  const main = document.getElementById('quizMain');
+  main.innerHTML = '';
+  QUIZ_DATA.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = `qcard-${q.id}`;
+
+    let optionsHTML = '';
+    if (q.type === 'mc') {
+      optionsHTML = `<div class="options" id="opts-${q.id}">` +
+        q.options.map((opt, i) =>
+          `<button class="opt-btn" onclick="answerMC(${q.id},${i})" data-idx="${i}">
+            <span class="opt-label">${['①','②','③','④'][i]}</span>
+            <span>${opt}</span>
+           </button>`
+        ).join('') + '</div>';
+    } else if (q.type === 'ox') {
+      optionsHTML = `<div class="ox-wrap" id="opts-${q.id}">
+        <button class="ox-btn" onclick="answerOX(${q.id},0)" data-idx="0">O</button>
+        <button class="ox-btn" onclick="answerOX(${q.id},1)" data-idx="1">X</button>
+      </div>`;
+    } else if (q.type === 'short') {
+      optionsHTML = `<div class="short-wrap">
+        <input class="short-input" type="text" id="sinput-${q.id}" placeholder="답을 입력하세요">
+        <button class="submit-btn" id="sbtn-${q.id}" onclick="answerShort(${q.id})">제출</button>
+      </div>
+      <div class="short-result" id="sresult-${q.id}"></div>`;
+    }
+
+    card.innerHTML = `
+      <div class="q-meta">
+        <span class="q-num">Q${q.id}</span>
+        <span class="q-type">${typeLabel(q.type)}</span>
+        ${diffLabel(q.difficulty)}
+      </div>
+      <div class="q-text">${q.question}</div>
+      ${optionsHTML}
+      <div class="explanation" id="ex-${q.id}">
+        <div class="ex-title">📖 해설</div>
+        <div>${q.explanation}</div>
+      </div>
+    `;
+    main.appendChild(card);
+  });
+}
+
+function updateScoreBar() {
+  document.getElementById('sSolved').textContent  = state.solved;
+  document.getElementById('sCorrect').textContent = state.correct;
+  const pct = state.solved === 0 ? 0 : Math.round((state.correct / state.solved) * 100);
+  document.getElementById('sPct').textContent = pct + '%';
+  const bar = document.getElementById('progressBar');
+  bar.style.width = (state.solved / 10 * 100) + '%';
+  if (pct < 40)      bar.style.background = '#e11d48';
+  else if (pct < 70) bar.style.background = '#f59e0b';
+  else               bar.style.background = '#16a34a';
+}
+
+function markAnswered(qid, isCorrect) {
+  if (state.answeredIds.has(qid)) return false;
+  state.answeredIds.add(qid);
+  state.solved++;
+  if (isCorrect) state.correct++;
+  updateScoreBar();
+  if (state.solved === 10) {
+    setTimeout(showFinal, 700);
+  }
+  return true;
+}
+
+function showExplanation(qid) {
+  const el = document.getElementById(`ex-${qid}`);
+  if (el) el.classList.add('show');
+}
+
+function disableOptions(containerId) {
+  const cont = document.getElementById(containerId);
+  if (!cont) return;
+  cont.querySelectorAll('button').forEach(b => b.disabled = true);
+}
+
+function answerMC(qid, idx) {
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  if (!q || state.answeredIds.has(qid)) return;
+  const isCorrect = idx === q.answer;
+  markAnswered(qid, isCorrect);
+
+  const btns = document.querySelectorAll(`#opts-${qid} .opt-btn`);
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.answer) {
+      btn.classList.add('correct');
+      btn.insertAdjacentHTML('beforeend', '<span class="result-badge badge-correct">✓ 정답!</span>');
+    }
+    if (i === idx && !isCorrect) {
+      btn.classList.add('wrong');
+      btn.querySelector('.result-badge')?.remove();
+      btn.insertAdjacentHTML('beforeend', '<span class="result-badge badge-wrong">✗ 오답</span>');
+    }
+  });
+  showExplanation(qid);
+}
+
+function answerOX(qid, idx) {
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  if (!q || state.answeredIds.has(qid)) return;
+  const isCorrect = idx === q.answer;
+  markAnswered(qid, isCorrect);
+
+  const btns = document.querySelectorAll(`#opts-${qid} .ox-btn`);
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.answer) btn.classList.add('correct');
+    if (i === idx && !isCorrect) btn.classList.add('wrong');
+  });
+  showExplanation(qid);
+}
+
+function answerShort(qid) {
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  if (!q || state.answeredIds.has(qid)) return;
+  const input = document.getElementById(`sinput-${qid}`);
+  const val = input.value.trim().toLowerCase().replace(/\s/g, '');
+  const accepted = q.answer.map(a => a.toLowerCase().replace(/\s/g, ''));
+  const isCorrect = accepted.some(a => val.includes(a) || a.includes(val));
+
+  markAnswered(qid, isCorrect);
+  input.disabled = true;
+  document.getElementById(`sbtn-${qid}`).disabled = true;
+
+  const resultEl = document.getElementById(`sresult-${qid}`);
+  if (isCorrect) {
+    resultEl.textContent = '✓ 정답입니다!';
+    resultEl.className = 'short-result correct-text show';
+  } else {
+    resultEl.textContent = `✗ 오답. 정답: ${q.answer[0]}`;
+    resultEl.className = 'short-result wrong-text show';
+  }
+  showExplanation(qid);
+}
+
+function showFinal() {
+  const sc = state.correct;
+  let grade, msg, emoji;
+  if (sc >= 9)      { grade = 'A+'; msg = '완벽합니다! 노바 방송을 정말 집중해서 들으셨군요. 당신은 이미 고수입니다. 🎉'; emoji = '🏆'; }
+  else if (sc >= 8) { grade = 'A';  msg = '훌륭합니다! 핵심 내용을 대부분 파악하셨습니다.'; emoji = '🥇'; }
+  else if (sc >= 7) { grade = 'B';  msg = '잘 하셨습니다. 놓친 부분을 다시 한번 복습해보세요.'; emoji = '🥈'; }
+  else if (sc >= 5) { grade = 'C';  msg = '무난한 수준입니다. 방송 내용을 한 번 더 확인해보세요.'; emoji = '📖'; }
+  else              { grade = 'D';  msg = '아직 갈 길이 있습니다. 방송 복습 후 다시 도전해보세요!'; emoji = '💪'; }
+
+  document.getElementById('finalEmoji').textContent = emoji;
+  document.getElementById('finalScore').textContent = sc;
+  document.getElementById('finalGrade').textContent = grade;
+  document.getElementById('finalMsg').textContent = msg;
+  document.getElementById('finalOverlay').classList.add('show');
+}
+
+function resetQuiz() {
+  state = { solved: 0, correct: 0, answeredIds: new Set() };
+  updateScoreBar();
+  document.getElementById('finalOverlay').classList.remove('show');
+  buildQuiz();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Init
+buildQuiz();
+updateScoreBar();
+</script>
+</body>
+</html>
