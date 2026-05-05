@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>httpCIA.chat 멤버미팅 2026-05-05 분석</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --c1: #e11d48;
+    --c2: #1a1a1a;
+    --c3: #6b7280;
+    --c4: #2563eb;
+    --table-bg: #fafafa;
+    --table-header: #e11d48;
+    --border: #e5e5e5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 18px 60px;
+  }
+
+  /* HEADER */
+  .magazine-header {
+    padding: 40px 0 24px;
+    border-bottom: 3px solid var(--accent);
+    margin-bottom: 32px;
+    position: relative;
+  }
+  .mag-label {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .mag-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 7vw, 42px);
+    font-weight: 900;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .mag-title span { color: var(--accent); }
+  .mag-meta {
+    font-size: 12px;
+    color: var(--text2);
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .mag-meta a { color: var(--accent); text-decoration: none; }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 40px;
+  }
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 14px;
+    border-left: 4px solid var(--accent);
+    padding-left: 12px;
+  }
+
+  /* SUMMARY BOX */
+  .summary-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    padding: 18px 20px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+  .summary-box p {
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .summary-box p:last-child { margin-bottom: 0; }
+
+  /* HIGHLIGHT PULL QUOTE */
+  .pull-quote {
+    border-top: 2px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
+    padding: 18px 0;
+    margin: 28px 0;
+    text-align: center;
+  }
+  .pull-quote p {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    font-style: italic;
+    color: var(--accent);
+    line-height: 1.5;
+  }
+
+  /* STATS GRID */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 16px 14px;
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--accent);
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label { font-size: 12px; color: var(--text2); line-height: 1.3; }
+
+  /* TOPIC CARDS */
+  .topic-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px;
+    margin-bottom: 14px;
+  }
+  .topic-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .topic-card h3 .icon {
+    width: 26px; height: 26px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; flex-shrink: 0;
+  }
+  .topic-card p { font-size: 14px; color: var(--text); line-height: 1.65; }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 13.5px;
+  }
+  th {
+    background: var(--table-header);
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+  }
+  td {
+    padding: 10px 12px;
+    background: var(--table-bg);
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: #f4f4f4; }
+  .up { color: #16a34a; font-weight: 700; }
+  .down { color: var(--accent); font-weight: 700; }
+
+  /* TAGS */
+  .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .tag {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+  .tag.hot {
+    background: #fff1f2;
+    border-color: var(--accent2);
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* STRATEGY LIST */
+  .strategy-list { list-style: none; padding: 0; }
+  .strategy-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .strategy-list li:last-child { border-bottom: none; }
+  .s-num {
+    background: var(--accent);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px;
+  }
+
+  /* CHART */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin-bottom: 20px;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas { opacity: 1; }
+
+  /* RISK BADGE */
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-weight: 700;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .badge-red { background: #fff1f2; color: var(--accent); border: 1px solid var(--accent2); }
+  .badge-green { background: #f0fdf4; color: #16a34a; border: 1px solid #86efac; }
+  .badge-yellow { background: #fffbeb; color: #b45309; border: 1px solid #fcd34d; }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+
+  /* INTERACTIVE SIMULATOR */
+  .simulator {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .simulator h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .sim-row {
+    margin-bottom: 16px;
+  }
+  .sim-row label {
+    font-size: 12px;
+    color: var(--text2);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .sim-row input[type=range] {
+    width: 100%;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+  .sim-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+    text-align: right;
+  }
+  .sim-result {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px;
+    margin-top: 12px;
+    font-size: 13px;
+  }
+  .sim-result .r-label { color: var(--text2); font-size: 11px; margin-bottom: 2px; }
+  .sim-result .r-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .sim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .reset-btn {
+    background: none;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { background: var(--accent); color: white; }
+
+  /* FLOW CHART */
+  .flow-wrap { margin-bottom: 20px; }
+  .flow-step {
+    display: flex; gap: 12px; align-items: flex-start;
+    margin-bottom: 12px;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  .flow-step:hover { border-color: var(--accent2); background: #fff1f2; }
+  .flow-step.active { border-color: var(--accent); background: #fff1f2; }
+  .flow-dot {
+    width: 32px; height: 32px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px;
+    flex-shrink: 0;
+  }
+  .flow-content h4 { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+  .flow-detail { font-size: 13px; color: var(--text2); display: none; margin-top: 6px; line-height: 1.6; }
+  .flow-step.active .flow-detail { display: block; }
+
+  /* FOOTER */
+  footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text2);
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<header class="magazine-header fade-in">
+  <div class="mag-label">경제 분석 리포트</div>
+  <h1 class="mag-title">AI 인프라 <span>빅뱅</span><br>하드웨어가 시장을 지배한다</h1>
+  <div class="mag-meta">
+    <span>📅 2026년 5월 5일 (화)</span>
+    <span>🎙 httpCIA.chat 멤버미팅</span>
+    <a href="https://www.youtube.com/watch?v=EkdgNNU7Cw4" target="_blank">▶ YouTube 원본</a>
+  </div>
+</header>
+
+<!-- 시장 개요 -->
+<section class="section fade-in">
+  <div class="section-label">Market Overview</div>
+  <div class="section-title">📊 오늘의 시장 — 전 지수 상승</div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-num">+1.03%</div>
+      <div class="stat-label">나스닥<br><small>사상 최고가 경신</small></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">+1.41%</div>
+      <div class="stat-label">러셀 2000<br><small>소형주 강세</small></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">+0.80%</div>
+      <div class="stat-label">S&P 500<br><small>사상 최고가 경신</small></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">+0.73%</div>
+      <div class="stat-label">다우존스<br><small>안정적 상승</small></div>
+    </div>
+  </div>
+
+  <div class="chart-container fade-in">
+    <canvas id="marketChart" height="220"></canvas>
+  </div>
+
+  <div class="summary-box">
+    <p><strong>상승 주도 섹터:</strong> AI 반도체·메모리, 산업재(인더스트리얼), 전력·에너지 인프라</p>
+    <p><strong>상승 촉매:</strong> ① 미국-이란 휴전 유지 → 에너지 가격 하락 ② 국채금리(10년·30년물) 안정 ③ JOLTS(구인·이직 보고서) 호조 ④ SMCI 3Q 실적 및 4Q 가이던스 상향</p>
+  </div>
+</section>
+
+<!-- 주요 종목 -->
+<section class="section fade-in">
+  <div class="section-label">Key Stocks</div>
+  <div class="section-title">🔥 주목 종목 & 언급 가격</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>종목</th>
+        <th>언급 내용</th>
+        <th>비고</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>FIXD(픽스)</strong></td>
+        <td>약 2개월 전 $800대 → 현재 <span class="up">$1,400</span></td>
+        <td>에어컨 수리·산업재</td>
+      </tr>
+      <tr>
+        <td><strong>CAT(캣)</strong></td>
+        <td>$1,000 근접 <span class="up">↑</span></td>
+        <td>중장비</td>
+      </tr>
+      <tr>
+        <td><strong>QNTA(퀀타)</strong></td>
+        <td>작년 $400 미만 → 현재 <span class="up">$773</span></td>
+        <td>전력 서비스, 수주잔고 $485억</td>
+      </tr>
+      <tr>
+        <td><strong>MU(마이크론)</strong></td>
+        <td>245TB SSD 신제품 발표</td>
+        <td>메모리 혁신</td>
+      </tr>
+      <tr>
+        <td><strong>SMCI(슈퍼마이크로)</strong></td>
+        <td>마진 6.3% → <span class="up">9.9%</span>, 가이던스 상향</td>
+        <td>서버 랙</td>
+      </tr>
+      <tr>
+        <td><strong>AMD</strong></td>
+        <td>메타와 $60B 규모 계약</td>
+        <td>CPU·GPU</td>
+      </tr>
+      <tr>
+        <td><strong>PLTR(팔란티어)</strong></td>
+        <td>실적 호조에도 <span class="down">하락</span> — PER 85배</td>
+        <td>밸류에이션 트랩</td>
+      </tr>
+      <tr>
+        <td><strong>SHOP(쇼피파이)</strong></td>
+        <td>실적 호조에도 <span class="down">하락</span> — 성장률 둔화</td>
+        <td>밸류에이션 트랩</td>
+      </tr>
+      <tr>
+        <td><strong>PINS(핀터레스트)</strong></td>
+        <td>유저 +11%, 매출 YoY <span class="up">+18%</span>, EBITDA마진 +20.5%</td>
+        <td>AI 광고 최적화 효과</td>
+      </tr>
+      <tr>
+        <td><strong>GVP·PWR·BE</strong></td>
+        <td>최근 한 달간 급등</td>
+        <td>전력 인프라</td>
+      </tr>
+      <tr>
+        <td><strong>EWY</strong></td>
+        <td>한국 ETF — 무시 못 할 규모로 성장</td>
+        <td>이머징 아시아</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="pull-quote fade-in">
+  <p>"소프트웨어를 최대 퍼포먼스로 돌리려면<br>결국 하드웨어가 맞춰져야 한다."</p>
+</div>
+
+<!-- AI 밸류에이션 수평 확장 -->
+<section class="section fade-in">
+  <div class="section-label">AI Value Chain</div>
+  <div class="section-title">🤖 AI 밸류에이션의 수평적 확장</div>
+
+  <p style="font-size:14px;margin-bottom:16px;">AI 투자 사이클은 단순한 GPU 구매를 넘어 전체 인프라 스택으로 확장되고 있다. 아래 3단계로 이해하면 쉽다.</p>
+
+  <div class="flow-wrap">
+    <div class="flow-step" onclick="toggleFlow(this)">
+      <div class="flow-dot">1</div>
+      <div class="flow-content">
+        <h4>연산 능력 (GPU·CPU) <span class="badge badge-red">핫</span></h4>
+        <div class="flow-detail">AI 훈련·추론에는 GPU가 필수. 최근 추론(Inference) 단계로 전환되면서 GPU 1개당 필요한 CPU 코어 수가 8~12개 → <strong>80~120개(10배)</strong>로 폭증. AMD, 인텔 수혜.</div>
+      </div>
+    </div>
+    <div class="flow-step" onclick="toggleFlow(this)">
+      <div class="flow-dot">2</div>
+      <div class="flow-content">
+        <h4>메모리·스토리지 <span class="badge badge-red">핫</span></h4>
+        <div class="flow-detail">데이터센터가 자체 내재화(In-house) 부품을 쓰기 시작하며 마이크론, SNDK, SMCI 수요 급증. 마이크론은 245TB SSD(전력·열 효율 혁신) 신제품 발표.</div>
+      </div>
+    </div>
+    <div class="flow-step" onclick="toggleFlow(this)">
+      <div class="flow-dot">3</div>
+      <div class="flow-content">
+        <h4>물리적 에너지·인프라 <span class="badge badge-yellow">성장 중</span></h4>
+        <div class="flow-detail">골드만삭스 보고서: 미국 전역 연간 전기기사 <strong>8만 1천명 부족</strong>. 향후 데이터센터 허가 조건으로 '자체 발전소 병설' 가능성 대두. 변압기·전선·발전기 관련주 주목.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-container fade-in">
+    <canvas id="cpuChart" height="220"></canvas>
+  </div>
+</section>
+
+<!-- CPU 코어 시뮬레이터 -->
+<div class="simulator fade-in">
+  <h3>⚙️ GPU당 CPU 코어 수요 시뮬레이터</h3>
+  <p style="font-size:13px;color:var(--text2);margin-bottom:14px;">GPU 대수를 입력하면 필요한 CPU 코어 수를 계산합니다.</p>
+  <div class="sim-row">
+    <label>GPU 대수: <strong id="gpuCount">100</strong>대</label>
+    <input type="range" min="10" max="1000" step="10" value="100" id="gpuSlider" oninput="calcCPU()">
+  </div>
+  <div class="sim-grid">
+    <div class="sim-result">
+      <div class="r-label">🕰 과거 (8~12코어/GPU)</div>
+      <div class="r-value" id="oldCPU">1,000</div>
+      <div style="font-size:11px;color:var(--text2)">코어</div>
+    </div>
+    <div class="sim-result">
+      <div class="r-label">⚡ 현재 (80~120코어/GPU)</div>
+      <div class="r-value" id="newCPU">10,000</div>
+      <div style="font-size:11px;color:var(--text2)">코어 (10배↑)</div>
+    </div>
+  </div>
+  <button class="reset-btn" onclick="resetCPU()">↺ 초기화</button>
+</div>
+
+<!-- 밸류에이션 트랩 -->
+<section class="section fade-in">
+  <div class="section-label">Risk Analysis</div>
+  <div class="section-title">⚠️ 밸류에이션 트랩 경고</div>
+  <p style="font-size:14px;margin-bottom:14px;">아무리 좋은 실적이 나와도 PER(주가수익비율)이 지나치게 높으면 주가가 오히려 빠질 수 있다. 이를 <strong>밸류에이션 트랩</strong>이라 한다.</p>
+
+  <table>
+    <thead>
+      <tr><th>종목</th><th>상황</th><th>판단</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>팔란티어</strong></td>
+        <td>영웅적 실적에도 PER 85배 — 너무 많이 펌핑</td>
+        <td><span class="badge badge-red">트랩 위험</span></td>
+      </tr>
+      <tr>
+        <td><strong>쇼피파이</strong></td>
+        <td>실적 호조이나 성장률 지속 둔화</td>
+        <td><span class="badge badge-red">트랩 위험</span></td>
+      </tr>
+      <tr>
+        <td><strong>마이크론</strong></td>
+        <td>PER이 무서울 정도로 높아진 상태</td>
+        <td><span class="badge badge-yellow">주의</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="summary-box">
+    <p>💡 <strong>조언:</strong> "머리(최고점)에서 팔려 하지 말고, 내려오는 어깨에서 파는 것"이 맞다. 꺾임 신호가 보이면 과감하게 매도하라.</p>
+  </div>
+</section>
+
+<!-- 밸류에이션 인터랙티브 차트 -->
+<div class="simulator fade-in">
+  <h3>📊 PER 체감 계산기</h3>
+  <p style="font-size:13px;color:var(--text2);margin-bottom:14px;">PER과 연간 EPS를 입력하면 이론 주가를 계산합니다.</p>
+  <div class="sim-row">
+    <label>PER 배수: <strong id="perVal">85</strong>배</label>
+    <input type="range" min="10" max="200" step="5" value="85" id="perSlider" oninput="calcPER()">
+  </div>
+  <div class="sim-row">
+    <label>연간 EPS(주당순이익): <strong id="epsVal">$5</strong></label>
+    <input type="range" min="1" max="50" step="1" value="5" id="epsSlider" oninput="calcPER()">
+  </div>
+  <div class="sim-result">
+    <div class="r-label">이론 주가</div>
+    <div class="r-value" id="perResult">$425</div>
+    <div style="font-size:12px;color:var(--text2);margin-top:4px;" id="perComment">PER 85배는 향후 85년치 이익을 선반영하는 수준입니다.</div>
+  </div>
+  <button class="reset-btn" onclick="resetPER()">↺ 초기화</button>
+</div>
+
+<!-- 핀터레스트·ASCS -->
+<section class="section fade-in">
+  <div class="section-label">AI Disruption</div>
+  <div class="section-title">🎯 AI의 파괴적 확산</div>
+
+  <div class="topic-card">
+    <h3><div class="icon">P</div> 핀터레스트 — AI 광고 혁신</h3>
+    <p>AI를 통해 광고주가 직접 그래픽 이미지를 생성·최적화할 수 있는 시스템 구축. 그 결과 유저 인게이지먼트 <strong>+11%</strong>, 매출 YoY <strong>+18%</strong>, EBITDA마진 <strong>+20.5%</strong> 달성. 그래픽 디자이너·광고 대행사 수요 감소 직접 시사.</p>
+  </div>
+
+  <div class="topic-card">
+    <h3><div class="icon">A</div> ASCS — 아마존 서플라이 체인 서비스</h3>
+    <p>AWS가 클라우드 시장을 장악했듯, ASCS는 <strong>물류망·창고망</strong>을 잠식 중. 초대형 기업들을 이미 고객으로 확보. 중동 지정학 리스크로 공급망 불안이 고조될수록 ASCS의 가격 결정력 강화.</p>
+  </div>
+
+  <div class="topic-card">
+    <h3><div class="icon">⚡</div> AI 전력 위기</h3>
+    <p>골드만삭스: AI 데이터센터 폭증으로 전력 인프라가 병목. 연간 전기기사 <strong>8만 1천명 부족</strong>. 가까운 미래에 정부가 "발전소 병설 시 데이터센터 허가" 조건을 내걸 가능성 언급. → 원전·천연가스·솔라 발전, 터빈·변압기 관련주 수혜 예상.</p>
+  </div>
+</section>
+
+<!-- 소형주 & ETF -->
+<section class="section fade-in">
+  <div class="section-label">Small Cap</div>
+  <div class="section-title">📈 소형주(러셀 2000) 강세</div>
+
+  <p style="font-size:14px;margin-bottom:14px;">4월 한 달간 2020년 이후 최고 수익률 기록. AI 인프라 수요로 무명 부품·서비스 회사까지 살아남.</p>
+
+  <div class="summary-box">
+    <p><strong>ETF 접근법:</strong></p>
+    <p>• <strong>SMLF</strong> — 수익성 우선 소형주 ETF (우상향 추세)</p>
+    <p>• <strong>JSML</strong> — 실적 중심 소형주 ETF (점핑 후 우상향 패턴)</p>
+  </div>
+
+  <div class="chart-container fade-in">
+    <canvas id="smallcapChart" height="220"></canvas>
+  </div>
+</section>
+
+<!-- 투자 전략 -->
+<section class="section fade-in">
+  <div class="section-label">Strategy</div>
+  <div class="section-title">🧭 투자 전략 7가지</div>
+
+  <ul class="strategy-list">
+    <li>
+      <div class="s-num">1</div>
+      <div><strong>포트폴리오 코어: 딱따구리 유지</strong> — 시장 변동성에도 핵심 포지션은 흔들리지 않는다.</div>
+    </li>
+    <li>
+      <div class="s-num">2</div>
+      <div><strong>인텔 신규 진입 신중</strong> — 애플과 협력설은 카더라. 애플은 삼성·SK하이닉스도 동시에 검토 중.</div>
+    </li>
+    <li>
+      <div class="s-num">3</div>
+      <div><strong>AI 전력 테마 지속 발굴</strong> — 변압기·전선·발전기·전기기사 공급 회사 등 새 종목 발굴 이어가기.</div>
+    </li>
+    <li>
+      <div class="s-num">4</div>
+      <div><strong>고PER 소프트웨어 신규 진입 신중</strong> — 포워드 PER 40~90배 종목은 실적 발표 후 폭락 리스크.</div>
+    </li>
+    <li>
+      <div class="s-num">5</div>
+      <div><strong>지정학 헤지 자산 유지</strong> — 에너지 섹터 일부 배당 중심으로 편입. 전쟁 종료 후에도 에너지 불안 지속 예상.</div>
+    </li>
+    <li>
+      <div class="s-num">6</div>
+      <div><strong>금리 인하 2027년 상반기까지 없음 가정</strong> — 고금리 장기화 대비 포트폴리오 조정.</div>
+    </li>
+    <li>
+      <div class="s-num">7</div>
+      <div><strong>러셀 2000 소형주 ETF 분산 매입</strong> — 개별 소형주 선별이 어려우면 SMLF·JSML로 대응.</div>
+    </li>
+  </ul>
+</section>
+
+<!-- 불마켓/베어마켓 시나리오 -->
+<section class="section fade-in">
+  <div class="section-label">Scenario</div>
+  <div class="section-title">🎲 불마켓 vs 베어마켓 시나리오</div>
+
+  <table>
+    <thead>
+      <tr><th>시나리오</th><th>조건</th><th>영향</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-green">상승</span></td>
+        <td>지정학 리스크 완화</td>
+        <td>에너지 가격 하락, 시장 상승</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-green">상승</span></td>
+        <td>펀더멘탈 견고 (실적 호조)</td>
+        <td>주가 추가 상승</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-green">상승</span></td>
+        <td>수평적 AI 사이클 지속</td>
+        <td>하드웨어·인프라 전반 상승</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-red">위험</span></td>
+        <td>가이던스 패러독스 (밸류에이션 트랩)</td>
+        <td>고PER 종목 실적 후 급락</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-red">위험</span></td>
+        <td>정부가 데이터센터 허가 제한</td>
+        <td>빅테크 투자 계획 차질</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-yellow">주의</span></td>
+        <td>트럼프 2026년 중간선거 패배</td>
+        <td>정책 변동성 → 시나리오 재설정 필요</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="summary-box">
+    <p>💡 현재 시장은 "풀악셀" 상태. 낙관론이 지배하지만 언제든 복병이 나올 수 있다. <strong>풀악셀로 달리되, 발은 브레이크 위에 살짝 올려두어야 한다.</strong></p>
+  </div>
+</section>
+
+<!-- 주요 용어 -->
+<div class="divider"></div>
+<section class="section fade-in">
+  <div class="section-label">Glossary</div>
+  <div class="section-title">📖 주요 용어 설명</div>
+  <table>
+    <thead><tr><th>용어</th><th>설명</th></tr></thead>
+    <tbody>
+      <tr><td><strong>JOLTS</strong></td><td>미국 구인·이직 보고서. 노동시장 건강도 지표. 높을수록 고용시장 탄탄.</td></tr>
+      <tr><td><strong>PER (포워드)</strong></td><td>향후 예상 이익 대비 주가 배수. 85배면 85년치 이익을 선반영하는 수준.</td></tr>
+      <tr><td><strong>밸류에이션 트랩</strong></td><td>실적이 좋아도 주가가 이미 지나치게 오른 탓에 하락하는 현상.</td></tr>
+      <tr><td><strong>인퍼런스(추론)</strong></td><td>AI 모델이 학습 완료 후 실제 답을 생성하는 단계. 훈련보다 더 많은 연산 필요.</td></tr>
+      <tr><td><strong>ASCS</strong></td><td>Amazon Supply Chain Services. 아마존의 물류·창고 대행 서비스.</td></tr>
+      <tr><td><strong>RSI</strong></td><td>상대강도지수. 70 이상이면 과매수 구간으로 조정 가능성 시사.</td></tr>
+      <tr><td><strong>EWY</strong></td><td>한국 주식에 투자하는 미국 상장 ETF.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer class="fade-in">
+  <p>본 리포트는 httpCIA.chat 멤버미팅(2026-05-05) 자막 기반 분석입니다.</p>
+  <p style="margin-top:4px;">투자 판단의 최종 책임은 본인에게 있습니다. 정보 제공 목적이며 투자 권유가 아닙니다.</p>
+</footer>
+
+<script>
+// ─── FADE OBSERVER ───
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// ─── CHART CONFIGS ───
+const chartConfigs = {};
+
+chartConfigs['marketChart'] = () => {
+  new Chart(document.getElementById('marketChart'), {
+    type: 'bar',
+    data: {
+      labels: ['다우존스', 'S&P 500', '나스닥', '러셀 2000'],
+      datasets: [{
+        label: '등락률 (%)',
+        data: [0.73, 0.80, 1.03, 1.41],
+        backgroundColor: ['#6b7280','#2563eb','#e11d48','#f43f5e'],
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        title: { display: true, text: '2026-05-05 미국 주요 지수 등락률', color: '#1a1a1a', font: { size: 13 } }
+      },
+      scales: {
+        y: { beginAtZero: true, ticks: { callback: v => v + '%' }, grid: { color: '#e5e5e5' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+};
+
+chartConfigs['cpuChart'] = () => {
+  new Chart(document.getElementById('cpuChart'), {
+    type: 'bar',
+    data: {
+      labels: ['과거 (훈련)', '현재 (추론)'],
+      datasets: [{
+        label: 'GPU당 CPU 코어 수 (최소)',
+        data: [8, 80],
+        backgroundColor: ['#6b7280', '#e11d48'],
+        borderRadius: 4,
+      }, {
+        label: 'GPU당 CPU 코어 수 (최대)',
+        data: [12, 120],
+        backgroundColor: ['#9ca3af', '#f43f5e'],
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        title: { display: true, text: 'GPU당 CPU 코어 수 변화 (훈련 → 추론)', color: '#1a1a1a', font: { size: 13 } }
+      },
+      scales: {
+        y: { beginAtZero: true, grid: { color: '#e5e5e5' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+};
+
+chartConfigs['smallcapChart'] = () => {
+  new Chart(document.getElementById('smallcapChart'), {
+    type: 'line',
+    data: {
+      labels: ['2025.12','2026.01','2026.02','2026.03','2026.04','2026.05'],
+      datasets: [{
+        label: 'SMLF (개념)',
+        data: [100, 102, 105, 108, 115, 122],
+        borderColor: '#e11d48',
+        backgroundColor: 'rgba(225,29,72,0.08)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 4,
+      }, {
+        label: 'JSML (개념)',
+        data: [100, 101, 103, 107, 114, 120],
+        borderColor: '#2563eb',
+        backgroundColor: 'rgba(37,99,235,0.08)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        title: { display: true, text: '소형주 ETF 개념 추이 (인덱스 100 기준)', color: '#1a1a1a', font: { size: 13 } },
+        legend: { labels: { font: { size: 11 } } }
+      },
+      scales: {
+        y: { grid: { color: '#e5e5e5' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+};
+
+// ─── CHART OBSERVER ───
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+// ─── FLOW TOGGLE ───
+function toggleFlow(el) {
+  const wasActive = el.classList.contains('active');
+  document.querySelectorAll('.flow-step').forEach(s => s.classList.remove('active'));
+  if (!wasActive) el.classList.add('active');
+}
+
+// ─── CPU SIMULATOR ───
+function calcCPU() {
+  const v = parseInt(document.getElementById('gpuSlider').value);
+  document.getElementById('gpuCount').textContent = v;
+  document.getElementById('oldCPU').textContent = (v * 10).toLocaleString();
+  document.getElementById('newCPU').textContent = (v * 100).toLocaleString();
+}
+function resetCPU() {
+  document.getElementById('gpuSlider').value = 100;
+  calcCPU();
+}
+
+// ─── PER SIMULATOR ───
+function calcPER() {
+  const per = parseInt(document.getElementById('perSlider').value);
+  const eps = parseInt(document.getElementById('epsSlider').value);
+  document.getElementById('perVal').textContent = per;
+  document.getElementById('epsVal').textContent = '$' + eps;
+  document.getElementById('perResult').textContent = '$' + (per * eps).toLocaleString();
+  let comment = '';
+  if (per < 20) comment = '적정 PER 수준입니다. 안정적인 밸류에이션.';
+  else if (per < 40) comment = '성장주 수준의 PER. 실적 성장이 뒷받침되어야 합니다.';
+  else if (per < 80) comment = '고PER 구간. 높은 성장 기대가 반영된 상태입니다.';
+  else comment = 'PER ' + per + '배는 향후 ' + per + '년치 이익을 선반영하는 수준입니다. 밸류에이션 트랩 주의!';
+  document.getElementById('perComment').textContent = comment;
+}
+function resetPER() {
+  document.getElementById('perSlider').value = 85;
+  document.getElementById('epsSlider').value = 5;
+  calcPER();
+}
+</script>
+</body>
+</html>
