@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA Real Invest — UPS 폭락 & 아마존 ASCS 충격 분석</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --c1: #e11d48;
+    --c2: #1a1a1a;
+    --c3: #6b7280;
+    --c4: #2563eb;
+    --tbl-bg: #fafafa;
+    --tbl-header: #e11d48;
+    --tbl-border: #e5e5e5;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--text);
+    color: #fff;
+    padding: 52px 24px 44px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.12;
+  }
+  .hero-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 6vw, 38px);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 14px;
+  }
+  .hero h1 span { color: var(--accent2); }
+  .hero-sub {
+    font-size: 13px;
+    color: #aaa;
+    margin-bottom: 24px;
+  }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #ddd;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 680px; margin: 0 auto; padding: 0 20px; }
+
+  section { padding: 36px 0 0; }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .section-num {
+    width: 32px; height: 32px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 48px;
+    height: 3px;
+    background: var(--accent);
+    margin: 8px 0 20px;
+    border-radius: 2px;
+  }
+
+  /* ── BODY TEXT ── */
+  p { margin-bottom: 14px; color: var(--text); }
+  strong { font-weight: 700; color: var(--accent); }
+
+  /* ── QUOTE ── */
+  .pullquote {
+    border-left: 4px solid var(--accent);
+    padding: 14px 18px;
+    background: #fff5f7;
+    margin: 20px 0;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--text);
+    border-radius: 0 8px 8px 0;
+  }
+
+  /* ── TICKER GRID ── */
+  .ticker-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 20px 0;
+  }
+  .ticker-card {
+    background: var(--bg2);
+    border: 1px solid var(--tbl-border);
+    border-radius: 10px;
+    padding: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .ticker-card.up { border-left: 4px solid #16a34a; }
+  .ticker-card.down { border-left: 4px solid var(--accent); }
+  .ticker-name { font-size: 12px; color: var(--text2); font-weight: 500; margin-bottom: 4px; }
+  .ticker-val {
+    font-size: 22px;
+    font-weight: 700;
+    font-family: 'Playfair Display', serif;
+  }
+  .ticker-card.up .ticker-val { color: #16a34a; }
+  .ticker-card.down .ticker-val { color: var(--accent); }
+  .ticker-label { font-size: 11px; color: var(--text2); margin-top: 3px; }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; margin: 20px 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--tbl-bg);
+    font-size: 13px;
+  }
+  thead tr { background: var(--tbl-header); color: #fff; }
+  thead th { padding: 11px 12px; text-align: left; font-weight: 600; }
+  tbody tr { border-bottom: 1px solid var(--tbl-border); }
+  tbody tr:nth-child(even) { background: #f5f5f5; }
+  tbody td { padding: 10px 12px; }
+
+  /* ── CHART ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin: 20px 0;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas {
+    opacity: 1;
+  }
+  .chart-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text2);
+    text-align: center;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── CALLOUT BOXES ── */
+  .callout {
+    background: var(--bg2);
+    border: 1px solid var(--tbl-border);
+    border-radius: 12px;
+    padding: 18px;
+    margin: 18px 0;
+  }
+  .callout-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  /* ── COMPARE TABLE ── */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 18px 0;
+  }
+  .compare-col {
+    background: var(--bg2);
+    border-radius: 10px;
+    padding: 16px;
+    border: 1px solid var(--tbl-border);
+  }
+  .compare-col.highlight { border-color: var(--accent); background: #fff5f7; }
+  .compare-col-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--tbl-border);
+  }
+  .compare-col.highlight .compare-col-title { color: var(--accent); }
+  .compare-item {
+    font-size: 13px;
+    padding: 5px 0;
+    border-bottom: 1px dashed #eee;
+    color: var(--text);
+  }
+  .compare-item:last-child { border-bottom: none; }
+  .compare-item .ci-label { color: var(--text2); font-size: 11px; }
+
+  /* ── AI LAYER ── */
+  .layer-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 18px 0;
+  }
+  .layer-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 10px;
+    background: var(--bg2);
+    border: 1px solid var(--tbl-border);
+    transition: all 0.2s;
+  }
+  .layer-item.active { background: #fff5f7; border-color: var(--accent); }
+  .layer-badge {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+    background: #eee;
+    color: var(--text2);
+  }
+  .layer-item.active .layer-badge { background: var(--accent); color: #fff; }
+  .layer-text .lt { font-size: 12px; color: var(--text2); }
+  .layer-text .lb { font-size: 14px; font-weight: 700; }
+
+  /* ── PORTFOLIO 5 RULES ── */
+  .rules-list { list-style: none; margin: 18px 0; }
+  .rules-list li {
+    display: flex;
+    gap: 14px;
+    padding: 14px;
+    background: var(--bg2);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--tbl-border);
+    align-items: flex-start;
+  }
+  .rule-num {
+    width: 28px; height: 28px;
+    background: var(--text);
+    color: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .rule-text { font-size: 14px; }
+  .rule-text strong { color: var(--text); }
+
+  /* ── SIMULATOR ── */
+  .sim-box {
+    background: var(--bg2);
+    border: 1px solid var(--tbl-border);
+    border-radius: 14px;
+    padding: 20px;
+    margin: 20px 0;
+  }
+  .sim-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .sim-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .sim-label {
+    font-size: 12px;
+    color: var(--text2);
+    width: 110px;
+    flex-shrink: 0;
+  }
+  input[type=range] {
+    -webkit-appearance: none;
+    flex: 1;
+    min-width: 120px;
+    height: 6px;
+    border-radius: 3px;
+    background: #ddd;
+    outline: none;
+    cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+  }
+  .sim-val {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    width: 60px;
+    text-align: right;
+  }
+  .sim-result {
+    background: #fff;
+    border: 1px solid var(--tbl-border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-top: 14px;
+  }
+  .sim-result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px dashed #eee;
+    font-size: 13px;
+  }
+  .sim-result-row:last-child { border-bottom: none; }
+  .sim-result-row span:last-child { font-weight: 700; }
+  .sim-reset {
+    background: var(--text);
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-top: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .sim-reset:hover { background: var(--accent); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 40px 20px 30px;
+    color: var(--text2);
+    font-size: 12px;
+    border-top: 1px solid var(--tbl-border);
+    margin-top: 48px;
+  }
+  footer strong { color: var(--accent); }
+
+  /* ── KEYWORD PILL ── */
+  .pill {
+    display: inline-block;
+    background: #fff0f3;
+    color: var(--accent);
+    border: 1px solid #ffc2cc;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 9px;
+    margin: 2px;
+  }
+
+  @media (max-width: 440px) {
+    .ticker-grid { grid-template-columns: 1fr 1fr; }
+    .compare-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">NOVA Real Invest · 2026.05.05 시황 분석</div>
+  <h1>UPS <span>-10%</span> 대폭락!<br>아마존 '물류판 AWS'의<br>충격 정체</h1>
+  <p class="hero-sub">오늘 연쇄 충격 3탄 — 거시 위협 · 산업 붕괴 · AI 구원자</p>
+  <div class="hero-tags">
+    <span class="tag">UPS · FedEx 폭락</span>
+    <span class="tag">Amazon ASCS</span>
+    <span class="tag">중동 리스크</span>
+    <span class="tag">Palantir 실적</span>
+    <span class="tag">딱따구리 테마</span>
+    <span class="tag">30년물 5% 돌파</span>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+  <!-- ① 오늘의 시장 개황 -->
+  <section>
+    <div class="section-header fade-in">
+      <div class="section-num">1</div>
+      <div class="section-title">오늘의 시장 — 표면의 고요, 수면 아래의 폭풍</div>
+    </div>
+    <div class="divider"></div>
+
+    <p class="fade-in">S&P 500 <strong>-0.41%</strong>, 다우존스 · 나스닥 모두 마이너스로 마감. 지수만 보면 잔잔해 보이지만, 실제로는 극단적인 자본의 재배치가 일어났습니다.</p>
+
+    <div class="pullquote fade-in">"호수가 잔잔하네" — 그러나 수면 아래엔 무시무시한 빙하가 있다.</div>
+
+    <div class="chart-container fade-in">
+      <div class="chart-title">오늘의 주요 등락률 (%)</div>
+      <canvas id="marketChart" height="240"></canvas>
+    </div>
+
+    <div class="ticker-grid">
+      <div class="ticker-card up fade-in">
+        <div class="ticker-name">Circle (CRCL)</div>
+        <div class="ticker-val">+19.9%</div>
+        <div class="ticker-label">클라리티 법안 통과 기대</div>
+      </div>
+      <div class="ticker-card down fade-in">
+        <div class="ticker-name">UPS</div>
+        <div class="ticker-val">-10%</div>
+        <div class="ticker-label">Amazon ASCS 충격</div>
+      </div>
+      <div class="ticker-card up fade-in">
+        <div class="ticker-name">PINS (장후)</div>
+        <div class="ticker-val">+17%</div>
+        <div class="ticker-label">장후 실적 서프라이즈</div>
+      </div>
+      <div class="ticker-card down fade-in">
+        <div class="ticker-name">GME</div>
+        <div class="ticker-val">-10%</div>
+        <div class="ticker-label">개별 악재</div>
+      </div>
+      <div class="ticker-card up fade-in">
+        <div class="ticker-name">Micron (MU)</div>
+        <div class="ticker-val">+6.4%</div>
+        <div class="ticker-label">AI 딱따구리 강세</div>
+      </div>
+      <div class="ticker-card down fade-in">
+        <div class="ticker-name">FedEx</div>
+        <div class="ticker-val">-9.1%</div>
+        <div class="ticker-label">Amazon ASCS 충격</div>
+      </div>
+      <div class="ticker-card up fade-in">
+        <div class="ticker-name">브렌트유</div>
+        <div class="ticker-val">+5.4%</div>
+        <div class="ticker-label">중동 긴장 → $114</div>
+      </div>
+      <div class="ticker-card down fade-in">
+        <div class="ticker-name">Transportation</div>
+        <div class="ticker-val">-5%</div>
+        <div class="ticker-label">운송섹터 전반 급락</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ② 거시 위협 -->
+  <section>
+    <div class="section-header fade-in">
+      <div class="section-num">2</div>
+      <div class="section-title">거시 위협 — 호르무즈 & 채권 경고</div>
+    </div>
+    <div class="divider"></div>
+
+    <div class="callout fade-in">
+      <div class="callout-title">🌏 중동 리스크 도미노</div>
+      <p>① UAE, 이란으로부터 미사일 요격 → ② 트럼프 대통령, 이란 쾌속정 7대 타격 발표 → ③ 한국 상선(HMM) 피격 뉴스 → ④ 트럼프, <em>프로젝트 프리덤</em> 선언 (미 해군 직접 호위) → ⑤ 브렌트유 <strong>$114</strong>까지 급등</p>
+    </div>
+
+    <p class="fade-in"><strong>프로젝트 프리덤</strong> 선언은 사실상 이란과의 핵 협상 휴전이 붕괴됐음을 의미합니다. 중동 리스크는 아직 해소되지 않은 상태입니다.</p>
+
+    <div class="callout fade-in">
+      <div class="callout-title">📈 채권 시장 경고</div>
+      <p>· 10년물 국채 수익률: <strong>4.446%</strong><br>
+      · 30년물 국채 수익률: <strong>5.03%</strong> (경고선 5% 돌파)<br>
+      · 5년 인플레이션 기대치(미시간대): 위험 수준으로 상승<br><br>
+      노바가 지난주 "30년물 5% 넘으면 주식시장 위험"이라고 경고했고, 오늘 실제로 발생했습니다.</p>
+    </div>
+
+    <div class="chart-container fade-in">
+      <div class="chart-title">국채 수익률 추이 (10년물 · 30년물)</div>
+      <canvas id="bondChart" height="220"></canvas>
+    </div>
+
+    <p class="fade-in">5년 인플레이션 기대치는 실제 수치가 아닌 <strong>심리적 지표</strong>입니다. 이 수치가 먼저 오르면 주식시장은 반대로 하락하는 선행 패턴이 있습니다. 현재 위험 수준으로 판단됩니다.</p>
+  </section>
+
+  <!-- ③ 산업 붕괴: Amazon ASCS -->
+  <section>
+    <div class="section-header fade-in">
+      <div class="section-num">3</div>
+      <div class="section-title">산업 붕괴 — 아마존 ASCS, '물류판 AWS'</div>
+    </div>
+    <div class="divider"></div>
+
+    <p class="fade-in"><strong>아마존 서플라이 체인 서비스(ASCS)</strong>는 아마존이 자체 물류망을 외부 기업에도 개방하는 서비스입니다. AWS(클라우드 인프라 임대)와 동일한 개념을 물류에 적용한 것입니다.</p>
+
+    <div class="callout fade-in">
+      <div class="callout-title">🏭 아마존 물류 인프라 규모</div>
+      <p>· 화물기 <strong>100대 이상</strong><br>
+      · 트레일러 <strong>8만 대 이상</strong><br>
+      · 풀필먼트 센터(자동화 창고) <strong>200개 이상</strong></p>
+    </div>
+
+    <p class="fade-in">아마존은 이미 <strong>3M, P&G, 아메리칸 이글</strong>을 초기 고객으로 확보했습니다. 생필품(P&G), 산업재(3M), 의류(아메리칸 이글) — 물류 수요가 가장 큰 3대 카테고리를 선점한 것입니다.</p>
+
+    <div class="compare-grid">
+      <div class="compare-col fade-in">
+        <div class="compare-col-title">전통 물류 (UPS·FedEx)</div>
+        <div class="compare-item">
+          <div class="ci-label">비즈니스 속성</div>
+          단순 운송·배송 서비스
+        </div>
+        <div class="compare-item">
+          <div class="ci-label">원가 구조</div>
+          인건비·연료비 직격탄
+        </div>
+        <div class="compare-item">
+          <div class="ci-label">재고 배치</div>
+          경험 기반, 비효율 가능
+        </div>
+        <div class="compare-item">
+          <div class="ci-label">경쟁 우위</div>
+          글로벌 특수화물 전문성
+        </div>
+      </div>
+      <div class="compare-col highlight fade-in">
+        <div class="compare-col-title">아마존 ASCS</div>
+        <div class="compare-item">
+          <div class="ci-label">비즈니스 속성</div>
+          데이터 기반 인프라 임대
+        </div>
+        <div class="compare-item">
+          <div class="ci-label">원가 구조</div>
+          자동화로 인건비 최소화
+        </div>
+        <div class="compare-item">
+          <div class="ci-label">재고 배치</div>
+          수요 예측 AI로 최적 배치
+        </div>
+        <div class="compare-item">
+          <div class="ci-label">경쟁 우위</div>
+          압도적 네트워크 밀도·데이터
+        </div>
+      </div>
+    </div>
+
+    <div class="pullquote fade-in">"아마존이 UPS·FedEx 하는 거 보니까 — 이거 별거 없는데? 우리가 가진 데이터가 더 짱이잖아."</div>
+
+    <p class="fade-in">UPS · FedEx는 앞으로 고객을 계속 잃을 수 있습니다. 아마존이 추가 계약 소식을 발표할 때마다 주가는 계단식으로 하락할 가능성이 높습니다.</p>
+  </section>
+
+  <!-- ④ AI 구원자 -->
+  <section>
+    <div class="section-header fade-in">
+      <div class="section-num">4</div>
+      <div class="section-title">AI 구원자 — 팔란티어 & 마이크론</div>
+    </div>
+    <div class="divider"></div>
+
+    <div class="callout fade-in">
+      <div class="callout-title">📊 팔란티어 (PLTR) 실적 하이라이트</div>
+      <p>· 상업 매출 <strong>+133% 증가</strong><br>
+      · Rule of 40 달성률: <strong>145%</strong> (혁신기업 기준 40% 이상이면 합격)<br>
+      · 장후 <strong>-2.6%</strong>: 가이던스가 시장 기대에 약간 미달<br>
+      · 결론: 실적 자체는 우수하나, 주가가 이미 크게 올라 있어 차익실현 압력 발생</p>
+    </div>
+
+    <div class="callout fade-in">
+      <div class="callout-title">🦅 마이크론 (MU) — '딱따구리' 테마</div>
+      <p>2025년 12월 31일 방송에서 2026년 유망주로 콕 짚어낸 종목. AI 인프라 투자 사이클의 핵심 수혜주로, 오늘 <strong>+6.4%</strong> 상승했습니다.</p>
+    </div>
+
+    <!-- AI 레이어 다이어그램 -->
+    <p class="fade-in">AI 투자 사이클은 3개 레이어로 진행됩니다. 현재는 레이어 2에서 레이어 3으로 전환 중입니다.</p>
+    <div class="layer-flow">
+      <div class="layer-item fade-in">
+        <div class="layer-badge">L1</div>
+        <div class="layer-text">
+          <div class="lt">완료 단계</div>
+          <div class="lb">GPU 인프라 — 엔비디아 등 GPU 수혜주</div>
+        </div>
+      </div>
+      <div class="layer-item active fade-in">
+        <div class="layer-badge">L2</div>
+        <div class="layer-text">
+          <div class="lt">현재 단계 (집중)</div>
+          <div class="lb">딱따구리 — 데이터센터·반도체 팹·발전소 건설 인프라</div>
+        </div>
+      </div>
+      <div class="layer-item fade-in">
+        <div class="layer-badge">L3</div>
+        <div class="layer-text">
+          <div class="lt">다음 단계 (주목)</div>
+          <div class="lb">온톨로지 SaaS — 기업 데이터 기반 AI 수익화 소프트웨어</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout fade-in">
+      <div class="callout-title">🏗️ 스털링 인프라 (STRL) — 장후 +20%</div>
+      <p>토목·특수건축 회사로, AI 투자 슈퍼사이클에서 데이터센터·반도체 팹·물류센터·발전소를 건설하는 '딱따구리' 대표주. 오늘 장후 20% 이상 폭등했습니다.</p>
+    </div>
+  </section>
+
+  <!-- ⑤ 자금 흐름 & 딱따구리 -->
+  <section>
+    <div class="section-header fade-in">
+      <div class="section-num">5</div>
+      <div class="section-title">자금 흐름 — '딱따구리'와 크립토</div>
+    </div>
+    <div class="divider"></div>
+
+    <p class="fade-in"><strong>딱따구리</strong>란 나무(AI)에 구멍을 뚫어 먹이를 취하는 새처럼, AI 인프라 구축에 필수적인 건설·소재·장비 기업들을 의미합니다.</p>
+
+    <div class="table-wrap fade-in">
+      <table>
+        <thead>
+          <tr>
+            <th>섹터</th>
+            <th>오늘 흐름</th>
+            <th>이유</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>크립토 (Circle 등)</td><td>🟢 강세 +20%</td><td>클라리티 법안 통과 기대</td></tr>
+          <tr><td>AI 딱따구리 (건설·소재)</td><td>🟢 강세</td><td>데이터센터 수요 폭증</td></tr>
+          <tr><td>AI 반도체 (MU 등)</td><td>🟢 강세</td><td>AI 인프라 사이클 수혜</td></tr>
+          <tr><td>전통 물류 (UPS·FedEx)</td><td>🔴 약세 -10%</td><td>Amazon ASCS 구조적 위협</td></tr>
+          <tr><td>크루즈·소비재</td><td>🔴 약세</td><td>유가 급등·경기침체 우려</td></tr>
+          <tr><td>운송 전반</td><td>🔴 약세 -5%</td><td>경기선행 지표 악화</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ⑥ 포트폴리오 5대 행동강령 -->
+  <section>
+    <div class="section-header fade-in">
+      <div class="section-num">6</div>
+      <div class="section-title">포트폴리오 5대 행동강령</div>
+    </div>
+    <div class="divider"></div>
+
+    <ul class="rules-list">
+      <li class="fade-in">
+        <div class="rule-num">1</div>
+        <div class="rule-text"><strong>현금 비중 20~30% 유지</strong><br>중동 리스크 미해소, 30년물 5% 돌파 등 거시 불확실성이 크다. 충분한 현금을 보유해야 기회가 왔을 때 매집할 수 있다.</div>
+      </li>
+      <li class="fade-in">
+        <div class="rule-num">2</div>
+        <div class="rule-text"><strong>AI 승자만 선별 매집</strong><br>엔비디아·팔란티어·마이크론 등 AI 생태계 핵심주는 공포 국면의 할인 시 분할 매수. 지금 FOMO(포모)로 추격하면 안 된다.</div>
+      </li>
+      <li class="fade-in">
+        <div class="rule-num">3</div>
+        <div class="rule-text"><strong>전통 물류·경기민감주 관망</strong><br>UPS·FedEx는 오늘 많이 내렸더라도 추가 진입 금지. 아마존의 고객 확보 발표가 계속될 가능성이 높아 추가 하락 리스크 有.</div>
+      </li>
+      <li class="fade-in">
+        <div class="rule-num">4</div>
+        <div class="rule-text"><strong>에너지 5~10% 전술적 헤지</strong><br>지정학적 리스크 방어용 소량 보유. 유가가 안정되면 매도해 헤지 포지션 해제.</div>
+      </li>
+      <li class="fade-in">
+        <div class="rule-num">5</div>
+        <div class="rule-text"><strong>AMD 실적 확인 후 결정</strong><br>내일(5/6) 장마감 후 AMD 실적 발표. 오늘 다운그레이드 폭탄으로 약세. 가이던스와 시장 반응 모두 확인 후 진입 여부 결정.</div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ⑦ 포트폴리오 시뮬레이터 -->
+  <section>
+    <div class="section-header fade-in">
+      <div class="section-num">7</div>
+      <div class="section-title">포트폴리오 비중 시뮬레이터</div>
+    </div>
+    <div class="divider"></div>
+
+    <p class="fade-in">노바의 5대 행동강령을 바탕으로 내 포트폴리오 비중을 조정해 보세요.</p>
+
+    <div class="sim-box fade-in">
+      <div class="sim-title">🎛️ 비중 조절 (총합 100%에 맞게 자동 계산)</div>
+
+      <div class="sim-row">
+        <div class="sim-label">현금</div>
+        <input type="range" id="slCash" min="0" max="50" value="25" step="5" oninput="updateSim()">
+        <div class="sim-val" id="vCash">25%</div>
+      </div>
+      <div class="sim-row">
+        <div class="sim-label">AI 딱따구리</div>
+        <input type="range" id="slAi" min="0" max="60" value="40" step="5" oninput="updateSim()">
+        <div class="sim-val" id="vAi">40%</div>
+      </div>
+      <div class="sim-row">
+        <div class="sim-label">에너지(헤지)</div>
+        <input type="range" id="slEnergy" min="0" max="20" value="10" step="5" oninput="updateSim()">
+        <div class="sim-val" id="vEnergy">10%</div>
+      </div>
+      <div class="sim-row">
+        <div class="sim-label">기타</div>
+        <input type="range" id="slOther" min="0" max="40" value="25" step="5" oninput="updateSim()">
+        <div class="sim-val" id="vOther">25%</div>
+      </div>
+
+      <div class="sim-result">
+        <div class="sim-result-row"><span>총 비중</span><span id="rTotal" style="color:#1a1a1a">100%</span></div>
+        <div class="sim-result-row"><span>현금 수준</span><span id="rCashLevel">적정 (20~30%)</span></div>
+        <div class="sim-result-row"><span>에너지 헤지</span><span id="rEnergyLevel">적정 (5~10%)</span></div>
+        <div class="sim-result-row"><span>노바 기준 평가</span><span id="rOverall">✅ 양호</span></div>
+      </div>
+      <button class="sim-reset" onclick="resetSim()">↺ 초기화</button>
+    </div>
+  </section>
+
+  <!-- ⑧ 다음 주요 이벤트 -->
+  <section>
+    <div class="section-header fade-in">
+      <div class="section-num">8</div>
+      <div class="section-title">이번 주 주요 이벤트 일정</div>
+    </div>
+    <div class="divider"></div>
+
+    <div class="table-wrap fade-in">
+      <table>
+        <thead>
+          <tr><th>날짜</th><th>이벤트</th><th>중요도</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>5/6 (화)</td><td>ISM 서비스 PMI 발표</td><td>⭐⭐</td></tr>
+          <tr><td>5/6 (화)</td><td>AMD 실적 발표 (장마감 후)</td><td>⭐⭐⭐</td></tr>
+          <tr><td>5/7 (수)</td><td>ADP 민간고용보고서</td><td>⭐⭐</td></tr>
+          <tr><td>5/9 (금)</td><td>비농업 고용보고서 (NFP)</td><td>⭐⭐⭐</td></tr>
+          <tr><td>5/9 (금)</td><td>CIA 불금 파티 (다크풀 활용법)</td><td>🎉 CIA only</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="fade-in">이번 주는 <strong>살얼음판</strong>입니다. 중동 변수 + 채권 금리 + 고용지표가 복합적으로 시장에 영향을 줄 수 있습니다.</p>
+  </section>
+
+  <!-- ⑨ 핵심 결론 -->
+  <section>
+    <div class="section-header fade-in">
+      <div class="section-num">9</div>
+      <div class="section-title">핵심 결론 — 해류를 따르라</div>
+    </div>
+    <div class="divider"></div>
+
+    <div class="pullquote fade-in">"표면의 파도는 계속 흔들려도, 심해의 해류는 이미 방향을 잡고 있다. 그 해류의 이름은 AI 인프라."</div>
+
+    <p class="fade-in">오늘 시장의 3가지 충격(거시 위협·산업 붕괴·AI 구원자)은 모두 하나의 방향을 가리킵니다. <strong>AI가 기존 산업을 해체하고 새로운 생태계를 만드는 구조적 변화</strong>입니다.</p>
+
+    <div class="callout fade-in">
+      <div class="callout-title">✅ 오늘 방송 핵심 키워드</div>
+      <span class="pill">Amazon ASCS</span>
+      <span class="pill">물류판 AWS</span>
+      <span class="pill">딱따구리</span>
+      <span class="pill">구름에서 땅으로</span>
+      <span class="pill">30년물 5%</span>
+      <span class="pill">5년 인플레 기대</span>
+      <span class="pill">Rule of 40</span>
+      <span class="pill">클라리티 법안</span>
+      <span class="pill">붉은 파티</span>
+      <span class="pill">선별장세</span>
+    </div>
+  </section>
+
+</div><!-- /container -->
+
+<footer>
+  <strong>NOVA Real Invest</strong> · 2026.05.05 방송 기반 분석 리포트<br>
+  본 자료는 교육 목적이며 투자 권유가 아닙니다.
+</footer>
+
+<script>
+/* ── CHART CONFIGS ── */
+const chartConfigs = {};
+
+chartConfigs['marketChart'] = () => {
+  new Chart(document.getElementById('marketChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Circle', 'PINS(장후)', 'MU', '브렌트유', 'STRL(장후)', 'S&P500', 'Transport', 'FedEx', 'GME', 'UPS'],
+      datasets: [{
+        label: '등락률 (%)',
+        data: [19.9, 17, 6.4, 5.4, 20, -0.41, -5, -9.1, -10, -10],
+        backgroundColor: [
+          '#16a34a','#16a34a','#16a34a','#16a34a','#16a34a',
+          '#6b7280',
+          '#e11d48','#e11d48','#e11d48','#e11d48'
+        ],
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` ${ctx.raw > 0 ? '+' : ''}${ctx.raw}%`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: '#f0f0f0' },
+          ticks: { callback: v => v + '%' }
+        },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+};
+
+chartConfigs['bondChart'] = () => {
+  new Chart(document.getElementById('bondChart'), {
+    type: 'line',
+    data: {
+      labels: ['4/28','4/29','4/30','5/1','5/2','5/5(오늘)'],
+      datasets: [
+        {
+          label: '10년물 (%)',
+          data: [4.18, 4.22, 4.30, 4.35, 4.38, 4.446],
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37,99,235,0.05)',
+          tension: 0.4, fill: true, pointRadius: 4,
+        },
+        {
+          label: '30년물 (%)',
+          data: [4.72, 4.80, 4.88, 4.93, 4.97, 5.03],
+          borderColor: '#e11d48',
+          backgroundColor: 'rgba(225,29,72,0.05)',
+          tension: 0.4, fill: true, pointRadius: 4,
+          borderDash: [0,0],
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' },
+        annotation: {}
+      },
+      scales: {
+        y: {
+          min: 4.0, max: 5.2,
+          ticks: { callback: v => v + '%' },
+          grid: { color: '#f0f0f0' }
+        }
+      }
+    }
+  });
+};
+
+/* ── INTERSECTION OBSERVERS ── */
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+/* ── SIMULATOR ── */
+function updateSim() {
+  const cash = +document.getElementById('slCash').value;
+  const ai = +document.getElementById('slAi').value;
+  const energy = +document.getElementById('slEnergy').value;
+  const other = +document.getElementById('slOther').value;
+  const total = cash + ai + energy + other;
+
+  document.getElementById('vCash').textContent = cash + '%';
+  document.getElementById('vAi').textContent = ai + '%';
+  document.getElementById('vEnergy').textContent = energy + '%';
+  document.getElementById('vOther').textContent = other + '%';
+
+  const rTotal = document.getElementById('rTotal');
+  rTotal.textContent = total + '%';
+  rTotal.style.color = total === 100 ? '#16a34a' : '#e11d48';
+
+  const rCash = document.getElementById('rCashLevel');
+  if (cash < 20) rCash.textContent = '⚠️ 부족 (20~30% 권장)';
+  else if (cash > 30) rCash.textContent = '⚠️ 과다 (20~30% 권장)';
+  else rCash.textContent = '✅ 적정 (20~30%)';
+
+  const rEnergy = document.getElementById('rEnergyLevel');
+  if (energy < 5) rEnergy.textContent = '⚠️ 부족 (5~10% 권장)';
+  else if (energy > 10) rEnergy.textContent = '⚠️ 과다 (5~10% 권장)';
+  else rEnergy.textContent = '✅ 적정 (5~10%)';
+
+  const rOverall = document.getElementById('rOverall');
+  const ok = total === 100 && cash >= 20 && cash <= 30 && energy >= 5 && energy <= 10;
+  rOverall.textContent = ok ? '✅ 양호' : (total !== 100 ? '❌ 비중 합이 100% 아님' : '⚠️ 조정 필요');
+}
+
+function resetSim() {
+  document.getElementById('slCash').value = 25;
+  document.getElementById('slAi').value = 40;
+  document.getElementById('slEnergy').value = 10;
+  document.getElementById('slOther').value = 25;
+  updateSim();
+}
+
+updateSim();
+</script>
+</body>
+</html>
