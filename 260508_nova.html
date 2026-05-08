@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>httpCIA 멤버미팅 분석 리포트 | 2026.05.07</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --chart1: #e11d48;
+    --chart2: #1a1a1a;
+    --chart3: #6b7280;
+    --chart4: #2563eb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 18px 60px;
+  }
+
+  /* ── Header ── */
+  .site-header {
+    border-bottom: 3px solid var(--accent);
+    padding: 28px 0 14px;
+    margin-bottom: 32px;
+  }
+  .site-header .kicker {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .site-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 7vw, 38px);
+    font-weight: 900;
+    line-height: 1.15;
+    color: var(--text);
+  }
+  .site-header .meta {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text2);
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .site-header .meta span { display: flex; align-items: center; gap: 4px; }
+
+  /* ── Section Titles ── */
+  .section-label {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    margin-bottom: 10px;
+  }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 5vw, 26px);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 14px;
+    border-left: 4px solid var(--accent);
+    padding-left: 14px;
+  }
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 22px 0 8px;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 18px;
+    margin: 18px 0;
+  }
+  .card.highlight {
+    border-left: 4px solid var(--accent);
+    background: #fff5f7;
+  }
+  p { margin-bottom: 12px; color: var(--text); }
+  .text2 { color: var(--text2); font-size: 13px; }
+
+  /* ── Key Metrics Row ── */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .metric-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 14px;
+    text-align: center;
+  }
+  .metric-card .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .metric-card .label {
+    font-size: 11px;
+    color: var(--text2);
+    font-weight: 500;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+  .divider.thick {
+    border-top: 3px solid var(--text);
+    margin: 40px 0 28px;
+  }
+
+  /* ── Blockquote ── */
+  blockquote {
+    border-left: 4px solid var(--accent2);
+    padding: 12px 16px;
+    margin: 18px 0;
+    background: #fff5f7;
+    font-style: italic;
+    color: #444;
+    border-radius: 0 6px 6px 0;
+    font-size: 14px;
+  }
+
+  /* ── Tag / Badge ── */
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin: 0 3px 4px 0;
+  }
+  .badge.red { background: #fde8ec; color: var(--accent); }
+  .badge.dark { background: #1a1a1a; color: #fff; }
+  .badge.gray { background: #f3f4f6; color: #374151; }
+  .badge.blue { background: #dbeafe; color: #1d4ed8; }
+
+  /* ── Table ── */
+  .table-wrap { overflow-x: auto; margin: 18px 0; border-radius: 8px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; background: var(--bg2); }
+  thead th {
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 10px 12px;
+    text-align: left;
+  }
+  tbody td { padding: 10px 12px; font-size: 13px; border-bottom: 1px solid var(--border); }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:nth-child(even) { background: #f9f9f9; }
+
+  /* ── Chart ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 18px 0;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas { opacity: 1; }
+  .chart-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text2);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  /* ── Scenario Simulator ── */
+  .simulator {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 18px;
+    margin: 20px 0;
+  }
+  .simulator h3 { margin-top: 0; font-size: 16px; }
+  .sim-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 14px 0;
+    flex-wrap: wrap;
+  }
+  .sim-row label { font-size: 13px; font-weight: 700; min-width: 120px; }
+  .sim-row input[type=range] {
+    flex: 1;
+    min-width: 120px;
+    accent-color: var(--accent);
+  }
+  .sim-row .val {
+    min-width: 70px;
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 14px;
+    text-align: right;
+  }
+  .sim-result {
+    margin-top: 16px;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    transition: all 0.3s;
+  }
+  .sim-result.gold { background: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+  .sim-result.green { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+  .sim-result.red { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+  .sim-result.neutral { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
+  .reset-btn {
+    margin-top: 12px;
+    background: none;
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    padding: 6px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+    transition: all 0.2s;
+    display: block;
+  }
+  .reset-btn:hover { background: var(--accent); color: #fff; }
+
+  /* ── Sector Rotation ── */
+  .sector-bar-wrap { margin: 16px 0; }
+  .sector-bar-item { margin: 8px 0; }
+  .sector-bar-label { font-size: 12px; font-weight: 700; margin-bottom: 3px; display: flex; justify-content: space-between; }
+  .sector-bar-track { background: #e5e5e5; border-radius: 4px; height: 10px; overflow: hidden; }
+  .sector-bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
+
+  /* ── Timeline ── */
+  .timeline { margin: 18px 0; }
+  .tl-item {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 18px;
+    padding-bottom: 18px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .tl-item:last-child { border-bottom: none; }
+  .tl-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .tl-body .tl-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .tl-body p { font-size: 13px; color: var(--text2); margin-bottom: 0; }
+
+  /* ── Footer ── */
+  .footer {
+    border-top: 3px solid var(--text);
+    padding-top: 18px;
+    margin-top: 50px;
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  @media (max-width: 400px) {
+    .metrics-grid { grid-template-columns: 1fr 1fr; }
+    .sim-row label { min-width: 90px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header class="site-header">
+  <div class="kicker">httpCIA · 멤버미팅 분석 리포트</div>
+  <h1>현장의 안개와<br>소프트웨어의 빛</h1>
+  <div class="meta">
+    <span>📅 2026년 5월 7일 (목)</span>
+    <span>🔗 YouTube 멤버미팅</span>
+    <span>✍️ httpCIA 노바</span>
+  </div>
+</header>
+
+<!-- ══ KEY METRICS ══ -->
+<div class="section-label fade-in">핵심 수치</div>
+<div class="metrics-grid">
+  <div class="metric-card fade-in">
+    <div class="num">$89</div>
+    <div class="label">유가 저점 (WTI·오전)</div>
+  </div>
+  <div class="metric-card fade-in">
+    <div class="num">+10$↑</div>
+    <div class="label">교전 후 유가 급등폭</div>
+  </div>
+  <div class="metric-card fade-in">
+    <div class="num">55K~65K</div>
+    <div class="label">비농업고용 컨센서스</div>
+  </div>
+  <div class="metric-card fade-in">
+    <div class="num">42</div>
+    <div class="label">S&P 상승 실질 종목 수</div>
+  </div>
+  <div class="metric-card fade-in">
+    <div class="num">+30.8%</div>
+    <div class="label">HAWK IPO 첫날 상승률</div>
+  </div>
+  <div class="metric-card fade-in">
+    <div class="num">-32%</div>
+    <div class="label">Planet Fitness 주가 낙폭</div>
+  </div>
+</div>
+
+<hr class="divider thick">
+
+<!-- ══ 1. 거시경제 / 지정학 ══ -->
+<div class="section-label fade-in">거시경제 & 지정학</div>
+<h2 class="fade-in">미·이란 교전과 유가 충격</h2>
+
+<p class="fade-in">
+  이날 오전 유가는 배럴당 <strong>$89</strong>까지 하락하며 분위기가 양호했으나, 
+  미국 구축함이 호르무즈 해협을 통과하던 중 이란 미사일·드론과 교전이 발생하면서 
+  단숨에 <strong>약 10달러 반등</strong>했습니다. 미군 측은 "피해 없음"을 주장하고, 
+  이란 측은 "미군이 먼저 자국 항구를 타격했다"고 반박하며 양측 주장이 엇갈렸습니다.
+  아랍에미리트도 미사일 피격을 받았다는 소식이 전해지면서 
+  <strong>확전 리스크</strong>가 빠르게 부각되었습니다.
+</p>
+
+<div class="card highlight fade-in">
+  <strong>💡 지정학 구도 요약</strong><br><br>
+  트럼프 대통령은 SNS에 "빨리 협상·서명하지 않으면 끝"이라는 취지의 게시물을 
+  연일 올리고 있습니다. 노바는 이를 두고 <em>"포스팅을 자꾸 올리는 쪽이 쫄리는 쪽"</em>이라고 
+  분석했습니다. 이란은 경제적으로 이미 최악이라 "더 잃을 것이 없는" 상태이고, 
+  종교·민족·역사적 자존심이 결합돼 협상 동력이 약합니다. 
+  반면 트럼프는 11월 중간선거·중국과의 협상 카드가 남아 있어 
+  빠른 종전 필요성이 더 큰 구조입니다.
+</div>
+
+<!-- Chart 1 : 유가 변동 시나리오 -->
+<div class="chart-title fade-in">유가 수준별 시장 영향 개요</div>
+<div class="chart-container fade-in">
+  <canvas id="oilChart" height="240"></canvas>
+</div>
+
+<!-- ══ 2. 관세 / 트럼프 레임덕 ══ -->
+<hr class="divider">
+<div class="section-label fade-in">정책 리스크</div>
+<h2 class="fade-in">트럼프 관세 무효 판결과 레임덕</h2>
+
+<p class="fade-in">
+  위헌 판결을 받은 트럼프 대통령은 <strong>§122(또는 유사 긴급 조항)</strong>을 발동해 
+  "6개월간 10~15% 관세 부과"를 강행했으나, 
+  이번엔 <strong>연방 무역법원이 재차 불법 판결</strong>을 내렸습니다.
+  노바는 이를 두고 "레임덕이 이미 시작된 것 같다"고 평가했습니다.
+</p>
+
+<div class="timeline fade-in">
+  <div class="tl-item">
+    <div class="tl-dot">1</div>
+    <div class="tl-body">
+      <div class="tl-title">트럼프 관세 1차 위헌 판결</div>
+      <p>법원이 관세 정책에 위헌 결정 → 트럼프 대통령 긴급조항 발동으로 우회 시도</p>
+    </div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-dot">2</div>
+    <div class="tl-body">
+      <div class="tl-title">연방 무역법원 2차 무효 판결</div>
+      <p>긴급조항 활용 관세도 불법 판결 → 행정부 권한 연속 제동</p>
+    </div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-dot">3</div>
+    <div class="tl-body">
+      <div class="tl-title">수입 의존 소매·전자 섹터 완화 기대</div>
+      <p>관세 판결 무효로 공급망 일부 완화 기대 → 수입 비중 높은 섹터에 호재</p>
+    </div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-dot">4</div>
+    <div class="tl-body">
+      <div class="tl-title">향후 시나리오: 탄핵 가능성?</div>
+      <p>11월 선거 패배 + 레임덕 심화 시 탄핵 논의 가능 → 민주당 집권 대비 필요</p>
+    </div>
+  </div>
+</div>
+
+<blockquote class="fade-in">
+  "민주당 정권이 들어왔을 때 어떤 흐름이 펼쳐질지는 바이든 시대를 생각하면 됩니다. 
+  그때 길을 못 폈던 종목, 예를 들면 테슬라 같은 것들을 조심해야 한다는 얘기입니다." — 노바
+</blockquote>
+
+<hr class="divider">
+
+<!-- ══ 3. 섹터 시프트 ══ -->
+<div class="section-label fade-in">섹터 분석</div>
+<h2 class="fade-in">하드웨어 → 소프트웨어 섹터 시프트</h2>
+
+<p class="fade-in">
+  노바는 이번 움직임을 <strong>"섹터 로테이션"이 아닌 "섹터 시프트"</strong>로 규정했습니다. 
+  반도체·하드웨어가 끝난 것이 아니라 밸류에이션 부담으로 차익실현이 발생하고, 
+  그 자금이 상대적으로 덜 오른 소프트웨어 종목으로 이동하는 구조입니다.
+</p>
+
+<!-- 섹터 흐름 바 차트 -->
+<div class="sector-bar-wrap card fade-in">
+  <p style="font-size:12px;font-weight:700;margin-bottom:12px;color:var(--text2)">자본 흐름 온도 (개념적 수급 강도)</p>
+  <div class="sector-bar-item">
+    <div class="sector-bar-label"><span>소프트웨어 (DDOG·MDB·FTNT)</span><span style="color:var(--accent)">▲ 유입</span></div>
+    <div class="sector-bar-track"><div class="sector-bar-fill" style="width:85%;background:var(--chart1)"></div></div>
+  </div>
+  <div class="sector-bar-item">
+    <div class="sector-bar-label"><span>우주·항공 (RKLB·HAWK)</span><span style="color:var(--chart4)">▲ 유입</span></div>
+    <div class="sector-bar-track"><div class="sector-bar-fill" style="width:72%;background:var(--chart4)"></div></div>
+  </div>
+  <div class="sector-bar-item">
+    <div class="sector-bar-label"><span>에너지 (유가 급등 수혜)</span><span style="color:#d97706">▲ 소폭</span></div>
+    <div class="sector-bar-track"><div class="sector-bar-fill" style="width:50%;background:#d97706"></div></div>
+  </div>
+  <div class="sector-bar-item">
+    <div class="sector-bar-label"><span>반도체·하드웨어 (차익실현)</span><span style="color:var(--text2)">▼ 유출</span></div>
+    <div class="sector-bar-track"><div class="sector-bar-fill" style="width:30%;background:var(--chart3)"></div></div>
+  </div>
+  <div class="sector-bar-item">
+    <div class="sector-bar-label"><span>소비재 하위 (소비 압박)</span><span style="color:var(--accent)">▼ 약세</span></div>
+    <div class="sector-bar-track"><div class="sector-bar-fill" style="width:15%;background:#f43f5e"></div></div>
+  </div>
+</div>
+
+<!-- ══ 3-1. DataDog ══ -->
+<h3 class="fade-in">🐕 Datadog (DDOG) — AI 데이터 모니터링의 수혜</h3>
+<p class="fade-in">
+  1분기 매출 <strong>$10억 6백만 달러</strong> 달성. 
+  노바는 작년부터 "잘 정리된 데이터만이 AI를 제대로 쓸 수 있게 한다"며 DDOG를 추천했습니다. 
+  OpenAI, Anthropic 같은 최상위 AI 기업들이 LLM의 <strong>환각(Hallucination) 탐지·모니터링</strong> 툴로 
+  DDOG를 채택하며 매출이 폭발적으로 증가했습니다.
+</p>
+
+<!-- ══ 3-2. Fortinet ══ -->
+<h3 class="fade-in">🛡️ Fortinet (FTNT) — 하드웨어 결합 사이버 보안</h3>
+<p class="fade-in">
+  타 사이버 보안 기업과 달리 <strong>소프트웨어 + 하드웨어를 함께 판매</strong>하는 독특한 구조가 차별점. 
+  AI 기반 랜섬웨어 확산으로 기업들이 "소프트웨어만으로는 부족하다"는 인식을 갖게 되면서 
+  FTNT의 번들 솔루션에 수요가 집중됐습니다.
+</p>
+
+<!-- ══ 3-3. ARM·COHR ══ -->
+<h3 class="fade-in">⚠️ ARM·COHR — 각각 10%대 하락</h3>
+<p class="fade-in">
+  <strong>ARM</strong>: 메모리 배분 경쟁에서 밀림. 엔비디아가 "밀가루 100포대" 요구 시 
+  ARM은 "1포대" 수준이라 공급 우선순위에서 뒤처져 가이던스 부진.
+  <strong>COHR</strong>: 공장 증설 수요는 폭발적이나, 고금리 환경에서 
+  Capex 부담이 수익을 잠식 — "벌어도 이자로 나간다"는 구조적 문제.
+</p>
+
+<hr class="divider">
+
+<!-- ══ 4. 테슬라 ══ -->
+<div class="section-label fade-in">개별 종목</div>
+<h2 class="fade-in">테슬라 +3.3% — 3가지 모멘텀</h2>
+
+<div class="table-wrap fade-in">
+  <table>
+    <thead>
+      <tr><th>모멘텀</th><th>내용</th><th>강도</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>📈 컵앤핸들 기술적 돌파</td>
+        <td>저항선 돌파 + 쇼트 커버링 발생</td>
+        <td><span class="badge red">강</span></td>
+      </tr>
+      <tr>
+        <td>⛽ 유가 상승 → 전기차 수요</td>
+        <td>연료비 부담 → EV 관심 자연 증가</td>
+        <td><span class="badge gray">중</span></td>
+      </tr>
+      <tr>
+        <td>🚗 ADAS 규제 최초 통과</td>
+        <td>2024년 기준 생성 후 2년 만에 첫 합격·업계 1위</td>
+        <td><span class="badge red">강</span></td>
+      </tr>
+      <tr>
+        <td>🇨🇳 중국 공장 유럽 판매 +36% YOY</td>
+        <td>중국산 → 유럽 수출 확대 (가스값 민감도 높음)</td>
+        <td><span class="badge blue">중상</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card fade-in">
+  <strong>ADAS 기능 구성</strong>: 보행자 자동 긴급 제동 · 차선 유지 보조 · 사각지대 경고·개입 · 전방 충돌 경고 · 자동 긴급 제동 · 차선 이탈 경고. 완전 자율주행(FSD)과는 다른 개념이나 "세계 최초 통과"라는 마케팅 키포인트 확보.
+</div>
+
+<hr class="divider">
+
+<!-- ══ 5. 소비자 압박 ══ -->
+<div class="section-label fade-in">소비자 지표</div>
+<h2 class="fade-in">K경제 — 소비 양극화 심화</h2>
+
+<div class="chart-container fade-in">
+  <canvas id="consumerChart" height="230"></canvas>
+</div>
+
+<div class="table-wrap fade-in">
+  <table>
+    <thead><tr><th>기업</th><th>내용</th><th>해석</th></tr></thead>
+    <tbody>
+      <tr><td>Planet Fitness</td><td>신규회원 -36%, 주가 -32%</td><td>저소득층도 $9/월 지출 부담</td></tr>
+      <tr><td>McDonald's</td><td>가성비 콤보로 소폭 상승</td><td>다운트레이딩 수혜</td></tr>
+      <tr><td>Shake Shack</td><td>손실 발생</td><td>프리미엄 버거 수요 감소</td></tr>
+      <tr><td>Whirlpool</td><td>부진 예상</td><td>가전 교체 수요 위축</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<blockquote class="fade-in">
+  "적당해야 돼. 뭔가 괜찮은 제품을 싸게 가성비로 제공하면 소비자한테 먹힐 수 있다." — 노바
+</blockquote>
+
+<hr class="divider">
+
+<!-- ══ 6. 우주 ══ -->
+<div class="section-label fade-in">테마</div>
+<h2 class="fade-in">2025년 12월 예고 키워드 — "우주"</h2>
+
+<p class="fade-in">
+  노바가 2025년 12월 31일 방송에서 예고한 <strong>"우주"</strong> 키워드가 실현되기 시작했습니다.
+</p>
+
+<div class="metrics-grid fade-in" style="grid-template-columns:1fr 1fr">
+  <div class="metric-card">
+    <div class="num" style="font-size:20px">HAWK IPO</div>
+    <div class="label">공모가 $26 → 오프닝 $34<br>+30.8% 첫날 상승</div>
+  </div>
+  <div class="metric-card">
+    <div class="num" style="font-size:20px">Rocket Lab</div>
+    <div class="label">역대 최대 규모 계약<br>수주잔고 $22억 돌파</div>
+  </div>
+</div>
+
+<div class="card fade-in">
+  <strong>SpaceX IPO 임박 시나리오</strong><br>
+  상장 직후 시가총액 Top 5 진입 가능성 — "IPO 역사상 처음 보는 광경"으로 예상. 
+  스페이스X 효과로 우주 섹터 전반에 대한 기대감이 선행적으로 반영되고 있습니다.
+  Rocket Lab은 계약 상대방을 공개하지 않아 "말할 수 없는 회사와 계약" 표현 사용.
+</div>
+
+<hr class="divider">
+
+<!-- ══ 7. 고용보고서 시뮬레이터 ══ -->
+<div class="section-label fade-in">내일 이벤트 시뮬레이터</div>
+<h2 class="fade-in">4월 비농업고용 시나리오 시뮬레이터</h2>
+
+<p class="fade-in">슬라이더를 조작하여 내일(5월 9일) 발표될 고용 수치에 따른 시장 반응을 예측해보세요.</p>
+
+<div class="simulator fade-in" id="nfpSim">
+  <h3>📊 Non-Farm Payroll 시나리오</h3>
+  <div class="sim-row">
+    <label>고용 증가 수(천 명)</label>
+    <input type="range" id="nfpSlider" min="0" max="250" step="5" value="60">
+    <div class="val" id="nfpVal">60K</div>
+  </div>
+  <div class="sim-row">
+    <label>전쟁 상황</label>
+    <select id="warSelect" style="flex:1;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;background:var(--bg2)">
+      <option value="calm">확전 없이 진정</option>
+      <option value="neutral" selected>현상 유지</option>
+      <option value="escalate">확전 심화</option>
+    </select>
+  </div>
+  <div class="sim-result neutral" id="simResult">슬라이더를 조작해 시나리오를 확인하세요</div>
+  <button class="reset-btn" onclick="resetSim()">↺ 초기값으로</button>
+</div>
+
+<hr class="divider">
+
+<!-- ══ 8. 버핏 지수 & 투자 전략 ══ -->
+<div class="section-label fade-in">투자 전략</div>
+<h2 class="fade-in">버핏 지수와 리스크 매니지먼트</h2>
+
+<p class="fade-in">
+  노바는 버핏 지수(시가총액/GDP)가 현재 <strong>역사적 위험 수준</strong>에 도달했다고 경고했습니다. 
+  2000년 닷컴 버블, 2022년 고점 등 과거 터치 때마다 폭락이 발생했습니다. 
+  4월 조정 후 재상승한 현재 수준은 다시 그 선에 근접하고 있습니다.
+</p>
+
+<div class="chart-container fade-in">
+  <canvas id="buffettChart" height="220"></canvas>
+</div>
+
+<div class="card highlight fade-in">
+  <strong>💡 핵심 메시지 — "관리만 잘하면 된다"</strong><br><br>
+  "주식은 우리가 잘나서 버는 게 아니에요. 그 회사가 잘해서 버는 거예요. 
+  우리는 리스크 매니지먼트만 하면 됩니다. 잃지 않는 것, 뺏기지 않는 것, 
+  녹아내리지 않게 하는 것 — 이것만 신경 쓰면 시장이 좋으면 자동으로 올라갑니다."
+</div>
+
+<div class="card fade-in">
+  <strong>📌 실전 전략 요약</strong>
+  <ul style="margin-top:10px;padding-left:18px;font-size:14px;line-height:2">
+    <li>S&P 상승에도 실질 상승 종목은 42개 — <strong>종목 선택이 핵심</strong></li>
+    <li>포트폴리오를 10개 이하로 압축해 관리 집중</li>
+    <li>한 발은 액셀, 한 발은 브레이크 위에 — 풀악셀 지양</li>
+    <li>SPY ETF로 꾸준히 자금 유입 중 → FOMO 자금 대기</li>
+    <li>소프트웨어(DDOG·MDB·FTNT), 우주(RKLB), 가성비 소비재 주목</li>
+  </ul>
+</div>
+
+<hr class="divider">
+
+<!-- ══ 9. 내일 체크리스트 ══ -->
+<div class="section-label fade-in">액션 아이템</div>
+<h2 class="fade-in">내일 아침 확인할 2가지</h2>
+
+<div class="metrics-grid fade-in">
+  <div class="metric-card" style="border:2px solid var(--accent)">
+    <div class="num" style="font-size:22px">①</div>
+    <div class="label" style="font-size:13px;font-weight:700;color:var(--text)">전쟁 확전 여부<br><span style="font-weight:400;color:var(--text2)">미·이란 교전 후속<br>UAE 피격 상황</span></div>
+  </div>
+  <div class="metric-card" style="border:2px solid var(--chart4)">
+    <div class="num" style="font-size:22px;color:var(--chart4)">②</div>
+    <div class="label" style="font-size:13px;font-weight:700;color:var(--text)">4월 비농업고용<br><span style="font-weight:400;color:var(--text2)">AM 8:30 발표<br>컨센서스 55K~65K</span></div>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<div class="footer fade-in">
+  <p>본 리포트는 httpCIA 멤버미팅(2026.05.07) 유튜브 방송 자막을 기반으로 작성된 투자 참고 자료입니다. 투자 판단의 최종 책임은 본인에게 있으며, 본 내용은 매수·매도 추천이 아닙니다.</p>
+  <p style="margin-top:8px">📌 분석 리포트 — 시험문제 파일 별도 제공</p>
+</div>
+
+<!-- ══ CHARTS & SIMULATOR JS ══ -->
+<script>
+// ── Intersection Observer: fade-in ──
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// ── Chart Configs ──
+const chartConfigs = {};
+
+chartConfigs['oilChart'] = () => {
+  new Chart(document.getElementById('oilChart'), {
+    type: 'bar',
+    data: {
+      labels: ['$70 이하\n(공급 과잉)', '$80~89\n(안정권)', '$90~100\n(경계선)', '$100+\n(교전 급등)'],
+      datasets: [{
+        label: '에너지주',
+        data: [-5, 2, 8, 18],
+        backgroundColor: ['#dbeafe','#dcfce7','#fef9c3','#fee2e2'],
+        borderColor: ['#2563eb','#16a34a','#ca8a04','#e11d48'],
+        borderWidth: 2,
+        borderRadius: 5
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => `에너지주 영향: ${ctx.raw > 0 ? '+' : ''}${ctx.raw}%` } }
+      },
+      scales: {
+        y: { title: { display: true, text: '영향도 (개념적 %)' }, grid: { color: '#f0f0f0' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+};
+
+chartConfigs['consumerChart'] = () => {
+  new Chart(document.getElementById('consumerChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Planet Fitness\n신규회원', 'Planet Fitness\n주가', '테슬라\n중국 판매 YOY', 'HAWK IPO\n첫날'],
+      datasets: [{
+        data: [-36, -32, 36, 30.8],
+        backgroundColor: (ctx) => ctx.raw < 0 ? '#fee2e2' : '#dcfce7',
+        borderColor: (ctx) => ctx.raw < 0 ? '#e11d48' : '#16a34a',
+        borderWidth: 2,
+        borderRadius: 5
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { title: { display: true, text: '변화율 (%)' }, grid: { color: '#f0f0f0' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+};
+
+chartConfigs['buffettChart'] = () => {
+  new Chart(document.getElementById('buffettChart'), {
+    type: 'line',
+    data: {
+      labels: ['1995','1998','2000','2003','2007','2009','2015','2018','2020','2022','2024','2026(현재)'],
+      datasets: [{
+        label: '버핏 지수 (개념적)',
+        data: [65, 110, 145, 70, 110, 55, 90, 115, 75, 155, 120, 150],
+        borderColor: '#e11d48',
+        backgroundColor: 'rgba(225,29,72,0.08)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 4,
+        pointBackgroundColor: '#e11d48'
+      },{
+        label: '위험 임계선',
+        data: [140,140,140,140,140,140,140,140,140,140,140,140],
+        borderColor: '#1a1a1a',
+        borderDash: [6,3],
+        borderWidth: 2,
+        pointRadius: 0,
+        fill: false
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11 } } },
+        tooltip: { mode: 'index' }
+      },
+      scales: {
+        y: { title: { display: true, text: '시총/GDP (%)' }, grid: { color: '#f0f0f0' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+};
+
+// ── Chart Observer ──
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+// ── NFP Simulator ──
+const slider = document.getElementById('nfpSlider');
+const valDisplay = document.getElementById('nfpVal');
+const warSelect = document.getElementById('warSelect');
+const result = document.getElementById('simResult');
+
+function updateSim() {
+  const nfp = parseInt(slider.value);
+  const war = warSelect.value;
+  valDisplay.textContent = nfp + 'K';
+
+  let text = '', cls = 'neutral';
+
+  if (war === 'escalate') {
+    cls = 'red';
+    text = `⚠️ 전쟁 확전 + 고용 ${nfp}K → 지정학 리스크 우세, S&P 하방 압력 강화. 에너지·방산 제외 전반 약세 예상.`;
+  } else if (nfp < 40) {
+    cls = 'red';
+    text = `❌ 침체 시나리오 (${nfp}K): 컨센서스 하회 → "경기 둔화 현실화" 우려, S&P 하락 가능성.`;
+  } else if (nfp >= 55 && nfp <= 65) {
+    cls = 'gold';
+    text = `🟡 골디락스 시나리오 (${nfp}K): 컨센서스 충족 → 경기 연착륙 기대유지, S&P ±0.5% 안정적 흐름 예상.`;
+    if (war === 'calm') { cls = 'green'; text = `✅ 베스트 시나리오: 전쟁 진정 + 고용 ${nfp}K → 시장 안도랠리, S&P 추가 상승 가능.`; }
+  } else if (nfp > 65 && nfp <= 120) {
+    cls = 'green';
+    text = `✅ 강세 시나리오 (${nfp}K): 컨센서스 상회 → 경기 견조 확인, S&P 상승 탄력. 단, 금리 우려 재부각 가능.`;
+  } else if (nfp > 120) {
+    cls = 'gold';
+    text = `🔥 과열 시나리오 (${nfp}K): 너무 강한 고용 → 연준 긴축 우려 재점화, 단기 변동성 확대.`;
+  } else {
+    cls = 'neutral';
+    text = `📊 약세 시나리오 (${nfp}K): 컨센서스 하회 → 불안 심리 자극, 방어적 움직임 예상.`;
+  }
+
+  result.textContent = text;
+  result.className = 'sim-result ' + cls;
+}
+
+slider.addEventListener('input', updateSim);
+warSelect.addEventListener('change', updateSim);
+updateSim();
+
+function resetSim() {
+  slider.value = 60;
+  warSelect.value = 'neutral';
+  updateSim();
+}
+</script>
+
+</body>
+</html>
