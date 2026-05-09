@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>AI 수퍼사이클 4단계 — 하드웨어 vs 소프트웨어 분석</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --blue: #2563eb;
+    --gray: #6b7280;
+    --border: #e5e5e5;
+    --tbl-header: #e11d48;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 15px;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--text);
+    color: #fff;
+    padding: 56px 24px 44px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 39px,
+      rgba(255,255,255,0.04) 39px,
+      rgba(255,255,255,0.04) 40px
+    );
+  }
+  .hero-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', 'Noto Serif KR', serif;
+    font-size: clamp(26px, 7vw, 38px);
+    font-weight: 900;
+    line-height: 1.25;
+    margin-bottom: 16px;
+  }
+  .hero h1 em {
+    color: var(--accent2);
+    font-style: normal;
+  }
+  .hero-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.7;
+  }
+  .hero-date {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.4);
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding-top: 12px;
+    width: 100%;
+  }
+
+  /* ─── LAYOUT ─── */
+  .container { max-width: 680px; margin: 0 auto; padding: 0 20px; }
+
+  /* ─── SECTION ─── */
+  .section { padding: 36px 0 28px; border-bottom: 1px solid var(--border); }
+  .section:last-child { border-bottom: none; }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+  h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 20px 0 8px;
+    color: var(--text);
+  }
+
+  p { margin-bottom: 12px; color: var(--text); }
+
+  strong { color: var(--text); font-weight: 700; }
+
+  em.red { color: var(--accent); font-style: normal; font-weight: 700; }
+  em.blue { color: var(--blue); font-style: normal; font-weight: 700; }
+
+  /* ─── STAT CARDS ─── */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 14px;
+  }
+  .stat-card.accent {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .stat-card.accent .stat-label,
+  .stat-card.accent .stat-note { color: rgba(255,255,255,0.75); }
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 6px;
+  }
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-note {
+    font-size: 11px;
+    color: var(--text2);
+  }
+
+  /* ─── QUOTE ─── */
+  .quote-block {
+    border-left: 3px solid var(--accent);
+    margin: 20px 0;
+    padding: 12px 18px;
+    background: var(--bg2);
+  }
+  .quote-block p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--text);
+    margin: 0;
+  }
+  .quote-source {
+    font-size: 11px;
+    color: var(--text2);
+    margin-top: 6px;
+  }
+
+  /* ─── HIGHLIGHT BOX ─── */
+  .highlight-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+  .highlight-box.warn {
+    border-color: var(--accent);
+    border-left: 3px solid var(--accent);
+  }
+  .highlight-box.info {
+    border-color: var(--blue);
+    border-left: 3px solid var(--blue);
+  }
+
+  /* ─── TABLES ─── */
+  .tbl-wrap { overflow-x: auto; margin: 18px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th {
+    background: var(--tbl-header);
+    color: #fff;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+  }
+  tbody tr:nth-child(even) { background: var(--bg2); }
+  tbody td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  .up { color: var(--accent); font-weight: 700; }
+  .down { color: var(--blue); font-weight: 700; }
+
+  /* ─── PHASE CARDS ─── */
+  .phase-list { margin: 16px 0; }
+  .phase-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .phase-item:last-child { border-bottom: none; }
+  .phase-num {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+  .phase-body h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .phase-body p { font-size: 13px; color: var(--text2); margin: 0; }
+
+  /* ─── CHART ─── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin: 20px 0;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas { opacity: 1; }
+  .chart-title {
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  /* ─── DIVIDER ─── */
+  .rule {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 28px 0;
+  }
+  .rule.thick {
+    border-top: 2px solid var(--text);
+    margin: 0 0 28px;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--text);
+    color: rgba(255,255,255,0.45);
+    padding: 28px 24px;
+    font-size: 11px;
+    line-height: 1.7;
+    text-align: center;
+    margin-top: 40px;
+  }
+  footer strong { color: rgba(255,255,255,0.7); }
+
+  /* ─── TAG CHIPS ─── */
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0; }
+  .chip {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 2px;
+    letter-spacing: 0.5px;
+  }
+  .chip.red { background: rgba(225,29,72,0.1); color: var(--accent); }
+  .chip.blue { background: rgba(37,99,235,0.1); color: var(--blue); }
+  .chip.dark { background: rgba(26,26,26,0.07); color: var(--text); }
+
+  /* ─── COMPARE BAR ─── */
+  .compare-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0;
+    font-size: 13px;
+  }
+  .compare-row .label { min-width: 90px; color: var(--text2); font-size: 12px; }
+  .compare-bar-wrap { flex: 1; height: 8px; background: var(--bg2); border-radius: 2px; overflow: hidden; }
+  .compare-bar { height: 100%; border-radius: 2px; transition: width 1s ease; }
+  .compare-val { min-width: 50px; text-align: right; font-weight: 700; font-size: 12px; }
+
+  /* ─── SIMULATION ─── */
+  .sim-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px;
+    margin: 18px 0;
+  }
+  .sim-box h4 { font-size: 14px; font-weight: 700; margin-bottom: 12px; color: var(--text); }
+  .slider-row { margin: 12px 0; }
+  .slider-row label { font-size: 12px; color: var(--text2); display: block; margin-bottom: 4px; }
+  .slider-row input[type=range] {
+    width: 100%;
+    accent-color: var(--accent);
+  }
+  .sim-result {
+    margin-top: 14px;
+    padding: 12px 14px;
+    background: var(--text);
+    color: #fff;
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .sim-result span { color: var(--accent2); font-weight: 700; }
+
+  @media (max-width: 400px) {
+    .stat-grid { grid-template-columns: 1fr; }
+    h2 { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-label">AI 수퍼사이클 심층분석 · 2026.05.09</div>
+    <h1>하드웨어의 축제,<br><em>소프트웨어의 위기</em></h1>
+    <p class="hero-sub">6주 연속 사상 최고치를 경신하는 증시 이면에서<br>AI 혁명이 두 산업의 운명을 정반대로 갈라놓고 있다</p>
+    <div class="hero-date">분석 출처 · YouTube 영상 자막 기반 · 미국 증시·경제 관점</div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ─── SECTION 1: 거시 경제 모순 ─── -->
+<div class="section fade-in">
+  <div class="section-label">Part 01 · 거시 경제</div>
+  <h2>지표가 엇갈리는 모순의 시장</h2>
+  <p>나스닥과 S&amp;P 500이 <em class="red">6주 연속 사상 최고치</em>를 경신하는 동안, 미국 소비자들의 체감 경기는 역사적 바닥을 뚫고 지하로 추락하고 있다. 두 지표가 이토록 극단적으로 엇갈리는 현상은 전문가도 흔치 않다고 평가한다.</p>
+
+  <div class="stat-grid">
+    <div class="stat-card accent fade-in">
+      <div class="stat-label">미시간대 소비자심리지수</div>
+      <div class="stat-value">48.2</div>
+      <div class="stat-note">역사상 최저치 수준</div>
+    </div>
+    <div class="stat-card fade-in">
+      <div class="stat-label">S&P 500 · 나스닥 연속 ATH</div>
+      <div class="stat-value">6주</div>
+      <div class="stat-note">연속 사상 최고치 경신</div>
+    </div>
+  </div>
+
+  <div class="quote-block fade-in">
+    <p>"칼날이 날아오는 회전판에 묶인 서커스 곡예사" — 중동 충돌 리스크, 재점화되는 인플레이션, 무거운 금리라는 칼날들이 경제를 향해 날아오고 있다.</p>
+    <div class="quote-source">코리 스탈 / 인디드(Indeed) 수석 이코노미스트</div>
+  </div>
+</div>
+
+<!-- ─── SECTION 2: 고용보고서 ─── -->
+<div class="section fade-in">
+  <div class="section-label">Part 02 · 고용 지표</div>
+  <h2>화려한 숫자 뒤의 불편한 진실</h2>
+  <p>4월 비농업 고용 보고서는 <em class="red">11만 5,000개</em>의 일자리 증가를 발표해 시장 예상치(6만 5,000개)를 두 배 가까이 상회했다. 실업률도 4.3%로 견고하다. 하지만 내용을 들여다보면 전혀 다른 그림이 나타난다.</p>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">4월 비농업 고용 — 섹터별 분해</div>
+    <canvas id="jobChart" height="230"></canvas>
+  </div>
+
+  <div class="highlight-box warn fade-in">
+    <h3>핵심 착시 포인트</h3>
+    <p>전체 증가분 115,000개 중 <strong>37,000개(32%)가 헬스케어 단일 섹터</strong>에서 나왔다. 헬스케어를 제거하면 지난 12개월 중 <em class="red">10개월간 순감소</em> 상태였다. 경제 전반의 엔진이 아닌, 특정 필수 섹터 하나가 전체 지표를 끌어올리는 착시다.</p>
+  </div>
+
+  <div class="tbl-wrap fade-in">
+    <table>
+      <thead>
+        <tr><th>구분</th><th>수치</th><th>시사점</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>시장 예상 일자리 증가</td><td>65,000개</td><td>사전 컨센서스</td></tr>
+        <tr><td>실제 증가 (전체)</td><td class="up">115,000개</td><td>예상 대비 +77%</td></tr>
+        <tr><td>헬스케어 부문만</td><td class="up">37,000개</td><td>전체의 32%</td></tr>
+        <tr><td>헬스케어 제외 시</td><td class="down">78,000개</td><td>12개월 중 10개월 순감소</td></tr>
+        <tr><td>실업률</td><td>4.3%</td><td>표면적으론 견고</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ─── SECTION 3: 지정학 리스크 ─── -->
+<div class="section fade-in">
+  <div class="section-label">Part 03 · 지정학·에너지</div>
+  <h2>호르무즈 해협과 소비자의 공포</h2>
+  <p>최근 휘발유 가격 폭등이 소비자의 숨통을 직접 조이고 있으며, 그 진원지는 중동 지역의 군사적 긴장이다. 미 중부사령부(CENTCOM)는 전 세계 원유 물동량의 <em class="red">약 20%</em>가 통과하는 호르무즈 해협에서 이란 연계 유조선 두 척을 공습해 무력화했다고 발표했다.</p>
+
+  <div class="stat-grid">
+    <div class="stat-card fade-in">
+      <div class="stat-label">호르무즈 해협 원유 통과 비중</div>
+      <div class="stat-value">20%</div>
+      <div class="stat-note">글로벌 원유 물동량 기준</div>
+    </div>
+    <div class="stat-card accent fade-in">
+      <div class="stat-label">미군 공습 유조선</div>
+      <div class="stat-value">2척</div>
+      <div class="stat-note">이란 연계 / 빈 유조선</div>
+    </div>
+  </div>
+
+  <div class="highlight-box info fade-in">
+    <strong>경제적 파장:</strong> 글로벌 에너지 공급망의 가장 취약한 목덜미에서 전면적 군사 충돌이 터질 수 있다는 경고 신호다. 유가 급등 → 인플레이션 재점화 → 연준 금리 인하 지연의 연쇄가 소비자 심리 최저치의 실질적 원인이다.
+  </div>
+
+  <p><strong>5월 14~15일 트럼프-시진핑 정상회담</strong>은 관세, 반도체 수출통제, 이란 문제 해결을 위한 핵심 이벤트로, 전 세계 시장이 숨죽여 주목한다.</p>
+</div>
+
+<!-- ─── SECTION 4: 공급망 재편 ─── -->
+<div class="section fade-in">
+  <div class="section-label">Part 04 · 리쇼어링</div>
+  <h2>애플 × 인텔: 공급망 지각 변동</h2>
+  <p>WSJ이 보도한 애플-인텔 역사적 파트너십 예비합의는 단순한 계약 변경이 아니다. 약 20년간 TSMC(대만)에 전적으로 의존해 온 애플의 공급망 철학이 붕괴된 사건이다. 발표 직후 인텔 주가는 <em class="red">장중 14% 이상 폭등</em>했다.</p>
+
+  <div class="highlight-box warn fade-in">
+    <h3>리쇼어링(Reshoring)이란?</h3>
+    <p>해외에 의존하던 핵심 제조시설을 자국으로 복귀시키는 전략. 타이완 해협을 둘러싼 미·중 패권 경쟁과 물리적 충돌 가능성 앞에서 기업들이 "가장 싼 곳"에서 "전쟁이 나도 끊기지 않는 안전한 곳"으로 논리를 전환하고 있다.</p>
+  </div>
+
+  <div class="tbl-wrap fade-in">
+    <table>
+      <thead>
+        <tr><th>기업</th><th>내용</th><th>주가 반응</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>인텔 (INTC)</strong></td><td>애플과 칩 제조 파트너십 예비합의<br>미 정부 지분 10% 보유</td><td class="up">+14%↑ (장중)</td></tr>
+        <tr><td><strong>애플 (AAPL)</strong></td><td>TSMC 의존 탈피, 미국 내 제조 다변화</td><td>장기 공급망 리스크 감소</td></tr>
+        <tr><td><strong>델 컴퓨터</strong></td><td>트럼프 IT 인프라 지원 발언 직후</td><td class="up">사상 최고치 경신</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ─── SECTION 5: AI 수퍼사이클 4단계 ─── -->
+<div class="section fade-in">
+  <div class="section-label">Part 05 · AI 수퍼사이클</div>
+  <h2>에이전틱 AI가 열어준 인프라 시대</h2>
+  <p>AI 투자 흐름은 초기 'GPU 확보 전쟁(엔비디아 독주)'에서 <em class="red">인프라 전반으로 확산</em>되는 새로운 국면으로 진입했다. 핵심 동력은 생성형 AI에서 <strong>에이전틱 AI</strong>로의 패러다임 전환이다.</p>
+
+  <div class="phase-list">
+    <div class="phase-item fade-in">
+      <div class="phase-num">1</div>
+      <div class="phase-body">
+        <h4>두뇌 확보 (초기 붐)</h4>
+        <p>엔비디아 GPU 독주 · 생성형 AI · 단순 Q&amp;A 구조</p>
+      </div>
+    </div>
+    <div class="phase-item fade-in">
+      <div class="phase-num">2</div>
+      <div class="phase-body">
+        <h4>에이전틱 AI 부상</h4>
+        <p>인간 개입 없이 목표 설정·외부 시스템 접속·행동 완수. 컴퓨팅 파워 수요 급증</p>
+      </div>
+    </div>
+    <div class="phase-item fade-in">
+      <div class="phase-num">3</div>
+      <div class="phase-body">
+        <h4>인프라 병목 해결 전쟁</h4>
+        <p>HBM(고대역폭 메모리)·광케이블·데이터센터·전력·냉각 시스템으로 자금 쏟아짐</p>
+      </div>
+    </div>
+    <div class="phase-item fade-in">
+      <div class="phase-num">4</div>
+      <div class="phase-body">
+        <h4>공급망 국산화 + 리쇼어링</h4>
+        <p>지정학 리스크 → 미국 본토 반도체·인프라 재편. 국가 자본 투입 가속</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box fade-in">
+    <strong>에이전틱 AI vs. 생성형 AI 비교:</strong><br>
+    생성형 AI = 질문에 답변하는 '고급 백과사전'<br>
+    에이전틱 AI = 은행·세무 시스템에 직접 접속해 세금 신고까지 완료 통보하는 '가상 전문 직원'
+  </div>
+</div>
+
+<!-- ─── SECTION 6: 하드웨어 르네상스 ─── -->
+<div class="section fade-in">
+  <div class="section-label">Part 06 · 하드웨어 르네상스</div>
+  <h2>인프라 기업들의 전례 없는 파티</h2>
+  <p>에이전틱 AI 시대에는 GPU 연산이 아무리 빨라도 데이터를 담는 메모리와 전송하는 광 라인이 느리면 무용지물이다. 이 병목을 해결하는 기업들로 자금이 폭발적으로 몰리고 있다.</p>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">하드웨어·인프라 기업 주가 반응</div>
+    <canvas id="hwChart" height="230"></canvas>
+  </div>
+
+  <div class="tbl-wrap fade-in">
+    <table>
+      <thead>
+        <tr><th>기업</th><th>분야</th><th>주요 내용</th><th>성과</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>마이크론 (MU)</strong></td>
+          <td>HBM 메모리</td>
+          <td>고대역폭 메모리 수요 폭발</td>
+          <td class="up">일주일 +38%<br>$746.79</td>
+        </tr>
+        <tr>
+          <td><strong>코닝 (GLW)</strong></td>
+          <td>광케이블</td>
+          <td>AI 데이터센터 광케이블 수요 급증</td>
+          <td class="up">연일 사상 최고치</td>
+        </tr>
+        <tr>
+          <td><strong>인텔 (INTC)</strong></td>
+          <td>반도체 제조</td>
+          <td>애플 파트너십 + 미 정부 지분 10%</td>
+          <td class="up">+14% (장중)</td>
+        </tr>
+        <tr>
+          <td><strong>아카마이 (AKAM)</strong></td>
+          <td>네트워크·클라우드</td>
+          <td>앤스로픽 등에 $18억 클라우드 계약</td>
+          <td class="up">대형 계약 체결</td>
+        </tr>
+        <tr>
+          <td><strong>코어 사이언티픽</strong></td>
+          <td>AI 데이터센터</td>
+          <td>비트코인 채굴 → AI 데이터센터 전환<br>엔비디아와 $34억 하드웨어 계약</td>
+          <td class="up">대규모 전환 완료</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="highlight-box info fade-in">
+    <strong>HBM(고대역폭 메모리)이란?</strong><br>
+    일반 메모리가 '얇은 빨대'라면 HBM은 '댐의 수문'에 해당한다. 에이전틱 AI가 여러 시스템을 실시간으로 처리하는 과정에서 반드시 필요한 초고속 데이터 통로다.
+  </div>
+</div>
+
+<!-- ─── SECTION 7: SaaS 아포칼립스 ─── -->
+<div class="section fade-in">
+  <div class="section-label">Part 07 · SaaS 위기</div>
+  <h2>SaaS 아포칼립스: 자기 무덤을 파는 소프트웨어</h2>
+  <p>하드웨어가 파티를 여는 동안, AI 소프트웨어 서비스(SaaS) 기업들은 생존을 건 사투를 벌이고 있다. 아이러니하게도 AI를 더 똑똑하게 만들수록 자신들의 수익 모델이 파괴되는 구조다.</p>
+
+  <div class="highlight-box warn fade-in">
+    <h3>기존 SaaS 수익 모델의 붕괴 구조</h3>
+    <p>기존 과금 방식 = <strong>직원 수(시트 단위)</strong> × 월정액<br>
+    에이전틱 AI 도입 → 직원 90% 감축 → 라이센스 매출 90% 증발<br>
+    → <em class="red">AI를 잘 만들수록 고객사가 인력을 줄이고 자신의 매출 기반이 무너지는 자가당착</em></p>
+  </div>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">소프트웨어 기업 실적 발표 후 주가 반응</div>
+    <canvas id="swChart" height="230"></canvas>
+  </div>
+
+  <div class="tbl-wrap fade-in">
+    <table>
+      <thead>
+        <tr><th>기업</th><th>실적 내용</th><th>주가 반응</th><th>이유</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>클라우드플레어 (NET)</strong></td>
+          <td>Q1 매출 YoY <span class="up">+34%</span></td>
+          <td class="down">-24% (다음날)</td>
+          <td>직원 20%(1,100명) 해고 + 에이전틱 AI 전환 선언 + 구조조정 비용 $1.4억</td>
+        </tr>
+        <tr>
+          <td><strong>허브스팟 (HUBS)</strong></td>
+          <td>실적 기대치 상회</td>
+          <td class="down">-19~20%</td>
+          <td>2분기 가이던스 실망 · 수익모델 둔화 우려</td>
+        </tr>
+        <tr>
+          <td><strong>코어위브 (CRWV)</strong></td>
+          <td>AI 인프라 수요 풍부</td>
+          <td class="down">-11%</td>
+          <td>데이터센터 확장 CapEx 부담 부각</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="highlight-box fade-in">
+    <strong>클라우드플레어 CEO 매튜 프린스의 발언:</strong> "이것은 단순한 비용 절감을 위한 해고가 아니다." — 비즈니스 모델 자체를 에이전틱 AI 중심으로 뜯어 고치겠다는 선언이었으나, 시장은 전환 비용과 불확실성에 즉각 반응했다.
+  </div>
+</div>
+
+<!-- ─── SECTION 8: 시뮬레이션 ─── -->
+<div class="section fade-in">
+  <div class="section-label">Part 08 · 시뮬레이션</div>
+  <h2>SaaS 수익 모델 붕괴 시뮬레이터</h2>
+  <p>에이전틱 AI 도입이 SaaS 기업 매출에 미치는 영향을 직접 계산해보세요.</p>
+
+  <div class="sim-box fade-in">
+    <h4>📊 시트 단위 매출 감소 시뮬레이션</h4>
+    <div class="slider-row">
+      <label>고객사 직원 수: <strong id="empVal">100</strong>명</label>
+      <input type="range" min="10" max="1000" value="100" id="empSlider" oninput="runSim()">
+    </div>
+    <div class="slider-row">
+      <label>1인당 월 SaaS 비용: <strong id="costVal">50</strong>달러</label>
+      <input type="range" min="10" max="300" value="50" id="costSlider" oninput="runSim()">
+    </div>
+    <div class="slider-row">
+      <label>에이전틱 AI 도입 후 인력 감축률: <strong id="cutVal">70</strong>%</label>
+      <input type="range" min="10" max="95" value="70" id="cutSlider" oninput="runSim()">
+    </div>
+    <div class="sim-result" id="simResult"></div>
+  </div>
+</div>
+
+<!-- ─── SECTION 9: 투자 시사점 ─── -->
+<div class="section fade-in">
+  <div class="section-label">Part 09 · 투자 시사점</div>
+  <h2>AI 딱지 ≠ 주가 상승 보증수표</h2>
+
+  <p>이제 그냥 'AI' 딱지만 붙었다고 주가가 오르는 맹목적 상승 시대는 끝났다. 하드웨어 인프라 팽창과 소프트웨어 업계 비즈니스 모델 붕괴가 <em class="red">동시에</em> 진행되고 있다. 이 두 세계를 명확히 분리해서 봐야 한다.</p>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">하드웨어 vs. 소프트웨어 — 투자 환경 비교 레이더</div>
+    <canvas id="radarChart" height="250"></canvas>
+  </div>
+
+  <div class="tbl-wrap fade-in">
+    <table>
+      <thead>
+        <tr><th>구분</th><th>하드웨어·인프라</th><th>SaaS·소프트웨어</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>AI 사이클 역할</td><td class="up">엔진·혈관 제공자</td><td class="down">엔진 위 차체 (균열 중)</td></tr>
+        <tr><td>수익 모델</td><td class="up">물리 인프라 수요 직결</td><td class="down">시트 과금 모델 붕괴 위기</td></tr>
+        <tr><td>정부 정책</td><td class="up">리쇼어링·반도체법 수혜</td><td>중립 또는 관망</td></tr>
+        <tr><td>단기 주가 리스크</td><td>CapEx 부담 부각 시</td><td class="down">가이던스 미스, 구조조정 비용</td></tr>
+        <tr><td>대표 수혜주</td><td>마이크론, 코닝, 인텔</td><td>전환 성공 기업 (불확실)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="highlight-box warn fade-in">
+    <h3>⚠️ 투자 판단 전 반드시 고려할 리스크</h3>
+    <p>① 중동 호르무즈 해협 — 언제든 유가 급등·인플레 재점화 트리거 가능<br>
+    ② 미중 정상회담(5/14~15) — 관세·반도체 수출통제 결과에 따른 공급망 변동<br>
+    ③ 소프트웨어 기업 전환 비용 — 에이전틱 AI 전환 과정에서 일시적 수익성 악화<br>
+    ④ 고용 지표 착시 — 헬스케어 편중 구조로 인한 소비 심리 침체 지속 가능성</p>
+  </div>
+
+  <div class="chips fade-in">
+    <span class="chip red">$INTC</span>
+    <span class="chip red">$MU</span>
+    <span class="chip red">$GLW</span>
+    <span class="chip red">$AAPL</span>
+    <span class="chip blue">$NET ↓24%</span>
+    <span class="chip blue">$HUBS ↓20%</span>
+    <span class="chip blue">$CRWV ↓11%</span>
+    <span class="chip dark">HBM</span>
+    <span class="chip dark">리쇼어링</span>
+    <span class="chip dark">에이전틱 AI</span>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<footer>
+  <strong>면책고지</strong><br>
+  본 문서는 공개된 영상 자막을 바탕으로 한 정보·교육 목적 분석이며, 특정 종목 매수·매도 권유가 아닙니다.<br>
+  투자 결정은 반드시 본인의 판단과 책임 하에 이루어져야 합니다.<br><br>
+  분석 기준일 2026.05.09 · 미국 증시 및 경제 관점
+</footer>
+
+<script>
+// ─────────────────────────────────────
+// FADE-IN OBSERVER
+// ─────────────────────────────────────
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// ─────────────────────────────────────
+// CHART CONFIGS (정의만, 직접 호출 금지)
+// ─────────────────────────────────────
+const chartConfigs = {};
+
+// Chart 1: 고용 분해 도넛
+chartConfigs['jobChart'] = () => {
+  new Chart(document.getElementById('jobChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['헬스케어 (37,000)', '기타 부문 (78,000)'],
+      datasets: [{
+        data: [37000, 78000],
+        backgroundColor: ['#e11d48', '#6b7280'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { animateRotate: true, animateScale: true, duration: 2000, easing: 'easeInOutQuart' },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 12, family: 'Noto Sans KR' }, color: '#1a1a1a', padding: 16 }
+        },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => ` ${ctx.label}: ${(ctx.raw/1000).toFixed(0)}천개 (${Math.round(ctx.raw/115000*100)}%)`
+          }
+        }
+      }
+    }
+  });
+};
+
+// Chart 2: 하드웨어 기업 주가 반응 (가로 막대)
+chartConfigs['hwChart'] = () => {
+  new Chart(document.getElementById('hwChart'), {
+    type: 'bar',
+    data: {
+      labels: ['마이크론 (1주)', '인텔 (장중)', '코어 사이언티픽', '코닝 (추세)'],
+      datasets: [{
+        label: '상승률 (%)',
+        data: [38, 14, 25, 15],
+        backgroundColor: ['#e11d48', '#f43f5e', '#1a1a1a', '#6b7280'],
+        borderRadius: 2
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      animations: { x: { from: 0 } },
+      animation: { duration: 1500, easing: 'easeInOutQuart' },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: (c) => ` +${c.raw}%` } }
+      },
+      scales: {
+        x: {
+          grid: { color: '#e5e5e5' },
+          ticks: { font: { size: 11, family: 'Noto Sans KR' }, color: '#777', callback: v => `+${v}%` }
+        },
+        y: { ticks: { font: { size: 12, family: 'Noto Sans KR' }, color: '#1a1a1a' }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+// Chart 3: 소프트웨어 주가 폭락 (세로 막대)
+chartConfigs['swChart'] = () => {
+  new Chart(document.getElementById('swChart'), {
+    type: 'bar',
+    data: {
+      labels: ['클라우드플레어\n(NET)', '허브스팟\n(HUBS)', '코어위브\n(CRWV)'],
+      datasets: [
+        {
+          label: '매출 성장률 (YoY %)',
+          data: [34, 18, 30],
+          backgroundColor: '#2563eb',
+          borderRadius: 2
+        },
+        {
+          label: '주가 변동률 (%)',
+          data: [-24, -19, -11],
+          backgroundColor: '#e11d48',
+          borderRadius: 2
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1500, easing: 'easeInOutQuart', delay: ctx => ctx.dataIndex * 150 },
+      animations: { y: { from: 0 } },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 11, family: 'Noto Sans KR' }, color: '#1a1a1a', padding: 14 }
+        },
+        tooltip: { callbacks: { label: c => ` ${c.dataset.label}: ${c.raw > 0 ? '+' : ''}${c.raw}%` } }
+      },
+      scales: {
+        x: { ticks: { font: { size: 11, family: 'Noto Sans KR' }, color: '#1a1a1a' }, grid: { display: false } },
+        y: {
+          grid: { color: '#e5e5e5' },
+          ticks: { font: { size: 11, family: 'Noto Sans KR' }, color: '#777', callback: v => `${v}%` }
+        }
+      }
+    }
+  });
+};
+
+// Chart 4: 레이더
+chartConfigs['radarChart'] = () => {
+  new Chart(document.getElementById('radarChart'), {
+    type: 'radar',
+    data: {
+      labels: ['수요 확실성', '수익모델 안정성', '정책 지원', '단기 주가 모멘텀', '리스크 내성'],
+      datasets: [
+        {
+          label: '하드웨어·인프라',
+          data: [95, 80, 90, 85, 70],
+          borderColor: '#e11d48',
+          backgroundColor: 'rgba(225,29,72,0.15)',
+          borderWidth: 2,
+          pointBackgroundColor: '#e11d48'
+        },
+        {
+          label: 'SaaS·소프트웨어',
+          data: [70, 30, 50, 25, 40],
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37,99,235,0.1)',
+          borderWidth: 2,
+          pointBackgroundColor: '#2563eb'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1800, easing: 'easeInOutQuart', delay: ctx => ctx.dataIndex * 120 },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 12, family: 'Noto Sans KR' }, color: '#1a1a1a', padding: 14 }
+        }
+      },
+      scales: {
+        r: {
+          min: 0, max: 100,
+          ticks: { display: false },
+          grid: { color: '#e5e5e5' },
+          pointLabels: { font: { size: 11, family: 'Noto Sans KR' }, color: '#1a1a1a' }
+        }
+      }
+    }
+  });
+};
+
+// ─────────────────────────────────────
+// CHART OBSERVER (보이면 200ms 후 실행)
+// ─────────────────────────────────────
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const canvas = entry.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        setTimeout(() => {
+          chartConfigs[canvas.id]();
+          entry.target.classList.add('chart-ready');
+          delete chartConfigs[canvas.id];
+        }, 200);
+      }
+      chartObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.25 });
+
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+// ─────────────────────────────────────
+// SIMULATION
+// ─────────────────────────────────────
+function runSim() {
+  const emp = +document.getElementById('empSlider').value;
+  const cost = +document.getElementById('costSlider').value;
+  const cut = +document.getElementById('cutSlider').value;
+  document.getElementById('empVal').textContent = emp;
+  document.getElementById('costVal').textContent = cost;
+  document.getElementById('cutVal').textContent = cut;
+
+  const before = emp * cost;
+  const remaining = Math.round(emp * (1 - cut / 100));
+  const after = remaining * cost;
+  const loss = before - after;
+  const lossRate = Math.round(loss / before * 100);
+
+  document.getElementById('simResult').innerHTML =
+    `AI 도입 전 월 매출: <span>$${before.toLocaleString()}</span><br>` +
+    `잔존 직원 수: <span>${remaining}명</span> (${100 - cut}%)<br>` +
+    `AI 도입 후 월 매출: <span>$${after.toLocaleString()}</span><br>` +
+    `<strong style="color:#f43f5e">월 매출 감소: -$${loss.toLocaleString()} (${lossRate}% 증발)</strong>`;
+}
+runSim();
+</script>
+</body>
+</html>

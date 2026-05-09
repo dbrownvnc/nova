@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>AI 수퍼사이클 분석 — 시험문제</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --blue: #2563eb;
+    --gray: #6b7280;
+    --border: #e5e5e5;
+    --green: #16a34a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 15px;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--text);
+    color: #fff;
+    padding: 48px 24px 36px;
+  }
+  .hero-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 6vw, 34px);
+    font-weight: 900;
+    line-height: 1.25;
+    margin-bottom: 12px;
+  }
+  .hero p { font-size: 13px; color: rgba(255,255,255,0.55); }
+
+  /* ─── TABS ─── */
+  .tabs {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 16px 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text2);
+    background: none;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* ─── PANELS ─── */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ─── CONTAINER ─── */
+  .container { max-width: 680px; margin: 0 auto; padding: 0 20px 60px; }
+
+  /* ─── HEADER BAR ─── */
+  .header-bar {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 18px;
+    margin: 24px 0 20px;
+    font-size: 13px;
+  }
+  .header-bar h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+  .header-bar p { color: var(--text2); font-size: 12px; margin: 0; }
+
+  /* ─── QUESTION CARD ─── */
+  .q-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .q-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+  }
+  .q-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 28px;
+  }
+  .q-meta { flex: 1; }
+  .q-meta .diff {
+    font-size: 11px;
+    color: var(--text2);
+    margin-bottom: 2px;
+  }
+  .q-meta .type-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .type-tag.blue { background: var(--blue); }
+  .type-tag.dark { background: var(--text); }
+  .type-tag.green { background: var(--green); }
+  .type-tag.gray { background: var(--gray); }
+
+  .q-body { padding: 16px 16px 18px; }
+  .q-body .question { font-size: 14px; font-weight: 600; line-height: 1.65; margin-bottom: 14px; }
+  .options { list-style: none; }
+  .options li {
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    margin-bottom: 7px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .options li:hover { border-color: var(--accent); background: rgba(225,29,72,0.04); }
+  .options li.selected { border-color: var(--accent); background: rgba(225,29,72,0.06); }
+  .options li.correct { border-color: var(--green); background: rgba(22,163,74,0.07); color: var(--green); font-weight: 600; }
+  .options li.wrong { border-color: var(--accent); background: rgba(225,29,72,0.07); color: var(--accent); text-decoration: line-through; }
+
+  .fill-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-size: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text);
+    margin-top: 4px;
+    transition: border-color 0.15s;
+  }
+  .fill-input:focus { outline: none; border-color: var(--accent); }
+  .fill-input.correct-input { border-color: var(--green); background: rgba(22,163,74,0.05); }
+  .fill-input.wrong-input { border-color: var(--accent); background: rgba(225,29,72,0.05); }
+
+  .ox-group { display: flex; gap: 10px; margin-top: 8px; }
+  .ox-btn {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-size: 20px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    cursor: pointer;
+    background: var(--bg2);
+    transition: all 0.15s;
+  }
+  .ox-btn:hover { border-color: var(--accent); }
+  .ox-btn.selected-o { border-color: var(--blue); background: rgba(37,99,235,0.08); }
+  .ox-btn.selected-x { border-color: var(--accent); background: rgba(225,29,72,0.08); }
+  .ox-btn.correct { border-color: var(--green); background: rgba(22,163,74,0.1); }
+  .ox-btn.wrong { border-color: var(--accent); background: rgba(225,29,72,0.1); opacity: 0.5; }
+
+  .check-btn {
+    margin-top: 12px;
+    padding: 9px 18px;
+    background: var(--text);
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    letter-spacing: 0.5px;
+    transition: background 0.15s;
+  }
+  .check-btn:hover { background: var(--accent); }
+
+  .feedback {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 3px;
+    font-size: 13px;
+    display: none;
+    line-height: 1.65;
+  }
+  .feedback.correct-fb { background: rgba(22,163,74,0.08); border-left: 3px solid var(--green); color: #14532d; }
+  .feedback.wrong-fb { background: rgba(225,29,72,0.06); border-left: 3px solid var(--accent); color: #9f1239; }
+
+  /* ─── SCORE ─── */
+  .score-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin: 20px 0;
+    font-size: 13px;
+  }
+  .score-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .score-label { color: var(--text2); font-size: 12px; }
+
+  /* ─── ANSWER SECTION ─── */
+  .a-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .a-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: var(--accent);
+    color: #fff;
+  }
+  .a-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .a-info { font-size: 12px; opacity: 0.85; }
+  .a-body { padding: 14px 16px 16px; }
+  .answer-tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 12px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 2px;
+    margin-bottom: 8px;
+  }
+  .a-explain { font-size: 13px; line-height: 1.75; color: var(--text); }
+  .a-explain strong { color: var(--accent); }
+  .a-explain em { color: var(--blue); font-style: normal; font-weight: 600; }
+
+  hr.rule { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="container">
+    <div class="hero-label">시험문제 · AI 수퍼사이클 분석</div>
+    <h1>📋 총 10문제</h1>
+    <p>하드웨어 vs 소프트웨어 · 에이전틱 AI · 거시경제 · 투자 시사점</p>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('quiz')">📋 문제지</button>
+  <button class="tab-btn" onclick="showTab('answer')">📝 정답·해설</button>
+</div>
+
+<!-- ════════════════ 문제지 패널 ════════════════ -->
+<div id="panel-quiz" class="panel active">
+<div class="container">
+
+  <div class="header-bar">
+    <h2>📋 시험문제 (총 10문제)</h2>
+    <p>문제를 풀고 '정답 확인' 버튼을 누르세요 · 정답지 탭에서 전체 해설 확인 가능</p>
+  </div>
+
+  <div class="score-bar">
+    <div>
+      <div class="score-label">현재 점수</div>
+      <div class="score-num"><span id="scoreNum">0</span> / 10</div>
+    </div>
+    <div style="flex:1; height:6px; background:#e5e5e5; border-radius:3px; margin-left:8px;">
+      <div id="scoreBar" style="height:100%; width:0%; background:#e11d48; border-radius:3px; transition:width 0.5s;"></div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-num">1</div>
+      <div class="q-meta">
+        <div class="diff">⭐ 쉬움</div>
+        <span class="type-tag">객관식</span>
+      </div>
+    </div>
+    <div class="q-body">
+      <p class="question">영상 분석 시점 기준, 나스닥과 S&P 500이 연속으로 사상 최고치를 경신한 기간은?</p>
+      <ul class="options" id="opts-1">
+        <li onclick="selectOpt(this,1,'a')">① 3주 연속</li>
+        <li onclick="selectOpt(this,1,'b')">② 4주 연속</li>
+        <li onclick="selectOpt(this,1,'c')">③ 5주 연속</li>
+        <li onclick="selectOpt(this,1,'d')">④ 6주 연속</li>
+      </ul>
+      <button class="check-btn" onclick="checkMC(1,'d')">정답 확인</button>
+      <div class="feedback" id="fb-1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-num">2</div>
+      <div class="q-meta">
+        <div class="diff">⭐ 쉬움</div>
+        <span class="type-tag">객관식</span>
+      </div>
+    </div>
+    <div class="q-body">
+      <p class="question">4월 비농업 고용 보고서에서 시장이 사전에 예상한 일자리 증가 수는?</p>
+      <ul class="options" id="opts-2">
+        <li onclick="selectOpt(this,2,'a')">① 약 35,000개</li>
+        <li onclick="selectOpt(this,2,'b')">② 약 65,000개</li>
+        <li onclick="selectOpt(this,2,'c')">③ 약 115,000개</li>
+        <li onclick="selectOpt(this,2,'d')">④ 약 150,000개</li>
+      </ul>
+      <button class="check-btn" onclick="checkMC(2,'b')">정답 확인</button>
+      <div class="feedback" id="fb-2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-num">3</div>
+      <div class="q-meta">
+        <div class="diff">⭐ 쉬움</div>
+        <span class="type-tag blue">OX 문제</span>
+      </div>
+    </div>
+    <div class="q-body">
+      <p class="question">호르무즈 해협은 전 세계 원유 물동량의 약 20%가 통과하는 핵심 경로이다.</p>
+      <div class="ox-group">
+        <button class="ox-btn" id="ox3-O" onclick="selectOX(3,'O')">O</button>
+        <button class="ox-btn" id="ox3-X" onclick="selectOX(3,'X')">X</button>
+      </div>
+      <button class="check-btn" onclick="checkOX(3,'O')">정답 확인</button>
+      <div class="feedback" id="fb-3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-num">4</div>
+      <div class="q-meta">
+        <div class="diff">⭐⭐ 보통</div>
+        <span class="type-tag dark">빈칸 채우기</span>
+      </div>
+    </div>
+    <div class="q-body">
+      <p class="question">4월 비농업 고용에서 단일 섹터로 가장 많은 일자리를 창출한 부문은 ( ① ) 부문이며, 이 부문의 증가분은 ( ② )개였다. 이를 제외하면 지난 12개월 중 ( ③ )개월간 일자리 순감소 상태였다.</p>
+      <input class="fill-input" id="fill-4a" placeholder="① 섹터 이름">
+      <input class="fill-input" id="fill-4b" placeholder="② 증가 수 (숫자만)" style="margin-top:8px;">
+      <input class="fill-input" id="fill-4c" placeholder="③ 개월 수 (숫자만)" style="margin-top:8px;">
+      <button class="check-btn" onclick="checkFill4()">정답 확인</button>
+      <div class="feedback" id="fb-4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-num">5</div>
+      <div class="q-meta">
+        <div class="diff">⭐⭐ 보통</div>
+        <span class="type-tag">객관식</span>
+      </div>
+    </div>
+    <div class="q-body">
+      <p class="question">월스트리트저널이 보도한 애플-인텔 파트너십 발표 직후 인텔의 장중 주가 상승폭은?</p>
+      <ul class="options" id="opts-5">
+        <li onclick="selectOpt(this,5,'a')">① 약 5%</li>
+        <li onclick="selectOpt(this,5,'b')">② 약 14%</li>
+        <li onclick="selectOpt(this,5,'c')">③ 약 24%</li>
+        <li onclick="selectOpt(this,5,'d')">④ 약 38%</li>
+      </ul>
+      <button class="check-btn" onclick="checkMC(5,'b')">정답 확인</button>
+      <div class="feedback" id="fb-5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-num">6</div>
+      <div class="q-meta">
+        <div class="diff">⭐⭐ 보통</div>
+        <span class="type-tag">객관식</span>
+      </div>
+    </div>
+    <div class="q-body">
+      <p class="question">클라우드플레어(NET)가 Q1 매출 34% 성장에도 불구하고 다음 날 주가가 폭락한 주된 이유로 가장 적절한 것은?</p>
+      <ul class="options" id="opts-6">
+        <li onclick="selectOpt(this,6,'a')">① 실적이 시장 예상치를 하회했기 때문</li>
+        <li onclick="selectOpt(this,6,'b')">② 경쟁사의 대규모 가격 인하가 발표되었기 때문</li>
+        <li onclick="selectOpt(this,6,'c')">③ 에이전틱 AI 전환 선언 + 직원 20% 해고 + 1.4억 달러 구조조정 비용으로 수익모델 불확실성 부각</li>
+        <li onclick="selectOpt(this,6,'d')">④ 미국 정부가 클라우드 서비스 규제 강화를 예고했기 때문</li>
+      </ul>
+      <button class="check-btn" onclick="checkMC(6,'c')">정답 확인</button>
+      <div class="feedback" id="fb-6"></div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-num">7</div>
+      <div class="q-meta">
+        <div class="diff">⭐⭐ 보통</div>
+        <span class="type-tag blue">OX 문제</span>
+      </div>
+    </div>
+    <div class="q-body">
+      <p class="question">기존 SaaS(B2B 소프트웨어) 기업의 주요 과금 방식은 '사용 데이터 용량(GB) 기준'이며, 에이전틱 AI 도입으로 이 모델이 유지된다.</p>
+      <div class="ox-group">
+        <button class="ox-btn" id="ox7-O" onclick="selectOX(7,'O')">O</button>
+        <button class="ox-btn" id="ox7-X" onclick="selectOX(7,'X')">X</button>
+      </div>
+      <button class="check-btn" onclick="checkOX(7,'X')">정답 확인</button>
+      <div class="feedback" id="fb-7"></div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-num">8</div>
+      <div class="q-meta">
+        <div class="diff">⭐⭐ 보통</div>
+        <span class="type-tag green">단답형</span>
+      </div>
+    </div>
+    <div class="q-body">
+      <p class="question">마이크론(MU)이 단 1주일 만에 약 38% 폭등한 배경에 있는, 에이전틱 AI 시대에 필수적인 초고속 메모리 기술의 약자(영문 3자)를 쓰시오.</p>
+      <input class="fill-input" id="fill-8" placeholder="영문 대문자로 작성">
+      <button class="check-btn" onclick="checkShort(8, ['HBM'])">정답 확인</button>
+      <div class="feedback" id="fb-8"></div>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-num">9</div>
+      <div class="q-meta">
+        <div class="diff">⭐⭐⭐ 어려움</div>
+        <span class="type-tag gray">서술형</span>
+      </div>
+    </div>
+    <div class="q-body">
+      <p class="question">영상에서 언급된 'SaaS 아포칼립스(SaaSapocalypse)'가 발생하는 메커니즘을 다음 흐름에 따라 서술하시오.<br><br>
+      [에이전틱 AI 도입] → [고객사 인력 변화] → [SaaS 매출 구조 변화] → [자가당착 결과]</p>
+      <textarea class="fill-input" id="fill-9" rows="4" placeholder="여기에 서술하세요..."></textarea>
+      <button class="check-btn" onclick="showModelAnswer(9)">모범 답안 보기</button>
+      <div class="feedback" id="fb-9"></div>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-num">10</div>
+      <div class="q-meta">
+        <div class="diff">⭐⭐⭐ 어려움</div>
+        <span class="type-tag">객관식 (복수 정답 가능)</span>
+      </div>
+    </div>
+    <div class="q-body">
+      <p class="question">영상에서 AI 투자의 '하드웨어 르네상스' 수혜주로 언급되거나, 그 흐름과 부합하는 기업을 모두 고르시오.</p>
+      <ul class="options" id="opts-10" style="list-style:none;">
+        <li onclick="toggleMulti(this)">① 마이크론 (MU) — HBM 메모리</li>
+        <li onclick="toggleMulti(this)">② 클라우드플레어 (NET) — AI 소프트웨어</li>
+        <li onclick="toggleMulti(this)">③ 코닝 (GLW) — 광케이블</li>
+        <li onclick="toggleMulti(this)">④ 인텔 (INTC) — 반도체 제조·애플 파트너십</li>
+        <li onclick="toggleMulti(this)">⑤ 허브스팟 (HUBS) — CRM SaaS</li>
+      </ul>
+      <button class="check-btn" onclick="checkMulti10()">정답 확인</button>
+      <div class="feedback" id="fb-10"></div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+</div><!-- /panel-quiz -->
+
+
+<!-- ════════════════ 정답지 패널 ════════════════ -->
+<div id="panel-answer" class="panel">
+<div class="container">
+
+  <div class="header-bar">
+    <h2>📝 정답 및 해설</h2>
+    <p>총 10문제 · 각 문제별 정답과 핵심 해설 수록</p>
+  </div>
+
+  <!-- A1 -->
+  <div class="a-card">
+    <div class="a-header">
+      <div class="a-num">문제 1</div>
+      <div class="a-info">⭐ 쉬움 · 객관식</div>
+    </div>
+    <div class="a-body">
+      <div class="answer-tag">정답: ④ 6주 연속</div>
+      <p class="a-explain">영상에서 나스닥과 S&P 500 모두 <strong>6주 연속 사상 최고치</strong>를 경신하고 있다고 명시했다. 이 수치는 거시경제 악재(소비 심리 최저, 지정학 리스크)와 주식 시장 랠리 사이의 모순을 설명하는 핵심 배경이다.</p>
+    </div>
+  </div>
+
+  <!-- A2 -->
+  <div class="a-card">
+    <div class="a-header">
+      <div class="a-num">문제 2</div>
+      <div class="a-info">⭐ 쉬움 · 객관식</div>
+    </div>
+    <div class="a-body">
+      <div class="answer-tag">정답: ② 약 65,000개</div>
+      <p class="a-explain">4월 비농업 고용 사전 컨센서스는 <strong>65,000개</strong>였다. 실제 발표치는 115,000개로 예상 대비 약 77% 초과했다. 이 격차가 '고용 착시' 논란의 시작점이다.</p>
+    </div>
+  </div>
+
+  <!-- A3 -->
+  <div class="a-card">
+    <div class="a-header">
+      <div class="a-num">문제 3</div>
+      <div class="a-info">⭐ 쉬움 · OX</div>
+    </div>
+    <div class="a-body">
+      <div class="answer-tag">정답: O (맞음)</div>
+      <p class="a-explain">영상에서 호르무즈 해협은 전 세계 원유 물동량의 <strong>약 20%</strong>가 통과하는 '글로벌 에너지 공급망의 핵심 동맥'으로 설명했다. 미군이 이 해협에서 이란 연계 유조선 2척을 공습해 무력화한 사건이 소비자 공포의 핵심 원인 중 하나다.</p>
+    </div>
+  </div>
+
+  <!-- A4 -->
+  <div class="a-card">
+    <div class="a-header">
+      <div class="a-num">문제 4</div>
+      <div class="a-info">⭐ 쉬움 · 빈칸 채우기</div>
+    </div>
+    <div class="a-body">
+      <div class="answer-tag">정답: ① 헬스케어(의료·보건) ② 37,000개 ③ 10개월</div>
+      <p class="a-explain">전체 증가분 115,000개 중 <strong>37,000개(약 32%)</strong>가 헬스케어 단일 섹터에서 나왔다. 이를 제거하면 지난 <em>12개월 중 10개월</em>이 순감소였다. 경제 전반이 아닌 특정 필수 섹터 하나가 지표를 끌어올린 착시 현상이다.</p>
+    </div>
+  </div>
+
+  <!-- A5 -->
+  <div class="a-card">
+    <div class="a-header">
+      <div class="a-num">문제 5</div>
+      <div class="a-info">⭐⭐ 보통 · 객관식</div>
+    </div>
+    <div class="a-body">
+      <div class="answer-tag">정답: ② 약 14%</div>
+      <p class="a-explain">WSJ의 애플-인텔 파트너십 예비합의 보도 직후 인텔 주가는 <strong>장중 14% 이상 폭등</strong>했다. 이는 약 20년간 TSMC에 의존해 온 애플의 공급망 전략 전환, 리쇼어링 흐름, 미 정부(트럼프 행정부의 인텔 지분 10% 보유)의 반도체 제조 인프라 지원이 복합적으로 반영된 결과다.</p>
+    </div>
+  </div>
+
+  <!-- A6 -->
+  <div class="a-card">
+    <div class="a-header">
+      <div class="a-num">문제 6</div>
+      <div class="a-info">⭐⭐ 보통 · 객관식</div>
+    </div>
+    <div class="a-body">
+      <div class="answer-tag">정답: ③</div>
+      <p class="a-explain">클라우드플레어 CEO는 실적 발표에서 에이전틱 AI 중심 운영 모델 전환을 선언하며 <strong>직원 1,100명(전체의 20%) 해고</strong> 및 <strong>구조조정 비용 1억 4,000만 달러 이상</strong>을 밝혔다. 매출 성장은 좋았지만 시장은 비즈니스 모델의 불확실성과 수익성 악화를 즉각 반영해 다음 날 주가를 24% 내리꽂았다.</p>
+    </div>
+  </div>
+
+  <!-- A7 -->
+  <div class="a-card">
+    <div class="a-header">
+      <div class="a-num">문제 7</div>
+      <div class="a-info">⭐⭐ 보통 · OX</div>
+    </div>
+    <div class="a-body">
+      <div class="answer-tag">정답: X (틀림)</div>
+      <p class="a-explain">기존 SaaS 기업의 과금 방식은 <strong>'직원 수(시트 단위) × 월정액'</strong>이다. 데이터 용량 기준이 아니다. 에이전틱 AI가 고객사의 인력을 90% 감축시키면 그만큼 시트 수가 줄어 SaaS 기업의 매출 기반이 직접 붕괴된다. 이것이 SaaS 아포칼립스의 핵심 메커니즘이다.</p>
+    </div>
+  </div>
+
+  <!-- A8 -->
+  <div class="a-card">
+    <div class="a-header">
+      <div class="a-num">문제 8</div>
+      <div class="a-info">⭐⭐ 보통 · 단답형</div>
+    </div>
+    <div class="a-body">
+      <div class="answer-tag">정답: HBM</div>
+      <p class="a-explain"><strong>HBM(High Bandwidth Memory, 고대역폭 메모리)</strong>. 영상은 일반 메모리를 '얇은 빨대', HBM을 '댐의 수문'에 비유했다. 에이전틱 AI가 여러 시스템을 실시간으로 순차 처리하려면 GPU 연산 속도에 걸맞은 초고속 데이터 통로가 필수이며, 마이크론(MU)이 이 분야의 핵심 수혜 기업으로 언급되었다.</p>
+    </div>
+  </div>
+
+  <!-- A9 -->
+  <div class="a-card">
+    <div class="a-header">
+      <div class="a-num">문제 9</div>
+      <div class="a-info">⭐⭐⭐ 어려움 · 서술형</div>
+    </div>
+    <div class="a-body">
+      <div class="answer-tag">모범 답안</div>
+      <p class="a-explain">
+        <strong>[에이전틱 AI 도입]</strong> 기업이 인간 개입 없이 스스로 목표를 설정하고 외부 시스템에 접속해 업무를 완수하는 에이전틱 AI를 도입한다.<br><br>
+        <strong>[고객사 인력 변화]</strong> 업무의 상당 부분이 자동화되어 고객 기업은 기존 100명의 인력을 10명 수준으로 대폭 감축할 수 있게 된다.<br><br>
+        <strong>[SaaS 매출 구조 변화]</strong> 기존 SaaS 기업은 '직원 수(시트) × 월정액' 방식으로 수익을 얻었으나, 고객사의 인력이 90% 줄어들면 그만큼 라이센스 매출도 90% 증발한다.<br><br>
+        <strong>[자가당착 결과]</strong> 소프트웨어 기업이 AI를 더 똑똑하게 만들수록 고객사의 인력이 줄고 자신의 매출 기반이 파괴되는 치명적인 <em>자가당착(Self-Destructive Loop)</em>에 빠진다. 이것이 '사스 아포칼립스'의 본질이다.
+      </p>
+    </div>
+  </div>
+
+  <!-- A10 -->
+  <div class="a-card">
+    <div class="a-header">
+      <div class="a-num">문제 10</div>
+      <div class="a-info">⭐⭐⭐ 어려움 · 복수 객관식</div>
+    </div>
+    <div class="a-body">
+      <div class="answer-tag">정답: ①③④ (마이크론, 코닝, 인텔)</div>
+      <p class="a-explain">
+        <strong>① 마이크론 (MU)</strong> — HBM 수요 폭발로 1주일 +38%, $746.79 기록. ✅ 수혜주<br>
+        <strong>② 클라우드플레어 (NET)</strong> — 소프트웨어/네트워크 기업. 주가 -24% 폭락. ❌ 해당 없음<br>
+        <strong>③ 코닝 (GLW)</strong> — AI 데이터센터 광케이블 수요 급증으로 사상 최고치 연속 경신. ✅ 수혜주<br>
+        <strong>④ 인텔 (INTC)</strong> — 애플 파트너십 + 미 정부 지분 10% 보유 + 리쇼어링 수혜. ✅ 수혜주<br>
+        <strong>⑤ 허브스팟 (HUBS)</strong> — SaaS 기업. 가이던스 실망으로 -19~20% 폭락. ❌ 해당 없음
+      </p>
+    </div>
+  </div>
+
+</div><!-- /container -->
+</div><!-- /panel-answer -->
+
+<script>
+// ─── TAB ───
+function showTab(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    if (b.textContent.includes(name === 'quiz' ? '문제' : '정답')) b.classList.add('active');
+  });
+}
+
+// ─── SCORE ───
+let score = 0;
+const answered = {};
+function updateScore() {
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('scoreBar').style.width = (score * 10) + '%';
+}
+
+// ─── MC (단일 선택) ───
+function selectOpt(el, qNum, val) {
+  if (answered[qNum]) return;
+  document.querySelectorAll('#opts-' + qNum + ' li').forEach(li => li.classList.remove('selected'));
+  el.classList.add('selected');
+  el.dataset.val = val;
+}
+function checkMC(qNum, correct) {
+  if (answered[qNum]) return;
+  const opts = document.querySelectorAll('#opts-' + qNum + ' li');
+  const selected = [...opts].find(li => li.classList.contains('selected'));
+  const fb = document.getElementById('fb-' + qNum);
+  if (!selected) { fb.style.display = 'block'; fb.className = 'feedback wrong-fb'; fb.textContent = '먼저 보기를 선택하세요.'; return; }
+  answered[qNum] = true;
+  opts.forEach(li => {
+    const map = { a:0, b:1, c:2, d:3, e:4 };
+    const val = li.textContent.trim()[0] === '①' ? 'a' :
+                li.textContent.trim()[0] === '②' ? 'b' :
+                li.textContent.trim()[0] === '③' ? 'c' :
+                li.textContent.trim()[0] === '④' ? 'd' : 'e';
+    if (val === correct) li.classList.add('correct');
+  });
+  const selectedVal = selected.textContent.trim()[0] === '①' ? 'a' :
+                      selected.textContent.trim()[0] === '②' ? 'b' :
+                      selected.textContent.trim()[0] === '③' ? 'c' :
+                      selected.textContent.trim()[0] === '④' ? 'd' : 'e';
+  if (selectedVal !== correct) selected.classList.add('wrong');
+  const isCorrect = selectedVal === correct;
+  if (isCorrect) { score++; updateScore(); fb.className = 'feedback correct-fb'; fb.textContent = '✅ 정답입니다!'; }
+  else { fb.className = 'feedback wrong-fb'; fb.textContent = '❌ 오답입니다. 정답을 확인하세요.'; }
+  fb.style.display = 'block';
+}
+
+// ─── OX ───
+const oxSel = {};
+function selectOX(qNum, val) {
+  if (answered[qNum]) return;
+  oxSel[qNum] = val;
+  document.getElementById('ox'+qNum+'-O').className = 'ox-btn' + (val === 'O' ? ' selected-o' : '');
+  document.getElementById('ox'+qNum+'-X').className = 'ox-btn' + (val === 'X' ? ' selected-x' : '');
+}
+function checkOX(qNum, correct) {
+  if (answered[qNum]) return;
+  const fb = document.getElementById('fb-' + qNum);
+  if (!oxSel[qNum]) { fb.style.display = 'block'; fb.className = 'feedback wrong-fb'; fb.textContent = 'O 또는 X를 선택하세요.'; return; }
+  answered[qNum] = true;
+  const isCorrect = oxSel[qNum] === correct;
+  document.getElementById('ox'+qNum+'-'+correct).classList.add('correct');
+  if (!isCorrect) document.getElementById('ox'+qNum+'-'+oxSel[qNum]).classList.add('wrong');
+  if (isCorrect) { score++; updateScore(); fb.className = 'feedback correct-fb'; fb.textContent = '✅ 정답입니다!'; }
+  else { fb.className = 'feedback wrong-fb'; fb.textContent = `❌ 오답입니다. 정답은 ${correct}입니다.`; }
+  fb.style.display = 'block';
+}
+
+// ─── 빈칸 Q4 ───
+function checkFill4() {
+  if (answered[4]) return;
+  const a = document.getElementById('fill-4a').value.trim();
+  const b = document.getElementById('fill-4b').value.trim();
+  const c = document.getElementById('fill-4c').value.trim();
+  const fb = document.getElementById('fb-4');
+  const ok1 = a.includes('헬스') || a.includes('의료') || a.toLowerCase().includes('health');
+  const ok2 = b === '37000' || b === '37,000';
+  const ok3 = c === '10';
+  const allOk = ok1 && ok2 && ok3;
+  answered[4] = true;
+  if (allOk) { score++; updateScore(); fb.className = 'feedback correct-fb'; fb.textContent = '✅ 세 항목 모두 정답입니다!'; }
+  else {
+    fb.className = 'feedback wrong-fb';
+    fb.innerHTML = `❌ 정답: ① 헬스케어(의료·보건) / ② 37,000개 / ③ 10개월<br>
+    ${ok1?'①✅':'①❌'} ${ok2?'②✅':'②❌'} ${ok3?'③✅':'③❌'}`;
+  }
+  fb.style.display = 'block';
+}
+
+// ─── 단답 Q8 ───
+function checkShort(qNum, answers) {
+  if (answered[qNum]) return;
+  const input = document.getElementById('fill-' + qNum);
+  const val = input.value.trim().toUpperCase();
+  const fb = document.getElementById('fb-' + qNum);
+  const isCorrect = answers.map(a => a.toUpperCase()).includes(val);
+  answered[qNum] = true;
+  input.className = 'fill-input ' + (isCorrect ? 'correct-input' : 'wrong-input');
+  if (isCorrect) { score++; updateScore(); fb.className = 'feedback correct-fb'; fb.textContent = '✅ 정답입니다!'; }
+  else { fb.className = 'feedback wrong-fb'; fb.textContent = `❌ 정답은 ${answers[0]}입니다.`; }
+  fb.style.display = 'block';
+}
+
+// ─── 서술형 Q9 ───
+function showModelAnswer(qNum) {
+  const fb = document.getElementById('fb-' + qNum);
+  fb.className = 'feedback correct-fb';
+  fb.innerHTML = `<strong>모범 답안:</strong><br>에이전틱 AI 도입 → 고객사 업무 자동화로 인력 90% 감축 가능 → SaaS 시트 수 급감으로 월 구독료 매출 급락 → AI를 더 발전시킬수록 자신의 수익 기반이 파괴되는 자가당착에 빠짐 (SaaS 아포칼립스)`;
+  fb.style.display = 'block';
+}
+
+// ─── 복수 선택 Q10 ───
+function toggleMulti(el) {
+  if (answered[10]) return;
+  el.classList.toggle('selected');
+}
+function checkMulti10() {
+  if (answered[10]) return;
+  const opts = document.querySelectorAll('#opts-10 li');
+  const correct = new Set([0, 2, 3]); // ①③④ = index 0,2,3
+  const selected = new Set();
+  opts.forEach((li, i) => { if (li.classList.contains('selected')) selected.add(i); });
+  const fb = document.getElementById('fb-10');
+  answered[10] = true;
+  let allRight = true;
+  opts.forEach((li, i) => {
+    if (correct.has(i)) {
+      li.classList.add('correct');
+      if (!selected.has(i)) allRight = false;
+    } else if (selected.has(i)) {
+      li.classList.add('wrong');
+      allRight = false;
+    }
+  });
+  if (allRight && selected.size === correct.size) {
+    score++; updateScore(); fb.className = 'feedback correct-fb'; fb.textContent = '✅ 정답입니다! ①③④ 모두 선택했군요.';
+  } else {
+    fb.className = 'feedback wrong-fb'; fb.textContent = '❌ 정답은 ①③④ (마이크론, 코닝, 인텔)입니다. ②NET와 ⑤HUBS는 소프트웨어 기업으로 주가 폭락 사례입니다.';
+  }
+  fb.style.display = 'block';
+}
+</script>
+</body>
+</html>
