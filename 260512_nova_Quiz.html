@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시험문제 — S&P 7400 & CPI 인플레 경고 | NOVA Real Invest</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --green: #16a34a;
+    --red: #e11d48;
+    --yellow: #d97706;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 18px 80px;
+  }
+
+  /* ── STICKY SCOREBAR ── */
+  #scorebar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--text);
+    color: #fff;
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+  .score-label {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #aaa;
+  }
+  .score-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .score-sep { color: #444; font-size: 18px; }
+  .progress-wrap {
+    flex: 1;
+    min-width: 100px;
+    background: #333;
+    border-radius: 10px;
+    height: 8px;
+    overflow: hidden;
+  }
+  #progressBar {
+    height: 100%;
+    width: 0%;
+    border-radius: 10px;
+    background: var(--accent);
+    transition: width 0.4s ease, background 0.4s ease;
+  }
+  #rateLabel {
+    font-size: 13px;
+    font-weight: 700;
+    min-width: 40px;
+    text-align: right;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    border-bottom: 3px solid var(--accent);
+    padding: 28px 0 16px;
+    margin-bottom: 8px;
+  }
+  .quiz-eyebrow {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .quiz-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 6vw, 32px);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .quiz-meta {
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  /* ── QUESTION CARD ── */
+  .q-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    background: var(--bg2);
+    transition: box-shadow 0.2s;
+  }
+  .q-card:hover { box-shadow: 0 2px 16px rgba(0,0,0,0.06); }
+  .q-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .q-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .q-difficulty {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+  .diff-easy { background: #dcfce7; color: #16a34a; }
+  .diff-medium { background: #fef3c7; color: #d97706; }
+  .diff-hard { background: #fee2e2; color: #e11d48; }
+  .q-type {
+    font-size: 10px;
+    color: var(--text2);
+    background: var(--border);
+    padding: 2px 8px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .q-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+
+  /* ── OPTIONS (MCQ) ── */
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt-btn {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    text-align: left;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    width: 100%;
+    line-height: 1.5;
+  }
+  .opt-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: #fff5f7;
+  }
+  .opt-btn.correct {
+    background: #dcfce7;
+    border-color: var(--green);
+    color: var(--green);
+    font-weight: 700;
+  }
+  .opt-btn.wrong {
+    background: #fee2e2;
+    border-color: var(--red);
+    color: var(--red);
+  }
+  .opt-btn:disabled { cursor: not-allowed; }
+
+  /* ── OX BUTTONS ── */
+  .ox-row { display: flex; gap: 10px; }
+  .ox-btn {
+    flex: 1;
+    padding: 14px;
+    font-size: 24px;
+    font-weight: 700;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    background: #fff;
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: all 0.2s;
+  }
+  .ox-btn:hover:not(:disabled) { border-color: var(--accent); background: #fff5f7; }
+  .ox-btn.correct { background: #dcfce7; border-color: var(--green); }
+  .ox-btn.wrong { background: #fee2e2; border-color: var(--red); }
+  .ox-btn:disabled { cursor: not-allowed; }
+
+  /* ── SHORT ANSWER ── */
+  .sa-row { display: flex; gap: 8px; }
+  .sa-input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .sa-input:focus { border-color: var(--accent); }
+  .sa-input.correct { border-color: var(--green); background: #dcfce7; }
+  .sa-input.wrong { border-color: var(--red); background: #fee2e2; }
+  .sa-input:disabled { background: #fafafa; cursor: not-allowed; }
+  .submit-btn {
+    padding: 10px 16px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .submit-btn:hover { background: var(--accent2); }
+  .submit-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+  /* ── FEEDBACK BADGE ── */
+  .feedback-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .badge-correct { background: var(--green); color: #fff; }
+  .badge-wrong { background: var(--red); color: #fff; }
+
+  /* ── EXPLANATION ── */
+  .explanation {
+    display: none;
+    margin-top: 14px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--text);
+  }
+  .explanation.show { display: block; }
+  .explanation strong { color: var(--accent); }
+  .explanation .correct-ans {
+    display: block;
+    color: var(--green);
+    font-weight: 700;
+    margin-bottom: 6px;
+    font-size: 13px;
+  }
+
+  /* ── MODAL ── */
+  #finalModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  #finalModal.show { display: flex; }
+  .modal-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 32px 28px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .modal-emoji { font-size: 56px; margin-bottom: 12px; }
+  .modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 900;
+    margin-bottom: 6px;
+  }
+  .modal-score {
+    font-size: 44px;
+    font-weight: 900;
+    font-family: 'Playfair Display', serif;
+    color: var(--accent);
+    margin: 12px 0 4px;
+  }
+  .modal-grade {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .modal-msg {
+    font-size: 14px;
+    color: var(--text2);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  .retry-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 28px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .retry-btn:hover { background: var(--accent2); }
+</style>
+</head>
+<body>
+
+<!-- STICKY SCOREBAR -->
+<div id="scorebar">
+  <div>
+    <div class="score-label">푼 문제</div>
+    <div class="score-value"><span id="solvedCount">0</span> / 10</div>
+  </div>
+  <div class="score-sep">|</div>
+  <div>
+    <div class="score-label">맞힌 문제</div>
+    <div class="score-value" id="correctCount">0</div>
+  </div>
+  <div class="score-sep">|</div>
+  <div style="flex:1;min-width:80px;">
+    <div class="score-label" style="margin-bottom:4px;">정답률 <span id="rateLabel">0%</span></div>
+    <div class="progress-wrap"><div id="progressBar"></div></div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="quiz-header">
+  <div class="quiz-eyebrow">Nova Real Invest · 인터랙티브 시험</div>
+  <div class="quiz-title">S&amp;P 7400의 이면 —<br>CPI 인플레 경고 핵심 문제</div>
+  <div class="quiz-meta">📅 2026.05.12 방송 기반 · 10문제 · 객관식·단답형·OX 혼합</div>
+</div>
+
+<!-- QUIZ CONTAINER -->
+<div id="quizContainer"></div>
+
+<!-- FINAL MODAL -->
+<div id="finalModal">
+  <div class="modal-card">
+    <div class="modal-emoji" id="modalEmoji">🏆</div>
+    <div class="modal-title">최종 결과</div>
+    <div class="modal-score" id="modalScore">0 / 10</div>
+    <div class="modal-grade" id="modalGrade">등급: A</div>
+    <div class="modal-msg" id="modalMsg"></div>
+    <button class="retry-btn" onclick="retryQuiz()">🔄 다시 풀기</button>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────
+// QUIZ DATA
+// ─────────────────────────────────────────
+const QUIZ_DATA = [
+  {
+    id: 1,
+    type: 'mcq',
+    difficulty: 'easy',
+    question: '방송 기준으로 소비자 심리지수가 48.2로 발표됐는데, 이는 어느 시점 이후 최저치라고 언급됐나요?',
+    options: ['1929년 대공황', '1952년 한국전쟁', '1973년 오일쇼크', '1987년 블랙먼데이'],
+    answer: 1,
+    explanation: '방송에서 "1952년 한국전쟁이 일어나던 때 이후의 최저치"라고 언급됐습니다. 소비자 심리지수 48.2는 약 70년 만의 최저 수준으로 서민 체감 경기와 주가지수 간의 심각한 괴리를 보여주는 지표입니다.'
+  },
+  {
+    id: 2,
+    type: 'mcq',
+    difficulty: 'medium',
+    question: 'CPI 데이터 왜곡의 원인으로 제시된 내용은 무엇인가요?',
+    options: [
+      '연방준비제도가 금리 결정을 위해 데이터를 조작했다',
+      '미국 정부 셧다운(43일)으로 노동통계국이 쉘터비 데이터를 수집하지 못해 6개월 후 일괄 반영됐다',
+      '에너지 가격이 CPI 계산식에서 제외됐다',
+      '중국의 수입 물가가 CPI를 왜곡시켰다'
+    ],
+    answer: 1,
+    explanation: '방송에서는 "25년도 정부 예산 미통과로 43일간 셧다운"이 발생해 미국 노동통계국이 업무를 못했고, 10월 쉘터(주거비) 데이터가 0으로 처리됐다고 설명했습니다. 이 데이터는 6개월 단위 패널로 집계되기 때문에 4월 패널에서 누락분이 일괄 반영되어 실제보다 0.25%p 정도 물가가 자동 상승할 수 있다고 했습니다.'
+  },
+  {
+    id: 3,
+    type: 'mcq',
+    difficulty: 'medium',
+    question: 'S&P 500 관련 설명 중 방송 내용과 다른 것은?',
+    options: [
+      '500개 기업 중 50일 이평선 위 기업이 52% 수준이다',
+      '약 240개 기업이 52주 최저가를 매일 찍고 있다',
+      '상위 약 10개 종목이 지수 상승을 주도하고 있다',
+      '500개 기업 모두가 고르게 상승하고 있다'
+    ],
+    answer: 3,
+    explanation: '방송에서는 정반대의 내용을 말했습니다. "500개 기업 중 10개 정도만 난리가 나고 490개는 하락하고 있다"고 언급했으며, 50일 이평선 아래에 있는 기업들이 52주 최저가를 매일 찍고 있다고 설명했습니다. 이를 "페이크 지수"라고 표현했습니다.'
+  },
+  {
+    id: 4,
+    type: 'mcq',
+    difficulty: 'hard',
+    question: '방송에서 현재 S&P 500의 극단적 양극화 현상(소수 종목이 지수 주도)과 비슷한 역사적 사례로 언급된 것을 모두 고르면?',
+    options: [
+      '1929년 대공황 / 1973년 오일쇼크 / 1999년 닷컴버블',
+      '1987년 블랙먼데이 / 2008년 금융위기 / 2020년 코로나 폭락',
+      '1929년 대공황 / 2008년 금융위기 / 1999년 닷컴버블',
+      '1973년 오일쇼크 / 1987년 블랙먼데이 / 2008년 금융위기'
+    ],
+    answer: 0,
+    explanation: '방송에서 "이 역사적인 행태들은 1990년 이후로 딱 세 번 있었는데"라며 1929년 대공황, 1973년 오일쇼크, 1999년 닷컴버블을 언급했습니다. 세 번 모두 공통점은 "주가지수가 최고치를 매일 찍고 있었다"는 것으로, 현재 상황과 비교했습니다.'
+  },
+  {
+    id: 5,
+    type: 'mcq',
+    difficulty: 'medium',
+    question: '트럼프 대통령의 중국 방문(5/12~14)에 동행하는 기업 중 방송에서 배제됐다고 명시된 곳은?',
+    options: ['보잉', '퀄컴', '엔비디아', '마이크론'],
+    answer: 2,
+    explanation: '방송에서 "엔비디아는 완전히 배제됐다"고 명확히 언급했습니다. 동행 기업은 보잉(항공기 500대 판매), 퀄컴(중국 스마트폰·자동차 칩 라이센스), 마이크론, 애플, 테슬라였습니다. 방송에서는 엔비디아가 빠진 것을 두고 "알맹이는 쏙 빼고 B급을 데려가는 것"이라고 평가했습니다.'
+  },
+  {
+    id: 6,
+    type: 'mcq',
+    difficulty: 'easy',
+    question: 'AI 인프라 투자 자본 흐름의 단계 중 방송에서 "현재 핵심 주목" 단계로 언급된 것은?',
+    options: [
+      'GPU(엔비디아·AMD)',
+      'HBM·DRAM 메모리(마이크론)',
+      '전력 패키징',
+      '광통신(코닝·루멘텀·LITE 등)'
+    ],
+    answer: 3,
+    explanation: '방송에서 AI 인프라 투자는 "GPU → HBM/DRAM → 전력 패키징 → 광통신(광커넥트)"의 순서로 자본이 이동한다고 설명했습니다. "구리 안 써, 파이버 쓴다"며 광통신을 현재 주목해야 할 단계로 강조했습니다. 코닝↔루멘텀은 페어 트레이딩 관계로 언급됐습니다.'
+  },
+  {
+    id: 7,
+    type: 'ox',
+    difficulty: 'easy',
+    question: '방송에서 삼성전자가 파업을 할 경우 글로벌 메모리 시장의 약 1/3을 차지하기 때문에 마이크론이 반사 수혜를 받는다고 설명했다.',
+    answer: 'O',
+    explanation: '방송에서 "삼성이 동네에서 거의 3분의 1 정도를 커버치고 있다"며 "삼성이 올스톱을 하면 그 충격이 엄청나다"고 했습니다. 이 논리로 마이크론이 오늘 "얼쑤 하면서 올라갔다"고 설명했습니다.'
+  },
+  {
+    id: 8,
+    type: 'ox',
+    difficulty: 'medium',
+    question: '방송에서 현재 AI가 일으키는 버블의 진짜 복병(위험 요소)은 전력(그리드) 부족 문제라고 언급됐다.',
+    answer: 'O',
+    explanation: '방송에서 "AI의 복병은 그리드다, AI의 복병은 전기다"라며 "지금 전기가 없다"고 강조했습니다. 라우딩 카운티 공무원들이 허가만 내주고 유틸리티 해결은 방치한다는 사례를 들며 "AI 버블이 전기 없어서 끝나버릴 수 있다"고 경고했습니다.'
+  },
+  {
+    id: 9,
+    type: 'short',
+    difficulty: 'medium',
+    question: '방송에서 코어 CPI가 만약 컨센서스를 상회해 약 2.8% 이상으로 나온다면, 당장 어떤 기대가 사라진다고 했나요? (3~5글자로 답하세요)',
+    answer: '금리인하',
+    altAnswers: ['기준금리인하', '금리 인하', '금리인하 기대'],
+    explanation: '방송에서 "코어 CPI가 2.7로 꽁쭉 올라갈 수 있는데, 컨센서스를 상회해 2.8 정도 나온다면 앞으로 당분간 금리 인하에 대한 얘기는 쏙 들어가게 될 것"이라고 했습니다. 금리인하 기대 소멸은 기술주·성장주에 직격탄이 됩니다.'
+  },
+  {
+    id: 10,
+    type: 'short',
+    difficulty: 'hard',
+    question: '방송에서 5월 하순의 세 가지 빅이벤트(CPI, 트럼프 방중, 엔비디아 실적) 결과가 결정짓는다고 한 기간은 언제인가요? (예: "2026년 X분기" 형태로 답하세요)',
+    answer: '2026년 하반기',
+    altAnswers: ['하반기', '2026 하반기', '올해 하반기'],
+    explanation: '방송에서 "5월 하순이 움직이는 이것들이 전체 2026년 하반기를 결정짓는 방향타 역할을 할 것"이라고 했습니다. 즉 이번 5월 이벤트들이 하반기 투자 방향의 분기점이라는 의미입니다.'
+  }
+];
+
+// ─────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────
+let state = { solved: 0, correct: 0 };
+
+function updateScorebar() {
+  document.getElementById('solvedCount').textContent = state.solved;
+  document.getElementById('correctCount').textContent = state.correct;
+  const rate = state.solved > 0 ? Math.round((state.correct / state.solved) * 100) : 0;
+  document.getElementById('rateLabel').textContent = rate + '%';
+  const bar = document.getElementById('progressBar');
+  bar.style.width = (state.solved / 10 * 100) + '%';
+  if (rate < 40) bar.style.background = '#e11d48';
+  else if (rate < 70) bar.style.background = '#d97706';
+  else bar.style.background = '#16a34a';
+  if (state.solved === 10) showFinalModal();
+}
+
+function gradeResult(correct, total) {
+  const pct = correct / total;
+  if (pct >= 0.9) return { grade: 'A', emoji: '🏆', msg: '완벽합니다! 방송 내용을 완전히 이해하셨군요. 노바픽 수준의 통찰력입니다.' };
+  if (pct >= 0.7) return { grade: 'B', emoji: '🥈', msg: '훌륭해요! 핵심 내용을 잘 파악하셨습니다. 한 번 더 복습하면 A입니다.' };
+  if (pct >= 0.5) return { grade: 'C', emoji: '📚', msg: '절반 이상 맞히셨네요. 분석 리포트를 한 번 더 정독해보세요.' };
+  return { grade: 'D', emoji: '💪', msg: '방송 내용을 다시 들어보시고, 리포트를 천천히 읽어보세요. 다음엔 더 잘하실 수 있어요!' };
+}
+
+function showFinalModal() {
+  const r = gradeResult(state.correct, 10);
+  document.getElementById('modalEmoji').textContent = r.emoji;
+  document.getElementById('modalScore').textContent = state.correct + ' / 10';
+  document.getElementById('modalGrade').textContent = '등급: ' + r.grade;
+  document.getElementById('modalMsg').textContent = r.msg;
+  const modal = document.getElementById('finalModal');
+  modal.classList.add('show');
+}
+
+function retryQuiz() {
+  state = { solved: 0, correct: 0 };
+  updateScorebar();
+  document.getElementById('finalModal').classList.remove('show');
+  renderQuiz();
+}
+
+// ─────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────
+function diffLabel(d) {
+  if (d === 'easy') return '<span class="q-difficulty diff-easy">쉬움</span>';
+  if (d === 'medium') return '<span class="q-difficulty diff-medium">보통</span>';
+  return '<span class="q-difficulty diff-hard">어려움</span>';
+}
+function typeLabel(t) {
+  if (t === 'mcq') return '<span class="q-type">객관식</span>';
+  if (t === 'ox') return '<span class="q-type">OX</span>';
+  return '<span class="q-type">단답형</span>';
+}
+
+function renderMCQ(q) {
+  const opts = q.options.map((opt, i) =>
+    `<button class="opt-btn" onclick="checkMCQ(${q.id},${i})" id="opt-${q.id}-${i}">${String.fromCharCode(9312+i)} ${opt}</button>`
+  ).join('');
+  return `<div class="options">${opts}</div>`;
+}
+
+function renderOX(q) {
+  return `<div class="ox-row">
+    <button class="ox-btn" onclick="checkOX(${q.id},'O')" id="ox-${q.id}-O">⭕ O</button>
+    <button class="ox-btn" onclick="checkOX(${q.id},'X')" id="ox-${q.id}-X">❌ X</button>
+  </div>`;
+}
+
+function renderShort(q) {
+  return `<div class="sa-row">
+    <input type="text" class="sa-input" id="sa-${q.id}" placeholder="답을 입력하세요..." onkeydown="if(event.key==='Enter')checkShort(${q.id})">
+    <button class="submit-btn" id="sa-btn-${q.id}" onclick="checkShort(${q.id})">제출</button>
+  </div>`;
+}
+
+function renderQuiz() {
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = QUIZ_DATA.map(q => {
+    let body = '';
+    if (q.type === 'mcq') body = renderMCQ(q);
+    else if (q.type === 'ox') body = renderOX(q);
+    else body = renderShort(q);
+    return `<div class="q-card" id="qcard-${q.id}">
+      <div class="q-header">
+        <div class="q-num">${q.id}</div>
+        ${diffLabel(q.difficulty)}
+        ${typeLabel(q.type)}
+      </div>
+      <div class="q-text">${q.question}</div>
+      ${body}
+      <div class="explanation" id="exp-${q.id}"></div>
+    </div>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────
+// GRADING
+// ─────────────────────────────────────────
+function showExplanation(q, isCorrect) {
+  const exp = document.getElementById(`exp-${q.id}`);
+  let answerLine = '';
+  if (q.type === 'mcq') answerLine = `<span class="correct-ans">✅ 정답: ${String.fromCharCode(9312+q.answer)} ${q.options[q.answer]}</span>`;
+  else if (q.type === 'ox') answerLine = `<span class="correct-ans">✅ 정답: ${q.answer}</span>`;
+  else answerLine = `<span class="correct-ans">✅ 정답 예시: ${q.answer}</span>`;
+  exp.innerHTML = answerLine + q.explanation;
+  exp.classList.add('show');
+}
+
+function checkMCQ(qid, chosen) {
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  const isCorrect = chosen === q.answer;
+  // disable all opts
+  for (let i = 0; i < q.options.length; i++) {
+    const btn = document.getElementById(`opt-${qid}-${i}`);
+    btn.disabled = true;
+    if (i === q.answer) btn.classList.add('correct');
+    else if (i === chosen && !isCorrect) btn.classList.add('wrong');
+  }
+  state.solved++;
+  if (isCorrect) state.correct++;
+  updateScorebar();
+  showExplanation(q, isCorrect);
+}
+
+function checkOX(qid, chosen) {
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  const isCorrect = chosen === q.answer;
+  ['O','X'].forEach(v => {
+    const btn = document.getElementById(`ox-${qid}-${v}`);
+    btn.disabled = true;
+    if (v === q.answer) btn.classList.add('correct');
+    else if (v === chosen && !isCorrect) btn.classList.add('wrong');
+  });
+  state.solved++;
+  if (isCorrect) state.correct++;
+  updateScorebar();
+  showExplanation(q, isCorrect);
+}
+
+function checkShort(qid) {
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  const input = document.getElementById(`sa-${qid}`);
+  const btn = document.getElementById(`sa-btn-${qid}`);
+  const raw = input.value.trim();
+  if (!raw) return;
+  const allAnswers = [q.answer, ...(q.altAnswers || [])].map(a => a.replace(/\s/g,'').toLowerCase());
+  const userAns = raw.replace(/\s/g,'').toLowerCase();
+  const isCorrect = allAnswers.some(a => userAns.includes(a) || a.includes(userAns));
+  input.disabled = true;
+  btn.disabled = true;
+  input.classList.add(isCorrect ? 'correct' : 'wrong');
+  state.solved++;
+  if (isCorrect) state.correct++;
+  updateScorebar();
+  showExplanation(q, isCorrect);
+}
+
+// ─────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────
+renderQuiz();
+</script>
+</body>
+</html>

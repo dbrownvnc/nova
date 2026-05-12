@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S&P 7400의 이면 — CPI 인플레 폭발 경고 | NOVA Real Invest 분석</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --chart1: #e11d48;
+    --chart2: #1a1a1a;
+    --chart3: #6b7280;
+    --chart4: #2563eb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+  }
+
+  /* FADE IN */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas {
+    opacity: 1;
+  }
+
+  /* HEADER */
+  .masthead {
+    border-bottom: 3px solid var(--accent);
+    padding: 28px 0 14px;
+    margin-bottom: 10px;
+  }
+  .masthead-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .masthead-date {
+    font-size: 12px;
+    color: var(--text2);
+    letter-spacing: 1px;
+  }
+  h1.headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 7vw, 38px);
+    font-weight: 900;
+    line-height: 1.15;
+    color: var(--text);
+    margin: 18px 0 12px;
+  }
+  h1.headline em {
+    color: var(--accent);
+    font-style: italic;
+  }
+  .subheadline {
+    font-size: 14px;
+    color: var(--text2);
+    border-left: 3px solid var(--accent);
+    padding-left: 12px;
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+
+  /* SECTIONS */
+  section { margin-bottom: 44px; }
+  h2.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h2.section-title::before {
+    content: '';
+    width: 4px;
+    height: 20px;
+    background: var(--accent);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  h3.sub-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 20px 0 8px;
+  }
+  p { margin-bottom: 12px; color: var(--text); }
+
+  /* STAT CARDS */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 16px 0;
+  }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 4px;
+    padding: 14px;
+  }
+  .stat-card.danger { border-top-color: #dc2626; }
+  .stat-card.blue { border-top-color: var(--chart4); }
+  .stat-card.gray { border-top-color: var(--chart3); }
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 4px;
+  }
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--text);
+    line-height: 1;
+  }
+  .stat-value.red { color: var(--accent); }
+  .stat-value.blue { color: var(--chart4); }
+  .stat-desc {
+    font-size: 11px;
+    color: var(--text2);
+    margin-top: 4px;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+  .divider.thick {
+    height: 2px;
+    background: linear-gradient(to right, var(--accent), transparent);
+  }
+
+  /* CALLOUT */
+  .callout {
+    background: #fff5f7;
+    border-left: 4px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 14px 16px;
+    margin: 16px 0;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .callout strong { color: var(--accent); }
+  .callout.dark {
+    background: var(--text);
+    color: #fff;
+    border-left-color: var(--accent2);
+  }
+  .callout.dark strong { color: var(--accent2); }
+  .callout.blue {
+    background: #eff6ff;
+    border-left-color: var(--chart4);
+  }
+  .callout.blue strong { color: var(--chart4); }
+
+  /* TAG */
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .tag.red { background: var(--accent); color: #fff; }
+  .tag.gray { background: var(--chart3); color: #fff; }
+  .tag.blue { background: var(--chart4); color: #fff; }
+
+  /* TIMELINE */
+  .timeline { margin: 16px 0; }
+  .tl-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .tl-item:last-child { border-bottom: none; }
+  .tl-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .tl-dot.gray { background: var(--chart3); }
+  .tl-dot.blue { background: var(--chart4); }
+  .tl-content { flex: 1; }
+  .tl-title { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+  .tl-desc { font-size: 13px; color: var(--text2); }
+
+  /* STRATEGY LIST */
+  .strategy-list { margin: 14px 0; }
+  .strategy-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+  .strategy-num {
+    width: 26px;
+    height: 26px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .strategy-text { font-size: 14px; line-height: 1.5; flex: 1; }
+  .strategy-text strong { color: var(--text); }
+
+  /* SCENARIO TABLE */
+  .scenario-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 14px 0;
+  }
+  .scenario-table th {
+    background: var(--accent);
+    color: #fff;
+    padding: 9px 10px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+  .scenario-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+    vertical-align: top;
+  }
+  .scenario-table tr:last-child td { border-bottom: none; }
+  .bull { color: #16a34a; font-weight: 700; }
+  .bear { color: var(--accent); font-weight: 700; }
+
+  /* INTERACTIVE: CPI SIMULATOR */
+  .sim-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 16px 0;
+  }
+  .sim-box h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+  .slider-row {
+    margin-bottom: 16px;
+  }
+  .slider-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+  .slider-label span { color: var(--accent); font-weight: 700; font-size: 14px; }
+  input[type=range] {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 4px;
+    background: var(--border);
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgba(225,29,72,0.3);
+  }
+  .sim-result {
+    background: var(--text);
+    color: #fff;
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-top: 12px;
+  }
+  .sim-result-label { font-size: 11px; letter-spacing: 1px; color: #aaa; margin-bottom: 4px; }
+  .sim-result-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--accent2);
+  }
+  .sim-result-desc { font-size: 12px; color: #ccc; margin-top: 6px; line-height: 1.5; }
+  .sim-warning {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .sim-warning.ok { background: #16a34a22; color: #16a34a; }
+  .sim-warning.caution { background: #f59e0b22; color: #d97706; }
+  .sim-warning.danger { background: #e11d4822; color: var(--accent); }
+  .reset-btn {
+    margin-top: 10px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* BREADTH VIS */
+  .breadth-vis {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+  }
+  .breadth-bar {
+    height: 36px;
+    border-radius: 4px;
+    display: flex;
+    overflow: hidden;
+    margin: 10px 0 6px;
+  }
+  .breadth-seg {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    transition: flex 0.6s ease;
+  }
+  .breadth-legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--text2);
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+  }
+
+  /* PHASE TABLE */
+  .phase-table {
+    width: 100%;
+    font-size: 13px;
+    border-collapse: collapse;
+    margin: 12px 0;
+  }
+  .phase-table th {
+    background: var(--text);
+    color: #fff;
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .phase-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .phase-table tr:nth-child(even) td { background: var(--bg2); }
+
+  /* FOOTER */
+  .footer {
+    border-top: 2px solid var(--accent);
+    padding-top: 20px;
+    margin-top: 40px;
+    font-size: 11px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+  .footer strong { color: var(--text); }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead fade-in">
+  <div class="masthead-label">Nova Real Invest · 시장 분석 리포트</div>
+  <div class="masthead-date">2026년 05월 12일 · 방송 내용 기반 정리</div>
+</div>
+
+<h1 class="headline fade-in">S&amp;P 7400의 이면, <em>CPI 인플레 폭발</em> 경고</h1>
+<p class="subheadline fade-in">지수는 사상 최고치지만 S&P 500 기업 절반이 52주 최저가 근처를 기고 있다. 내일 CPI 발표와 트럼프 방중, 엔비디아 실적이 2026년 하반기를 결정짓는다.</p>
+
+<!-- ─────────────────────────────────────── -->
+<section>
+  <h2 class="section-title fade-in">현재 시장 지표 — 숫자의 이중성</h2>
+
+  <div class="stat-grid">
+    <div class="stat-card fade-in">
+      <div class="stat-label">S&amp;P 500</div>
+      <div class="stat-value red">7,400+</div>
+      <div class="stat-desc">역사적 사상 최고치</div>
+    </div>
+    <div class="stat-card fade-in">
+      <div class="stat-label">나스닥</div>
+      <div class="stat-value">26,274</div>
+      <div class="stat-desc">역사적 사상 최고치</div>
+    </div>
+    <div class="stat-card danger fade-in">
+      <div class="stat-label">소비자 심리지수</div>
+      <div class="stat-value red">48.2</div>
+      <div class="stat-desc">1952년 한국전쟁 이후 최저치</div>
+    </div>
+    <div class="stat-card danger fade-in">
+      <div class="stat-label">구리 가격</div>
+      <div class="stat-value red">$6,460</div>
+      <div class="stat-desc">파운드당·금보다 비쌈·신고가</div>
+    </div>
+  </div>
+
+  <div class="callout fade-in">
+    <strong>📌 핵심 모순:</strong> 주가지수는 최고치, 소비자 체감경기는 역대 최저. 구리(현대산업의 쌀) 신고가는 <strong>제조업 원가 충격</strong>을 예고한다. 소매업 ETF(XRT)는 계속 하락 중.
+  </div>
+
+  <!-- S&P 빵 폭 차트 -->
+  <h3 class="sub-title fade-in">S&P 500 내부 실상 — 승자 독식</h3>
+  <div class="breadth-vis fade-in">
+    <div style="font-size:12px;color:var(--text2);margin-bottom:4px;">S&amp;P 500 · 500개 기업 분포</div>
+    <div class="breadth-bar">
+      <div class="breadth-seg" style="background:var(--accent);flex:10;">10개<br>폭등</div>
+      <div class="breadth-seg" style="background:var(--chart4);flex:250;">240개 — 50일선 위</div>
+      <div class="breadth-seg" style="background:var(--chart3);flex:240;">240개 — 50일선 아래 하락</div>
+      <div class="breadth-seg" style="background:#1a1a1a;flex:10;">10</div>
+    </div>
+    <div class="breadth-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>~10개 폭등 주도</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--chart4)"></div>50일선 위 52%</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--chart3)"></div>50일선 아래 ~48% (52주 최저가 경신)</div>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:var(--text2);">
+      500개 기업 중 <strong style="color:var(--accent)">490개</strong>가 하락 중. 지수는 상위 10개 종목이 견인. 방송에선 이를 <strong>"페이크 지수"</strong>라고 표현.
+    </div>
+  </div>
+
+  <!-- 빵폭 차트 -->
+  <div class="chart-container fade-in" style="margin-top:16px;">
+    <canvas id="breadthChart" height="220"></canvas>
+  </div>
+
+  <div class="callout dark fade-in">
+    <strong>⚠️ 역사적 선례:</strong> 이런 극단적 양극화는 1990년 이후 세 번만 관찰됨 — <strong>1929년 대공황, 1973년 오일쇼크, 1999년 닷컴버블</strong>. 세 번 모두 공통점: 지수는 매일 최고치, 내부는 이미 무너지는 중.
+  </div>
+</section>
+
+<div class="divider thick"></div>
+
+<!-- ─────────────────────────────────────── -->
+<section>
+  <h2 class="section-title fade-in">⚡ 내일 CPI — 왜 이번이 특별한가</h2>
+
+  <p class="fade-in">모하메드 엘에리안은 "이번 주 CPI가 무조건 절대적으로 가장 중요하다"고 발언. 단순한 인플레이션 수치 문제가 아니라 <strong>데이터 왜곡</strong>이 해소되는 시점이기 때문이다.</p>
+
+  <h3 class="sub-title fade-in">데이터 왜곡의 구조</h3>
+  <div class="timeline fade-in">
+    <div class="tl-item">
+      <div class="tl-dot">1</div>
+      <div class="tl-content">
+        <div class="tl-title">2025년 10월 — 43일 셧다운</div>
+        <div class="tl-desc">미국 노동통계국 업무 중단. 10월 쉘터(주거비) 데이터 수집 불가 → 해당 월 데이터 0으로 처리.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot gray">2</div>
+      <div class="tl-content">
+        <div class="tl-title">10월~현재 — 가짜 CPI 6개월</div>
+        <div class="tl-desc">쉘터비 CPI는 <strong>6개월 패널 단위</strong>로 집계. 누락된 데이터가 반영 안 된 상태로 발표됐기 때문에 지난 6개월 CPI는 실제보다 낮게 측정된 가짜 수치.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">3</div>
+      <div class="tl-content">
+        <div class="tl-title">2026년 4월 패널 — 6개월 만에 반영</div>
+        <div class="tl-desc">누락됐던 주거인상분이 <strong>4월 패널 조사에 일괄 반영</strong>. 아무 일 없어도 물가가 <strong>+0.25%p</strong> 자동 상승할 수 있음.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot blue">4</div>
+      <div class="tl-content">
+        <div class="tl-title">예상: 코어 CPI 2.7~2.8%</div>
+        <div class="tl-desc">전문가 컨센서스(+0.4% MoM) 적용 시 YoY 2.7%. 이를 상회해 <strong>2.8% 이상 나오면</strong> 금리인하 기대 완전 소멸.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CPI 시뮬레이터 -->
+  <div class="sim-box fade-in">
+    <h4>🔢 코어 CPI 시나리오 시뮬레이터</h4>
+    <div class="slider-row">
+      <div class="slider-label">전월 대비(MoM) 상승률 <span id="momVal">0.40</span>%</div>
+      <input type="range" id="momSlider" min="0.20" max="0.70" step="0.01" value="0.40">
+    </div>
+    <div class="slider-row">
+      <div class="slider-label">쉘터비 누락분 반영 <span id="shelterVal">0.25</span>%p</div>
+      <input type="range" id="shelterSlider" min="0.00" max="0.40" step="0.01" value="0.25">
+    </div>
+    <div class="sim-result">
+      <div class="sim-result-label">예상 코어 CPI (YoY)</div>
+      <div class="sim-result-value" id="cpiResult">2.80%</div>
+      <div class="sim-result-desc" id="cpiDesc">컨센서스 2.7% 상회 → 금리인하 기대 소멸 가능성</div>
+    </div>
+    <div class="sim-warning" id="simWarn">⚠️ 위험: 기술주 및 잡주 투매 가능성</div>
+    <button class="reset-btn" onclick="resetSim()">↺ 초기값으로 리셋</button>
+  </div>
+
+  <p class="fade-in" style="font-size:13px;color:var(--text2);">10년물 국채금리: <strong>4.4%</strong> / 30년물: <strong>4.98%</strong> (5% 재돌파 시도 중). 금리 급등 시 기술주·성장주 리스크 노출 극대화.</p>
+</section>
+
+<div class="divider thick"></div>
+
+<!-- ─────────────────────────────────────── -->
+<section>
+  <h2 class="section-title fade-in">🤖 AI 인프라 투자 흐름 — 어디만 좋은가</h2>
+
+  <p class="fade-in">시장을 끌어올리는 건 AI 단 하나. 그러나 AI라고 다 오르는 게 아니다. 투자 자본의 흐름이 단계별로 이동 중이다.</p>
+
+  <table class="phase-table fade-in">
+    <tr>
+      <th>단계</th><th>영역</th><th>대표 종목</th><th>상태</th>
+    </tr>
+    <tr>
+      <td><strong>Phase 1</strong></td>
+      <td>연산·GPU</td>
+      <td>엔비디아, AMD</td>
+      <td>초기 투자 완료 수준</td>
+    </tr>
+    <tr>
+      <td><strong>Phase 2</strong></td>
+      <td>메모리 HBM·DRAM</td>
+      <td>마이크론</td>
+      <td>삼성 파업 수혜 기대</td>
+    </tr>
+    <tr>
+      <td><strong>Phase 3</strong></td>
+      <td>전력 패키징</td>
+      <td>AVGO 등</td>
+      <td>노바픽 기 선정</td>
+    </tr>
+    <tr>
+      <td><strong>Phase 4</strong></td>
+      <td>광통신(파이버)</td>
+      <td>코닝, 루멘텀, LITE, GLPW, COHR</td>
+      <td>📈 현재 핵심 주목</td>
+    </tr>
+  </table>
+
+  <div class="callout blue fade-in">
+    <strong>📡 왜 광통신인가?</strong> AI 데이터센터 내부 연결을 기존 구리(Copper)에서 광섬유(Fiber)로 교체 중. 에너지 효율·속도 모두 압도. 코닝↔루멘텀은 <strong>페어 트레이딩</strong> 관계로 함께 움직임.
+  </div>
+
+  <h3 class="sub-title fade-in">삼성 파업과 마이크론 효과</h3>
+  <p class="fade-in">삼성전자 노조가 파업을 준비 중. 삼성은 글로벌 메모리(LPDDR, HBM) 시장의 약 <strong>1/3</strong>을 점유. 올스톱 시 공급 충격 → 마이크론 반사 수혜 논리. 반도체 공장은 24시간 3교대 운영이 필수적이라 선진 노동국가에서 운영이 사실상 불가능.</p>
+
+  <!-- AI 투자 비중 차트 -->
+  <div class="chart-container fade-in">
+    <canvas id="aiPhaseChart" height="220"></canvas>
+  </div>
+</section>
+
+<div class="divider thick"></div>
+
+<!-- ─────────────────────────────────────── -->
+<section>
+  <h2 class="section-title fade-in">🌐 5월 빅이벤트 — 하반기 방향타</h2>
+
+  <div class="timeline fade-in">
+    <div class="tl-item">
+      <div class="tl-dot">5/13</div>
+      <div class="tl-content">
+        <div class="tl-title">CPI 발표</div>
+        <div class="tl-desc">코어 CPI YoY. 2.7%±가 분기점. 이 결과 하나가 금리 경로를 바꾼다.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot gray">5/12~14</div>
+      <div class="tl-content">
+        <div class="tl-title">트럼프 방중 (베이징)</div>
+        <div class="tl-desc">보잉 500대, 퀄컴, 마이크론, 애플, 테슬라 동행. <strong>엔비디아는 배제됨</strong>. 미국 측 진짜 목적은 농산물(콩·옥수수) 수출 협상. B급 기업 동행으로 '있어 보이는' 성과를 연출하는 전략으로 분석.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot blue">5/20</div>
+      <div class="tl-content">
+        <div class="tl-title">엔비디아 1Q 실적 발표</div>
+        <div class="tl-desc">판매가·마진 모두 급등한 상황. 압도적 어닝비트 가능성 높게 봄. 이 결과가 AI 슈퍼사이클 내러티브를 확인 혹은 파괴.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 불/베어 시나리오 -->
+  <h3 class="sub-title fade-in">불케이스 vs 베어케이스</h3>
+  <table class="scenario-table fade-in">
+    <tr>
+      <th>구분</th><th class="bull">🟢 불케이스</th><th class="bear">🔴 베어케이스</th>
+    </tr>
+    <tr>
+      <td><strong>CPI</strong></td>
+      <td>컨센서스 부합 (~2.7%)</td>
+      <td>2.8% 이상 서프라이즈</td>
+    </tr>
+    <tr>
+      <td><strong>미중</strong></td>
+      <td>상호 양보, 관세 완화</td>
+      <td>트럼프 분노 귀국, 재격화</td>
+    </tr>
+    <tr>
+      <td><strong>엔비디아</strong></td>
+      <td>압도적 어닝비트</td>
+      <td>실망 실적 또는 가이던스 하향</td>
+    </tr>
+    <tr>
+      <td><strong>이란</strong></td>
+      <td>소강 상태 유지</td>
+      <td>호르무즈 접수 → 유가 $120+</td>
+    </tr>
+    <tr>
+      <td><strong>결과</strong></td>
+      <td>S&amp;P 7800~8250 도달 가능</td>
+      <td>1999년 닷컴버블 데자뷰</td>
+    </tr>
+  </table>
+
+  <div class="callout fade-in">
+    <strong>📌 노바 전망:</strong> 불케이스 가능성 더 높게 봄. 트럼프 방중 자체가 "어느 정도 합의 끝났다"는 신호. 이란도 서로 물렸기에 추가 충돌 가능성 낮음. CPI는 "마사지 가능성"도 언급.
+  </div>
+
+  <!-- 시나리오 가능성 차트 -->
+  <div class="chart-container fade-in">
+    <canvas id="scenarioChart" height="220"></canvas>
+  </div>
+</section>
+
+<div class="divider thick"></div>
+
+<!-- ─────────────────────────────────────── -->
+<section>
+  <h2 class="section-title fade-in">📋 투자 전략 5가지</h2>
+
+  <div class="strategy-list fade-in">
+    <div class="strategy-item">
+      <div class="strategy-num">1</div>
+      <div class="strategy-text"><strong>AI 인프라 코어 홀드</strong> — 엔비디아, LITE, 광통신 등 핵심 AI 인프라 종목은 어쨌든 보유. 가장 중요한 전략.</div>
+    </div>
+    <div class="strategy-item">
+      <div class="strategy-num">2</div>
+      <div class="strategy-text"><strong>선제적 배팅 금지</strong> — CPI·방중 결과가 나오기 전에 미리 들어가지 말 것. 파급력이 크기 때문에 보고 가도 늦지 않음.</div>
+    </div>
+    <div class="strategy-item">
+      <div class="strategy-num">3</div>
+      <div class="strategy-text"><strong>에너지 소량 보유</strong> — 유가 변동성이 크지만 에너지 기업 내러티브는 당분간 유효. 크게는 말고 소량 보유.</div>
+    </div>
+    <div class="strategy-item">
+      <div class="strategy-num">4</div>
+      <div class="strategy-text"><strong>CPI 발표 전 현금 헤지</strong> — 시장 발작 시 저가 매수 기회를 잡으려면 현금(캐시)이 반드시 있어야 함. 캐시 없으면 기회를 놓침.</div>
+    </div>
+    <div class="strategy-item">
+      <div class="strategy-num">5</div>
+      <div class="strategy-text"><strong>소비재·항공 비중 축소</strong> — 고유가 + 고금리 환경에서 소비재·항공은 불리. 비중 줄이거나 보유 자제.</div>
+    </div>
+  </div>
+
+  <div class="callout dark fade-in">
+    <strong>결론 한 줄:</strong> "포모에 탑승하되 비상구를 확인하라." 풀악셀이되 브레이크 위에 발을 올려두라. AI 슈퍼사이클은 실재하지만, 지수는 페이크다. <strong>전기(그리드) 부족</strong>이 AI 버블의 진짜 복병.
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<div class="footer fade-in">
+  <strong>⚠️ 면책조항</strong><br>
+  본 문서는 NOVA Real Invest 방송(2026.05.12) 내용을 정리한 것으로, 특정 종목 매수·매도를 권유하지 않습니다. 투자 판단과 책임은 전적으로 본인에게 있습니다. 해당 방송은 엔터테인먼트 채널임을 명시하고 있습니다.
+</div>
+
+<script>
+// ─── INTERSECTION OBSERVER: FADE-IN ───
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// ─── CHART CONFIGS ───
+const chartConfigs = {};
+
+chartConfigs['breadthChart'] = () => {
+  new Chart(document.getElementById('breadthChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['폭등 (~10개)', '50일선 위·횡보 (250개)', '50일선 아래 하락 (240개)'],
+      datasets: [{
+        data: [2, 50, 48],
+        backgroundColor: ['#e11d48', '#2563eb', '#6b7280'],
+        borderWidth: 0,
+        hoverOffset: 6
+      }]
+    },
+    options: {
+      cutout: '60%',
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            font: { family: 'Noto Sans KR', size: 11 },
+            color: '#1a1a1a',
+            padding: 12,
+            boxWidth: 12
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` ${ctx.label}: ${ctx.parsed}%`
+          }
+        },
+        title: {
+          display: true,
+          text: 'S&P 500 내부 구조 (%, 개략치)',
+          font: { family: 'Noto Sans KR', size: 12 },
+          color: '#777'
+        }
+      }
+    }
+  });
+};
+
+chartConfigs['aiPhaseChart'] = () => {
+  new Chart(document.getElementById('aiPhaseChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Phase 1\nGPU', 'Phase 2\nHBM/DRAM', 'Phase 3\n전력패키징', 'Phase 4\n광통신'],
+      datasets: [{
+        label: '투자 자본 흐름 (상대적 관심도)',
+        data: [70, 80, 75, 95],
+        backgroundColor: ['#6b7280', '#6b7280', '#2563eb', '#e11d48'],
+        borderRadius: 4,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: 'AI 인프라 투자 단계별 자본 흐름 (개략적 지수)',
+          font: { family: 'Noto Sans KR', size: 12 },
+          color: '#777'
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 110,
+          ticks: { font: { size: 11 }, color: '#777' },
+          grid: { color: '#e5e5e5' }
+        },
+        x: {
+          ticks: { font: { size: 10 }, color: '#777' },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+};
+
+chartConfigs['scenarioChart'] = () => {
+  new Chart(document.getElementById('scenarioChart'), {
+    type: 'radar',
+    data: {
+      labels: ['CPI 긍정', '미중 협상 성공', '엔비디아 어닝비트', '이란 소강', '유가 안정'],
+      datasets: [
+        {
+          label: '🟢 불케이스 가능성',
+          data: [60, 70, 80, 65, 60],
+          backgroundColor: 'rgba(22,163,74,0.15)',
+          borderColor: '#16a34a',
+          borderWidth: 2,
+          pointBackgroundColor: '#16a34a'
+        },
+        {
+          label: '🔴 베어케이스 가능성',
+          data: [40, 30, 20, 35, 40],
+          backgroundColor: 'rgba(225,29,72,0.1)',
+          borderColor: '#e11d48',
+          borderWidth: 2,
+          pointBackgroundColor: '#e11d48'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { family: 'Noto Sans KR', size: 11 }, color: '#1a1a1a' }
+        },
+        title: {
+          display: true,
+          text: '시나리오별 발생 가능성 (방송 기준 주관적 판단)',
+          font: { family: 'Noto Sans KR', size: 12 },
+          color: '#777'
+        }
+      },
+      scales: {
+        r: {
+          min: 0, max: 100,
+          ticks: { stepSize: 25, font: { size: 10 }, color: '#aaa' },
+          grid: { color: '#e5e5e5' },
+          pointLabels: { font: { size: 11, family: 'Noto Sans KR' }, color: '#1a1a1a' }
+        }
+      }
+    }
+  });
+};
+
+// ─── INTERSECTION OBSERVER: CHARTS ───
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+// ─── CPI SIMULATOR ───
+const momSlider = document.getElementById('momSlider');
+const shelterSlider = document.getElementById('shelterSlider');
+const momVal = document.getElementById('momVal');
+const shelterVal = document.getElementById('shelterVal');
+const cpiResult = document.getElementById('cpiResult');
+const cpiDesc = document.getElementById('cpiDesc');
+const simWarn = document.getElementById('simWarn');
+
+const BASE_YOY = 2.3;
+
+function updateSim() {
+  const mom = parseFloat(momSlider.value);
+  const shelter = parseFloat(shelterSlider.value);
+  momVal.textContent = mom.toFixed(2);
+  shelterVal.textContent = shelter.toFixed(2);
+
+  // YoY 대략 계산: 기저 + MoM*12/2 + shelter 보정
+  const yoy = BASE_YOY + (mom - 0.20) * 2.5 + shelter * 0.8;
+  const yoyDisplay = Math.max(2.0, Math.min(4.5, yoy));
+  cpiResult.textContent = yoyDisplay.toFixed(2) + '%';
+
+  if (yoyDisplay < 2.5) {
+    cpiDesc.textContent = '시장 기대치 하회 → 금리인하 기대 유지, 시장 환호';
+    simWarn.textContent = '✅ 낙관: 기술주·성장주 랠리 재개 가능';
+    simWarn.className = 'sim-warning ok';
+  } else if (yoyDisplay < 2.7) {
+    cpiDesc.textContent = '컨센서스 수준 → 시장 무난, 현상 유지';
+    simWarn.textContent = '🟡 중립: 큰 충격 없이 현 흐름 유지';
+    simWarn.className = 'sim-warning caution';
+  } else if (yoyDisplay < 3.0) {
+    cpiDesc.textContent = '컨센서스 상회 → 금리인하 기대 소멸, 기술주 투매 가능';
+    simWarn.textContent = '⚠️ 위험: 기술주·잡주 대규모 투매 가능성';
+    simWarn.className = 'sim-warning danger';
+  } else {
+    cpiDesc.textContent = '심각한 인플레이션 서프라이즈 → 전면적 시장 충격';
+    simWarn.textContent = '🔴 위기: 1999년 데자뷰 우려. 전면 리스크 오프';
+    simWarn.className = 'sim-warning danger';
+  }
+}
+
+function resetSim() {
+  momSlider.value = 0.40;
+  shelterSlider.value = 0.25;
+  updateSim();
+}
+
+momSlider.addEventListener('input', updateSim);
+shelterSlider.addEventListener('input', updateSim);
+updateSim();
+</script>
+</body>
+</html>
