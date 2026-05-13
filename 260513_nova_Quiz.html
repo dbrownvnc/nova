@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 수퍼사이클 전환 — 인터랙티브 퀴즈</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff; --bg2: #fafafa; --text: #1a1a1a; --text2: #777;
+  --accent: #e11d48; --accent2: #f43f5e; --border: #e5e5e5;
+  --green: #16a34a; --red: #e11d48; --orange: #f97316;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); font-size:15px; }
+
+/* STICKY SCOREBOARD */
+#scoreboard {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--text);
+  padding: 10px 18px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px;
+}
+.score-item { text-align: center; }
+.score-num { font-family:'Playfair Display',serif; font-size:20px; font-weight:900; color:#fff; }
+.score-label { font-size:10px; color:#aaa; letter-spacing:0.5px; }
+.score-progress-wrap { flex:1; height:6px; background:#333; border-radius:3px; overflow:hidden; min-width:60px; }
+.score-progress-bar { height:100%; border-radius:3px; transition: width 0.4s ease, background 0.4s ease; width:0%; background: var(--accent); }
+
+/* HEADER */
+.quiz-header {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d1b22 100%);
+  padding: 36px 20px 28px;
+  text-align: center;
+  position: relative;
+}
+.quiz-header::before {
+  content:''; position:absolute; top:0;left:0;right:0; height:4px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+}
+.quiz-issue { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--accent2); margin-bottom:12px; }
+.quiz-title { font-family:'Playfair Display',serif; font-size:clamp(22px,5vw,34px); font-weight:900; color:#fff; line-height:1.2; margin-bottom:8px; }
+.quiz-title span { color: var(--accent2); }
+.quiz-sub { font-size:12px; color:#999; }
+
+/* CONTAINER */
+.container { max-width:680px; margin:0 auto; padding:0 16px; }
+
+/* QUIZ CARD */
+.quiz-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 0;
+  margin: 20px 0;
+  padding: 22px 18px;
+  border-left: 4px solid var(--border);
+  transition: border-color 0.3s;
+}
+.quiz-card.correct-card { border-left-color: var(--green); }
+.quiz-card.wrong-card   { border-left-color: var(--red); }
+
+.card-meta {
+  display:flex; align-items:center; gap:8px; margin-bottom:12px;
+}
+.q-num {
+  font-family:'Playfair Display',serif; font-size:11px; font-weight:700;
+  color: var(--text2); letter-spacing:1px;
+}
+.q-badge {
+  font-size:9px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
+  padding:2px 7px; border:1px solid;
+}
+.badge-easy   { border-color:#16a34a; color:#16a34a; }
+.badge-medium { border-color:#f97316; color:#f97316; }
+.badge-hard   { border-color:var(--accent); color:var(--accent); }
+.badge-ox     { border-color:#6b7280; color:#6b7280; }
+.badge-short  { border-color:#2563eb; color:#2563eb; }
+
+.q-text {
+  font-size:15px; font-weight:500; line-height:1.6; margin-bottom:16px;
+}
+
+/* OPTIONS */
+.options { display:flex; flex-direction:column; gap:9px; }
+.opt-btn {
+  background: var(--bg2); border: 1px solid var(--border);
+  padding: 11px 14px; text-align:left; cursor:pointer; font-size:13px;
+  font-family:'Noto Sans KR',sans-serif; color:var(--text);
+  transition: all 0.15s; line-height:1.5; border-radius:0;
+}
+.opt-btn:hover:not(:disabled) { background:#f3f3f3; border-color:#aaa; }
+.opt-btn:disabled { cursor:default; }
+.opt-btn.selected-correct { background:#dcfce7; border-color:var(--green); color:var(--green); font-weight:700; }
+.opt-btn.selected-wrong   { background:#fee2e2; border-color:var(--red);   color:var(--red);   font-weight:700; }
+.opt-btn.reveal-correct   { background:#dcfce7; border-color:var(--green); color:var(--green); }
+
+.feedback-badge {
+  display:inline-block; font-size:11px; font-weight:700; padding:2px 8px;
+  margin-left:8px; vertical-align:middle;
+}
+.badge-ok  { background:var(--green); color:#fff; }
+.badge-no  { background:var(--red);   color:#fff; }
+
+/* OX BUTTONS */
+.ox-row { display:flex; gap:12px; }
+.ox-btn {
+  flex:1; padding:14px; font-size:22px; font-weight:900;
+  border:2px solid var(--border); background:var(--bg2); cursor:pointer;
+  transition:all 0.15s; font-family:'Playfair Display',serif;
+}
+.ox-btn:hover:not(:disabled) { background:#f3f3f3; }
+.ox-btn:disabled { cursor:default; }
+.ox-btn.selected-correct { background:#dcfce7; border-color:var(--green); }
+.ox-btn.selected-wrong   { background:#fee2e2; border-color:var(--red); }
+.ox-btn.reveal-correct   { background:#dcfce7; border-color:var(--green); }
+
+/* SHORT ANSWER */
+.short-row { display:flex; gap:8px; }
+.short-input {
+  flex:1; padding:10px 12px; border:1px solid var(--border);
+  font-size:14px; font-family:'Noto Sans KR',sans-serif; outline:none;
+  color:var(--text); background:var(--bg2);
+}
+.short-input:focus { border-color: var(--accent); }
+.short-input:disabled { background:#f0f0f0; }
+.submit-btn {
+  background:var(--accent); color:#fff; border:none;
+  padding:10px 16px; cursor:pointer; font-size:13px;
+  font-family:'Noto Sans KR',sans-serif; font-weight:700;
+  transition: background 0.15s;
+}
+.submit-btn:hover:not(:disabled) { background: #c21b40; }
+.submit-btn:disabled { background:#ccc; cursor:default; }
+
+/* EXPLANATION */
+.explanation {
+  display:none; margin-top:14px;
+  background: #1a1a1a; color:#e5e5e5;
+  padding:14px 16px; font-size:13px; line-height:1.6;
+  border-left:3px solid var(--accent2);
+}
+.explanation.show { display:block; }
+.explanation strong { color:var(--accent2); }
+.explanation .ex-label {
+  font-size:10px; letter-spacing:1.5px; text-transform:uppercase;
+  color: var(--accent2); margin-bottom:6px; font-weight:700;
+}
+
+/* RESULT MODAL */
+#resultModal {
+  display:none; position:fixed; inset:0; z-index:999;
+  background: rgba(0,0,0,0.85); align-items:center; justify-content:center;
+}
+#resultModal.show { display:flex; }
+.modal-inner {
+  background:#fff; max-width:360px; width:90%; padding:36px 28px;
+  text-align:center; border-top:5px solid var(--accent);
+}
+.modal-score-big {
+  font-family:'Playfair Display',serif; font-size:64px; font-weight:900;
+  color:var(--accent); line-height:1;
+}
+.modal-grade {
+  font-family:'Playfair Display',serif; font-size:28px; font-weight:700;
+  margin:8px 0; color:var(--text);
+}
+.modal-msg { font-size:14px; color:var(--text2); margin:12px 0 20px; line-height:1.6; }
+.modal-retry {
+  background:var(--accent); color:#fff; border:none;
+  padding:12px 28px; cursor:pointer; font-size:14px; font-weight:700;
+  font-family:'Noto Sans KR',sans-serif; width:100%;
+  transition: background 0.15s;
+}
+.modal-retry:hover { background:#c21b40; }
+
+.quiz-footer {
+  background: var(--text); color:#777; text-align:center;
+  padding:20px; font-size:11px; letter-spacing:1px; margin-top:32px;
+}
+.quiz-footer strong { color: var(--accent2); }
+
+@media(max-width:400px) {
+  .quiz-card { padding:16px 13px; }
+  .short-row { flex-direction:column; }
+  .submit-btn { width:100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- STICKY SCOREBOARD -->
+<div id="scoreboard">
+  <div class="score-item">
+    <div class="score-num"><span id="sSolved">0</span>/10</div>
+    <div class="score-label">푼 문제</div>
+  </div>
+  <div class="score-item">
+    <div class="score-num"><span id="sCorrect">0</span></div>
+    <div class="score-label">정답</div>
+  </div>
+  <div class="score-progress-wrap">
+    <div class="score-progress-bar" id="sBar"></div>
+  </div>
+  <div class="score-item">
+    <div class="score-num"><span id="sPct">0</span>%</div>
+    <div class="score-label">정답률</div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="quiz-header">
+  <div class="quiz-issue">CIA.chat 멤버미팅 · 2026.05.12</div>
+  <h1 class="quiz-title">AI 수퍼사이클 <span>전환</span><br>인터랙티브 퀴즈</h1>
+  <div class="quiz-sub">총 10문제 · 클릭 한 번으로 즉시 채점</div>
+</div>
+
+<div class="container" id="quizContainer">
+  <!-- 문제들이 JS로 동적 생성 -->
+</div>
+
+<!-- RESULT MODAL -->
+<div id="resultModal">
+  <div class="modal-inner">
+    <div style="font-size:11px;letter-spacing:2px;color:var(--text2);margin-bottom:12px;text-transform:uppercase;">최종 결과</div>
+    <div class="modal-score-big" id="modalScore">0</div>
+    <div style="font-size:13px;color:var(--text2);">/ 10 문제 정답</div>
+    <div class="modal-grade" id="modalGrade">—</div>
+    <div class="modal-msg" id="modalMsg">—</div>
+    <button class="modal-retry" onclick="retryQuiz()">↺ 다시 풀기</button>
+  </div>
+</div>
+
+<div class="quiz-footer">
+  <strong>CIA.chat</strong> 멤버미팅 · 2026년 5월 12일<br>
+  본 문제는 방송 내용을 기반으로 출제되었습니다.
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id: 1,
+    type: 'mcq',
+    difficulty: 'easy',
+    question: '2026년 5월 12일 방송에서 언급된 4월 CPI 수치는 얼마인가?',
+    options: ['2.4%', '3.1%', '3.8%', '4.5%'],
+    answer: 2,
+    explanation: '<strong>정답: 3.8%</strong><br>방송에서 "인플레이션이 3.8까지 왔어요. 2023년 이후 최고치를 보여주고 있어요"라고 언급되었다. 이는 2023년 5월 바이든 대통령이 팬데믹 종료를 선언한 이후 가장 높은 물가 수준이다.'
+  },
+  {
+    id: 2,
+    type: 'mcq',
+    difficulty: 'medium',
+    question: '케빈 워시 연준 의장이 특히 강조한 정책 방향은 무엇인가?',
+    options: [
+      '즉각적인 금리 인하',
+      '금리는 건들지 않되 대차대조표 축소 강행',
+      '양적완화(QE) 재개',
+      '금리 동결 후 시장 상황 관망'
+    ],
+    answer: 1,
+    explanation: '<strong>정답: 금리는 건들지 않되 대차대조표 축소 강행</strong><br>방송에서 "케빈워시가 하는 얘기는 나는 금리는 건들지 않을 텐데 대차대조표 이거 축소를 확실하게 하겠다 이런 얘기를 했단 말이에요. 그럼 이건 무슨 얘기예요 미국 채권금리를 그냥 말아 올려 버리겠다 이 얘기입니다"라고 설명했다.'
+  },
+  {
+    id: 3,
+    type: 'mcq',
+    difficulty: 'medium',
+    question: '방송에서 "또 다른 AI다"라고 표현하며 새로운 AI 수혜 섹터로 강조한 두 ETF는?',
+    options: [
+      'XLK (기술) + XLC (통신)',
+      'XLF (금융) + XLE (에너지)',
+      'XLI (인더스트리얼) + XLU (유틸리티)',
+      'XLV (헬스케어) + XLB (소재)'
+    ],
+    answer: 2,
+    explanation: '<strong>정답: XLI (인더스트리얼) + XLU (유틸리티)</strong><br>"XLI나 XLU는 또 다른 AI다 라고 여러분들이 지금 채팅창에 쓰시면 됩니다. XLI, XLU는 유틸리티와 인더스트리얼이죠. 이 두 가지가 새로운 AI다"라고 명시했다.'
+  },
+  {
+    id: 4,
+    type: 'ox',
+    difficulty: 'easy',
+    question: '방송에서 한국 정책실장 김용범이 "AI 이익에 세금을 부과해 시민배당을 하자"는 발언을 한 후, 엔비디아 주가도 크게 하락했다.',
+    answer: 'X',
+    explanation: '<strong>정답: X (오답)</strong><br>"오늘 엔비디아는 어떻게 됐다? 좋았다. 이거예요. 엔비디아는 좋았다." 다른 반도체 종목들은 하락했지만 엔비디아는 이날 선방하거나 오히려 상승했다. 이는 엔비디아의 "황제주" 지위가 재확인된 것으로 해석되었다.'
+  },
+  {
+    id: 5,
+    type: 'mcq',
+    difficulty: 'hard',
+    question: '지브라 테크놀로지(ZBRA)가 오늘 폭등한 핵심 이유로 방송에서 언급된 내용은?',
+    options: [
+      '반도체 생산량 급증으로 인한 공급 계약 체결',
+      '피지컬 AI(로봇 등)에 들어가는 부품·센서·조립을 담당하며 해당 실적 호조',
+      '미국 정부의 AI 관련 보조금 수혜 발표',
+      '중국 수출 제한 해제로 매출 급증'
+    ],
+    answer: 1,
+    explanation: '<strong>정답: 피지컬 AI 부품·센서·조립 실적 호조</strong><br>"지브라 같은 경우 AI가 물리로 가면서... 피지컬 AI에 들어가는 파트에 들어가는 아이들이라는 거죠. 예를 들면 여기에 들어가는 센서부터 시작해서 여러 가지 파트... 실적 발표한 내용들을 읽어보니까 야 우리 지금 이제 피지컬 AI 이것 때문에 지금 우리가 장사가 잘 되고 있어." 라고 설명했다.'
+  },
+  {
+    id: 6,
+    type: 'short',
+    difficulty: 'medium',
+    question: '방송에서 투자자의 "최고의 기술"로 수도 없이 강조한 영어 표현을 쓰세요. (힌트: 두 단어)',
+    answer: 'do nothing',
+    explanation: '<strong>정답: Do Nothing</strong><br>"최고의 기술이 뭐예요 투자자들이 하는 최고의 기술. Do nothing. Do nothing. Do nothing이 최고의 기술입니다." 아무것도 하지 않는 것도 결정이며, 막상 행동에 나서지 않고 기다리는 것이 때로는 최고의 전략임을 강조했다.'
+  },
+  {
+    id: 7,
+    type: 'ox',
+    difficulty: 'easy',
+    question: '방송에서 현재 불 케이스와 베어 케이스의 확률이 각각 5대5로 동일하다고 언급했다.',
+    answer: 'O',
+    explanation: '<strong>정답: O (정답)</strong><br>"이 시나리오 확률은 지금 어느 정도나 되냐 확률상으로 말씀드리면 5대5입니다. 5대5. 1대1." 불·베어 케이스가 동등하게 가능하기 때문에 몰빵이 아닌 현금 보유와 분할 접근을 권장했다.'
+  },
+  {
+    id: 8,
+    type: 'mcq',
+    difficulty: 'hard',
+    question: '언더아머와 힘쓰도(Humana)가 크게 하락한 공통적인 근본 원인으로 방송에서 지목한 것은?',
+    options: [
+      '매출 감소와 직원 대규모 감원 발표',
+      '프라이싱 파워(가격 결정력)의 부재로 마진 통제력이 없음',
+      '중국 시장 철수와 글로벌 수요 감소',
+      'AI 기술 투자 부족으로 경쟁력 상실'
+    ],
+    answer: 1,
+    explanation: '<strong>정답: 프라이싱 파워(가격 결정력) 부재</strong><br>"프라이싱 파워가 중요한데 그게 없다라는 거죠... 이 두 기업의 공통점이 바로 그거예요. 즉 마진에 대한 통제력이 없다라는 거예요." 관세와 고유가로 원가가 상승할 때 가격을 올릴 수 없는 기업은 마진이 직격탄을 맞는다.'
+  },
+  {
+    id: 9,
+    type: 'mcq',
+    difficulty: 'medium',
+    question: '방송에서 월스트리트의 이란 지정학 리스크 분석 포인트로 설명한 핵심 내용은?',
+    options: [
+      '이란의 핵무기 보유 가능성과 이스라엘 공격 위협',
+      '이란과의 전면전 가능성과 미국 승리 여부',
+      '호르무즈 해협의 자유통행 가능 여부',
+      '이란 원유 수출 제재의 지속 여부'
+    ],
+    answer: 2,
+    explanation: '<strong>정답: 호르무즈 해협의 자유통행 가능 여부</strong><br>"미국이 이기고 이란이 이기고 휴전을 하고 이게 중요한 게 아니라 옛날처럼 호르무즈가 이렇게 왔다 갔다 할 수 있는 누구나 쓸 수 있는 바다가 될 것이냐 그렇지 않을 것이냐 여기에 초점을 맞추고 있다는 거예요."'
+  },
+  {
+    id: 10,
+    type: 'short',
+    difficulty: 'hard',
+    question: '방송에서 언급된 2026년 빅테크들의 연간 예상 캐펙스(설비투자) 규모는 얼마인가? (숫자+단위, 예: 1조 달러)',
+    answer: '7천억 달러',
+    explanation: '<strong>정답: 7천억 달러 (7,000억 달러)</strong><br>"지금 올해 캐펙스가 어느 정도라고 해요? 7천억 달러 정도 된다고 합니다. 이 돈들이 어디로 가야 될지 우리는 알고 있습니다." GPU 다음 단계로 AI 파워그리드(전력 인프라)가 이 자금의 향처로 언급되었다.'
+  }
+];
+
+let state = { solved: 0, correct: 0 };
+const diffLabel = { easy:'쉬움', medium:'보통', hard:'어려움' };
+const diffClass = { easy:'badge-easy', medium:'badge-medium', hard:'badge-hard' };
+
+function renderQuiz() {
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+  QUIZ_DATA.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'quiz-card';
+    card.id = `card-${q.id}`;
+
+    let innerHTML = `
+      <div class="card-meta">
+        <span class="q-num">Q${q.id}</span>
+        <span class="q-badge ${diffClass[q.difficulty]}">${diffLabel[q.difficulty]}</span>
+        ${q.type === 'ox' ? '<span class="q-badge badge-ox">OX</span>' : ''}
+        ${q.type === 'short' ? '<span class="q-badge badge-short">단답형</span>' : ''}
+      </div>
+      <div class="q-text">${q.question}</div>
+    `;
+
+    if (q.type === 'mcq') {
+      innerHTML += `<div class="options">`;
+      q.options.forEach((opt, idx) => {
+        innerHTML += `<button class="opt-btn" onclick="submitMCQ(${q.id}, ${idx})" data-idx="${idx}">${idx+1}. ${opt}</button>`;
+      });
+      innerHTML += `</div>`;
+    } else if (q.type === 'ox') {
+      innerHTML += `
+        <div class="ox-row">
+          <button class="ox-btn" onclick="submitOX(${q.id}, 'O')" data-val="O">⭕ O</button>
+          <button class="ox-btn" onclick="submitOX(${q.id}, 'X')" data-val="X">❌ X</button>
+        </div>`;
+    } else if (q.type === 'short') {
+      innerHTML += `
+        <div class="short-row">
+          <input type="text" class="short-input" id="short-${q.id}" placeholder="답을 입력하세요..." onkeydown="if(event.key==='Enter')submitShort(${q.id})">
+          <button class="submit-btn" id="shortbtn-${q.id}" onclick="submitShort(${q.id})">제출</button>
+        </div>`;
+    }
+
+    innerHTML += `<div class="explanation" id="exp-${q.id}"><div class="ex-label">📖 해설</div>${q.explanation}</div>`;
+    card.innerHTML = innerHTML;
+    container.appendChild(card);
+  });
+}
+
+function updateScoreboard() {
+  document.getElementById('sSolved').textContent = state.solved;
+  document.getElementById('sCorrect').textContent = state.correct;
+  const pct = state.solved > 0 ? Math.round(state.correct / state.solved * 100) : 0;
+  document.getElementById('sPct').textContent = pct;
+  const bar = document.getElementById('sBar');
+  bar.style.width = (state.solved / 10 * 100) + '%';
+  if (pct < 40) bar.style.background = '#e11d48';
+  else if (pct < 70) bar.style.background = '#f97316';
+  else bar.style.background = '#16a34a';
+}
+
+function showExplanation(qId) {
+  const exp = document.getElementById(`exp-${qId}`);
+  if (exp) exp.classList.add('show');
+}
+
+function recordAnswer(qId, isCorrect) {
+  state.solved++;
+  if (isCorrect) state.correct++;
+  updateScoreboard();
+  const card = document.getElementById(`card-${qId}`);
+  card.classList.add(isCorrect ? 'correct-card' : 'wrong-card');
+  showExplanation(qId);
+  if (state.solved === QUIZ_DATA.length) {
+    setTimeout(showResult, 600);
+  }
+}
+
+function submitMCQ(qId, idx) {
+  const q = QUIZ_DATA.find(x => x.id === qId);
+  const btns = document.querySelectorAll(`#card-${qId} .opt-btn`);
+  btns.forEach(b => b.disabled = true);
+  const isCorrect = idx === q.answer;
+  btns[idx].classList.add(isCorrect ? 'selected-correct' : 'selected-wrong');
+  btns[idx].innerHTML += `<span class="feedback-badge ${isCorrect ? 'badge-ok' : 'badge-no'}">${isCorrect ? '✓ 정답!' : '✗ 오답'}</span>`;
+  if (!isCorrect) {
+    btns[q.answer].classList.add('reveal-correct');
+    btns[q.answer].innerHTML += `<span class="feedback-badge badge-ok">✓ 정답</span>`;
+  }
+  recordAnswer(qId, isCorrect);
+}
+
+function submitOX(qId, val) {
+  const q = QUIZ_DATA.find(x => x.id === qId);
+  const btns = document.querySelectorAll(`#card-${qId} .ox-btn`);
+  btns.forEach(b => b.disabled = true);
+  const isCorrect = val === q.answer;
+  btns.forEach(b => {
+    if (b.dataset.val === val) {
+      b.classList.add(isCorrect ? 'selected-correct' : 'selected-wrong');
+      b.innerHTML += `<div style="font-size:11px;font-weight:700;margin-top:4px;">${isCorrect ? '✓ 정답!' : '✗ 오답'}</div>`;
+    }
+    if (!isCorrect && b.dataset.val === q.answer) {
+      b.classList.add('reveal-correct');
+      b.innerHTML += `<div style="font-size:11px;font-weight:700;margin-top:4px;">✓ 정답</div>`;
+    }
+  });
+  recordAnswer(qId, isCorrect);
+}
+
+function submitShort(qId) {
+  const q = QUIZ_DATA.find(x => x.id === qId);
+  const input = document.getElementById(`short-${qId}`);
+  const btn = document.getElementById(`shortbtn-${qId}`);
+  const val = input.value.trim();
+  if (!val) { input.style.borderColor = 'var(--accent)'; return; }
+  input.disabled = true;
+  btn.disabled = true;
+
+  // Flexible matching
+  const normalize = s => s.toLowerCase().replace(/[\s,]/g,'').replace(/달러/,'').replace(/억/,'억');
+  const userNorm = normalize(val);
+  const ansNorm = normalize(q.answer);
+
+  let isCorrect = userNorm === ansNorm;
+  // Also accept partial matches for common variations
+  const acceptedVariants = {
+    'do nothing': ['donothing', '두낫띵', '두낫씽', '아무것도하지않는것'],
+    '7천억 달러': ['7000억달러','7000억','7천억','칠천억달러','칠천억'],
+  };
+  if (!isCorrect && acceptedVariants[q.answer]) {
+    isCorrect = acceptedVariants[q.answer].some(v => userNorm.includes(normalize(v)) || normalize(v).includes(userNorm));
+  }
+
+  const feedbackDiv = document.createElement('div');
+  feedbackDiv.style.cssText = 'margin-top:8px;font-size:13px;font-weight:700;';
+  if (isCorrect) {
+    feedbackDiv.style.color = 'var(--green)';
+    feedbackDiv.textContent = '✓ 정답입니다!';
+    input.style.borderColor = 'var(--green)';
+  } else {
+    feedbackDiv.style.color = 'var(--accent)';
+    feedbackDiv.textContent = `✗ 오답 — 정답: ${q.answer}`;
+    input.style.borderColor = 'var(--accent)';
+  }
+  btn.parentElement.parentElement.insertBefore(feedbackDiv, btn.parentElement.nextSibling);
+  recordAnswer(qId, isCorrect);
+}
+
+function showResult() {
+  const correct = state.correct;
+  const grades = [
+    { min:9, grade:'A+', msg:'완벽합니다! AI 수퍼사이클 전환기의 핵심을 완벽히 파악하셨습니다. 지금 당장 투자에 적용할 준비가 되어 있습니다.' },
+    { min:7, grade:'A',  msg:'훌륭합니다! 대부분의 핵심 개념을 정확히 이해하셨습니다. 몇 가지 세부 사항을 복습하시면 완벽합니다.' },
+    { min:5, grade:'B',  msg:'양호합니다! 주요 흐름은 파악하셨지만, 섹터 로테이션과 개별 종목 분석을 좀 더 복습해보세요.' },
+    { min:3, grade:'C',  msg:'기초가 필요합니다. 방송 핵심 내용인 인플레이션, 금리, AI 물리 인프라 전환을 다시 한번 정리해보세요.' },
+    { min:0, grade:'D',  msg:'다시 도전하세요! 방송을 처음부터 꼼꼼히 복습한 뒤 다시 풀어보시면 훨씬 나은 결과를 얻으실 수 있습니다.' }
+  ];
+  const g = grades.find(x => correct >= x.min);
+  document.getElementById('modalScore').textContent = correct;
+  document.getElementById('modalGrade').textContent = `등급: ${g.grade}`;
+  document.getElementById('modalMsg').textContent = g.msg;
+  document.getElementById('resultModal').classList.add('show');
+}
+
+function retryQuiz() {
+  state = { solved: 0, correct: 0 };
+  updateScoreboard();
+  document.getElementById('resultModal').classList.remove('show');
+  renderQuiz();
+}
+
+// INIT
+renderQuiz();
+updateScoreboard();
+</script>
+</body>
+</html>
