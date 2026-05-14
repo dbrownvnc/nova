@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA | PPI 물가 폭등 퀴즈 10문제</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff;
+  --bg2: #fafafa;
+  --text: #1a1a1a;
+  --text2: #777777;
+  --accent: #e11d48;
+  --accent2: #f43f5e;
+  --border: #e5e5e5;
+  --correct: #16a34a;
+  --wrong: #dc2626;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size:15px;
+  line-height:1.7;
+  max-width:480px;
+  margin:0 auto;
+  padding-bottom:60px;
+}
+
+/* STICKY SCORE BAR */
+.score-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--text);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.score-bar .score-title {
+  font-size:11px;
+  color:#aaa;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+.score-stats {
+  display:flex;
+  gap:10px;
+  flex:1;
+  justify-content:flex-end;
+  font-size:12px;
+  color:#fff;
+  font-weight:500;
+}
+.score-stats span { color:#aaa; }
+.score-stats strong { color:#fff; }
+.progress-wrap {
+  position:absolute;
+  bottom:0; left:0; right:0;
+  height:3px;
+  background:#333;
+}
+.progress-bar {
+  height:3px;
+  background: var(--accent);
+  transition: width 0.4s ease, background 0.4s ease;
+  width:0%;
+}
+
+/* HEADER */
+.quiz-header {
+  padding: 28px 20px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.quiz-header .tag {
+  font-size:10px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--accent);
+  font-weight:700;
+}
+.quiz-header h1 {
+  font-family:'Playfair Display',serif;
+  font-size:22px;
+  font-weight:900;
+  margin:8px 0 6px;
+  line-height:1.3;
+}
+.quiz-header p {
+  font-size:12px;
+  color:var(--text2);
+}
+
+/* QUESTION CARD */
+.q-card {
+  margin:16px 16px 0;
+  border:1px solid var(--border);
+  border-radius:6px;
+  overflow:hidden;
+  transition: border-color 0.3s;
+}
+.q-card.answered { border-color: var(--border); }
+
+.q-header {
+  background:var(--bg2);
+  padding:12px 14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  border-bottom:1px solid var(--border);
+}
+.q-num {
+  font-family:'Playfair Display',serif;
+  font-size:18px;
+  font-weight:700;
+  color:var(--accent);
+  min-width:28px;
+}
+.q-type {
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  padding:2px 7px;
+  border-radius:2px;
+  background:var(--text);
+  color:#fff;
+}
+.q-diff {
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  padding:2px 7px;
+  border-radius:2px;
+  margin-left:auto;
+}
+.diff-easy { background:#dcfce7; color:#16a34a; }
+.diff-mid  { background:#fef9c3; color:#ca8a04; }
+.diff-hard { background:#fee2e2; color:#dc2626; }
+
+.q-body { padding:14px; }
+.q-text {
+  font-size:14px;
+  font-weight:500;
+  line-height:1.6;
+  margin-bottom:14px;
+}
+
+/* OPTION BUTTONS */
+.options { display:flex; flex-direction:column; gap:8px; }
+.opt-btn {
+  width:100%;
+  text-align:left;
+  padding:10px 13px;
+  border:1.5px solid var(--border);
+  border-radius:4px;
+  background:#fff;
+  font-size:13px;
+  font-family:'Noto Sans KR',sans-serif;
+  cursor:pointer;
+  transition: all 0.2s;
+  color: var(--text);
+  line-height:1.5;
+}
+.opt-btn:hover:not(:disabled) { border-color:var(--accent); background:#fff5f7; }
+.opt-btn:disabled { cursor:default; }
+.opt-btn.correct {
+  background:#dcfce7;
+  border-color:#16a34a;
+  color:#15803d;
+  font-weight:700;
+}
+.opt-btn.wrong {
+  background:#fee2e2;
+  border-color:#dc2626;
+  color:#dc2626;
+}
+.opt-badge {
+  float:right;
+  font-size:11px;
+  font-weight:700;
+  margin-left:8px;
+}
+
+/* SHORT ANSWER */
+.sa-wrap { display:flex; gap:8px; margin-top:4px; }
+.sa-input {
+  flex:1;
+  padding:9px 12px;
+  border:1.5px solid var(--border);
+  border-radius:4px;
+  font-size:13px;
+  font-family:'Noto Sans KR',sans-serif;
+  outline:none;
+  transition:border-color 0.2s;
+}
+.sa-input:focus { border-color:var(--accent); }
+.sa-input:disabled { background:#f5f5f5; color:#999; }
+.sa-submit {
+  padding:9px 16px;
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  border-radius:4px;
+  font-size:13px;
+  font-family:'Noto Sans KR',sans-serif;
+  cursor:pointer;
+  font-weight:700;
+  white-space:nowrap;
+  transition:background 0.2s;
+}
+.sa-submit:hover:not(:disabled) { background:var(--accent2); }
+.sa-submit:disabled { background:#ccc; cursor:default; }
+.sa-result {
+  margin-top:8px;
+  font-size:13px;
+  font-weight:700;
+  display:none;
+}
+.sa-result.correct { color:#16a34a; }
+.sa-result.wrong { color:#dc2626; }
+
+/* OX BUTTONS */
+.ox-wrap { display:flex; gap:12px; margin-top:4px; }
+.ox-btn {
+  flex:1;
+  padding:14px;
+  border:1.5px solid var(--border);
+  border-radius:4px;
+  background:#fff;
+  font-size:22px;
+  font-weight:900;
+  cursor:pointer;
+  transition:all 0.2s;
+  font-family:'Playfair Display',serif;
+  color:var(--text2);
+}
+.ox-btn:hover:not(:disabled) { border-color:var(--accent); color:var(--accent); }
+.ox-btn:disabled { cursor:default; }
+.ox-btn.correct { background:#dcfce7; border-color:#16a34a; color:#16a34a; }
+.ox-btn.wrong   { background:#fee2e2; border-color:#dc2626; color:#dc2626; }
+
+/* EXPLANATION */
+.explanation {
+  display:none;
+  margin-top:12px;
+  padding:12px;
+  background:#fff9f0;
+  border-left:3px solid #f59e0b;
+  border-radius:0 4px 4px 0;
+  font-size:13px;
+  line-height:1.7;
+}
+.explanation .exp-label {
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  color:#d97706;
+  margin-bottom:6px;
+}
+.explanation .exp-answer {
+  font-weight:700;
+  color:var(--text);
+  margin-bottom:4px;
+}
+.explanation .exp-reason { color:#555; }
+
+/* MODAL */
+.modal-overlay {
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  z-index:200;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.modal-overlay.show { display:flex; }
+.modal-card {
+  background:#fff;
+  border-radius:8px;
+  padding:30px 24px;
+  text-align:center;
+  max-width:340px;
+  width:100%;
+  animation: popIn 0.3s ease;
+}
+@keyframes popIn {
+  from { transform:scale(0.85); opacity:0; }
+  to   { transform:scale(1);    opacity:1; }
+}
+.modal-card .modal-icon { font-size:48px; margin-bottom:12px; }
+.modal-card h2 {
+  font-family:'Playfair Display',serif;
+  font-size:22px;
+  font-weight:900;
+  margin-bottom:6px;
+}
+.modal-card .modal-score {
+  font-size:36px;
+  font-family:'Playfair Display',serif;
+  font-weight:700;
+  color:var(--accent);
+  margin:10px 0;
+}
+.modal-card .modal-grade {
+  font-size:14px;
+  color:var(--text2);
+  margin-bottom:16px;
+}
+.modal-card .modal-msg {
+  font-size:13px;
+  line-height:1.6;
+  color:var(--text);
+  margin-bottom:20px;
+}
+.btn-retry {
+  width:100%;
+  padding:12px;
+  background:var(--text);
+  color:#fff;
+  border:none;
+  border-radius:4px;
+  font-size:14px;
+  font-family:'Noto Sans KR',sans-serif;
+  font-weight:700;
+  cursor:pointer;
+  letter-spacing:1px;
+}
+.btn-retry:hover { background:var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- STICKY SCORE BAR -->
+<div class="score-bar">
+  <div class="score-title">퀴즈</div>
+  <div class="score-stats">
+    <span>풀었음</span><strong id="sbSolved">0</strong>
+    <span>/ 10</span>
+    &nbsp;|&nbsp;
+    <span>정답</span><strong id="sbCorrect">0</strong>
+    &nbsp;|&nbsp;
+    <span>정답률</span><strong id="sbRate">0%</strong>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="quiz-header">
+  <div class="tag">NOVA Real Invest · Interactive Quiz</div>
+  <h1>PPI 물가 폭등 &<br>AI 디커플링 시장</h1>
+  <p>2026.05.13 방송 기반 · 10문제 · 클릭하면 즉시 채점</p>
+</div>
+
+<!-- QUESTIONS will be injected here -->
+<div id="quizContainer"></div>
+
+<!-- FINAL MODAL -->
+<div class="modal-overlay" id="finalModal">
+  <div class="modal-card">
+    <div class="modal-icon" id="modalIcon">🎉</div>
+    <h2>최종 결과</h2>
+    <div class="modal-score" id="modalScore">0 / 10</div>
+    <div class="modal-grade" id="modalGrade">등급: —</div>
+    <div class="modal-msg" id="modalMsg"></div>
+    <button class="btn-retry" onclick="retryAll()">↺ 다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id: 1,
+    type: 'mcq',
+    difficulty: 'easy',
+    question: '오늘 방송(2026년 5월 13일)에서 언급된 미국 30년물 국채 금리는 얼마였으며, 이는 몇 년 만에 처음 있는 일이었나요?',
+    options: [
+      '4.4%, 2015년 이후 처음',
+      '5.046%, 2007년 이후 처음',
+      '5.3%, 2000년 이후 처음',
+      '4.8%, 2019년 이후 처음'
+    ],
+    answer: 1,
+    explanation: {
+      correct: '✅ 정답: 5.046%, 2007년 이후 처음',
+      reason: '방송에서 "30년물이 5.046% 돌파를 했다라는 건 2007년 이후 처음 있는 엄청난 것입니다"라고 명시적으로 언급했습니다. 10년물은 4.4%로 "위험한 수준"이라고 덧붙였습니다.'
+    }
+  },
+  {
+    id: 2,
+    type: 'mcq',
+    difficulty: 'easy',
+    question: '타워 세미컨덕터(TSEM)가 오늘 급등한 주요 이유는 무엇인가요?',
+    options: [
+      '자사주 매입 발표',
+      'AI 데이터센터용 실리콘 포토닉스(광) 칩 계약 체결 공개',
+      '미국 정부와 방위산업 계약 체결',
+      '엔비디아에 인수되는 뉴스'
+    ],
+    answer: 1,
+    explanation: {
+      correct: '✅ 정답: AI 데이터센터용 실리콘 포토닉스 칩 계약 체결',
+      reason: '"타워 세미컨덕터 이 회사도 AI 데이터센터용 실리콘 포토닉스 칩 계약을 체결했다 라는 얘기를 했어요"라고 방송에서 말했습니다. 이날 22.77% 상승했습니다.'
+    }
+  },
+  {
+    id: 3,
+    type: 'mcq',
+    difficulty: 'mid',
+    question: 'CME 금리 예측에서 1월 금리 인상 확률은 몇 퍼센트였고, 이를 노바는 어떻게 평가했나요?',
+    options: [
+      '10%, 아직 무시할 수준이다',
+      '20%, 시장이 과민반응 중이다',
+      '33%, 30% 초과는 상당히 심각한 신호다',
+      '50%, 금리 인상이 확실시된다'
+    ],
+    answer: 2,
+    explanation: {
+      correct: '✅ 정답: 33%, 30% 초과는 심각한 신호',
+      reason: '"1월달로 가면 33%입니다. 일단 30%가 넘어갔다라는 건 뭘 얘기하는 건가요? 상당히 시리어스하다라는 거죠"라고 방송에서 설명했습니다.'
+    }
+  },
+  {
+    id: 4,
+    type: 'mcq',
+    difficulty: 'mid',
+    question: '포드(F)가 오늘 13% 이상 급등한 핵심 이유는 무엇인가요?',
+    options: [
+      '2분기 자동차 판매량 사상 최고 기록',
+      '테슬라와의 합병 협상 소식',
+      '데이터센터 배터리 ESS 사업 자회사 설립으로 AI 인프라 기업으로 재평가',
+      '미국 정부 전기차 보조금 확대 정책 발표'
+    ],
+    answer: 2,
+    explanation: {
+      correct: '✅ 정답: 데이터센터 배터리 ESS 자회사 설립 → AI 인프라 기업 재평가',
+      reason: '"AI 와싱. 자회사를 하나 만든대요...LFP 배터리를 데이터센터 안에 들어가는 ESS를 집어넣는다...갑자기 AI 데이터센터 전력 배터리 업체가 된 겁니다. 즉 AI 인프라 기업으로 재평가가 된 거예요"라고 설명했습니다.'
+    }
+  },
+  {
+    id: 5,
+    type: 'short',
+    difficulty: 'mid',
+    question: '네비오스(MBIS)가 "전력을 확보한 최초의 기업"이라고 평가받는 이유는 무엇인가요? 확보한 전력 규모(단위 포함)를 쓰세요.',
+    answer: '1.2기가와트',
+    aliases: ['1.2gw', '1.2 gw', '1.2기가와트', '1.2 기가와트', '12기가와트'],
+    explanation: {
+      correct: '✅ 정답: 1.2기가와트(GW)',
+      reason: '"1.2기가와트의 전력을 확보한 최초의 기업이 됐어요...펜실베니아의 최대 1.2기가와트 규모의 전력과 부지를 확보했다고 발표를 했습니다. 이건 자사 소유예요"라고 방송에서 말했습니다. 미주리에도 추가 1.2GW 규모의 AI 팩토리 착공 소식도 있었습니다.'
+    }
+  },
+  {
+    id: 6,
+    type: 'mcq',
+    difficulty: 'hard',
+    question: '방송에서 언급된 엔비디아의 중국 매출 비중은 불과 2년 전(트럼프 이전)에 얼마였나요?',
+    options: [
+      '약 10%',
+      '약 20%',
+      '약 32%',
+      '약 50%'
+    ],
+    answer: 2,
+    explanation: {
+      correct: '✅ 정답: 약 32%',
+      reason: '"불과 2년 전만 하더라도 중국이 어떤 시장이었어요? 엔비디아 매출에 무려 32%를 커버하고 있었어요. 누가? 중국이"라고 방송에서 명시했습니다.'
+    }
+  },
+  {
+    id: 7,
+    type: 'ox',
+    difficulty: 'easy',
+    question: '방송에서 노바는 "AI는 돈만 쓰고 매출은 못 만들고 있다"고 평가했다.',
+    answer: 'X',
+    explanation: {
+      correct: '✅ 정답: X (거짓)',
+      reason: '반대입니다. "이번 실적 시즌을 통해서 완전히 그냥 AI 자본지출이 이거 엄청나네. 쓰는 만큼 벌고 있잖아. 그래 이게 배수거품이 아니라는 거예요"라고 AI가 실제로 돈을 벌고 있음을 강조했습니다.'
+    }
+  },
+  {
+    id: 8,
+    type: 'short',
+    difficulty: 'hard',
+    question: '시스코(CSCO)가 다음 분기 가이던스를 얼마에서 얼마로 올렸나요? 숫자와 단위를 함께 쓰세요.',
+    answer: '50억달러에서 90억달러',
+    aliases: ['5b에서9b', '50억에서90억', '5빌리언에서9빌리언', '50억달러→90억달러', '$5b에서$9b'],
+    explanation: {
+      correct: '✅ 정답: 50억 달러(5B) → 90억 달러(9B)',
+      reason: '"가이던스가 미쳤습니다. 가이던스가 원래 예상했던 가이던스가 5빌리언이었어요. 다음 분기 때 근데 다음 분기 때 9빌리언으로 들렸어요. 뭐 이거 거의 두 배 아니야?"라고 방송에서 말했습니다.'
+    }
+  },
+  {
+    id: 9,
+    type: 'mcq',
+    difficulty: 'hard',
+    question: '"새로운 투자 규범(New Regime)"의 3가지 룰 중 2번째는 무엇인가요?',
+    options: [
+      '지정학 리스크는 무조건 피해라',
+      '레거시 소프트웨어 대신 하드웨어·네트워크 인프라에 투자하라 (딱따구리)',
+      '매크로가 나빠도 캐펙스를 늘리는 기업을 찾아라',
+      '현금 비중을 항상 50% 이상 유지하라'
+    ],
+    answer: 1,
+    explanation: {
+      correct: '✅ 정답: 하드웨어·네트워크 인프라 우선 (딱따구리)',
+      reason: '"두 번째 가치평가의 기존 이동...하드웨어 네트워크 이런 쪽이 전부 다 밸류에이션을 독식하고 있다. 흔히 말해서 딱따구리. 딱따구리들이 전부 다 돈을 벌고 있다는 거예요"라고 방송에서 설명했습니다.'
+    }
+  },
+  {
+    id: 10,
+    type: 'ox',
+    difficulty: 'mid',
+    question: '방송에서 일라이 릴리의 신약 "레타트루타이드"는 이미 FDA 승인을 받은 공식 판매 제품이라고 소개됐다.',
+    answer: 'X',
+    explanation: {
+      correct: '✅ 정답: X (거짓)',
+      reason: '"아직 지금 비만약이 하나 나왔어요...아직 승인받지 않은 비만약인데 이미 틱톡이나 이런 데서 지금 난리도 아니래요"라고 방송에서 말했습니다. 임상실험 중인 미승인 의약품임에도 블랙마켓이 형성될 정도로 수요가 폭발적이라고 소개됐습니다.'
+    }
+  }
+];
+
+// State
+let state = { solved: 0, correct: 0 };
+
+function updateScoreBar() {
+  document.getElementById('sbSolved').textContent = state.solved;
+  document.getElementById('sbCorrect').textContent = state.correct;
+  const rate = state.solved === 0 ? 0 : Math.round((state.correct / state.solved) * 100);
+  document.getElementById('sbRate').textContent = rate + '%';
+  const bar = document.getElementById('progressBar');
+  bar.style.width = (state.solved / QUIZ_DATA.length * 100) + '%';
+  if (rate >= 70) bar.style.background = '#16a34a';
+  else if (rate >= 40) bar.style.background = '#f59e0b';
+  else bar.style.background = '#e11d48';
+
+  if (state.solved === QUIZ_DATA.length) {
+    setTimeout(showModal, 600);
+  }
+}
+
+function onAnswer(isCorrect) {
+  state.solved++;
+  if (isCorrect) state.correct++;
+  updateScoreBar();
+}
+
+function showModal() {
+  const rate = Math.round((state.correct / QUIZ_DATA.length) * 100);
+  let grade, icon, msg;
+  if (rate >= 90) { grade='A+'; icon='🏆'; msg='완벽합니다! 방송 내용을 완전히 숙지하셨네요. 실전 투자에도 바로 활용 가능한 수준입니다.'; }
+  else if (rate >= 80) { grade='A';  icon='🎉'; msg='훌륭합니다! AI 디커플링 시장과 인플레이션 국면을 잘 이해하고 있습니다.'; }
+  else if (rate >= 70) { grade='B';  icon='👍'; msg='좋습니다! 핵심 개념은 잡았지만 세부 수치를 한 번 더 확인해보세요.'; }
+  else if (rate >= 60) { grade='C';  icon='📚'; msg='방송을 다시 한 번 돌려보며 PPI·금리 수치와 종목 이유를 정리해보세요.'; }
+  else               { grade='D';  icon='💪'; msg='괜찮습니다! 분석 리포트를 먼저 꼼꼼히 읽고 다시 도전해보세요.'; }
+
+  document.getElementById('modalIcon').textContent = icon;
+  document.getElementById('modalScore').textContent = state.correct + ' / ' + QUIZ_DATA.length;
+  document.getElementById('modalGrade').textContent = '등급: ' + grade + ' (' + rate + '%)';
+  document.getElementById('modalMsg').textContent = msg;
+  document.getElementById('finalModal').classList.add('show');
+}
+
+function retryAll() {
+  state = { solved: 0, correct: 0 };
+  document.getElementById('finalModal').classList.remove('show');
+  updateScoreBar();
+  renderQuiz();
+}
+
+// RENDER
+function renderQuiz() {
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+
+  QUIZ_DATA.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'card-' + q.id;
+
+    const diffLabel = {easy:'쉬움',mid:'보통',hard:'어려움'}[q.difficulty];
+    const diffClass = {easy:'diff-easy',mid:'diff-mid',hard:'diff-hard'}[q.difficulty];
+    const typeLabel = {mcq:'객관식',short:'단답형',ox:'OX'}[q.type];
+
+    let bodyHTML = `<div class="q-text">${q.question}</div>`;
+
+    if (q.type === 'mcq') {
+      bodyHTML += `<div class="options" id="opts-${q.id}">`;
+      q.options.forEach((opt, i) => {
+        bodyHTML += `<button class="opt-btn" data-q="${q.id}" data-i="${i}" onclick="checkMCQ(${q.id},${i})">${opt}</button>`;
+      });
+      bodyHTML += `</div>`;
+    } else if (q.type === 'short') {
+      bodyHTML += `
+        <div class="sa-wrap">
+          <input type="text" id="sa-${q.id}" class="sa-input" placeholder="정답을 입력하세요..." autocomplete="off">
+          <button class="sa-submit" id="saBtn-${q.id}" onclick="checkSA(${q.id})">제출</button>
+        </div>
+        <div class="sa-result" id="saRes-${q.id}"></div>`;
+    } else if (q.type === 'ox') {
+      bodyHTML += `
+        <div class="ox-wrap" id="ox-${q.id}">
+          <button class="ox-btn" data-q="${q.id}" data-v="O" onclick="checkOX(${q.id},'O')">O</button>
+          <button class="ox-btn" data-q="${q.id}" data-v="X" onclick="checkOX(${q.id},'X')">X</button>
+        </div>`;
+    }
+
+    bodyHTML += `
+      <div class="explanation" id="exp-${q.id}">
+        <div class="exp-label">📖 해설</div>
+        <div class="exp-answer">${''}</div>
+        <div class="exp-reason">${''}</div>
+      </div>`;
+
+    card.innerHTML = `
+      <div class="q-header">
+        <div class="q-num">Q${idx+1}</div>
+        <div class="q-type">${typeLabel}</div>
+        <div class="q-diff ${diffClass}">${diffLabel}</div>
+      </div>
+      <div class="q-body">${bodyHTML}</div>`;
+    container.appendChild(card);
+  });
+}
+
+function showExplanation(qid, isCorrect) {
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  const expDiv = document.getElementById('exp-' + qid);
+  expDiv.querySelector('.exp-answer').textContent = q.explanation.correct;
+  expDiv.querySelector('.exp-reason').textContent = q.explanation.reason;
+  expDiv.style.display = 'block';
+  onAnswer(isCorrect);
+}
+
+function checkMCQ(qid, selected) {
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  const btns = document.querySelectorAll(`[data-q="${qid}"]`);
+  btns.forEach(btn => btn.disabled = true);
+  const isCorrect = (selected === q.answer);
+  btns[selected].classList.add(isCorrect ? 'correct' : 'wrong');
+  btns[selected].innerHTML += `<span class="opt-badge">${isCorrect ? '✓ 정답!' : '✗ 오답'}</span>`;
+  if (!isCorrect) {
+    btns[q.answer].classList.add('correct');
+    btns[q.answer].innerHTML += `<span class="opt-badge">✓ 정답</span>`;
+  }
+  showExplanation(qid, isCorrect);
+}
+
+function checkSA(qid) {
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  const input = document.getElementById('sa-' + qid);
+  const btn = document.getElementById('saBtn-' + qid);
+  const res = document.getElementById('saRes-' + qid);
+  const val = input.value.trim().toLowerCase().replace(/\s/g,'');
+  if (!val) return;
+
+  const correct = q.answer.toLowerCase().replace(/\s/g,'');
+  const aliases = (q.aliases || []).map(a => a.toLowerCase().replace(/\s/g,''));
+  const isCorrect = val === correct || aliases.includes(val);
+
+  input.disabled = true;
+  btn.disabled = true;
+  res.style.display = 'block';
+  res.textContent = isCorrect ? '✓ 정답입니다!' : `✗ 오답. 정답: ${q.answer}`;
+  res.className = 'sa-result ' + (isCorrect ? 'correct' : 'wrong');
+  showExplanation(qid, isCorrect);
+}
+
+function checkOX(qid, val) {
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  const btns = document.querySelectorAll(`#ox-${qid} .ox-btn`);
+  btns.forEach(btn => btn.disabled = true);
+  const isCorrect = (val === q.answer);
+  btns.forEach(btn => {
+    if (btn.dataset.v === val) btn.classList.add(isCorrect ? 'correct' : 'wrong');
+    if (!isCorrect && btn.dataset.v === q.answer) btn.classList.add('correct');
+  });
+  showExplanation(qid, isCorrect);
+}
+
+// Allow Enter key for short answer
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.activeElement.classList.contains('sa-input')) {
+    const id = parseInt(document.activeElement.id.replace('sa-',''));
+    checkSA(id);
+  }
+});
+
+// INIT
+renderQuiz();
+updateScoreBar();
+</script>
+</body>
+</html>
