@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>httpCIA.chat 멤버미팅 2026-05-14 — 시험문제</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#ffffff; --bg2:#fafafa; --text:#1a1a1a; --text2:#777777;
+  --accent:#e11d48; --accent2:#f43f5e; --border:#e5e5e5;
+  --green:#16a34a; --red:#dc2626; --orange:#ea580c;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;}
+
+/* ── STICKY SCOREBOARD ── */
+.scoreboard{
+  position:sticky;top:0;z-index:100;
+  background:var(--text);color:#fff;
+  padding:10px 16px;
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  box-shadow:0 2px 8px rgba(0,0,0,0.3);
+}
+.score-item{font-size:12px;color:#aaa;}
+.score-item strong{font-size:14px;color:#fff;}
+.score-item.highlight strong{color:var(--accent2);}
+.progress-wrap{flex:1;min-width:100px;height:8px;background:#333;border-radius:4px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:4px;transition:width 0.5s ease,background 0.5s ease;width:0%;}
+
+/* ── HEADER ── */
+.quiz-header{
+  background:var(--accent);color:#fff;
+  padding:28px 20px 22px;
+}
+.quiz-header::before{content:'';display:block;height:4px;background:var(--text);margin-bottom:12px;border-radius:2px;}
+.quiz-header h1{font-family:'Playfair Display',serif;font-size:clamp(20px,5vw,28px);font-weight:900;line-height:1.2;}
+.quiz-header p{font-size:13px;color:rgba(255,255,255,0.8);margin-top:8px;}
+
+/* ── CONTAINER ── */
+.container{max-width:680px;margin:0 auto;padding:0 16px;}
+
+/* ── QUIZ CARD ── */
+.quiz-card{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:20px;
+  margin:16px 0;
+  transition:box-shadow 0.2s;
+}
+.quiz-card:hover{box-shadow:0 2px 12px rgba(225,29,72,0.08);}
+
+.q-meta{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+.q-num{
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-weight:900;
+  color:var(--accent);line-height:1;
+}
+.badge{
+  display:inline-block;padding:2px 8px;border-radius:2px;
+  font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+}
+.badge-easy{background:#dcfce7;color:#15803d;}
+.badge-mid{background:#fef9c3;color:#854d0e;}
+.badge-hard{background:#fee2e2;color:var(--red);}
+.badge-mc{background:#dbeafe;color:#1d4ed8;}
+.badge-sa{background:#ede9fe;color:#6d28d9;}
+.badge-ox{background:#fce7f3;color:#be185d;}
+
+.q-text{font-size:15px;font-weight:500;margin-bottom:14px;line-height:1.6;}
+
+/* ── OPTIONS ── */
+.options{display:flex;flex-direction:column;gap:8px;}
+.opt-btn{
+  width:100%;text-align:left;
+  padding:10px 14px;
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:4px;
+  cursor:pointer;
+  font-size:14px;
+  font-family:'Noto Sans KR',sans-serif;
+  transition:all 0.18s;
+  line-height:1.5;
+}
+.opt-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);background:#fff5f7;}
+.opt-btn:disabled{cursor:default;}
+.opt-btn.correct{background:#dcfce7;border-color:var(--green);color:var(--green);font-weight:700;}
+.opt-btn.wrong{background:#fee2e2;border-color:var(--red);color:var(--red);}
+.result-badge{
+  display:inline-block;margin-left:8px;font-size:11px;font-weight:700;
+  padding:1px 6px;border-radius:2px;
+}
+.result-badge.ok{background:var(--green);color:#fff;}
+.result-badge.no{background:var(--red);color:#fff;}
+
+/* ── SHORT ANSWER ── */
+.sa-wrap{display:flex;gap:8px;margin-top:4px;}
+.sa-input{
+  flex:1;padding:10px 12px;
+  border:1px solid var(--border);border-radius:4px;
+  font-size:14px;font-family:'Noto Sans KR',sans-serif;
+  outline:none;transition:border-color 0.2s;
+}
+.sa-input:focus{border-color:var(--accent);}
+.sa-input:disabled{background:#f5f5f5;color:var(--text2);}
+.submit-btn{
+  padding:10px 16px;
+  background:var(--accent);color:#fff;
+  border:none;border-radius:4px;
+  cursor:pointer;font-size:13px;font-weight:700;
+  font-family:'Noto Sans KR',sans-serif;
+  transition:background 0.2s;white-space:nowrap;
+}
+.submit-btn:hover:not(:disabled){background:var(--accent2);}
+.submit-btn:disabled{background:#ccc;cursor:default;}
+
+/* ── OX ── */
+.ox-wrap{display:flex;gap:12px;margin-top:4px;}
+.ox-btn{
+  flex:1;padding:14px;
+  font-size:22px;font-weight:900;
+  border:1px solid var(--border);background:#fff;
+  border-radius:4px;cursor:pointer;
+  font-family:'Noto Sans KR',sans-serif;
+  transition:all 0.18s;
+}
+.ox-btn:hover:not(:disabled){border-color:var(--accent);background:#fff5f7;}
+.ox-btn:disabled{cursor:default;}
+.ox-btn.correct{background:#dcfce7;border-color:var(--green);}
+.ox-btn.wrong{background:#fee2e2;border-color:var(--red);}
+
+/* ── EXPLANATION ── */
+.explanation{
+  display:none;
+  margin-top:12px;
+  background:#fff;
+  border-left:3px solid var(--accent);
+  padding:12px 14px;
+  border-radius:0 4px 4px 0;
+  font-size:13px;
+  color:var(--text);
+  line-height:1.7;
+}
+.explanation.show{display:block;}
+.expl-title{font-size:11px;color:var(--accent);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+
+/* ── FINAL MODAL ── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.6);
+  z-index:200;align-items:center;justify-content:center;
+  padding:20px;
+}
+.modal-overlay.show{display:flex;}
+.modal{
+  background:#fff;border-radius:8px;
+  padding:28px 24px;max-width:380px;width:100%;
+  text-align:center;
+  box-shadow:0 8px 40px rgba(0,0,0,0.25);
+}
+.modal-grade{
+  font-family:'Playfair Display',serif;
+  font-size:64px;font-weight:900;
+  color:var(--accent);line-height:1;
+  margin-bottom:8px;
+}
+.modal-score{font-size:20px;font-weight:700;margin-bottom:8px;}
+.modal-msg{font-size:14px;color:var(--text2);margin-bottom:20px;line-height:1.6;}
+.modal-retry{
+  background:var(--accent);color:#fff;
+  border:none;padding:12px 28px;border-radius:4px;
+  cursor:pointer;font-size:14px;font-weight:700;
+  font-family:'Noto Sans KR',sans-serif;
+  transition:background 0.2s;
+}
+.modal-retry:hover{background:var(--accent2);}
+
+/* ── FOOTER ── */
+.footer{background:var(--text);color:#555;padding:16px;text-align:center;font-size:11px;margin-top:30px;}
+.footer span{color:var(--accent2);}
+</style>
+</head>
+<body>
+
+<!-- SCOREBOARD -->
+<div class="scoreboard" id="scoreboard">
+  <div class="score-item">📝 <strong id="sb-solved">0</strong> / 10</div>
+  <div class="score-item highlight">✅ 맞힌 문제 <strong id="sb-correct">0</strong></div>
+  <div class="score-item">🎯 정답률 <strong id="sb-pct">0%</strong></div>
+  <div class="progress-wrap">
+    <div class="progress-fill" id="sb-bar"></div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="quiz-header">
+  <div class="container">
+    <h1>httpCIA.chat 멤버미팅<br>2026-05-14 · 시험문제</h1>
+    <p>총 10문제 · 클릭 즉시 채점 · 해설 자동 표시</p>
+  </div>
+</div>
+
+<div class="container" id="quizArea" style="padding-top:8px;padding-bottom:20px;"></div>
+
+<!-- FINAL MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-grade" id="modalGrade">A</div>
+    <div class="modal-score" id="modalScore">10 / 10 점</div>
+    <div class="modal-msg" id="modalMsg">완벽합니다! 오늘 방송 내용을 완전히 이해하셨네요.</div>
+    <button class="modal-retry" onclick="retryQuiz()">↺ 다시 풀기</button>
+  </div>
+</div>
+
+<div class="footer"><p>본 시험은 <span>httpCIA.chat 멤버미팅 2026-05-14</span> 자막 기반으로 출제된 학습용 문제입니다.</p></div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id: 1,
+    type: 'mc',
+    difficulty: 'easy',
+    question: '2026년 5월 14일, 다우존스산업평균지수(DJIA)가 처음으로 돌파한 역사적인 포인트는?',
+    options: ['40,000', '45,000', '50,000', '55,000'],
+    answer: '50,000',
+    explanation: '방송에서 "다우가 이제 오만 시대가 됐습니다"라고 언급했으며, 구체적으로 5만 63.46으로 마감했다고 밝혔습니다. 다우지수는 S&P·나스닥과 계산법이 달라 5만이라는 숫자 자체가 역사적으로 매우 의미 있는 수치라고 강조했습니다.'
+  },
+  {
+    id: 2,
+    type: 'mc',
+    difficulty: 'easy',
+    question: '이날 나스닥의 종가로 언급된 수치는?',
+    options: ['24,800', '25,500', '26,635', '27,100'],
+    answer: '26,635',
+    explanation: '방송에서 "나스닥 당연히 좋고요. 26,635. 미쳤습니다."라고 직접 수치를 언급했습니다.'
+  },
+  {
+    id: 3,
+    type: 'mc',
+    difficulty: 'mid',
+    question: '시스코(CSCO)에 대해 모건 스탠리가 사용한 표현으로 방송에서 언급된 것은?',
+    options: [
+      '클라우드 인프라의 심장을 만드는 회사',
+      'AI 데이터센터의 혈관을 만드는 회사',
+      '반도체 공급망의 허브',
+      '5G 시대의 최대 수혜자'
+    ],
+    answer: 'AI 데이터센터의 혈관을 만드는 회사',
+    explanation: '방송에서 "데이터 센터의 혈관을 만드는 회사다. 멋있는 것 같아. 모건 스탠리가 약간 문과생인 줄..."이라고 언급하며 모건 스탠리가 시스코를 이렇게 평가했음을 소개했습니다. 목표가도 120달러에서 132달러로 상향했습니다.'
+  },
+  {
+    id: 4,
+    type: 'mc',
+    difficulty: 'mid',
+    question: '세레브라스의 WSE-3 칩은 일반 GPU보다 몇 배 크다고 설명했는가?',
+    options: ['12배', '28배', '58배', '100배'],
+    answer: '58배',
+    explanation: '방송에서 "WSE-3 이게 일반 GPU의 58배에 해당하는 웨이퍼 스케일 엔진을 가졌다"고 직접 언급했습니다. 이 대담한 발상이 IPO 당일 약 95% 급등을 이끌었습니다.'
+  },
+  {
+    id: 5,
+    type: 'mc',
+    difficulty: 'mid',
+    question: '세레브라스 매출에서 62%를 차지하는 국가/지역은?',
+    options: ['미국', '사우디아라비아', '아랍에미리트(UAE)', '중국'],
+    answer: '아랍에미리트(UAE)',
+    explanation: '방송에서 "매출의 한 62%가 아랍에미리트에 편중되어 있어요"라고 직접 언급했습니다. 이는 특정 고객에 대한 매출 집중이라는 리스크 요인으로도 지목됐습니다.'
+  },
+  {
+    id: 6,
+    type: 'mc',
+    difficulty: 'mid',
+    question: 'IMSR이 일반 SMR(고농축 우라늄 방식)보다 유리한 점으로 방송에서 언급된 것과 거리가 먼 것은?',
+    options: [
+      '저농축 우라늄이라 구하기 쉽고 가격이 저렴하다',
+      '사고 발생 시 처리가 쉽다',
+      '고농축 우라늄보다 에너지 효율이 더 높다',
+      '핵무기 전용 우려가 없어 조달이 비교적 자유롭다'
+    ],
+    answer: '고농축 우라늄보다 에너지 효율이 더 높다',
+    explanation: '방송에서 "저농축 우라늄은 학술적으로도 쓸 수가 있기 때문에 구하기가 어렵지 않고 가격도 훨씬 싸다"고 했으며, "사고 처리하는 게 쉽다"고도 했습니다. 하지만 "고농축보다 효율이 좀 떨어질 수는 있으나 얘도 워킹을 하는 것"이라 밝혔으므로, 효율이 더 높다는 것은 사실과 반대입니다.'
+  },
+  {
+    id: 7,
+    type: 'mc',
+    difficulty: 'hard',
+    question: '미국과 중국의 1일차 협상에서 합의된 내용이 아닌 것은?',
+    options: [
+      '호르무즈 해협 자유 통행 원칙에 합의',
+      '엔비디아 H200을 중국 10개 업체에 판매 승인 (각 최대 7만 5천 개)',
+      '중국이 미국 원유·LNG·대두를 구매하기로 합의',
+      '중국 화웨이의 미국 반도체 수입 전면 허용'
+    ],
+    answer: '중국 화웨이의 미국 반도체 수입 전면 허용',
+    explanation: '방송에서는 호르무즈 해협 자유 개방 합의, 엔비디아 H200의 알리바바·텐센트·바이트댄스 등 10개 기업 판매 승인(각 최대 75,000개), 중국의 미국 원유·LNG·대두 구매 합의를 언급했습니다. 화웨이 관련 내용은 방송에 등장하지 않았습니다.'
+  },
+  {
+    id: 8,
+    type: 'sa',
+    difficulty: 'mid',
+    question: '노바가 제시한 투자 프레임워크 "SPA"의 세 단계를 순서대로 쓰시오. (예: A, B, C 형식으로)',
+    answer: 'study, principle, apply',
+    explanation: '"SPA"는 Study(공부) → Principle(원칙 수립) → Apply(적용)의 세 단계로 구성됩니다. 방송에서 "청기누설만 완벽하게 스터디를 해, 그 다음에 본인의 원칙을 세워, 그 다음에 어플라이 해"라고 직접 설명했습니다.'
+  },
+  {
+    id: 9,
+    type: 'ox',
+    difficulty: 'easy',
+    question: '방송에서 "나스닥과 S&P 500 지수가 역대 최고치를 기록한 것은 시장 전반이 고루 올라간 브로드닝(broadening) 현상이다"라고 평가했다.',
+    answer: 'X',
+    explanation: '방송에서는 정반대로 평가했습니다. "S&P 500에도 최고치 나스닥 최고치 다 페이크입니다. 그냥 빅테크 큰 덩어리들만 잡고서 올라가고 있는 거죠. 나머지들은 빨개."라고 하며, 이는 브로드닝이 아닌 탑헤비(상위 종목 쏠림) 현상이라고 지적했습니다.'
+  },
+  {
+    id: 10,
+    type: 'ox',
+    difficulty: 'hard',
+    question: '방송에서 엔비디아가 중국에 현재 공급하는 제품은 최신 블랙웰(Blackwell) 칩이라고 언급했다.',
+    answer: 'X',
+    explanation: '방송에서 "현재 H200은 중국에다 납품하는 거고요. 블랙웰은 지금 현재 판매하는 미국에 판매하고 뭐 그러는 거죠"라고 명확히 구분했습니다. 즉 중국에 납품되는 것은 H200이고, 블랙웰은 미국 등 다른 시장에 판매되는 구조입니다.'
+  }
+];
+
+let state = { solved: 0, correct: 0, answered: {} };
+
+function updateScoreboard() {
+  const s = state;
+  document.getElementById('sb-solved').textContent  = s.solved;
+  document.getElementById('sb-correct').textContent = s.correct;
+  const pct = s.solved === 0 ? 0 : Math.round(s.correct / s.solved * 100);
+  document.getElementById('sb-pct').textContent = pct + '%';
+  const bar = document.getElementById('sb-bar');
+  bar.style.width = (s.solved / 10 * 100) + '%';
+  bar.style.background = pct < 40 ? '#dc2626' : pct < 70 ? '#ea580c' : '#16a34a';
+}
+
+function showExplanation(id) {
+  document.getElementById('expl-' + id).classList.add('show');
+}
+
+function onMcAnswer(qid, chosen, correct, btns) {
+  if (state.answered[qid]) return;
+  state.answered[qid] = true;
+  state.solved++;
+  const isCorrect = chosen === correct;
+  if (isCorrect) state.correct++;
+  btns.forEach(btn => {
+    btn.disabled = true;
+    if (btn.dataset.val === correct) {
+      btn.classList.add('correct');
+      btn.innerHTML += ' <span class="result-badge ok">✓ 정답</span>';
+    } else if (btn.dataset.val === chosen && !isCorrect) {
+      btn.classList.add('wrong');
+      btn.innerHTML += ' <span class="result-badge no">✗ 오답</span>';
+    }
+  });
+  showExplanation(qid);
+  updateScoreboard();
+  checkComplete();
+}
+
+function onOxAnswer(qid, chosen, correct, btns) {
+  if (state.answered[qid]) return;
+  state.answered[qid] = true;
+  state.solved++;
+  const isCorrect = chosen === correct;
+  if (isCorrect) state.correct++;
+  btns.forEach(btn => {
+    btn.disabled = true;
+    if (btn.dataset.val === correct) btn.classList.add('correct');
+    else if (btn.dataset.val === chosen) btn.classList.add('wrong');
+  });
+  showExplanation(qid);
+  updateScoreboard();
+  checkComplete();
+}
+
+function onSaSubmit(qid, inputEl, correct, submitBtn) {
+  if (state.answered[qid]) return;
+  const val = inputEl.value.trim().toLowerCase().replace(/[,\s·]+/g, ' ');
+  if (!val) return;
+  state.answered[qid] = true;
+  state.solved++;
+  // flexible check: all key words present
+  const keys = correct.toLowerCase().split(',').map(k => k.trim());
+  const isCorrect = keys.every(k => val.includes(k));
+  if (isCorrect) state.correct++;
+  inputEl.disabled = true;
+  submitBtn.disabled = true;
+  const feedback = document.getElementById('sa-feedback-' + qid);
+  if (feedback) {
+    feedback.style.display = 'block';
+    feedback.style.color = isCorrect ? '#16a34a' : '#dc2626';
+    feedback.textContent = isCorrect ? '✓ 정답입니다!' : '✗ 오답입니다. 정답: ' + correct.split(',').map(k=>k.trim()).map(k=>k.charAt(0).toUpperCase()+k.slice(1)).join(' → ');
+  }
+  showExplanation(qid);
+  updateScoreboard();
+  checkComplete();
+}
+
+function checkComplete() {
+  if (state.solved < 10) return;
+  const pct = Math.round(state.correct / 10 * 100);
+  let grade, msg;
+  if (pct >= 90) { grade = 'A'; msg = '완벽합니다! 오늘 방송 내용을 거의 완전히 이해하셨군요. AI 투자의 핵심을 꿰뚫고 있습니다.'; }
+  else if (pct >= 70) { grade = 'B'; msg = '잘 하셨습니다! 핵심 내용을 잘 파악하고 있습니다. 틀린 문제를 다시 복습해 보세요.'; }
+  else if (pct >= 50) { grade = 'C'; msg = '절반 이상 맞히셨습니다. 방송 내용을 한 번 더 복습하면 완벽해질 거예요.'; }
+  else { grade = 'D'; msg = '조금 더 공부가 필요합니다. SPA 원칙의 첫 번째, Study부터 다시 시작해봅시다!'; }
+  document.getElementById('modalGrade').textContent = grade;
+  document.getElementById('modalScore').textContent = state.correct + ' / 10 점 (' + pct + '%)';
+  document.getElementById('modalMsg').textContent = msg;
+  setTimeout(() => document.getElementById('modalOverlay').classList.add('show'), 600);
+}
+
+function retryQuiz() {
+  state = { solved: 0, correct: 0, answered: {} };
+  document.getElementById('modalOverlay').classList.remove('show');
+  updateScoreboard();
+  renderQuiz();
+}
+
+function diffBadge(d) {
+  if (d === 'easy') return '<span class="badge badge-easy">쉬움</span>';
+  if (d === 'mid')  return '<span class="badge badge-mid">보통</span>';
+  return '<span class="badge badge-hard">어려움</span>';
+}
+function typeBadge(t) {
+  if (t === 'mc') return '<span class="badge badge-mc">객관식</span>';
+  if (t === 'sa') return '<span class="badge badge-sa">단답형</span>';
+  return '<span class="badge badge-ox">O / X</span>';
+}
+
+function renderQuiz() {
+  const area = document.getElementById('quizArea');
+  area.innerHTML = '';
+  QUIZ_DATA.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'quiz-card';
+    let inner = `
+      <div class="q-meta">
+        <div class="q-num">Q${idx + 1}</div>
+        ${typeBadge(q.type)}
+        ${diffBadge(q.difficulty)}
+      </div>
+      <div class="q-text">${q.question}</div>
+    `;
+
+    if (q.type === 'mc') {
+      inner += '<div class="options" id="opts-' + q.id + '">';
+      q.options.forEach(opt => {
+        inner += `<button class="opt-btn" data-val="${opt}" onclick="mcClick(${q.id}, this)">${opt}</button>`;
+      });
+      inner += '</div>';
+    } else if (q.type === 'sa') {
+      inner += `
+        <div class="sa-wrap">
+          <input type="text" class="sa-input" id="sa-input-${q.id}" placeholder="답을 입력하세요..." maxlength="60">
+          <button class="submit-btn" id="sa-btn-${q.id}" onclick="saClick(${q.id})">제출</button>
+        </div>
+        <div id="sa-feedback-${q.id}" style="display:none;font-size:13px;font-weight:700;margin-top:6px;"></div>
+      `;
+    } else if (q.type === 'ox') {
+      inner += `
+        <div class="ox-wrap" id="ox-${q.id}">
+          <button class="ox-btn" data-val="O" onclick="oxClick(${q.id}, this)">⭕ O</button>
+          <button class="ox-btn" data-val="X" onclick="oxClick(${q.id}, this)">❌ X</button>
+        </div>
+      `;
+    }
+
+    inner += `
+      <div class="explanation" id="expl-${q.id}">
+        <div class="expl-title">해설</div>
+        ${q.explanation}
+      </div>
+    `;
+
+    card.innerHTML = inner;
+    area.appendChild(card);
+  });
+
+  // enter key for SA
+  QUIZ_DATA.filter(q => q.type === 'sa').forEach(q => {
+    const inp = document.getElementById('sa-input-' + q.id);
+    if (inp) inp.addEventListener('keydown', e => { if (e.key === 'Enter') saClick(q.id); });
+  });
+}
+
+function mcClick(qid, btn) {
+  if (state.answered[qid]) return;
+  const wrap = document.getElementById('opts-' + qid);
+  const btns = Array.from(wrap.querySelectorAll('.opt-btn'));
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  onMcAnswer(qid, btn.dataset.val, q.answer, btns);
+}
+
+function oxClick(qid, btn) {
+  if (state.answered[qid]) return;
+  const wrap = document.getElementById('ox-' + qid);
+  const btns = Array.from(wrap.querySelectorAll('.ox-btn'));
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  onOxAnswer(qid, btn.dataset.val, q.answer, btns);
+}
+
+function saClick(qid) {
+  if (state.answered[qid]) return;
+  const inp  = document.getElementById('sa-input-' + qid);
+  const btn  = document.getElementById('sa-btn-' + qid);
+  const q    = QUIZ_DATA.find(x => x.id === qid);
+  onSaSubmit(qid, inp, q.answer, btn);
+}
+
+renderQuiz();
+updateScoreboard();
+</script>
+</body>
+</html>
