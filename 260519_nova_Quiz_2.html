@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA Real Invest — 인터랙티브 시험문제</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --correct-bg: #dcfce7;
+    --correct-bd: #86efac;
+    --correct-txt: #15803d;
+    --wrong-bg: #fff1f2;
+    --wrong-bd: #fda4af;
+    --wrong-txt: #be123c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #f5f5f5;
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── 스티키 점수판 ── */
+  .scorebar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--text);
+    color: #fff;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 12px rgba(0,0,0,.3);
+  }
+  .scorebar-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    flex: 1;
+    min-width: 100px;
+  }
+  .score-items { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .score-chip {
+    font-size: 12px;
+    background: rgba(255,255,255,.12);
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+  .score-chip span { font-weight: 700; color: #fff; }
+  .progress-bar-wrap {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,.15);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    width: 0%;
+    transition: width .4s ease, background-color .4s ease;
+    background: #ef4444;
+  }
+
+  /* ── 헤더 ── */
+  .hero {
+    background: var(--text);
+    color: #fff;
+    padding: 36px 20px 28px;
+    text-align: center;
+  }
+  .hero-label { font-size: 11px; letter-spacing: 3px; color: var(--accent); margin-bottom: 10px; }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 5vw, 30px);
+    font-weight: 900;
+    margin-bottom: 8px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p { font-size: 13px; color: #aaa; }
+
+  /* ── 컨테이너 ── */
+  .container { max-width: 680px; margin: 0 auto; padding: 24px 16px 80px; }
+
+  /* ── 문제 카드 ── */
+  .q-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05);
+  }
+  .q-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .q-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    min-width: 32px;
+  }
+  .q-badge {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+  .badge-easy { background: #dcfce7; color: #15803d; }
+  .badge-normal { background: #fef3c7; color: #92400e; }
+  .badge-hard { background: #fee2e2; color: #b91c1c; }
+  .badge-mc { background: #ede9fe; color: #6d28d9; }
+  .badge-short { background: #e0f2fe; color: #0369a1; }
+  .badge-ox { background: #fce7f3; color: #9d174d; }
+
+  .q-text {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    line-height: 1.7;
+  }
+
+  /* ── 보기 버튼 ── */
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt-btn {
+    width: 100%;
+    text-align: left;
+    background: var(--bg2);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 11px 14px;
+    font-size: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    transition: all .2s;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .opt-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: #fff1f2;
+  }
+  .opt-btn:disabled { cursor: default; }
+  .opt-btn.correct {
+    background: var(--correct-bg);
+    border-color: var(--correct-bd);
+    color: var(--correct-txt);
+    font-weight: 700;
+  }
+  .opt-btn.wrong {
+    background: var(--wrong-bg);
+    border-color: var(--wrong-bd);
+    color: var(--wrong-txt);
+  }
+  .opt-btn .badge-result {
+    float: right;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 10px;
+    margin-left: 8px;
+  }
+  .badge-ok { background: var(--correct-txt); color: #fff; }
+  .badge-no { background: var(--wrong-txt); color: #fff; }
+
+  /* ── OX 버튼 ── */
+  .ox-wrap { display: flex; gap: 10px; }
+  .ox-btn {
+    flex: 1;
+    padding: 14px;
+    font-size: 22px;
+    font-weight: 900;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg2);
+    cursor: pointer;
+    transition: all .2s;
+    font-family: inherit;
+  }
+  .ox-btn:hover:not(:disabled) { border-color: var(--accent); background: #fff1f2; }
+  .ox-btn:disabled { cursor: default; }
+  .ox-btn.correct { background: var(--correct-bg); border-color: var(--correct-bd); }
+  .ox-btn.wrong { background: var(--wrong-bg); border-color: var(--wrong-bd); }
+
+  /* ── 단답형 ── */
+  .short-wrap { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .short-input {
+    flex: 1;
+    min-width: 160px;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .short-input:focus { border-color: var(--accent); }
+  .short-input:disabled { background: var(--bg2); }
+  .submit-btn {
+    padding: 10px 18px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+  .submit-btn:hover { opacity: .85; }
+  .submit-btn:disabled { opacity: .4; cursor: default; }
+
+  /* ── 해설 ── */
+  .explanation {
+    display: none;
+    margin-top: 14px;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+    color: #78350f;
+    line-height: 1.7;
+  }
+  .explanation strong { color: #92400e; }
+  .explanation.show { display: block; }
+
+  /* ── 모달 ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.6);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: #fff;
+    border-radius: 16px;
+    padding: 36px 28px;
+    text-align: center;
+    max-width: 380px;
+    width: 100%;
+    animation: popIn .4s ease;
+  }
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(.85); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  .modal-emoji { font-size: 56px; margin-bottom: 12px; }
+  .modal-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .modal-grade {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .modal-msg { font-size: 14px; color: var(--text2); margin-bottom: 24px; line-height: 1.7; }
+  .retry-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 32px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  @media (max-width: 400px) {
+    .q-card { padding: 16px 14px; }
+    .scorebar { gap: 6px; }
+    .score-items { gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 스티키 점수판 -->
+<div class="scorebar">
+  <div class="scorebar-title">📋 NOVA 퀴즈</div>
+  <div class="score-items">
+    <div class="score-chip">푼 문제 <span id="solved">0</span> / 10</div>
+    <div class="score-chip">정답 <span id="correct">0</span></div>
+    <div class="score-chip">정답률 <span id="rate">0</span>%</div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progressBar"></div>
+  </div>
+</div>
+
+<!-- 헤더 -->
+<div class="hero">
+  <div class="hero-label">NOVA Real Invest · 2026.05.19</div>
+  <h1>두 세계의 <span>정면충돌</span><br>인터랙티브 퀴즈</h1>
+  <p>10문제 · 객관식·단답형·OX 혼합 · 즉시 채점</p>
+</div>
+
+<div class="container" id="quizContainer"></div>
+
+<!-- 결과 모달 -->
+<div class="modal-overlay" id="resultModal">
+  <div class="modal">
+    <div class="modal-emoji" id="modalEmoji">🎉</div>
+    <div class="modal-score" id="modalScore">0 / 10</div>
+    <div class="modal-grade" id="modalGrade"></div>
+    <div class="modal-msg" id="modalMsg"></div>
+    <button class="retry-btn" onclick="retryQuiz()">↺ 다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id: 1, type: 'mc', difficulty: 'easy',
+    question: "오늘 방송에서 Dan Loeb(Third Point)이 인용된 명언은 무엇입니까?",
+    options: [
+      "A. 주식시장은 단기적으로 인기투표기계이고 장기적으로 체중 측정기계다",
+      "B. You will either be a beneficiary of AI or AI roadkill",
+      "C. AI는 전기보다 더 중요한 발명이다",
+      "D. 위기는 기회다"
+    ],
+    answer: 1,
+    explanation: "방송에서 Dan Loeb(Third Point)의 말로 '너는 AI의 수혜자가 되거나 AI에 의해 로드킬 당한다'는 내용을 인용했습니다. 이 문구가 오늘 방송의 핵심 테마였습니다."
+  },
+  {
+    id: 2, type: 'mc', difficulty: 'normal',
+    question: "오늘 AI 하드웨어 관련주가 폭락한 가장 직접적인 두 가지 원인으로 맞는 것은?",
+    options: [
+      "A. 엔비디아 실적 악화 + 트럼프 관세",
+      "B. 삼성전자 노조 파업 우려 + Seagate CEO의 공장 증설 지연 경고",
+      "C. 중국의 반도체 수출 금지 + 연준 금리 인상",
+      "D. 애플의 AI 칩 내재화 + AMD의 점유율 확대"
+    ],
+    answer: 1,
+    explanation: "방송에서 하드웨어 병목의 두 원인으로 ① 삼성전자 노조 파업으로 메모리 공급 차질 우려, ② Seagate CEO 데이빗 모슬리가 JP모건 컨퍼런스에서 '공장 증설 리드타임이 지연되고 있다'고 경고한 것을 언급했습니다."
+  },
+  {
+    id: 3, type: 'mc', difficulty: 'normal',
+    question: "NextEra Energy가 Dominion Energy를 인수하겠다고 발표한 금액은?",
+    options: [
+      "A. 22억 달러",
+      "B. 33억 달러",
+      "C. 66.8억 달러",
+      "D. 668억 달러 (66.8빌리언)"
+    ],
+    answer: 3,
+    explanation: "방송에서 'NextEra Energy가 Dominion Energy를 66.8 빌리언(한국 돈으로 90조 원)에 전액 현금으로 인수하겠다'고 밝혔습니다."
+  },
+  {
+    id: 4, type: 'mc', difficulty: 'normal',
+    question: "오늘 방송에서 제시된 '2026년의 새로운 피난처 3대 기둥'에 해당하지 않는 것은?",
+    options: [
+      "A. 전력망 (Power Grids)",
+      "B. 데이터 클린룸 (반도체 공장 건설)",
+      "C. 사이버보안 플랫폼",
+      "D. 필수소비재 (Consumer Staples)"
+    ],
+    answer: 3,
+    explanation: "방송에서 2026년 새로운 피난처로 '① 전력망, ② 데이터 클린룸(반도체 공장 건설), ③ 사이버보안 플랫폼'을 제시했습니다. 필수소비재는 '20세기에나 통하던 전통적 방어주'로 이제는 유효하지 않다고 언급했습니다."
+  },
+  {
+    id: 5, type: 'mc', difficulty: 'hard',
+    question: "Aehr Test Systems(AEHR)가 오늘 폭락한 이유로 방송에서 설명한 내용은?",
+    options: [
+      "A. 엔비디아가 AEHR와의 계약을 해지했기 때문",
+      "B. 반도체 테스트 장비의 수요가 둔화됐는데, 이는 공장 자체가 안 지어지고 있어 테스트 장비도 팔리지 않기 때문",
+      "C. 중국 수출 금지로 최대 고객을 잃었기 때문",
+      "D. 삼성이 자체 테스트 장비를 개발했기 때문"
+    ],
+    answer: 1,
+    explanation: "방송에서 'AI 관련 반도체 테스트 장비를 파는 AEHR가 수요 둔화를 보고했는데, 그 이유는 공장(팹)이 지어져야 테스트 장비도 팔리는데, 지금 공장 자체가 못 만들어지고 있기 때문'이라고 설명했습니다. AI 수요 과잉이 역설적으로 부품·장비 업체에 타격을 준 것입니다."
+  },
+  {
+    id: 6, type: 'mc', difficulty: 'normal',
+    question: "버지니아가 데이터센터의 성지가 된 역사적 이유로 방송에서 언급된 것은?",
+    options: [
+      "A. 구글의 첫 번째 데이터센터가 버지니아에 세워졌기 때문",
+      "B. AOL이 버지니아에 탄생했고, 당시 전 세계 인터넷 트래픽의 80%가 이 지역을 통과했기 때문",
+      "C. 미국 연방정부 데이터센터가 워싱턴DC 인근 버지니아에 집중됐기 때문",
+      "D. 버지니아주가 세금 혜택을 가장 많이 제공했기 때문"
+    ],
+    answer: 1,
+    explanation: "방송에서 'AOL(아메리칸 온라인)이 버지니아에 생겼고, 당시 전 세계 인터넷 트래픽의 80%가 이 지역을 통과했다. 이후 Verizon이 인프라를 인수하며 데이터센터가 집중됐다'고 설명했습니다."
+  },
+  {
+    id: 7, type: 'ox', difficulty: 'easy',
+    question: "방송에서 사이버보안 섹터(CrowdStrike, Palo Alto Networks 등)는 오늘 52주 신고가를 경신하며 상승했다고 언급됐다.",
+    answer: 'O',
+    explanation: "맞습니다. 방송에서 'CrowdStrike 4.2% 상승, 오늘 52주 최고가를 찍어내고 있다. Palo Alto Networks 시총 2,000억 달러 돌파'를 언급했습니다. AI 위협의 정교화로 사이버보안 수요가 폭발하고 있다는 것이 핵심입니다."
+  },
+  {
+    id: 8, type: 'ox', difficulty: 'normal',
+    question: "방송에서는 전통적인 필수소비재(식품·생활용품) 주식이 2026년 스태그플레이션 환경에서 가장 좋은 피난처라고 주장했다.",
+    answer: 'X',
+    explanation: "틀렸습니다. 방송에서는 정반대로 '필수소비재, 보험 같은 전통적 방어주는 20세기에나 통하던 말이다. 21세기 방어주는 전력망·데이터 클린룸·사이버보안이다'라고 강조했습니다."
+  },
+  {
+    id: 9, type: 'short', difficulty: 'normal',
+    question: "방송에서 오늘 공개된 중요한 정보로, LiveRamp(RAMP)를 22억 달러(현금)에 인수하겠다고 발표한 프랑스 광고그룹의 이름은?",
+    answer: 'publicis',
+    answerAlts: ['퍼블리시스', 'Publicis', '퍼블리시', 'publicis'],
+    explanation: "방송에서 '프랑스 광고의사(광고회사)인 자이언트 퍼블리시(Publicis)가 LiveRamp를 22억 달러 전액 현금으로 인수하겠다고 발표해 +27.3% 급등했다'고 언급했습니다. 에이전틱 AI를 활용한 데이터 분석 역량을 확보하려는 목적입니다."
+  },
+  {
+    id: 10, type: 'short', difficulty: 'hard',
+    question: "방송에서 버지니아주 전기세가 최근 3년간 얼마나 올랐다고 언급했나요? (숫자+단위 입력, 예: 50%)",
+    answer: '80%',
+    answerAlts: ['80', '80%이상', '80%+', '80% 이상'],
+    explanation: "방송에서 '버지니아 같은 경우 3년 동안 80% 이상 전기세가 올라가고 있다. 앞으로 매년 5%를 올리는 게 목표'라고 언급했습니다. 데이터센터 급증으로 전력 수요가 폭발하고, 독점적 유틸리티 기업들이 가격 결정권을 갖고 있기 때문입니다."
+  }
+];
+
+let state = { solved: 0, correct: 0 };
+
+function updateScoreboard() {
+  document.getElementById('solved').textContent  = state.solved;
+  document.getElementById('correct').textContent = state.correct;
+  const rate = state.solved === 0 ? 0 : Math.round(state.correct / state.solved * 100);
+  document.getElementById('rate').textContent = rate;
+  const bar = document.getElementById('progressBar');
+  bar.style.width = (state.solved / 10 * 100) + '%';
+  bar.style.background = rate >= 70 ? '#16a34a' : rate >= 40 ? '#d97706' : '#ef4444';
+
+  if (state.solved === 10) showResult();
+}
+
+function markAnswer(isCorrect) {
+  state.solved++;
+  if (isCorrect) state.correct++;
+  updateScoreboard();
+}
+
+function showExplanation(id) {
+  document.getElementById('exp-' + id).classList.add('show');
+}
+
+function renderQuiz() {
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+  state = { solved: 0, correct: 0 };
+  updateScoreboard();
+
+  QUIZ_DATA.forEach((q) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'card-' + q.id;
+
+    const diffMap = { easy: '쉬움', normal: '보통', hard: '어려움' };
+    const diffClass = { easy: 'badge-easy', normal: 'badge-normal', hard: 'badge-hard' };
+    const typeMap = { mc: '객관식', ox: 'OX', short: '단답형' };
+    const typeClass = { mc: 'badge-mc', ox: 'badge-ox', short: 'badge-short' };
+
+    let optionsHTML = '';
+
+    if (q.type === 'mc') {
+      optionsHTML = '<div class="options">' + q.options.map((opt, i) =>
+        `<button class="opt-btn" onclick="checkMC(${q.id}, ${i})">${opt}</button>`
+      ).join('') + '</div>';
+    } else if (q.type === 'ox') {
+      optionsHTML = `<div class="ox-wrap">
+        <button class="ox-btn" onclick="checkOX(${q.id}, 'O')">⭕</button>
+        <button class="ox-btn" onclick="checkOX(${q.id}, 'X')">❌</button>
+      </div>`;
+    } else if (q.type === 'short') {
+      optionsHTML = `<div class="short-wrap">
+        <input type="text" class="short-input" id="short-${q.id}" placeholder="정답을 입력하세요..." onkeydown="if(event.key==='Enter') checkShort(${q.id})">
+        <button class="submit-btn" id="sbtn-${q.id}" onclick="checkShort(${q.id})">제출</button>
+      </div>
+      <div id="short-result-${q.id}" style="margin-top:8px;font-size:13px;font-weight:700;"></div>`;
+    }
+
+    card.innerHTML = `
+      <div class="q-header">
+        <div class="q-num">Q${q.id}</div>
+        <span class="q-badge ${diffClass[q.difficulty]}">${diffMap[q.difficulty]}</span>
+        <span class="q-badge ${typeClass[q.type]}">${typeMap[q.type]}</span>
+      </div>
+      <div class="q-text">${q.question}</div>
+      ${optionsHTML}
+      <div class="explanation" id="exp-${q.id}">
+        <strong>📚 해설:</strong> ${q.explanation}
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function checkMC(qid, chosen) {
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  const card = document.getElementById('card-' + qid);
+  const btns = card.querySelectorAll('.opt-btn');
+  btns.forEach(b => b.disabled = true);
+
+  const isCorrect = chosen === q.answer;
+  btns[chosen].classList.add(isCorrect ? 'correct' : 'wrong');
+  btns[chosen].innerHTML += `<span class="badge-result ${isCorrect ? 'badge-ok' : 'badge-no'}">${isCorrect ? '✓ 정답!' : '✗ 오답'}</span>`;
+
+  if (!isCorrect) {
+    btns[q.answer].classList.add('correct');
+    btns[q.answer].innerHTML += `<span class="badge-result badge-ok">✓ 정답</span>`;
+  }
+  showExplanation(qid);
+  markAnswer(isCorrect);
+}
+
+function checkOX(qid, chosen) {
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  const card = document.getElementById('card-' + qid);
+  const btns = card.querySelectorAll('.ox-btn');
+  btns.forEach(b => b.disabled = true);
+
+  const isCorrect = chosen === q.answer;
+  const chosenIdx = chosen === 'O' ? 0 : 1;
+  const correctIdx = q.answer === 'O' ? 0 : 1;
+  btns[chosenIdx].classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) btns[correctIdx].classList.add('correct');
+  showExplanation(qid);
+  markAnswer(isCorrect);
+}
+
+function checkShort(qid) {
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  const input = document.getElementById('short-' + qid);
+  const sbtn  = document.getElementById('sbtn-' + qid);
+  const resultEl = document.getElementById('short-result-' + qid);
+  const val = input.value.trim();
+  if (!val) return;
+
+  input.disabled = true;
+  sbtn.disabled = true;
+
+  const allAnswers = [q.answer, ...(q.answerAlts || [])].map(a => a.toLowerCase().replace(/\s/g,''));
+  const isCorrect = allAnswers.includes(val.toLowerCase().replace(/\s/g,''));
+
+  resultEl.textContent = isCorrect ? '✓ 정답!' : `✗ 오답 — 정답: ${q.answer}`;
+  resultEl.style.color = isCorrect ? '#15803d' : '#be123c';
+  showExplanation(qid);
+  markAnswer(isCorrect);
+}
+
+function showResult() {
+  const score = state.correct;
+  const rate  = Math.round(score / 10 * 100);
+  let grade, emoji, msg;
+
+  if (score >= 9) { grade = 'A+'; emoji = '🏆'; msg = '완벽합니다! NOVA 방송을 완벽하게 이해하셨군요. AI 시대의 승자가 되실 자격이 있습니다!'; }
+  else if (score >= 8) { grade = 'A';  emoji = '🥇'; msg = '훌륭합니다! 핵심 내용을 잘 파악하셨습니다. AI 로드킬은 없을 것 같네요.'; }
+  else if (score >= 7) { grade = 'B';  emoji = '👍'; msg = '좋은 성적입니다! 조금 더 복습하면 완벽해질 것 같아요.'; }
+  else if (score >= 5) { grade = 'C';  emoji = '📚'; msg = '괜찮습니다! 아직 복습이 필요한 부분이 있어요. 분석 리포트를 다시 읽어보세요.'; }
+  else { grade = 'D'; emoji = '💪'; msg = '더 열심히 공부해 봅시다! AI 로드킬을 피하기 위해 다시 방송을 돌려보세요.'; }
+
+  document.getElementById('modalEmoji').textContent  = emoji;
+  document.getElementById('modalScore').textContent  = score + ' / 10';
+  document.getElementById('modalGrade').textContent  = '등급: ' + grade + ' (' + rate + '%)';
+  document.getElementById('modalMsg').textContent    = msg;
+  document.getElementById('resultModal').classList.add('show');
+}
+
+function retryQuiz() {
+  document.getElementById('resultModal').classList.remove('show');
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// 초기 렌더링
+renderQuiz();
+</script>
+</body>
+</html>
