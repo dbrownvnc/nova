@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA Real Invest — 엔비디아 실적 방송 퀴즈</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --correct: #16a34a;
+    --wrong: #dc2626;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* STICKY SCORE BAR */
+  #scorebar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--text);
+    color: #fff;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  #scorebar .brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 6px;
+    flex-shrink: 0;
+  }
+  .score-stat {
+    font-size: 12px;
+    opacity: .85;
+    white-space: nowrap;
+  }
+  .score-stat span { font-weight: 700; color: #fde68a; }
+  .prog-wrap {
+    flex: 1;
+    min-width: 100px;
+    height: 6px;
+    background: rgba(255,255,255,.15);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  #progBar {
+    height: 100%;
+    width: 0%;
+    border-radius: 3px;
+    background: #4ade80;
+    transition: width .4s, background .4s;
+  }
+
+  /* HEADER */
+  .hero {
+    background: var(--text);
+    color: #fff;
+    padding: 30px 20px 28px;
+    text-align: center;
+  }
+  .hero .kicker {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 10px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 900;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+  .hero p { font-size: 12px; opacity: .6; }
+
+  /* QUIZ AREA */
+  #quizArea { padding: 20px; max-width: 680px; margin: 0 auto 60px; }
+
+  /* QUESTION CARD */
+  .q-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .q-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .q-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .diff-badge {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 3px;
+  }
+  .diff-easy { background: #d1fae5; color: #065f46; }
+  .diff-med { background: #fef3c7; color: #92400e; }
+  .diff-hard { background: #fee2e2; color: #991b1b; }
+  .type-badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 3px;
+    background: #e0e7ff;
+    color: #3730a3;
+  }
+  .q-text {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.65;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  /* OPTIONS */
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt-btn {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    padding: 11px 14px;
+    text-align: left;
+    font-size: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
+    position: relative;
+    line-height: 1.5;
+  }
+  .opt-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: #fff5f7;
+  }
+  .opt-btn.correct {
+    background: #f0fdf4;
+    border-color: var(--correct);
+    color: #14532d;
+  }
+  .opt-btn.wrong {
+    background: #fef2f2;
+    border-color: var(--wrong);
+    color: #7f1d1d;
+  }
+  .opt-btn .badge-inline {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-left: 6px;
+  }
+  .badge-correct { background: var(--correct); color: #fff; }
+  .badge-wrong { background: var(--wrong); color: #fff; }
+
+  /* OX buttons */
+  .ox-row { display: flex; gap: 12px; }
+  .ox-btn {
+    flex: 1;
+    padding: 14px;
+    font-size: 22px;
+    font-weight: 700;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    background: #fff;
+    cursor: pointer;
+    transition: .15s;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .ox-btn:hover:not(:disabled) { border-color: var(--accent); background: #fff5f7; }
+  .ox-btn.correct { background: #f0fdf4; border-color: var(--correct); }
+  .ox-btn.wrong { background: #fef2f2; border-color: var(--wrong); }
+
+  /* Short answer */
+  .sa-row { display: flex; gap: 8px; align-items: stretch; }
+  .sa-input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    font-size: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    outline: none;
+    transition: border-color .15s;
+  }
+  .sa-input:focus { border-color: var(--accent); }
+  .sa-input.correct { border-color: var(--correct); background: #f0fdf4; }
+  .sa-input.wrong { border-color: var(--wrong); background: #fef2f2; }
+  .sa-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: background .15s;
+    white-space: nowrap;
+  }
+  .sa-btn:hover:not(:disabled) { background: var(--accent2); }
+  .sa-btn:disabled { background: #d1d5db; cursor: default; }
+
+  /* EXPLANATION */
+  .explanation {
+    display: none;
+    margin-top: 14px;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 13px;
+    line-height: 1.75;
+    color: #78350f;
+  }
+  .explanation.show { display: block; }
+  .explanation .ex-title {
+    font-weight: 700;
+    margin-bottom: 6px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #92400e;
+  }
+
+  /* FINAL MODAL */
+  #finalCard {
+    display: none;
+    background: var(--text);
+    color: #fff;
+    border-radius: 12px;
+    padding: 32px 24px;
+    margin-top: 30px;
+    text-align: center;
+  }
+  #finalCard.show { display: block; }
+  #finalCard .f-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 900;
+    margin-bottom: 6px;
+  }
+  #finalCard .f-score {
+    font-size: 48px;
+    font-weight: 700;
+    color: #fde68a;
+    margin: 16px 0 8px;
+    font-family: 'Playfair Display', serif;
+  }
+  #finalCard .f-grade {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  #finalCard .f-msg { font-size: 14px; opacity: .75; margin-bottom: 22px; }
+  .btn-retry {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 28px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .btn-retry:hover { background: var(--accent2); }
+</style>
+</head>
+<body>
+
+<div id="scorebar">
+  <div class="brand">NOVA Quiz</div>
+  <div class="score-stat">푼 문제 <span id="sSolved">0</span> / 10</div>
+  <div class="score-stat">맞힌 문제 <span id="sCorrect">0</span></div>
+  <div class="score-stat">정답률 <span id="sRate">0%</span></div>
+  <div class="prog-wrap"><div id="progBar"></div></div>
+</div>
+
+<div class="hero">
+  <div class="kicker">Interactive Quiz</div>
+  <h1>엔비디아 실적 방송<br>핵심 개념 테스트</h1>
+  <p>NOVA Real Invest · 2026년 5월 21일 방송 기반 · 10문항</p>
+</div>
+
+<div id="quizArea"></div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id: 1,
+    type: 'multiple',
+    difficulty: 'easy',
+    question: '엔비디아 Q1 2026년 실제 매출은 얼마였나요?',
+    options: ['$75.2B', '$78.0B', '$81.62B', '$91.0B'],
+    answer: 2,
+    explanation: '방송에서 "78빌리언 예상했는데 81.62빌리언까지 했다"고 언급했습니다. 공식 컨센서스는 약 $79.1B이었고 실제 결과는 $81.62B로 상회했습니다.'
+  },
+  {
+    id: 2,
+    type: 'multiple',
+    difficulty: 'easy',
+    question: '엔비디아가 이번 분기에 발표한 자사주 매입 규모는 얼마로 확대되었나요?',
+    options: ['$40B', '$60B', '$75B', '$80B'],
+    answer: 3,
+    explanation: '방송에서 "그동안 60빌리언이었는데 이제 80빌리언입니다"라고 명확히 언급했습니다. 자사주 매입 규모가 $60B에서 $80B으로 확대되었습니다.'
+  },
+  {
+    id: 3,
+    type: 'multiple',
+    difficulty: 'med',
+    question: '"위스퍼넘버(Whisper Number)"란 무엇인가요?',
+    options: [
+      '월가 공식 애널리스트들의 평균 예상치',
+      '헤지펀드·옵션 트레이더 등 리테일러들의 비공식 기대치',
+      '연준이 내부적으로 사용하는 금리 목표치',
+      '기업 IR 팀이 투자자에게 귀띔하는 실적 가이던스'
+    ],
+    answer: 1,
+    explanation: '방송에서 "위스퍼넘버는 월가에서 나오는 게 아니라 리테일러들이나 헤지펀드, 옵션 트레이딩을 하는 곳에서 원하는 숫자, 워너비 숫자"라고 설명했습니다. 이번 분기 위스퍼넘버는 $91B이었습니다.'
+  },
+  {
+    id: 4,
+    type: 'multiple',
+    difficulty: 'med',
+    question: '엔비디아 차세대 칩 "루빈 울트라(Rubin Ultra)"가 기존 블랙웰 대비 DRAM 수요를 얼마나 더 필요로 한다고 언급되었나요?',
+    options: ['1.5배', '2배', '3.5배', '5배'],
+    answer: 2,
+    explanation: '방송에서 "루빈 울트라의 칩은 마이크론의 메모리가 3.5배 더 들어간다. 3.5배 디램이 더 많이 들어갑니다"라고 명시했습니다. 이로 인해 마이크론(MU) 매출이 3배 이상 늘어날 가능성이 있다고 언급했습니다.'
+  },
+  {
+    id: 5,
+    type: 'ox',
+    difficulty: 'easy',
+    question: '4월 FOMC 의사록에 따르면, 다수의 연준 위원들이 금리 인상 가능성에 동의한 것으로 확인되었다.',
+    options: ['O', 'X'],
+    answer: 0,
+    explanation: '방송에서 "대다수의 연준위원들은 금리 인상까지 동의한 상태예요. 이게 이제 상당히 위험한 부분입니다"라고 언급했습니다. 시장은 이 리스크를 외면(타조 효과)하고 있다고 경고했습니다.'
+  },
+  {
+    id: 6,
+    type: 'multiple',
+    difficulty: 'med',
+    question: 'K자형 소비 양극화 분석에서 "압박받는 샌드위치 지대(Squeezed Middle)"에 해당하는 종목은?',
+    options: [
+      'TJX (TJ Maxx)',
+      'Toll Brothers',
+      'Target (TGT)',
+      'CAVA'
+    ],
+    answer: 2,
+    explanation: '방송에서 Target은 "가이던스가 안 좋다. 소비가 줄어들 것 같다는 얘기를 했다"며 주가가 -3.8% 하락했다고 설명했습니다. TJX(초가성비)와 Toll Brothers(럭셔리)는 승자로, Target과 Lowe\'s는 중간지대 압박을 받는 종목으로 분류했습니다.'
+  },
+  {
+    id: 7,
+    type: 'multiple',
+    difficulty: 'hard',
+    question: '스페이스X IPO(티커: SPCX)의 핵심 리스크로 언급된 것이 아닌 것은?',
+    options: [
+      '스타링크 매출 편중(전체의 약 68~70%)',
+      '일론 머스크의 85% 의결권 집중',
+      'xAI 합병으로 인한 연간 약 $49억 순손실 예상',
+      '골드만삭스가 주관사를 거절한 사실'
+    ],
+    answer: 3,
+    explanation: '방송에서는 골드만삭스가 "대표 주관사로 일을 하고 있다"고 언급했습니다. 리스크로 언급된 것은 스타링크 매출 편중, 일론 머스크 85% 의결권 집중, xAI 합병에 따른 적자($49억 순손실) 등입니다.'
+  },
+  {
+    id: 8,
+    type: 'short',
+    difficulty: 'hard',
+    question: 'AI 인프라 밸류체인에서 "Layer 1"에 해당하는 것은 무엇인가요? (약자 포함 2~4글자로 답하세요)',
+    options: null,
+    answer: 'HBM',
+    altAnswers: ['hbm', 'HBM', 'HBM메모리', 'HBM 메모리'],
+    explanation: '방송에서 "레이어 1이죠. 그죠? HBM입니다. HBM"이라고 명확히 언급했습니다. HBM(High Bandwidth Memory)은 AI GPU에 들어가는 고대역폭 메모리로 마이크론, SK하이닉스 등이 공급합니다.'
+  },
+  {
+    id: 9,
+    type: 'ox',
+    difficulty: 'easy',
+    question: '방송에서 AI 버블이 꺼지는 시점은 "전력 문제에 부딪혔을 때"라고 언급했다.',
+    options: ['O', 'X'],
+    answer: 0,
+    explanation: '방송에서 "AI 버블이 꺼지는 순간은 언제냐면 전력 문제에 부딪혔을 때예요"라고 명시했으며, 미국과 중국의 AI 패권 경쟁에서도 기술이 아닌 전력 인프라가 핵심이라고 강조했습니다.'
+  },
+  {
+    id: 10,
+    type: 'multiple',
+    difficulty: 'hard',
+    question: '"리버스 오일 트레이드(Reverse Oil Trade)" 메커니즘에서 가장 큰 수혜 섹터로 언급된 것은?',
+    options: [
+      '원자력 발전주',
+      '항공주 & 성장주(잡주)',
+      '럭셔리 소비재',
+      '반도체 장비주'
+    ],
+    answer: 1,
+    explanation: '방송에서 "가장 큰 수혜 섹터는 에어라인이고요. 그 다음이 잡주 흔히 말해서 성장주 그로스 스탁"이라고 언급했습니다. 유가 하락 → 인플레이션 우려 완화 → 10년물 금리 하락 → 고밸류 기술주 성장 프리미엄 회복의 연쇄 작용을 설명했습니다.'
+  }
+];
+
+let state = { solved: 0, correct: 0 };
+
+function updateScorebar() {
+  document.getElementById('sSolved').textContent = state.solved;
+  document.getElementById('sCorrect').textContent = state.correct;
+  const rate = state.solved > 0 ? Math.round(state.correct / state.solved * 100) : 0;
+  document.getElementById('sRate').textContent = rate + '%';
+  const bar = document.getElementById('progBar');
+  bar.style.width = (state.solved / 10 * 100) + '%';
+  bar.style.background = rate >= 70 ? '#4ade80' : rate >= 40 ? '#fb923c' : '#f87171';
+
+  if (state.solved === QUIZ_DATA.length) {
+    setTimeout(showFinal, 600);
+  }
+}
+
+function diffClass(d) {
+  return d === 'easy' ? 'diff-easy' : d === 'med' ? 'diff-med' : 'diff-hard';
+}
+function diffLabel(d) {
+  return d === 'easy' ? '쉬움' : d === 'med' ? '보통' : '어려움';
+}
+function typeLabel(t) {
+  return t === 'multiple' ? '객관식' : t === 'ox' ? 'O/X' : '단답형';
+}
+
+function renderQuiz() {
+  const area = document.getElementById('quizArea');
+  area.innerHTML = '';
+
+  QUIZ_DATA.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'qcard' + q.id;
+
+    let optionsHTML = '';
+    if (q.type === 'multiple') {
+      optionsHTML = `<div class="options">` +
+        q.options.map((o, i) =>
+          `<button class="opt-btn" id="opt${q.id}_${i}" onclick="answerMC(${q.id}, ${i})">${String.fromCharCode(9312 + i)} ${o}</button>`
+        ).join('') +
+        `</div>`;
+    } else if (q.type === 'ox') {
+      optionsHTML = `<div class="ox-row">
+        <button class="ox-btn" id="opt${q.id}_0" onclick="answerOX(${q.id}, 0)">⭕ O</button>
+        <button class="ox-btn" id="opt${q.id}_1" onclick="answerOX(${q.id}, 1)">❌ X</button>
+      </div>`;
+    } else {
+      optionsHTML = `<div class="sa-row">
+        <input type="text" class="sa-input" id="sainput${q.id}" placeholder="정답을 입력하세요" maxlength="20">
+        <button class="sa-btn" id="sabtn${q.id}" onclick="answerSA(${q.id})">제출</button>
+      </div>`;
+    }
+
+    card.innerHTML = `
+      <div class="q-meta">
+        <span class="q-num">Q${q.id}</span>
+        <span class="diff-badge ${diffClass(q.difficulty)}">${diffLabel(q.difficulty)}</span>
+        <span class="type-badge">${typeLabel(q.type)}</span>
+      </div>
+      <div class="q-text">${q.question}</div>
+      ${optionsHTML}
+      <div class="explanation" id="exp${q.id}">
+        <div class="ex-title">📖 해설</div>
+        ${q.explanation}
+      </div>
+    `;
+    area.appendChild(card);
+  });
+
+  area.appendChild(document.createElement('div')).id = 'finalCard';
+  document.getElementById('finalCard').outerHTML = '<div id="finalCard"></div>';
+}
+
+function disableQuestion(qid) {
+  document.querySelectorAll(`[id^="opt${qid}_"]`).forEach(b => b.disabled = true);
+  const sb = document.getElementById('sabtn' + qid);
+  const si = document.getElementById('sainput' + qid);
+  if (sb) sb.disabled = true;
+  if (si) si.disabled = true;
+}
+
+function showExp(qid) {
+  document.getElementById('exp' + qid).classList.add('show');
+}
+
+function answerMC(qid, idx) {
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  const isCorrect = idx === q.answer;
+  state.solved++;
+  if (isCorrect) state.correct++;
+
+  const correctBtn = document.getElementById(`opt${qid}_${q.answer}`);
+  const selectedBtn = document.getElementById(`opt${qid}_${idx}`);
+
+  correctBtn.classList.add('correct');
+  correctBtn.innerHTML += ' <span class="badge-inline badge-correct">✓ 정답!</span>';
+
+  if (!isCorrect) {
+    selectedBtn.classList.add('wrong');
+    selectedBtn.innerHTML += ' <span class="badge-inline badge-wrong">✗ 오답</span>';
+  }
+
+  disableQuestion(qid);
+  showExp(qid);
+  updateScorebar();
+}
+
+function answerOX(qid, idx) {
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  const isCorrect = idx === q.answer;
+  state.solved++;
+  if (isCorrect) state.correct++;
+
+  const correctBtn = document.getElementById(`opt${qid}_${q.answer}`);
+  const selectedBtn = document.getElementById(`opt${qid}_${idx}`);
+
+  correctBtn.classList.add('correct');
+  if (!isCorrect) selectedBtn.classList.add('wrong');
+
+  disableQuestion(qid);
+  showExp(qid);
+  updateScorebar();
+}
+
+function answerSA(qid) {
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  const input = document.getElementById('sainput' + qid);
+  const val = input.value.trim().toUpperCase();
+  const correctAnswers = [q.answer.toUpperCase(), ...(q.altAnswers || []).map(a => a.toUpperCase())];
+  const isCorrect = correctAnswers.some(a => val === a || val.includes(a) || a.includes(val));
+
+  state.solved++;
+  if (isCorrect) state.correct++;
+
+  input.classList.add(isCorrect ? 'correct' : 'wrong');
+  const btn = document.getElementById('sabtn' + qid);
+  btn.textContent = isCorrect ? '✓ 정답!' : '✗ 오답';
+  btn.style.background = isCorrect ? '#16a34a' : '#dc2626';
+
+  if (!isCorrect) {
+    const hint = document.createElement('div');
+    hint.style = 'font-size:12px; color:#dc2626; margin-top:6px;';
+    hint.textContent = '정답: ' + q.answer;
+    input.parentNode.appendChild(hint);
+  }
+
+  disableQuestion(qid);
+  showExp(qid);
+  updateScorebar();
+}
+
+function showFinal() {
+  const total = QUIZ_DATA.length;
+  const score = state.correct;
+  const pct = Math.round(score / total * 100);
+  let grade, msg;
+  if (pct >= 90) { grade = 'A+'; msg = '🏆 완벽합니다! NOVA 방송을 정말 집중해서 들으셨군요!'; }
+  else if (pct >= 80) { grade = 'A'; msg = '🎉 훌륭해요! 핵심 내용을 잘 파악하셨습니다.'; }
+  else if (pct >= 70) { grade = 'B'; msg = '👍 좋습니다! 조금만 더 복습하면 완벽할 거예요.'; }
+  else if (pct >= 60) { grade = 'C'; msg = '📚 기본기는 갖췄습니다. 리포트를 다시 한번 읽어보세요.'; }
+  else { grade = 'D'; msg = '💪 괜찮아요! 방송을 다시 보고 재도전해 보세요.'; }
+
+  const el = document.getElementById('finalCard');
+  el.innerHTML = `
+    <div class="f-title">최종 결과</div>
+    <div class="f-score">${score} / ${total}</div>
+    <div class="f-grade">등급: ${grade} · ${pct}점</div>
+    <div class="f-msg">${msg}</div>
+    <button class="btn-retry" onclick="retryQuiz()">↺ 다시 풀기</button>
+  `;
+  el.className = 'show';
+  el.style.cssText = 'display:block; background:#1a1a1a; color:#fff; border-radius:12px; padding:32px 24px; margin-top:30px; text-align:center;';
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function retryQuiz() {
+  state = { solved: 0, correct: 0 };
+  updateScorebar();
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Short answer: submit on Enter
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.classList.contains('sa-input')) {
+    const qid = parseInt(e.target.id.replace('sainput', ''));
+    const btn = document.getElementById('sabtn' + qid);
+    if (btn && !btn.disabled) answerSA(qid);
+  }
+});
+
+renderQuiz();
+</script>
+</body>
+</html>
