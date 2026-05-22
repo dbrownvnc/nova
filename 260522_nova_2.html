@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시장 분석 리포트 | 2026.05.21</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --table-bg: #fafafa;
+    --table-header: #e11d48;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* HEADER */
+  .site-header {
+    border-bottom: 3px solid var(--accent);
+    padding: 20px 20px 14px;
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .site-header .label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .site-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(18px, 5vw, 26px);
+    font-weight: 900;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .site-header .meta {
+    font-size: 11px;
+    color: var(--text2);
+    margin-top: 6px;
+    letter-spacing: 0.5px;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--text);
+    color: #fff;
+    padding: 36px 20px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    right: -30px; top: -30px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    border: 40px solid rgba(225,29,72,0.25);
+    pointer-events: none;
+  }
+  .hero .tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .hero h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 7vw, 36px);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .hero h2 em {
+    color: var(--accent2);
+    font-style: italic;
+  }
+  .hero .sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.6;
+  }
+
+  /* KEY STATS */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-cell {
+    padding: 18px 12px;
+    border-right: 1px solid var(--border);
+    text-align: center;
+  }
+  .stat-cell:last-child { border-right: none; }
+  .stat-cell .num {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 5.5vw, 30px);
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    display: block;
+  }
+  .stat-cell .num.green { color: #16a34a; }
+  .stat-cell .num.red { color: var(--accent); }
+  .stat-cell .desc {
+    font-size: 11px;
+    color: var(--text2);
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+
+  /* SECTION */
+  .section {
+    padding: 28px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section:last-child { border-bottom: none; }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(18px, 5vw, 24px);
+    font-weight: 900;
+    line-height: 1.25;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+  .section p {
+    color: var(--text);
+    font-size: 14.5px;
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+  .section p:last-child { margin-bottom: 0; }
+
+  /* PULL QUOTE */
+  .pull-quote {
+    border-left: 4px solid var(--accent);
+    padding: 12px 16px;
+    margin: 16px 0;
+    background: var(--bg2);
+  }
+  .pull-quote p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--text);
+    line-height: 1.5;
+    margin: 0;
+  }
+  .pull-quote .source {
+    font-size: 11px;
+    color: var(--text2);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-style: normal;
+    margin-top: 6px;
+    display: block;
+  }
+
+  /* HIGHLIGHT BOX */
+  .highlight-box {
+    background: var(--accent);
+    color: #fff;
+    padding: 16px;
+    margin: 16px 0;
+    border-radius: 2px;
+  }
+  .highlight-box .box-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    opacity: 0.8;
+    margin-bottom: 6px;
+  }
+  .highlight-box p {
+    color: #fff;
+    font-size: 14px;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* TAG ROW */
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0;
+  }
+  .tag-item {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .tag-item.hot {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  /* CHART CONTAINER */
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin: 16px 0;
+    background: var(--bg2);
+    padding: 12px;
+    border: 1px solid var(--border);
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas { opacity: 1; }
+
+  /* FADE IN */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* TABLE */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 13px;
+  }
+  .data-table th {
+    background: var(--table-header);
+    color: #fff;
+    padding: 9px 10px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 12px;
+  }
+  .data-table td {
+    padding: 9px 10px;
+    border-bottom: 1px solid var(--border);
+    background: var(--table-bg);
+  }
+  .data-table tr:nth-child(even) td { background: #f5f5f5; }
+  .up { color: #16a34a; font-weight: 700; }
+  .down { color: var(--accent); font-weight: 700; }
+
+  /* STRATEGY CARDS */
+  .strategy-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin: 14px 0;
+  }
+  .strategy-card {
+    border: 1px solid var(--border);
+    padding: 16px;
+    background: var(--bg2);
+    position: relative;
+  }
+  .strategy-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--accent);
+  }
+  .strategy-card.green::before { background: #16a34a; }
+  .strategy-card.blue::before { background: #2563eb; }
+  .strategy-card .card-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  .strategy-card .card-sub {
+    font-size: 11px;
+    color: var(--text2);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .strategy-card p {
+    font-size: 13.5px;
+    color: var(--text);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* SIMULATOR */
+  .simulator {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 18px;
+    margin: 16px 0;
+  }
+  .simulator h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+  .sim-row {
+    margin-bottom: 14px;
+  }
+  .sim-row label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--text);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .sim-row label span {
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .sim-row input[type=range] {
+    width: 100%;
+    accent-color: var(--accent);
+    cursor: pointer;
+    height: 4px;
+  }
+  .sim-result {
+    background: var(--text);
+    color: #fff;
+    padding: 14px;
+    border-radius: 2px;
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .sim-result .res-item { text-align: center; }
+  .sim-result .res-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: #4ade80;
+    display: block;
+  }
+  .sim-result .res-val.red { color: var(--accent2); }
+  .sim-result .res-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 2px;
+  }
+  .reset-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    padding: 6px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* BARBELL */
+  .barbell {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 14px 0;
+  }
+  .barbell-end {
+    flex: 1;
+    padding: 14px 10px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+  .barbell-end.left {
+    background: #e11d48;
+    color: #fff;
+  }
+  .barbell-end.right {
+    background: #1a1a1a;
+    color: #fff;
+  }
+  .barbell-mid {
+    width: 30px;
+    height: 4px;
+    background: #888;
+    flex-shrink: 0;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0 20px;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 24px 20px;
+    border-top: 3px solid var(--accent);
+    text-align: center;
+    background: var(--bg2);
+  }
+  footer p {
+    font-size: 11px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+  footer strong { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- STICKY HEADER -->
+<header class="site-header">
+  <div class="label">CIA.chat 멤버미팅 · 시장 분석 리포트</div>
+  <h1>시장의 패러다임이<br>전환된 하루</h1>
+  <div class="meta">2026년 5월 21일 목요일 · 작성자: NOVA · 원본 영상 기준</div>
+</header>
+
+<!-- HERO -->
+<div class="hero fade-in">
+  <div class="tag">Breaking</div>
+  <h2>다우 <em>5만</em> 돌파,<br>20억 달러가 움직였다</h2>
+  <p class="sub">이란 지정학 루머 → 유가 롤러코스터 → 미 정부 CHIPS Act 양자 투자까지, 하루에 모든 게 압축된 날.</p>
+</div>
+
+<!-- KEY STATS -->
+<div class="stats-row fade-in">
+  <div class="stat-cell">
+    <span class="num green">50,285</span>
+    <div class="desc">다우존스<br>사상 최고치</div>
+  </div>
+  <div class="stat-cell">
+    <span class="num red">$102</span>
+    <div class="desc">유가 장중 고점<br>(WTI 배럴)</div>
+  </div>
+  <div class="stat-cell">
+    <span class="num">$2B</span>
+    <div class="desc">CHIPS Act<br>양자 투자액</div>
+  </div>
+</div>
+
+<!-- SECTION 1: MACRO -->
+<section class="section fade-in">
+  <div class="section-label">01 · 매크로</div>
+  <h3>지정학 뉴스 한 방에 장이 뒤집혔다</h3>
+
+  <p>오전 장은 최악이었다. 이란이 <strong>고농축 우라늄 반출 금지</strong>를 지시했다는 외신 보도가 나오면서 유가가 배럴당 $102까지 치솟았고, 증시는 바닥을 향해 달렸다. 고농축 우라늄은 핵무기 제조에 사용되는 재료로, 미·이란 평화협상이 사실상 물 건너갔다는 공포심이 퍼진 것이다.</p>
+
+  <div class="pull-quote">
+    <p>"헤드라인 하나로 수십 분 만에 방향을 바꾸는 이런 움직임은 개미들을 털어버리는 역할을 한다."</p>
+    <span class="source">— NOVA, 멤버미팅 발언</span>
+  </div>
+
+  <p>오후 2시경, 분위기가 반전됐다. ILNA 통신이 <strong>파키스탄 중재의 미·이란 평화합의 초안</strong>이 마련됐다는 소식을 전했고, 뉴스 하나에 증시가 급등했다. 다우는 결국 <strong>50,285.66</strong>에 마감, 5만 선을 돌파했다.</p>
+
+  <div class="highlight-box">
+    <div class="box-label">핵심 교훈</div>
+    <p>다우가 움직인다 = 유가에 영향받는 제조업이 살아난다는 신호. 지정학적 변수가 해소될 때 다우는 가장 먼저 반응한다.</p>
+  </div>
+</section>
+
+<!-- CHART 1: 장중 흐름 -->
+<div class="section fade-in">
+  <div class="section-label">데이터 시각화</div>
+  <h3 style="font-family:'Playfair Display',serif;font-size:18px;margin-bottom:10px;">5/21 장중 유가 vs 증시 흐름</h3>
+  <div class="chart-container fade-in">
+    <canvas id="macroChart" height="230"></canvas>
+  </div>
+  <p style="font-size:12px;color:var(--text2);margin-top:6px;">▲ 오전 이란 뉴스로 유가 급등·증시 급락 → 오후 평화 협상 소식으로 반전</p>
+</div>
+
+<!-- SECTION 2: NVDA -->
+<section class="section fade-in">
+  <div class="section-label">02 · AI 하드웨어</div>
+  <h3>엔비디아: 완벽한 실적, 차가운 시장</h3>
+
+  <p>엔비디아(NVDA)는 1분기 매출 <strong>816억 달러(전년 대비 +85%)</strong>, 2분기 가이던스 910억 달러를 발표했다. 자사주 매입 800억 달러, 분기 배당금 25배 인상(1센트 → 25센트)까지 포함된 그야말로 완벽한 성적표였다. 15개 증권사가 목표주가를 상향했고 평균 목표가는 320달러, 최고는 500달러다.</p>
+
+  <p>그런데 주가는 <strong>-1.8%</strong> 하락했다. 이유는 <strong>'위스퍼 넘버'(Whisper Number)</strong>* 때문이다. 시장이 공식 가이던스보다 훨씬 높은 기대치를 암암리에 형성했고, 실적이 그 비밀 기준에 미달하자 기관들이 차익실현 빌미로 삼았다.</p>
+  
+  <p style="font-size:12px;color:var(--text2);">* 위스퍼 넘버: 공식 컨센서스가 아닌 시장 참여자들 사이에서 비공식적으로 형성된 기대치</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="nvdaChart" height="220"></canvas>
+  </div>
+
+  <div class="highlight-box">
+    <div class="box-label">투자 전략: 공격적 조정 매수</div>
+    <p>800억 달러 자사주 매입은 하방 보호 안전벨트. 10% 조정 시 회사도 자사주 매입에 들어간다 → 그 구간에서 분할 매수 전략이 유효하다.</p>
+  </div>
+</section>
+
+<!-- SECTION 3: QUANTUM -->
+<section class="section fade-in">
+  <div class="section-label">03 · 양자 컴퓨팅</div>
+  <h3>미 정부가 직접 지분을 산다: $20억 양자 투자</h3>
+
+  <p>트럼프 행정부가 CHIPS Act 예산 <strong>20억 달러</strong>를 양자 컴퓨팅에 투입했다. IBM에 10억 달러, GlobalFoundries 등에 나머지를 배분했다. 중국과의 기술 패권 경쟁에서 이기기 위한 국가 전략이다.</p>
+
+  <div class="data-table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>종목</th>
+          <th>투자액</th>
+          <th>당일 주가</th>
+          <th>내용</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>IBM</strong></td>
+          <td>$1B</td>
+          <td class="up">+12.4%</td>
+          <td>뉴욕주 올버니 양자 팹 'Anderon' 설립</td>
+        </tr>
+        <tr>
+          <td><strong>GlobalFoundries</strong></td>
+          <td>$375M</td>
+          <td class="up">+14.9%</td>
+          <td>정부 수혜 소용주</td>
+        </tr>
+        <tr>
+          <td><strong>D-Wave (QBTS)</strong></td>
+          <td>~$100M</td>
+          <td class="up">+33.4%</td>
+          <td>소형 양자주 동반 급등</td>
+        </tr>
+        <tr>
+          <td><strong>Rigetti</strong></td>
+          <td>~$100M</td>
+          <td class="up">+30.6%</td>
+          <td>소형 양자주 동반 급등</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>양자 컴퓨팅은 아직 상용화까지 갈 길이 멀다. 하지만 핵심은 <strong>"정부가 투자하면 뭔가 있다"</strong>는 시그널이다. 초기 상용화 리스크가 국가 보증으로 상쇄된다. IBM처럼 검증된 대기업이 양자를 한다면 → 중장기 포트폴리오 편입 근거가 된다.</p>
+</section>
+
+<!-- CHART: QUANTUM -->
+<div class="section fade-in">
+  <div class="section-label">양자주 급등 비교</div>
+  <div class="chart-container fade-in">
+    <canvas id="quantumChart" height="230"></canvas>
+  </div>
+</div>
+
+<!-- SECTION 4: AI DISRUPTION -->
+<section class="section fade-in">
+  <div class="section-label">04 · AI 디스럽션</div>
+  <h3>소프트웨어의 갈림길: 도태 vs 진화</h3>
+
+  <p><strong>인튜이트(INTU) -20%</strong>: 2003년 이후 최대 일일 낙폭. AI가 세금 신고를 대체하면서 터보택스의 핵심 고객층이 흔들리고 있다. AI를 쓸 줄 아는 사람에게 굳이 유료 서비스를 쓸 이유가 없어진 것이다.</p>
+
+  <p>반면 AI를 새로운 돈벌이 수단으로 전환한 기업들은 달랐다.</p>
+
+  <table class="data-table">
+    <thead>
+      <tr><th>기업</th><th>전략</th><th>주가</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>스포티파이</strong></td>
+        <td>UMG 협력, AI 커버·리믹스 기능 + 프리미엄 과금 모델. 2030년 목표: 10억 사용자, 마진 40%</td>
+        <td class="up">+13.1%</td>
+      </tr>
+      <tr>
+        <td><strong>웍데이</strong></td>
+        <td>AI 에이전트 완벽 통합, 기존 고객 락인(Lock-in) 강화. 1분기 EPS 컨센서스 상회</td>
+        <td class="up">+9.0%</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pull-quote">
+    <p>"AI를 껍데기(겉치레)로 쓰는 게 아니라, AI로 고객에게 더 많이 과금하고 마진을 극대화하는 회사를 찾아야 한다."</p>
+    <span class="source">— NOVA</span>
+  </div>
+</section>
+
+<!-- SECTION 5: CONSUMER -->
+<section class="section fade-in">
+  <div class="section-label">05 · 소비 양극화</div>
+  <h3>'중간'이 붕괴된 바벨 구조 시장</h3>
+
+  <p>오늘 소비재 섹터가 극단적 양극화를 보여줬다. 중간 가격대 소매점(타겟 등)의 고객들이 초저가 할인점으로 이동하는 동시에, 고소득층의 명품 소비는 전혀 타격을 받지 않았다.</p>
+
+  <div class="barbell">
+    <div class="barbell-end left">🛒 초저가<br>Ross +21%<br>TJX +5.7%</div>
+    <div class="barbell-mid"></div>
+    <div class="barbell-end right">👔 명품<br>Ralph Lauren<br>+13.8%</div>
+  </div>
+
+  <p>반면 중간 가격대인 월마트(-7.2%, 고유가로 물류비 급증 우려), 디어(-5.1%, 농기계 판매 급감), 크로거(-4.0%, 인플레이션 압박)는 하락했다.</p>
+
+  <p>멕시코 농업 인력 유출로 미국 농업 자체가 흔들리고 있어 디어의 주요 매출원인 대형 농기계 수요가 급감한 점도 주목할 만하다.</p>
+</section>
+
+<!-- SECTION 6: DATA CENTER -->
+<section class="section fade-in">
+  <div class="section-label">06 · 물리 세계로 번진 AI</div>
+  <h3>데이터센터와 전력망: AI의 숨겨진 수혜주</h3>
+
+  <p>AI 칩 수요가 하드웨어를 넘어 인프라 전체로 번지고 있다. 엔비디아가 출발점이지만, 실제 돈은 그 아래 레이어에서도 움직인다.</p>
+
+  <table class="data-table">
+    <thead>
+      <tr><th>기업</th><th>내용</th><th>주가</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Applied Digital (APLD)</strong></td>
+        <td>15년 장기, 300MW 하이퍼스케일 데이터센터 임대 계약. 기본 75억 달러, 최대 182억 달러</td>
+        <td class="up">+21.5%</td>
+      </tr>
+      <tr>
+        <td><strong>DTE Energy</strong></td>
+        <td>오라클(1.4GW)·구글(1GW) 데이터센터 전력 공급. 배당률 3.3%</td>
+        <td class="up">+0.7%</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>전통 전력회사 DTE가 AI 인프라 성장주로 재평가받고 있다. 데이터센터가 계속 늘면 전기는 반드시 필요하다.</p>
+</section>
+
+<!-- SECTION 7: BIO -->
+<section class="section fade-in">
+  <div class="section-label">07 · 바이오</div>
+  <h3>수술을 대체하는 신약: 일라이릴리 레타트루타이드</h3>
+
+  <p>일라이릴리의 차세대 비만 치료제 <strong>레타트루타이드(Retatrutide)</strong>가 임상에서 80주 투여 시 평균 <strong>28.3%</strong> 체중 감량 효과를 보였다. 임상 환자의 45.3%가 '30% 이상 체중 감량'을 달성했고, 위 우회 수술(비만 수술)을 약물로 대체할 수 있는 수준이라는 평가다. 1세대 치료제(위고비/젭바운드)의 15~20%를 크게 웃도는 수치다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="bioChart" height="200"></canvas>
+  </div>
+
+  <div class="highlight-box">
+    <div class="box-label">바이오가 중요한 이유</div>
+    <p>경기 불황·지정학 루머와 무관하게 움직인다. 사람은 항상 살을 빼고 싶고 병도 든다. 의료 시스템 자체가 바뀌는 변곡점.</p>
+  </div>
+</section>
+
+<!-- INVESTMENT SIMULATOR -->
+<section class="section fade-in">
+  <div class="section-label">인터랙티브 시뮬레이터</div>
+  <h3>분할 매수 수익률 계산기</h3>
+  <div class="simulator">
+    <h4>📊 엔비디아 조정 매수 시뮬레이터</h4>
+    <div class="sim-row">
+      <label>투자 원금 <span id="capitalVal">$10,000</span></label>
+      <input type="range" id="capitalSlider" min="1000" max="100000" step="1000" value="10000">
+    </div>
+    <div class="sim-row">
+      <label>예상 조정폭 <span id="dropVal">-10%</span></label>
+      <input type="range" id="dropSlider" min="5" max="40" step="1" value="10">
+    </div>
+    <div class="sim-row">
+      <label>목표 수익률 (12개월 기준) <span id="returnVal">+50%</span></label>
+      <input type="range" id="returnSlider" min="10" max="150" step="5" value="50">
+    </div>
+    <div class="sim-row">
+      <label>분할 매수 횟수 <span id="splitVal">3회</span></label>
+      <input type="range" id="splitSlider" min="1" max="10" step="1" value="3">
+    </div>
+    <div class="sim-result">
+      <div class="res-item">
+        <span class="res-val" id="buyPrice">$198</span>
+        <div class="res-label">조정 후 매수가<br>(현재가 $220 기준)</div>
+      </div>
+      <div class="res-item">
+        <span class="res-val" id="profitVal">$5,000</span>
+        <div class="res-label">예상 수익금</div>
+      </div>
+      <div class="res-item">
+        <span class="res-val" id="totalVal">$15,000</span>
+        <div class="res-label">예상 총 자산</div>
+      </div>
+      <div class="res-item">
+        <span class="res-val" id="perBuyVal">$3,333</span>
+        <div class="res-label">1회 매수 금액</div>
+      </div>
+    </div>
+    <button class="reset-btn" onclick="resetSim()">↺ 초기값으로 리셋</button>
+  </div>
+</section>
+
+<!-- SECTION 8: STRATEGY -->
+<section class="section fade-in">
+  <div class="section-label">08 · 포트폴리오 행동강령</div>
+  <h3>새로운 투자 방정식: 3가지 전략축</h3>
+
+  <div class="strategy-grid">
+    <div class="strategy-card fade-in">
+      <div class="card-sub">Cyber Blue · 테마 선점형</div>
+      <div class="card-title">IBM (정책 후원 테마)</div>
+      <p>미 정부가 직접 자본을 투입한 테마는 초기 상용화 리스크가 제거된다. 단기 과열 리스크는 있지만 중장기 관점에서 포트폴리오에 담아둘 만하다. 정부가 어디에 투자한다 → 거기엔 반드시 뭔가 있다.</p>
+    </div>
+    <div class="strategy-card green fade-in">
+      <div class="card-sub">Electric Emerald · 공격적 조정 매수</div>
+      <div class="card-title">NVDA (조정 시 분할 매수)</div>
+      <p>데이터센터 92% 고성장 + 800억 달러 자사주 매입 = 펀더멘털 견고. 위스퍼 넘버 그림자 효과로 생긴 하락은 일시적. 조정 시 자사주 매입처럼 따라 들어가는 전략 유효.</p>
+    </div>
+    <div class="strategy-card blue fade-in">
+      <div class="card-sub">Dark Slate · 방어적 성장</div>
+      <div class="card-title">Ralph Lauren + Ross Stores (극단 바벨)</div>
+      <p>중간은 없다. 완전 저소득층 타겟(초저가) 또는 완전 고소득층 타겟(하이엔드 명품) 양쪽을 잡는 바벨 전략. 지정학적 불확실성 속에서도 두 극단은 꺾이지 않는다.</p>
+    </div>
+  </div>
+
+  <div class="highlight-box" style="margin-top:16px;">
+    <div class="box-label">핵심 원칙</div>
+    <p>① 정책 후원 테마 선점 → ② AI 수익화 기업 집중 → ③ 극단적 포지셔닝(중간 배제) = 변동성 시장을 이기는 새로운 플레이북</p>
+  </div>
+</section>
+
+<!-- SECTION 9: OIL -->
+<section class="section fade-in">
+  <div class="section-label">09 · 유가 전망</div>
+  <h3>유가는 차트보다 정치로 읽어라</h3>
+  <p>현재 유가는 소실점을 향해 수렴하는 형태를 보이고 있다. OPEC+는 증산을 결정했지만 증가분이 미미해 실질 효과는 제한적이다. 핵심은 이란-미국 협상 결과다.</p>
+
+  <div class="tag-row">
+    <span class="tag-item hot">하방: 협상 타결 → 유가 급락</span>
+    <span class="tag-item">상방: 협상 결렬 → $102+ 재도전</span>
+  </div>
+
+  <p>고유가가 지속될 경우 물류비 급증으로 중간 소비재 기업(월마트 등)이 2분기 실적을 하향 조정할 가능성이 있다. 이 시나리오에서는 바벨 전략의 방어력이 더욱 빛난다.</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>CIA.chat</strong> 멤버미팅 · 2026년 5월 21일</p>
+  <p>본 리포트는 교육·정보 제공 목적으로 작성된 콘텐츠입니다.<br>투자 판단 및 책임은 본인에게 있습니다.</p>
+</footer>
+
+<script>
+// ===== INTERSECTION OBSERVERS =====
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+const chartConfigs = {};
+
+chartConfigs['macroChart'] = () => {
+  new Chart(document.getElementById('macroChart'), {
+    type: 'line',
+    data: {
+      labels: ['시장 오픈','09:00','09:14\n이란 보도','10:00','11:00','12:00','13:00','14:00\n평화초안','15:00','마감'],
+      datasets: [
+        {
+          label: 'S&P 500',
+          data: [5005, 5020, 4998, 5010, 5025, 5015, 5005, 4985, 5020, 5030],
+          borderColor: '#16a34a',
+          backgroundColor: 'rgba(22,163,74,0.08)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 3,
+          yAxisID: 'y',
+        },
+        {
+          label: 'WTI 유가($)',
+          data: [98, 99, 102, 103, 102.5, 101, 103, 101, 97, 96],
+          borderColor: '#e11d48',
+          backgroundColor: 'rgba(225,29,72,0.08)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 3,
+          yAxisID: 'y2',
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { labels: { font: { family: 'Noto Sans KR', size: 11 }, color: '#1a1a1a' } },
+        tooltip: { bodyFont: { family: 'Noto Sans KR' }, titleFont: { family: 'Noto Sans KR' } }
+      },
+      scales: {
+        x: { ticks: { font: { size: 10, family: 'Noto Sans KR' }, color: '#777' }, grid: { color: '#e5e5e5' } },
+        y: { position: 'left', ticks: { font: { size: 10 }, color: '#16a34a' }, grid: { color: '#e5e5e5' }, title: { display: true, text: 'S&P500', color: '#16a34a', font: { size: 10 } } },
+        y2: { position: 'right', ticks: { font: { size: 10 }, color: '#e11d48' }, grid: { display: false }, title: { display: true, text: 'WTI ($)', color: '#e11d48', font: { size: 10 } } }
+      }
+    }
+  });
+};
+
+chartConfigs['nvdaChart'] = () => {
+  new Chart(document.getElementById('nvdaChart'), {
+    type: 'bar',
+    data: {
+      labels: ['1Q 매출\n(실적)', '2Q 가이던스\n(공식)', '2Q 위스퍼\n(비공식 기대치)', '자사주 매입'],
+      datasets: [{
+        label: '억 달러',
+        data: [816, 910, 1100, 800],
+        backgroundColor: ['#16a34a', '#2563eb', '#e11d48', '#6b7280'],
+        borderRadius: 2,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => `$${ctx.raw}억 달러`
+          },
+          bodyFont: { family: 'Noto Sans KR' }
+        }
+      },
+      scales: {
+        x: { ticks: { font: { size: 10, family: 'Noto Sans KR' }, color: '#777' }, grid: { display: false } },
+        y: { ticks: { font: { size: 10 }, color: '#777', callback: v => `$${v}억` }, grid: { color: '#e5e5e5' } }
+      }
+    }
+  });
+};
+
+chartConfigs['quantumChart'] = () => {
+  new Chart(document.getElementById('quantumChart'), {
+    type: 'bar',
+    data: {
+      labels: ['IBM', 'GlobalFoundries', 'D-Wave (QBTS)', 'Rigetti', 'Infleqtion'],
+      datasets: [{
+        label: '당일 주가 변동(%)',
+        data: [12.4, 14.9, 33.4, 30.6, 31.5],
+        backgroundColor: ['#2563eb', '#6b7280', '#e11d48', '#f43f5e', '#e11d48'],
+        borderRadius: 2,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: { label: ctx => `+${ctx.raw}%` },
+          bodyFont: { family: 'Noto Sans KR' }
+        }
+      },
+      scales: {
+        x: { ticks: { callback: v => `+${v}%`, font: { size: 10 }, color: '#777' }, grid: { color: '#e5e5e5' } },
+        y: { ticks: { font: { size: 11, family: 'Noto Sans KR' }, color: '#1a1a1a' }, grid: { display: false } }
+      }
+    }
+  });
+};
+
+chartConfigs['bioChart'] = () => {
+  new Chart(document.getElementById('bioChart'), {
+    type: 'bar',
+    data: {
+      labels: ['1세대 (위고비/젭바운드)', '차세대 레타트루타이드'],
+      datasets: [{
+        label: '평균 체중 감량(%)',
+        data: [17.5, 28.3],
+        backgroundColor: ['#6b7280', '#e11d48'],
+        borderRadius: 4,
+        barThickness: 50,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: { label: ctx => `평균 -${ctx.raw}% 체중 감량` },
+          bodyFont: { family: 'Noto Sans KR' }
+        }
+      },
+      scales: {
+        x: { ticks: { font: { size: 11, family: 'Noto Sans KR' }, color: '#1a1a1a' }, grid: { display: false } },
+        y: { ticks: { callback: v => `-${v}%`, font: { size: 10 }, color: '#777' }, grid: { color: '#e5e5e5' }, max: 35 }
+      }
+    }
+  });
+};
+
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+// ===== SIMULATOR =====
+const CURRENT_PRICE = 220;
+
+function updateSim() {
+  const capital = parseInt(document.getElementById('capitalSlider').value);
+  const drop = parseInt(document.getElementById('dropSlider').value);
+  const ret = parseInt(document.getElementById('returnSlider').value);
+  const split = parseInt(document.getElementById('splitSlider').value);
+
+  document.getElementById('capitalVal').textContent = `$${capital.toLocaleString()}`;
+  document.getElementById('dropVal').textContent = `-${drop}%`;
+  document.getElementById('returnVal').textContent = `+${ret}%`;
+  document.getElementById('splitVal').textContent = `${split}회`;
+
+  const buyPrice = CURRENT_PRICE * (1 - drop / 100);
+  const profit = capital * (ret / 100);
+  const total = capital + profit;
+  const perBuy = capital / split;
+
+  document.getElementById('buyPrice').textContent = `$${buyPrice.toFixed(0)}`;
+  document.getElementById('profitVal').textContent = `$${profit.toLocaleString(undefined, {maximumFractionDigits:0})}`;
+  document.getElementById('totalVal').textContent = `$${total.toLocaleString(undefined, {maximumFractionDigits:0})}`;
+  document.getElementById('perBuyVal').textContent = `$${perBuy.toLocaleString(undefined, {maximumFractionDigits:0})}`;
+}
+
+function resetSim() {
+  document.getElementById('capitalSlider').value = 10000;
+  document.getElementById('dropSlider').value = 10;
+  document.getElementById('returnSlider').value = 50;
+  document.getElementById('splitSlider').value = 3;
+  updateSim();
+}
+
+['capitalSlider','dropSlider','returnSlider','splitSlider'].forEach(id => {
+  document.getElementById(id).addEventListener('input', updateSim);
+});
+updateSim();
+</script>
+</body>
+</html>
