@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>영구적 기둥 주식 포지션 — 퀴즈</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--accent:#e11d48;--accent2:#f43f5e;--bg:#fafafa;--card:#fff;--text:#1a1a1a;--text2:#777;--border:#e5e5e5;--green:#16a34a;--red:#e11d48;--orange:#d97706}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+
+/* Sticky Score */
+.score-bar{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#1a1a1a,#2d2d2d);color:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+.score-bar .title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700}
+.score-stats{display:flex;gap:16px;font-size:.82rem}
+.score-stats span{display:flex;align-items:center;gap:4px}
+.progress-wrap{width:100%;height:6px;background:rgba(255,255,255,.15);border-radius:3px;margin-top:6px}
+.progress-fill{height:100%;border-radius:3px;transition:width .4s ease,background .4s ease;width:0%;background:var(--red)}
+
+/* Header */
+.header{text-align:center;padding:40px 20px 24px;background:linear-gradient(135deg,#0f0f0f,#1a1a2e);color:#fff}
+.header h1{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,4vw,1.8rem);margin-bottom:6px}
+.header p{font-size:.82rem;color:rgba(255,255,255,.6)}
+
+/* Container */
+.container{max-width:640px;margin:0 auto;padding:20px 16px 60px}
+
+/* Question Card */
+.q-card{background:var(--card);border-radius:14px;padding:22px 20px;margin-bottom:20px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.04);transition:border-color .3s}
+.q-card.answered-correct{border-color:var(--green)}
+.q-card.answered-wrong{border-color:var(--red)}
+.q-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.q-num{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:800;color:var(--accent)}
+.q-badge{font-size:.65rem;padding:3px 10px;border-radius:12px;font-weight:600}
+.badge-easy{background:#dcfce7;color:#166534}
+.badge-mid{background:#fef3c7;color:#92400e}
+.badge-hard{background:#fce7f3;color:#9d174d}
+.q-type{font-size:.65rem;padding:3px 10px;border-radius:12px;background:#f0f0f0;color:#555;font-weight:500}
+.q-text{font-size:.95rem;font-weight:600;margin-bottom:16px;line-height:1.6}
+
+/* Options */
+.opt-btn{display:block;width:100%;text-align:left;padding:12px 16px;margin-bottom:8px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:.88rem;cursor:pointer;transition:all .2s;font-family:'Noto Sans KR',sans-serif;color:var(--text)}
+.opt-btn:hover:not(.disabled){background:#fef2f2;border-color:var(--accent2)}
+.opt-btn.disabled{cursor:default;opacity:.85}
+.opt-btn.correct{background:#dcfce7;border-color:var(--green);color:#166534}
+.opt-btn.wrong{background:#fef2f2;border-color:var(--red);color:#9f1239}
+.opt-btn .badge-result{font-size:.72rem;font-weight:700;margin-left:8px}
+
+/* Short answer */
+.short-wrap{display:flex;gap:8px;margin-bottom:8px}
+.short-wrap input{flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:.88rem;font-family:'Noto Sans KR',sans-serif}
+.short-wrap input:focus{outline:none;border-color:var(--accent)}
+.short-wrap input.correct{border-color:var(--green);background:#dcfce7}
+.short-wrap input.wrong{border-color:var(--red);background:#fef2f2}
+.submit-btn{padding:10px 20px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:.85rem;cursor:pointer;font-family:'Noto Sans KR',sans-serif;font-weight:600;transition:background .2s}
+.submit-btn:hover{background:#be123c}
+.submit-btn:disabled{background:#ccc;cursor:default}
+
+/* OX */
+.ox-wrap{display:flex;gap:10px}
+.ox-btn{flex:1;padding:14px;text-align:center;font-size:1.2rem;font-weight:800;border:2px solid var(--border);border-radius:10px;cursor:pointer;background:#fff;transition:all .2s;font-family:'Playfair Display',serif}
+.ox-btn:hover:not(.disabled){border-color:var(--accent)}
+.ox-btn.disabled{cursor:default}
+.ox-btn.correct{background:#dcfce7;border-color:var(--green)}
+.ox-btn.wrong{background:#fef2f2;border-color:var(--red)}
+
+/* Explanation */
+.explanation{display:none;margin-top:14px;padding:14px 16px;background:#fafafa;border-radius:10px;border-left:4px solid var(--accent);font-size:.84rem;line-height:1.7}
+.explanation.show{display:block;animation:slideDown .3s ease}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.explanation strong{color:var(--accent)}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.show{display:flex}
+.modal{background:#fff;border-radius:16px;padding:36px 28px;max-width:380px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal .grade{font-family:'Playfair Display',serif;font-size:4rem;font-weight:900;color:var(--accent)}
+.modal .score-text{font-size:1.3rem;font-weight:700;margin:8px 0}
+.modal .msg{font-size:.9rem;color:var(--text2);margin-bottom:20px}
+.retry-btn{padding:12px 32px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:.95rem;cursor:pointer;font-family:'Noto Sans KR',sans-serif;font-weight:700;transition:background .2s}
+.retry-btn:hover{background:#be123c}
+
+@media(max-width:400px){
+.score-stats{gap:10px;font-size:.75rem}
+.q-card{padding:18px 16px}
+}
+</style>
+</head>
+<body>
+
+<!-- Score Bar -->
+<div class="score-bar">
+<div>
+<div class="title">📝 퀴즈</div>
+<div class="score-stats">
+<span>📋 <span id="sSolved">0</span>/10</span>
+<span>✅ <span id="sCorrect">0</span></span>
+<span>📊 <span id="sRate">0</span>%</span>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="progressBar"></div></div>
+</div>
+</div>
+
+<!-- Header -->
+<div class="header">
+<h1>영구적 기둥 주식 포지션</h1>
+<p>2026.05.27 심층탐구 — 이해도 확인 퀴즈 10문항</p>
+</div>
+
+<div class="container" id="quizWrap"></div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal">
+<div class="modal">
+<div class="grade" id="mGrade">A</div>
+<div class="score-text" id="mScore">10 / 10</div>
+<div class="msg" id="mMsg">완벽합니다!</div>
+<button class="retry-btn" onclick="resetQuiz()">🔄 다시 풀기</button>
+</div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id:1, type:'mc', difficulty:'easy',
+    question:'마이크론 테크놀로지가 2026년 5월 26일 달성한 시가총액 이정표는?',
+    options:['5천억 달러 돌파','1조 달러 최초 돌파','2조 달러 최초 돌파','시가총액 S&P 1위 등극'],
+    answer:1,
+    explanation:'UBS 리포트를 촉매로 마이크론이 장중 19% 폭등하며 시가총액 1조 달러를 최초 돌파했다.'
+  },
+  {
+    id:2, type:'mc', difficulty:'mid',
+    question:'UBS 애널리스트 티모시 아큐리가 마이크론의 2029년 EPS를 얼마로 전망했나?',
+    options:['$50 돌파','$75 돌파','$100 돌파','$150 돌파'],
+    answer:2,
+    explanation:'티모시 아큐리는 2029년까지 EPS $100 돌파, 누적 잉여현금흐름 $4,000억을 전망하며 목표가를 $1,625로 상향했다.'
+  },
+  {
+    id:3, type:'mc', difficulty:'mid',
+    question:'질스케일러(Zscaler)가 실적 상회에도 19% 폭락한 가장 직접적인 원인은?',
+    options:['CEO 사임 발표','사이버 보안 해킹 사고 발생','차기 분기 매출 가이던스가 시장 예상치에 미달','대규모 유상증자 발표'],
+    answer:2,
+    explanation:'질스케일러는 3분기 매출 $8.5억으로 예상치를 상회했으나, 4분기 매출 가이던스($80.75~80.78억)가 시장 예상($80.79억)에 근소하게 미달하면서 시간외 19% 폭락했다.'
+  },
+  {
+    id:4, type:'short', difficulty:'mid',
+    question:'마이크론의 HBM4 비즈니스에서 고객사와 맺고 있는 장기공급계약의 기간은 몇 년에서 몇 년인가? (예: 1~2)',
+    answer:['3~5','3-5','3에서 5','3에서5'],
+    explanation:'마이크론 CEO는 고객사와 3년에서 5년짜리 장기공급계약(LTA)을 맺고 있다고 밝혔다. 이는 메모리 반도체가 안정적 AI 인프라 필수재로 재평가받고 있음을 보여준다.'
+  },
+  {
+    id:5, type:'mc', difficulty:'easy',
+    question:'레노버가 발표한 AI 매출 증가율은 얼마인가?',
+    options:['약 40%','약 60%','약 84%','약 120%'],
+    answer:2,
+    explanation:'레노버가 AI 매출 84% 폭증이라는 서프라이즈를 발표하면서 하드웨어 섹터 전반의 매수세를 이끌었다.'
+  },
+  {
+    id:6, type:'ox', difficulty:'easy',
+    question:'미군의 이란 남부 제한적 공습 뉴스 이후, WTI 유가는 상승했다.',
+    answer:false,
+    explanation:'보통 지정학적 리스크에 유가가 상승해야 하지만, 트럼프 대통령의 "협상이 잘 진행되고 있다"는 발언에 시장이 전쟁 종식 신호로 해석하여 WTI 유가는 오히려 3.8% 급락했다.'
+  },
+  {
+    id:7, type:'mc', difficulty:'hard',
+    question:'오토존(AutoZone)의 주가가 약 11% 폭락한 핵심 맥락으로 가장 적절한 해석은?',
+    options:['CEO 비리 스캔들로 인한 급락','방어주임에도 매출 미달 + 해외 성장 둔화가 소비 위축 신호','경쟁사 대비 AI 전환 실패','자사주 매입 중단 발표'],
+    answer:1,
+    explanation:'오토존은 전형적 방어주로 경기 침체 시 수혜를 받는 구조이나, EPS는 상회했음에도 매출 자체가 예상치를 넘기지 못하고 브라질·멕시코 성장 둔화가 부각되며 폭락했다. 이는 인플레이션에 짓눌린 소비자의 지갑이 닫히는 신호로 해석된다.'
+  },
+  {
+    id:8, type:'short', difficulty:'mid',
+    question:'샘 올트먼이 투자한 소형원전 기업의 이름은? (영문)',
+    answer:['Oklo','oklo','오클로','OKLO'],
+    explanation:'오클로(Oklo)가 미국 에너지부(DOE)의 잉여 플루토늄 연료화 프로그램 협상 대상자로 선정되면서 주가 11% 급등했다.'
+  },
+  {
+    id:9, type:'mc', difficulty:'hard',
+    question:'방송에서 제시한 "초연결 인프라 패러다임"의 핵심 논지는?',
+    options:['각 테마(반도체·원자력·우주)는 완전히 독립적으로 성장 중이다','반도체·원자력·우주가 AI 데이터센터를 중심으로 하나의 생태계로 수렴하고 있다','소프트웨어 기업이 하드웨어까지 수직 통합하고 있다','원자력은 AI와 무관한 별도의 투자 테마이다'],
+    answer:1,
+    explanation:'방송은 오클로의 원자력이 데이터센터 전력 공급, 스페이스X의 위성이 데이터 전송, 마이크론·마벨의 반도체가 연산 기반을 제공하며 "초연결 인프라 구축"이라는 하나의 패러다임으로 수렴한다고 분석했다.'
+  },
+  {
+    id:10, type:'ox', difficulty:'mid',
+    question:'일라이 릴리는 비만치료제 수익을 활용하여 백신 바이오텍 3곳을 $40억에 인수했다.',
+    answer:true,
+    explanation:'일라이 릴리는 비만치료제로 벌어들인 현금 $40억을 동원해 큐레보, 리마텍, 백신 컴퍼니 등 백신 바이오텍 3곳을 한 번에 인수하며 감염병 예방 영역으로 영토를 확장했다.'
+  }
+];
+
+let state = { solved: 0, correct: 0, answered: new Set() };
+
+function updateScore() {
+  document.getElementById('sSolved').textContent = state.solved;
+  document.getElementById('sCorrect').textContent = state.correct;
+  const rate = state.solved === 0 ? 0 : Math.round(state.correct / state.solved * 100);
+  document.getElementById('sRate').textContent = rate;
+  const bar = document.getElementById('progressBar');
+  bar.style.width = (state.solved / 10 * 100) + '%';
+  if (rate >= 70) bar.style.background = '#16a34a';
+  else if (rate >= 40) bar.style.background = '#d97706';
+  else bar.style.background = '#e11d48';
+  if (state.solved === 10) showModal();
+}
+
+function grade(qId, isCorrect) {
+  if (state.answered.has(qId)) return;
+  state.answered.add(qId);
+  state.solved++;
+  if (isCorrect) state.correct++;
+  updateScore();
+}
+
+function showModal() {
+  const pct = Math.round(state.correct / 10 * 100);
+  let g, msg;
+  if (pct >= 90) { g = 'A'; msg = '🎉 훌륭합니다! 완벽에 가까운 이해도입니다.'; }
+  else if (pct >= 70) { g = 'B'; msg = '👏 좋은 성적입니다! 몇 가지만 복습하면 완벽해요.'; }
+  else if (pct >= 50) { g = 'C'; msg = '💪 괜찮아요. 핵심 내용을 다시 한번 살펴보세요.'; }
+  else { g = 'D'; msg = '📖 리포트를 다시 읽고 도전해 보세요!'; }
+  document.getElementById('mGrade').textContent = g;
+  document.getElementById('mScore').textContent = state.correct + ' / 10';
+  document.getElementById('mMsg').textContent = msg;
+  setTimeout(() => document.getElementById('modal').classList.add('show'), 400);
+}
+
+function resetQuiz() {
+  state = { solved: 0, correct: 0, answered: new Set() };
+  updateScore();
+  document.getElementById('modal').classList.remove('show');
+  renderQuiz();
+}
+
+function renderQuiz() {
+  const wrap = document.getElementById('quizWrap');
+  wrap.innerHTML = '';
+  QUIZ_DATA.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'qcard-' + q.id;
+    const diffLabel = q.difficulty === 'easy' ? '쉬움' : q.difficulty === 'mid' ? '보통' : '어려움';
+    const diffClass = q.difficulty === 'easy' ? 'badge-easy' : q.difficulty === 'mid' ? 'badge-mid' : 'badge-hard';
+    const typeLabel = q.type === 'mc' ? '객관식' : q.type === 'short' ? '단답형' : 'OX';
+
+    let html = '<div class="q-header">';
+    html += '<span class="q-num">Q' + (idx + 1) + '</span>';
+    html += '<span class="q-badge ' + diffClass + '">' + diffLabel + '</span>';
+    html += '<span class="q-type">' + typeLabel + '</span></div>';
+    html += '<div class="q-text">' + q.question + '</div>';
+
+    if (q.type === 'mc') {
+      html += '<div class="opts-wrap" id="opts-' + q.id + '">';
+      q.options.forEach((opt, oi) => {
+        html += '<button class="opt-btn" data-qid="' + q.id + '" data-oi="' + oi + '" onclick="handleMC(this,' + q.id + ',' + oi + ',' + q.answer + ')">';
+        html += '<strong>' + ['①','②','③','④'][oi] + '</strong> ' + opt + '</button>';
+      });
+      html += '</div>';
+    } else if (q.type === 'short') {
+      html += '<div class="short-wrap" id="short-' + q.id + '">';
+      html += '<input type="text" placeholder="정답 입력" id="input-' + q.id + '" onkeydown="if(event.key===\'Enter\')handleShort(' + q.id + ')">';
+      html += '<button class="submit-btn" onclick="handleShort(' + q.id + ')">제출</button></div>';
+    } else {
+      html += '<div class="ox-wrap" id="ox-' + q.id + '">';
+      html += '<button class="ox-btn" onclick="handleOX(this,' + q.id + ',true,' + q.answer + ')">⭕ O</button>';
+      html += '<button class="ox-btn" onclick="handleOX(this,' + q.id + ',false,' + q.answer + ')">❌ X</button></div>';
+    }
+
+    html += '<div class="explanation" id="expl-' + q.id + '"><strong>해설:</strong> ' + q.explanation + '</div>';
+    card.innerHTML = html;
+    wrap.appendChild(card);
+  });
+}
+
+function handleMC(btn, qId, chosen, answer) {
+  if (state.answered.has(qId)) return;
+  const wrap = document.getElementById('opts-' + qId);
+  const btns = wrap.querySelectorAll('.opt-btn');
+  const isCorrect = chosen === answer;
+  btns.forEach((b, i) => {
+    b.classList.add('disabled');
+    b.onclick = null;
+    if (i === answer) { b.classList.add('correct'); b.innerHTML += '<span class="badge-result" style="color:#16a34a">✓ 정답</span>'; }
+    if (i === chosen && !isCorrect) { b.classList.add('wrong'); b.innerHTML += '<span class="badge-result" style="color:#e11d48">✗ 오답</span>'; }
+  });
+  document.getElementById('qcard-' + qId).classList.add(isCorrect ? 'answered-correct' : 'answered-wrong');
+  document.getElementById('expl-' + qId).classList.add('show');
+  grade(qId, isCorrect);
+}
+
+function handleShort(qId) {
+  if (state.answered.has(qId)) return;
+  const input = document.getElementById('input-' + qId);
+  const val = input.value.trim();
+  if (!val) return;
+  const q = QUIZ_DATA.find(x => x.id === qId);
+  const isCorrect = q.answer.some(a => val.replace(/\s/g, '') === a.replace(/\s/g, ''));
+  input.classList.add(isCorrect ? 'correct' : 'wrong');
+  input.disabled = true;
+  const wrap = document.getElementById('short-' + qId);
+  const submitBtn = wrap.querySelector('.submit-btn');
+  submitBtn.disabled = true;
+  if (!isCorrect) {
+    const hint = document.createElement('div');
+    hint.style.cssText = 'font-size:.82rem;color:#16a34a;margin-top:6px;font-weight:600';
+    hint.textContent = '정답: ' + q.answer[0];
+    wrap.after(hint);
+  }
+  document.getElementById('qcard-' + qId).classList.add(isCorrect ? 'answered-correct' : 'answered-wrong');
+  document.getElementById('expl-' + qId).classList.add('show');
+  grade(qId, isCorrect);
+}
+
+function handleOX(btn, qId, chosen, answer) {
+  if (state.answered.has(qId)) return;
+  const wrap = document.getElementById('ox-' + qId);
+  const btns = wrap.querySelectorAll('.ox-btn');
+  const isCorrect = chosen === answer;
+  btns.forEach(b => { b.classList.add('disabled'); b.onclick = null; });
+  if (isCorrect) {
+    btn.classList.add('correct');
+  } else {
+    btn.classList.add('wrong');
+    btns.forEach(b => { if (b !== btn) b.classList.add('correct'); });
+  }
+  document.getElementById('qcard-' + qId).classList.add(isCorrect ? 'answered-correct' : 'answered-wrong');
+  document.getElementById('expl-' + qId).classList.add('show');
+  grade(qId, isCorrect);
+}
+
+renderQuiz();
+</script>
+</body>
+</html>
