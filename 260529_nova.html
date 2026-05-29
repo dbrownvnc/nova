@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>평화의 안도, 데이터의 폭발 — CIA.chat 멤버 미팅 분석 (2026.05.28)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#fafafa; --ink:#1a1a1a; --sub:#777777;
+    --accent:#e11d48; --accent2:#f43f5e; --line:#e5e5e5;
+    --c1:#e11d48; --c2:#1a1a1a; --c3:#6b7280; --c4:#2563eb;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:'Noto Sans KR',sans-serif; font-weight:400;
+    line-height:1.75; -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:0 20px}
+
+  /* ===== HERO ===== */
+  .hero{padding:64px 20px 44px;border-bottom:3px solid var(--ink);position:relative}
+  .hero::before{content:"BILLIONAIRE MARKET INTELLIGENCE";position:absolute;top:22px;left:20px;
+    font-size:10px;letter-spacing:.32em;color:var(--accent);font-weight:700}
+  .kicker{display:inline-block;font-size:11px;letter-spacing:.22em;font-weight:700;
+    color:#fff;background:var(--accent);padding:5px 12px;margin-bottom:18px}
+  .hero h1{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(34px,9vw,52px);
+    line-height:1.06;letter-spacing:-.01em;margin-bottom:16px}
+  .hero h1 em{font-style:italic;color:var(--accent)}
+  .hero .lede{font-size:16px;color:var(--sub);max-width:560px;font-weight:300}
+  .hero .meta{margin-top:24px;font-size:12.5px;color:var(--sub);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .hero .meta b{color:var(--ink);font-weight:700}
+  .dot{width:4px;height:4px;border-radius:50%;background:var(--accent)}
+
+  /* ===== SECTION CHROME ===== */
+  section{padding:48px 0}
+  .sec-no{font-family:'Playfair Display',serif;font-size:13px;color:var(--accent);
+    font-weight:700;letter-spacing:.1em;margin-bottom:8px}
+  h2{font-family:'Playfair Display',serif;font-weight:800;font-size:clamp(25px,6.5vw,34px);
+    line-height:1.15;letter-spacing:-.01em;margin-bottom:10px}
+  h2 .en{display:block;font-family:'Noto Sans KR';font-size:13px;font-weight:500;
+    letter-spacing:.08em;color:var(--sub);margin-top:6px}
+  .dek{font-size:15px;color:var(--sub);margin-bottom:26px;font-weight:300}
+  p{font-size:15.5px;margin-bottom:16px}
+  .lead-cap::first-letter{font-family:'Playfair Display',serif;font-weight:900;
+    font-size:3.1em;float:left;line-height:.82;margin:6px 10px 0 0;color:var(--accent)}
+  strong{font-weight:700;color:var(--ink)}
+  .hl{background:linear-gradient(transparent 62%, rgba(225,29,72,.18) 62%);font-weight:500}
+
+  .divider{height:1px;background:var(--line);margin:0 20px}
+
+  /* ===== STAT TILES ===== */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:22px 0}
+  .tile{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:18px 16px;
+    border-top:3px solid var(--ink)}
+  .tile.up{border-top-color:var(--accent)}
+  .tile .nm{font-size:12px;color:var(--sub);font-weight:500;letter-spacing:.02em}
+  .tile .vl{font-family:'Playfair Display',serif;font-size:27px;font-weight:800;margin:4px 0 2px;line-height:1}
+  .tile .pc{font-size:13px;font-weight:700;color:#0a8a3f}
+  .tile .ds{font-size:11.5px;color:var(--sub);margin-top:8px;line-height:1.5}
+
+  /* ===== CHART ===== */
+  .fade-in{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+  .fade-in.visible{opacity:1;transform:translateY(0)}
+  .chart-container{position:relative;max-height:340px;background:var(--bg2);
+    border:1px solid var(--line);border-radius:12px;padding:18px 14px 10px;margin:22px 0}
+  .chart-container canvas{opacity:0;transition:opacity .4s ease;max-height:300px}
+  .chart-container.chart-ready canvas{opacity:1}
+  .chart-cap{font-size:11.5px;color:var(--sub);margin-top:10px;text-align:center}
+  .chart-title{font-size:13px;font-weight:700;margin-bottom:4px;letter-spacing:.02em}
+
+  /* ===== PULL QUOTE ===== */
+  .pull{border-left:4px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0;
+    font-family:'Playfair Display',serif;font-style:italic;font-size:20px;line-height:1.4;font-weight:500}
+  .pull .src{display:block;font-family:'Noto Sans KR';font-style:normal;font-size:12px;
+    color:var(--sub);margin-top:10px;font-weight:500}
+
+  /* ===== TABLE ===== */
+  .tbl-wrap{overflow-x:auto;margin:22px 0;border-radius:12px;border:1px solid var(--line)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:380px;background:var(--bg)}
+  thead th{background:var(--accent);color:#fff;padding:11px 12px;text-align:left;font-weight:700;font-size:13px}
+  tbody td{padding:11px 12px;border-top:1px solid var(--line);background:var(--bg2);vertical-align:top}
+  tbody tr td:first-child{font-weight:700;background:var(--bg)}
+  .sig-buy{color:#0a8a3f;font-weight:700}
+  .sig-sell{color:var(--accent);font-weight:700}
+
+  /* ===== LAYER DIAGRAM (interactive) ===== */
+  .layers{margin:22px 0}
+  .layer{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden;
+    cursor:pointer;transition:transform .25s ease,box-shadow .25s ease;background:var(--bg2)}
+  .layer:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+  .layer .lh{padding:15px 16px;display:flex;justify-content:space-between;align-items:center}
+  .layer .ltitle{font-weight:700;font-size:15px}
+  .layer .lsub{font-size:11px;color:var(--sub);font-weight:500;letter-spacing:.04em}
+  .layer .arrow{font-size:13px;color:var(--accent);transition:transform .3s ease}
+  .layer.open .arrow{transform:rotate(180deg)}
+  .layer .body{max-height:0;overflow:hidden;transition:max-height .4s ease;font-size:13.5px}
+  .layer.open .body{max-height:340px}
+  .layer .body-in{padding:0 16px 16px}
+  .layer .body-in li{list-style:none;padding:7px 0;border-top:1px dashed var(--line);
+    display:flex;justify-content:space-between;gap:12px}
+  .layer .body-in li b{color:#0a8a3f}
+  .L1{border-left:5px solid #0a7d4d}
+  .L2{border-left:5px solid var(--c4)}
+  .L3{border-left:5px solid var(--c3)}
+
+  /* ===== SIMULATOR ===== */
+  .sim{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:22px 18px;margin:24px 0;
+    border-top:3px solid var(--accent)}
+  .sim h4{font-size:15px;font-weight:700;margin-bottom:4px}
+  .sim .sd{font-size:12px;color:var(--sub);margin-bottom:18px}
+  .sim label{font-size:12.5px;font-weight:500;display:flex;justify-content:space-between;margin-bottom:7px}
+  .sim label span{color:var(--accent);font-weight:700}
+  input[type=range]{-webkit-appearance:none;width:100%;height:5px;border-radius:5px;
+    background:var(--line);outline:none;margin-bottom:18px}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+    background:var(--accent);cursor:pointer;box-shadow:0 2px 6px rgba(225,29,72,.4)}
+  input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--accent);
+    cursor:pointer;border:none}
+  .sim-out{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+  .sim-out .o{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:14px 12px;text-align:center}
+  .sim-out .o .ol{font-size:11px;color:var(--sub);font-weight:500}
+  .sim-out .o .ov{font-family:'Playfair Display',serif;font-size:23px;font-weight:800;margin-top:3px;color:var(--accent)}
+  .sim-note{font-size:11.5px;color:var(--sub);margin-top:14px;line-height:1.55;padding:10px 12px;
+    background:var(--bg);border-radius:8px;border:1px dashed var(--line)}
+  .btn-reset{background:none;border:1px solid var(--accent);color:var(--accent);font-family:inherit;
+    font-size:12px;font-weight:700;padding:8px 16px;border-radius:8px;cursor:pointer;margin-top:14px;transition:.2s}
+  .btn-reset:hover{background:var(--accent);color:#fff}
+  .seg{display:flex;gap:6px;margin-bottom:18px}
+  .seg button{flex:1;padding:9px;border:1px solid var(--line);background:var(--bg);font-family:inherit;
+    font-size:12.5px;font-weight:700;border-radius:8px;cursor:pointer;color:var(--sub);transition:.2s}
+  .seg button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+  /* ===== GEAR / synthesis ===== */
+  .gears{display:flex;flex-direction:column;gap:12px;margin:22px 0}
+  .gear{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:16px;
+    border-left:4px solid var(--c4)}
+  .gear:nth-child(2){border-left-color:#0a7d4d}
+  .gear:nth-child(3){border-left-color:var(--c3)}
+  .gear h5{font-size:15px;font-weight:700;margin-bottom:3px}
+  .gear .ge{font-size:11px;color:var(--sub);letter-spacing:.04em;margin-bottom:7px;font-weight:500}
+  .gear p{font-size:13px;margin:0;color:#444}
+
+  /* ===== CHECKPOINT cards ===== */
+  .cps{display:flex;flex-direction:column;gap:12px;margin:22px 0}
+  .cp{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .cp.flag{border:2px solid var(--accent)}
+  .cp .cpn{font-size:11px;letter-spacing:.08em;font-weight:700;color:#fff;background:var(--ink);
+    display:inline-block;padding:3px 10px;border-radius:5px;margin-bottom:9px}
+  .cp.flag .cpn{background:var(--accent)}
+  .cp h5{font-size:15px;font-weight:700;margin-bottom:6px}
+  .cp p{font-size:13px;margin:0;color:#444}
+
+  /* ===== PLAYBOOK ===== */
+  .pb{border-radius:12px;overflow:hidden;margin-bottom:11px;border:1px solid var(--line)}
+  .pb .pbh{display:flex;align-items:stretch}
+  .pb .tag{flex:0 0 84px;display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:800;letter-spacing:.04em;color:#fff;padding:14px 6px;text-align:center}
+  .pb.act .tag{background:#3f6b3a}
+  .pb.cau .tag{background:#b8902f}
+  .pb .pbody{padding:14px 16px;background:var(--bg2);flex:1}
+  .pb .pbody h5{font-size:14px;font-weight:700;margin-bottom:5px}
+  .pb .pbody p{font-size:13px;margin:0;color:#444}
+
+  .term{border-bottom:1px dotted var(--accent);cursor:help}
+
+  /* ===== FOOTER ===== */
+  footer{border-top:3px solid var(--ink);padding:36px 20px 60px;margin-top:30px}
+  footer .fl{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:10px}
+  footer p{font-size:12px;color:var(--sub);margin-bottom:8px}
+  .disc{background:var(--bg2);border:1px solid var(--line);border-left:4px solid var(--accent);
+    border-radius:8px;padding:14px 16px;font-size:11.5px;color:var(--sub);line-height:1.65;margin-top:16px}
+
+  @media(max-width:420px){
+    .grid2{grid-template-columns:1fr}
+    .hero h1{font-size:33px}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <span class="kicker">CIA.CHAT 멤버 미팅 · 2026.05.28</span>
+  <h1>평화의 안도,<br><em>데이터의 폭발</em></h1>
+  <p class="lede">스태그플레이션 공포를 돌파한 5월 28일, 뉴욕 증시 3대 지수 트리펙타 신고가의 핵심 동력과 투자 전략을 풀어낸다.</p>
+  <div class="meta">
+    <span><b>NY</b> 5/28 (목)</span><span class="dot"></span>
+    <span><b>화자</b> 노바(NOVA)</span><span class="dot"></span>
+    <span>3대 지수 동반 사상 최고</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- 1. 트리펙타 -->
+<section>
+  <div class="sec-no">01 / OVERVIEW</div>
+  <h2>3대 지수 트리펙타 신고가<span class="en">The Triple All-Time High</span></h2>
+  <p class="dek">물가는 치솟고 성장은 무너졌는데, 시장은 일제히 사상 최고치를 갈아치웠다.</p>
+  <p class="lead-cap">아침에 계좌를 열어본 투자자들이 놀란 이유는 단순하다. <strong>거시 지표만 보면 명백한 악재</strong>였기 때문이다. 하지만 장이 열리자 시장은 공포를 모두 걷어내고 상승했다. 특히 <span class="hl">러셀 2000이 6거래일 연속 신고가</span>를 기록하며 상승세가 대형주를 넘어 중소형주(잡주·성장주)로 번지는 'Breadth(시장의 폭)' 확산이 핵심이었다.</p>
+
+  <div class="grid2">
+    <div class="tile up"><div class="nm">나스닥 종합</div><div class="vl">26,917</div><div class="pc">+0.91%</div><div class="ds">사상 최고치 · 5월 누적 +8%, 2009년 이후 최대 두 달 상승률</div></div>
+    <div class="tile up"><div class="nm">S&amp;P 500</div><div class="vl">7,563</div><div class="pc">+0.58%</div><div class="ds">11개 섹터 중 5개만 상승하는 좁은 폭에도 대장주가 견인</div></div>
+    <div class="tile"><div class="nm">다우존스</div><div class="vl">50,668</div><div class="pc">+0.05%</div><div class="ds">사상 최고 종가 · BNSF 합병 중단 악재에도 MSFT·IBM이 방어</div></div>
+    <div class="tile up"><div class="nm">러셀 2000</div><div class="vl">2,936</div><div class="pc">+0.60%</div><div class="ds">6거래일 연속 신고가 · 중소형주 확산의 강력한 신호</div></div>
+  </div>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">당일 지수 등락률 비교 (%)</div>
+    <canvas id="idxChart" height="230"></canvas>
+    <div class="chart-cap">막대를 클릭하면 강조 표시됩니다. 러셀의 상대 강세가 '시장 폭 확대'를 보여준다.</div>
+  </div>
+</section>
+</div>
+<div class="divider"></div>
+<div class="wrap">
+
+<!-- 2. 매크로 vs 마이크로 -->
+<section>
+  <div class="sec-no">02 / FORCES</div>
+  <h2>매크로의 중력 vs<br>마이크로의 폭발력<span class="en">Macro Drag &amp; Micro Lift</span></h2>
+  <p class="dek">아래로 끌어내리는 거시 압력을, 개별 기업 실적이 멱살 잡고 끌어올렸다.</p>
+
+  <p>이날 발표된 거시 지표는 전형적인 <strong class="term" title="물가 상승(인플레이션)과 경기 침체(스태그네이션)가 동시에 나타나는 현상">스태그플레이션</strong> 신호였다. <span class="hl">4월 헤드라인 PCE(개인소비지출 물가)가 전년비 3.8%</span>로 3년래 최고를 찍었고, 동시에 <strong>1분기 GDP는 1.6%로 하향 수정</strong>(예상 2.0)됐다. 게다가 개인 저축률은 2.6%로 급락 — 평균적인 미국인이 약 두 달치 생활비만 보유한 셈이다(통상 권고는 6개월).</p>
+
+  <p>그럼에도 시장이 버틴 이유는 미시(마이크로)에서 폭발이 일어났기 때문이다. 연준은 연내 금리인하 기대는 사실상 거뒀지만, <span class="hl">경기 둔화를 이유로 금리인상 시점을 내년 3월까지 밀어냈다</span>. 하방 압력이 일부 완화된 것이다.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>구분</th><th>↓ 하방 압력 (Macro)</th><th>↑ 상방 촉매 (Micro)</th></tr></thead>
+      <tbody>
+        <tr><td>물가</td><td>헤드라인 PCE 3.8% (3년래 최고)</td><td>—</td></tr>
+        <tr><td>성장</td><td>GDP 1.6% 하향, 저축률 2.6%</td><td>—</td></tr>
+        <tr><td>지정학</td><td>(전일) 호르무즈 무력 충돌설</td><td>美·이란 60일 휴전 MOU, 유가 급락</td></tr>
+        <tr><td>실적</td><td>—</td><td>SNOW·DELL 어닝 대폭발</td></tr>
+        <tr><td>소비</td><td>의류 등 재량 소비 붕괴</td><td>밸류 리테일·AI 기기 선방</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pull">"매크로만 보면 물가는 치솟고 성장은 무너지고 있다. 하지만 마이크로가 다 멱살 잡고 올려버렸다."<span class="src">— 노바, CIA.chat 멤버 미팅</span></div>
+</section>
+</div>
+<div class="divider"></div>
+<div class="wrap">
+
+<!-- 3. 호르무즈 -->
+<section>
+  <div class="sec-no">03 / TRIGGER</div>
+  <h2>1차 방아쇠:<br>호르무즈 셧다운 해제<span class="en">Geopolitical Relief Rally</span></h2>
+  <p class="dek">전일까지의 전쟁 공포가, 평화 기대감으로 급반전했다.</p>
+
+  <p>장 초반까지만 해도 미·이란 무력 충돌과 미 해군의 이란 항구 봉쇄 소식이 시장을 짓눌렀다. 그러나 알자지라발 보도로 <span class="hl">"미국과 이란이 60일(30일+30일) 휴전 연장 양해각서에 잠정 합의했다"</span>는 뉴스가 나오며 분위기가 급반전했다. 시장은 진위 논란에도 불구하고 '선제적 안도 랠리'에 베팅했다.</p>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">유가(WTI) &amp; 공포지수(VIX) 동반 하락</div>
+    <canvas id="fearChart" height="230"></canvas>
+    <div class="chart-cap">WTI는 전일 $92.51 고점에서 $88.90으로, VIX는 1월 이후 최저인 15.73으로 진정. 10년물 국채금리도 4.45%로 하락하며 성장주 할인율 부담을 덜었다.</div>
+  </div>
+  <p>유가·VIX·국채금리가 동반 하락하면서 위험자산 선호가 살아났다. 특히 <strong>금리 하락은 밸류에이션이 높은 성장주에 직접적인 호재</strong>로 작용했다.</p>
+</section>
+</div>
+<div class="divider"></div>
+<div class="wrap">
+
+<!-- 4. Mega Trend 1 -->
+<section>
+  <div class="sec-no">04 / MEGA TREND 1</div>
+  <h2>AI 밸류체인의 수직적 확산<span class="en">Vertical Expansion of the AI Stack</span></h2>
+  <p class="dek">AI 투자 사이클은 끝나지 않았다. GPU를 넘어 서버·스토리지·데이터로 '수익화'가 시작됐다.</p>
+
+  <p class="lead-cap">노바가 강조한 핵심 프레임은 'AI 자금이 흐르는 층(Layer)'이다. 초기에 GPU(실리콘) 레이어에 몰렸던 돈이, 서버·스토리지(인프라) 레이어를 거쳐 이제는 <span class="hl">데이터·소프트웨어 레이어로 상향 이동</span>하고 있다는 것. 각 층을 눌러 핵심 종목과 수치를 확인해 보자.</p>
+
+  <div class="layers">
+    <div class="layer L1 open">
+      <div class="lh"><div><div class="ltitle">① Data / Software Layer</div><div class="lsub">데이터를 다루는 아이들 — 현재 주도층</div></div><div class="arrow">▼</div></div>
+      <div class="body"><ul class="body-in">
+        <li>Snowflake (SNOW) <b>+39.43%</b></li>
+        <li>MongoDB (MDB) <b>+10.6%</b></li>
+        <li>Palantir (PLTR) <b>+8.1%</b></li>
+        <li>Reddit·Oracle 등 데이터 보유주 동반 강세</li>
+      </ul></div>
+    </div>
+    <div class="layer L2">
+      <div class="lh"><div><div class="ltitle">② Infrastructure / Server Layer</div><div class="lsub">서버·스토리지 — 캐펙스 수혜 정점</div></div><div class="arrow">▼</div></div>
+      <div class="body"><ul class="body-in">
+        <li>Dell (DELL) 시간외 <b>+38%</b></li>
+        <li>NetApp (NTAP) 시간외 <b>+10%</b></li>
+        <li>HPQ <b>+20.4%</b> · SMCI <b>+9.8%</b> · IBM <b>+2.6%</b></li>
+      </ul></div>
+    </div>
+    <div class="layer L3">
+      <div class="lh"><div><div class="ltitle">③ Silicon / GPU Layer</div><div class="lsub">반등 성공, 주도권은 상위로 이동 중</div></div><div class="arrow">▼</div></div>
+      <div class="body"><ul class="body-in">
+        <li>NVIDIA (NVDA) — 여전히 모두가 사야 하는 필수재</li>
+        <li>Micron·EWY(D램 대용) 눌림목 매수 대상</li>
+      </ul></div>
+    </div>
+  </div>
+
+  <p><strong>두 장의 성적표가 시장의 의심을 박살냈다.</strong> Snowflake는 AWS와 5년간 60억 달러 규모의 AI 인프라 메가딜을 체결하며 상장 이래 최고 일일 상승률(+39.43%)을 기록했다. Dell은 AI 서버 매출이 전년비 757% 폭증($16.1B), 주문 잔고 244억 달러를 돌파했다.</p>
+
+  <p>가장 무서운 건 <strong>가이던스</strong>다. 원래 올해 AI 서버 매출 가이던스가 10억 달러였는데, 이날 <span class="hl">60억 달러로 6배 상향</span>됐다. 노바는 "실적도 6배인데 가이던스도 6배. 이는 계약이 이미 다 됐다는 뜻"이라고 해석했다.</p>
+
+  <!-- Dell guidance simulator -->
+  <div class="sim">
+    <h4>📊 Dell 가이던스 충격 계산기</h4>
+    <p class="sd">기존 가이던스 대비 상향 배수를 조절하며 '서프라이즈 강도'를 직접 확인해 보세요.</p>
+    <label>기존 AI 서버 가이던스 <span id="dellBaseV">$10B</span></label>
+    <input type="range" id="dellBase" min="5" max="20" value="10" step="1">
+    <label>신규 가이던스 <span id="dellNewV">$60B</span></label>
+    <input type="range" id="dellNew" min="10" max="120" value="60" step="5">
+    <div class="sim-out">
+      <div class="o"><div class="ol">상향 배수</div><div class="ov" id="dellMult">6.0×</div></div>
+      <div class="o"><div class="ol">증가 규모</div><div class="ov" id="dellDelta">+$50B</div></div>
+    </div>
+    <div class="sim-note" id="dellNote">📌 실적·가이던스가 동반 6배. 보통 가이던스는 보수적으로 잡는데, 이렇게 공격적이면 "계약 물량이 이미 숫자로 확정됐다"는 신호로 읽힌다.</div>
+    <button class="btn-reset" id="dellReset">초기값으로 리셋</button>
+  </div>
+
+  <div class="pull">"하이퍼스케일러들은 '투자를 줄이면 죽는다'고 생각한다. 그래서 캐펙스를 발표한 대로 다 쓰고 있다. 가장 큰 리스크는 바로 그들이 어느 날 '이제 그만'이라고 말하는 순간이다."<span class="src">— 노바</span></div>
+</section>
+</div>
+<div class="divider"></div>
+<div class="wrap">
+
+<!-- 5. AI 지형도 표 -->
+<section>
+  <div class="sec-no">05 / DIAGNOSIS</div>
+  <h2>AI 투자 지형도 진단<span class="en">Hardware (Infra) vs Software (Data)</span></h2>
+  <p class="dek">같은 AI 테마라도 위치한 레이어에 따라 리스크 성격이 다르다.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th></th><th>AI 인프라·서버 (DELL, NTAP, MRVL)</th><th>AI 데이터·소프트웨어 (SNOW, MDB, PLTR)</th></tr></thead>
+      <tbody>
+        <tr><td>실적 촉매</td><td>AI 서버 매출·스토리지 수요 폭증 (DELL +757%)</td><td>초대형 클라우드 파트너십(SNOW 60억$) 및 엔터프라이즈 도입</td></tr>
+        <tr><td>마켓 페이즈</td><td>대규모 CapEx 수혜의 정점(Peak) 확인 중</td><td>'AI 무용론(Ghost Trade)' 극복 후 강력한 리레이팅 초기</td></tr>
+        <tr><td>투자 리스크</td><td>이익률 방어 및 하이퍼스케일러 투자 축소 우려(단기 과열)</td><td>여전히 높은 밸류에이션 (SNOW 선행 PER 85배)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>노바는 데이터·소프트웨어 진영의 강세를 인정하면서도 <span class="hl">"매출을 계속 늘리지 못하면 PER 85배 같은 고밸류는 부담으로 돌아온다"</span>는 단서를 달았다. 즉, 성장률이 멈추는 순간이 진짜 위험 구간이라는 것.</p>
+</section>
+</div>
+<div class="divider"></div>
+<div class="wrap">
+
+<!-- 6. Mega Trend 2 드론 -->
+<section>
+  <div class="sec-no">06 / MEGA TREND 2</div>
+  <h2>펜타곤 '드론 지배<br>프로그램'의 폭발<span class="en">The Pentagon Drone Dominance Play</span></h2>
+  <p class="dek">정책 기대감 + 숏스퀴즈가 결합되어 소형주가 무더기로 폭등했다.</p>
+
+  <p>월스트리트저널(WSJ) 단독 보도로 펜타곤의 <strong>DDP(Drone Dominance Program)</strong> 추진설이 나왔다. 11억 달러 규모로 미국산 드론 제조업체를 지원하거나 정부가 지분을 인수한다는 내용이다. 아직 <strong>실행 확정이 아닌 루머(카더라) 단계</strong>라는 점이 중요하다.</p>
+
+  <p>그동안 횡보하며 공매도가 잔뜩 쌓여 있던 소형 드론주들이, 이 뉴스에 <span class="hl">숏스퀴즈와 결합되며 통제불능으로 폭등</span>했다. 특히 트럼프 주니어가 이사회에 참여한 UMAC이 화제의 중심이었다.</p>
+
+  <div class="grid2">
+    <div class="tile up"><div class="nm">Unusual Machines (UMAC)</div><div class="vl">+61.9%</div><div class="ds">트럼프 주니어 이사회 참여 · 직접 자금 지원 루머의 핵심</div></div>
+    <div class="tile up"><div class="nm">Red Cat (RCAT)</div><div class="vl">+33%</div><div class="ds">전술 방산 파트너 (페어 트레이딩 짝꿍주)</div></div>
+    <div class="tile up"><div class="nm">Ondas (ONDS)</div><div class="vl">+23%</div><div class="ds">소형 드론 무더기 동반 급등</div></div>
+    <div class="tile up"><div class="nm">AeroVironment (AVAV)</div><div class="vl">+18%</div><div class="ds">대표 방산 드론주 · 팔란티어(PLTR)까지 동반 상승</div></div>
+  </div>
+
+  <p>노바의 조언은 <strong>'짝꿍(페어) 트레이딩'</strong>이다. UMAC처럼 먼저 폭등한 종목은 따라잡기 어렵지만, RCAT·AVAV 같은 짝꿍주는 천천히 따라 오르기 때문에 탑승 기회가 있다는 것. 다만 루머 기반인 만큼 비중 몰빵은 금물이라고 못 박았다.</p>
+</section>
+</div>
+<div class="divider"></div>
+<div class="wrap">
+
+<!-- 7. Mega Trend 3 소비 -->
+<section>
+  <div class="sec-no">07 / MEGA TREND 3</div>
+  <h2>고물가 시대,<br>소비재의 양극화<span class="en">The Great Consumer Divide</span></h2>
+  <p class="dek">중산층·고소득층마저 '약게' 소비한다. 가성비와 AI 기기만 살아남았다.</p>
+
+  <p>'K경제'가 통했다. 고물가 부담에 <span class="hl">중산층·고소득층까지 할인점으로 트레이드 다운</span>하면서, 가성비 리테일이 폭발했다. 반면 의류 등 재량 소비재는 고객 트래픽 자체가 감소하며 붕괴했다. 별도로 AI PC·콘솔 교체 사이클이 베스트바이를 4년 만의 최고 실적으로 끌어올렸다.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>구분</th><th>종목 / 등락</th><th>핵심 트리거 · 신호</th></tr></thead>
+      <tbody>
+        <tr><td>가성비·대량</td><td>Dollar Tree <b style="color:#0a8a3f">+16.5%</b><br>Costco +9.8%</td><td>운송비 하락·중고소득층 유입 / 멤버십·주유 트래픽 → <span class="sig-buy">BUY</span></td></tr>
+        <tr><td>AI 기기</td><td>Best Buy <b style="color:#0a8a3f">+18.1%</b></td><td>AI PC·콘솔 수요, 4년만 최고 동일점포 +2.0% → <span class="sig-buy">BUY/HOLD</span></td></tr>
+        <tr><td>일반 의류(붕괴)</td><td>AEO <span class="sig-sell">-11%</span><br>Gap <span class="sig-sell">-14%</span></td><td>고물가 속 트래픽 급감·가이던스 하향 → <span class="sig-sell">SELL/AVOID</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="dek" style="margin-top:6px">※ 노바: "사람들이 약아졌다. 옷은 있던 거 입고, 안 쓰는 돈을 주식에 넣는다. 소비가 죽지 않고 형태만 바뀌는 이상한 장세다."</p>
+</section>
+</div>
+<div class="divider"></div>
+<div class="wrap">
+
+<!-- 8. Eli Lilly -->
+<section>
+  <div class="sec-no">08 / HIDDEN GIANT</div>
+  <h2>헬스케어 1조 달러<br>클럽의 귀환<span class="en">Eli Lilly Reclaims $1 Trillion</span></h2>
+  <p class="dek">일라이릴리(LLY) +4.16%, 시가총액 1조 달러 재돌파.</p>
+
+  <p>비만치료제 모멘텀이 두 갈래로 터졌다. 첫째, 미국 최대 <strong class="term" title="처방약 급여를 관리하는 약제급여관리회사">PBM</strong>인 CVS Caremark가 비만주사제 'Zepbound'를 표준 처방집에 복원하면서 보험 커버리지가 확대됐다. 둘째, <span class="hl">경구용 비만약 'Foundayo'의 커버리지 신규 추가</span>다.</p>
+
+  <p>노바가 주목한 건 경구용의 파괴력이다. 주사제는 저온 보관·특수 운송이 필요하지만 먹는 약은 그런 제약이 없어 <strong>유통 혁명으로 단가가 크게 낮아진다</strong>. 약효는 주사보다 덜해도 접근성에서 게임 체인저라는 평가다. 이로써 Novo Nordisk에 뺏겼던 점유율 탈환이 전망되며, 헬스케어 ETF(XLV)도 +1.4% 상승을 주도했다.</p>
+</section>
+</div>
+<div class="divider"></div>
+<div class="wrap">
+
+<!-- 9. 매매법 / ATR -->
+<section>
+  <div class="sec-no">09 / METHOD</div>
+  <h2>변동성 기반 매매법<span class="en">ATR &amp; The %-Rule Position Sizing</span></h2>
+  <p class="dek">3% 매매법이냐 5%냐는 정답이 없다. 종목의 '평소 움직임'이 기준이다.</p>
+
+  <p>노바는 <strong class="term" title="Average True Range. 일정 기간 동안 가격이 하루에 움직인 폭의 평균">ATR(평균 진폭)</strong> 개념을 출퇴근 시간에 비유했다. 어떤 날은 40분, 어떤 날은 1시간 걸리듯 — 그 평균을 내면 "이 종목은 하루에 대략 이만큼 움직인다"를 알 수 있다는 것. <span class="hl">ATR 트레일링 스탑</span>은 이 평균 진폭을 기준으로 손절선을 동적으로 설정해준다.</p>
+
+  <p>핵심 원리: 변동성이 좁을 땐 3% 매매법으로 충분하지만, 변동성이 커진 종목(예: KORU, UMAC)은 5%·7% 매매법으로 손절·분할 기준을 넓혀야 한다. 아래 계산기로 직접 시뮬레이션해 보자.</p>
+
+  <!-- ATR position calc -->
+  <div class="sim">
+    <h4>🧮 변동성 매매법 계산기</h4>
+    <p class="sd">진입가·매매법 비율·투자금을 조절하면 손절가와 1회 매수 금액(분할 기준)이 즉시 계산됩니다.</p>
+    <div class="seg" id="ruleSeg">
+      <button data-r="3" class="active">3% 매매법</button>
+      <button data-r="5">5% 매매법</button>
+      <button data-r="7">7% 매매법</button>
+    </div>
+    <label>진입가 (USD) <span id="entryV">$100</span></label>
+    <input type="range" id="entry" min="10" max="1000" value="100" step="5">
+    <label>총 투자금 (USD) <span id="capV">$10,000</span></label>
+    <input type="range" id="cap" min="1000" max="100000" value="10000" step="1000">
+    <label>분할 매수 횟수 <span id="splitV">4회</span></label>
+    <input type="range" id="split" min="1" max="8" value="4" step="1">
+    <div class="sim-out">
+      <div class="o"><div class="ol">손절가 (−rule%)</div><div class="ov" id="stopV">$97.00</div></div>
+      <div class="o"><div class="ol">1회 매수 금액</div><div class="ov" id="perBuyV">$2,500</div></div>
+    </div>
+    <div class="sim-note" id="atrNote">📌 변동성이 큰 종목일수록 매매법 비율을 높여 손절폭을 넓히고, 분할 횟수를 늘려 평단 리스크를 분산하는 것이 ATR 트레일링 스탑의 기본 사용법입니다.</div>
+    <button class="btn-reset" id="atrReset">초기값으로 리셋</button>
+  </div>
+  <p class="dek" style="margin-top:2px">※ 본 계산기는 개념 이해용이며 실제 매매 권유가 아닙니다. ATR 값은 종목·기간(5·10·14일)에 따라 달라집니다.</p>
+</section>
+</div>
+<div class="divider"></div>
+<div class="wrap">
+
+<!-- 10. Synthesis -->
+<section>
+  <div class="sec-no">10 / SYNTHESIS</div>
+  <h2>시장의 폭이 넓어진다<span class="en">The Market is Broadening</span></h2>
+  <p class="dek">소수의 매그니피센트 7이 끌던 장세는 끝났다. 3대 톱니바퀴가 거시 중력을 분산시킨다.</p>
+
+  <p>맨 밑바닥엔 여전히 <strong>스태그플레이션 리스크(고물가 &amp; 성장 둔화)</strong>가 깔려 있다. 그럼에도 시장이 돌아가는 이유는, 세 개의 독립적인 성장 톱니바퀴가 서로 맞물려 거시 하방 압력을 분산·지탱하고 있기 때문이다.</p>
+
+  <div class="gears">
+    <div class="gear"><h5>① AI Enterprise Expansion</h5><div class="ge">AI 엔터프라이즈 확장</div><p>하드웨어를 넘어 소프트웨어·데이터센터 전반으로 실제 기업 투자가 집행됨 (SNOW, DELL).</p></div>
+    <div class="gear"><h5>② Govt &amp; Defense Spending</h5><div class="ge">정부·국방 지출</div><p>지정학적 리스크가 오히려 자율화·드론 실물 투자로 전환됨 (UMAC, RCAT).</p></div>
+    <div class="gear"><h5>③ Value Consumer Resilience</h5><div class="ge">가성비 소비의 방어력</div><p>강력한 고용을 바탕으로 한 할인점·대량소비 경제의 방어력 입증 (DLTR, COST).</p></div>
+  </div>
+  <p>세 바퀴가 유기적으로 맞물려 돌기 때문에, 어느 한쪽이 흔들려도 시장 전체가 무너지지 않는 구조가 만들어졌다는 것이 이날 미팅의 결론이다.</p>
+</section>
+</div>
+<div class="divider"></div>
+<div class="wrap">
+
+<!-- 11. Tactical Radar -->
+<section>
+  <div class="sec-no">11 / RADAR</div>
+  <h2>내일장 (5/29)<br>3대 체크포인트<span class="en">Tactical Radar</span></h2>
+  <p class="dek">다음 거래일에 시장을 흔들 수 있는 핵심 이벤트.</p>
+
+  <div class="cps">
+    <div class="cp"><span class="cpn">CHECK 1</span><h5>매크로 데이터</h5><p>4월 소매/도매 재고 및 5월 시카고 PMI(예상 50.6). GDP 둔화와 맞물려 실물 경기가 침체인지 일시적 둔화인지 판가름할 핵심 기준.</p></div>
+    <div class="cp"><span class="cpn">CHECK 2</span><h5>ASCO 연례회의 개막</h5><p>화이자·아스트라제네카 등 빅파마의 암 임상 데이터 대거 공개. 바이오텍은 결과에 따라 하루 20~30%, 심하면 100% 이상도 움직이는 고변동 구간.</p></div>
+    <div class="cp flag"><span class="cpn">CHECK 3</span><h5>델(DELL) 후폭풍</h5><p>시간외 대폭등한 DELL의 온기가 NVDA·AVGO·SMCI 등 반도체·하드웨어 전반의 갭업 출발을 유도할지 관건. '서버랙' 관련주를 미리 스캔할 것.</p></div>
+  </div>
+</section>
+</div>
+<div class="divider"></div>
+<div class="wrap">
+
+<!-- 12. Playbook -->
+<section>
+  <div class="sec-no">12 / PLAYBOOK</div>
+  <h2>The Billionaire<br>Playbook<span class="en">투자자 행동 강령</span></h2>
+  <p class="dek">분석을 실행으로 옮기는 4가지 행동 지침.</p>
+
+  <div class="pb act"><div class="pbh"><div class="tag">ACTION</div><div class="pbody"><h5>AI 포트폴리오 리밸런싱</h5><p>순수 하드웨어(GPU) 추격 매수를 멈추고, 실적이 입증된 AI 데이터·소프트웨어 대장주(SNOW, ORCL, PLTR) 중심의 눌림목 매수.</p></div></div></div>
+  <div class="pb act"><div class="pbh"><div class="tag">ACTION</div><div class="pbody"><h5>소비재 옥석 가리기</h5><p>독점적 경제 해자를 가진 기업(COST, DLTR, LLY)으로만 포트폴리오 압축. 의류 등 일반 재량 소비재는 비중 축소.</p></div></div></div>
+  <div class="pb cau"><div class="pbh"><div class="tag">CAUTION</div><div class="pbody"><h5>드론 테마 트레이딩</h5><p>UMAC 등 소형 드론주는 변동성 극대화 상태. 장기 투자가 아닌, 방산 소프트웨어 백본 대형주 위주로 포지션 빌드업.</p></div></div></div>
+  <div class="pb cau"><div class="pbh"><div class="tag">CAUTION</div><div class="pbody"><h5>현금 확보 및 조정 대비</h5><p>BofA 조사 기관 현금 비중 3.9% 급감 경고. 여름철 단기 기술적 조정에 대비해 현금 10~15% 확보 후 분할 매수 원칙 고수.</p></div></div></div>
+
+  <!-- cash reserve sim -->
+  <div class="sim">
+    <h4>💰 현금 버퍼 & 조정 대비 시뮬레이터</h4>
+    <p class="sd">포트폴리오 규모와 예상 조정폭을 조절하면, 권고 현금 버퍼와 조정 시 '박앤세일' 매수 여력이 계산됩니다.</p>
+    <label>포트폴리오 규모 (USD) <span id="pfV">$100,000</span></label>
+    <input type="range" id="pf" min="10000" max="1000000" value="100000" step="10000">
+    <label>현금 확보 비중 <span id="cashV">12%</span></label>
+    <input type="range" id="cash" min="5" max="30" value="12" step="1">
+    <label>예상 기술적 조정폭 <span id="dropV">12%</span></label>
+    <input type="range" id="drop" min="5" max="25" value="12" step="1">
+    <div class="sim-out">
+      <div class="o"><div class="ol">현금 버퍼</div><div class="ov" id="bufV">$12,000</div></div>
+      <div class="o"><div class="ol">조정 후 주식 평가</div><div class="ov" id="postV">$77,440</div></div>
+    </div>
+    <div class="sim-note" id="cashNote">📌 노바 권고: 자산이 불어날수록 조금씩 현금을 만들어 여름철 'Buy-and-Sale'을 준비. 현금 10~15% 구간에서 분할 매수가 핵심.</div>
+    <button class="btn-reset" id="cashReset">초기값으로 리셋</button>
+  </div>
+
+  <div class="pull">"손절을 잘하면 성공한다. 인간관계 손절을 잘하는 사람이 주식 손절도 잘한다. 마진은 다 정리하라 — 마진이 있으면 정상적인 사고를 못한다."<span class="src">— 노바</span></div>
+</section>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap" style="padding:0">
+    <div class="fl">Billionaire Market Intelligence Briefing</div>
+    <p>출처: CIA.chat 멤버 미팅 (2026년 5월 28일, NOVA Real Invest) · 본 문서는 방송 내용을 교육 목적으로 정리·요약한 자료입니다.</p>
+    <p>지수·등락률·종목 수치는 방송 시점(미국 동부 5/28 장중·시간외) 기준이며 원본 그대로 기재했습니다.</p>
+    <div class="disc">⚠️ <strong>투자 유의</strong> · 본 자료는 정보 제공·교육 목적의 요약이며, 특정 종목의 매수·매도 권유가 아닙니다. 본 문서의 작성자는 투자 자문업자가 아니며, 모든 투자 판단과 그 결과의 책임은 투자자 본인에게 있습니다. 언급된 휴전 MOU·DDP 등은 미확정 루머를 포함하며, 실제 사실 여부는 별도 확인이 필요합니다.</div>
+  </div>
+</footer>
+
+<script>
+/* ===== Fade-in observer ===== */
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+/* ===== Chart configs ===== */
+const GRID = 'rgba(0,0,0,0.06)';
+Chart.defaults.font.family = "'Noto Sans KR', sans-serif";
+Chart.defaults.color = '#777777';
+
+const chartConfigs = {};
+
+chartConfigs['idxChart'] = () => {
+  const data = [0.91, 0.58, 0.05, 0.60];
+  const base = ['#e11d48','#f43f5e','#6b7280','#1a1a1a'];
+  let active = -1;
+  const chart = new Chart(document.getElementById('idxChart'), {
+    type: 'bar',
+    data: {
+      labels: ['NASDAQ','S&P 500','DOW','러셀 2000'],
+      datasets: [{
+        label: '당일 등락률 (%)',
+        data: data,
+        backgroundColor: base.slice(),
+        borderRadius: 6, maxBarThickness: 56
+      }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false},
+        tooltip:{callbacks:{label:(c)=>' +'+c.parsed.y+'%'}}},
+      scales:{ y:{beginAtZero:true, grid:{color:GRID}, ticks:{callback:v=>v+'%'}},
+        x:{grid:{display:false}}},
+      onClick:(evt,els)=>{
+        if(els.length){
+          const idx=els[0].index;
+          active = (active===idx)?-1:idx;
+          chart.data.datasets[0].backgroundColor = base.map((c,i)=>
+            active===-1 ? c : (i===active? c : 'rgba(120,120,120,.25)'));
+          chart.update();
+        }
+      }
+    }
+  });
+};
+
+chartConfigs['fearChart'] = () => {
+  const wti = [92.51,92.0,91.6,91.8,90.9,90.4,90.7,89.9,89.5,89.7,89.1,88.9];
+  const vix = [22.4,21.0,20.2,19.6,18.9,18.4,17.8,17.5,16.9,16.6,16.0,15.73];
+  const labels = ['전일고점','','','','','','','','','','','종가'];
+  new Chart(document.getElementById('fearChart'), {
+    type:'line',
+    data:{labels,
+      datasets:[
+        {label:'WTI 유가 ($)',data:wti,borderColor:'#1a1a1a',backgroundColor:'rgba(26,26,26,.05)',
+         tension:.35,borderWidth:2.5,pointRadius:0,yAxisID:'y'},
+        {label:'VIX 공포지수',data:vix,borderColor:'#e11d48',backgroundColor:'rgba(225,29,72,.07)',
+         tension:.35,borderWidth:2.5,pointRadius:0,yAxisID:'y1',fill:true}
+      ]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{labels:{boxWidth:12,font:{size:11}}}},
+      scales:{
+        y:{position:'left',grid:{color:GRID},ticks:{callback:v=>'$'+v},title:{display:true,text:'WTI',font:{size:10}}},
+        y1:{position:'right',grid:{display:false},title:{display:true,text:'VIX',font:{size:10}}},
+        x:{grid:{display:false},ticks:{font:{size:10}}}}}
+  });
+};
+
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+/* ===== Layer accordion ===== */
+document.querySelectorAll('.layer').forEach(l=>{
+  l.querySelector('.lh').addEventListener('click',()=>l.classList.toggle('open'));
+});
+
+/* ===== Dell guidance simulator ===== */
+(function(){
+  const base=document.getElementById('dellBase'), nw=document.getElementById('dellNew');
+  const baseV=document.getElementById('dellBaseV'), newV=document.getElementById('dellNewV');
+  const mult=document.getElementById('dellMult'), delta=document.getElementById('dellDelta'), note=document.getElementById('dellNote');
+  function upd(){
+    let b=+base.value, n=+nw.value;
+    if(n<b){ n=b; nw.value=b; }
+    baseV.textContent='$'+b+'B'; newV.textContent='$'+n+'B';
+    const m=(n/b);
+    mult.textContent=m.toFixed(1)+'×';
+    delta.textContent='+$'+(n-b)+'B';
+    let msg;
+    if(m>=6) msg='📌 실적·가이던스 동반 6배급. "계약 물량이 이미 확정됐다"는 강력한 신호 — 페마(FOMO를 넘는 강제 매수)를 부른다.';
+    else if(m>=3) msg='📌 가이던스 '+m.toFixed(1)+'배 상향은 강한 서프라이즈. 추세 추종 매수세가 붙기 쉽다.';
+    else msg='📌 가이던스 '+m.toFixed(1)+'배 수준. 통상적인 보수적 상향에 가까워 폭발력은 제한적일 수 있다.';
+    note.textContent=msg;
+  }
+  base.oninput=upd; nw.oninput=upd;
+  document.getElementById('dellReset').onclick=()=>{base.value=10;nw.value=60;upd();};
+  upd();
+})();
+
+/* ===== ATR position calculator ===== */
+(function(){
+  let rule=3;
+  const seg=document.getElementById('ruleSeg');
+  const entry=document.getElementById('entry'), cap=document.getElementById('cap'), split=document.getElementById('split');
+  const entryV=document.getElementById('entryV'), capV=document.getElementById('capV'), splitV=document.getElementById('splitV');
+  const stopV=document.getElementById('stopV'), perBuyV=document.getElementById('perBuyV'), note=document.getElementById('atrNote');
+  function fmt(n){return '$'+Math.round(n).toLocaleString();}
+  function upd(){
+    const e=+entry.value, c=+cap.value, s=+split.value;
+    entryV.textContent='$'+e; capV.textContent=fmt(c); splitV.textContent=s+'회';
+    const stop=e*(1-rule/100);
+    stopV.textContent='$'+stop.toFixed(2);
+    perBuyV.textContent=fmt(c/s);
+    let msg;
+    if(rule>=7) msg='📌 7% 매매법 = 고변동 종목(KORU·UMAC 등)용. 손절폭이 넓은 만큼 분할 횟수를 늘려 평단 충격을 줄이세요.';
+    else if(rule>=5) msg='📌 5% 매매법 = 변동성이 커진 종목용. 너무 타이트한 손절은 휩쏘(가짜 신호)에 털릴 수 있습니다.';
+    else msg='📌 3% 매매법 = 변동성이 좁은 안정 종목용. 손절 -'+rule+'%, '+s+'회 분할 기준으로 진입 리스크를 분산합니다.';
+    note.textContent=msg;
+  }
+  seg.querySelectorAll('button').forEach(b=>{
+    b.onclick=()=>{seg.querySelectorAll('button').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active'); rule=+b.dataset.r; upd();};
+  });
+  entry.oninput=upd; cap.oninput=upd; split.oninput=upd;
+  document.getElementById('atrReset').onclick=()=>{
+    seg.querySelectorAll('button').forEach(x=>x.classList.remove('active'));
+    seg.querySelector('[data-r="3"]').classList.add('active'); rule=3;
+    entry.value=100; cap.value=10000; split.value=4; upd();};
+  upd();
+})();
+
+/* ===== Cash buffer simulator ===== */
+(function(){
+  const pf=document.getElementById('pf'), cash=document.getElementById('cash'), drop=document.getElementById('drop');
+  const pfV=document.getElementById('pfV'), cashV=document.getElementById('cashV'), dropV=document.getElementById('dropV');
+  const bufV=document.getElementById('bufV'), postV=document.getElementById('postV'), note=document.getElementById('cashNote');
+  function fmt(n){return '$'+Math.round(n).toLocaleString();}
+  function upd(){
+    const p=+pf.value, c=+cash.value, d=+drop.value;
+    pfV.textContent=fmt(p); cashV.textContent=c+'%'; dropV.textContent=d+'%';
+    const buffer=p*c/100;
+    const equity=p*(1-c/100);
+    const post=equity*(1-d/100);
+    bufV.textContent=fmt(buffer);
+    postV.textContent=fmt(post);
+    let msg;
+    if(c>=10&&c<=15) msg='📌 현금 '+c+'%는 노바 권고 구간(10~15%). 조정 시 '+fmt(buffer)+'로 저가 분할 매수가 가능합니다.';
+    else if(c<10) msg='📌 현금 '+c+'%는 권고치보다 낮음. 단기 기술적 조정 시 추가 매수 여력이 부족할 수 있습니다.';
+    else msg='📌 현금 '+c+'%는 다소 보수적. 상승장 지속 시 기회비용이 발생할 수 있으나 조정 방어력은 높습니다.';
+    note.textContent=msg;
+  }
+  pf.oninput=upd; cash.oninput=upd; drop.oninput=upd;
+  document.getElementById('cashReset').onclick=()=>{pf.value=100000;cash.value=12;drop.value=12;upd();};
+  upd();
+})();
+</script>
+</body>
+</html>
