@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>다우 51K 시장 리포트 — 인터랙티브 퀴즈</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --correct: #16a34a;
+    --wrong: #dc2626;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 16px 80px;
+  }
+
+  /* STICKY SCOREBAR */
+  .scorebar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--text);
+    color: #fff;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .scorebar .s-item {
+    font-size: 12px;
+    opacity: 0.85;
+  }
+  .scorebar .s-val {
+    font-weight: 700;
+    font-size: 14px;
+    color: #fff;
+    opacity: 1;
+  }
+  .progress-track {
+    flex: 1;
+    min-width: 80px;
+    height: 6px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.4s ease, background 0.4s ease;
+    background: #22c55e;
+  }
+
+  /* HEADER */
+  .quiz-header {
+    padding: 28px 0 16px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 24px;
+  }
+  .quiz-header .label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .quiz-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 5vw, 28px);
+    font-weight: 900;
+    color: var(--text);
+    line-height: 1.25;
+  }
+  .quiz-header p {
+    font-size: 13px;
+    color: var(--text2);
+    margin-top: 8px;
+  }
+
+  /* QUESTION CARD */
+  .q-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: border-color 0.2s;
+  }
+  .q-card.answered { border-color: #ccc; }
+  .q-meta {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .q-num {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text2);
+  }
+  .badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .badge-easy { background: #dcfce7; color: #15803d; }
+  .badge-medium { background: #fef9c3; color: #a16207; }
+  .badge-hard { background: #fee2e2; color: #b91c1c; }
+  .badge-type { background: #e0e7ff; color: #4338ca; }
+
+  .q-text {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  /* OPTIONS */
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt-btn {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 5px;
+    padding: 11px 14px;
+    text-align: left;
+    font-size: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+  }
+  .opt-btn:hover:not(:disabled) { border-color: var(--accent); background: #fff5f7; }
+  .opt-btn:disabled { cursor: default; }
+  .opt-btn.correct { background: #f0fdf4; border-color: var(--correct); color: var(--correct); font-weight: 700; }
+  .opt-btn.wrong { background: #fef2f2; border-color: var(--wrong); color: var(--wrong); font-weight: 700; }
+  .opt-btn .badge-result {
+    float: right;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: 10px;
+  }
+  .badge-correct-r { background: var(--correct); color: #fff; }
+  .badge-wrong-r { background: var(--wrong); color: #fff; }
+
+  /* OX BUTTONS */
+  .ox-row { display: flex; gap: 12px; }
+  .ox-btn {
+    flex: 1;
+    padding: 16px;
+    font-size: 22px;
+    font-weight: 900;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .ox-btn:hover:not(:disabled) { border-color: var(--accent); background: #fff5f7; }
+  .ox-btn:disabled { cursor: default; }
+  .ox-btn.correct { background: #f0fdf4; border-color: var(--correct); }
+  .ox-btn.wrong { background: #fef2f2; border-color: var(--wrong); }
+
+  /* SHORT ANSWER */
+  .sa-row { display: flex; gap: 8px; }
+  .sa-input {
+    flex: 1;
+    border: 1.5px solid var(--border);
+    border-radius: 5px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .sa-input:focus { border-color: var(--accent); }
+  .sa-input:disabled { background: #f5f5f5; }
+  .sa-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .sa-btn:hover:not(:disabled) { background: var(--accent2); }
+  .sa-btn:disabled { background: #ccc; cursor: default; }
+
+  /* EXPLANATION */
+  .explanation {
+    display: none;
+    margin-top: 14px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 5px 5px 0;
+    padding: 14px;
+  }
+  .explanation.show { display: block; }
+  .explanation .ex-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .explanation p {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .explanation .answer-reveal {
+    font-size: 12px;
+    color: var(--correct);
+    font-weight: 700;
+    margin-top: 6px;
+  }
+
+  /* RESULT MODAL */
+  .result-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  .result-overlay.show { display: flex; }
+  .result-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 36px 28px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .result-card .result-emoji { font-size: 48px; margin-bottom: 12px; }
+  .result-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .result-card .score-big {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    margin: 10px 0;
+  }
+  .result-card .grade {
+    display: inline-block;
+    padding: 4px 16px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 14px;
+  }
+  .result-card .msg {
+    font-size: 14px;
+    color: var(--text2);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  .btn-retry {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 13px 28px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    transition: background 0.15s;
+    width: 100%;
+  }
+  .btn-retry:hover { background: var(--accent2); }
+
+  @media (max-width: 360px) {
+    body { padding: 0 10px 60px; }
+    .q-card { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- STICKY SCORE BAR -->
+<div class="scorebar" id="scoreBar">
+  <span class="s-item">푼 문제 <span class="s-val" id="sbSolved">0</span>/10</span>
+  <span class="s-item">맞힌 문제 <span class="s-val" id="sbCorrect">0</span></span>
+  <span class="s-item">정답률 <span class="s-val" id="sbRate">0%</span></span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<!-- HEADER -->
+<div class="quiz-header">
+  <div class="label">인터랙티브 퀴즈 · 10문제</div>
+  <h1>다우 51K — 위대한 양극화<br>시장 이해 테스트</h1>
+  <p>방송 내용을 바탕으로 출제된 10개의 문제입니다. 문제를 클릭하면 즉시 채점됩니다.</p>
+</div>
+
+<div id="quizContainer"></div>
+
+<!-- RESULT MODAL -->
+<div class="result-overlay" id="resultOverlay">
+  <div class="result-card">
+    <div class="result-emoji" id="resEmoji">🎉</div>
+    <h2>최종 결과</h2>
+    <div class="score-big" id="resScore">0점</div>
+    <div class="grade" id="resGrade">F</div>
+    <div class="msg" id="resMsg"></div>
+    <button class="btn-retry" onclick="retryQuiz()">↺ 다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id: 1,
+    type: 'mcq',
+    difficulty: 'easy',
+    question: '이번 방송에서 다우존스 지수가 처음으로 돌파한 수치는 얼마인가?',
+    options: ['4만 8천', '5만', '5만 1천', '5만 5천'],
+    answer: 2,
+    explanation: '방송에서 "다우지수가 역사상 처음으로 5만 1,032를 뚫었다"고 언급했다. 5만을 뚫은 것도 최근 일이었는데, 일주일도 안 돼 5만 1천을 넘어선 것이 역사적 사건으로 다뤄졌다.'
+  },
+  {
+    id: 2,
+    type: 'mcq',
+    difficulty: 'easy',
+    question: '현재 미국 주식에 투자 중인 리테일 투자자 중 손실(마이너스) 상태인 비율은?',
+    options: ['50%', '63%', '73%', '83%'],
+    answer: 2,
+    explanation: '"지금 미국 주식시장에 투자하고 있는 73%가 마이너스 상태"라고 방송에서 명확히 언급했다. 3대 지수가 모두 신고가를 찍는 상황에서도 대부분의 개인 투자자가 손실 중이라는 역설적 상황이다.'
+  },
+  {
+    id: 3,
+    type: 'mcq',
+    difficulty: 'medium',
+    question: '방송에서 S&P 500 11개 섹터 중 하락한 섹터 수는?',
+    options: ['4개', '6개', '8개', '10개'],
+    answer: 2,
+    explanation: '"S&P 500 11개 섹터 중에서 8개 섹터가 맛이 갔다"고 언급했다. 상승한 것은 IT(+19.79%)와 헬스케어(+2.40%) 단 2개뿐으로, 이를 "매우 드문 나쁜 breadth 시장"이라 표현했다.'
+  },
+  {
+    id: 4,
+    type: 'mcq',
+    difficulty: 'medium',
+    question: '방송에서 언급한 "3A Economy"에 해당하지 않는 항목은?',
+    options: ['Affluent(부유층 소비)', 'AI Investment(AI 투자)', 'Asset Appreciation(자산 가치 상승)', 'Automation(자동화)'],
+    answer: 3,
+    explanation: '3A Economy는 Affluent(부유층 소비), AI Investment(AI 투자), Asset Appreciation(자산 가치 상승)으로 구성된다. Automation(자동화)는 방송에서 3A의 구성 요소로 언급되지 않았다.'
+  },
+  {
+    id: 5,
+    type: 'mcq',
+    difficulty: 'medium',
+    question: '4월 PCE(개인소비지출) 물가지수로 방송에서 언급된 수치는? (연준 목표치: 2%)',
+    options: ['2.1%', '2.8%', '3.8%', '4.5%'],
+    answer: 2,
+    explanation: '"PCE 물가지수가 3.8%가 나왔다. 연준 기준치는 2%인데 3.8%이면 거의 2배 이상 오른 것"이라고 언급했다. 3년 내 최고치라고도 했다.'
+  },
+  {
+    id: 6,
+    type: 'ox',
+    difficulty: 'easy',
+    question: '방송에서 언급된 미국인의 평균 비상금(생활비 여유)은 약 2개월치이다.',
+    options: ['O', 'X'],
+    answer: 0,
+    explanation: '"지금 미국인들 비상금, 생활비가 2개월치밖에 안 남아있다"고 방송에서 명확히 언급했다. 이를 "두려움을 보여주는 상태"라고 표현했다.'
+  },
+  {
+    id: 7,
+    type: 'mcq',
+    difficulty: 'medium',
+    question: 'AI 인프라 슈퍼사이클의 "Layer 3"에 해당하는 것은?',
+    options: ['Core GPU / Silicon', 'AI Servers / Hardware', 'Data Storage / Management', 'Memory / Bandwidth'],
+    answer: 2,
+    explanation: '방송에서 제시된 레이어 구조는 Layer 1(Core GPU), Layer 2(AI Servers), Layer 3(Data Storage), Layer 4(Memory/Bandwidth)이다. NetApp의 +22.7% 급등이 Layer 3 대표 사례로 언급됐다.'
+  },
+  {
+    id: 8,
+    type: 'mcq',
+    difficulty: 'hard',
+    question: '방송에서 코스코(Costco)의 동일점포 매출 증가율로 언급된 수치는?',
+    options: ['6.8%', '9.3%', '11.6%', '14.2%'],
+    answer: 2,
+    explanation: '"코스코 보시면 매출이 한 점포에서 11.6%씩 늘어났다"고 언급했다. 유가 상승으로 주유소를 찾는 부유층이 매장 쇼핑으로 연결되는 효과 때문이라고 설명했다.'
+  },
+  {
+    id: 9,
+    type: 'ox',
+    difficulty: 'medium',
+    question: '방송에서 소파이(SoFi)가 출시한 스테이블코인 이름은 "SoFiUSD"이며, 미국 달러와 1대1로 연동된다고 언급됐다.',
+    options: ['O', 'X'],
+    answer: 0,
+    explanation: '"소파이 USD라는 스테이블코인을 냈습니다. 이건 미국 달러하고 1대1로 연동되는 은행 등급의 자체 스테이블코인"이라고 방송에서 언급했다. 이것이 SoFi 주가 +13% 상승의 주요 이유 중 하나였다.'
+  },
+  {
+    id: 10,
+    type: 'mcq',
+    difficulty: 'hard',
+    question: '방송에서 Enphase Energy의 5월 한 달 상승률로 언급된 수치는?',
+    options: ['27%', '55%', '110%', '210%'],
+    answer: 2,
+    explanation: '"인페이즈(Enphase)가 5월 한 달 동안 110% 폭등했다"고 명시됐다. 재생에너지 섹터는 유가 불안과 세액공제 수혜, 그리고 트럼프 레임덕 기대감으로 강세를 보였다.'
+  }
+];
+
+let state = { solved: 0, correct: 0, answers: {} };
+
+function getDiffBadge(d) {
+  if (d === 'easy') return '<span class="badge badge-easy">쉬움</span>';
+  if (d === 'medium') return '<span class="badge badge-medium">보통</span>';
+  return '<span class="badge badge-hard">어려움</span>';
+}
+function getTypeBadge(t) {
+  const map = { mcq: '객관식', ox: 'OX', short: '단답형' };
+  return `<span class="badge badge-type">${map[t]||t}</span>`;
+}
+
+function renderQuiz() {
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+  QUIZ_DATA.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'card-' + q.id;
+
+    let optionsHTML = '';
+    if (q.type === 'mcq') {
+      optionsHTML = `<div class="options">${q.options.map((o, i) =>
+        `<button class="opt-btn" id="opt-${q.id}-${i}" onclick="submitMCQ(${q.id}, ${i})">${o}</button>`
+      ).join('')}</div>`;
+    } else if (q.type === 'ox') {
+      optionsHTML = `<div class="ox-row">
+        <button class="ox-btn" id="opt-${q.id}-0" onclick="submitMCQ(${q.id}, 0)">O</button>
+        <button class="ox-btn" id="opt-${q.id}-1" onclick="submitMCQ(${q.id}, 1)">X</button>
+      </div>`;
+    } else {
+      optionsHTML = `<div class="sa-row">
+        <input class="sa-input" id="sa-${q.id}" type="text" placeholder="답을 입력하세요...">
+        <button class="sa-btn" id="sabtn-${q.id}" onclick="submitShort(${q.id})">제출</button>
+      </div>`;
+    }
+
+    card.innerHTML = `
+      <div class="q-meta">
+        <span class="q-num">Q${q.id}</span>
+        ${getDiffBadge(q.difficulty)}
+        ${getTypeBadge(q.type)}
+      </div>
+      <div class="q-text">${q.question}</div>
+      ${optionsHTML}
+      <div class="explanation" id="exp-${q.id}">
+        <div class="ex-label">해설</div>
+        <p>${q.explanation}</p>
+        ${q.type === 'short' ? `<div class="answer-reveal">정답: ${q.answer}</div>` : ''}
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function submitMCQ(qid, selected) {
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  if (state.answers[qid] !== undefined) return;
+
+  state.answers[qid] = selected;
+  state.solved++;
+
+  const isCorrect = selected === q.answer;
+  if (isCorrect) state.correct++;
+
+  // disable all buttons
+  const optCount = (q.type === 'ox') ? 2 : q.options.length;
+  for (let i = 0; i < optCount; i++) {
+    const btn = document.getElementById(`opt-${qid}-${i}`);
+    if (!btn) continue;
+    btn.disabled = true;
+    if (i === q.answer) {
+      btn.classList.add('correct');
+      if (q.type !== 'ox') btn.innerHTML += ' <span class="badge-result badge-correct-r">✓ 정답!</span>';
+    } else if (i === selected && !isCorrect) {
+      btn.classList.add('wrong');
+      if (q.type !== 'ox') btn.innerHTML += ' <span class="badge-result badge-wrong-r">✗ 오답</span>';
+    }
+  }
+
+  // OX special label
+  if (q.type === 'ox') {
+    const selBtn = document.getElementById(`opt-${qid}-${selected}`);
+    selBtn.innerHTML += isCorrect ? ' ✓' : ' ✗';
+  }
+
+  document.getElementById('card-' + qid).classList.add('answered');
+  document.getElementById('exp-' + qid).classList.add('show');
+
+  updateScorebar();
+  if (state.solved === 10) setTimeout(showResult, 700);
+}
+
+function submitShort(qid) {
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  if (state.answers[qid] !== undefined) return;
+  const input = document.getElementById('sa-' + qid);
+  const val = input.value.trim();
+  if (!val) { input.focus(); return; }
+
+  state.answers[qid] = val;
+  state.solved++;
+
+  const isCorrect = Array.isArray(q.answer)
+    ? q.answer.some(a => val.includes(a))
+    : val.includes(q.answer);
+  if (isCorrect) state.correct++;
+
+  input.disabled = true;
+  document.getElementById('sabtn-' + qid).disabled = true;
+  input.style.borderColor = isCorrect ? 'var(--correct)' : 'var(--wrong)';
+
+  document.getElementById('card-' + qid).classList.add('answered');
+  document.getElementById('exp-' + qid).classList.add('show');
+
+  updateScorebar();
+  if (state.solved === 10) setTimeout(showResult, 700);
+}
+
+function updateScorebar() {
+  const rate = state.solved === 0 ? 0 : Math.round(state.correct / state.solved * 100);
+  document.getElementById('sbSolved').textContent = state.solved;
+  document.getElementById('sbCorrect').textContent = state.correct;
+  document.getElementById('sbRate').textContent = rate + '%';
+  const fill = document.getElementById('progressFill');
+  fill.style.width = (state.solved / 10 * 100) + '%';
+  if (rate >= 70) fill.style.background = '#22c55e';
+  else if (rate >= 40) fill.style.background = '#f97316';
+  else fill.style.background = '#e11d48';
+}
+
+function showResult() {
+  const score = state.correct;
+  const rate = Math.round(score / 10 * 100);
+  let grade, emoji, msg;
+  if (rate >= 90) { grade = 'A+'; emoji = '🏆'; msg = '완벽합니다! 방송 내용을 완전히 이해하셨네요. AI 인프라 슈퍼사이클의 흐름을 정확히 파악하고 계십니다.'; }
+  else if (rate >= 80) { grade = 'A'; emoji = '🎉'; msg = '훌륭합니다! 핵심 내용을 잘 이해하셨습니다. 놓친 부분을 복습해보세요.'; }
+  else if (rate >= 70) { grade = 'B'; emoji = '📈'; msg = '잘하셨습니다! 기본 개념은 잡혀 있습니다. 세부 수치들을 좀 더 체크해보세요.'; }
+  else if (rate >= 50) { grade = 'C'; emoji = '📚'; msg = '절반 이상 맞히셨네요. 3A Economy, AI 레이어 구조 부분을 다시 복습해보세요.'; }
+  else { grade = 'D'; emoji = '💪'; msg = '아직 갈 길이 남아있습니다! 분석 리포트를 다시 한번 꼼꼼히 읽어보신 후 재도전하세요.'; }
+
+  document.getElementById('resEmoji').textContent = emoji;
+  document.getElementById('resScore').textContent = score + ' / 10';
+  document.getElementById('resGrade').textContent = '등급 ' + grade;
+  document.getElementById('resMsg').textContent = msg;
+  document.getElementById('resultOverlay').classList.add('show');
+}
+
+function retryQuiz() {
+  state = { solved: 0, correct: 0, answers: {} };
+  document.getElementById('resultOverlay').classList.remove('show');
+  updateScorebar();
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+renderQuiz();
+</script>
+</body>
+</html>

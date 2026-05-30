@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>다우 51K — 위대한 양극화 시장 리포트</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --table-bg: #fafafa;
+    --table-header: #e11d48;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+  }
+
+  /* HEADER */
+  .masthead {
+    border-top: 4px solid var(--accent);
+    padding: 32px 0 16px;
+    margin-bottom: 8px;
+  }
+  .masthead .issue-line {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 16px;
+  }
+  .masthead h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 6vw, 42px);
+    font-weight: 900;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .masthead h1 em {
+    color: var(--accent);
+    font-style: normal;
+  }
+  .masthead .subtitle {
+    font-size: 14px;
+    color: var(--text2);
+    border-left: 3px solid var(--accent);
+    padding-left: 12px;
+    margin-bottom: 20px;
+  }
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0;
+  }
+  .divider-accent {
+    height: 2px;
+    background: var(--accent);
+    width: 60px;
+    margin: 20px 0;
+  }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 8px;
+    margin-top: 36px;
+  }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 4.5vw, 26px);
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 14px;
+    line-height: 1.3;
+  }
+  h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 20px 0 8px;
+  }
+  p {
+    font-size: 14.5px;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  /* LEAD BOX */
+  .lead-box {
+    background: var(--text);
+    color: #fff;
+    padding: 24px 20px;
+    margin: 24px 0;
+    border-radius: 2px;
+  }
+  .lead-box .lead-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 10px;
+  }
+  .lead-box p {
+    color: #eee;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  /* STAT CARDS */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 20px 0;
+  }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    padding: 14px 12px;
+    border-radius: 2px;
+    text-align: center;
+  }
+  .stat-card .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-card .label {
+    font-size: 11px;
+    color: var(--text2);
+    line-height: 1.3;
+  }
+
+  /* CALLOUT */
+  .callout {
+    border-left: 4px solid var(--accent);
+    background: #fff5f7;
+    padding: 16px 18px;
+    margin: 20px 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .callout p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  /* CHART */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin: 20px 0;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas { opacity: 1; }
+  .chart-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text2);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  /* TABLE */
+  .tbl-wrap { margin: 20px 0; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th {
+    background: var(--table-header);
+    color: #fff;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 700;
+  }
+  tbody td {
+    background: var(--table-bg);
+    border-bottom: 1px solid var(--border);
+    padding: 9px 12px;
+    color: var(--text);
+  }
+  tbody tr:nth-child(even) td { background: #f3f3f3; }
+  .up { color: #16a34a; font-weight: 700; }
+  .dn { color: var(--accent); font-weight: 700; }
+
+  /* LAYER DIAGRAM */
+  .layer-stack { margin: 20px 0; }
+  .layer-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 16px;
+    border: 1px solid var(--border);
+    margin-bottom: 6px;
+    border-radius: 3px;
+    background: var(--bg2);
+    transition: border-color 0.2s;
+  }
+  .layer-item:hover { border-color: var(--accent); }
+  .layer-num {
+    width: 28px;
+    height: 28px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .layer-name { font-weight: 700; font-size: 13px; color: var(--text); }
+  .layer-eg { font-size: 12px; color: var(--text2); }
+
+  /* 3A PILLARS */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 10px;
+    margin: 20px 0;
+  }
+  .pillar {
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--accent);
+    padding: 14px 12px;
+    border-radius: 2px;
+    background: var(--bg2);
+  }
+  .pillar .pillar-title {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .pillar p { font-size: 12px; color: var(--text2); margin: 0; }
+
+  /* SIMULATOR */
+  .sim-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px;
+    margin: 24px 0;
+  }
+  .sim-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  .sim-row {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .sim-field label {
+    display: block;
+    font-size: 12px;
+    color: var(--text2);
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+  .sim-field input[type=range] {
+    width: 100%;
+    accent-color: var(--accent);
+  }
+  .sim-field .val-display {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .sim-result {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 14px;
+    margin-top: 10px;
+  }
+  .sim-result .result-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .sim-result .result-row:last-child { border-bottom: none; }
+  .sim-result .result-label { color: var(--text2); }
+  .sim-result .result-val { font-weight: 700; color: var(--text); }
+  .result-val.pos { color: #16a34a; }
+  .result-val.neg { color: var(--accent); }
+  .btn-reset {
+    background: none;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: background 0.2s, color 0.2s;
+  }
+  .btn-reset:hover { background: var(--accent); color: #fff; }
+
+  /* RISK METER */
+  .risk-meter-wrap {
+    margin: 20px 0;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 18px;
+  }
+  .risk-meter-label {
+    font-size: 12px;
+    color: var(--text2);
+    margin-bottom: 8px;
+  }
+  .risk-track {
+    height: 10px;
+    background: linear-gradient(to right, #22c55e, #facc15, var(--accent));
+    border-radius: 5px;
+    position: relative;
+    margin-bottom: 10px;
+  }
+  .risk-thumb {
+    position: absolute;
+    top: -4px;
+    width: 18px;
+    height: 18px;
+    background: var(--text);
+    border: 2px solid #fff;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    transition: left 0.5s ease;
+  }
+  .risk-indicators {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--text2);
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 2px solid var(--border);
+    margin-top: 48px;
+    padding-top: 16px;
+    font-size: 11px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 420px) {
+    .stat-row { grid-template-columns: repeat(3,1fr); gap: 7px; }
+    .stat-card .num { font-size: 20px; }
+    .pillars { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead fade-in">
+  <div class="issue-line">2026년 05월 29일 · 시장 리포트</div>
+  <h1>다우 <em>51,000</em> 돌파의<br>이면: 위대한 양극화</h1>
+  <div class="subtitle">지수는 역사적 신고가, 그러나 리테일 트레이더 73%는 손실 — The Great Bifurcation</div>
+</div>
+
+<div class="divider fade-in"></div>
+
+<!-- KEY STATS -->
+<div class="section-label fade-in">핵심 지표</div>
+<div class="stat-row fade-in">
+  <div class="stat-card">
+    <div class="num">51,032</div>
+    <div class="label">다우존스<br>사상 최초 돌파</div>
+  </div>
+  <div class="stat-card">
+    <div class="num">9주</div>
+    <div class="label">S&P 500<br>연속 주간 상승</div>
+  </div>
+  <div class="stat-card">
+    <div class="num">+8%</div>
+    <div class="label">나스닥<br>5월 월간 급등</div>
+  </div>
+</div>
+
+<div class="lead-box fade-in">
+  <div class="lead-label">핵심 역설</div>
+  <p>3대 지수 모두 연일 신고가를 찍는 "초호황" 장세임에도, 미국 주식에 투자 중인 리테일 투자자의 <strong style="color:#f43f5e">73%</strong>가 손실(마이너스) 상태다. 지수와 체감 사이의 괴리가 역사적으로 드문 수준이다.</p>
+</div>
+
+<!-- SECTOR CHART -->
+<div class="section-label fade-in">섹터별 성과 — 극단적 쏠림</div>
+<div class="chart-container fade-in">
+  <div class="chart-title">S&P 500 섹터 5월 수익률 (11개 중 8개 하락)</div>
+  <canvas id="sectorChart" height="240"></canvas>
+</div>
+
+<p class="fade-in">S&P 500 11개 섹터 중 <strong>8개 섹터가 하락</strong>했다. 지수를 끌어올린 것은 <strong>IT(+19.79%)</strong>와 헬스케어(+2.40%) 단 2개 섹터뿐이다. 에너지(-3.6%), 유틸리티(-4.35%) 등 대부분 섹터는 약세다. 이른바 "매우 드문 나쁜 Breadth 시장"이다.</p>
+
+<div class="callout fade-in">
+  <p><strong>Breadth(브레드스)</strong>란 시장의 "폭"을 의미한다. 지수가 오르더라도 소수 종목에만 매수세가 집중되면 Breadth가 나쁜 시장이라 한다. 현재가 이 케이스다.</p>
+</div>
+
+<div class="divider fade-in"></div>
+
+<!-- 거시적 방아쇠 -->
+<div class="section-label fade-in">거시 트리거</div>
+<h2 class="fade-in">랠리를 이끈 4단계 도미노</h2>
+
+<div class="tbl-wrap fade-in">
+  <table>
+    <thead>
+      <tr><th>단계</th><th>내용</th><th>영향</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Step 1</strong><br>지정학 완화</td><td>미-이란 60일 휴전 MOU<br>(양측 공식 확인은 아직 없음)</td><td>에너지 비용 급락 기대</td></tr>
+      <tr><td><strong>Step 2</strong><br>에너지 비용 하락</td><td>WTI 17% 하락<br>브렌트유 배럴당 91.12달러</td><td>인플레이션 완화 기대</td></tr>
+      <tr><td><strong>Step 3</strong><br>금리 안정화</td><td>10년물 국채금리 4.44%<br>30년물도 동반 하락</td><td>위험자산 선호 강화</td></tr>
+      <tr><td><strong>Step 4</strong><br>Risk-On 자금 유입</td><td>CTA·알고리즘·패시브 자금<br>성장주·AI 테크로 집중 유입</td><td>지수 신고가 견인</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="callout fade-in">
+  <p>⚠️ 미-이란 휴전 MOU는 양측 모두 공식 확인하지 않은 상태다. 시장은 이를 기정사실로 받아들이고 움직이고 있어, 돌발 부인 시 에너지주·채권 급변동 위험이 있다.</p>
+</div>
+
+<div class="divider fade-in"></div>
+
+<!-- 3A ECONOMY -->
+<div class="section-label fade-in">구조 분석</div>
+<h2 class="fade-in">The 3A Economy — 좁은 3개의 기둥</h2>
+<p class="fade-in">글로벌 회계 법인 EY Parthenon 수석 이코노미스트 Gregory Daco의 진단: 지금 미국 경제와 주식시장을 지탱하는 근거는 단 3가지다.</p>
+
+<div class="pillars fade-in">
+  <div class="pillar">
+    <div class="pillar-title">A¹ Affluent</div>
+    <p>부유층 소비. 주식·자산 시장 호황으로 고소득층 지출이 성장을 견인.</p>
+  </div>
+  <div class="pillar">
+    <div class="pillar-title">A² AI Investment</div>
+    <p>빅테크부터 중소기업까지 AI CAPEX(자본지출) 폭발적 증가.</p>
+  </div>
+  <div class="pillar">
+    <div class="pillar-title">A³ Asset Appreciation</div>
+    <p>자산 가치 상승. 주식 포트폴리오 상승이 소비 여력을 재차 확대.</p>
+  </div>
+</div>
+
+<div class="callout fade-in">
+  <p><strong>EY 경고:</strong> "이 극단적으로 좁은 기반이 흔들리면, 이미 한계에 다다른 하위 계층의 붕괴가 즉각적으로 전체 경제 침체로 이어질 수 있는 매우 취약한 구조다."</p>
+</div>
+
+<!-- 리스크 시각화 -->
+<div class="risk-meter-wrap fade-in">
+  <div class="risk-meter-label">현재 시장 취약성 수준 (EY 진단 기준)</div>
+  <div class="risk-track">
+    <div class="risk-thumb" id="riskThumb" style="left: 72%"></div>
+  </div>
+  <div class="risk-indicators">
+    <span>낮음</span><span>보통</span><span>높음</span><span>매우 높음</span>
+  </div>
+</div>
+
+<div class="divider fade-in"></div>
+
+<!-- PCE vs 저축률 -->
+<div class="section-label fade-in">소비자 체력</div>
+<h2 class="fade-in">붕괴하는 중산층 — 숫자로 보는 실태</h2>
+
+<div class="stat-row fade-in">
+  <div class="stat-card">
+    <div class="num">3.8%</div>
+    <div class="label">4월 PCE<br>물가지수 (3년 최고)</div>
+  </div>
+  <div class="stat-card">
+    <div class="num">2.6%</div>
+    <div class="label">가계 저축률<br>(4년 최저)</div>
+  </div>
+  <div class="stat-card">
+    <div class="num">2개월</div>
+    <div class="label">미국인 평균<br>비상금 여유</div>
+  </div>
+</div>
+
+<p class="fade-in">연준의 PCE 물가 목표치는 2%다. 현재 3.8%는 이 목표의 거의 2배다. 동시에 가계 저축률은 4년 최저 수준(2.6%)으로 떨어졌다. 중산층과 저소득층은 소비 여력이 빠르게 고갈되고 있다.</p>
+
+<div class="chart-container fade-in">
+  <div class="chart-title">리테일 산업 내 양극화: 승자 vs 패자</div>
+  <canvas id="retailChart" height="220"></canvas>
+</div>
+
+<div class="tbl-wrap fade-in">
+  <table>
+    <thead>
+      <tr><th>구분</th><th>기업</th><th>실적</th><th>이유</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="up">✓ 강세</td><td>코스코 (COST)</td><td class="up">매출 +11.6%</td><td>유가 상승→주유소 유입→구매 연결</td></tr>
+      <tr><td class="up">✓ 강세</td><td>메리엇 (MAR)</td><td class="up">EPS +17%</td><td>부유층 럭셔리 여행 수요 견조</td></tr>
+      <tr><td class="dn">✗ 약세</td><td>GAP</td><td class="dn">주가 -15.4%</td><td>가이던스 하향(1~2%), 의류 소비 위축</td></tr>
+      <tr><td class="dn">✗ 약세</td><td>American Eagle</td><td class="dn">주가 -11.8%</td><td>동일매장 매출 -2%, 청소년 소비 둔화</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="divider fade-in"></div>
+
+<!-- AI 인프라 레이어 -->
+<div class="section-label fade-in">투자 기회</div>
+<h2 class="fade-in">AI 인프라 슈퍼사이클: GPU를 넘어선 4개 레이어</h2>
+
+<p class="fade-in">AI 투자 확산은 GPU(그래픽처리장치) 단계를 넘어 인프라 전체로 파급되고 있다. 다음 4개 레이어가 현재 순차적으로 폭발 중이다.</p>
+
+<div class="layer-stack fade-in">
+  <div class="layer-item">
+    <div class="layer-num">1</div>
+    <div>
+      <div class="layer-name">Core GPU / Silicon</div>
+      <div class="layer-eg">엔비디아, ARM Holdings(YTD +210%), Marvell Technology</div>
+    </div>
+  </div>
+  <div class="layer-item">
+    <div class="layer-num">2</div>
+    <div>
+      <div class="layer-name">AI Servers / Hardware</div>
+      <div class="layer-eg">Dell Technologies(1분기 AI 서버 수주 161억 달러), Super Micro</div>
+    </div>
+  </div>
+  <div class="layer-item">
+    <div class="layer-num">3</div>
+    <div>
+      <div class="layer-name">Data Storage / Management</div>
+      <div class="layer-eg">NetApp(+22.7%), Snowflake(+36%), AI 데이터센터 스토리지</div>
+    </div>
+  </div>
+  <div class="layer-item">
+    <div class="layer-num">4</div>
+    <div>
+      <div class="layer-name">Memory / Bandwidth</div>
+      <div class="layer-eg">Micron Technology, HBM·DRAM 수급 불균형 심화</div>
+    </div>
+  </div>
+</div>
+
+<!-- 소프트웨어 전환 -->
+<div class="section-label fade-in">핵심 테마</div>
+<h2 class="fade-in">소프트웨어의 귀환 — "Data-Layered SaaS"</h2>
+
+<p class="fade-in">기존 구독형(Seat-based) SaaS는 성장 한계에 직면했다. 살아남는 소프트웨어 기업은 <strong>자사 데이터를 AI 에이전트와 결합한 사용량 기반(Usage-based) 수익 모델</strong>로 전환하고 있다.</p>
+
+<div class="tbl-wrap fade-in">
+  <table>
+    <thead>
+      <tr><th>기업</th><th>주가 반응</th><th>전환 내용</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Snowflake (SNOW)</td><td class="up">+36%</td><td>AWS와 60억 달러 클라우드 파트너십, 기업 데이터 허브 역할 재확인</td></tr>
+      <tr><td>Okta (OKTA)</td><td class="up">+30.1%</td><td>AI 에이전트 보안(Identity) 수요 폭발, 가이던스 상향</td></tr>
+      <tr><td>Salesforce (CRM)</td><td class="up">+8.5%</td><td>Agentforce 플랫폼 ARR 12억 달러 돌파</td></tr>
+      <tr><td>IBM</td><td>—</td><td>10년 만의 최고 1분기 실적, 양자컴퓨팅 100억 달러 투자 발표</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="callout fade-in">
+  <p>IBM의 양자컴퓨팅 투자는 3년 이상 실적 기여가 어렵다. "지금 당장 AI로 돈 버는가"가 종목 선별의 핵심 기준이다.</p>
+</div>
+
+<div class="divider fade-in"></div>
+
+<!-- 섹터 리스크 -->
+<div class="section-label fade-in">섹터별 이벤트 리스크</div>
+<h2 class="fade-in">고유 리스크 — 단일 이벤트에 취약한 섹터</h2>
+
+<div class="tbl-wrap fade-in">
+  <table>
+    <thead>
+      <tr><th>섹터</th><th>이슈</th><th>결과</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>우주·항공</td><td>Blue Origin 로켓 연소 폭발 사고</td><td>ASTS -14.8%, 우주 섹터 전반 하락</td></tr>
+      <tr><td>헬스케어</td><td>바이오테크 Replimune, FDA 재제출 합의</td><td>Replimune +85.9%</td></tr>
+      <tr><td>재생에너지</td><td>유가 불안→재생에너지 재평가, 세액공제 수혜</td><td>Enphase 5월 +110%, TAN ETF +26.5%</td></tr>
+      <tr><td>핀테크 vs 전통은행</td><td>SoFi USD 스테이블코인 출시 vs JP모건 규제 촉구</td><td>SOFI +13%, JPM -2.4%</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p class="fade-in">재생에너지는 트럼프 정권 레임덕이 본격화될 경우 추가 상승 여력이 있다. 정책 민감도가 높은 만큼 정치 일정 모니터링이 필수다.</p>
+
+<div class="divider fade-in"></div>
+
+<!-- 투자 전략 시뮬레이터 -->
+<div class="section-label fade-in">투자 전략</div>
+<h2 class="fade-in">Q3 포트폴리오 시뮬레이터</h2>
+
+<div class="sim-box fade-in">
+  <div class="sim-title">💼 섹터 비중 조절 — 예상 포트폴리오 방향</div>
+  <div class="sim-row">
+    <div class="sim-field">
+      <label>AI 인프라 하드웨어 비중: <span class="val-display" id="hwVal">40</span>%</label>
+      <input type="range" id="hwSlider" min="0" max="70" value="40" oninput="updateSim()">
+    </div>
+    <div class="sim-field">
+      <label>AI 소프트웨어(Data SaaS) 비중: <span class="val-display" id="swVal">25</span>%</label>
+      <input type="range" id="swSlider" min="0" max="50" value="25" oninput="updateSim()">
+    </div>
+    <div class="sim-field">
+      <label>방어적 소비재(Affluent 타겟) 비중: <span class="val-display" id="defVal">20</span>%</label>
+      <input type="range" id="defSlider" min="0" max="40" value="20" oninput="updateSim()">
+    </div>
+    <div class="sim-field">
+      <label>재생에너지 비중: <span class="val-display" id="reVal">10</span>%</label>
+      <input type="range" id="reSlider" min="0" max="30" value="10" oninput="updateSim()">
+    </div>
+  </div>
+  <div class="sim-result">
+    <div class="result-row"><span class="result-label">현금·기타</span><span class="result-val" id="cashVal">5%</span></div>
+    <div class="result-row"><span class="result-label">AI 노출도</span><span class="result-val pos" id="aiExp">65%</span></div>
+    <div class="result-row"><span class="result-label">방어성</span><span class="result-val" id="defScore">중간</span></div>
+    <div class="result-row"><span class="result-label">전략 진단</span><span class="result-val" id="diagnosis">균형 공격형</span></div>
+  </div>
+  <button class="btn-reset" onclick="resetSim()">↺ 초기화</button>
+</div>
+
+<div class="divider fade-in"></div>
+
+<!-- 종합 진단 -->
+<div class="section-label fade-in">종합 진단</div>
+<h2 class="fade-in">착시를 걷어내면: 겉은 대리석, 속은 공허</h2>
+
+<div class="chart-container fade-in">
+  <div class="chart-title">수면 위 vs 수면 아래 — 지수 강세와 내부 리스크</div>
+  <canvas id="icebergChart" height="230"></canvas>
+</div>
+
+<p class="fade-in"><strong>수면 위(착시):</strong> 다우 51,032 신고가, 나스닥 월간 +8%, S&P 9주 연속 상승. <strong>수면 아래(현실):</strong> S&P 11개 섹터 중 8개 하락, PCE 물가 3.8%(3년 최고), 가계 저축률 2.6%(4년 최저), 의류·소비재 기업 가이던스 심각하게 하향.</p>
+
+<div class="callout fade-in">
+  <p>캐나다는 GDP 역성장(-0.1%, 예상치 +1.5%)으로 기술적 리세션에 진입했다. 미국과 경제 동조화가 높은 캐나다의 금리·소비 움직임은 미국 경제의 선행 지표 역할을 한다.</p>
+</div>
+
+<!-- 투자 전략 요약 -->
+<div class="section-label fade-in">실행 전략</div>
+<h2 class="fade-in">Q3 투자 플레이북 — 3가지 행동 지침</h2>
+
+<div class="tbl-wrap fade-in">
+  <table>
+    <thead>
+      <tr><th>구분</th><th>방향</th><th>핵심 종목·자산</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong style="color:#16a34a">Step 1<br>매수/확대</strong></td>
+        <td>AI 2차 수혜 인프라 발굴</td>
+        <td>전력, 스토리지(NetApp), 액체냉각(SMCI), 네트워킹(Broadcom), 메모리(Micron)</td>
+      </tr>
+      <tr>
+        <td><strong style="color:#d97706">Step 2<br>선별/관망</strong></td>
+        <td>가격 결정력 갖춘 방어적 소비재</td>
+        <td>코스코, 메리엇 등 부유층 지출 노출 기업. 중저가 의류·리테일 비중 축소.</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--accent)">Step 3<br>경계/관리</strong></td>
+        <td>금리 민감도·밸류에이션 리스크</td>
+        <td>RSI 90+ 과매수 종목 트림, 캐시 확보. 10년물 금리(4.44%)와 PCE 지속 모니터링.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="lead-box fade-in">
+  <div class="lead-label">핵심 요약</div>
+  <p>지수 신고가에 현혹되지 말 것. 포트폴리오가 <strong>AI 인프라 · 데이터 SaaS · 부유층 소비재</strong>에 집중되어 있는지 확인하라. RSI 과매수 구간 종목은 일부 차익실현(트림)하고 현금 비중을 확보해 3분기 변동성에 대비할 것.</p>
+</div>
+
+<footer class="fade-in">
+  <p>본 리포트는 DJ노바 방송(2026.05.29) 자막을 기반으로 정리한 <strong>정보 요약 자료</strong>입니다. 투자 조언이 아니며, 모든 투자 결정과 그 결과는 본인에게 귀속됩니다. 주식 거래는 원금 손실 위험이 있습니다.</p>
+</footer>
+
+<script>
+// --- FADE IN OBSERVER ---
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// --- CHART CONFIGS ---
+const chartConfigs = {};
+
+chartConfigs['sectorChart'] = () => {
+  new Chart(document.getElementById('sectorChart'), {
+    type: 'bar',
+    data: {
+      labels: ['IT', '헬스케어', '금융', '산업재', '필수소비재', '부동산', '소재', '통신', '임의소비재', '에너지', '유틸리티'],
+      datasets: [{
+        label: '5월 수익률(%)',
+        data: [19.79, 2.40, -0.5, -1.2, -1.8, -2.1, -2.4, -2.8, -3.1, -3.6, -4.35],
+        backgroundColor: [19.79, 2.40, -0.5, -1.2, -1.8, -2.1, -2.4, -2.8, -3.1, -3.6, -4.35].map(v => v > 0 ? '#e11d48' : '#6b7280'),
+        borderRadius: 3,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ctx.raw + '%' } }
+      },
+      scales: {
+        x: { ticks: { font: { size: 10 }, color: '#777' } },
+        y: { ticks: { callback: v => v + '%', font: { size: 10 }, color: '#777' }, grid: { color: '#e5e5e5' } }
+      }
+    }
+  });
+};
+
+chartConfigs['retailChart'] = () => {
+  new Chart(document.getElementById('retailChart'), {
+    type: 'bar',
+    data: {
+      labels: ['코스코\n매출', '메리엇\nEPS', 'GAP\n주가', 'AEO\n주가'],
+      datasets: [{
+        label: '변동률(%)',
+        data: [11.6, 17, -15.4, -11.8],
+        backgroundColor: ['#e11d48','#e11d48','#6b7280','#6b7280'],
+        borderRadius: 3,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.raw + '%' } } },
+      scales: {
+        x: { ticks: { font: { size: 11 }, color: '#777' } },
+        y: { ticks: { callback: v => v + '%', font: { size: 10 }, color: '#777' }, grid: { color: '#e5e5e5' } }
+      }
+    }
+  });
+};
+
+chartConfigs['icebergChart'] = () => {
+  new Chart(document.getElementById('icebergChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['IT 섹터(지수 견인)', '기타 10개 섹터(대부분 약세)'],
+      datasets: [{
+        data: [27, 73],
+        backgroundColor: ['#e11d48', '#1a1a1a'],
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11 }, color: '#1a1a1a', padding: 14 } },
+        tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.raw + '%' } }
+      }
+    }
+  });
+};
+
+// --- CHART OBSERVER ---
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+// --- SIMULATOR ---
+function updateSim() {
+  const hw = +document.getElementById('hwSlider').value;
+  const sw = +document.getElementById('swSlider').value;
+  const def = +document.getElementById('defSlider').value;
+  const re = +document.getElementById('reSlider').value;
+
+  document.getElementById('hwVal').textContent = hw;
+  document.getElementById('swVal').textContent = sw;
+  document.getElementById('defVal').textContent = def;
+  document.getElementById('reVal').textContent = re;
+
+  const total = hw + sw + def + re;
+  const cash = Math.max(0, 100 - total);
+  const aiExp = hw + sw;
+
+  document.getElementById('cashVal').textContent = cash + '%';
+  document.getElementById('aiExp').textContent = aiExp + '%';
+  document.getElementById('aiExp').className = 'result-val ' + (aiExp >= 50 ? 'pos' : '');
+
+  let defScore = '낮음';
+  if (def >= 20) defScore = '높음';
+  else if (def >= 10) defScore = '중간';
+  document.getElementById('defScore').textContent = defScore;
+
+  let diag = '';
+  if (aiExp >= 70) diag = '🚀 공격적 AI 집중형';
+  else if (aiExp >= 50) diag = '📈 균형 공격형';
+  else if (def >= 25) diag = '🛡️ 방어 우선형';
+  else if (cash >= 20) diag = '💰 현금 보유 대기형';
+  else diag = '⚖️ 분산형';
+  document.getElementById('diagnosis').textContent = diag;
+}
+
+function resetSim() {
+  document.getElementById('hwSlider').value = 40;
+  document.getElementById('swSlider').value = 25;
+  document.getElementById('defSlider').value = 20;
+  document.getElementById('reSlider').value = 10;
+  updateSim();
+}
+
+updateSim();
+</script>
+</body>
+</html>
