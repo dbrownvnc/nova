@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시험문제 | RTX Spark가 점찍어 준 주식 종목들</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;--bg2:#fafafa;--text:#1a1a1a;--text2:#777777;
+    --accent:#e11d48;--accent2:#f43f5e;--border:#e5e5e5;
+    --green:#16a34a;--green-bg:#e9f8ee;--red-bg:#fdecef;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;
+    line-height:1.7;font-size:16px;-webkit-font-smoothing:antialiased;padding-bottom:60px;}
+  .wrap{max-width:680px;margin:0 auto;padding:0 18px;}
+
+  /* header */
+  .head{background:#0d0d0f;color:#fff;padding:50px 18px 40px;text-align:center;position:relative;overflow:hidden;}
+  .head::before{content:"";position:absolute;inset:0;
+    background:radial-gradient(circle at 50% 0%,rgba(225,29,72,.3),transparent 60%);}
+  .head-in{position:relative;z-index:2;max-width:680px;margin:0 auto;}
+  .head .kick{font-size:11px;letter-spacing:.3em;color:var(--accent2);font-weight:700;margin-bottom:14px;text-transform:uppercase;}
+  .head h1{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(24px,6vw,34px);line-height:1.2;color:#fff;}
+  .head p{font-size:13.5px;color:#aaa;margin-top:14px;font-weight:300;}
+
+  /* sticky scoreboard */
+  .score{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border);
+    box-shadow:0 2px 12px rgba(0,0,0,.05);padding:12px 18px;}
+  .score-in{max-width:680px;margin:0 auto;}
+  .score-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600;}
+  .score-row .item b{font-family:'Playfair Display',serif;font-size:18px;color:var(--accent);font-weight:800;}
+  .score-row .item span{color:var(--text2);font-weight:500;}
+  .pbar{height:6px;background:#eee;border-radius:6px;margin-top:9px;overflow:hidden;}
+  .pbar-fill{height:100%;width:0;border-radius:6px;background:var(--accent);transition:width .4s ease,background .4s ease;}
+
+  /* question card */
+  .q{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px 20px;margin:22px 0;}
+  .q-top{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+  .q-no{font-family:'Playfair Display',serif;font-weight:800;font-size:15px;color:var(--accent);}
+  .badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.02em;}
+  .b-type{background:#1a1a1a;color:#fff;}
+  .b-easy{background:#e9f8ee;color:var(--green);}
+  .b-mid{background:#fff4e5;color:#d97706;}
+  .b-hard{background:#fdecef;color:var(--accent);}
+  .q-text{font-size:16.5px;font-weight:500;margin-bottom:18px;line-height:1.6;}
+
+  .opts{display:flex;flex-direction:column;gap:9px;}
+  .opt{background:#fff;border:1.5px solid var(--border);border-radius:11px;padding:13px 15px;
+    font-size:14.5px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:10px;text-align:left;
+    font-family:inherit;color:var(--text);line-height:1.5;}
+  .opt:hover:not(:disabled){border-color:var(--accent);background:#fff5f7;}
+  .opt:disabled{cursor:default;}
+  .opt .mk{flex-shrink:0;width:24px;height:24px;border-radius:50%;border:1.5px solid #ccc;
+    display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#888;}
+  .opt.correct{background:var(--green-bg);border-color:var(--green);}
+  .opt.correct .mk{background:var(--green);border-color:var(--green);color:#fff;}
+  .opt.wrong{background:var(--red-bg);border-color:var(--accent);}
+  .opt.wrong .mk{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .opt .res{margin-left:auto;font-size:12px;font-weight:700;padding:2px 8px;border-radius:6px;}
+  .opt.correct .res{background:var(--green);color:#fff;}
+  .opt.wrong .res{background:var(--accent);color:#fff;}
+
+  /* OX */
+  .ox{display:flex;gap:12px;}
+  .ox .opt{flex:1;justify-content:center;font-size:20px;font-weight:800;padding:18px;}
+  .ox .opt .mk{display:none;}
+
+  /* short answer */
+  .sa{display:flex;gap:8px;flex-wrap:wrap;}
+  .sa input{flex:1;min-width:160px;padding:13px 15px;border:1.5px solid var(--border);border-radius:11px;
+    font-size:15px;font-family:inherit;outline:none;}
+  .sa input:focus{border-color:var(--accent);}
+  .sa input:disabled{background:#f3f3f3;}
+  .sa button{background:var(--accent);color:#fff;border:none;border-radius:11px;padding:13px 22px;
+    font-size:14.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s;}
+  .sa button:hover:not(:disabled){background:#c01540;}
+  .sa button:disabled{background:#ccc;cursor:default;}
+  .sa-hint{font-size:12px;color:var(--text2);margin-top:8px;}
+
+  /* explanation */
+  .exp{max-height:0;overflow:hidden;transition:max-height .4s ease,margin .4s ease,padding .4s ease;
+    background:#0d0d0f;color:#e8e8e8;border-radius:12px;padding:0 18px;margin-top:0;}
+  .exp.show{max-height:600px;padding:18px;margin-top:16px;}
+  .exp .et{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--accent2);margin-bottom:8px;display:flex;align-items:center;gap:7px;}
+  .exp .ans{font-weight:700;color:#fff;margin-bottom:6px;font-size:14px;}
+  .exp p{font-size:13.5px;line-height:1.65;color:#cfcfcf;}
+  .exp .src{font-size:12px;color:#888;margin-top:10px;border-top:1px solid #2a2a2a;padding-top:10px;font-style:italic;}
+
+  /* final modal */
+  .modal{position:fixed;inset:0;background:rgba(13,13,15,.92);z-index:100;display:none;
+    align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);}
+  .modal.show{display:flex;}
+  .modal-card{background:#fff;border-radius:20px;padding:38px 28px;max-width:380px;width:100%;text-align:center;
+    animation:pop .4s cubic-bezier(.18,.89,.32,1.28);}
+  @keyframes pop{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+  .modal-card .grade{font-family:'Playfair Display',serif;font-size:72px;font-weight:900;line-height:1;color:var(--accent);}
+  .modal-card .sc{font-size:18px;font-weight:700;margin-top:12px;}
+  .modal-card .sc span{color:var(--accent);}
+  .modal-card .msg{font-size:14px;color:var(--text2);margin:16px 0 24px;line-height:1.6;}
+  .modal-card button{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:14px 28px;
+    font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;width:100%;transition:background .2s;}
+  .modal-card button:hover{background:#c01540;}
+
+  .end-note{text-align:center;color:var(--text2);font-size:13px;padding:30px 0 10px;}
+
+  @media(max-width:420px){.q{padding:20px 16px;}.head{padding:40px 18px 32px;}}
+</style>
+</head>
+<body>
+
+<header class="head">
+  <div class="head-in">
+    <div class="kick">Interactive Quiz · 10 Questions</div>
+    <h1>RTX Spark가 점찍어 준<br>주식 종목들</h1>
+    <p>2026년 6월 시장 대전환 — 방송 내용 이해도 점검 퀴즈</p>
+  </div>
+</header>
+
+<div class="score">
+  <div class="score-in">
+    <div class="score-row">
+      <div class="item">푼 문제 <b id="sSolved">0</b> <span>/ 10</span></div>
+      <div class="item">맞힌 문제 <b id="sCorrect">0</b></div>
+      <div class="item">정답률 <b id="sRate">0</b><span>%</span></div>
+    </div>
+    <div class="pbar"><div class="pbar-fill" id="pbar"></div></div>
+  </div>
+</div>
+
+<div class="wrap" id="quizArea"></div>
+
+<div class="end-note">모든 문제를 풀면 최종 결과가 표시됩니다 ✦</div>
+
+<!-- final modal -->
+<div class="modal" id="modal">
+  <div class="modal-card">
+    <div class="grade" id="mGrade">A</div>
+    <div class="sc"><span id="mScore">0</span> / 10 정답</div>
+    <div class="msg" id="mMsg"></div>
+    <button onclick="resetQuiz()">다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id:1,type:'mc',difficulty:'easy',
+    question:'젠슨 황 CEO가 대만 컴퓨텍스 2026 GTC 기조연설에서 RTX Spark를 두고 사용한 표현은?',
+    options:['10년 만의 GPU 혁신','40년 만의 PC 재발명','100년 만의 컴퓨팅 진화','데이터센터의 종말'],
+    answer:1,
+    explanation:'젠슨 황은 기조연설에서 "40년 만의 PC의 재발명"이라고 표현했습니다. 노바는 시청자에게 채팅창에 "40"을 쓰라고 강조했습니다.'
+  },
+  {
+    id:2,type:'mc',difficulty:'easy',
+    question:'시총 1위 엔비디아(NVDA)가 이날 하루 동안 기록한 등락률은?',
+    options:['+2.28%','+4.46%','+6.26%','+15.73%'],
+    answer:2,
+    explanation:'엔비디아는 단 하루 동안 6.26% 폭등했습니다. 다만 직전 최고가(236.54)는 아직 회복하지 못한 상태였습니다. (+15.73%는 ARM의 상승률입니다.)'
+  },
+  {
+    id:3,type:'ox',difficulty:'easy',
+    question:'유가 폭등과 국채 금리 급등 등 악재 속에서도, 이날 S&P 500은 7,600선을 돌파하며 사상 최고치를 기록했다.',
+    answer:'O',
+    explanation:'맞습니다. 지정학·인플레이션 공포에도 불구하고 S&P 500은 7,600.25로 사상 최초로 7,600선을 돌파했습니다. 노바는 이를 실물경제와 증시의 "디커플링"으로 설명했습니다.'
+  },
+  {
+    id:4,type:'mc',difficulty:'mid',
+    question:'AI PC(RTX Spark) 발표 당일, 반도체 섹터 내에서 가장 큰 낙폭을 기록한 종목은?',
+    options:['Intel (-6.5%)','AMD (-4.0%)','Qualcomm (-8.8%)','Micron'],
+    answer:2,
+    explanation:'퀄컴(QCOM)이 -8.8%로 섹터 내 최대 낙폭을 기록했습니다. ARM 기반 Windows PC 시장의 독점적 지위 상실 우려가 직접적 타격으로 작용했습니다.'
+  },
+  {
+    id:5,type:'mc',difficulty:'mid',
+    question:'신제품 RTX Spark가 기존 DGX(GTX) Spark와 구별되는 가장 핵심적인 차이점은?',
+    options:['메모리 용량이 256GB로 2배','Windows OS 기반으로 일반 사용자 활용','가격이 절반 수준','인텔 CPU 탑재'],
+    answer:1,
+    explanation:'기존 DGX Spark는 NVIDIA OS(유닉스 계열)로 전문가용이었지만, RTX Spark는 Windows OS 기반이라 일반 사용자가 로컬 AI 에이전트와 윈도우 소프트웨어를 모두 쓸 수 있습니다. 메모리는 둘 다 128GB로 동일합니다.'
+  },
+  {
+    id:6,type:'sa',difficulty:'mid',
+    question:'HPE(휴렛팩커드 엔터프라이즈)는 원래 2028년에 달성하리라 봤던 재무 목표를 2026년에 조기 달성했습니다. 즉 목표를 몇 년 앞당긴 것입니까? (숫자로)',
+    answer:['2','2년','이년'],
+    explanation:'HPE는 2028년 목표를 2026년에 달성하며 2년을 앞당겼습니다. 이 충격적인 조기 달성에 시간외 약 32% 폭등했습니다.'
+  },
+  {
+    id:7,type:'mc',difficulty:'hard',
+    question:'HPE 실적에서 시장을 놀라게 한 두 가지 수치는?',
+    options:['네트워킹 매출 +48%, 서버 +88%','네트워킹 매출 +148%, 데이터센터 네트워킹 +233%','전체 매출 +233%, 마진 +148%','네트워킹 +233%, 스토리지 +148%'],
+    answer:1,
+    explanation:'HPE는 네트워킹 매출이 148% 증가했고, 그중 데이터센터 네트워킹은 233%나 급증했다고 밝혔습니다. 빅테크의 AI CapEx가 칩을 넘어 네트워크 스위치 등 물리 인프라로 전환되고 있다는 증거입니다.'
+  },
+  {
+    id:8,type:'sa',difficulty:'mid',
+    question:'클로드(Claude) 개발사 앤트로픽이 SEC에 제출한 비밀 IPO 신청서상 가치평가액은 약 몇 빌리언 달러입니까? (숫자만)',
+    answer:['965','965b','965빌리언','9650억'],
+    explanation:'앤트로픽의 가치평가액은 965빌리언($965B) 달러입니다. 노바는 IPO 시 1조~1.5조 달러까지 가능하다고 전망했으며, 이 소식에 초기 투자사 Zoom(+12%)과 Salesforce가 함께 급등했습니다.'
+  },
+  {
+    id:9,type:'ox',difficulty:'hard',
+    question:'크레도(Credo Technology)는 Q4 매출 157% 증가라는 호실적에도 불구하고, 향후 마진 축소 가이던스 실망감으로 시간외 12% 폭락했다.',
+    answer:'O',
+    explanation:'맞습니다. 크레도는 매출 157% 증가의 폭발적 호실적에도 가이던스 실망으로 시간외 12% 폭락했습니다. 노바는 이를 "승자독식·무결점 실적" 요구가 극대화된 가혹한 옥석 가리기 장세의 증거로 들었습니다.'
+  },
+  {
+    id:10,type:'mc',difficulty:'mid',
+    question:'노바가 새로 만든, AI 시대에 부흥할 소프트웨어를 지칭하는 용어는?',
+    options:['클라우드 네이티브 소프트웨어','데이터 레이어드 소프트웨어','에이전틱 미들웨어','엣지 컴퓨팅 스택'],
+    answer:1,
+    explanation:'노바는 "데이터 레이어드 소프트웨어(Data Layered Software)"라는 용어를 만들었습니다. AI는 양질의 데이터 없이는 작동할 수 없으므로(엔진에 연료가 필요하듯), 양질의 데이터를 제공하는 기업만 살아남는다는 논리입니다. Snowflake, ServiceNow, IBM 등이 수혜주로 언급됐습니다.'
+  }
+];
+
+let state={solved:0,correct:0};
+const answered=new Array(QUIZ_DATA.length).fill(false);
+const quizArea=document.getElementById('quizArea');
+
+const diffMap={easy:['쉬움','b-easy'],mid:['보통','b-mid'],hard:['어려움','b-hard']};
+const typeMap={mc:'객관식',sa:'단답형',ox:'OX'};
+
+function render(){
+  quizArea.innerHTML='';
+  QUIZ_DATA.forEach((q,idx)=>{
+    const card=document.createElement('div');
+    card.className='q';
+    const [dLabel,dClass]=diffMap[q.difficulty];
+    let inner=`<div class="q-top">
+      <span class="q-no">Q${q.id}</span>
+      <span class="badge b-type">${typeMap[q.type]}</span>
+      <span class="badge ${dClass}">${dLabel}</span>
+    </div>
+    <div class="q-text">${q.question}</div>`;
+
+    if(q.type==='mc'){
+      inner+='<div class="opts">';
+      q.options.forEach((o,i)=>{
+        const letter=String.fromCharCode(65+i);
+        inner+=`<button class="opt" data-q="${idx}" data-i="${i}">
+          <span class="mk">${letter}</span><span>${o}</span></button>`;
+      });
+      inner+='</div>';
+    } else if(q.type==='ox'){
+      inner+=`<div class="ox">
+        <button class="opt" data-q="${idx}" data-ox="O">O</button>
+        <button class="opt" data-q="${idx}" data-ox="X">X</button>
+      </div>`;
+    } else if(q.type==='sa'){
+      inner+=`<div class="sa">
+        <input type="text" id="sa-${idx}" placeholder="정답을 입력하세요" autocomplete="off">
+        <button data-sa="${idx}">제출</button>
+      </div><div class="sa-hint">예: 숫자나 핵심 단어를 입력</div>`;
+    }
+
+    inner+=`<div class="exp" id="exp-${idx}">
+      <div class="et">◆ 해설</div>
+      <div class="ans" id="ans-${idx}"></div>
+      <p>${q.explanation}</p>
+      <div class="src">근거: 방송 자막 중 해당 발언 부분</div>
+    </div>`;
+    card.innerHTML=inner;
+    quizArea.appendChild(card);
+  });
+  attach();
+}
+
+function attach(){
+  document.querySelectorAll('.opt[data-i]').forEach(b=>{
+    b.addEventListener('click',()=>handleMC(+b.dataset.q,+b.dataset.i));
+  });
+  document.querySelectorAll('.opt[data-ox]').forEach(b=>{
+    b.addEventListener('click',()=>handleOX(+b.dataset.q,b.dataset.ox));
+  });
+  document.querySelectorAll('button[data-sa]').forEach(b=>{
+    b.addEventListener('click',()=>handleSA(+b.dataset.sa));
+  });
+  document.querySelectorAll('.sa input').forEach(inp=>{
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter'){
+      const idx=+inp.id.split('-')[1];handleSA(idx);}});
+  });
+}
+
+function lockExplain(idx,isCorrect){
+  const q=QUIZ_DATA[idx];
+  const exp=document.getElementById('exp-'+idx);
+  const ans=document.getElementById('ans-'+idx);
+  let txt='';
+  if(q.type==='mc') txt='정답: '+String.fromCharCode(65+q.answer)+'. '+q.options[q.answer];
+  else if(q.type==='ox') txt='정답: '+q.answer;
+  else txt='정답 예시: '+(Array.isArray(q.answer)?q.answer[0]:q.answer);
+  ans.textContent=(isCorrect?'✓ 정답! ':'✗ 오답 — ')+txt;
+  exp.classList.add('show');
+}
+
+function score(isCorrect){
+  state.solved++;
+  if(isCorrect) state.correct++;
+  updateBoard();
+  if(state.solved===QUIZ_DATA.length) setTimeout(showModal,500);
+}
+
+function handleMC(idx,choice){
+  if(answered[idx])return;answered[idx]=true;
+  const q=QUIZ_DATA[idx];
+  const btns=document.querySelectorAll(`.opt[data-q="${idx}"][data-i]`);
+  const isCorrect=choice===q.answer;
+  btns.forEach(b=>{
+    b.disabled=true;
+    const i=+b.dataset.i;
+    if(i===q.answer){b.classList.add('correct');b.insertAdjacentHTML('beforeend','<span class="res">✓ 정답</span>');}
+    if(i===choice&&!isCorrect){b.classList.add('wrong');b.insertAdjacentHTML('beforeend','<span class="res">✗ 오답</span>');}
+  });
+  lockExplain(idx,isCorrect);score(isCorrect);
+}
+
+function handleOX(idx,choice){
+  if(answered[idx])return;answered[idx]=true;
+  const q=QUIZ_DATA[idx];
+  const btns=document.querySelectorAll(`.opt[data-q="${idx}"][data-ox]`);
+  const isCorrect=choice===q.answer;
+  btns.forEach(b=>{
+    b.disabled=true;
+    if(b.dataset.ox===q.answer)b.classList.add('correct');
+    if(b.dataset.ox===choice&&!isCorrect)b.classList.add('wrong');
+  });
+  lockExplain(idx,isCorrect);score(isCorrect);
+}
+
+function handleSA(idx){
+  if(answered[idx])return;
+  const inp=document.getElementById('sa-'+idx);
+  const val=(inp.value||'').trim().toLowerCase().replace(/\s/g,'');
+  if(!val)return;
+  answered[idx]=true;
+  const q=QUIZ_DATA[idx];
+  const accept=(Array.isArray(q.answer)?q.answer:[q.answer]).map(a=>a.toLowerCase().replace(/\s/g,''));
+  const isCorrect=accept.some(a=>val===a||val.includes(a)||a.includes(val));
+  inp.disabled=true;
+  const btn=document.querySelector(`button[data-sa="${idx}"]`);
+  btn.disabled=true;
+  inp.style.borderColor=isCorrect?'var(--green)':'var(--accent)';
+  inp.style.background=isCorrect?'var(--green-bg)':'var(--red-bg)';
+  lockExplain(idx,isCorrect);score(isCorrect);
+}
+
+function updateBoard(){
+  document.getElementById('sSolved').textContent=state.solved;
+  document.getElementById('sCorrect').textContent=state.correct;
+  const rate=state.solved?Math.round(state.correct/state.solved*100):0;
+  document.getElementById('sRate').textContent=rate;
+  const fill=document.getElementById('pbar');
+  fill.style.width=rate+'%';
+  fill.style.background = rate<40?'#e11d48' : rate<70?'#f59e0b' : '#16a34a';
+}
+
+function showModal(){
+  const c=state.correct;
+  let grade,msg;
+  if(c>=9){grade='A';msg='완벽합니다! 시장 대전환의 핵심 흐름을 정확히 꿰뚫었습니다.';}
+  else if(c>=7){grade='B';msg='훌륭합니다! 주요 테마를 잘 이해하고 있습니다.';}
+  else if(c>=5){grade='C';msg='절반은 맞혔습니다. 분석 리포트를 한 번 더 복습해 보세요.';}
+  else {grade='D';msg='조금 아쉽네요. 리포트를 다시 읽고 재도전해 보세요!';}
+  document.getElementById('mGrade').textContent=grade;
+  document.getElementById('mScore').textContent=c;
+  document.getElementById('mMsg').textContent=msg;
+  document.getElementById('modal').classList.add('show');
+}
+
+function resetQuiz(){
+  state={solved:0,correct:0};
+  answered.fill(false);
+  document.getElementById('modal').classList.remove('show');
+  updateBoard();
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+render();
+updateBoard();
+</script>
+</body>
+</html>
