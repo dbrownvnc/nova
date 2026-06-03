@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>물리적 인프라의 역습 — 알파벳 800억 달러 쇼크 & 마벨 26년 만의 폭등</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#fafafa; --txt:#1a1a1a; --txt2:#777777;
+    --accent:#e11d48; --accent2:#f43f5e;
+    --c1:#e11d48; --c2:#1a1a1a; --c3:#6b7280; --c4:#2563eb;
+    --border:#e5e5e5;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg); color:var(--txt);
+    font-family:'Noto Sans KR',sans-serif; font-weight:400;
+    line-height:1.75; font-size:16px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px; margin:0 auto; padding:0 20px}
+
+  /* ---- HERO ---- */
+  .hero{padding:64px 20px 40px; max-width:680px; margin:0 auto; border-bottom:3px solid var(--txt)}
+  .kicker{font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--accent); font-weight:700; margin-bottom:18px}
+  .hero h1{font-family:'Playfair Display',serif; font-weight:900; font-size:40px; line-height:1.12; letter-spacing:-0.5px; margin-bottom:20px}
+  .hero h1 em{font-style:italic; color:var(--accent)}
+  .hero .dek{font-size:16px; color:var(--txt2); font-weight:300; line-height:1.7}
+  .meta{display:flex; gap:14px; flex-wrap:wrap; margin-top:26px; font-size:12px; color:var(--txt2); letter-spacing:.5px}
+  .meta span{padding:5px 12px; background:var(--bg2); border:1px solid var(--border); border-radius:2px}
+
+  /* ---- SECTION ---- */
+  section{padding:46px 0 8px}
+  .num{font-family:'Playfair Display',serif; font-size:13px; font-weight:700; color:var(--accent); letter-spacing:2px; margin-bottom:10px; display:block}
+  h2{font-family:'Playfair Display',serif; font-weight:800; font-size:27px; line-height:1.25; letter-spacing:-0.3px; margin-bottom:8px}
+  h3{font-family:'Noto Sans KR'; font-weight:700; font-size:18px; margin:30px 0 10px; padding-left:14px; border-left:4px solid var(--accent)}
+  p{margin-bottom:16px; font-weight:300; color:#2a2a2a}
+  p strong, li strong{font-weight:700; color:var(--txt)}
+  .lead{font-size:18px; line-height:1.8; color:var(--txt)}
+  .lead::first-letter{font-family:'Playfair Display',serif; font-size:58px; float:left; line-height:.82; padding:6px 12px 0 0; color:var(--accent); font-weight:900}
+  ul{margin:0 0 18px 0; padding-left:0; list-style:none}
+  ul li{position:relative; padding-left:22px; margin-bottom:9px; font-weight:300; color:#2a2a2a}
+  ul li::before{content:'—'; position:absolute; left:0; color:var(--accent); font-weight:700}
+
+  /* ---- PULL QUOTE ---- */
+  .pull{font-family:'Playfair Display',serif; font-style:italic; font-size:24px; line-height:1.45; color:var(--txt); border-top:2px solid var(--accent); border-bottom:2px solid var(--accent); padding:24px 0; margin:32px 0; text-align:center}
+  .pull span{display:block; font-family:'Noto Sans KR'; font-style:normal; font-size:12px; letter-spacing:2px; color:var(--accent); margin-top:12px; text-transform:uppercase}
+
+  /* ---- STAT CARDS ---- */
+  .stats{display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin:24px 0}
+  .stat{background:var(--bg); padding:20px 16px}
+  .stat .v{font-family:'Playfair Display',serif; font-weight:900; font-size:30px; line-height:1; color:var(--accent)}
+  .stat .v.dn{color:var(--c4)}
+  .stat .v.neu{color:var(--txt)}
+  .stat .l{font-size:12px; color:var(--txt2); margin-top:8px; line-height:1.4}
+
+  /* ---- TABLE ---- */
+  .tbl{width:100%; border-collapse:collapse; margin:22px 0; font-size:14px}
+  .tbl th{background:var(--accent); color:#fff; padding:11px 10px; text-align:left; font-weight:500; font-size:13px}
+  .tbl td{padding:11px 10px; border-bottom:1px solid var(--border); background:var(--bg2); font-weight:300}
+  .tbl tr td:first-child{font-weight:500; color:var(--txt)}
+  .up{color:var(--accent); font-weight:700}
+  .down{color:var(--c4); font-weight:700}
+
+  /* ---- NOTE BOX ---- */
+  .note{background:var(--bg2); border-left:4px solid var(--accent); padding:16px 18px; margin:22px 0; font-size:14px}
+  .note b{color:var(--accent); display:block; margin-bottom:5px; font-size:13px; letter-spacing:.5px}
+  .note p{margin:0; font-size:14px; color:#3a3a3a}
+
+  /* ---- CHART ---- */
+  .fade-in{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease}
+  .fade-in.visible{opacity:1; transform:translateY(0)}
+  .chart-container{position:relative; max-height:340px; background:var(--bg2); border:1px solid var(--border); padding:18px 14px; margin:24px 0}
+  .chart-container canvas{opacity:0; transition:opacity .4s ease; max-height:300px}
+  .chart-container.chart-ready canvas{opacity:1}
+  .chart-cap{font-size:12px; color:var(--txt2); text-align:center; margin-top:10px; font-weight:300}
+  .chart-title{font-size:13px; font-weight:700; letter-spacing:.5px; margin-bottom:4px; color:var(--txt)}
+
+  /* ---- INTERACTIVE ---- */
+  .sim{background:#fff; border:2px solid var(--txt); margin:26px 0; padding:0; overflow:hidden}
+  .sim-head{background:var(--txt); color:#fff; padding:13px 18px; font-weight:700; font-size:14px; letter-spacing:.5px; display:flex; align-items:center; gap:8px}
+  .sim-head .ico{color:var(--accent2)}
+  .sim-body{padding:20px 18px}
+  .ctrl{margin-bottom:18px}
+  .ctrl label{font-size:13px; font-weight:500; display:flex; justify-content:space-between; margin-bottom:8px}
+  .ctrl label b{color:var(--accent); font-family:'Playfair Display',serif; font-size:16px}
+  input[type=range]{-webkit-appearance:none; width:100%; height:4px; background:var(--border); border-radius:2px; outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:22px; height:22px; border-radius:50%; background:var(--accent); cursor:pointer; border:3px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.3)}
+  input[type=range]::-moz-range-thumb{width:22px; height:22px; border-radius:50%; background:var(--accent); cursor:pointer; border:3px solid #fff}
+  .sim-out{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); border:1px solid var(--border); margin-top:6px}
+  .sim-out .o{background:var(--bg2); padding:14px 12px; text-align:center}
+  .sim-out .o .ov{font-family:'Playfair Display',serif; font-weight:900; font-size:24px; color:var(--txt)}
+  .sim-out .o .ov.warn{color:var(--accent)}
+  .sim-out .o .ol{font-size:11px; color:var(--txt2); margin-top:4px}
+  .btn-reset{background:none; border:1px solid var(--txt2); color:var(--txt2); padding:7px 16px; font-size:12px; cursor:pointer; border-radius:2px; margin-top:14px; font-family:inherit; transition:all .2s}
+  .btn-reset:hover{background:var(--txt); color:#fff; border-color:var(--txt)}
+
+  /* ---- STACK (layers) ---- */
+  .stack{margin:24px 0; border:2px solid var(--txt)}
+  .layer{border-bottom:1px solid var(--border); cursor:pointer; transition:background .2s}
+  .layer:last-child{border-bottom:none}
+  .layer:hover{background:var(--bg2)}
+  .layer-head{padding:15px 18px; display:flex; align-items:center; justify-content:space-between; gap:10px}
+  .layer-head .lt{font-weight:700; font-size:15px}
+  .layer-head .lt small{display:block; font-size:11px; color:var(--txt2); font-weight:400; margin-top:2px}
+  .layer-head .tag{font-size:11px; background:var(--accent); color:#fff; padding:3px 9px; border-radius:2px; white-space:nowrap}
+  .layer-head .arrow{color:var(--accent); font-size:14px; transition:transform .25s; margin-left:4px}
+  .layer.open .arrow{transform:rotate(90deg)}
+  .layer-body{max-height:0; overflow:hidden; transition:max-height .3s ease; background:var(--bg2)}
+  .layer.open .layer-body{max-height:240px}
+  .layer-body div{padding:0 18px 16px; font-size:14px; font-weight:300; color:#3a3a3a}
+  .layer-body div b{color:var(--accent)}
+
+  /* ---- FLOW (capital) ---- */
+  .flow{margin:24px 0; text-align:center}
+  .flow-src{display:inline-block; background:var(--txt); color:#fff; padding:14px 22px; border-radius:4px; font-weight:700; font-size:15px}
+  .flow-src small{display:block; font-size:11px; color:var(--accent2); font-weight:400; margin-top:3px}
+  .flow-arrow{font-size:24px; color:var(--accent); margin:8px 0}
+  .flow-targets{display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:6px}
+  .flow-t{background:var(--bg2); border:1px solid var(--border); border-top:3px solid var(--accent); padding:13px 10px; border-radius:0 0 4px 4px}
+  .flow-t .ft{font-weight:700; font-size:14px}
+  .flow-t .fv{font-family:'Playfair Display',serif; font-weight:900; font-size:20px; color:var(--accent); margin-top:4px}
+  .flow-t .fl{font-size:10px; color:var(--txt2); margin-top:2px}
+
+  .divider{text-align:center; margin:42px 0; color:var(--accent); font-size:18px; letter-spacing:8px}
+
+  footer{border-top:3px solid var(--txt); margin-top:50px; padding:34px 0 60px}
+  footer .disc{font-size:11px; color:var(--txt2); line-height:1.7; font-weight:300}
+  footer .src{font-size:12px; color:var(--txt2); margin-top:18px}
+  .tline{color:var(--accent); font-weight:700; letter-spacing:1px}
+
+  @media(max-width:480px){
+    .hero h1{font-size:31px}
+    h2{font-size:23px}
+    .stats{grid-template-columns:1fr 1fr}
+    .lead::first-letter{font-size:48px}
+    .pull{font-size:20px}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="kicker">Market Analysis · 2026.06.03</div>
+  <h1>물리적 인프라가 <em>랠리의 주도권</em>을 탈환하다</h1>
+  <p class="dek">S&amp;P 500이 7,609를 찍은 날, 진짜 주인공은 무형의 소프트웨어가 아니라 구리선·광케이블·발전기였다. 알파벳의 800억 달러 기습 유상증자가 드러낸 'AI 군비 경쟁'의 그림자와, 26년 만의 폭등을 기록한 반도체 인프라 기업들의 이야기.</p>
+  <div class="meta">
+    <span>NOVA Real Invest</span>
+    <span>미국 증시 분석</span>
+    <span>AI 인프라 · 반도체</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section>
+    <span class="num">OVERVIEW</span>
+    <h2>지수는 최고가, 그러나 자금은 지각변동 중</h2>
+    <p class="lead">뉴욕 증시는 역사적인 하루를 또 한 번 새겼다. S&amp;P 500은 <strong>7,609.78</strong>로 사상 최고가를, 다우는 <strong>51,307.79</strong>로 기록을 갈아치웠다. 표면적으로는 '증시는 계속 오른다'는 평온한 그림이다.</p>
+    <p>하지만 그 아래에서는 돈의 흐름이 통째로 이동하고 있었다. 시장을 흔든 세 가지 물결 — <strong>하드웨어의 폭발</strong>, <strong>자본의 현실(알파벳 유상증자)</strong>, 그리고 <strong>거시적 마찰(고용·유가)</strong> — 이 동시에 부딪힌 날이었다.</p>
+
+    <div class="stats">
+      <div class="stat"><div class="v neu">7,609.78</div><div class="l">S&amp;P 500 사상 최고</div></div>
+      <div class="stat"><div class="v neu">51,307.79</div><div class="l">다우존스 사상 최고</div></div>
+      <div class="stat"><div class="v">+32.5%</div><div class="l">마벨(MRVL) 하루 상승</div></div>
+      <div class="stat"><div class="v dn">−3.88%</div><div class="l">알파벳(GOOGL) 하락</div></div>
+    </div>
+
+    <p class="pull">"진짜 지배자는 무형의 것이 아니라 물리적인 것이다."<span>오늘의 핵심 명제</span></p>
+  </section>
+
+  <div class="divider">✦ ✦ ✦</div>
+
+  <section>
+    <span class="num">WAVE 01</span>
+    <h2>젠슨 황의 한 문장이 26년 만의 폭등을 촉발하다</h2>
+    <p>대만에서 열린 컴퓨텍스(GTC) 둘째 날, 엔비디아 CEO 젠슨 황이 마벨(Marvell) CEO 맷 머피를 무대 위로 불러내며 한마디를 던졌다. <strong>"신사 숙녀 여러분, 다음 1조 달러 기업입니다(Next Trillion Dollar Company)."</strong></p>
+    <p>단순한 립서비스였다면 주가가 이렇게 움직였을 리 없다. 마벨은 하루 만에 <strong class="up">+32.52%</strong>, 장후에 다시 <strong class="up">+9.01%</strong> — 합산 약 40% 폭등했다. 거래량은 1억 주를 돌파했는데, 이는 <strong>2000년 닷컴버블 이후 26년 만</strong>의 일이다.</p>
+
+    <h3>왜 '광(光)'인가</h3>
+    <p>그동안 칩과 칩, 서버와 서버 사이는 <strong>구리선</strong>이 연결했다. 문제는 둘이다. 첫째 속도가 느리고, 둘째 열이 엄청나게 발생한다. 그 열을 잡으려고 다시 연산·냉방에 전기가 들어가는 악순환이다.</p>
+    <p>엔비디아의 광통신 규격 <strong>NVLink</strong>를 이용해 마벨이 'AI 네트워크 컨트롤러'를 만들었고, 빛의 속도로 칩과 서버를 연결한다. 두 회사는 20억 달러 이상의 파트너십을 체결했다. 그 결과 광 부품주 전체가 함께 달렸다.</p>
+
+    <div class="note">
+      <b>용어 — NVLink</b>
+      <p>엔비디아가 개발한 초고속 칩·서버 간 연결 규격. 구리선의 속도·발열 한계를 광(光) 통신으로 돌파한다. 데이터센터 내부의 '신경망' 역할.</p>
+    </div>
+
+    <div class="chart-container fade-in">
+      <div class="chart-title">마벨(MRVL) 당일 + 장후 수익률 분해</div>
+      <canvas id="mrvlChart" height="230"></canvas>
+      <div class="chart-cap">정규장 +32.52%에 장후 +9.01%가 더해져 합산 약 40% 상승</div>
+    </div>
+
+    <h3>숫자가 증명한다</h3>
+    <p>회계연도 2분기 매출이 크게 늘고, <strong>EPS는 예상치를 약 49% 상회한 0.79달러</strong>를 기록했다. 마벨이 이런 숫자를 본 것은 <strong>2018년 이후 처음</strong>이다. 예상하지 못했던 숫자가 폭등의 진짜 연료였다.</p>
+  </section>
+
+  <section>
+    <span class="num">WAVE 01-B</span>
+    <h2>AI 서버의 실수요, 휴렛팩커드가 입증하다</h2>
+    <p>휴렛팩커드 엔터프라이즈(HPE)도 실적으로 화답했다. 주가 <strong class="up">+19.47%</strong>, 클라우드·AI 매출이 전년 대비 <strong>22.9%</strong> 급증했고, AI 신규 수주만 18억 달러, 백로그(수주 잔고)는 <strong>63억 달러</strong>가 쌓여 있다.</p>
+
+    <div class="stats">
+      <div class="stat"><div class="v">$106.8억</div><div class="l">2분기 매출 (예상 97.9억 대폭 상회)</div></div>
+      <div class="stat"><div class="v">$0.79</div><div class="l">조정 EPS (2018년 이후 최대 서프라이즈)</div></div>
+    </div>
+
+    <div class="note">
+      <b>현상 — The Phenomenon</b>
+      <p>단 이틀 만에 지난 11개월 치 합산 규모와 맞먹는 개인투자자 매수 자금이 유입됐다. RSI(과매수 지표)가 꽉 찼는데도 'FOMO(놓칠까 두려운 심리)' 자금이 계속 꽂히고 있다는 신호.</p>
+    </div>
+    <p>노바의 견해로는 델(Dell)과 HPE 중 <strong>델이 더 좋다</strong>. HPE는 사업이 양분돼 있지만, 진짜 광기는 데이터센터 시장 비중이 큰 델 쪽이라는 것. 다만 이번엔 예상 밖 숫자를 보여준 HPE의 주가가 더 크게 튀었다.</p>
+  </section>
+
+  <div class="divider">✦ ✦ ✦</div>
+
+  <section>
+    <span class="num">WAVE 02</span>
+    <h2>알파벳의 800억 달러, AI 군비 경쟁의 그림자</h2>
+    <p class="lead">어제 저녁, 구글의 모회사 알파벳이 AI 인프라 확충을 위해 <strong>800억 달러(80 Billion)</strong> 규모의 초대형 자본 조달을 기습 공시했다. 주가는 즉시 <strong class="down">−3.88%</strong> 폭락했다.</p>
+
+    <p>핵심 질문은 이것이다. <strong>알파벳이 돈이 없는 회사인가?</strong> 전혀 아니다. 빅테크 중에서도 프리캐시플로우(잉여현금)가 가장 강력한, '국가급' 현금 창출 기업이다. 그런데도 주주가치 희석을 감수하며 자본을 조달한다는 건, AI가 <strong>'반드시 이겨야 하는 전쟁터'</strong>임을 선언한 셈이다.</p>
+
+    <h3>자본 조달 구조</h3>
+    <div class="chart-container fade-in">
+      <div class="chart-title">800억 달러 조달 구성</div>
+      <canvas id="googStruct" height="230"></canvas>
+      <div class="chart-cap">3분기부터 가동될 400억 달러 ATM 프로그램은 추가 희석 가능성을 의미</div>
+    </div>
+
+    <table class="tbl">
+      <tr><th>조달 방식</th><th>규모</th><th>성격</th></tr>
+      <tr><td>공모 발행</td><td>$300억</td><td>보통주·채권 공모</td></tr>
+      <tr><td>의무전환 우선주</td><td>$150억</td><td>일정 시점에 주식 전환</td></tr>
+      <tr><td>신주(보통주) 발행</td><td>$150억</td><td>즉시 주식 수 증가</td></tr>
+      <tr><td>ATM 프로그램</td><td>$400억</td><td>3분기부터 장내 점진 발행</td></tr>
+      <tr><td>버크셔 사모 참여</td><td>$100억</td><td>워런 버핏의 신뢰 신호</td></tr>
+    </table>
+
+    <div class="note">
+      <b>용어 — 유상증자 · ATM · 의무전환우선주</b>
+      <p><b>유상증자</b>는 새 주식을 발행해 돈을 끌어오는 것. 주식 수가 늘어 기존 주주의 지분·EPS가 희석된다. <b>ATM(At-The-Market)</b>은 정해둔 한도 내에서 장중 시세에 맞춰 조금씩 주식을 파는 프로그램. <b>의무전환우선주</b>는 만기 때 무조건 보통주로 바뀌는 채권 성격의 주식.</p>
+    </div>
+
+    <h3>희석이 EPS에 미치는 영향 — 직접 계산해보기</h3>
+    <p>자본금이 늘면 주당순이익(EPS)은 줄어든다. 신주 발행 규모를 움직여 희석 효과를 체감해보자.</p>
+
+    <div class="sim">
+      <div class="sim-head"><span class="ico">▶</span> EPS 희석 시뮬레이터</div>
+      <div class="sim-body">
+        <div class="ctrl">
+          <label>신주 발행 규모 (지분 희석률) <b id="dilLabel">0.65%</b></label>
+          <input type="range" id="dilSlider" min="0" max="3" step="0.05" value="0.65">
+        </div>
+        <div class="sim-out">
+          <div class="o"><div class="ov" id="epsBefore">$8.00</div><div class="ol">기존 EPS (예시)</div></div>
+          <div class="o"><div class="ov warn" id="epsAfter">$7.95</div><div class="ol">희석 후 EPS</div></div>
+        </div>
+        <div class="sim-out" style="margin-top:1px">
+          <div class="o"><div class="ov" id="dilAmt" style="font-size:20px">$800억</div><div class="ol">조달 자금 (희석률 기준)</div></div>
+          <div class="o"><div class="ov" id="dilPct" style="font-size:20px; color:var(--c4)">−0.64%</div><div class="ol">EPS 변화율</div></div>
+        </div>
+        <button class="btn-reset" id="dilReset">초기값으로 리셋</button>
+        <p style="font-size:11px; color:var(--txt2); margin:14px 0 0; font-weight:300">※ 알파벳 시총·발행주식 수를 단순화한 교육용 예시입니다. 실제 수치와 다를 수 있습니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <span class="num">WAVE 02-B</span>
+    <h2>왜 이건 가볍게 넘길 문제가 아닌가</h2>
+    <p>알파벳은 빅테크 중 캐펙스(설비투자) 1위이자, 프리캐시플로우가 가장 많은 회사다. <strong>그런 회사가 유상증자를 택했다.</strong> 그렇다면 메타·아마존·테슬라·마이크로소프트는?</p>
+    <p>이들 역시 캐펙스를 폭발적으로 늘리고 있고, 일부는 프리캐시플로우보다 캐펙스가 더 크다. 알파벳이 길을 텄으니 <strong>"우리도 유상증자"</strong>가 어쩔 수 없는 수순이 될 수 있다. 동시다발 증자가 일어나면 시장 전체가 상당히 어려워질 가능성이 있다.</p>
+
+    <div class="note">
+      <b>The Reality — 자본의 현실</b>
+      <p>2026년 캐펙스 전망치는 <b>1,800억~1,900억 달러</b> 수준. 현금 흐름을 초과하는 천문학적 AI 인프라 투자 비용이 밸류에이션을 압박한다.</p>
+    </div>
+  </section>
+
+  <section>
+    <span class="num">WAVE 02-C</span>
+    <h2>형님이 쏘면, 동생들이 파티를 연다</h2>
+    <p>구글에서 빠진 돈은 어디로 갈까? 알파벳은 자체 칩 <strong>TPU</strong>를 만들며 수직 구조를 짓고 있고, 그 아래에 깔린 공급망 기업들 — 브로드컴·마벨·루멘텀·코히런트 — 이 그 돈을 빨아들인다. 한쪽(구글 주주)은 희석되지만, 다른 한쪽(인프라 공급망)은 파티를 연다.</p>
+
+    <div class="flow">
+      <div class="flow-src">Alphabet $80B CapEx<small>SOURCE · 자본의 원천</small></div>
+      <div class="flow-arrow">▼</div>
+      <div class="flow-targets">
+        <div class="flow-t"><div class="ft">Broadcom (AVGO)</div><div class="fv">+4.39%</div><div class="fl">Google TPU 직접 수혜</div></div>
+        <div class="flow-t"><div class="ft">Marvell (MRVL)</div><div class="fv">+32.5%</div><div class="fl">맞춤형 실리콘</div></div>
+        <div class="flow-t"><div class="ft">Lumentum (LITE)</div><div class="fv">+13.72%</div><div class="fl">광 부품</div></div>
+        <div class="flow-t"><div class="ft">Coherent (COHR)</div><div class="fv">+17.63%</div><div class="fl">광 부품</div></div>
+      </div>
+    </div>
+    <p style="font-size:13px; color:var(--txt2); text-align:center; font-weight:300">"AI 파티의 비용은 빅테크가 지불하고, 그 과실은 물리적 인프라 공급망이 독식하는 구조."</p>
+  </section>
+
+  <div class="divider">✦ ✦ ✦</div>
+
+  <section>
+    <span class="num">WAVE 03</span>
+    <h2>AI 투자 스택은 반도체를 넘어 물리적 인프라로</h2>
+    <p>이제 돈은 GPU에만 머물지 않는다. AI 투자의 무게중심이 칩 → 신경망 → 서버 → 동력원으로 단계적으로 이동하고 있다. <strong>각 층을 눌러 어떤 기업이 들어가는지 확인해보자.</strong></p>
+
+    <div class="stack" id="aiStack">
+      <div class="layer">
+        <div class="layer-head">
+          <div class="lt">Layer 1 · 실리콘 <small>두뇌 (연산)</small></div>
+          <div><span class="tag">Nvidia · AMD</span><span class="arrow">▶</span></div>
+        </div>
+        <div class="layer-body"><div>GPU 및 가속기 중심의 성숙기 진입 단계. 시장의 출발점이지만, 자금은 이미 다음 층으로 이동을 시작했다.</div></div>
+      </div>
+      <div class="layer">
+        <div class="layer-head">
+          <div class="lt">Layer 2 · 네트워킹 &amp; 광학 <small>신경망 (연결)</small></div>
+          <div><span class="tag">MRVL · AVGO · LITE</span><span class="arrow">▶</span></div>
+        </div>
+        <div class="layer-body"><div>데이터 병목 해소를 위한 <b>폭발적 랠리 진행 중</b>. 마벨·브로드컴·루멘텀·코히런트가 광 통신으로 칩과 서버를 연결한다. 오늘의 주인공.</div></div>
+      </div>
+      <div class="layer">
+        <div class="layer-head">
+          <div class="lt">Layer 3 · 서버 &amp; 랙 <small>뼈대 (물리적 본체)</small></div>
+          <div><span class="tag">HPE · Dell</span><span class="arrow">▶</span></div>
+        </div>
+        <div class="layer-body"><div>실제 수주 및 마진 확대로 <b>어닝 서프라이즈 창출</b>. HPE +19.47%, 백로그 63억 달러가 실수요를 입증.</div></div>
+      </div>
+      <div class="layer">
+        <div class="layer-head">
+          <div class="lt">Layer 4 · 전력 &amp; 냉각 <small>동력원 (최종 병목)</small></div>
+          <div><span class="tag">GNRC · VRT</span><span class="arrow">▶</span></div>
+        </div>
+        <div class="layer-body"><div>데이터센터 가동의 <b>최종 한계점</b>. 비상 발전기(제너락), 변압기(GE·이튼), 액체냉각(버티브)으로 자금이 로테이션 중.</div></div>
+      </div>
+    </div>
+
+    <h3>병목은 결국 '전력망'에서 터진다</h3>
+    <p>제너락(GNRC)은 장중 9% 이상 올랐다가 <strong class="up">+5.69%</strong>로 마감했다. 글로벌 하이퍼스케일 데이터센터 운영사와 대형 백업 전력 공급 계약을 체결했다는 공식 발표가 동력이었다.</p>
+    <p>데이터센터는 자체 발전소(온사이트 파워플랜트)를 지을 여력이 안 되는데, 정전은 언제든 발생할 수 있다. 그래서 무정전 가동을 위한 <strong>비상 발전기</strong>가 필수다. 과거 '주거용 발전기 회사'로 인식되던 제너락의 주거용 성장은 1%에 그친 반면, 상업·산업용(데이터센터) 매출은 <strong>전년 대비 28% 폭등</strong>했다.</p>
+
+    <div class="note">
+      <b>로테이션의 방향</b>
+      <p>반도체 쇼티지(부족) → 전력망 쇼티지 → 냉각 쇼티지. 돈은 가만히 있지 않는다. "몸집을 빨리 키울 수 있는 곳"으로 잽싸게 이동한다. 한 바퀴 돈 동네를 떠나 아직 안 돈 동네로.</p>
+    </div>
+  </section>
+
+  <section>
+    <span class="num">WAVE 03-B</span>
+    <h2>엇갈린 운명 — 자본은 소프트웨어를 떠나 하드웨어로</h2>
+    <p>물리적 하드웨어가 폭등하는 동안, 엔터프라이즈 소프트웨어(SaaS)는 여전히 약세다. 팔란티어(PLTR) −5.3%, CRM·마이크로소프트도 부진했다.</p>
+    <p>팔란티어의 PER은 <strong>172배</strong>, 선행 PER도 <strong>97배</strong>. 멀티플 부담이 과도한 '밈 주식'이라는 평가다. 실적 숫자로 증명하는 기업이 있는데, 굳이 꿈팔이·미래팔이에 베팅할 이유가 없다는 논리.</p>
+
+    <table class="tbl">
+      <tr><th>구분</th><th>대표 종목</th><th>당일 흐름</th></tr>
+      <tr><td>물리적 하드웨어</td><td>MRVL · HPE</td><td class="up">+32% / +19% 폭등</td></tr>
+      <tr><td>SaaS (약세)</td><td>PLTR · CRM · MSFT</td><td class="down">−5.3% 등 약세</td></tr>
+      <tr><td>SaaS (예외)</td><td>Snowflake (SNOW)</td><td class="up">+5.20% (NRR 126%)</td></tr>
+    </table>
+    <p>예외는 스노우플레이크(SNOW)다. 데이터 레이어 소프트웨어로 <strong>NRR(순매출유지율) 126%</strong>를 숫자로 증명하며 +5.20% 상승했다. 결국 핵심은 '실적으로 증명하느냐'다.</p>
+    <div class="note">
+      <b>용어 — NRR (Net Revenue Retention)</b>
+      <p>기존 고객이 1년 후 얼마나 더(혹은 덜) 결제했는지 보여주는 지표. 126%면 이탈을 감안하고도 매출이 26% 늘었다는 뜻으로, 매우 건강한 성장 신호.</p>
+    </div>
+  </section>
+
+  <div class="divider">✦ ✦ ✦</div>
+
+  <section>
+    <span class="num">MACRO</span>
+    <h2>거시적 중력 — 유가·고용이 천장을 누른다</h2>
+    <h3>중동의 지정학적 뇌관</h3>
+    <p>이란의 섬과 쿠웨이트 쪽에 정체불명의 폭격이 있었고, 호르무즈 해협 봉쇄 재경고가 나왔다. 그 결과 WTI 원유는 <strong class="up">+7.7%</strong> 수직 상승해 배럴당 <strong>$94.08</strong>을 돌파, 브렌트유도 $97을 넘었다. 에너지 섹터(XLE)는 강세지만, 유가 급등은 인플레이션을 다시 자극한다.</p>
+
+    <h3>예상치를 뒤엎은 고용 — 연준의 딜레마</h3>
+    <p>4월 JOLTS(구인건수)가 <strong>761.8만 개</strong>로 나왔다. 시장 예상치 686만 개를 크게 상회한 <strong>2년 내 최고치</strong>다.</p>
+
+    <div class="stats">
+      <div class="stat"><div class="v">761.8만</div><div class="l">4월 JOLTS 구인건수 (2년 내 최고)</div></div>
+      <div class="stat"><div class="v neu">4.45%</div><div class="l">국채 10년물 금리 (보합 유지)</div></div>
+    </div>
+
+    <div class="note">
+      <b>The Dilemma — 딜레마</b>
+      <p>노동시장이 견고하다는 건 경제 펀더멘털엔 호재다. 하지만 연준(Fed) 입장에선 <b>조기 금리 인하의 명분이 약화</b>되는 악재. 견고한 고용 → 금리 인하 지연 → 국채 금리 상승 압력.</p>
+    </div>
+    <p>그럼에도 뉴욕 증시는 마벨·HPE의 AI 하드웨어 모멘텀으로 이 거시 충격을 '몸빵'으로 받아내며 상승했다. 다만 유가·물가·고용이 리스크를 계속 키우면서, 거시 중력은 점점 더 세지고 있다.</p>
+  </section>
+
+  <section>
+    <span class="num">CONSUMER</span>
+    <h2>거시 압박 속에서도 — 소비재의 선별적 턴어라운드</h2>
+    <h3>① 빅토리아 시크릿 (VSXY) — 브랜드 파워</h3>
+    <p>티커를 VSCO에서 <strong>VSXY</strong>(Very Sexy)로 바꾼 빅토리아 시크릿이 하루 만에 <strong class="up">+47.3%</strong> 폭등했다. 1분기 매출이 15% 증가한 브랜드 리뉴얼의 성공 사례다.</p>
+    <p>흥미로운 해석이 따른다. 불황이 오면 야한 속옷·빨간 립스틱·화장품·초콜릿·술·담배 소비가 늘어난다는 '경기 신호' 이론. 작은 사치로 위안을 얻으려는 심리다.</p>
+
+    <h3>② 달러제너럴 (DG) — 초가성비 방어</h3>
+    <p>달러제너럴이 <strong class="up">+4.4%</strong> 상승했다. 핵심은 <strong>'트레이드다운(하향 구매)'</strong> 현상. 연소득 10만 달러 이상의 고소득층까지 저가 매장으로 내려오기 시작했다.</p>
+    <div class="note">
+      <b>인사이트</b>
+      <p>확실한 브랜드 아이덴티티(VSXY)나 극단적 가성비(DG)를 제공하는 소매 유통주는 불황기에 강력한 포트폴리오 방어재 역할을 한다. 두 종목 모두 <b>불황을 경고하는 시그널</b>이기도 하다.</p>
+    </div>
+  </section>
+
+  <div class="divider">✦ ✦ ✦</div>
+
+  <section>
+    <span class="num">CRYPTO &amp; LAW</span>
+    <h2>비트코인 고래의 변절, 그리고 깨진 신뢰</h2>
+    <p>'스트레티지(MSTR, 옛 마이크로스트래티지)' 주가가 <strong class="down">−9.13%</strong> 급락했다. "절대 비트코인을 팔지 않겠다"던 호들(HODL) 전략의 대표 주자가, <strong>2022년 이후 처음으로 32 BTC를 매각</strong>했기 때문이다.</p>
+    <p>매각 규모 자체는 250만 달러로 크지 않다. 문제는 <strong>신뢰</strong>다. 우선주·전환사채 만기가 도래해 부채 상환을 위해 팔았다는 사실이 SEC 공시로 드러났다. 자본주의의 근간인 신뢰에 균열이 생긴 것이다.</p>
+
+    <div class="note">
+      <b>용어 — HODL</b>
+      <p>"Hold On for Dear Life"의 줄임말로 통하는 암호화폐 은어. 가격 변동에 흔들리지 않고 끝까지 보유한다는 뜻. 이 회사의 매각은 그 전략에 금이 갔음을 상징한다.</p>
+    </div>
+
+    <p>그 여파로 비트코인은 <strong>$66,000</strong>까지 하락했다(장중 $65,000도 관측). 진행자는 작년 10월 고점 이후 '머리어깨형' 패턴을 근거로 하락을 예측해왔으며, 향후 지지선 시나리오를 다음과 같이 제시한다.</p>
+
+    <div class="chart-container fade-in">
+      <div class="chart-title">비트코인 하락 시나리오 (진행자 견해)</div>
+      <canvas id="btcChart" height="240"></canvas>
+      <div class="chart-cap">희망 바닥 $48,000 · 1차 지지 $54,000 · 추가 하락 시 $33,000 (개인 견해, 투자 권유 아님)</div>
+    </div>
+
+    <h3>공매도 왜곡(Short-and-Distort) 유죄</h3>
+    <p>한편 어제 한 인물이 주가 조작 및 증권 사기 혐의로 유죄 판결을 받았다. 근거 없는 거짓 정보로 공매도를 친 뒤 그 소문을 퍼뜨려 차익을 챙기는 <strong>'공매도 왜곡(Short-and-Distort)'</strong> 기법으로, 13건에 걸쳐 약 <strong>2,100만 달러</strong>를 편취했다.</p>
+    <p>공매도 자체는 정당한 투자 기법이지만, 반드시 근거가 있어야 한다. 근거 없는 비방은 범죄다. 이 판결은 공매도 업계 전반의 위축과 소형주 숏커버링 변동성을 유발할 수 있다.</p>
+  </section>
+
+  <div class="divider">✦ ✦ ✦</div>
+
+  <section>
+    <span class="num">VALUATION</span>
+    <h2>실러 PE 42.78 — 1999년 닷컴 정점에 근접하다</h2>
+    <p class="lead">가장 무서운 숫자는 따로 있다. <strong>실러 P/E(CAPE) 지수가 42.78</strong>에 도달했다. 1999년 12월 닷컴버블 정점이 역사적 최고치 44.19였으니, 거의 다 온 셈이다.</p>
+
+    <div class="note">
+      <b>용어 — 실러 PE (CAPE)</b>
+      <p>현재 S&amp;P 500 지수를, 인플레이션을 반영한 <b>지난 10년간 실질 EPS 평균</b>으로 나눈 값. 단기 실적 출렁임을 걸러내 시장이 장기적으로 얼마나 비싼지를 보여준다.</p>
+    </div>
+
+    <div class="chart-container fade-in">
+      <div class="chart-title">실러 PE 역사적 비교</div>
+      <canvas id="capeChart" height="230"></canvas>
+      <div class="chart-cap">현재 42.78 vs 1999년 정점 44.19 · 역사적 평균 17.4 · 역사적 최저 4.78(1920)</div>
+    </div>
+
+    <p>이 폭등은 전적으로 AI 덕분이다. 만약 <strong>"AI 별거 없네"</strong>라는 신뢰 붕괴나, <strong>"우리 캐펙스 줄입니다"</strong>라는 시그널이 나오면 어떻게 될까? 구글·아마존·메타·테슬라의 캐펙스 증가세가 꺾이는 순간, 셀링이 셀링을 부르는 대폭락 리셋이 올 수 있다. 바클레이즈·UBS 등 대형 투자은행들이 이미 경고성 리포트를 내기 시작했다.</p>
+
+    <h3>전력 부족이라는 시한폭탄</h3>
+    <p>미국에서 허가받은 데이터센터 부지가 <strong>6,400개</strong>에 달한다. 사실상 6,400개의 소규모 도시가 생기는 것인데, 정작 전기는 없다. 발전소를 지을 계획도, 부지도 부족하다(특히 버지니아 라우든 카운티). 전력이 부족하면 AI 인프라 자체가 멈출 수 있다는 경고다.</p>
+  </section>
+
+  <div class="divider">✦ ✦ ✦</div>
+
+  <section>
+    <span class="num">STRATEGY</span>
+    <h2>오만을 버리고, 인프라 밸류체인 전반으로</h2>
+    <p>눈앞엔 랠리가 있지만, 교만해질 시점은 아니다. 진행자가 제시한 세 가지 행동 전략을 정리하면 다음과 같다.</p>
+
+    <table class="tbl">
+      <tr><th>전략</th><th>내용</th></tr>
+      <tr><td>① 추격매수 자제</td><td>단기 30% 폭등 종목 FOMO 매수 금지. 10~15% 눌림목은 건강한 조정, 20% 이상이면 위험. 분할 매수로 대응.</td></tr>
+      <tr><td>② 스택 전체로 확대</td><td>GPU·메모리에 함몰되지 말 것. 전력망·유틸리티·장비·건설로 다변화해 밸류에이션 붕괴 리스크 분산.</td></tr>
+      <tr><td>③ 유동성 이벤트 대비</td><td>현금(캐시) 확보. 6월 예정 SpaceX IPO(조달 목표 750억 달러, 절반으로 축소) 등 변동성 블랙홀에 대비.</td></tr>
+    </table>
+
+    <div class="note">
+      <b>유동성 경고 신호</b>
+      <p>SpaceX는 아직 상장도 안 했는데 2배 레버리지 ETF가 이미 SEC에 신청됐다. 동시에 조달 목표 금액을 절반으로 삭감했다는 소식은 주관사들의 회의적 시각을 보여주는 '이상한 시그널'.</p>
+    </div>
+
+    <p class="pull">"겸손을 매수하고, 오만을 매도하라."<span>Long Humility, Short Hubris</span></p>
+
+    <h3>다가오는 변동성 — 이번 주 일정</h3>
+    <ul>
+      <li><strong>브로드컴(AVGO) 실적 발표</strong> — AI 인프라의 또 다른 거물</li>
+      <li><strong>ADP 민간 고용</strong> — 금요일 고용통계의 선행 지표</li>
+      <li><strong>금요일 고용통계</strong> — 연준 금리 경로의 분수령</li>
+    </ul>
+    <p>유가·물가·고용이 동시에 리스크를 키우는 가운데, 변동성이 극단적으로 흐를 가능성이 있다.</p>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="src">출처: <span class="tline">NOVA Real Invest</span> 유튜브 방송 (2026.06.03) · 미국 증시 마감 분석</div>
+    <p class="disc" style="margin-top:18px">※ 본 문서는 영상 내용을 요약·정리한 분석 리포트입니다. 영상 내 모든 정보·수치·견해는 개인의 의견이며 투자 권유가 아닙니다. 모든 투자 판단과 그 결과의 책임은 투자자 본인에게 있으며, 주식·암호화폐 투자에는 원금 손실의 상당한 위험이 따릅니다. 종목 언급은 정보 제공 목적일 뿐 매수·매도 추천이 아닙니다.</p>
+  </div>
+</footer>
+
+<script>
+  // ---------- Fade-in observer ----------
+  const fadeObs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        fadeObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+  // ---------- Chart defaults ----------
+  Chart.defaults.font.family = "'Noto Sans KR', sans-serif";
+  Chart.defaults.color = '#777777';
+  const C = { red:'#e11d48', dark:'#1a1a1a', gray:'#6b7280', blue:'#2563eb', soft:'#f43f5e' };
+
+  const chartConfigs = {};
+
+  chartConfigs['mrvlChart'] = () => {
+    new Chart(document.getElementById('mrvlChart'), {
+      type:'bar',
+      data:{
+        labels:['정규장','장후','합산'],
+        datasets:[{
+          label:'상승률(%)',
+          data:[32.52, 9.01, 41.53],
+          backgroundColor:[C.red, C.soft, C.dark],
+          borderRadius:4, barThickness:46
+        }]
+      },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false},
+          tooltip:{callbacks:{label:(c)=>'+'+c.parsed.y+'%'}}},
+        scales:{
+          y:{beginAtZero:true, grid:{color:'#eee'}, ticks:{callback:v=>v+'%'}},
+          x:{grid:{display:false}}
+        }
+      }
+    });
+  };
+
+  chartConfigs['googStruct'] = () => {
+    new Chart(document.getElementById('googStruct'), {
+      type:'doughnut',
+      data:{
+        labels:['공모 발행 $300억','의무전환 우선주 $150억','신주 발행 $150억','ATM 프로그램 $400억'],
+        datasets:[{
+          data:[300,150,150,400],
+          backgroundColor:[C.red, C.soft, C.gray, C.dark],
+          borderColor:'#fff', borderWidth:2
+        }]
+      },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        plugins:{
+          legend:{position:'bottom', labels:{boxWidth:12, padding:10, font:{size:11}}},
+          tooltip:{callbacks:{label:(c)=>c.label+' ('+Math.round(c.parsed/10)+'%)'}}
+        }
+      }
+    });
+  };
+
+  chartConfigs['btcChart'] = () => {
+    new Chart(document.getElementById('btcChart'), {
+      type:'line',
+      data:{
+        labels:['현재','1차 지지','희망 바닥','추가 하락'],
+        datasets:[{
+          label:'비트코인 ($)',
+          data:[66000, 54000, 48000, 33000],
+          borderColor:C.red, backgroundColor:'rgba(225,29,72,.08)',
+          fill:true, tension:.25, pointRadius:5, pointBackgroundColor:C.red,
+          pointBorderColor:'#fff', pointBorderWidth:2
+        }]
+      },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false},
+          tooltip:{callbacks:{label:(c)=>'$'+c.parsed.y.toLocaleString()}}},
+        scales:{
+          y:{grid:{color:'#eee'}, ticks:{callback:v=>'$'+(v/1000)+'k'}},
+          x:{grid:{display:false}}
+        }
+      }
+    });
+  };
+
+  chartConfigs['capeChart'] = () => {
+    new Chart(document.getElementById('capeChart'), {
+      type:'bar',
+      data:{
+        labels:['현재(2026)','1999 닷컴 정점','역사적 평균','역사적 최저(1920)'],
+        datasets:[{
+          label:'실러 PE',
+          data:[42.78, 44.19, 17.4, 4.78],
+          backgroundColor:[C.red, C.dark, C.gray, C.blue],
+          borderRadius:4
+        }]
+      },
+      options:{
+        indexAxis:'y',
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false},
+          tooltip:{callbacks:{label:(c)=>'PE '+c.parsed.x}}},
+        scales:{
+          x:{beginAtZero:true, grid:{color:'#eee'}},
+          y:{grid:{display:false}, ticks:{font:{size:11}}}
+        }
+      }
+    });
+  };
+
+  const chartObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const canvas = e.target.querySelector('canvas');
+        if (canvas && chartConfigs[canvas.id]) {
+          chartConfigs[canvas.id]();
+          e.target.classList.add('chart-ready');
+          chartObs.unobserve(e.target);
+        }
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+  // ---------- AI Stack accordion ----------
+  document.querySelectorAll('#aiStack .layer').forEach(layer => {
+    layer.querySelector('.layer-head').addEventListener('click', () => {
+      layer.classList.toggle('open');
+    });
+  });
+
+  // ---------- EPS dilution simulator ----------
+  const baseEPS = 8.00;        // 예시 기존 EPS
+  const baseCap = 80;          // $80B 기준 → 희석률 0.65% 가정시 환산
+  const dilSlider = document.getElementById('dilSlider');
+  const dilLabel  = document.getElementById('dilLabel');
+  const epsBefore = document.getElementById('epsBefore');
+  const epsAfter  = document.getElementById('epsAfter');
+  const dilAmt    = document.getElementById('dilAmt');
+  const dilPct    = document.getElementById('dilPct');
+
+  function updateDil(){
+    let pct = parseFloat(dilSlider.value); // 지분 희석률 %
+    dilLabel.textContent = pct.toFixed(2) + '%';
+    // 신주 비율만큼 EPS 희석: newEPS = baseEPS / (1 + pct/100)
+    const newEPS = baseEPS / (1 + pct/100);
+    epsBefore.textContent = '$' + baseEPS.toFixed(2);
+    epsAfter.textContent  = '$' + newEPS.toFixed(2);
+    const change = ((newEPS - baseEPS)/baseEPS*100);
+    dilPct.textContent = change.toFixed(2) + '%';
+    // 조달 자금: 희석률 0.65% ≈ 800억 달러 가정 → 비례 환산 (교육용)
+    const amt = Math.round(pct / 0.65 * 800);
+    dilAmt.textContent = '$' + amt.toLocaleString() + '억';
+  }
+  dilSlider.addEventListener('input', updateDil);
+  document.getElementById('dilReset').addEventListener('click', ()=>{
+    dilSlider.value = 0.65; updateDil();
+  });
+  updateDil();
+</script>
+
+</body>
+</html>

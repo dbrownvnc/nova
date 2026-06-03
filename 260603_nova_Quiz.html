@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>퀴즈 — 알파벳 유상증자 쇼크 & AI 인프라 랠리</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#fafafa; --txt:#1a1a1a; --txt2:#777777;
+    --accent:#e11d48; --accent2:#f43f5e; --border:#e5e5e5;
+    --green:#16a34a; --greenbg:#f0fdf4; --redbg:#fef2f2;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg2); color:var(--txt); font-family:'Noto Sans KR',sans-serif; line-height:1.7; -webkit-font-smoothing:antialiased}
+  .wrap{max-width:680px; margin:0 auto; background:var(--bg); min-height:100vh}
+
+  /* ---- Sticky score bar ---- */
+  .scorebar{position:sticky; top:0; z-index:50; background:var(--txt); color:#fff; padding:12px 18px; box-shadow:0 2px 10px rgba(0,0,0,.15)}
+  .score-row{display:flex; justify-content:space-between; align-items:center; font-size:13px; gap:8px}
+  .score-row .item b{font-family:'Playfair Display',serif; font-size:18px; color:var(--accent2)}
+  .score-row .item span{color:#bbb; font-size:11px; display:block}
+  .pbar{height:6px; background:rgba(255,255,255,.15); border-radius:3px; margin-top:10px; overflow:hidden}
+  .pbar-fill{height:100%; width:0%; background:var(--accent); transition:width .4s ease, background .4s ease; border-radius:3px}
+
+  /* ---- Header ---- */
+  header{padding:48px 22px 30px; border-bottom:3px solid var(--txt)}
+  header .kicker{font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--accent); font-weight:700; margin-bottom:14px}
+  header h1{font-family:'Playfair Display',serif; font-weight:900; font-size:30px; line-height:1.2; letter-spacing:-0.3px}
+  header p{color:var(--txt2); font-size:14px; margin-top:12px; font-weight:300}
+
+  /* ---- Quiz card ---- */
+  .quiz{padding:10px 18px 30px}
+  .card{background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:22px 18px; margin:18px 0; box-shadow:0 1px 3px rgba(0,0,0,.03)}
+  .card-top{display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap}
+  .qnum{font-family:'Playfair Display',serif; font-weight:900; font-size:22px; color:var(--accent)}
+  .badge{font-size:11px; padding:3px 10px; border-radius:20px; font-weight:500}
+  .badge.easy{background:#ecfdf5; color:#059669}
+  .badge.mid{background:#fffbeb; color:#d97706}
+  .badge.hard{background:#fef2f2; color:#dc2626}
+  .badge.type{background:var(--bg2); color:var(--txt2); border:1px solid var(--border)}
+  .qtext{font-size:16px; font-weight:500; line-height:1.6; margin-bottom:16px}
+
+  .opts{display:flex; flex-direction:column; gap:9px}
+  .opt{text-align:left; padding:13px 15px; border:1.5px solid var(--border); border-radius:5px; background:var(--bg); font-family:inherit; font-size:14px; cursor:pointer; transition:all .15s; line-height:1.5; color:var(--txt); display:flex; gap:10px; align-items:flex-start}
+  .opt:hover:not(:disabled){border-color:var(--accent); background:#fff5f7}
+  .opt:disabled{cursor:default}
+  .opt .mk{font-weight:700; color:var(--txt2); flex-shrink:0}
+  .opt.correct{background:var(--greenbg); border-color:var(--green); color:#14532d}
+  .opt.correct .mk{color:var(--green)}
+  .opt.wrong{background:var(--redbg); border-color:var(--accent); color:#7f1d1d}
+  .opt.wrong .mk{color:var(--accent)}
+  .opt .res{margin-left:auto; font-size:11px; font-weight:700; padding:2px 8px; border-radius:12px; flex-shrink:0; white-space:nowrap}
+  .opt.correct .res{background:var(--green); color:#fff}
+  .opt.wrong .res{background:var(--accent); color:#fff}
+
+  /* short answer */
+  .short{display:flex; gap:8px}
+  .short input{flex:1; padding:12px 14px; border:1.5px solid var(--border); border-radius:5px; font-family:inherit; font-size:14px; outline:none}
+  .short input:focus{border-color:var(--accent)}
+  .short input:disabled{background:var(--bg2)}
+  .short button, .ox button{padding:12px 18px; background:var(--txt); color:#fff; border:none; border-radius:5px; font-family:inherit; font-size:14px; font-weight:500; cursor:pointer; transition:background .15s}
+  .short button:hover:not(:disabled){background:var(--accent)}
+  .ox{display:flex; gap:10px}
+  .ox button{flex:1; font-size:18px; font-weight:700; padding:16px}
+  .ox button.o-btn{background:#fff; color:var(--txt); border:1.5px solid var(--border)}
+  .ox button.x-btn{background:#fff; color:var(--txt); border:1.5px solid var(--border)}
+  .ox button:hover:not(:disabled){border-color:var(--accent); color:var(--accent)}
+  .ox button.sel-correct{background:var(--greenbg); border-color:var(--green); color:var(--green)}
+  .ox button.sel-wrong{background:var(--redbg); border-color:var(--accent); color:var(--accent)}
+  .ox button.reveal{background:var(--greenbg); border-color:var(--green); color:var(--green)}
+  button:disabled{cursor:default; opacity:.85}
+
+  /* explanation */
+  .exp{max-height:0; overflow:hidden; transition:max-height .35s ease; margin-top:0}
+  .exp.show{max-height:400px; margin-top:14px}
+  .exp-in{background:var(--bg2); border-left:4px solid var(--accent); padding:14px 16px; border-radius:0 5px 5px 0; font-size:13.5px; font-weight:300; color:#333; line-height:1.65}
+  .exp-in b{color:var(--accent); display:block; margin-bottom:4px; font-size:12px; letter-spacing:.5px}
+
+  /* result modal */
+  .modal{position:fixed; inset:0; background:rgba(26,26,26,.6); display:none; align-items:center; justify-content:center; z-index:100; padding:20px}
+  .modal.show{display:flex}
+  .modal-card{background:#fff; border-radius:10px; max-width:380px; width:100%; padding:36px 28px; text-align:center; animation:pop .3s ease}
+  @keyframes pop{from{transform:scale(.9); opacity:0}to{transform:scale(1); opacity:1}}
+  .modal-card .grade{font-family:'Playfair Display',serif; font-size:64px; font-weight:900; line-height:1; color:var(--accent)}
+  .modal-card .gscore{font-size:15px; color:var(--txt2); margin:10px 0 6px}
+  .modal-card .gscore b{color:var(--txt); font-size:20px; font-family:'Playfair Display',serif}
+  .modal-card .gmsg{font-size:14px; color:#444; margin:14px 0 24px; line-height:1.6}
+  .modal-card button{padding:13px 26px; background:var(--accent); color:#fff; border:none; border-radius:6px; font-family:inherit; font-size:14px; font-weight:500; cursor:pointer}
+  .modal-card button:hover{background:var(--accent2)}
+
+  footer{text-align:center; padding:24px; font-size:11px; color:var(--txt2); font-weight:300; border-top:1px solid var(--border)}
+
+  @media(max-width:480px){
+    header h1{font-size:24px}
+    .qtext{font-size:15px}
+    .score-row{font-size:12px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="scorebar">
+    <div class="score-row">
+      <div class="item">푼 문제 <b id="sSolved">0</b> / 10</div>
+      <div class="item">맞힌 문제 <b id="sCorrect">0</b></div>
+      <div class="item">정답률 <b id="sRate">0%</b></div>
+    </div>
+    <div class="pbar"><div class="pbar-fill" id="pbarFill"></div></div>
+  </div>
+
+  <header>
+    <div class="kicker">Quiz · 2026.06.03</div>
+    <h1>알파벳 유상증자 쇼크 &amp; AI 인프라 랠리</h1>
+    <p>NOVA Real Invest 방송 분석 — 총 10문제 · 객관식/단답형/OX 혼합</p>
+  </header>
+
+  <div class="quiz" id="quizRoot"></div>
+
+  <footer>※ 본 퀴즈는 영상 학습용입니다 · 투자 권유가 아닙니다</footer>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-card">
+    <div class="grade" id="mGrade">A</div>
+    <div class="gscore">10문제 중 <b id="mScore">0</b>문제 정답</div>
+    <div class="gmsg" id="mMsg"></div>
+    <button id="retryBtn">다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id:1, type:'mc', difficulty:'easy',
+    question:'젠슨 황이 마벨(MRVL) CEO를 무대에 불러내며 사용한 표현은?',
+    options:['"The Next Trillion Dollar Company"','"The Greatest Chip Ever Made"','"Our Most Trusted Partner"','"The Future of Software"'],
+    answer:0,
+    explanation:'젠슨 황은 마벨 CEO 맷 머피를 무대 위로 부르며 "Ladies and Gentlemen, The Next Trillion Dollar Company(다음 1조 달러 기업)"라고 말했습니다. 이는 단순 립서비스가 아니었고, 실제로 주가가 폭등했습니다.'
+  },
+  {
+    id:2, type:'mc', difficulty:'mid',
+    question:'마벨(MRVL)의 당일 정규장 상승률과, 닷컴버블 이후 처음 돌파한 거래량 기준으로 옳은 것은?',
+    options:['+15.2% 상승 / 5천만 주','+32.52% 상승 / 1억 주 돌파','+50.0% 상승 / 2억 주','+9.01% 상승 / 8천만 주'],
+    answer:1,
+    explanation:'마벨은 정규장에서 +32.52% 폭등했고, 거래량이 1억 주를 돌파했습니다. 이는 2000년 닷컴버블 이후 26년 만에 처음 있는 일이었습니다. (+9.01%는 장후 추가 상승률)'
+  },
+  {
+    id:3, type:'mc', difficulty:'easy',
+    question:'알파벳이 기습 공시한 자본 조달 규모와 그날 주가 반응은?',
+    options:['800억 달러 조달 / 주가 약 −3.88% 하락','500억 달러 조달 / 주가 +2% 상승','800억 달러 조달 / 주가 +5% 상승','300억 달러 조달 / 주가 −10% 하락'],
+    answer:0,
+    explanation:'알파벳은 AI 인프라 확충을 위해 총 800억 달러 규모의 자본 조달(유상증자)을 발표했고, 주가는 약 −3.88% 폭락했습니다. 프리캐시플로우가 풍부한 회사임에도 주주가치 희석을 감수한 점이 핵심입니다.'
+  },
+  {
+    id:4, type:'mc', difficulty:'hard',
+    question:'알파벳 800억 달러 조달 구조에 포함되지 않은 항목은?',
+    options:['공모 발행 300억 달러','의무전환 우선주 150억 달러','3분기 가동 ATM 프로그램 400억 달러','국채 발행 200억 달러'],
+    answer:3,
+    explanation:'조달 구조는 공모 300억 + 의무전환 우선주 150억 + 신주 150억 + 3분기부터 가동될 ATM 프로그램 400억 달러로 구성됩니다. 여기에 버크셔 해서웨이가 100억 달러를 사모로 참여했습니다. "국채 발행"은 포함되지 않습니다.'
+  },
+  {
+    id:5, type:'ox', difficulty:'mid',
+    question:'알파벳의 유상증자가 위험 신호인 이유는, 프리캐시플로우가 가장 풍부한 알파벳마저 자본을 조달한 만큼 메타·아마존 등 다른 빅테크도 같은 선택을 할 수 있기 때문이다.',
+    answer:'O',
+    explanation:'정답은 O입니다. 진행자는 캐펙스 1위이자 현금이 가장 많은 알파벳이 유상증자를 택했다면, 캐펙스를 늘리는 메타·아마존·테슬라·마이크로소프트도 "우리도 유상증자"로 갈 수 있고, 이것이 시장 전체에 부담이 될 수 있다고 경고했습니다.'
+  },
+  {
+    id:6, type:'mc', difficulty:'mid',
+    question:'AI 투자 스택에서 \'동력원(전력 & 냉각)\' 계층에 해당하는 대표 기업은?',
+    options:['Nvidia, AMD','Marvell, Broadcom','HPE, Dell','Generac, Vertiv'],
+    answer:3,
+    explanation:'AI 투자 스택은 Layer1 실리콘(Nvidia·AMD) → Layer2 네트워킹·광학(Marvell·Broadcom·Lumentum) → Layer3 서버·랙(HPE·Dell) → Layer4 전력·냉각(Generac·Vertiv) 순입니다. 동력원 계층은 제너락(GNRC)과 버티브(VRT)입니다.'
+  },
+  {
+    id:7, type:'short', difficulty:'hard',
+    question:'현재 약 42.78에 도달해 1999년 닷컴 정점(44.19)에 근접한, 시장 고평가를 보여주는 밸류에이션 지표의 이름은? (한글 또는 영문 약어)',
+    answer:['실러','실러pe','실러p/e','cape','shiller','shillerpe','실러피이','실러 pe'],
+    explanation:'정답은 "실러 PE(CAPE, 경기조정주가수익비율)"입니다. 현재 S&P500 지수를 인플레이션 조정 10년 실질 EPS 평균으로 나눈 값으로, 현재 42.78은 1999년 12월 닷컴 정점 44.19에 매우 근접한 위험 수준입니다. (역사적 평균 17.4)'
+  },
+  {
+    id:8, type:'short', difficulty:'mid',
+    question:'예상치(686만)를 크게 상회해 2년 내 최고치인 761.8만 개를 기록한, 연준의 금리 인하 명분을 약화시킨 4월 고용 지표의 영문 약어는?',
+    answer:['jolts','졸트','졸츠'],
+    explanation:'정답은 "JOLTS"(구인·이직 보고서)입니다. 4월 JOLTS 구인건수가 761.8만 개로 예상치 686만 개를 크게 상회한 2년 내 최고치를 기록했습니다. 노동시장 견고함은 펀더멘털엔 호재지만, 연준의 조기 금리 인하 명분은 약화시킵니다.'
+  },
+  {
+    id:9, type:'ox', difficulty:'easy',
+    question:'스트레티지(MSTR)가 2022년 이후 처음으로 비트코인 32 BTC를 매각한 가장 큰 이유는, 차익 실현을 위한 자발적 판단이었다.',
+    answer:'X',
+    explanation:'정답은 X입니다. 매각 이유는 차익 실현이 아니라 우선주·전환사채 만기 도래에 따른 부채 상환 때문이었습니다. "절대 팔지 않겠다(HODL)"던 회사의 변절로 신뢰에 균열이 생겼고, 비트코인은 6만 6천 달러까지 하락했습니다.'
+  },
+  {
+    id:10, type:'mc', difficulty:'mid',
+    question:'진행자가 제시한 세 가지 행동 전략을 한 문장으로 요약한 표현은?',
+    options:['"All In, No Fear"','"Long Humility, Short Hubris (겸손을 매수, 오만을 매도)"','"Buy the Dip Forever"','"Cash is Trash"'],
+    answer:1,
+    explanation:'정답은 "Long Humility, Short Hubris(겸손을 매수하고, 오만을 매도하라)"입니다. ①추격매수 자제 ②인프라 스택 전반으로 다변화 ③유동성 이벤트 대비 현금 확보 — 세 전략의 핵심 메시지로 제시되었습니다.'
+  }
+];
+
+let state = { solved:0, correct:0, done:new Set() };
+const root = document.getElementById('quizRoot');
+const diffMap = { easy:['easy','쉬움'], mid:['mid','보통'], hard:['hard','어려움'] };
+const typeMap = { mc:'객관식', short:'단답형', ox:'OX' };
+
+function norm(s){ return (s||'').toString().trim().toLowerCase().replace(/\s+/g,'').replace(/[.\/]/g,''); }
+
+function render(){
+  root.innerHTML = '';
+  QUIZ_DATA.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.id = 'card-' + q.id;
+    const [dcls, dlabel] = diffMap[q.difficulty];
+
+    let body = '';
+    if(q.type === 'mc'){
+      body = '<div class="opts">' + q.options.map((o,i)=>
+        `<button class="opt" data-i="${i}"><span class="mk">${String.fromCharCode(65+i)}</span><span>${o}</span></button>`
+      ).join('') + '</div>';
+    } else if(q.type === 'short'){
+      body = `<div class="short"><input type="text" placeholder="정답 입력..." id="inp-${q.id}"><button data-act="submit">제출</button></div>`;
+    } else if(q.type === 'ox'){
+      body = `<div class="ox"><button class="o-btn" data-v="O">O</button><button class="x-btn" data-v="X">X</button></div>`;
+    }
+
+    card.innerHTML = `
+      <div class="card-top">
+        <span class="qnum">${q.id < 10 ? '0'+q.id : q.id}</span>
+        <span class="badge ${dcls}">${dlabel}</span>
+        <span class="badge type">${typeMap[q.type]}</span>
+      </div>
+      <div class="qtext">${q.question}</div>
+      ${body}
+      <div class="exp" id="exp-${q.id}">
+        <div class="exp-in"><b>해설</b>${q.explanation}</div>
+      </div>`;
+    root.appendChild(card);
+
+    // bind
+    if(q.type === 'mc'){
+      card.querySelectorAll('.opt').forEach(btn=>{
+        btn.addEventListener('click', ()=> handleMC(q, card, parseInt(btn.dataset.i)));
+      });
+    } else if(q.type === 'short'){
+      const submit = ()=> handleShort(q, card);
+      card.querySelector('[data-act=submit]').addEventListener('click', submit);
+      card.querySelector('input').addEventListener('keydown', e=>{ if(e.key==='Enter') submit(); });
+    } else if(q.type === 'ox'){
+      card.querySelectorAll('.ox button').forEach(btn=>{
+        btn.addEventListener('click', ()=> handleOX(q, card, btn.dataset.v));
+      });
+    }
+  });
+}
+
+function lockExplain(q){
+  document.getElementById('exp-'+q.id).classList.add('show');
+}
+function tally(isCorrect, q){
+  if(state.done.has(q.id)) return;
+  state.done.add(q.id);
+  state.solved++;
+  if(isCorrect) state.correct++;
+  updateBar();
+  if(state.solved === QUIZ_DATA.length) setTimeout(showModal, 450);
+}
+
+function handleMC(q, card, idx){
+  if(state.done.has(q.id)) return;
+  const opts = card.querySelectorAll('.opt');
+  const isCorrect = idx === q.answer;
+  opts.forEach((o,i)=>{
+    o.disabled = true;
+    if(i === q.answer){
+      o.classList.add('correct');
+      o.insertAdjacentHTML('beforeend','<span class="res">✓ 정답</span>');
+    }
+    if(i === idx && !isCorrect){
+      o.classList.add('wrong');
+      o.insertAdjacentHTML('beforeend','<span class="res">✗ 오답</span>');
+    }
+  });
+  lockExplain(q); tally(isCorrect, q);
+}
+
+function handleShort(q, card){
+  if(state.done.has(q.id)) return;
+  const inp = card.querySelector('input');
+  const val = norm(inp.value);
+  if(!val){ inp.focus(); return; }
+  const isCorrect = q.answer.some(a => norm(a) === val);
+  inp.disabled = true;
+  const btn = card.querySelector('button');
+  btn.disabled = true;
+  inp.style.borderColor = isCorrect ? 'var(--green)' : 'var(--accent)';
+  inp.style.background = isCorrect ? 'var(--greenbg)' : 'var(--redbg)';
+  btn.textContent = isCorrect ? '✓ 정답' : '✗ 오답';
+  btn.style.background = isCorrect ? 'var(--green)' : 'var(--accent)';
+  lockExplain(q); tally(isCorrect, q);
+}
+
+function handleOX(q, card, v){
+  if(state.done.has(q.id)) return;
+  const isCorrect = v === q.answer;
+  const btns = card.querySelectorAll('.ox button');
+  btns.forEach(b=>{
+    b.disabled = true;
+    if(b.dataset.v === q.answer && !isCorrect) b.classList.add('reveal');
+    if(b.dataset.v === v) b.classList.add(isCorrect ? 'sel-correct' : 'sel-wrong');
+  });
+  lockExplain(q); tally(isCorrect, q);
+}
+
+function updateBar(){
+  document.getElementById('sSolved').textContent = state.solved;
+  document.getElementById('sCorrect').textContent = state.correct;
+  const rate = state.solved ? Math.round(state.correct/state.solved*100) : 0;
+  document.getElementById('sRate').textContent = rate + '%';
+  const fill = document.getElementById('pbarFill');
+  fill.style.width = rate + '%';
+  fill.style.background = rate < 40 ? '#dc2626' : rate < 70 ? '#f59e0b' : '#16a34a';
+}
+
+function showModal(){
+  const n = state.correct;
+  let grade, msg;
+  if(n >= 9){ grade='A'; msg='탁월합니다! AI 인프라 흐름을 완벽히 꿰뚫고 계시네요.'; }
+  else if(n >= 7){ grade='B'; msg='훌륭합니다! 핵심 맥락을 잘 잡으셨습니다.'; }
+  else if(n >= 5){ grade='C'; msg='좋아요. 몇몇 디테일을 다시 보면 완벽해집니다.'; }
+  else { grade='D'; msg='해설을 천천히 복습해보세요. 다시 도전!'; }
+  document.getElementById('mGrade').textContent = grade;
+  document.getElementById('mScore').textContent = n;
+  document.getElementById('mMsg').textContent = msg;
+  document.getElementById('modal').classList.add('show');
+}
+
+document.getElementById('retryBtn').addEventListener('click', ()=>{
+  state = { solved:0, correct:0, done:new Set() };
+  document.getElementById('modal').classList.remove('show');
+  updateBar(); render();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+render();
+updateBar();
+</script>
+</body>
+</html>
