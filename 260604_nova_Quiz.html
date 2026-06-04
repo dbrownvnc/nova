@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>차가운 현실 자각 · 시장 리포트 퀴즈 (10문제)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;--bg2:#fafafa;--ink:#1a1a1a;--sub:#777777;
+    --rose:#e11d48;--rose2:#f43f5e;--line:#e5e5e5;
+    --green:#16a34a;--greenbg:#ecfdf5;--redbg:#fef2f2;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:'Noto Sans KR',sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:680px;margin:0 auto;padding:0 18px 90px}
+
+  /* sticky score bar */
+  .scorebar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:12px 18px}
+  .scorebar .inner{max-width:680px;margin:0 auto}
+  .score-row{display:flex;justify-content:space-between;align-items:center;font-size:.82rem;font-weight:700;gap:8px;flex-wrap:wrap}
+  .score-row .it{color:var(--sub)}
+  .score-row .it b{color:var(--ink);font-size:1.0rem}
+  .score-row .rate b{color:var(--rose);font-size:1.05rem}
+  .pbar{height:7px;background:var(--line);border-radius:6px;margin-top:9px;overflow:hidden}
+  .pfill{height:100%;width:0;background:var(--rose);border-radius:6px;transition:width .4s ease,background .3s ease}
+
+  /* header */
+  header{padding:46px 0 26px;border-bottom:2px solid var(--ink);margin-bottom:8px}
+  .kick{font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--rose);font-weight:700;margin-bottom:14px}
+  h1{font-family:'Playfair Display',serif;font-weight:900;font-size:2rem;line-height:1.15}
+  h1 .ko{font-family:'Noto Sans KR';font-weight:900;font-size:1.45rem;display:block;margin-top:6px}
+  .sub{color:var(--sub);font-size:.9rem;margin-top:14px;line-height:1.6}
+
+  /* question card */
+  .q{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:22px 18px;margin-top:20px}
+  .q-top{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+  .qnum{font-family:'Playfair Display',serif;font-weight:900;font-size:1.3rem;color:var(--rose)}
+  .badge{font-size:.66rem;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.04em}
+  .b-type{background:var(--ink);color:#fff}
+  .b-easy{background:#dcfce7;color:#15803d}
+  .b-mid{background:#fef9c3;color:#a16207}
+  .b-hard{background:#fee2e2;color:#b91c1c}
+  .qtext{font-weight:700;font-size:1.05rem;line-height:1.6}
+
+  /* options */
+  .opts{margin-top:16px;display:flex;flex-direction:column;gap:9px}
+  .opt{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:13px 15px;font-size:.94rem;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:11px;text-align:left;font-family:'Noto Sans KR';color:var(--ink)}
+  .opt:hover:not(:disabled){border-color:var(--rose);background:#fff5f7}
+  .opt .mk{width:26px;height:26px;min-width:26px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;color:var(--sub)}
+  .opt:disabled{cursor:default}
+  .opt.correct{border-color:var(--green);background:var(--greenbg)}
+  .opt.correct .mk{background:var(--green);border-color:var(--green);color:#fff}
+  .opt.wrong{border-color:var(--rose);background:var(--redbg)}
+  .opt.wrong .mk{background:var(--rose);border-color:var(--rose);color:#fff}
+  .opt .tag{margin-left:auto;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:6px}
+  .opt.correct .tag{background:var(--green);color:#fff}
+  .opt.wrong .tag{background:var(--rose);color:#fff}
+
+  /* OX */
+  .ox{display:flex;gap:12px;margin-top:16px}
+  .ox button{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:18px;font-size:1.4rem;font-weight:900;cursor:pointer;transition:all .18s;font-family:'Playfair Display',serif}
+  .ox button:hover:not(:disabled){border-color:var(--rose)}
+  .ox button.correct{border-color:var(--green);background:var(--greenbg);color:var(--green)}
+  .ox button.wrong{border-color:var(--rose);background:var(--redbg);color:var(--rose)}
+  .ox button:disabled{cursor:default}
+
+  /* short answer */
+  .sa{display:flex;gap:8px;margin-top:16px}
+  .sa input{flex:1;border:1.5px solid var(--line);border-radius:10px;padding:13px 15px;font-size:.95rem;font-family:'Noto Sans KR';outline:none}
+  .sa input:focus{border-color:var(--rose)}
+  .sa input:disabled{background:var(--bg2)}
+  .sa button{border:none;background:var(--ink);color:#fff;font-weight:700;padding:0 20px;border-radius:10px;cursor:pointer;font-family:'Noto Sans KR';font-size:.9rem}
+  .sa button:disabled{background:#bbb;cursor:default}
+  .sa-hint{font-size:.74rem;color:var(--sub);margin-top:8px}
+
+  /* explanation */
+  .exp{max-height:0;overflow:hidden;transition:max-height .4s ease;margin-top:0}
+  .exp.show{max-height:400px;margin-top:16px}
+  .exp-in{background:#fff;border-left:4px solid var(--rose);border-radius:0 10px 10px 0;padding:14px 16px}
+  .exp-in .et{font-weight:700;font-size:.82rem;color:var(--rose);margin-bottom:6px;letter-spacing:.03em}
+  .exp-in .ans{font-weight:700;font-size:.9rem;margin-bottom:7px}
+  .exp-in .ed{font-size:.86rem;color:#444;line-height:1.65}
+
+  /* result modal */
+  .overlay{position:fixed;inset:0;background:rgba(26,26,26,.6);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+  .overlay.show{display:flex}
+  .modal{background:#fff;border-radius:18px;max-width:420px;width:100%;padding:34px 26px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+  .modal .grade{font-family:'Playfair Display',serif;font-weight:900;font-size:4.5rem;line-height:1;color:var(--rose)}
+  .modal .gt{font-size:.78rem;letter-spacing:.2em;color:var(--sub);text-transform:uppercase;font-weight:700;margin-top:6px}
+  .modal .sc{font-size:1.5rem;font-weight:900;margin-top:18px}
+  .modal .sc small{font-size:.9rem;color:var(--sub);font-weight:400}
+  .modal .msg{font-size:.92rem;color:#444;margin-top:14px;line-height:1.65}
+  .modal .retry{margin-top:24px;width:100%;border:none;background:var(--ink);color:#fff;font-weight:700;padding:14px;border-radius:10px;font-size:.95rem;cursor:pointer;font-family:'Noto Sans KR'}
+  .modal .retry:hover{background:var(--rose)}
+
+  footer{text-align:center;margin-top:40px;font-size:.74rem;color:var(--sub);line-height:1.7}
+
+  @media(max-width:480px){
+    h1{font-size:1.65rem}h1 .ko{font-size:1.2rem}
+    .qtext{font-size:1.0rem}
+  }
+</style>
+</head>
+<body>
+
+<div class="scorebar">
+  <div class="inner">
+    <div class="score-row">
+      <span class="it">푼 문제 <b id="sSolved">0</b> / 10</span>
+      <span class="it">맞힌 문제 <b id="sCorrect">0</b></span>
+      <span class="it rate">정답률 <b id="sRate">0%</b></span>
+    </div>
+    <div class="pbar"><div class="pfill" id="pfill"></div></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <header>
+    <div class="kick">NOVA REAL INVEST · CIA CHAT · QUIZ</div>
+    <h1>Reality Check Quiz<span class="ko">차가운 현실 자각 — 2026.06.03 시장 리포트</span></h1>
+    <p class="sub">10문제 · 객관식 6 · 단답형 3 · OX 1. 답을 고르면 즉시 채점되고 해설이 펼쳐집니다. 상단 점수판은 실시간으로 갱신됩니다.</p>
+  </header>
+
+  <div id="quiz"></div>
+
+  <footer>NOVA REAL INVEST · CIA 멤버 미팅 기반 복습 퀴즈 · 2026.06.03</footer>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="grade" id="mGrade">A</div>
+    <div class="gt">Final Grade</div>
+    <div class="sc" id="mScore">0 <small>/ 10</small></div>
+    <div class="msg" id="mMsg"></div>
+    <button class="retry" onclick="resetQuiz()">다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id:1, type:'mc', difficulty:'easy',
+    question:'S&P 500은 9거래일 연속 상승 후 마감했습니다. 이날 도전했다가 결국 실패한 대기록은 무엇입니까?',
+    options:['2000년 이후 최고가 경신','1995년 이후 최초 10거래일 연속 상승','사상 최초 8,000선 돌파','3대 지수 동시 신고가'],
+    answer:1,
+    explanation:'9일 연속 상승 후, 1995년 이후 최초의 10거래일 연속 상승이라는 기록에 도전했으나 결국 실패하고 하락 마감했습니다.'
+  },
+  {
+    id:2, type:'sa', difficulty:'easy',
+    question:'다우지수는 이날 하루 만에 약 몇 포인트가 빠졌습니까? (숫자만, 예: 500)',
+    accept:['621','620','621포인트','620포인트','-621','621pt'],
+    answer:'약 621포인트 (−1.21%)',
+    explanation:'다우는 50,687로 마감하며 하루 만에 약 621포인트(−1.21%) 급락, 대형주 매도세가 집중됐습니다.'
+  },
+  {
+    id:3, type:'ox', difficulty:'easy',
+    question:'이번 하락은 그동안의 상승에 따른 단순 차익실현(profit-taking)이다.',
+    answer:'X',
+    explanation:'X. 단순 차익실현이 아니라 에너지·금리·지정학 리스크가 동시에 반영된 구조적 매도세였습니다.'
+  },
+  {
+    id:4, type:'mc', difficulty:'mid',
+    question:'Macro Domino(시스템 리스크 연쇄)에서 ‘에너지 충격’ 단계의 WTI 원유는 하루 만에 2.5% 급등하며 어느 가격을 돌파했습니까?',
+    options:['$86','$96','$106','$116'],
+    answer:1,
+    explanation:'지정학 충격 → 에너지 충격으로 WTI 원유가 2.5% 급등하며 $96를 돌파했습니다.'
+  },
+  {
+    id:5, type:'sa', difficulty:'mid',
+    question:'인플레이션·유가 공포로 미국 10년물 국채 금리가 터치한 수치는 몇 %입니까? (숫자만, 예: 4.0)',
+    accept:['4.49','4.5','4.49%','4.5%','449'],
+    answer:'4.49% (장중 4.5 부근)',
+    explanation:'금리 급등 단계에서 미국 10년물 국채 금리가 4.49%를 터치했습니다.'
+  },
+  {
+    id:6, type:'mc', difficulty:'mid',
+    question:'5월 ISM 서비스업 가격지수가 71.3으로 나온 것이 의미하는 바로 가장 적절한 것은?',
+    options:['서비스 수요 둔화 신호','약 4년래 최고치 — 비용 인상형 인플레이션 압력','경기 침체 진입 신호','연준의 금리 인하 임박 신호'],
+    answer:1,
+    explanation:'가격지수 71.3은 약 4년래 최고치로, 관세와 유가에서 비롯된 비용 인상형(cost-push) 인플레이션을 가리킵니다.'
+  },
+  {
+    id:7, type:'mc', difficulty:'mid',
+    question:'노동시장 호조(ADP +12.2만 명)가 오히려 악재로 작용한 이유는, 연준의 2026년 내 금리 인상 확률이 몇 %까지 급상승했기 때문입니다?',
+    options:['15%','25%','35%','55%'],
+    answer:2,
+    explanation:'견고한 고용 지표가 연준의 2026년 내 금리 인상 확률을 35%까지 급상승시키며 부담 요인이 됐습니다.'
+  },
+  {
+    id:8, type:'mc', difficulty:'hard',
+    question:'Broadcom(AVGO)은 매출 +48%, AI매출 143% 초과 등 호실적에도 시간외 −6.7% 하락했습니다. ‘숨겨진 실망 요인’은 무엇입니까?',
+    options:['매출 가이던스 하향','자사주 매입 규모 급감 ($7.8B → $0.6B)','CEO 사임 발표','AI 칩 수율 문제'],
+    answer:1,
+    explanation:'호실적에도 자사주 매입을 78억 달러에서 6억 달러로 급감시켰습니다. “번 돈을 주주에게 돌려주기보다 AI에 써야 한다”는 자본 환원 축소가 실망 요인이었습니다.'
+  },
+  {
+    id:9, type:'sa', difficulty:'mid',
+    question:'돈이 AI에서 빠져나가는 ‘매도’가 아니라, AI 인프라 내부에서 일어나는 이 현상을 무엇이라 부릅니까? (○○ 로테이션)',
+    accept:['섹터','섹터 로테이션','sector','sector rotation','ai 인프라 로테이션','인프라'],
+    answer:'섹터 로테이션 (AI 인프라 로테이션)',
+    explanation:'AI에서 탈출하는 게 아니라 범용 GPU·메가캡에서 맞춤형 칩·전력·광학 부품으로 자금이 이동하는 ‘섹터 로테이션(AI 인프라 로테이션)’입니다.'
+  },
+  {
+    id:10, type:'mc', difficulty:'hard',
+    question:'임박한 SpaceX(SPCX) IPO의 총 밸류에이션과 상장 목표일이 올바르게 짝지어진 것은?',
+    options:['$1.0조 / 6월 5일','$1.75조 / 6월 12일','$2.5조 / 7월 1일','$0.75조 / 6월 12일'],
+    answer:1,
+    explanation:'총 밸류에이션 $1.75조(사상 최대 IPO), 상장 목표일은 2026년 6월 12일(금)입니다. 공모가는 주당 $135, 조달액 약 $750억입니다.'
+  }
+];
+
+let state = { solved:0, correct:0, done:new Set() };
+const quizEl = document.getElementById('quiz');
+
+const diffBadge = (d)=> d==='easy'?'<span class="badge b-easy">쉬움</span>'
+  : d==='mid'?'<span class="badge b-mid">보통</span>'
+  : '<span class="badge b-hard">어려움</span>';
+const typeBadge = (t)=> t==='mc'?'객관식' : t==='sa'?'단답형' : 'OX';
+
+function render(){
+  quizEl.innerHTML='';
+  QUIZ_DATA.forEach((q,idx)=>{
+    const card=document.createElement('div');
+    card.className='q'; card.id='q'+q.id;
+    let inner=`<div class="q-top"><span class="qnum">${String(idx+1).padStart(2,'0')}</span>
+      <span class="badge b-type">${typeBadge(q.type)}</span>${diffBadge(q.difficulty)}</div>
+      <div class="qtext">${q.question}</div>`;
+
+    if(q.type==='mc'){
+      inner+='<div class="opts">';
+      q.options.forEach((o,i)=>{
+        inner+=`<button class="opt" onclick="answerMC(${q.id},${i},this)">
+          <span class="mk">${String.fromCharCode(65+i)}</span><span>${o}</span></button>`;
+      });
+      inner+='</div>';
+    } else if(q.type==='ox'){
+      inner+=`<div class="ox">
+        <button onclick="answerOX(${q.id},'O',this)">O</button>
+        <button onclick="answerOX(${q.id},'X',this)">X</button></div>`;
+    } else {
+      inner+=`<div class="sa">
+        <input type="text" id="sa${q.id}" placeholder="정답 입력 후 제출" onkeydown="if(event.key==='Enter')answerSA(${q.id},this.parentNode)">
+        <button onclick="answerSA(${q.id},this.parentNode)">제출</button></div>
+        <div class="sa-hint">※ 핵심 단어/숫자만 입력해도 인정됩니다.</div>`;
+    }
+    inner+=`<div class="exp" id="exp${q.id}"><div class="exp-in">
+      <div class="et">📌 해설</div>
+      <div class="ans">정답: ${q.type==='mc'?String.fromCharCode(65+q.answer)+'. '+q.options[q.answer]:q.answer}</div>
+      <div class="ed">${q.explanation}</div></div></div>`;
+    card.innerHTML=inner;
+    quizEl.appendChild(card);
+  });
+}
+
+function lock(q){ state.done.add(q.id); }
+function showExp(id){ document.getElementById('exp'+id).classList.add('show'); }
+
+function commit(isCorrect){
+  state.solved++; if(isCorrect) state.correct++;
+  updateBar();
+  if(state.solved===QUIZ_DATA.length) setTimeout(showResult,500);
+}
+
+function answerMC(id,choice,btn){
+  if(state.done.has(id))return;
+  const q=QUIZ_DATA.find(x=>x.id===id);
+  const opts=btn.parentNode.querySelectorAll('.opt');
+  opts.forEach(o=>o.disabled=true);
+  const correct=choice===q.answer;
+  if(correct){
+    btn.classList.add('correct');
+    btn.insertAdjacentHTML('beforeend','<span class="tag">✓ 정답!</span>');
+  }else{
+    btn.classList.add('wrong');
+    btn.insertAdjacentHTML('beforeend','<span class="tag">✗ 오답</span>');
+    const right=opts[q.answer];
+    right.classList.add('correct');
+    right.insertAdjacentHTML('beforeend','<span class="tag">정답</span>');
+  }
+  lock(q); showExp(id); commit(correct);
+}
+
+function answerOX(id,val,btn){
+  if(state.done.has(id))return;
+  const q=QUIZ_DATA.find(x=>x.id===id);
+  const btns=btn.parentNode.querySelectorAll('button');
+  btns.forEach(b=>b.disabled=true);
+  const correct=val===q.answer;
+  if(correct){ btn.classList.add('correct'); }
+  else{
+    btn.classList.add('wrong');
+    btns.forEach(b=>{ if(b.textContent===q.answer) b.classList.add('correct'); });
+  }
+  lock(q); showExp(id); commit(correct);
+}
+
+function answerSA(id,wrap){
+  if(state.done.has(id))return;
+  const q=QUIZ_DATA.find(x=>x.id===id);
+  const input=wrap.querySelector('input');
+  const val=input.value.trim().toLowerCase().replace(/\s+/g,' ');
+  if(!val){ input.focus(); return; }
+  const correct=q.accept.some(a=> val.includes(a.toLowerCase()) || a.toLowerCase().includes(val) && val.length>=1);
+  input.disabled=true; wrap.querySelector('button').disabled=true;
+  input.style.borderColor = correct ? 'var(--green)' : 'var(--rose)';
+  input.style.background = correct ? 'var(--greenbg)' : 'var(--redbg)';
+  lock(q); showExp(id); commit(correct);
+}
+
+function updateBar(){
+  document.getElementById('sSolved').textContent=state.solved;
+  document.getElementById('sCorrect').textContent=state.correct;
+  const rate = state.solved? Math.round(state.correct/state.solved*100):0;
+  document.getElementById('sRate').textContent=rate+'%';
+  const fill=document.getElementById('pfill');
+  fill.style.width=(state.solved/QUIZ_DATA.length*100)+'%';
+  let col = rate<40?'var(--rose)' : rate<70?'#f59e0b':'var(--green)';
+  fill.style.background=col;
+}
+
+function showResult(){
+  const total=QUIZ_DATA.length, sc=state.correct;
+  const pct=sc/total*100;
+  let g,msg;
+  if(pct>=90){g='A';msg='탁월합니다! 오늘 시장의 핵심 논리를 완벽히 꿰뚫었습니다. 현실 자각 완료.';}
+  else if(pct>=70){g='B';msg='훌륭합니다. 큰 그림은 정확히 잡았습니다. 디테일만 한 번 더 복습해 보세요.';}
+  else if(pct>=50){g='C';msg='기본은 갖췄습니다. 리포트를 다시 보며 도미노·로테이션 흐름을 정리해 보세요.';}
+  else{g='D';msg='아직 워밍업 단계입니다. 분석 리포트를 한 번 더 읽고 도전해 보세요!';}
+  document.getElementById('mGrade').textContent=g;
+  document.getElementById('mScore').innerHTML=sc+' <small>/ '+total+'</small>';
+  document.getElementById('mMsg').textContent=msg;
+  document.getElementById('overlay').classList.add('show');
+}
+
+function resetQuiz(){
+  state={solved:0,correct:0,done:new Set()};
+  document.getElementById('overlay').classList.remove('show');
+  updateBar(); render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+render(); updateBar();
+</script>
+</body>
+</html>
