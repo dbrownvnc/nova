@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>반도체 대학살 — 인터랙티브 시험문제</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#fafafa; --text:#1a1a1a; --text2:#777777;
+    --accent:#e11d48; --accent2:#f43f5e; --border:#e5e5e5;
+    --green:#16a34a; --green-bg:#dcfce7; --red:#dc2626; --red-bg:#fee2e2;
+    --orange:#ea580c;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg2); color:var(--text); font-family:'Noto Sans KR',sans-serif; line-height:1.7; -webkit-font-smoothing:antialiased}
+  .wrap{max-width:680px; margin:0 auto; padding:0 16px 60px}
+
+  /* HEADER */
+  .qhead{text-align:center; padding:46px 16px 30px; background:var(--bg)}
+  .qhead .k{font-weight:700; font-size:.7rem; letter-spacing:.26em; color:var(--accent); text-transform:uppercase; margin-bottom:14px}
+  .qhead h1{font-family:'Playfair Display',serif; font-weight:900; font-size:clamp(1.8rem,7vw,2.6rem); line-height:1.1; letter-spacing:-.02em}
+  .qhead h1 em{font-style:italic; color:var(--accent)}
+  .qhead p{color:var(--text2); font-size:.9rem; margin-top:12px}
+
+  /* STICKY SCOREBOARD */
+  .scoreboard{position:sticky; top:0; z-index:50; background:var(--bg); border-bottom:1px solid var(--border); box-shadow:0 2px 12px rgba(0,0,0,.05)}
+  .sb-inner{max-width:680px; margin:0 auto; padding:12px 16px}
+  .sb-stats{display:flex; justify-content:space-between; align-items:center; margin-bottom:9px}
+  .sb-stat{text-align:center; flex:1}
+  .sb-stat .v{font-family:'Playfair Display',serif; font-weight:800; font-size:1.5rem; line-height:1; color:var(--text)}
+  .sb-stat .v.acc{color:var(--accent)}
+  .sb-stat .l{font-size:.64rem; color:var(--text2); margin-top:3px; letter-spacing:.03em}
+  .sb-stat.divider{flex:0; border-left:1px solid var(--border); align-self:stretch}
+  .progress{height:7px; background:var(--border); border-radius:4px; overflow:hidden}
+  .progress-fill{height:100%; width:0%; background:var(--red); border-radius:4px; transition:width .5s ease, background .4s ease}
+
+  /* QUIZ CARD */
+  .quiz-list{margin-top:24px}
+  .card{background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:22px 20px; margin-bottom:18px; box-shadow:0 1px 3px rgba(0,0,0,.03)}
+  .card-top{display:flex; align-items:center; gap:9px; margin-bottom:14px; flex-wrap:wrap}
+  .qnum{font-family:'Playfair Display',serif; font-weight:800; font-size:1.1rem; color:var(--accent)}
+  .badge{font-size:.66rem; font-weight:700; padding:3px 9px; border-radius:20px; letter-spacing:.03em}
+  .badge.type{background:#eef2ff; color:#4338ca}
+  .badge.d-easy{background:var(--green-bg); color:var(--green)}
+  .badge.d-mid{background:#fef9c3; color:#ca8a04}
+  .badge.d-hard{background:var(--red-bg); color:var(--red)}
+  .q-text{font-size:1.02rem; font-weight:500; line-height:1.55; margin-bottom:16px}
+
+  /* OPTIONS */
+  .options{display:flex; flex-direction:column; gap:9px}
+  .opt{display:flex; align-items:flex-start; gap:11px; padding:13px 15px; border:1.5px solid var(--border); border-radius:8px; cursor:pointer; transition:all .18s; background:var(--bg); font-size:.94rem; text-align:left; font-family:inherit; line-height:1.45}
+  .opt:hover:not(:disabled){border-color:var(--accent); background:#fff5f7}
+  .opt:disabled{cursor:default}
+  .opt .mark{flex:none; width:24px; height:24px; border-radius:50%; border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:.78rem; font-weight:700; color:var(--text2); transition:all .18s}
+  .opt.correct{border-color:var(--green); background:var(--green-bg)}
+  .opt.correct .mark{background:var(--green); border-color:var(--green); color:#fff}
+  .opt.wrong{border-color:var(--red); background:var(--red-bg)}
+  .opt.wrong .mark{background:var(--red); border-color:var(--red); color:#fff}
+  .opt .badge-res{margin-left:auto; flex:none; font-size:.72rem; font-weight:700; padding:2px 8px; border-radius:12px; align-self:center}
+  .opt.correct .badge-res{background:var(--green); color:#fff}
+  .opt.wrong .badge-res{background:var(--red); color:#fff}
+
+  /* SHORT ANSWER */
+  .sa-wrap{display:flex; gap:8px}
+  .sa-input{flex:1; padding:12px 14px; border:1.5px solid var(--border); border-radius:8px; font-family:inherit; font-size:.95rem; outline:none; transition:border-color .18s}
+  .sa-input:focus{border-color:var(--accent)}
+  .sa-input:disabled{background:var(--bg2)}
+  .sa-input.correct{border-color:var(--green); background:var(--green-bg)}
+  .sa-input.wrong{border-color:var(--red); background:var(--red-bg)}
+  .sa-btn{padding:0 20px; background:var(--accent); color:#fff; border:none; border-radius:8px; font-family:inherit; font-weight:700; font-size:.9rem; cursor:pointer; transition:background .18s}
+  .sa-btn:hover:not(:disabled){background:var(--accent2)}
+  .sa-btn:disabled{background:var(--text2); cursor:default}
+
+  /* OX */
+  .ox-wrap{display:flex; gap:12px}
+  .ox-btn{flex:1; padding:18px; border:1.5px solid var(--border); border-radius:10px; background:var(--bg); font-family:'Playfair Display',serif; font-weight:800; font-size:1.6rem; cursor:pointer; transition:all .18s; color:var(--text)}
+  .ox-btn:hover:not(:disabled){border-color:var(--accent); background:#fff5f7}
+  .ox-btn:disabled{cursor:default}
+  .ox-btn.correct{border-color:var(--green); background:var(--green-bg); color:var(--green)}
+  .ox-btn.wrong{border-color:var(--red); background:var(--red-bg); color:var(--red)}
+
+  /* EXPLANATION */
+  .explain{max-height:0; overflow:hidden; transition:max-height .4s ease; margin-top:0}
+  .explain.show{max-height:600px; margin-top:16px}
+  .explain-in{background:var(--bg2); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:14px 16px}
+  .explain-in .et{font-weight:700; font-size:.84rem; color:var(--accent); margin-bottom:6px; display:flex; align-items:center; gap:6px}
+  .explain-in .eb{font-size:.88rem; color:var(--text); line-height:1.6}
+  .explain-in .src{display:block; margin-top:9px; padding-top:9px; border-top:1px dashed var(--border); font-size:.78rem; color:var(--text2); font-style:italic}
+
+  /* RESULT MODAL */
+  .modal-bg{position:fixed; inset:0; background:rgba(26,26,26,.6); display:none; align-items:center; justify-content:center; z-index:100; padding:20px; backdrop-filter:blur(3px)}
+  .modal-bg.show{display:flex; animation:fadein .3s ease}
+  @keyframes fadein{from{opacity:0}to{opacity:1}}
+  .modal{background:var(--bg); border-radius:16px; max-width:380px; width:100%; padding:36px 28px; text-align:center; animation:pop .4s cubic-bezier(.2,1.2,.4,1)}
+  @keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+  .modal .grade{font-family:'Playfair Display',serif; font-weight:900; font-size:4.5rem; line-height:1; margin-bottom:6px}
+  .modal .score{font-size:1.05rem; font-weight:700; margin-bottom:4px}
+  .modal .msg{font-size:.9rem; color:var(--text2); margin-bottom:24px}
+  .modal .ring{width:130px; height:130px; margin:0 auto 18px; position:relative}
+  .modal .ring svg{transform:rotate(-90deg)}
+  .modal .ring .rt{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column}
+  .modal .ring .rt b{font-family:'Playfair Display'; font-size:2rem; font-weight:800; line-height:1}
+  .modal .ring .rt span{font-size:.64rem; color:var(--text2)}
+  .modal .retry{margin-top:6px; width:100%; padding:14px; background:var(--accent); color:#fff; border:none; border-radius:10px; font-family:inherit; font-weight:700; font-size:.95rem; cursor:pointer; transition:background .2s}
+  .modal .retry:hover{background:var(--accent2)}
+
+  .foot{text-align:center; font-size:.74rem; color:var(--text2); margin-top:30px; line-height:1.6}
+</style>
+</head>
+<body>
+
+<div class="qhead">
+  <div class="k">NOVA REAL INVEST · QUIZ</div>
+  <h1>반도체 <em>대학살</em><br>이해도 점검</h1>
+  <p>2026.06.05 방송 · 총 10문제 · 클릭 즉시 채점</p>
+</div>
+
+<div class="scoreboard">
+  <div class="sb-inner">
+    <div class="sb-stats">
+      <div class="sb-stat"><div class="v" id="sbSolved">0 / 10</div><div class="l">푼 문제</div></div>
+      <div class="sb-stat divider"></div>
+      <div class="sb-stat"><div class="v" id="sbCorrect">0</div><div class="l">맞힌 문제</div></div>
+      <div class="sb-stat divider"></div>
+      <div class="sb-stat"><div class="v acc" id="sbRate">0%</div><div class="l">정답률</div></div>
+    </div>
+    <div class="progress"><div class="progress-fill" id="sbBar"></div></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="quiz-list" id="quizList"></div>
+  <p class="foot">본 퀴즈는 NOVA Real Invest 방송(2026.06.05) 내용을 근거로 제작된 교육용 자료입니다.<br>투자 권유가 아니며 모든 판단의 책임은 본인에게 있습니다.</p>
+</div>
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <div class="ring">
+      <svg width="130" height="130">
+        <circle cx="65" cy="65" r="56" fill="none" stroke="#e5e5e5" stroke-width="11"/>
+        <circle id="ringFill" cx="65" cy="65" r="56" fill="none" stroke="#e11d48" stroke-width="11" stroke-linecap="round" stroke-dasharray="351.86" stroke-dashoffset="351.86"/>
+      </svg>
+      <div class="rt"><b id="ringPct">0%</b><span>정답률</span></div>
+    </div>
+    <div class="grade" id="mGrade">A</div>
+    <div class="score" id="mScore">10문제 중 10문제 정답</div>
+    <div class="msg" id="mMsg"></div>
+    <button class="retry" id="mRetry">↺ 다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA=[
+  {
+    id:1, type:'mc', difficulty:'easy',
+    question:"이날 SOX 반도체 지수는 몇 % 폭락하며 '6년 만의 최악의 하루'를 기록했나요?",
+    options:["-4.2%","-6.2%","-10.3%","-17.8%"],
+    answer:2,
+    explanation:"SOX 반도체 지수는 -10.3% 폭락해 6년 만의 최악의 거래일을 기록했고, 반도체 섹터에서만 시총 1조 달러가 증발했습니다.",
+    src:"방송: \"SOX 지수는 마이너스 10%나 빠졌어요… 반도체 시총이 1조 달러가 날라가 버렸습니다\""
+  },
+  {
+    id:2, type:'ox', difficulty:'easy',
+    question:"이날 하루 만에 반도체 섹터에서 시가총액 1조 달러가 증발했다.",
+    answer:'O',
+    explanation:"맞습니다. SOX 지수 -10.3% 폭락과 함께 반도체 시총 1조 달러가 하루 만에 사라졌습니다.",
+    src:"방송: \"반도체 시총이 1조 달러가 날라가 버렸습니다… 순식간에 없어져 버린 겁니다\""
+  },
+  {
+    id:3, type:'mc', difficulty:'easy',
+    question:"나스닥 종합지수의 이날 하락률은 약 얼마였나요?",
+    options:["-2.64%","-3.4%","-4.2%","-10.3%"],
+    answer:2,
+    explanation:"나스닥은 약 -4.2% 하락했습니다. 같은 날 S&P500은 -2.64%, 다우는 약 -3.4%로, AI·기술주 중심의 매도가 나스닥 낙폭을 키웠습니다.",
+    src:"방송: \"나스닥이 무려 마이너스 4.2%나 빠졌죠… 4% 빠졌어 나스닥\""
+  },
+  {
+    id:4, type:'mc', difficulty:'mid',
+    question:"이번 폭풍의 진앙이 된 5월 고용 지표의 예상치와 실제치는?",
+    options:["예상 85K · 실제 122K","예상 85K · 실제 172K","예상 122K · 실제 172K","예상 172K · 실제 85K"],
+    answer:1,
+    explanation:"예상 85K의 약 2배인 172K가 나오면서 '뜨거운 경제 = 금리 인상' 공포가 부활했습니다. 3~4월분도 93K 상향 조정됐습니다.",
+    src:"방송: \"고용서프라이즈 실제치가 17만 2천개 예상이 8만 5천개\""
+  },
+  {
+    id:5, type:'mc', difficulty:'mid',
+    question:"마이크로 쇼크의 핵심인 브로드컴(AVGO)의 실제 가이던스와 시장 예상치는?",
+    options:["실제 $16B vs 예상 $17.2B","실제 $17.2B vs 예상 $16B","실제 $14B vs 예상 $16B","실제 $16B vs 예상 $14B"],
+    answer:0,
+    explanation:"AI 칩 매출이 143% 증가했음에도, 실제 가이던스 약 $16B가 예상 $17.2B에 미달하며 투매를 불렀습니다. '예상대로 나온 실적'조차 실망으로 받아들여진 것이 핵심입니다.",
+    src:"슬라이드: '시장의 비현실적 Q3 AI 칩 매출 기대치 $17.2B / 실제 가이던스 약 $16B'"
+  },
+  {
+    id:6, type:'mc', difficulty:'mid',
+    question:"6월 11일, 엔비디아 CEO 젠슨 황을 상원 청문회에 소환한 인물은?",
+    options:["제레미 시겔","레이 달리오","엘리자베스 워런","마이클 세일러"],
+    answer:2,
+    explanation:"엘리자베스 워런 상원의원이 젠슨 황을 청문회에 소환했습니다. 대중국 AI 칩 수출 통제(H100 우회 수출 의혹)가 핵심 쟁점입니다.",
+    src:"방송: \"엔비디아를 그냥 휘둘겨 팬 바로 엘리자베스 워런… 상원 청문회에 소환했습니다… 6월 11일\""
+  },
+  {
+    id:7, type:'mc', difficulty:'mid',
+    question:"AI 투자가 '실리콘·GPU'에서 '데이터센터 전력 인프라'로 이동한다며 NOVA가 꼽은 '히든 챔피언'은?",
+    options:["마벨(MRVL)","플렉스(FLEX)","아르간(AGX)","유나이티드헬스(UNH)"],
+    answer:2,
+    explanation:"천연가스 발전 프로젝트를 다루는 아르간(AGX)이 히든 챔피언으로 지목됐습니다. 1분기 매출 50% 폭증, 3년치 일감($2.9B 백로그)을 확보했고, 반도체가 붕괴한 날 장 전 13% 급등했습니다.",
+    src:"슬라이드: '히든 챔피언: Argan (AGX)… 반도체가 붕괴한 날 장전 13% 급등 달성'"
+  },
+  {
+    id:8, type:'sa', difficulty:'mid',
+    question:"마이클 세일러(MSTR)가 2022년 12월 이후 처음으로 비트코인을 매도한 충격적인 이유는 무엇을 내기 위해서였나요? (두 글자)",
+    answer:["이자","이자내려고","배당이자","우선주배당","우선주배당이자"],
+    explanation:"우선주 배당 '이자'를 내기 위해서였습니다. 돈이 떨어져 보유 자산까지 팔아야 했다는 점이 시장에 큰 충격을 줬습니다.",
+    src:"방송: \"이자 내려고 팔았다라는 겁니다… 우선주 배당에 있는 이 이자를 주기 위해서\""
+  },
+  {
+    id:9, type:'sa', difficulty:'hard',
+    question:"마이클 세일러가 매도까지 하게 만든 우선주 배당 이자율은 몇 %였나요? (숫자만, 예: 11.75)",
+    answer:["11.75","11.75%"],
+    explanation:"11.75%의 높은 우선주 배당 이자가 부담이었습니다. 고금리 환경에서 차입 여력(담보 에쿼티)까지 줄어들어 고래들조차 추가 매수가 어려워졌습니다.",
+    src:"방송: \"아 11.75%네요… 11.75% 우선주 배당에 있는 이 이자\""
+  },
+  {
+    id:10, type:'sa', difficulty:'hard',
+    question:"6월 12일 나스닥 상장 예정인 스페이스X의 기업가치는 약 몇 조 달러인가요? (숫자만, 예: 1.77)",
+    answer:["1.77","1.77조","1.77조달러"],
+    explanation:"기업가치 약 $1.77조로 테슬라를 상회하며 미국 내 7위 규모입니다. 사상 최대 조달 규모($75B)가 기존 자산에서 자금을 빨아들이는 '수급 블랙홀'로 작용했습니다.",
+    src:"슬라이드: '기업가치 $1.77조 달러 (테슬라 상회, 미국 내 7위 규모)'"
+  }
+];
+
+const TYPE_LABEL={mc:'객관식', sa:'단답형', ox:'OX'};
+const DIFF={easy:['쉬움','d-easy'], mid:['보통','d-mid'], hard:['어려움','d-hard']};
+let state={solved:0, correct:0, done:new Set()};
+
+const list=document.getElementById('quizList');
+
+function normalize(s){return s.toString().trim().toLowerCase().replace(/\s+/g,'').replace(/[%]/g,'');}
+
+function render(){
+  list.innerHTML='';
+  QUIZ_DATA.forEach((q)=>{
+    const card=document.createElement('div');
+    card.className='card'; card.id='card'+q.id;
+    const [dlabel,dcls]=DIFF[q.difficulty];
+    let inner=`<div class="card-top">
+      <span class="qnum">Q${q.id}</span>
+      <span class="badge type">${TYPE_LABEL[q.type]}</span>
+      <span class="badge ${dcls}">${dlabel}</span>
+    </div>
+    <div class="q-text">${q.question}</div>`;
+
+    if(q.type==='mc'){
+      inner+=`<div class="options" id="opts${q.id}">`;
+      q.options.forEach((o,i)=>{
+        inner+=`<button class="opt" data-q="${q.id}" data-i="${i}">
+          <span class="mark">${String.fromCharCode(65+i)}</span>
+          <span>${o}</span></button>`;
+      });
+      inner+=`</div>`;
+    } else if(q.type==='ox'){
+      inner+=`<div class="ox-wrap" id="opts${q.id}">
+        <button class="ox-btn" data-q="${q.id}" data-v="O">O</button>
+        <button class="ox-btn" data-q="${q.id}" data-v="X">X</button>
+      </div>`;
+    } else {
+      inner+=`<div class="sa-wrap" id="opts${q.id}">
+        <input type="text" class="sa-input" id="sa${q.id}" placeholder="정답 입력 후 제출">
+        <button class="sa-btn" data-q="${q.id}">제출</button>
+      </div>`;
+    }
+    inner+=`<div class="explain" id="exp${q.id}"><div class="explain-in">
+      <div class="et" id="et${q.id}"></div>
+      <div class="eb">${q.explanation}<span class="src">📌 근거 — ${q.src}</span></div>
+    </div></div>`;
+    card.innerHTML=inner;
+    list.appendChild(card);
+  });
+  attachEvents();
+}
+
+function attachEvents(){
+  document.querySelectorAll('.opt').forEach(b=>{
+    b.addEventListener('click',()=>gradeMC(+b.dataset.q, +b.dataset.i));
+  });
+  document.querySelectorAll('.ox-btn').forEach(b=>{
+    b.addEventListener('click',()=>gradeOX(+b.dataset.q, b.dataset.v));
+  });
+  document.querySelectorAll('.sa-btn').forEach(b=>{
+    b.addEventListener('click',()=>gradeSA(+b.dataset.q));
+  });
+  document.querySelectorAll('.sa-input').forEach(inp=>{
+    inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ gradeSA(+inp.id.replace('sa','')); }});
+  });
+}
+
+function revealExplain(qid, isCorrect){
+  const exp=document.getElementById('exp'+qid);
+  const et=document.getElementById('et'+qid);
+  et.innerHTML = isCorrect ? '✅ 정답!' : '✗ 오답 — 정답 및 해설';
+  et.style.color = isCorrect ? 'var(--green)' : 'var(--red)';
+  exp.classList.add('show');
+}
+
+function tallied(qid, isCorrect){
+  if(state.done.has(qid)) return;
+  state.done.add(qid);
+  state.solved++;
+  if(isCorrect) state.correct++;
+  updateBoard();
+  if(state.solved===QUIZ_DATA.length) setTimeout(showResult, 600);
+}
+
+function gradeMC(qid, idx){
+  if(state.done.has(qid)) return;
+  const q=QUIZ_DATA.find(x=>x.id===qid);
+  const opts=document.querySelectorAll(`#opts${qid} .opt`);
+  const isCorrect = idx===q.answer;
+  opts.forEach((o,i)=>{
+    o.disabled=true;
+    if(i===q.answer){ o.classList.add('correct'); o.insertAdjacentHTML('beforeend','<span class="badge-res">✓ 정답</span>'); }
+    if(i===idx && !isCorrect){ o.classList.add('wrong'); o.insertAdjacentHTML('beforeend','<span class="badge-res">✗ 오답</span>'); }
+  });
+  revealExplain(qid, isCorrect);
+  tallied(qid, isCorrect);
+}
+
+function gradeOX(qid, val){
+  if(state.done.has(qid)) return;
+  const q=QUIZ_DATA.find(x=>x.id===qid);
+  const btns=document.querySelectorAll(`#opts${qid} .ox-btn`);
+  const isCorrect = val===q.answer;
+  btns.forEach(b=>{
+    b.disabled=true;
+    if(b.dataset.v===q.answer) b.classList.add('correct');
+    if(b.dataset.v===val && !isCorrect) b.classList.add('wrong');
+  });
+  revealExplain(qid, isCorrect);
+  tallied(qid, isCorrect);
+}
+
+function gradeSA(qid){
+  if(state.done.has(qid)) return;
+  const q=QUIZ_DATA.find(x=>x.id===qid);
+  const inp=document.getElementById('sa'+qid);
+  const val=inp.value;
+  if(!val.trim()){ inp.focus(); return; }
+  const isCorrect = q.answer.some(a=>normalize(a)===normalize(val));
+  inp.disabled=true;
+  inp.classList.add(isCorrect?'correct':'wrong');
+  const btn=document.querySelector(`#opts${qid} .sa-btn`);
+  btn.disabled=true; btn.textContent=isCorrect?'정답':'오답';
+  if(!isCorrect){
+    document.getElementById('et'+qid).dataset.ans=q.answer[0];
+  }
+  // append correct answer hint into explanation title area when wrong
+  revealExplain(qid, isCorrect);
+  if(!isCorrect){
+    const et=document.getElementById('et'+qid);
+    et.innerHTML='✗ 오답 — 정답: <span style="color:var(--green)">'+q.answer[0]+'</span>';
+  }
+  tallied(qid, isCorrect);
+}
+
+function updateBoard(){
+  document.getElementById('sbSolved').textContent=state.solved+' / '+QUIZ_DATA.length;
+  document.getElementById('sbCorrect').textContent=state.correct;
+  const rate = state.solved? Math.round(state.correct/state.solved*100):0;
+  document.getElementById('sbRate').textContent=rate+'%';
+  const bar=document.getElementById('sbBar');
+  bar.style.width=(state.solved/QUIZ_DATA.length*100)+'%';
+  bar.style.background = rate<40?'var(--red)' : rate<70?'var(--orange)' : 'var(--green)';
+}
+
+function showResult(){
+  const total=QUIZ_DATA.length;
+  const rate=Math.round(state.correct/total*100);
+  let grade,msg,color;
+  if(rate>=90){grade='A';color='#16a34a';msg='완벽합니다! NOVA의 인사이트를 제대로 흡수했네요.';}
+  else if(rate>=70){grade='B';color='#2563eb';msg='훌륭해요. 핵심 흐름을 잘 파악했습니다.';}
+  else if(rate>=50){grade='C';color='#ca8a04';msg='절반은 넘겼어요. 해설을 다시 한번 복습해 보세요.';}
+  else{grade='D';color='#e11d48';msg='아직 다지기 구간! 리포트를 다시 정독해 보세요.';}
+  document.getElementById('mGrade').textContent=grade;
+  document.getElementById('mGrade').style.color=color;
+  document.getElementById('mScore').textContent=`${total}문제 중 ${state.correct}문제 정답`;
+  document.getElementById('mMsg').textContent=msg;
+  document.getElementById('ringPct').textContent=rate+'%';
+  const circ=351.86;
+  const ring=document.getElementById('ringFill');
+  ring.style.stroke=color;
+  ring.style.transition='stroke-dashoffset 1s ease';
+  document.getElementById('modalBg').classList.add('show');
+  setTimeout(()=>{ ring.style.strokeDashoffset = circ*(1-rate/100); }, 100);
+}
+
+document.getElementById('mRetry').addEventListener('click',()=>{
+  state={solved:0, correct:0, done:new Set()};
+  document.getElementById('modalBg').classList.remove('show');
+  document.getElementById('ringFill').style.strokeDashoffset='351.86';
+  render(); updateBoard();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+render();
+updateBoard();
+</script>
+</body>
+</html>
