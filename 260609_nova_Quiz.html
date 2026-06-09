@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>충격과 회복, 주도주의 재편 | 이해도 체크 퀴즈</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;--bg2:#fafafa;--text:#1a1a1a;--text2:#777777;
+    --accent:#e11d48;--accent2:#f43f5e;--border:#e5e5e5;
+    --green:#16a34a;--green-bg:#f0faf3;--red-bg:#fff4f5;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg2);color:var(--text);font-family:'Noto Sans KR',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:680px;margin:0 auto;padding:0 18px 70px;}
+
+  /* ===== HEADER ===== */
+  header{background:var(--bg);border-bottom:3px solid var(--text);padding:40px 0 28px;}
+  header .inner{max-width:680px;margin:0 auto;padding:0 18px;}
+  .eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:14px;}
+  h1{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(26px,6.5vw,38px);line-height:1.12;letter-spacing:-.01em;}
+  h1 em{font-style:italic;color:var(--accent);}
+  header p{font-size:13.5px;color:var(--text2);margin-top:12px;}
+
+  /* ===== STICKY SCOREBOARD ===== */
+  .score{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:12px 0;}
+  .score .si{max-width:680px;margin:0 auto;padding:0 18px;}
+  .score .row{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;margin-bottom:8px;}
+  .score .stats{display:flex;gap:16px;}
+  .score .stats b{font-family:'Playfair Display';font-size:16px;font-weight:900;color:var(--text);}
+  .score .stats .lab{color:var(--text2);font-size:11px;display:block;}
+  .score .pct{font-family:'Playfair Display';font-weight:900;font-size:20px;}
+  .bar{height:6px;border-radius:3px;background:var(--border);overflow:hidden;}
+  .bar i{display:block;height:100%;width:0;border-radius:3px;background:var(--accent);transition:width .5s ease,background .4s ease;}
+
+  /* ===== QUESTION CARD ===== */
+  .q{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:22px 20px;margin-top:20px;box-shadow:0 1px 3px rgba(0,0,0,.03);}
+  .q .meta{display:flex;align-items:center;gap:9px;margin-bottom:14px;}
+  .q .num{font-family:'Playfair Display';font-weight:900;font-size:15px;color:var(--accent);}
+  .badge{font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:20px;letter-spacing:.03em;}
+  .badge.easy{background:#eafaf0;color:var(--green);}
+  .badge.med{background:#fff3e0;color:#c47d00;}
+  .badge.hard{background:#fdeaee;color:var(--accent);}
+  .badge.type{background:var(--bg2);color:var(--text2);border:1px solid var(--border);}
+  .q .qt{font-size:16px;font-weight:700;line-height:1.5;margin-bottom:16px;letter-spacing:-.01em;}
+
+  /* options */
+  .opt{display:block;width:100%;text-align:left;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:13px 15px;margin-bottom:9px;font-size:14.5px;font-family:'Noto Sans KR';cursor:pointer;transition:all .15s ease;line-height:1.45;position:relative;}
+  .opt:hover:not(:disabled){border-color:var(--accent);background:#fff8f9;}
+  .opt:disabled{cursor:default;}
+  .opt .ck{font-weight:700;color:var(--text2);margin-right:9px;font-family:'Playfair Display';}
+  .opt.correct{background:var(--green-bg);border-color:var(--green);color:var(--text);}
+  .opt.wrong{background:var(--red-bg);border-color:var(--accent);}
+  .opt .tag{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:700;padding:2px 9px;border-radius:14px;}
+  .opt.correct .tag{background:var(--green);color:#fff;}
+  .opt.wrong .tag{background:var(--accent);color:#fff;}
+
+  /* OX */
+  .ox{display:flex;gap:12px;}
+  .ox .opt{text-align:center;font-family:'Playfair Display';font-size:24px;font-weight:900;padding:18px;}
+
+  /* short answer */
+  .sa{display:flex;gap:9px;}
+  .sa input{flex:1;border:1.5px solid var(--border);border-radius:8px;padding:13px 15px;font-size:15px;font-family:'Noto Sans KR';outline:none;}
+  .sa input:focus{border-color:var(--accent);}
+  .sa input:disabled{background:var(--bg2);}
+  .sa button{background:var(--text);color:#fff;border:none;border-radius:8px;padding:0 20px;font-size:14px;font-weight:700;font-family:'Noto Sans KR';cursor:pointer;white-space:nowrap;}
+  .sa button:hover{background:var(--accent);}
+  .sa button:disabled{background:var(--border);color:var(--text2);cursor:default;}
+  .sa-hint{font-size:11.5px;color:var(--text2);margin-top:8px;}
+
+  /* explanation */
+  .exp{max-height:0;overflow:hidden;transition:max-height .45s ease,margin .3s ease,padding .3s ease;background:var(--bg2);border-radius:8px;border-left:3px solid var(--accent);}
+  .exp.open{max-height:600px;margin-top:14px;padding:14px 16px;}
+  .exp .eh{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:6px;}
+  .exp .ans{font-size:13.5px;font-weight:700;margin-bottom:6px;}
+  .exp .ans b{color:var(--green);}
+  .exp .body{font-size:13px;color:var(--text);line-height:1.6;}
+  .exp .src{font-size:11.5px;color:var(--text2);margin-top:8px;padding-top:8px;border-top:1px dotted var(--border);}
+
+  /* ===== RESULT MODAL ===== */
+  .modal{position:fixed;inset:0;background:rgba(26,26,26,.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px;}
+  .modal.show{display:flex;}
+  .card{background:var(--bg);border-radius:16px;max-width:380px;width:100%;padding:34px 28px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:pop .35s ease;}
+  @keyframes pop{from{transform:scale(.9);opacity:0;}to{transform:scale(1);opacity:1;}}
+  .card .grade{font-family:'Playfair Display';font-size:62px;font-weight:900;line-height:1;color:var(--accent);}
+  .card .gl{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--text2);margin-top:6px;}
+  .card .scoreline{font-family:'Playfair Display';font-size:22px;font-weight:700;margin:18px 0 4px;}
+  .card .scoreline span{color:var(--accent);}
+  .card .msg{font-size:13.5px;color:var(--text2);line-height:1.6;margin:10px 0 22px;}
+  .card .retry{background:var(--text);color:#fff;border:none;border-radius:8px;padding:13px 0;width:100%;font-size:14px;font-weight:700;font-family:'Noto Sans KR';cursor:pointer;}
+  .card .retry:hover{background:var(--accent);}
+
+  footer{text-align:center;font-size:11px;color:var(--text2);margin-top:30px;line-height:1.6;}
+
+  @media (max-width:380px){
+    .sa{flex-direction:column;}
+    .sa button{padding:12px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="eyebrow">NOVA Real Invest · 이해도 체크</div>
+    <h1>충격과 회복,<br><em>주도주의 재편</em></h1>
+    <p>총 10문제 · 보기를 고르면 즉시 채점되고 해설이 펼쳐집니다.</p>
+  </div>
+</header>
+
+<div class="score">
+  <div class="si">
+    <div class="row">
+      <div class="stats">
+        <div><b id="sSolved">0</b><span class="lab">푼 문제 / 10</span></div>
+        <div><b id="sCorrect">0</b><span class="lab">맞힌 문제</span></div>
+      </div>
+      <div class="pct" id="sPct" style="color:var(--text2)">0%</div>
+    </div>
+    <div class="bar"><i id="sBar"></i></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div id="quiz"></div>
+  <footer>
+    본 퀴즈는 NOVA Real Invest 방송(2026.06.08) 자막 내용에 근거합니다.<br>엔터테인먼트 목적이며 투자 조언이 아닙니다.
+  </footer>
+</div>
+
+<div class="modal" id="modal">
+  <div class="card">
+    <div class="grade" id="mGrade">A</div>
+    <div class="gl">Your Grade</div>
+    <div class="scoreline"><span id="mScore">0</span> / 10</div>
+    <div class="msg" id="mMsg"></div>
+    <button class="retry" id="mRetry">다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id:1, type:'mc', difficulty:'easy',
+    question:"이번 변동성의 발단이 된 5월 미국 비농업 고용 지표는 어떻게 나왔나요?",
+    options:["예상치(8만 명)를 밑돈 5만 명 증가","예상치에 부합한 8만 명 증가","예상치(8만 명)의 2배인 17.2만 명 증가","고용이 오히려 감소"],
+    answer:2,
+    explanation:"5월 비농업 고용이 17.2만 명 증가하며 예상치 8만 명의 2배를 넘었습니다. 경기가 탄탄하다는 신호가 곧 금리 인하 기대 소멸로 이어져 위험자산이 먼저 무너졌습니다.",
+    src:"패널 1(금요일의 충격): '5월 비농업 고용 17.2만 명 증가(예상치 8만 명의 2배 상회)'"
+  },
+  {
+    id:2, type:'ox', difficulty:'easy',
+    question:"금요일 필라델피아 반도체 지수(SOX)는 하루 만에 -10% 폭락했다.",
+    answer:'O',
+    explanation:"맞습니다. SOX는 -10.0% 폭락했고, 이로 인해 미국 상장 반도체 시총 약 1조 달러가 증발했습니다. VIX 변동성 지수도 39.7% 폭등했습니다.",
+    src:"패널 1: 'SOX: -10.0%', '미국 상장 반도체 시총 약 1조 달러 증발'"
+  },
+  {
+    id:3, type:'mc', difficulty:'easy',
+    question:"월요일 시장 회복 국면에서 필라델피아 반도체 지수(SOX)는 얼마나 반등했나요?",
+    options:["+0.86%","+5.6%","+10.0%","변동 없음"],
+    answer:1,
+    explanation:"월요일 SOX는 +5.6% 반등했습니다. 같은 날 나스닥은 +0.86%, S&P 500은 +0.3% 올랐는데, 저가 매수세(Dip-buying)와 AI 인프라 장기 수요 재확인이 촉매였습니다.",
+    src:"패널 2(월요일의 회복): '필라델피아 반도체 지수(SOX) +5.6%', '나스닥 +0.86%'"
+  },
+  {
+    id:4, type:'mc', difficulty:'med',
+    question:"당일 +11.19% 급등한 Intel(INTC)의 호재로 방송에서 언급된 것은?",
+    options:["엔비디아 HBM4 공급사 인증","아마존 데이터센터 광섬유 계약","구글의 2028년 생산용 TPU 300만 개 발주","S&P 500 신규 편입"],
+    answer:2,
+    explanation:"인텔은 구글의 2028년 생산용 TPU 300만 개 발주, 테슬라 14A 공정 고객 확보 등의 소식으로 +11.19% 급등했습니다. 나머지 보기는 각각 Micron, Corning, Marvell의 호재입니다.",
+    src:"AI 인프라 밸류체인 비교 매트릭스 — Intel: '구글 2028년 생산용 TPU 300만 개 발주', '테슬라 14A 공정 고객 확보'"
+  },
+  {
+    id:5, type:'sa', difficulty:'med',
+    question:"엔비디아 CEO 젠슨 황이 '다음 1조 달러 기업'으로 지목했고, S&P 500 신규 편입이 확정된 네트워킹 종목의 회사명(또는 티커)은?",
+    answer:["마벨","마블","marvell","mrvl","마벨테크","마벨테크놀로지"],
+    explanation:"정답은 Marvell(MRVL)입니다. S&P 500 편입 확정과 젠슨 황의 '다음 1조 달러 기업' 지목으로 당일 +9.63% 급등했습니다.",
+    src:"매트릭스 — Marvell(MRVL): 'S&P 500 지수 신규 편입 확정', '젠슨 황이 다음 1조 달러 기업으로 지목'",
+    hint:"힌트: 영문 티커 4글자 또는 한글 회사명"
+  },
+  {
+    id:6, type:'mc', difficulty:'med',
+    question:"알파벳(구글)의 800억 달러 규모 유상증자에 워런 버핏의 버크셔 해서웨이가 앵커 투자자로 참여한 금액은?",
+    options:["10억 달러","100억 달러","800억 달러","965억 달러"],
+    answer:1,
+    explanation:"버크셔는 100억 달러를 투자해 800억 달러 유상증자의 8분의 1을 떠안았습니다. 유상증자는 주식 희석 부담이 있음에도 참여했다는 점에서, 시장은 이를 AI 패권을 쥐기 위한 재무적 우위(Credit Positive)로 해석했습니다.",
+    src:"테마 2 — Alphabet: '워런 버핏의 버크셔 해서웨이가 100억 달러 앵커 투자자로 참여'"
+  },
+  {
+    id:7, type:'sa', difficulty:'med',
+    question:"SpaceX IPO는 750억 달러 공모에 1,500억 달러 주문이 들어와 몇 배 초과 청약을 기록했나요? (숫자만)",
+    answer:["2","2배","두배","2.0"],
+    explanation:"2배 초과 청약입니다. 겉보기엔 성공처럼 보이지만, 뜨거운 IPO는 통상 4~5배 초과 청약을 기록하므로 2배 수준은 오히려 약세 신호로 해석됩니다.",
+    src:"심층 분석 — '750억 달러 공모에 1,500억 달러 주문 유입(2배 초과 청약)', '통상적으로 뜨거운 IPO는 4~5배의 초과 청약'",
+    hint:"힌트: 1,500 ÷ 750 = ?"
+  },
+  {
+    id:8, type:'mc', difficulty:'med',
+    question:"6월 22일 S&P 500 재조정에서, 1957년 원년 멤버로 69년 만에 퇴출되는 종목은?",
+    options:["Pool Corp (POOL)","Flex (FLEX)","Campbell's (CPB)","Marvell (MRVL)"],
+    answer:2,
+    explanation:"Campbell's(CPB)는 1957년 S&P 500 출범 당시 원년 멤버로, 69년 만에 퇴출됩니다. 인플레이션 비용 압박의 직격탄을 맞은 사례입니다. Pool Corp도 함께 편출됩니다.",
+    src:"인덱스 재조정 — OUT: 'Campbell's(CPB): 1957년 원년 멤버의 69년 만의 퇴출'"
+  },
+  {
+    id:9, type:'sa', difficulty:'hard',
+    question:"Eli Lilly의 차세대 비만 치료제 '레타트루타이드'가 Phase 3 임상에서 80주간 최고 용량 투여 시 보인 평균 체중 감량률은? (숫자만, 예: 28.3)",
+    answer:["28.3","28.3%","28"],
+    explanation:"평균 28.3% 체중 감량입니다. 단순 감량을 넘어 수면 무호흡증 60.6% 감소 등 다중 적응증 확장을 입증하며 LLY는 2,000억 달러 시장의 1위를 굳혔습니다.",
+    src:"테마 4 — '80주간 최고 용량 투여 시 평균 28.3% 체중 감량'",
+    hint:"힌트: 20%대 후반의 소수점 숫자"
+  },
+  {
+    id:10, type:'mc', difficulty:'hard',
+    question:"처음으로 경고 시그널을 낸 뱅크오브아메리카(BofA)의 진단으로 옳은 것은?",
+    options:["약세장 신호 70% 발현, 연말 S&P 500 목표 7,100","약세장 신호 25% 발현, 목표 7,500","베어마켓 신호 100% 발현, 목표 6,000","강세 신호 70%, 목표 8,000"],
+    answer:0,
+    explanation:"BofA는 약세장 신호 중 70%가 이미 발현됐다고 보며, 연말 S&P 500 목표를 7,100으로 제시했습니다. 현재 7,500대 대비 조정장이 아닌 하락장급 전망입니다.",
+    src:"기관 포지셔닝 — 'BofA 베어마켓 신호 70% 발현', 본문: '연말 목표를 7100으로 잡았다'"
+  }
+];
+
+let state={solved:0,correct:0};
+const solvedSet=new Set();
+
+const quizEl=document.getElementById('quiz');
+const diffMap={easy:['easy','쉬움'],med:['med','보통'],hard:['hard','어려움']};
+const typeMap={mc:'객관식',ox:'OX',sa:'단답형'};
+
+function render(){
+  quizEl.innerHTML='';
+  QUIZ_DATA.forEach(q=>{
+    const card=document.createElement('div');
+    card.className='q'; card.id='q'+q.id;
+    const [dc,dl]=diffMap[q.difficulty];
+    let body='';
+    if(q.type==='mc'){
+      body='<div class="opts">'+q.options.map((o,i)=>
+        `<button class="opt" data-i="${i}"><span class="ck">${String.fromCharCode(65+i)}</span>${o}<span class="tag"></span></button>`
+      ).join('')+'</div>';
+    }else if(q.type==='ox'){
+      body='<div class="ox">'+['O','X'].map(o=>
+        `<button class="opt" data-i="${o}">${o}<span class="tag"></span></button>`
+      ).join('')+'</div>';
+    }else{
+      body=`<div class="sa"><input type="text" placeholder="답을 입력하세요" data-id="${q.id}"><button data-id="${q.id}">제출</button></div>`+
+           (q.hint?`<div class="sa-hint">${q.hint}</div>`:'');
+    }
+    card.innerHTML=`
+      <div class="meta">
+        <span class="num">Q${q.id}</span>
+        <span class="badge ${dc}">${dl}</span>
+        <span class="badge type">${typeMap[q.type]}</span>
+      </div>
+      <div class="qt">${q.question}</div>
+      ${body}
+      <div class="exp" id="exp${q.id}">
+        <div class="eh">해설</div>
+        <div class="ans"></div>
+        <div class="body">${q.explanation}</div>
+        <div class="src">📌 근거 — ${q.src}</div>
+      </div>`;
+    quizEl.appendChild(card);
+
+    if(q.type==='mc'||q.type==='ox'){
+      card.querySelectorAll('.opt').forEach(btn=>{
+        btn.addEventListener('click',()=>handleChoice(q,btn,card));
+      });
+    }else{
+      const inp=card.querySelector('input'), sub=card.querySelector('button');
+      const go=()=>handleShort(q,inp,sub,card);
+      sub.addEventListener('click',go);
+      inp.addEventListener('keydown',e=>{if(e.key==='Enter')go();});
+    }
+  });
+}
+
+function handleChoice(q,btn,card){
+  if(solvedSet.has(q.id))return;
+  solvedSet.add(q.id);
+  const chosen=q.type==='ox'?btn.dataset.i:parseInt(btn.dataset.i);
+  const isCorrect=chosen===q.answer;
+  const allBtns=card.querySelectorAll('.opt');
+  allBtns.forEach((b,idx)=>{
+    b.disabled=true;
+    const bv=q.type==='ox'?b.dataset.i:idx;
+    if(bv===q.answer){b.classList.add('correct');b.querySelector('.tag').textContent='✓ 정답';}
+  });
+  if(!isCorrect){btn.classList.add('wrong');btn.querySelector('.tag').textContent='✗ 오답';}
+  finalize(q,isCorrect,card);
+}
+
+function handleShort(q,inp,sub,card){
+  if(solvedSet.has(q.id))return;
+  const val=inp.value.trim().toLowerCase().replace(/\s+/g,'');
+  if(!val){inp.focus();inp.style.borderColor='var(--accent)';return;}
+  solvedSet.add(q.id);
+  const isCorrect=q.answer.some(a=>{
+    const norm=a.toLowerCase().replace(/\s+/g,'');
+    return val===norm||val.includes(norm)||norm.includes(val)&&val.length>=norm.length-1;
+  });
+  inp.disabled=true; sub.disabled=true;
+  inp.style.borderColor=isCorrect?'var(--green)':'var(--accent)';
+  inp.style.background=isCorrect?'var(--green-bg)':'var(--red-bg)';
+  finalize(q,isCorrect,card);
+}
+
+function finalize(q,isCorrect,card){
+  state.solved++; if(isCorrect)state.correct++;
+  const exp=card.querySelector('#exp'+q.id);
+  const ansEl=exp.querySelector('.ans');
+  let correctText;
+  if(q.type==='mc')correctText=String.fromCharCode(65+q.answer)+'. '+q.options[q.answer];
+  else if(q.type==='ox')correctText=q.answer;
+  else correctText=q.answer[0];
+  ansEl.innerHTML=(isCorrect?'정답입니다! ':'정답: ')+'<b>'+correctText+'</b>';
+  exp.classList.add('open');
+  updateScore();
+  if(state.solved===QUIZ_DATA.length)setTimeout(showResult,650);
+}
+
+function updateScore(){
+  document.getElementById('sSolved').textContent=state.solved;
+  document.getElementById('sCorrect').textContent=state.correct;
+  const pct=state.solved?Math.round(state.correct/state.solved*100):0;
+  document.getElementById('sPct').textContent=pct+'%';
+  const bar=document.getElementById('sBar');
+  bar.style.width=(state.solved/QUIZ_DATA.length*100)+'%';
+  let col,pc;
+  if(pct<40){col='var(--accent)';pc='var(--accent)';}
+  else if(pct<70){col='#f59e0b';pc='#d97706';}
+  else{col='var(--green)';pc='var(--green)';}
+  bar.style.background=col;
+  document.getElementById('sPct').style.color=state.solved?pc:'var(--text2)';
+}
+
+function showResult(){
+  const n=state.correct;
+  let grade,msg;
+  if(n>=9){grade='A';msg='완벽합니다. 방송 핵심을 정확히 꿰뚫고 있군요. 인프라·헬스케어 재편의 큰 그림을 제대로 잡았습니다.';}
+  else if(n>=7){grade='B';msg='훌륭합니다. 주요 흐름은 확실히 이해했어요. 틀린 문제의 해설만 다시 보면 완벽해집니다.';}
+  else if(n>=5){grade='C';msg='절반 이상 맞혔습니다. 메가 IPO와 지수 재조정 부분을 한 번 더 복습해 보세요.';}
+  else if(n>=3){grade='D';msg='기본기는 잡혔습니다. 해설을 차근차근 읽고 다시 도전해 보세요.';}
+  else{grade='F';msg='괜찮아요, 처음엔 누구나 그렇습니다. 분석 리포트를 먼저 읽고 다시 풀어보세요.';}
+  document.getElementById('mGrade').textContent=grade;
+  document.getElementById('mScore').textContent=n;
+  document.getElementById('mMsg').textContent=msg;
+  document.getElementById('modal').classList.add('show');
+}
+
+document.getElementById('mRetry').addEventListener('click',()=>{
+  state={solved:0,correct:0}; solvedSet.clear();
+  document.getElementById('modal').classList.remove('show');
+  updateScore(); render();
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+document.getElementById('modal').addEventListener('click',e=>{
+  if(e.target.id==='modal')e.currentTarget.classList.remove('show');
+});
+
+render();
+</script>
+</body>
+</html>

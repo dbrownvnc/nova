@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>충격과 회복, 그리고 주도주의 재편 | NOVA Real Invest 분석</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#fafafa; --text:#1a1a1a; --text2:#777777;
+    --accent:#e11d48; --accent2:#f43f5e; --border:#e5e5e5;
+    --blue:#2563eb; --gray:#6b7280; --green:#16a34a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:'Noto Sans KR',sans-serif; font-weight:400;
+    line-height:1.75; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:0 22px;}
+
+  /* ===== HERO / MASTHEAD ===== */
+  .masthead{padding:54px 0 30px;border-bottom:3px solid var(--text);}
+  .kicker{
+    font-size:12px;letter-spacing:.32em;text-transform:uppercase;
+    color:var(--accent);font-weight:700;margin-bottom:18px;
+  }
+  .kicker .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin:0 9px 2px;vertical-align:middle;}
+  h1.title{
+    font-family:'Playfair Display',serif;font-weight:900;
+    font-size:clamp(33px,8.5vw,52px);line-height:1.08;letter-spacing:-.01em;
+    margin-bottom:18px;
+  }
+  h1.title em{font-style:italic;color:var(--accent);}
+  .standfirst{font-size:16px;color:var(--text2);line-height:1.7;max-width:560px;font-weight:300;}
+  .byline{
+    margin-top:24px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;
+    font-size:12px;color:var(--text2);letter-spacing:.04em;
+  }
+  .byline b{color:var(--text);font-weight:700;}
+  .byline .sep{width:1px;height:13px;background:var(--border);}
+
+  /* ===== SECTION SCAFFOLD ===== */
+  section{padding:46px 0;border-bottom:1px solid var(--border);}
+  .eyebrow{
+    font-family:'Playfair Display',serif;font-style:italic;
+    font-size:15px;color:var(--accent);margin-bottom:8px;font-weight:500;
+  }
+  h2{
+    font-family:'Playfair Display',serif;font-weight:700;
+    font-size:clamp(25px,6vw,34px);line-height:1.18;letter-spacing:-.01em;
+    margin-bottom:22px;
+  }
+  h3{
+    font-family:'Noto Sans KR',sans-serif;font-weight:700;
+    font-size:18px;margin:30px 0 12px;letter-spacing:-.01em;
+    display:flex;align-items:center;gap:9px;
+  }
+  h3::before{content:"";width:14px;height:2px;background:var(--accent);}
+  p{font-size:15.5px;margin-bottom:15px;}
+  p .hl{color:var(--accent);font-weight:700;}
+  strong{font-weight:700;}
+
+  .lead{
+    font-size:18px;line-height:1.7;color:var(--text);
+    border-left:3px solid var(--accent);padding-left:18px;font-weight:400;
+  }
+
+  /* ===== DROP NUMBER (테마 마커) ===== */
+  .theme-num{
+    font-family:'Playfair Display',serif;font-size:13px;font-weight:700;
+    letter-spacing:.2em;color:var(--accent);text-transform:uppercase;margin-bottom:6px;
+  }
+
+  /* ===== STAT DUEL (충격 vs 회복) ===== */
+  .duel{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border);border-radius:4px;overflow:hidden;margin:22px 0;}
+  .duel .col{padding:22px 18px;}
+  .duel .col.shock{background:#fff5f6;border-right:1px solid var(--border);}
+  .duel .col.recover{background:#f4faf6;}
+  .duel .lab{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;margin-bottom:14px;}
+  .duel .shock .lab{color:var(--accent);}
+  .duel .recover .lab{color:var(--green);}
+  .duel .big{font-family:'Playfair Display',serif;font-size:34px;font-weight:900;line-height:1;}
+  .duel .shock .big{color:var(--accent);}
+  .duel .recover .big{color:var(--green);}
+  .duel .bigsub{font-size:12px;color:var(--text2);margin:4px 0 16px;}
+  .duel ul{list-style:none;font-size:13px;line-height:1.6;color:var(--text);}
+  .duel li{padding:5px 0;border-top:1px dotted var(--border);}
+  .duel li:first-child{border-top:none;}
+  .duel li b{display:block;font-size:11px;color:var(--text2);font-weight:500;margin-bottom:1px;}
+
+  /* ===== TABLE ===== */
+  .tbl-wrap{overflow-x:auto;margin:18px 0;-webkit-overflow-scrolling:touch;}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:440px;}
+  thead th{background:var(--accent);color:#fff;font-weight:700;text-align:left;padding:11px 13px;font-size:12.5px;letter-spacing:.02em;}
+  tbody td{padding:11px 13px;border-bottom:1px solid var(--border);background:var(--bg2);vertical-align:top;}
+  tbody tr:nth-child(even) td{background:#fff;}
+  tbody td .tk{font-weight:700;font-family:'Playfair Display',serif;}
+  .up{color:var(--green);font-weight:700;}
+  .down{color:var(--accent);font-weight:700;}
+
+  /* ===== CHART ===== */
+  .chart-card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:18px 16px 14px;margin:22px 0;}
+  .chart-card .ct{font-size:13px;font-weight:700;margin-bottom:3px;}
+  .chart-card .cs{font-size:11.5px;color:var(--text2);margin-bottom:12px;}
+  .chart-container{position:relative;max-height:340px;}
+  .chart-container canvas{opacity:0;transition:opacity .4s ease;max-height:300px;}
+  .chart-container.chart-ready canvas{opacity:1;}
+
+  /* ===== PYRAMID (테마1) ===== */
+  .pyramid{margin:24px auto;max-width:380px;}
+  .pyr-row{margin:0 auto 5px;color:#fff;text-align:center;padding:13px 10px;font-weight:700;font-size:13px;line-height:1.4;clip-path:polygon(15% 0,85% 0,100% 100%,0 100%);}
+  .pyr-row.top{width:46%;background:var(--gray);clip-path:polygon(0 0,100% 0,82% 100%,18% 100%);}
+  .pyr-row.mid{width:72%;background:var(--text);clip-path:polygon(8% 0,92% 0,100% 100%,0 100%);}
+  .pyr-row.base{width:100%;background:var(--accent);clip-path:polygon(11% 0,89% 0,100% 100%,0 100%);}
+  .pyr-row small{display:block;font-weight:400;font-size:10.5px;opacity:.85;margin-top:2px;}
+  .pyr-cap{font-size:12px;color:var(--text2);text-align:center;margin-top:6px;}
+
+  /* ===== CALLOUT / NOTE ===== */
+  .note{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:0 4px 4px 0;padding:14px 16px;margin:18px 0;font-size:13.5px;color:var(--text);}
+  .note b{color:var(--blue);}
+  .quote{font-family:'Playfair Display',serif;font-style:italic;font-size:19px;line-height:1.5;color:var(--text);border-top:2px solid var(--text);border-bottom:2px solid var(--text);padding:20px 0;margin:24px 0;}
+  .quote .src{display:block;font-family:'Noto Sans KR';font-style:normal;font-size:12px;color:var(--text2);margin-top:10px;letter-spacing:.04em;}
+
+  /* ===== GAUGE (양방향 압력) ===== */
+  .pressure{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:22px 0;}
+  .pcard{border:1px solid var(--border);border-radius:6px;padding:16px 14px;background:var(--bg2);}
+  .pcard .ph{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+  .pcard .ph span{background:var(--accent);color:#fff;font-size:11px;border-radius:3px;padding:1px 7px;font-family:'Playfair Display';}
+  .pcard ul{list-style:none;font-size:12.5px;line-height:1.55;}
+  .pcard li{padding:6px 0;border-top:1px dotted var(--border);}
+  .pcard li:first-child{border-top:none;}
+  .pcard li b{color:var(--accent);}
+
+  /* ===== SIMULATOR ===== */
+  .sim{background:#1a1a1a;color:#fff;border-radius:8px;padding:22px 18px;margin:24px 0;}
+  .sim h4{font-family:'Playfair Display';font-size:18px;font-weight:700;margin-bottom:4px;color:#fff;}
+  .sim .sd{font-size:12px;color:#bbb;margin-bottom:18px;}
+  .sim label{display:block;font-size:12px;color:#ddd;margin-bottom:7px;display:flex;justify-content:space-between;}
+  .sim label b{color:var(--accent2);font-family:'Playfair Display';font-size:15px;}
+  .sim input[type=range]{width:100%;-webkit-appearance:none;height:5px;border-radius:3px;background:#444;outline:none;margin-bottom:20px;}
+  .sim input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid #fff;}
+  .sim input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid #fff;}
+  .sim .out{background:#000;border-radius:6px;padding:16px;text-align:center;margin-top:6px;}
+  .sim .out .ov{font-family:'Playfair Display';font-size:30px;font-weight:900;color:var(--accent2);line-height:1;}
+  .sim .out .ol{font-size:11px;color:#aaa;margin-top:6px;letter-spacing:.05em;}
+  .sim .out .verdict{font-size:13px;margin-top:12px;padding-top:12px;border-top:1px solid #333;font-weight:500;}
+  .sim .reset{margin-top:14px;background:transparent;border:1px solid #555;color:#ccc;font-size:11px;padding:7px 14px;border-radius:5px;cursor:pointer;font-family:'Noto Sans KR';}
+  .sim .reset:hover{border-color:var(--accent);color:#fff;}
+
+  /* ===== IN/OUT ===== */
+  .inout{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:22px 0;}
+  .iocard{border-radius:6px;padding:16px 14px;}
+  .iocard.in{background:#f4faf6;border:1px solid #cce8d6;}
+  .iocard.out{background:#fff5f6;border:1px solid #f5d0d6;}
+  .iocard .ioh{font-family:'Playfair Display';font-weight:900;font-size:17px;margin-bottom:12px;}
+  .iocard.in .ioh{color:var(--green);}
+  .iocard.out .ioh{color:var(--accent);}
+  .iocard .ent{padding:8px 0;border-top:1px dotted var(--border);}
+  .iocard .ent:first-of-type{border-top:none;}
+  .iocard .ent .nm{font-weight:700;font-size:14px;}
+  .iocard .ent .ds{font-size:11.5px;color:var(--text2);line-height:1.45;margin-top:2px;}
+
+  /* ===== POSITIONING MATRIX ===== */
+  .posmat{margin:22px 0;border:1px solid var(--border);border-radius:6px;overflow:hidden;}
+  .posrow{display:grid;grid-template-columns:96px 1fr;border-top:1px solid var(--border);}
+  .posrow:first-child{border-top:none;}
+  .poslab{padding:16px 12px;color:#fff;font-weight:700;font-size:13px;display:flex;flex-direction:column;justify-content:center;line-height:1.3;}
+  .poslab.ow{background:var(--green);}
+  .poslab.nu{background:#d4a017;}
+  .poslab.uw{background:var(--accent);}
+  .poslab small{font-weight:400;font-size:10.5px;opacity:.9;margin-top:2px;}
+  .posbody{padding:14px 15px;background:var(--bg2);font-size:13px;}
+  .posbody .pb{padding:5px 0;}
+  .posbody .pb b{color:var(--text);}
+  .posbody .pb span{color:var(--text2);font-size:12px;}
+
+  /* ===== KEY TERM ===== */
+  .term{margin:18px 0;padding:13px 16px;background:var(--bg2);border:1px dashed var(--border);border-radius:5px;font-size:13px;}
+  .term b{color:var(--accent);}
+
+  /* ===== FOOTER ===== */
+  footer{padding:40px 0 60px;text-align:center;}
+  .disclaimer{font-size:11px;color:var(--text2);line-height:1.6;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:16px;margin-bottom:24px;text-align:left;}
+  .endmark{font-family:'Playfair Display';font-style:italic;font-size:15px;color:var(--text2);}
+  .endmark::before,.endmark::after{content:"—";margin:0 8px;color:var(--accent);}
+
+  .fade-in{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+  .fade-in.visible{opacity:1;transform:translateY(0);}
+
+  @media (max-width:430px){
+    .duel,.pressure,.inout{grid-template-columns:1fr;}
+    .duel .col.shock{border-right:none;border-bottom:1px solid var(--border);}
+    .posrow{grid-template-columns:80px 1fr;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .fade-in{transition:none;opacity:1;transform:none;}
+    .chart-container canvas{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="kicker">NOVA Real Invest <span class="dot"></span> 글로벌 매크로 리서치 데스크</div>
+    <h1 class="title">충격과 회복,<br>그리고 <em>주도주의 재편</em></h1>
+    <p class="standfirst">금요일 하루 만에 미국 상장 반도체 시총 약 1조 달러가 증발했고, 월요일 시장은 거의 그만큼을 되돌렸다. 같은 자산을 두고 공포와 확신이 48시간 만에 자리를 바꾼 이 변동성의 정체를 해부한다.</p>
+    <div class="byline">
+      <span>미국 시각 <b>2026년 6월 8일(월)</b></span>
+      <span class="sep"></span>
+      <span>시장 변동성 분석 &amp; 하반기 전략</span>
+    </div>
+  </div>
+</header>
+
+<!-- ===== 핵심 진단 ===== -->
+<section>
+  <div class="wrap fade-in">
+    <div class="eyebrow">The Diagnosis</div>
+    <h2>1조 달러의 증발과 V자 반등</h2>
+    <p class="lead">시장은 펀더멘털이 아니라 <strong>포지셔닝</strong>에 반응했다. 금요일 폭락은 AI 수요의 붕괴가 아니라, 한쪽으로 쏠려 있던 레버리지가 기계적으로 청산된 결과였다.</p>
+
+    <p style="margin-top:22px">발단은 금요일의 고용지표였다. 5월 비농업 고용이 <span class="hl">17.2만 명</span> 늘어 예상치(8만 명)의 두 배를 넘었다. 좋은 소식이 악재가 되는 전형적 구간 — 경기가 탄탄하다는 신호가 곧 <strong>금리 인하 기대 소멸</strong>로 읽히면서 국채 2년물 금리가 4.16%로 튀어 올랐다. 위험자산, 특히 밸류에이션이 높은 반도체가 먼저 무너졌다.</p>
+
+    <div class="duel">
+      <div class="col shock">
+        <div class="lab">● 금요일 — 매크로 공포</div>
+        <div class="big">−10.0%</div>
+        <div class="bigsub">필라델피아 반도체 지수(SOX)</div>
+        <ul>
+          <li><b>나스닥</b>−4.2%</li>
+          <li><b>VIX 변동성 지수</b>+39.7% 폭등</li>
+          <li><b>국채 2년물</b>4.16%로 급등</li>
+          <li><b>증발 시총</b>반도체 약 1조 달러</li>
+        </ul>
+      </div>
+      <div class="col recover">
+        <div class="lab">● 월요일 — 펀더멘털 확신</div>
+        <div class="big">+5.6%</div>
+        <div class="bigsub">필라델피아 반도체 지수(SOX)</div>
+        <ul>
+          <li><b>나스닥</b>+0.86%</li>
+          <li><b>S&amp;P 500</b>+0.3% 반등</li>
+          <li><b>촉매</b>저가 매수세 유입</li>
+          <li><b>재확인</b>AI 인프라 장기 수요</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="chart-card fade-in">
+      <div class="ct">금요일 충격 vs 월요일 회복</div>
+      <div class="cs">주요 지수·지표의 이틀간 변동률 (%)</div>
+      <div class="chart-container">
+        <canvas id="shockChart" height="230"></canvas>
+      </div>
+    </div>
+
+    <div class="quote">
+      단기적인 포지셔닝 이벤트일 뿐, AI 수요의 구조적 약세 신호가 아니다.
+      <span class="src">— Nvidia CEO 젠슨 황</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 양방향 압력 ===== -->
+<section>
+  <div class="wrap fade-in">
+    <div class="eyebrow">Macro Stress Test</div>
+    <h2>양방향에서 조여오는 압력</h2>
+    <p>회복했다고 안심하긴 이르다. 시장은 지금 서로 다른 방향에서 오는 두 개의 압력 게이지가 동시에 적색 구간으로 향하고 있다.</p>
+
+    <div class="pressure">
+      <div class="pcard">
+        <div class="ph"><span>압력 1</span> 연준의 인플레이션 딜레마</div>
+        <ul>
+          <li><b>CPI 재가속:</b> 5월 소비자물가지수 예상치 <strong>4.2%</strong> — 연준 목표(2%)의 두 배</li>
+          <li><b>신임 의장 리스크:</b> Kevin Warsh 신임 의장의 첫 정책 시험대</li>
+          <li><b>파급:</b> '보험성 금리 인하' 기대 소멸, 장기금리 상승 시 AI Capex 조달비 증가</li>
+        </ul>
+      </div>
+      <div class="pcard">
+        <div class="ph"><span>압력 2</span> 지정학 뇌관과 유가</div>
+        <ul>
+          <li><b>중동 충돌:</b> 이란–이스라엘 미사일 교전 재개 후 일시 중단, 확전 경고</li>
+          <li><b>에너지:</b> WTI 장중 <strong>$95</strong> 도달 후 $91선 안착(호르무즈 위기)</li>
+          <li><b>실물 타격:</b> 미국 주요 항공사 4월 연료비 전년比 <strong>+78%</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note"><b>스태그플레이션 시그널</b> — 항공 연료비처럼 100% 비용으로 전가되는 압박이 다른 섹터로 번지면, 물가는 오르고 성장은 둔화되는 구간에 진입할 위험이 커진다.</div>
+
+    <div class="term"><b>CPI(소비자물가지수)</b> — 소비자가 사는 상품·서비스 가격의 평균 변동을 측정하는 지표. 연준은 이 수치를 보고 금리를 올릴지 내릴지 판단한다. 목표치는 연 2%.</div>
+  </div>
+</section>
+
+<!-- ===== 테마 1 : AI 인프라 ===== -->
+<section>
+  <div class="wrap fade-in">
+    <div class="theme-num">Theme 01</div>
+    <h2>GPU를 넘어선 밸류체인의 재평가</h2>
+    <p class="lead">투자 초점이 '단일 칩'에서 <strong>'초거대 AI 공장'</strong>을 짓는 전방위 인프라로 이동하고 있다. 피라미드의 무게중심은 더 이상 맨 위가 아니다.</p>
+
+    <div class="pyramid">
+      <div class="pyr-row top">Software / Algorithms <small>모델 · 알고리즘</small></div>
+      <div class="pyr-row mid">GPU / Compute <small>연산</small></div>
+      <div class="pyr-row base">Memory · Networking · Foundry · Physical Infra <small>실질적 투자 병목 구간</small></div>
+    </div>
+    <p class="pyr-cap">맨 아래가 가장 두꺼워진 피라미드 — 돈이 모이는 곳이 바뀌었다</p>
+
+    <h3>핵심 동인 3가지</h3>
+    <p><strong>① 장기 공급 계약(LTA):</strong> 클라우드 사업자(CSP)들이 수년 전부터 파운드리·메모리 물량을 선제적으로 확보. <strong>② 공급 부족 장기화:</strong> HBM·NAND 플래시가 <span class="hl">2028년까지</span> 구조적 부족 전망. <strong>③ 물리적 병목:</strong> 전력·냉각·광통신이 새로운 투자 병목으로 부상.</p>
+
+    <h3>밸류체인 비교 매트릭스</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>종목</th><th>구간</th><th>당일</th><th>모멘텀</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tk">Intel (INTC)</span></td><td>파운드리·패키징</td><td class="up">+11.19%</td><td>구글 TPU 300만 개 발주, 테슬라 14A 공정 고객 확보</td></tr>
+          <tr><td><span class="tk">Micron (MU)</span></td><td>메모리</td><td class="up">+9.87%</td><td>엔비디아 HBM4 공급사 인증, 6월 24일 실적 기대</td></tr>
+          <tr><td><span class="tk">SanDisk (SNDK)</span></td><td>스토리지</td><td class="up">+5.30%</td><td>폭발적 수요로 목표가 $2,100 상향</td></tr>
+          <tr><td><span class="tk">Marvell (MRVL)</span></td><td>네트워킹·커스텀</td><td class="up">+9.63%</td><td>S&amp;P 500 편입 확정, '다음 1조 달러 기업' 지목</td></tr>
+          <tr><td><span class="tk">Corning (GLW)</span></td><td>물리적 인프라</td><td class="up">+5.60%</td><td>아마존 데이터센터용 광섬유 다년 공급계약</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="chart-card fade-in">
+      <div class="ct">AI 인프라 밸류체인 당일 상승률</div>
+      <div class="cs">막대를 탭하면 종목별 수치 확인 (%)</div>
+      <div class="chart-container">
+        <canvas id="infraChart" height="240"></canvas>
+      </div>
+    </div>
+
+    <div class="term"><b>HBM(고대역폭 메모리)</b> — GPU 옆에 쌓아 데이터를 빠르게 주고받는 고성능 메모리. GPU 성능이 아무리 좋아도 HBM이 부족하면 AI 연산이 병목에 걸린다. 엔비디아가 한국(SK·삼성)에 공급을 요청하는 이유다.</div>
+  </div>
+</section>
+
+<!-- ===== 테마 2 : 빅테크 ===== -->
+<section>
+  <div class="wrap fade-in">
+    <div class="theme-num">Theme 02</div>
+    <h2>빅테크의 엇갈린 전략적 행보</h2>
+    <p>같은 'AI 시대'를 두 회사가 정반대로 통과하고 있다. 통합으로 갈 것인가, 인프라를 직접 장악할 것인가.</p>
+
+    <h3>Apple — 통합과 수익화의 딜레마</h3>
+    <p>WWDC에서 발표한 'Siri AI' 개편은 자체 기술이 아니라 <strong>구글 Gemini 모델</strong>에 기반한다. 고부하 AI 기능은 iCloud+ 유료 구독($0.99~$64.99)과 묶는 수익화를 시도. 시장은 "기존 생태계 통합에 머물 뿐 하드웨어 교체 슈퍼사이클을 끌어낼 차별성은 부족하다"고 평가하며 주가는 <span class="down">−1.9%</span>로 반응했다.</p>
+
+    <h3>Alphabet — 압도적 Capex와 인프라 장악</h3>
+    <p>AI 컴퓨팅·글로벌 데이터센터 확장을 위해 <span class="hl">800억 달러</span> 규모의 초대형 지분 발행에 나섰다. 주목할 지점은 <strong>워런 버핏의 버크셔 해서웨이가 100억 달러 앵커 투자자로 참여</strong>했다는 것. 800억 달러 유상증자의 8분의 1을 떠안은 셈이다.</p>
+
+    <div class="note"><b>왜 이 시그널이 중요한가</b> — 유상증자는 주식 희석으로 단기 주가에 부담이다. 그럼에도 버핏이 참여했다는 건, 구글이 'Google Works'라는 인프라 생태계를 장악한 점을 AI 패권의 <b>재무적 우위(Credit Positive)</b>로 인정했다는 뜻이다.</div>
+
+    <div class="quote">
+      AI 기술이 아무리 좋아도 인프라가 없으면 의미가 없다. 구글은 그 인프라를 이미 쥐고 있다.
+      <span class="src">— 방송 중 분석 요지</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 테마 3 : 메가 IPO ===== -->
+<section>
+  <div class="wrap fade-in">
+    <div class="theme-num">Theme 03</div>
+    <h2>유동성 블랙홀, 메가 IPO의 역습</h2>
+    <p class="lead">빅테크·AI 랠리로 한곳에 모인 유동성이, 역대 최대 규모의 비상장 거인들이 상장하면서 사방으로 빨려나갈 위기에 놓였다.</p>
+
+    <h3>대기 중인 거인들</h3>
+    <p>금요일 상장하는 <strong>SpaceX</strong>를 시작으로, SEC에 IPO를 신청한 것으로 알려진 <span class="hl">OpenAI($850B+)</span>와 <span class="hl">Anthropic($965B)</span>가 줄지어 대기 중이다. 과거 데이터가 존재하지 않는, 전례 없는 규모다.</p>
+
+    <h3>시장 수급에 미치는 두 가지 충격</h3>
+    <p><strong>① 자본 재배치:</strong> 기관들이 메가 IPO 참여 자금을 마련하려 기존 기술주를 매도 → 이것이 금요일 매도세의 또 다른 원인. <strong>② 지수 편입의 한계:</strong> 상장 직후 12개월간 S&amp;P 500 편입이 불가해, 초기 패시브 자금 유입이 제한된다.</p>
+
+    <h3>심층 분석 — SpaceX의 경고 시그널</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>항목</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td>조달 목표</td><td><strong>750억 달러</strong> (역대 1위)</td></tr>
+          <tr><td>목표 기업가치</td><td>1.75조 ~ 1.8조 달러</td></tr>
+          <tr><td>공모가</td><td>주당 $135</td></tr>
+          <tr><td>주문 유입</td><td>1,500억 달러 — <strong>2배 초과 청약</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>겉보기엔 2배 초과 청약으로 성공처럼 보인다. 그러나 함정이 있다. <strong>뜨거운 IPO는 통상 4~5배 초과 청약</strong>을 기록한다. 2배 수준은 1.8조 달러 고평가 논란과 맞물려, 상장 첫날 강한 상승(Pop)을 담보하기 어렵다는 <span class="hl">약세 신호</span>로 읽힌다.</p>
+
+    <!-- 청약 시뮬레이터 -->
+    <div class="sim">
+      <h4>IPO 청약 열기 시뮬레이터</h4>
+      <div class="sd">초과 청약 배수를 움직여 '뜨거운 IPO' 기준에 닿는지 확인해 보세요.</div>
+      <label>초과 청약 배수 <b><span id="simVal">2.0</span>배</b></label>
+      <input type="range" id="simRange" min="0.5" max="6" step="0.1" value="2.0">
+      <div class="out">
+        <div class="ov" id="simHeat">미달</div>
+        <div class="ol">시장 평가 (기준: 4~5배 = 강세)</div>
+        <div class="verdict" id="simVerdict"></div>
+      </div>
+      <button class="reset" id="simReset">SpaceX 실제값(2.0배)으로 초기화</button>
+    </div>
+    <p class="pyr-cap">소문난 잔치에 먹을 게 없을 수 있다 — 상장 당일 진입 시 고점 부근 차익 실현 주의</p>
+  </div>
+</section>
+
+<!-- ===== 테마 4 : 헬스케어 ===== -->
+<section>
+  <div class="wrap fade-in">
+    <div class="theme-num">Theme 04</div>
+    <h2>비기술주 주도 랠리 — 헬스케어의 초격차</h2>
+    <p>AI 외곽에서 구조적 성장을 만드는 제약/바이오 섹터의 2세대 승자 독식 국면. 중심엔 비만 치료제 패권을 쥔 일라이 릴리가 있다.</p>
+
+    <h3>Eli Lilly (LLY) — 비만 치료제 시장 장악</h3>
+    <p>차세대 삼중작용제 <strong>'레타트루타이드(Retatrutide)'</strong>의 Phase 3 임상이 성공했다. 80주간 최고 용량 투여 시 평균 <span class="hl">28.3% 체중 감량</span>. 단순 다이어트를 넘어 무릎 통증 완화, 수면 무호흡증 60.6% 감소 등 다중 적응증으로 확장된다는 점이 핵심이다. 주가는 <span class="up">+4.4%</span>.</p>
+
+    <div class="chart-card fade-in">
+      <div class="ct">비만 치료제 경쟁 구도의 재편</div>
+      <div class="cs">신약 모멘텀 당일 주가 반응 (%)</div>
+      <div class="chart-container">
+        <canvas id="pharmaChart" height="220"></canvas>
+      </div>
+    </div>
+
+    <p>경쟁사 <strong>Zealand Pharma</strong>는 신약 내약성 문제로 <span class="down">−20%</span> 폭락, <strong>Novo Nordisk</strong>도 −4.5%. 그 사이 LLY는 저용량에서도 19% 감량 효과를 증명하며 2,000억 달러 시장의 확고한 1위로 자리매김했다.</p>
+
+    <div class="note"><b>버핏의 두 축</b> — 구글(AI 패권)과 일라이 릴리(헬스케어 독점)를 동시에 담은 버크셔의 포트폴리오는 '어려운 시기에도 버틸 코어 자산'을 미리 쌓아둔 구성으로 읽힌다.</div>
+  </div>
+</section>
+
+<!-- ===== 인덱스 재조정 ===== -->
+<section>
+  <div class="wrap fade-in">
+    <div class="eyebrow">Rebalancing · 6월 22일 효력</div>
+    <h2>지수 재편이 암시하는 권력 이동</h2>
+    <p>S&amp;P 500 편입/편출은 단순한 종목 교체가 아니다. 미국 경제의 무게중심이 어디서 어디로 옮겨가는지를 보여주는 지도다.</p>
+
+    <div class="inout">
+      <div class="iocard in">
+        <div class="ioh">IN ↑ 새 인프라</div>
+        <div class="ent"><div class="nm">Marvell Tech (MRVL)</div><div class="ds">AI 데이터센터용 커스텀 칩·네트워킹 강자. 편입 발표 후 +9.63%</div></div>
+        <div class="ent"><div class="nm">Flex (FLEX)</div><div class="ds">빅테크 전자기기 수탁 생산. 글로벌 공급망 다변화 역량 입증</div></div>
+      </div>
+      <div class="iocard out">
+        <div class="ioh">OUT ↓ 구경제</div>
+        <div class="ent"><div class="nm">Campbell's (CPB)</div><div class="ds">1957년 원년 멤버의 69년 만의 퇴출. 인플레 비용 압박 직격탄</div></div>
+        <div class="ent"><div class="nm">Pool Corp (POOL)</div><div class="ds">주택시장 침체·중산층 임의 소비 여력 고갈 반영</div></div>
+      </div>
+    </div>
+
+    <div class="note"><b>단기 트레이딩 기회</b> — 패시브 자금(ETF)이 6월 22일까지 기계적으로 편입 종목을 사고 편출 종목을 팔면서, 편입주는 오버슈팅·편출주는 언더슈팅이 나타날 수 있다.</div>
+  </div>
+</section>
+
+<!-- ===== 기관 포지셔닝 ===== -->
+<section>
+  <div class="wrap fade-in">
+    <div class="eyebrow">Institutional Positioning</div>
+    <h2>펀더멘털 강세와 포지셔닝 과열의 충돌</h2>
+
+    <h3>1. BofA의 베어마켓 경고등</h3>
+    <p>그동안 대부분의 기관이 S&amp;P 500 목표를 상향했지만, 처음으로 뱅크오브아메리카가 경고를 냈다. 약세장을 알리는 전통적 신호 중 <span class="hl">70%가 이미 발현</span>됐고, 연말 목표를 <strong>7,100</strong>으로 제시 — 현재 7,500대 대비 조정장이 아닌 하락장급 전망이다.</p>
+
+    <div class="chart-card fade-in">
+      <div class="ct">베어마켓 신호 발현율</div>
+      <div class="cs">BofA 기준 — 전통적 약세장 신호 충족 정도</div>
+      <div class="chart-container">
+        <canvas id="bearChart" height="220"></canvas>
+      </div>
+    </div>
+
+    <h3>2. 헤지펀드·ETF의 과도한 레버리지</h3>
+    <p>모건스탠리 분석에 따르면 <strong>반도체 섹터가 글로벌 헤지펀드 포트폴리오의 25%</strong>를 차지한다. 헤지펀드는 자기 자본 비중이 작고 대부분 마진(차입)을 쓰기 때문에, 청산이 시작되면 알고리즘이 기계적으로 매도한다. 금요일 나스닥이 S&amp;P의 두 배로 빠진 건 이 레버리지 청산 탓이다.</p>
+
+    <h3>3. 스마트 머니의 'Buy the Dip'</h3>
+    <p>한편 마이크로스트래티지(MSTR)는 비트코인 6만 달러 붕괴 공포 속에서도 <span class="hl">1억 8,100만 달러</span> 규모를 추가 매수하며 역발상 베팅에 나섰다.</p>
+  </div>
+</section>
+
+<!-- ===== 종합 매트릭스 ===== -->
+<section>
+  <div class="wrap fade-in">
+    <div class="eyebrow">The Playbook</div>
+    <h2>2026 하반기 섹터 포지셔닝</h2>
+    <p class="lead">충격 이후의 시장은 철저히 <strong>'실적 가시성'</strong>과 <strong>'비용 전가력'</strong>을 기준으로 재편될 것이다.</p>
+
+    <div class="posmat">
+      <div class="posrow">
+        <div class="poslab ow">Overweight<small>비중 확대</small></div>
+        <div class="posbody">
+          <div class="pb"><b>AI 물리적 인프라</b> — 메모리(MU)·네트워킹(MRVL)·광통신(GLW). <span>장기 공급계약으로 매크로 노이즈 방어</span></div>
+          <div class="pb"><b>혁신 제약/바이오</b> — 독점 파이프라인의 비만·대사 질환 리더(LLY). <span>매크로 무관한 구조적 성장</span></div>
+        </div>
+      </div>
+      <div class="posrow">
+        <div class="poslab nu">Neutral<small>중립</small></div>
+        <div class="posbody">
+          <div class="pb"><b>빅테크 &amp; 소프트웨어</b> — 메가 IPO 유동성 이탈 리스크. <span>인프라 투자 역량 유무로 차별화 필요</span></div>
+          <div class="pb"><b>에너지</b> — 중동 리스크(유가 $90 이상 유지)가 하방 지지</div>
+        </div>
+      </div>
+      <div class="posrow">
+        <div class="poslab uw">Underweight<small>비중 축소</small></div>
+        <div class="posbody">
+          <div class="pb"><b>전통 소비재 &amp; 운송</b> — 항공(연료비 폭등)·필수소비재(CPB 가격 인상 한계). <span>가처분 소득 감소의 직접 타격</span></div>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top:24px">결론은 명확하다. 시장이 흔들릴 때가 기회지만, <strong>지수 추종(인덱스)이 위험해지는 국면</strong>이다. 무게중심이 인프라·헬스케어로 옮겨가는 한, '무엇을 사느냐'보다 '무엇을 피하느냐'가 수익률을 가른다.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap fade-in">
+    <div class="disclaimer">
+      <strong>면책조항</strong> — 본 문서는 NOVA Real Invest 방송 내용을 정리·분석한 자료이며, 채널은 엔터테인먼트 목적의 개인 투자 브이로그임을 명시하고 있습니다. 본 내용은 사실과 다를 수 있으며 투자 조언이 아닙니다. 모든 투자 결정과 그 결과에 대한 책임은 투자자 본인에게 있습니다. 수치는 방송에서 제시된 원본을 그대로 옮긴 것입니다.
+    </div>
+    <div class="endmark">NOVA Real Invest · 2026.06.08</div>
+  </div>
+</footer>
+
+<script>
+  // ===== Fade-in observer =====
+  const fadeObs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        fadeObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+  // ===== Chart defaults =====
+  const ACC='#e11d48', INK='#1a1a1a', GRY='#6b7280', BLU='#2563eb', GRN='#16a34a';
+  Chart.defaults.font.family = "'Noto Sans KR', sans-serif";
+  Chart.defaults.font.size = 11;
+  Chart.defaults.color = '#777777';
+
+  const chartConfigs = {};
+
+  chartConfigs['shockChart'] = () => {
+    new Chart(document.getElementById('shockChart'), {
+      type:'bar',
+      data:{
+        labels:['SOX','나스닥','S&P500','VIX'],
+        datasets:[
+          {label:'금요일(충격)',data:[-10.0,-4.2,-2.0,39.7],backgroundColor:ACC,borderRadius:4,maxBarThickness:34},
+          {label:'월요일(회복)',data:[5.6,0.86,0.3,null],backgroundColor:INK,borderRadius:4,maxBarThickness:34}
+        ]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:14}},
+          tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.raw>0?'+':'')+c.raw+'%'}}},
+        scales:{y:{grid:{color:'#eee'},ticks:{callback:v=>v+'%'}},x:{grid:{display:false}}}
+      }
+    });
+  };
+
+  chartConfigs['infraChart'] = () => {
+    new Chart(document.getElementById('infraChart'), {
+      type:'bar',
+      data:{
+        labels:['INTC','MU','MRVL','SNDK','GLW'],
+        datasets:[{label:'당일 상승률',
+          data:[11.19,9.87,9.63,5.30,5.60],
+          backgroundColor:[ACC,'#f43f5e',ACC,'#f87171','#f43f5e'],borderRadius:5,maxBarThickness:46}]
+      },
+      options:{
+        indexAxis:'y',responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'+'+c.raw+'%'}}},
+        scales:{x:{grid:{color:'#eee'},ticks:{callback:v=>'+'+v+'%'}},y:{grid:{display:false}}}
+      }
+    });
+  };
+
+  chartConfigs['pharmaChart'] = () => {
+    new Chart(document.getElementById('pharmaChart'), {
+      type:'bar',
+      data:{
+        labels:['Eli Lilly','Novo Nordisk','Zealand Pharma'],
+        datasets:[{label:'당일 주가',
+          data:[4.4,-4.5,-20.0],
+          backgroundColor:[GRN,'#f87171',ACC],borderRadius:5,maxBarThickness:48}]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.raw>0?'+':'')+c.raw+'%'}}},
+        scales:{y:{grid:{color:'#eee'},ticks:{callback:v=>v+'%'}},x:{grid:{display:false}}}
+      }
+    });
+  };
+
+  chartConfigs['bearChart'] = () => {
+    new Chart(document.getElementById('bearChart'), {
+      type:'doughnut',
+      data:{
+        labels:['발현된 약세 신호','미발현'],
+        datasets:[{data:[70,30],backgroundColor:[ACC,'#e5e5e5'],borderWidth:0}]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,cutout:'68%',
+        plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:14}},
+          tooltip:{callbacks:{label:c=>c.label+': '+c.raw+'%'}}}
+      }
+    });
+  };
+
+  const chartObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const canvas = e.target.querySelector('canvas');
+        if (canvas && chartConfigs[canvas.id]) {
+          chartConfigs[canvas.id]();
+          e.target.classList.add('chart-ready');
+          chartObs.unobserve(e.target);
+        }
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+  // ===== IPO 시뮬레이터 =====
+  (function(){
+    const range=document.getElementById('simRange'),
+          val=document.getElementById('simVal'),
+          heat=document.getElementById('simHeat'),
+          verdict=document.getElementById('simVerdict'),
+          reset=document.getElementById('simReset');
+    function update(){
+      const x=parseFloat(range.value);
+      val.textContent=x.toFixed(1);
+      let label,v,color;
+      if(x<2){label='싸늘';color='#777777';v='수요 부진. 상장 직후 하락 위험이 큽니다.';}
+      else if(x<4){label='미지근';color='#e11d48';v='SpaceX의 2배 수준 — 성공처럼 보이나 약세 신호. 강한 상승(Pop)을 담보하기 어렵습니다.';}
+      else if(x<=5){label='뜨거움';color='#16a34a';v='4~5배 — 전형적인 강세 IPO 구간. 상장 첫날 상승 기대가 높습니다.';}
+      else{label='과열';color='#16a34a';v='5배 초과 — 극도의 수요. 다만 상장 후 변동성도 함께 커집니다.';}
+      heat.textContent=label; heat.style.color=color; verdict.textContent=v;
+    }
+    range.addEventListener('input',update);
+    reset.addEventListener('click',()=>{range.value=2.0;update();});
+    update();
+  })();
+</script>
+</body>
+</html>
