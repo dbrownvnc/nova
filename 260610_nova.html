@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Summer Swoon: 3중 리스크의 강타와 자본의 대이동 — 2026.06.09</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#ffffff; --bg-sub:#fafafa;
+    --text:#1a1a1a; --text-sub:#777777;
+    --accent:#e11d48; --accent2:#f43f5e;
+    --border:#e5e5e5; --blue:#2563eb; --gray:#6b7280;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text);
+    line-height:1.78; font-size:16px; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:0 20px 80px;}
+
+  /* ===== Hero ===== */
+  .hero{padding:64px 0 40px;border-bottom:3px solid var(--text);}
+  .kicker{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:18px;}
+  .hero h1{font-family:'Playfair Display','Noto Sans KR',serif;font-weight:900;font-size:clamp(30px,7vw,44px);line-height:1.18;letter-spacing:-.01em;}
+  .hero h1 .en{font-style:italic;color:var(--accent);}
+  .hero .sub{margin-top:18px;font-size:15.5px;color:var(--text-sub);font-weight:400;}
+  .meta{display:flex;gap:14px;flex-wrap:wrap;margin-top:24px;font-size:12.5px;color:var(--text-sub);letter-spacing:.04em;}
+  .meta span b{color:var(--text);font-weight:700;}
+
+  /* ===== Sections ===== */
+  section{margin-top:64px;}
+  .sec-label{display:flex;align-items:baseline;gap:12px;margin-bottom:8px;}
+  .sec-num{font-family:'Playfair Display',serif;font-style:italic;font-size:15px;color:var(--accent);font-weight:700;}
+  .sec-label .line{flex:1;height:1px;background:var(--border);}
+  h2{font-family:'Playfair Display','Noto Sans KR',serif;font-weight:700;font-size:clamp(22px,5vw,28px);line-height:1.3;margin-bottom:6px;}
+  h2 .en{font-style:italic;font-weight:500;color:var(--text-sub);font-size:.72em;display:block;margin-top:2px;}
+  h3{font-size:17px;font-weight:700;margin:30px 0 10px;}
+  p{margin:14px 0;}
+  p.lead{font-size:17.5px;font-weight:500;}
+  strong{font-weight:700;}
+  .acc{color:var(--accent);font-weight:700;}
+  em.term{font-style:normal;border-bottom:2px solid var(--accent2);font-weight:500;}
+
+  .pullquote{
+    margin:32px 0;padding:6px 0 6px 22px;border-left:3px solid var(--accent);
+    font-family:'Playfair Display','Noto Sans KR',serif;font-size:19px;font-weight:500;line-height:1.55;font-style:italic;
+  }
+  .pullquote .who{display:block;margin-top:8px;font-family:'Noto Sans KR';font-style:normal;font-size:12px;color:var(--text-sub);letter-spacing:.08em;}
+
+  .note{background:var(--bg-sub);border:1px solid var(--border);border-radius:10px;padding:16px 18px;font-size:14px;color:var(--text-sub);margin:20px 0;}
+  .note b{color:var(--text);}
+  .note .tag{display:inline-block;background:var(--accent);color:#fff;font-size:10.5px;font-weight:700;letter-spacing:.1em;padding:2px 8px;border-radius:4px;margin-right:8px;vertical-align:1px;}
+
+  /* ===== Tables ===== */
+  table{width:100%;border-collapse:collapse;font-size:13.8px;margin:20px 0;background:var(--bg-sub);}
+  th{background:var(--accent);color:#fff;font-weight:700;padding:10px 12px;text-align:left;font-size:12.8px;letter-spacing:.03em;}
+  td{padding:11px 12px;border:1px solid var(--border);vertical-align:top;}
+  tr td:first-child{font-weight:700;white-space:nowrap;}
+  .up{color:#16a34a;font-weight:700;}
+  .down{color:var(--accent);font-weight:700;}
+
+  /* ===== Fade-in / Chart pattern (required) ===== */
+  .fade-in{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+  .fade-in.visible{opacity:1;transform:translateY(0);}
+  .chart-container{position:relative;max-height:340px;}
+  .chart-container canvas{opacity:0;transition:opacity .4s ease;max-height:300px;}
+  .chart-container.chart-ready canvas{opacity:1;}
+  .chart-card{background:var(--bg-sub);border:1px solid var(--border);border-radius:12px;padding:20px 16px 14px;margin:24px 0;}
+  .chart-title{font-size:13px;font-weight:700;letter-spacing:.05em;margin-bottom:4px;}
+  .chart-sub{font-size:12px;color:var(--text-sub);margin-bottom:12px;}
+
+  /* ===== Triad diagram ===== */
+  .triad{display:grid;grid-template-columns:1fr;gap:12px;margin:24px 0;}
+  .triad-card{border:1px solid var(--border);border-radius:12px;padding:18px;background:#fff;cursor:pointer;transition:border-color .25s,box-shadow .25s;}
+  .triad-card:hover{border-color:var(--accent2);}
+  .triad-card.open{border-color:var(--accent);box-shadow:0 4px 18px rgba(225,29,72,.08);}
+  .triad-head{display:flex;align-items:center;gap:10px;}
+  .triad-ico{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex:none;}
+  .triad-head h4{font-size:15.5px;font-weight:700;}
+  .triad-head .hint{margin-left:auto;font-size:11px;color:var(--text-sub);letter-spacing:.05em;}
+  .triad-body{max-height:0;overflow:hidden;transition:max-height .4s ease;font-size:14px;color:#333;}
+  .triad-card.open .triad-body{max-height:300px;}
+  .triad-body ul{margin:12px 0 4px 4px;list-style:none;}
+  .triad-body li{padding-left:16px;position:relative;margin:6px 0;}
+  .triad-body li::before{content:"—";position:absolute;left:0;color:var(--accent);}
+
+  /* ===== Versus table ===== */
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:22px 0;}
+  .vs-col{border-radius:12px;padding:16px 14px;font-size:13.5px;}
+  .vs-col.core{background:#fdf2f4;border:1px solid #f5c6d0;}
+  .vs-col.infra{background:#eef3fb;border:1px solid #c9d8f0;}
+  .vs-col h4{font-size:13.5px;font-weight:900;margin-bottom:10px;letter-spacing:.02em;}
+  .vs-col.core h4{color:var(--accent);}
+  .vs-col.infra h4{color:var(--blue);}
+  .vs-col p{margin:8px 0;font-size:13.2px;line-height:1.6;}
+  @media(max-width:480px){.vs{grid-template-columns:1fr;}}
+
+  /* ===== Rotation flow ===== */
+  .flow{margin:24px 0;}
+  .flow-src{background:var(--text);color:#fff;border-radius:10px;padding:14px 16px;font-weight:700;font-size:14px;text-align:center;}
+  .flow-arrows{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px;}
+  .flow-dst{border:1px solid var(--border);border-radius:10px;padding:12px 10px;background:var(--bg-sub);text-align:center;}
+  .flow-dst .t{font-size:12.5px;font-weight:700;}
+  .flow-dst .tk{font-size:11px;color:var(--accent);font-weight:700;margin-top:2px;}
+  .flow-dst .d{font-size:11px;color:var(--text-sub);margin-top:4px;line-height:1.45;}
+  .flow-dst::before{content:"↓";display:block;color:var(--accent);font-weight:900;margin-bottom:4px;}
+  @media(max-width:480px){.flow-arrows{grid-template-columns:1fr;}}
+
+  /* ===== CPI Simulator ===== */
+  .sim{background:var(--bg-sub);border:1px solid var(--border);border-radius:14px;padding:24px 20px;margin:26px 0;}
+  .sim h4{font-size:15px;font-weight:900;letter-spacing:.02em;}
+  .sim .desc{font-size:12.5px;color:var(--text-sub);margin:4px 0 18px;}
+  .sim-row{display:flex;align-items:center;gap:14px;margin:10px 0;}
+  .sim-val{font-family:'Playfair Display',serif;font-size:34px;font-weight:900;min-width:96px;text-align:center;transition:color .2s;}
+  input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;background:linear-gradient(90deg,#16a34a,#f59e0b,var(--accent));outline:none;cursor:pointer;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;border:3px solid var(--text);cursor:grab;box-shadow:0 2px 6px rgba(0,0,0,.2);}
+  input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fff;border:3px solid var(--text);cursor:grab;}
+  .sim-out{border-radius:10px;padding:16px;margin-top:14px;font-size:14px;line-height:1.65;border:1px solid var(--border);background:#fff;transition:border-color .25s;}
+  .sim-out .badge{display:inline-block;font-size:11px;font-weight:900;letter-spacing:.08em;padding:3px 10px;border-radius:99px;color:#fff;margin-bottom:8px;}
+  .sim-reset{margin-top:14px;background:none;border:1px solid var(--border);border-radius:8px;padding:7px 16px;font-family:inherit;font-size:12.5px;color:var(--text-sub);cursor:pointer;transition:all .2s;}
+  .sim-reset:hover{border-color:var(--text);color:var(--text);}
+
+  /* ===== Barbell simulator ===== */
+  .bar-vis{display:flex;height:46px;border-radius:10px;overflow:hidden;margin:14px 0 6px;border:1px solid var(--border);}
+  .bar-seg{display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:#fff;transition:width .25s ease;white-space:nowrap;overflow:hidden;}
+  .bar-def{background:#16803c;}
+  .bar-hedge{background:var(--gray);}
+  .bar-infra{background:var(--blue);}
+  .bar-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--text-sub);margin-bottom:10px;}
+  .bar-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px;}
+  .sim-msg{font-size:13px;margin-top:8px;padding:10px 14px;border-left:3px solid var(--accent);background:#fff;}
+
+  /* ===== Catalyst tree ===== */
+  .cat{margin:24px 0;display:grid;gap:14px;}
+  .cat-ev{border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  .cat-ev .head{background:var(--text);color:#fff;padding:12px 16px;font-size:14px;font-weight:700;display:flex;justify-content:space-between;align-items:center;}
+  .cat-ev .head .when{font-size:11px;font-weight:400;color:#bbb;letter-spacing:.06em;}
+  .cat-branch{display:grid;grid-template-columns:1fr 1fr;}
+  .cat-case{padding:14px;font-size:13px;line-height:1.6;cursor:pointer;transition:background .2s;position:relative;}
+  .cat-case:first-child{border-right:1px solid var(--border);}
+  .cat-case .lab{font-weight:900;font-size:12px;display:block;margin-bottom:4px;}
+  .cat-case.bull .lab{color:#16a34a;}
+  .cat-case.bear .lab{color:var(--accent);}
+  .cat-case:hover{background:var(--bg-sub);}
+  @media(max-width:480px){.cat-branch{grid-template-columns:1fr;}.cat-case:first-child{border-right:none;border-bottom:1px solid var(--border);}}
+
+  /* checklist */
+  .check{margin:20px 0;display:grid;gap:10px;}
+  .check-item{display:flex;gap:12px;align-items:flex-start;background:var(--bg-sub);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-size:14.2px;}
+  .check-item .n{font-family:'Playfair Display',serif;font-style:italic;color:var(--accent);font-weight:900;font-size:18px;line-height:1.3;flex:none;}
+
+  footer{margin-top:80px;padding-top:24px;border-top:3px solid var(--text);font-size:12px;color:var(--text-sub);line-height:1.7;}
+  footer b{color:var(--text);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div class="kicker">CIA.chat Member Meeting · Daily Market Synthesis</div>
+    <h1><span class="en">The Summer Swoon</span><br>3중 리스크의 강타와<br>자본의 대이동</h1>
+    <p class="sub">어제의 반등은 데드캣 바운스였다. AI 랠리 피로감 · 방어주 로테이션 · 지정학 발작 — 세 개의 폭풍이 동시에 상륙한 6월 9일, 시장의 성격이 완전히 뒤바뀌었다.</p>
+    <div class="meta">
+      <span>날짜 <b>2026. 06. 09 (화)</b></span>
+      <span>주제 <b>Tactical Radar Report</b></span>
+      <span>키워드 <b>AI 변곡점 · 포트폴리오 로테이션</b></span>
+    </div>
+  </header>
+
+  <!-- ============ 01 시장 ============ -->
+  <section class="fade-in">
+    <div class="sec-label"><span class="sec-num">No.01</span><span class="line"></span></div>
+    <h2>시장의 성격이 뒤바뀐 하루<span class="en">Market Recap — June 9</span></h2>
+    <p class="lead">전일(6/8)의 상승은 <em class="term">데드캣 바운스</em>로 판명됐다. 다우만 간신히 양전했고, 그마저 "양전한 게 양전한 건지 모를 정도"였다는 평가다.</p>
+    <p>반도체에는 <strong>무차별적인 매도 폭탄</strong>이 터졌다. 나스닥은 장중 <span class="down">-3.5%</span>까지 급락했다가 일부 회복해 마감했고, 반도체 비중이 큰 S&amp;P 500도 장 초반 상승분을 모두 반납했다. 반면 다우는 방어주·가치주 중심의 <strong>자본 도피처</strong> 역할을 하며 홀로 버텼다.</p>
+
+    <div class="chart-card fade-in">
+      <div class="chart-title">3대 지수 등락 — 2026.06.09</div>
+      <div class="chart-sub">막대를 터치하면 종가를 확인할 수 있습니다</div>
+      <div class="chart-container fade-in">
+        <canvas id="chIndex" height="220"></canvas>
+      </div>
+    </div>
+
+    <table>
+      <thead><tr><th>지수</th><th>종가</th><th>등락</th><th>한 줄 평</th></tr></thead>
+      <tbody>
+        <tr><td>나스닥</td><td>25,678.82</td><td class="down">-0.97%</td><td>반도체 차익실현 융단폭격 (장중 -3.5%)</td></tr>
+        <tr><td>다우존스</td><td>50,872.11</td><td class="up">+0.17%</td><td>방어주/가치주 중심의 자본 도피처</td></tr>
+        <tr><td>S&amp;P 500</td><td>7,386.65</td><td class="down">-0.26%</td><td>기술주 매도 압력에 초반 상승분 반납</td></tr>
+      </tbody>
+    </table>
+    <p>하락의 배경은 세 가지로 압축된다. ① <strong>AI 랠리 피로감</strong>, ② 스태그플레이션 우려에 따른 <strong>방어주 로테이션</strong>, ③ <strong>지정학 발작</strong>. "여름 급락장이 또 시작되는 것 아니냐"는 목소리가 커지는 이유다.</p>
+  </section>
+
+  <!-- ============ 02 3중 리스크 ============ -->
+  <section class="fade-in">
+    <div class="sec-label"><span class="sec-num">No.02</span><span class="line"></span></div>
+    <h2>시장을 흔든 거시적 3중 리스크<span class="en">The Macro Triad</span></h2>
+    <p>단순히 "주가가 빠졌다"가 아니다. 거시경제의 역풍이라 할 <strong>삼중 리스크</strong>가 겹겹이 쌓이며 시장을 눌렀다. 각 카드를 탭하면 상세 내용이 펼쳐진다.</p>
+
+    <div class="triad">
+      <div class="triad-card" onclick="this.classList.toggle('open')">
+        <div class="triad-head"><div class="triad-ico">⚔</div><h4>지정학 리스크 — 이란발 발작</h4><span class="hint">탭하여 펼치기 ▾</span></div>
+        <div class="triad-body"><ul>
+          <li>이란이 미군 <strong>아파치 헬기를 격추</strong>, 트럼프 대통령은 "반드시 대응" 직후 오후 5시경 이란 공습 개시</li>
+          <li>"휴전은 물 건너갔다"는 분위기 — 호르무즈 해협 변수로 유가 변동성 촉발</li>
+          <li>오늘 밤 라이브 속보가 쏟아질 예정. 단, 총력전이 오히려 이란을 협상 테이블로 끌어낼 가능성도 거론</li>
+        </ul></div>
+      </div>
+      <div class="triad-card" onclick="this.classList.toggle('open')">
+        <div class="triad-head"><div class="triad-ico">%</div><h4>인플레이션 공포 — 내일 5월 CPI</h4><span class="hint">탭하여 펼치기 ▾</span></div>
+        <div class="triad-body"><ul>
+          <li>6/10 발표 예정인 5월 CPI 컨센서스는 <strong>전년비 4.2%</strong> — 3년 만의 최고치 가속 우려</li>
+          <li>조금만 더 높게 나와도 공포 증폭. 예상치 부합이어도 "물가가 안 잡힌다"는 걱정이 이어질 수 있음</li>
+          <li>연준 금리 인하 기대감이 "완전히 끝났다"는 얘기가 나올 가능성</li>
+        </ul></div>
+      </div>
+      <div class="triad-card" onclick="this.classList.toggle('open')">
+        <div class="triad-head"><div class="triad-ico">AI</div><h4>AI 피로감 — 기술주 폭락의 근본 원인</h4><span class="hint">탭하여 펼치기 ▾</span></div>
+        <div class="triad-body"><ul>
+          <li><strong>'토큰 맥싱'의 종료</strong> — 경쟁 과열로 토큰 비용을 고객에게 전가하지 못할 것이라는 우려 대두</li>
+          <li>월마트·우버 등 기업 고객은 이미 <strong>AI 예산을 소진</strong> — "쓴 만큼 회수가 안 된다"</li>
+          <li>치솟는 인프라 비용 대비 수익화 지연</li>
+        </ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 03 AI Token Crisis ============ -->
+  <section class="fade-in">
+    <div class="sec-label"><span class="sec-num">No.03</span><span class="line"></span></div>
+    <h2>'AI 토큰' 크라이시스<span class="en">From Unconditional Buying to Verification</span></h2>
+    <p class="lead">시소의 양쪽이 동시에 무너지고 있다. 한쪽은 <strong>CapEx의 폭발</strong>, 다른 쪽은 <strong>예산의 고갈</strong>.</p>
+    <p>MSFT·META·GOOGL 등 빅테크는 GPU와 메모리를 "무한대로" 사들이며 기하급수적으로 인프라 비용을 늘리고 있다. 그런데 정작 그 비용을 받아줘야 할 기업 고객(월마트, 우버 등)은 토큰 비용 폭증을 체감하며 AI 보조금·예산을 끊고 있다. <strong>양쪽 모두 "돈이 없다"</strong>는, 웃지 못할 대치 상황이다.</p>
+    <p>기업 고객의 속내는 이렇다 — "AI를 엄청나게 써봤는데, 생산성이 높아졌는지 모르겠다. 슬라이드는 열심히 만드는 것 같은데 돈을 벌지 못한다." 화려하게 부풀려진(플러핑) 기대 대비 <em class="term">ROI 검증</em>이 시작된 것이다.</p>
+    <div class="note"><span class="tag">INSIGHT</span><b>AI 투자가 멈춘 것은 아니다.</b> 다만 수익성(Cost-Benefit) 증명 없이는 밸류에이션 확장이 불가능한 구간에 진입했다.</div>
+
+    <h3>실망 매물의 진원지 — 환상과 현실의 괴리</h3>
+    <table>
+      <thead><tr><th>종목</th><th>기대 (Expectation)</th><th>현실 (Reality)</th></tr></thead>
+      <tbody>
+        <tr><td>Apple<br><span class="down">-3.64%</span></td><td>WWDC를 통한 즉각적 'Siri AI' 상용화, iPhone 슈퍼사이클</td><td>출시 일정 부재. EU/중국 제외 연말 베타에 그치며 단기 모멘텀 상실</td></tr>
+        <tr><td>Marvell<br><span class="down">-7.60%</span></td><td>S&amp;P 500 편입(6/22)에 따른 패시브 자금 유입 (장 초반 +9.6%)</td><td>PER 85배 고평가 부담. 편입 호재를 압도한 9,400만 주 이상의 차익실현</td></tr>
+      </tbody>
+    </table>
+    <p>마블의 경우 인덱스 펀드들은 6월 22일 편입일까지 물량을 채워 넣어야 하지만, "주가가 너무 비싸다"는 인식 속에 차익실현이 호재를 압도했다. CIA 멤버들 역시 이날 AI 관련주를 대거 정리한 것으로 전해졌다.</p>
+  </section>
+
+  <!-- ============ 04 옥석가리기 ============ -->
+  <section class="fade-in">
+    <div class="sec-label"><span class="sec-num">No.04</span><span class="line"></span></div>
+    <h2>옥석 가리기<span class="en">AI Pure-Play vs Physical Infrastructure</span></h2>
+    <p class="lead">이제 해야 할 일은 <strong>옥석 가리기</strong>다. '컴퓨터 안에 있는 애들'에서 '컴퓨터 바깥의 딱딱한 아이들'로 — 섹터가 크게 이동하고 있다.</p>
+
+    <div class="vs">
+      <div class="vs-col core">
+        <h4>AI Core — NVDA · AMD · MRVL</h4>
+        <p><strong>현상:</strong> 고밸류에이션 + 차익실현 매물 집중타.</p>
+        <p><strong>리스크:</strong> 소비자 수요 둔화 (IDC: 2026년 스마트폰 출하량 13% 감소 전망).</p>
+      </div>
+      <div class="vs-col infra">
+        <h4>AI Infra — FIX · CRDO · APLD</h4>
+        <p><strong>현상:</strong> 조정장 속에서도 사상 최고가(CRDO +5.5%) 경신, 방어력 입증.</p>
+        <p><strong>모멘텀:</strong> Comfort Systems(FIX) 분기 수주잔고 <strong>$12.4B</strong> 달성, UBS 목표가 $2,125 상향.</p>
+        <p><strong>실질 수요:</strong> 데이터센터 전력 · 냉각 · 고속연결(광통신) 인프라 구축.</p>
+      </div>
+    </div>
+    <p>AMD가 어떻든 NVIDIA가 어떻든, 무지막지한 열을 식힐 <strong>냉각 시스템</strong>, <strong>전력 인프라</strong>, <strong>고속 연결·광통신</strong>은 계속 필요하다. 매출이 꾸준히 늘고 있고 앞으로도 늘어날 것이라는 게 이들의 공통점이다. 노바가 일찍이 짚어온 '딱따구리'(물리적 인프라) 테마 그대로다.</p>
+  </section>
+
+  <!-- ============ 05 자본의 대이동 ============ -->
+  <section class="fade-in">
+    <div class="sec-label"><span class="sec-num">No.05</span><span class="line"></span></div>
+    <h2>The Great Rotation<span class="en">기술주를 떠난 자본의 행방</span></h2>
+    <p>기술주에서 빠져나간 돈을 추적한 결과, 행선지는 세 갈래로 확인된다.</p>
+
+    <div class="flow fade-in">
+      <div class="flow-src">나스닥 / 반도체 자본 유출 (Tech Outflow)</div>
+      <div class="flow-arrows">
+        <div class="flow-dst"><div class="t">방어적 소비재</div><div class="tk">SJM</div><div class="d">"먹는 게 짱" — 필수소비재·가치주로 자산 대피</div></div>
+        <div class="flow-dst"><div class="t">헬스케어 M&amp;A</div><div class="tk">NUVL</div><div class="d">대형 제약사의 후기 임상 자산 매입 프리미엄</div></div>
+        <div class="flow-dst"><div class="t">운송주</div><div class="tk">DAL</div><div class="d">유가 하락 + 워런 버핏 후계자의 베팅</div></div>
+      </div>
+    </div>
+
+    <div class="chart-card fade-in">
+      <div class="chart-title">매도 폭탄 vs 방어의 성벽 — 6/9 종목별 등락률 (%)</div>
+      <div class="chart-sub">기술주에서 빠진 자본이 어디서 환영받았는지 한눈에</div>
+      <div class="chart-container fade-in">
+        <canvas id="chMoves" height="240"></canvas>
+      </div>
+    </div>
+
+    <h3>Spotlight on M&amp;A — 바이오텍에 부는 106억 달러의 훈풍</h3>
+    <p>영국 거대 제약사 <strong>GSK</strong>가 보스턴의 임상 단계 바이오텍 <strong>뉴발런트(Nuvalent, NUVL)</strong>를 주당 <span class="acc">$124 전액 현금</span>, 총 <span class="acc">$10.6B</span> 규모에 인수하기로 합의했다. 핵심 자산은 FDA 승인이 임박한 ROS1·ALK 비소세포폐암 표적 항암제. NUVL 주가는 <span class="up">+39.28%</span> 폭등하며 인수가에 수렴했다.</p>
+    <p>"임상이 어쩌고 개발이 어쩌고"로는 바이오가 오르기 힘들지만, <strong>개발 성과가 보이기 시작하면 대형 제약사가 그냥 돈으로 산다</strong>는 것을 보여준 사례다. 침체된 헬스케어 전반에 대형 제약사의 자산 확보 의지가 방어선을 구축하고 있으며, M&amp;A는 계속 이어지는 중이다. (CIA 채널의 M&amp;A 섹션과 루머 채널을 주시할 것.)</p>
+
+    <h3>폭락장을 견딘 방어의 성벽 (Defensive Moats)</h3>
+    <table>
+      <thead><tr><th>종목</th><th>등락</th><th>트리거 &amp; 인사이트</th></tr></thead>
+      <tbody>
+        <tr><td>J.M. Smucker<br>(SJM)</td><td class="up">+10.4%</td><td>회계 4분기 조정 EPS $2.77로 예상($2.64) 상회. 브랜드 통합 성공·마진 방어 — "밖에서 먹긴 뭘 먹어" 심리 속 기술주 매도세의 가장 완벽한 피난처</td></tr>
+        <tr><td>Delta Air Lines<br>(DAL)</td><td class="up">+2.5%</td><td>이란 평화 협상 기대발 유가 단기 하락 수혜 + 버크셔 해서웨이 <strong>그렉 에이블 CEO의 $2.6B 신규 지분</strong> 확인으로 강력한 하단 지지. "돈 있는 사람들은 계속 여행 다닌다"는 K자 경제의 단면</td></tr>
+      </tbody>
+    </table>
+    <p>유가도 우호적이었다. 중국이 에너지 수출 쿼터를 예년과 동일하게 발표하면서 공급 우려가 완화, 전쟁 발발 전까지 유가는 <strong>80달러대</strong>를 보였다. "100불을 보며 떨던 시절을 생각하면 감개무량한" 수준이다. 전쟁이 곧 끝날 것이라는 기대가 연료비 부담 완화 기대로 이어지고 있다.</p>
+  </section>
+
+  <!-- ============ 06 위험지대 ============ -->
+  <section class="fade-in">
+    <div class="sec-label"><span class="sec-num">No.06</span><span class="line"></span></div>
+    <h2>The Danger Zone<span class="en">흑자 전환 전 성장주의 자본 조달 리스크</span></h2>
+    <table>
+      <thead><tr><th>사례</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td>Redwire<br>(RDW <span class="down">-16.7%</span>)</td><td>우주인프라 기업 RDW, 기습적인 <strong>$5억 규모 ATM(시장가 발행) 프로그램</strong> 공시. 한 달 만의 한도 증액으로 주주가치 희석(Dilution) 공포 극대화 — 장중 17.5% 폭락</td></tr>
+        <tr><td>Supermicro<br>(SMCI)</td><td>장 마감 후, AI 서버 주문 <strong>390억 달러</strong> 이행을 위한 <strong>70억 달러 규모 초대형 자본 조달</strong>(신주/예탁주식/ATM) 제안. "셸프에 넣어놓겠다"(시장에 즉시 풀지 않겠다)지만 충격은 불가피</td></tr>
+      </tbody>
+    </table>
+    <p>두 사례의 공통점은 명확하다. 우주 인프라든 AI 서버든, <strong>부품을 사야 하는 제조업 기반 기업은 돈이 필요하다</strong>. 인건비만 들이고 무한 복제로 돈을 버는 소프트웨어와는 체질이 다르다.</p>
+    <div class="pullquote">"이런 회사들이 신주 발행이나 유상증자를 발표하는 시점을 보면, 늘 주가가 잘 나갈 때입니다. '그동안 많이 올랐으니 여기서 좀 빠져도 괜찮겠지' 하는 시점에 한다는 거죠. 계속 그렇습니다."<span class="who">— 발행 타이밍에서 뽑아낼 교훈</span></div>
+    <div class="note"><span class="tag">시장 교훈</span>실적 개선 없는 지속적인 주식 발행에 대한 <b>시장의 내성이 한계에 도달</b>했다.</div>
+  </section>
+
+  <!-- ============ 07 향후 48시간 ============ -->
+  <section class="fade-in">
+    <div class="sec-label"><span class="sec-num">No.07</span><span class="line"></span></div>
+    <h2>The Catalyst Tree<span class="en">향후 48시간의 시나리오 분기점</span></h2>
+    <p class="lead">내일(6/10)은 "그냥 끝내주는 날"이다. <strong>5월 CPI</strong>와 <strong>오라클 실적</strong> — 이 두 이벤트 하나로 모든 것이 잡혀 있다.</p>
+
+    <div class="cat fade-in">
+      <div class="cat-ev">
+        <div class="head">Event 1 — 5월 CPI 발표 <span class="when">6/10 · 컨센서스 4.2%</span></div>
+        <div class="cat-branch">
+          <div class="cat-case bear"><span class="lab">▲ 4.2% 상회 시</span>'Higher for Longer' 공포 — 기술주 추가 타격, 완전히 공포에 떠는 시장</div>
+          <div class="cat-case bull"><span class="lab">▼ 4.2% 하회 시 (4.1, 4.0…)</span>오늘 밀렸던 낙폭을 순식간에 회복하는 안도 랠리</div>
+        </div>
+      </div>
+      <div class="cat-ev">
+        <div class="head">Event 2 — Oracle(ORCL) 실적 발표 <span class="when">클라우드(OCI)가 AI 수요의 리트머스</span></div>
+        <div class="cat-branch">
+          <div class="cat-case bull"><span class="lab">✓ OCI 수익성 증명 시</span>"돈을 많이 썼지만 벌고 있다" — AI 인프라 재도약</div>
+          <div class="cat-case bear"><span class="lab">✗ CapEx 부담 부각 시</span>AI 섹터 전반의 하방이 뚫리며 연쇄 하락 가능</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sim fade-in" id="cpiSim">
+      <h4>🔢 CPI 시나리오 시뮬레이터</h4>
+      <p class="desc">슬라이더로 내일 발표될 CPI 수치를 가정해 보세요. 컨센서스(4.2%) 대비 위치에 따라 방송에서 제시된 시나리오가 표시됩니다.</p>
+      <div class="sim-row">
+        <div class="sim-val" id="cpiVal">4.2%</div>
+        <input type="range" id="cpiRange" min="36" max="48" value="42" step="1" aria-label="CPI 가정치">
+      </div>
+      <div class="sim-out" id="cpiOut"></div>
+      <button class="sim-reset" id="cpiReset">↺ 컨센서스(4.2%)로 초기화</button>
+    </div>
+
+    <h3>차트가 말하는 경고 — SOX</h3>
+    <p>필라델피아 반도체 지수(SOX)의 1년 차트에 추세선을 그어 보면, 현재 <strong>상당히 위험한 구간</strong>에 걸쳐 있다. 이 조정이 여기서 끝나면 다행이지만, 그렇지 않다면 한동안 큰 고생을 각오해야 하는 자리다. 뒤집어 말하면 — <strong>캐시를 들고 있는 사람에겐 신나는 구간</strong>이 올 수 있다는 뜻이기도 하다.</p>
+    <p>참고로 이날 장 막판 <em class="term">MOC</em>(Market-On-Close, 종가 동시호가 주문)에는 자금이 엄청나게 몰려 들어갔다. 트럼프의 총력 대응이 역설적으로 이란을 막다른 골목, 즉 협상 테이블로 밀어붙여 사태를 빨리 끝낼 수 있다는 베팅이 깔린 것으로 해석된다.</p>
+  </section>
+
+  <!-- ============ 08 전략 ============ -->
+  <section class="fade-in">
+    <div class="sec-label"><span class="sec-num">No.08</span><span class="line"></span></div>
+    <h2>Tactical Strategy<span class="en">하락장을 돌파하는 바벨 포트폴리오 재조정</span></h2>
+    <p class="lead">무조건적인 상승의 시대 — '슈가 하이'는 끝났다. 이제는 마진과 실적을 <strong>숫자로 증명</strong>해야 하는 시대이며, 내러티브와 스토리는 통하지 않는다.</p>
+
+    <div class="check">
+      <div class="check-item"><span class="n">i.</span><div><strong>방어/가치 20~30%로 확대</strong> — 시장에서 소외됐던 헬스케어(XLV), 필수소비재(SJM 등 "커피·잼"), 보험주, 그리고 항공(전쟁 변수 유의)까지. 거시 충격을 흡수할 펀더멘털 방패.</div></div>
+      <div class="check-item"><span class="n">ii.</span><div><strong>변동성 헤지</strong> — 옵션이 가능하다면 고평가 AI Core 종목에 대해 <em class="term">콜옵션 매도</em> 또는 <em class="term">풋옵션 매수</em>로 하방 안전장치 마련. "빵 터지면 확실하게 버는" 구조.</div></div>
+      <div class="check-item"><span class="n">iii.</span><div><strong>AI 인프라(딱따구리) 신규 매수 일시 중단</strong> — FIX 등은 실적 데이터가 좋지만, 바닥을 모르는 지금은 기다렸다가 확실히 내려간 후 <strong>분할 매수</strong>로 진입.</div></div>
+    </div>
+
+    <div class="sim fade-in" id="bbSim">
+      <h4>⚖️ 바벨 포트폴리오 시뮬레이터</h4>
+      <p class="desc">방어/가치 비중 슬라이더를 움직여 보세요. 헤지를 10%로 고정하고 나머지를 AI 인프라(확실한 성장)에 배분하는 구조입니다. 방송이 제안한 방어 비중은 20~30%입니다.</p>
+      <div class="sim-row">
+        <div class="sim-val" id="bbVal" style="font-size:26px;">25%</div>
+        <input type="range" id="bbRange" min="0" max="60" value="25" step="5" aria-label="방어/가치 비중">
+      </div>
+      <div class="bar-vis" id="bbBar">
+        <div class="bar-seg bar-def" id="segDef"></div>
+        <div class="bar-seg bar-hedge" id="segHedge"></div>
+        <div class="bar-seg bar-infra" id="segInfra"></div>
+      </div>
+      <div class="bar-legend">
+        <span><i style="background:#16803c"></i>방어/가치 (XLV·SJM·보험)</span>
+        <span><i style="background:#6b7280"></i>변동성 헤지 (옵션)</span>
+        <span><i style="background:#2563eb"></i>AI 인프라 (FIX·CRDO 등 — 분할 대기)</span>
+      </div>
+      <div class="sim-msg" id="bbMsg"></div>
+      <button class="sim-reset" id="bbReset">↺ 권장 구간(25%)으로 초기화</button>
+    </div>
+
+    <h3>Executive Summary — 3 Key Takeaways</h3>
+    <div class="check">
+      <div class="check-item"><span class="n">1.</span><div>AI 랠리의 <strong>'무조건적 상승(Sugar High)' 종료</strong>. 실물 수익과 인프라 비용 간의 철저한 마진 검증 시대로 돌입.</div></div>
+      <div class="check-item"><span class="n">2.</span><div>지수 등락에 일희일비하지 말고 <strong>'자본의 로테이션'에 편승</strong>하라. (바이오 M&amp;A, 방어주가 이미 선방을 입증.)</div></div>
+      <div class="check-item"><span class="n">3.</span><div>내일 <strong>CPI(인플레이션)와 오라클 실적(AI 수요 지표)</strong> 확인 전까지 무리한 레버리지·신규 진입 자제. 포트폴리오 헤지 필수.</div></div>
+    </div>
+    <p>사실 오늘의 시장 움직임 자체는 "그닥 의미 없는 움직임"이었다. 모든 것이 재조정되는 것은 내일 — 뉴욕 시간 <strong>오전 8시 30분</strong>부터 시작된다. x.com과 Threads의 속보, 그리고 CIA 디스코드 서버를 주시할 것.</p>
+  </section>
+
+  <footer>
+    <b>출처</b> · CIA.chat 멤버미팅 2026-06-09 (NOVA) 방송 내용 정리<br>
+    본 문서는 방송 내용을 학습·참고 목적으로 재구성한 것으로, 특정 종목의 매수·매도 추천이 아닙니다. 투자의 책임은 투자자 본인에게 있습니다.
+  </footer>
+</div>
+
+<script>
+/* ===== [필수 패턴] fade-in observer ===== */
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+/* ===== [필수 패턴] chartConfigs + chart observer ===== */
+const C = { rose:'#e11d48', ink:'#1a1a1a', gray:'#6b7280', blue:'#2563eb' };
+Chart.defaults.font.family = "'Noto Sans KR', sans-serif";
+Chart.defaults.color = '#777777';
+
+const chartConfigs = {};
+
+chartConfigs['chIndex'] = () => {
+  new Chart(document.getElementById('chIndex'), {
+    type: 'bar',
+    data: {
+      labels: ['나스닥', '다우존스', 'S&P 500'],
+      datasets: [{
+        label: '등락률 (%)',
+        data: [-0.97, 0.17, -0.26],
+        backgroundColor: [C.rose, '#16a34a', C.gray],
+        borderRadius: 6,
+        maxBarThickness: 70
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      animation: { duration: 900, easing: 'easeOutQuart' },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { afterLabel: (ctx) => ['종가 25,678.82','종가 50,872.11','종가 7,386.65'][ctx.dataIndex] } }
+      },
+      scales: {
+        y: { grid: { color: '#eeeeee' }, ticks: { callback: v => v + '%' } },
+        x: { grid: { display: false }, ticks: { color: '#1a1a1a', font: { weight: 700 } } }
+      }
+    }
+  });
+};
+
+chartConfigs['chMoves'] = () => {
+  new Chart(document.getElementById('chMoves'), {
+    type: 'bar',
+    data: {
+      labels: ['NUVL', 'SJM', 'CRDO', 'DAL', 'AAPL', 'MRVL', 'RDW'],
+      datasets: [{
+        label: '등락률 (%)',
+        data: [39.28, 10.4, 5.5, 2.5, -3.64, -7.60, -16.7],
+        backgroundColor: (ctx) => ctx.raw >= 0 ? '#16a34a' : C.rose,
+        borderRadius: 5,
+        maxBarThickness: 46
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      animation: { duration: 1000, easing: 'easeOutQuart' },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { afterLabel: (ctx) => [
+          'GSK 인수 발표 ($124/주)','EPS 서프라이즈 ($2.77)','사상 최고가 경신','그렉 에이블 $2.6B 베팅','WWDC 모멘텀 상실','PER 85배 차익실현','$5억 ATM 발행 충격'
+        ][ctx.dataIndex] } }
+      },
+      scales: {
+        x: { grid: { color: '#eeeeee' }, ticks: { callback: v => v + '%' } },
+        y: { grid: { display: false }, ticks: { color: '#1a1a1a', font: { weight: 700 } } }
+      }
+    }
+  });
+};
+
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+/* ===== CPI Simulator ===== */
+(function(){
+  const range = document.getElementById('cpiRange');
+  const val = document.getElementById('cpiVal');
+  const out = document.getElementById('cpiOut');
+  const reset = document.getElementById('cpiReset');
+  function render(){
+    const v = parseInt(range.value, 10) / 10;
+    if (isNaN(v)) return;
+    val.textContent = v.toFixed(1) + '%';
+    let badge, color, msg;
+    if (v > 4.2) {
+      badge='상회 — 공포 시나리오'; color='#e11d48';
+      msg='<strong>"Higher for Longer" 공포 점화.</strong> "이번에는 물가가 안 잡히는구나" — 연준 금리 인하 기대가 사실상 소멸했다는 해석과 함께 기술주 추가 타격, 완전히 공포에 떠는 주식시장이 예상되는 구간입니다.';
+    } else if (v < 4.2) {
+      badge='하회 — 안도 랠리'; color='#16a34a';
+      msg='<strong>천만다행 시나리오.</strong> 4.1%, 4.0%처럼 컨센서스를 하회하면 전일 밀렸던 낙폭을 순식간에 회복하는 <strong>안도 랠리</strong>가 펼쳐질 것으로 방송은 전망했습니다.';
+    } else {
+      badge='부합 — 컨센서스 4.2%'; color='#f59e0b';
+      msg='<strong>"그나마 다행, 그러나…"</strong> 예상치에 부합해도 시장은 "걱정에 걱정을 하게 될 가능성"이 있습니다. 물가의 절대 레벨 자체가 3년 만의 최고치 가속을 우려하게 하는 수준이기 때문입니다.';
+    }
+    val.style.color = color;
+    out.style.borderColor = color;
+    out.innerHTML = '<span class="badge" style="background:'+color+'">'+badge+'</span><br>'+msg;
+  }
+  range.addEventListener('input', render);
+  reset.addEventListener('click', () => { range.value = 42; render(); });
+  render();
+})();
+
+/* ===== Barbell Simulator ===== */
+(function(){
+  const range = document.getElementById('bbRange');
+  const val = document.getElementById('bbVal');
+  const msg = document.getElementById('bbMsg');
+  const segDef = document.getElementById('segDef');
+  const segHedge = document.getElementById('segHedge');
+  const segInfra = document.getElementById('segInfra');
+  const HEDGE = 10;
+  function render(){
+    let def = parseInt(range.value, 10);
+    if (isNaN(def) || def < 0) def = 0;
+    if (def > 60) def = 60;
+    const infra = 100 - HEDGE - def;
+    val.textContent = def + '%';
+    segDef.style.width = def + '%';
+    segHedge.style.width = HEDGE + '%';
+    segInfra.style.width = infra + '%';
+    segDef.textContent = def >= 14 ? '방어 ' + def + '%' : (def > 0 ? def + '%' : '');
+    segHedge.textContent = '헤지 ' + HEDGE + '%';
+    segInfra.textContent = infra >= 14 ? 'AI 인프라 ' + infra + '%' : infra + '%';
+    let t;
+    if (def < 20) t = '⚠️ 방어 비중이 방송 제안 구간(20~30%)보다 낮습니다. 내일 CPI·오라클이라는 양대 이벤트 전, 거시 충격을 흡수할 방패가 얇은 상태입니다.';
+    else if (def <= 30) t = '✅ 방송이 제안한 <strong>방어/가치 20~30% 구간</strong>입니다. 헬스케어·필수소비재·보험으로 충격을 흡수하면서, AI 인프라는 확실히 내려간 뒤 분할 매수로 대응하는 균형 배분입니다.';
+    else t = '🛡️ 방어 비중이 제안 구간을 초과한 보수적 배분입니다. 하방은 단단해지지만, "수주 잔고가 입증된" AI 물리적 인프라의 반등 구간에서 소외될 수 있다는 트레이드오프가 있습니다.';
+    msg.innerHTML = t;
+  }
+  range.addEventListener('input', render);
+  document.getElementById('bbReset').addEventListener('click', () => { range.value = 25; render(); });
+  render();
+})();
+</script>
+</body>
+</html>

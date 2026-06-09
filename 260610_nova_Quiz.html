@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[시험문제] The Summer Swoon — CIA 멤버미팅 2026.06.09</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --bg-sub:#fafafa;
+    --text:#1a1a1a; --text-sub:#777777;
+    --accent:#e11d48; --accent2:#f43f5e;
+    --border:#e5e5e5;
+    --green:#16a34a; --green-bg:#f0fdf4;
+    --red-bg:#fef2f2;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:16px;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:680px;margin:0 auto;padding:0 16px 90px;}
+
+  /* ===== Sticky scoreboard ===== */
+  #scoreBar{
+    position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);padding:10px 16px 12px;
+  }
+  .sb-in{max-width:648px;margin:0 auto;}
+  .sb-stats{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:var(--text-sub);}
+  .sb-stats b{color:var(--text);font-size:16px;font-weight:900;}
+  .sb-stats .rate b{color:var(--accent);}
+  .sb-track{height:6px;background:#eee;border-radius:3px;margin-top:8px;overflow:hidden;}
+  #sbFill{height:100%;width:0%;border-radius:3px;background:#ef4444;transition:width .4s ease,background .4s ease;}
+
+  /* ===== Header ===== */
+  header{padding:46px 4px 30px;border-bottom:3px solid var(--text);margin-bottom:34px;}
+  .kicker{font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:14px;}
+  header h1{font-family:'Playfair Display','Noto Sans KR',serif;font-weight:900;font-size:clamp(26px,6.4vw,36px);line-height:1.22;}
+  header h1 .en{font-style:italic;color:var(--accent);}
+  header .sub{margin-top:12px;font-size:14px;color:var(--text-sub);}
+  .legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px;font-size:11px;}
+  .legend span{border:1px solid var(--border);border-radius:99px;padding:3px 11px;color:var(--text-sub);}
+
+  /* ===== Question cards ===== */
+  .q{background:#fff;border:1px solid var(--border);border-radius:14px;padding:22px 18px;margin-bottom:22px;transition:box-shadow .25s;}
+  .q.done{box-shadow:0 4px 20px rgba(0,0,0,.05);}
+  .q-top{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+  .q-num{font-family:'Playfair Display',serif;font-style:italic;font-weight:900;font-size:20px;color:var(--accent);}
+  .pill{font-size:10.5px;font-weight:700;letter-spacing:.06em;padding:3px 10px;border-radius:99px;}
+  .pill.type{background:var(--bg-sub);border:1px solid var(--border);color:var(--text-sub);}
+  .pill.d-easy{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;}
+  .pill.d-mid{background:#fffbeb;color:#b45309;border:1px solid #fde68a;}
+  .pill.d-hard{background:#fef2f2;color:var(--accent);border:1px solid #fecdd3;}
+  .q-text{font-size:16.5px;font-weight:700;line-height:1.6;margin-bottom:16px;}
+
+  .opts{display:grid;gap:9px;}
+  .opt{
+    display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;
+    background:var(--bg-sub);border:1.5px solid var(--border);border-radius:10px;
+    padding:12px 14px;font-family:inherit;font-size:14.5px;line-height:1.55;color:var(--text);
+    cursor:pointer;transition:border-color .18s,background .18s,transform .12s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--accent2);background:#fff;}
+  .opt:active:not(:disabled){transform:scale(.99);}
+  .opt:disabled{cursor:default;}
+  .opt .key{font-weight:900;color:var(--text-sub);flex:none;}
+  .opt .mark{margin-left:auto;font-size:11.5px;font-weight:900;white-space:nowrap;flex:none;}
+  .opt.correct{background:var(--green-bg);border-color:var(--green);}
+  .opt.correct .key{color:var(--green);}
+  .opt.correct .mark{color:var(--green);}
+  .opt.wrong{background:var(--red-bg);border-color:var(--accent);}
+  .opt.wrong .key{color:var(--accent);}
+  .opt.wrong .mark{color:var(--accent);}
+  .opt.dim{opacity:.45;}
+
+  .ox{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .ox .opt{justify-content:center;font-family:'Playfair Display',serif;font-size:26px;font-weight:900;padding:16px;}
+
+  .short{display:flex;gap:8px;}
+  .short input{
+    flex:1;border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;
+    font-family:inherit;font-size:15px;background:var(--bg-sub);outline:none;min-width:0;
+    transition:border-color .18s;
+  }
+  .short input:focus{border-color:var(--accent2);background:#fff;}
+  .short input:disabled{color:var(--text-sub);}
+  .short button{
+    background:var(--text);color:#fff;border:none;border-radius:10px;padding:0 20px;
+    font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:background .18s;flex:none;
+  }
+  .short button:hover:not(:disabled){background:var(--accent);}
+  .short button:disabled{background:#ccc;cursor:default;}
+  .short-result{margin-top:10px;font-size:13.5px;font-weight:700;display:none;}
+  .short-result.ok{display:block;color:var(--green);}
+  .short-result.no{display:block;color:var(--accent);}
+
+  .expl{
+    max-height:0;overflow:hidden;transition:max-height .5s ease,margin .5s ease;
+    margin-top:0;
+  }
+  .expl.show{max-height:600px;margin-top:16px;}
+  .expl-in{
+    background:var(--bg-sub);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;
+    padding:14px 16px;font-size:13.8px;color:#333;
+  }
+  .expl-in .lab{display:inline-block;font-size:10.5px;font-weight:900;letter-spacing:.1em;color:var(--accent);margin-bottom:6px;}
+  .expl-in .src{display:block;margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);color:var(--text-sub);font-size:12.8px;font-style:italic;}
+
+  /* ===== Result modal ===== */
+  #modalBack{
+    position:fixed;inset:0;background:rgba(26,26,26,.55);backdrop-filter:blur(3px);
+    display:none;align-items:center;justify-content:center;z-index:100;padding:20px;
+  }
+  #modalBack.show{display:flex;animation:fadeIn .3s ease;}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .modal{
+    background:#fff;border-radius:18px;max-width:420px;width:100%;padding:36px 28px;text-align:center;
+    animation:pop .35s cubic-bezier(.2,1.4,.4,1);
+  }
+  @keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+  .modal .grade{font-family:'Playfair Display',serif;font-weight:900;font-size:84px;line-height:1;color:var(--accent);}
+  .modal h3{font-size:19px;font-weight:900;margin:14px 0 6px;}
+  .modal .score{font-size:14px;color:var(--text-sub);}
+  .modal .msg{margin:16px 0 22px;font-size:14px;line-height:1.7;}
+  .modal .retry{
+    background:var(--accent);color:#fff;border:none;border-radius:99px;padding:13px 34px;
+    font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:background .2s;
+  }
+  .modal .retry:hover{background:var(--accent2);}
+  .modal .close{display:block;margin:14px auto 0;background:none;border:none;font-family:inherit;font-size:12.5px;color:var(--text-sub);cursor:pointer;text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<div id="scoreBar">
+  <div class="sb-in">
+    <div class="sb-stats">
+      <span>푼 문제 <b id="sbSolved">0</b> / 10</span>
+      <span>맞힌 문제 <b id="sbCorrect">0</b></span>
+      <span class="rate">정답률 <b id="sbRate">0%</b></span>
+    </div>
+    <div class="sb-track"><div id="sbFill"></div></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <header>
+    <div class="kicker">Interactive Quiz · 10 Questions</div>
+    <h1><span class="en">The Summer Swoon</span><br>3중 리스크와 자본의 대이동<br>이해도 점검</h1>
+    <p class="sub">CIA.chat 멤버미팅 (2026. 06. 09) 방송 내용 기반 · 보기를 클릭하면 즉시 채점되고 해설이 펼쳐집니다.</p>
+    <div class="legend">
+      <span>객관식 6</span><span>단답형 3</span><span>OX 1</span>
+      <span>쉬움 3 · 보통 5 · 어려움 2</span>
+    </div>
+  </header>
+  <main id="quiz"></main>
+</div>
+
+<div id="modalBack">
+  <div class="modal">
+    <div class="grade" id="mGrade">A</div>
+    <h3 id="mTitle">완료!</h3>
+    <div class="score" id="mScore"></div>
+    <p class="msg" id="mMsg"></p>
+    <button class="retry" id="mRetry">다시 풀기</button>
+    <button class="close" id="mClose">결과 닫고 해설 다시 보기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id:1, type:'mc', difficulty:'easy',
+    question:'2026년 6월 9일, 3대 지수 가운데 유일하게 상승(양전) 마감한 지수는?',
+    options:['나스닥 (COMP)','다우존스 (DJI)','S&P 500 (SPX)','필라델피아 반도체 (SOX)'],
+    answer:1,
+    explanation:'다우존스만 +0.17%(50,872.11)로 양전했습니다. 방어주·가치주 중심의 "자본 도피처" 역할을 한 덕분이며, 나스닥은 -0.97%(장중 -3.5% 급락), S&P 500은 -0.26%로 마감했습니다.',
+    source:'"다 다우존스만 살아났습니다. 방어주 가치주… 다우 같은 경우는 양전했지만 양전한 게 양전한 건지 잘 모를 정도였다"'
+  },
+  {
+    id:2, type:'mc', difficulty:'easy',
+    question:'방송이 꼽은 이날 시장을 흔든 "거시적 3중 리스크(Macro Triad)"에 해당하지 <u>않는</u> 것은?',
+    options:['지정학 리스크 (이란 사태)','인플레이션 공포 (CPI)','AI 피로감','달러 환율 위기'],
+    answer:3,
+    explanation:'3중 리스크는 ① 지정학 리스크(이란의 미군 헬기 격추와 미국의 공습), ② 인플레이션 공포(5월 CPI 4.2% 예상), ③ AI 피로감(토큰 맥싱의 종료)입니다. 환율 위기는 언급되지 않았습니다.',
+    source:'"일종의 거시경제의 역풍이라고 할 수 있는 삼중 리스크… AI 랠리 피로감이 1번이고요, 2번은 방어주 로테이션·스태그플레이션, 그리고 지정학 발작"'
+  },
+  {
+    id:3, type:'ox', difficulty:'easy',
+    question:'내일(6/10) 발표될 5월 CPI의 시장 예상치(컨센서스)는 전년비 4.2%이다.',
+    answer:0,
+    explanation:'맞습니다(O). 예상치는 4.2%이며, 이보다 조금만 높게 나와도 인플레이션 공포가 커지고, 예상에 부합해도 "걱정에 걱정을 하게 될" 수 있다고 했습니다. 하회 시에는 안도 랠리가 전망됐습니다.',
+    source:'"내일 이제 CPI 발표가 있습니다. 예상이 4.2예요. 만약에 조금만 더 높게 나오면 인플레이션 공포가 더 커질 겁니다."'
+  },
+  {
+    id:4, type:'mc', difficulty:'medium',
+    question:'"AI 토큰 크라이시스"와 관련해, 이미 AI 예산(토큰 비용)을 다 써버렸다고 언급된 기업 고객의 조합은?',
+    options:['애플 · 마이크로소프트','월마트 · 우버','테슬라 · 아마존','오라클 · 메타'],
+    answer:1,
+    explanation:'월마트와 우버가 예시로 등장했습니다. 이들은 보유한 토큰과 AI 예산을 이미 소진했고, "쓴 만큼 리턴(회수)이 안 되는 것 같다"며 예산을 늘릴 생각이 없는 상태라는 점이 AI 투자 회의론의 핵심입니다.',
+    source:'"기업고객들 월마트나 우버들은… 벌써 이 토큰들을 다 썼다고 합니다. AI 예산도 다 써버렸대요. 우리가 쓴 만큼 쓴 것 같은데 회수가 안 되는 것 같다"'
+  },
+  {
+    id:5, type:'mc', difficulty:'medium',
+    question:'마블(MRVL)이 S&P 500 편입 호재(장 초반 +9.6%)에도 -7.60%로 추락한 원인으로 방송이 지목한 것은?',
+    options:['편입 일정이 무기한 연기되어서','실적 가이던스를 대폭 하향해서','PER 85배 고평가 부담 속 9,400만 주 이상의 차익실현이 쏟아져서','경쟁사의 신제품 발표 때문에'],
+    answer:2,
+    explanation:'6월 22일 S&P 500 편입에 따른 패시브 자금 유입 기대가 있었지만, "주가가 너무 비싸다"(PER 85배)는 인식 속에 9,400만 주가 넘는 차익실현 물량이 편입 호재를 압도했습니다.',
+    source:'"마블 편입에 따른 효과가 있을 거라고 생각했는데 오늘 빠져버렸습니다. 주가가 너무 비싸다… 차익실현하는 사람들이 지금 너무 많습니다." (슬라이드: PER 85배, 9,400만 주 이상 차익실현)'
+  },
+  {
+    id:6, type:'short', difficulty:'medium',
+    question:'영국 제약사 GSK가 비소세포폐암 표적 항암제를 보유한 보스턴 바이오텍 "뉴발런트(NUVL)"를 인수하기로 한 주당 가격은 몇 달러인가? (숫자만 입력)',
+    answer:['124','$124','124불','124달러','124딸라'],
+    explanation:'GSK는 뉴발런트를 주당 $124, 총 $10.6B(106억 달러) 규모의 전액 현금으로 인수하기로 합의했고, NUVL 주가는 +39.28% 폭등하며 인수가에 수렴했습니다.',
+    source:'"GSK가 미국의 보스턴 임상 단계 바이오텍인 뉴발런트를 주당 124불, 이 정도에 산다라는 얘기가 나왔습니다. 합의했다고 해요."'
+  },
+  {
+    id:7, type:'mc', difficulty:'medium',
+    question:'"옥석 가리기"에서 조정장에도 강세를 보인 "AI 물리적 인프라" 진영으로 묶인 종목이 <u>아닌</u> 것은?',
+    options:['Comfort Systems (FIX)','Credo (CRDO)','Applied Digital (APLD)','NVIDIA (NVDA)'],
+    answer:3,
+    explanation:'NVDA는 AMD·MRVL과 함께 차익실현이 집중된 "AI Core(순수 플레이)" 진영입니다. 물리적 인프라(FIX·CRDO·APLD)는 데이터센터 냉각·전력·고속연결 수요를 바탕으로 CRDO가 +5.5% 사상 최고가를 기록하는 등 방어력을 입증했습니다.',
+    source:'슬라이드: "AI Core (NVDA, AMD, MRVL)" vs "AI Infra (FIX, CRDO, APLD)" / "컴퓨터 바깥쪽에 엄청나게 딱딱한 아이들, 이쪽으로 섹터가 아주 크게 이동하고 있다"'
+  },
+  {
+    id:8, type:'short', difficulty:'medium',
+    question:'기습적인 5억 달러 규모 ATM(시장가 발행) 프로그램 공시로 주가가 -16.7% 폭락(장중 -17.5%)한 우주인프라 기업의 이름은? (티커 RDW)',
+    answer:['레드와이어','redwire','레드 와이어','rdw'],
+    explanation:'레드와이어(Redwire)입니다. 한 달 만의 한도 증액으로 주주가치 희석(Dilution) 공포가 극대화됐습니다. SMCI의 70억 달러 조달 제안과 함께, "실적 개선 없는 지속적 주식 발행에 대한 시장의 내성이 한계에 도달했다"는 교훈을 남겼습니다.',
+    source:'"레드와이어죠. 우주인프라 기업인데 얘네가 자본조달을 갑자기 또 해버렸습니다. 유상증자를 해버렸어요." (슬라이드: RDW -16.7%, $5억 ATM, 장중 17.5% 폭락)'
+  },
+  {
+    id:9, type:'mc', difficulty:'hard',
+    question:'방송이 제시한 "바벨 포트폴리오" 전술적 재조정 내용으로 옳은 것은?',
+    options:[
+      '방어/가치주 비중을 50% 이상으로 늘리고 AI 관련주는 전량 매도한다',
+      '방어/가치주를 20~30% 수준으로 늘리고, AI 물리적 인프라는 신규 매수를 일시 중단한 뒤 확실히 내려가면 분할 매수한다',
+      'AI Core(반도체) 비중을 즉시 확대해 저가 매수에 나선다',
+      '전 자산을 현금화하고 시장을 완전히 떠난다'
+    ],
+    answer:1,
+    explanation:'핵심은 ① 헬스케어(XLV)·필수소비재(SJM)·보험 등 방어/가치 20~30% 확대, ② 옵션(콜 매도/풋 매수)으로 변동성 헤지, ③ AI 인프라(딱따구리)는 실적이 좋아도 바닥을 모르므로 매수를 일단 중단하고 하락 확인 후 분할 매수 — 입니다.',
+    source:'"방어가치주의 20~30% 정도를 늘려나가시는 게 어떨까… 요거는 매수를 지금 일단 중단하십시오. 확실히 내려간 후에 분할 매수로 들어가야 될 것 같아요."'
+  },
+  {
+    id:10, type:'short', difficulty:'hard',
+    question:'델타항공(DAL +2.5%)의 강력한 하단 지지 재료가 된, $2.6B 규모의 신규 지분을 구축한 워런 버핏의 후계자(버크셔 해서웨이 CEO)의 이름은?',
+    answer:['그렉 에이블','그렉에이블','greg abel','에이블','abel','그레그 에이블','그레그에이블'],
+    explanation:'그렉 에이블(Greg Abel)입니다. 버크셔 해서웨이의 그렉 에이블 CEO가 델타항공에 $2.6B 규모로 대규모 베팅을 했다는 소식이 퍼지며, 유가 하락 수혜 기대와 함께 다우지수를 단단하게 지지했습니다.',
+    source:'"워런 버핏의 후계자인 그렉 에이블, 대규모 배팅을 했다는 소식이 오늘 퍼지면서 아주 단단하게 다우지수를 지켜냈습니다." (슬라이드: $2.6B 규모 신규 지분 구축)'
+  }
+];
+
+let state = { solved: 0, correct: 0 };
+
+const D_LABEL = { easy:['쉬움','d-easy'], medium:['보통','d-mid'], hard:['어려움','d-hard'] };
+const T_LABEL = { mc:'객관식', short:'단답형', ox:'OX' };
+const KEYS = ['①','②','③','④'];
+
+const quizEl = document.getElementById('quiz');
+
+function build(){
+  quizEl.innerHTML = '';
+  QUIZ_DATA.forEach(q => {
+    const card = document.createElement('article');
+    card.className = 'q';
+    card.id = 'q' + q.id;
+    const [dTxt, dCls] = D_LABEL[q.difficulty];
+    let body = '';
+    if (q.type === 'mc') {
+      body = '<div class="opts">' + q.options.map((o,i) =>
+        '<button class="opt" data-i="'+i+'"><span class="key">'+KEYS[i]+'</span><span>'+o+'</span><span class="mark"></span></button>'
+      ).join('') + '</div>';
+    } else if (q.type === 'ox') {
+      body = '<div class="ox">' +
+        '<button class="opt" data-i="0">O<span class="mark"></span></button>' +
+        '<button class="opt" data-i="1">X<span class="mark"></span></button></div>';
+    } else {
+      body = '<div class="short">' +
+        '<input type="text" placeholder="정답 입력 후 제출" aria-label="단답 입력" />' +
+        '<button class="submit">제출</button></div>' +
+        '<div class="short-result"></div>';
+    }
+    card.innerHTML =
+      '<div class="q-top"><span class="q-num">Q'+q.id+'.</span>' +
+      '<span class="pill type">'+T_LABEL[q.type]+'</span>' +
+      '<span class="pill '+dCls+'">'+dTxt+'</span></div>' +
+      '<div class="q-text">'+q.question+'</div>' + body +
+      '<div class="expl"><div class="expl-in"><span class="lab">해설</span><div>'+q.explanation+'</div>' +
+      '<span class="src">근거: '+q.source+'</span></div></div>';
+    quizEl.appendChild(card);
+
+    if (q.type === 'short') {
+      const input = card.querySelector('input');
+      const btn = card.querySelector('.submit');
+      const go = () => gradeShort(q, card, input, btn);
+      btn.addEventListener('click', go);
+      input.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+    } else {
+      card.querySelectorAll('.opt').forEach(btn => {
+        btn.addEventListener('click', () => gradeChoice(q, card, parseInt(btn.dataset.i,10)));
+      });
+    }
+  });
+}
+
+function gradeChoice(q, card, picked){
+  if (card.classList.contains('done')) return;
+  const isOK = picked === q.answer;
+  card.querySelectorAll('.opt').forEach(btn => {
+    const i = parseInt(btn.dataset.i, 10);
+    btn.disabled = true;
+    if (i === q.answer) {
+      btn.classList.add('correct');
+      btn.querySelector('.mark').textContent = (isOK ? '✓ 정답!' : '✓ 정답');
+    } else if (i === picked) {
+      btn.classList.add('wrong');
+      btn.querySelector('.mark').textContent = '✗ 오답';
+    } else {
+      btn.classList.add('dim');
+    }
+  });
+  finish(card, isOK);
+}
+
+function gradeShort(q, card, input, btn){
+  if (card.classList.contains('done')) return;
+  const v = input.value.trim().toLowerCase().replace(/\s+/g,'');
+  if (!v) { input.focus(); input.placeholder = '답을 입력해 주세요!'; return; }
+  const isOK = q.answer.some(a => v === a.toLowerCase().replace(/\s+/g,''));
+  input.disabled = true; btn.disabled = true;
+  const res = card.querySelector('.short-result');
+  if (isOK) {
+    res.className = 'short-result ok';
+    res.textContent = '✓ 정답! — ' + q.answer[0];
+    input.style.borderColor = 'var(--green)'; input.style.background = 'var(--green-bg)';
+  } else {
+    res.className = 'short-result no';
+    res.textContent = '✗ 오답 — 정답: ' + q.answer[0];
+    input.style.borderColor = 'var(--accent)'; input.style.background = 'var(--red-bg)';
+  }
+  finish(card, isOK);
+}
+
+function finish(card, isOK){
+  card.classList.add('done');
+  card.querySelector('.expl').classList.add('show');
+  state.solved += 1;
+  if (isOK) state.correct += 1;
+  updateBoard();
+  if (state.solved === QUIZ_DATA.length) setTimeout(showModal, 700);
+}
+
+function updateBoard(){
+  const rate = state.solved ? Math.round(state.correct / state.solved * 100) : 0;
+  document.getElementById('sbSolved').textContent = state.solved;
+  document.getElementById('sbCorrect').textContent = state.correct;
+  document.getElementById('sbRate').textContent = rate + '%';
+  const fill = document.getElementById('sbFill');
+  fill.style.width = (state.solved / QUIZ_DATA.length * 100) + '%';
+  fill.style.background = rate < 40 ? '#ef4444' : (rate < 70 ? '#f59e0b' : '#16a34a');
+}
+
+function showModal(){
+  const score = state.correct * 10;
+  let g, t, m;
+  if (score >= 90) { g='A'; t='완벽합니다! 🏆'; m='3중 리스크부터 바벨 재조정까지 완전히 소화하셨네요. 내일 8시 30분, CPI와 오라클 — 준비는 끝났습니다.'; }
+  else if (score >= 70) { g='B'; t='훌륭해요! 👏'; m='핵심 흐름은 확실히 잡으셨습니다. 틀린 문제의 해설(특히 수치와 종목 매칭)만 한 번 더 확인하면 A는 금방입니다.'; }
+  else if (score >= 50) { g='C'; t='절반은 왔습니다 💪'; m='큰 그림은 보이지만 디테일이 아쉽습니다. 옥석 가리기(Core vs Infra)와 캐털리스트 트리 부분을 다시 복습해 보세요.'; }
+  else { g='D'; t='다시 도전! 🔥'; m='괜찮습니다 — 해설을 차근차근 읽고 다시 풀어보면 분명히 달라집니다. 리포트 본문을 한 번 더 정독하는 것을 추천해요.'; }
+  document.getElementById('mGrade').textContent = g;
+  document.getElementById('mTitle').textContent = t;
+  document.getElementById('mScore').textContent = '총점 ' + score + '점 · ' + state.correct + ' / 10 문제 정답';
+  document.getElementById('mMsg').textContent = m;
+  document.getElementById('modalBack').classList.add('show');
+}
+
+document.getElementById('mRetry').addEventListener('click', () => {
+  state = { solved: 0, correct: 0 };
+  updateBoard();
+  document.getElementById('modalBack').classList.remove('show');
+  build();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+document.getElementById('mClose').addEventListener('click', () => {
+  document.getElementById('modalBack').classList.remove('show');
+});
+
+build();
+updateBoard();
+</script>
+</body>
+</html>
