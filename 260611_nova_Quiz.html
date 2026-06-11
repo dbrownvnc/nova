@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📝 퍼펙트 스톰과 자본의 새로운 공식 — 이해도 점검 시험 (10문제)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#fafafa; --txt:#1a1a1a; --sub:#777777;
+    --accent:#e11d48; --accent2:#f43f5e; --line:#e5e5e5;
+    --ok:#15803d; --okbg:#f0fdf4; --okline:#86efac;
+    --no:#b91c1c; --nobg:#fef2f2; --noline:#fca5a5;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{background:var(--bg);color:var(--txt);font-family:'Noto Sans KR',sans-serif;line-height:1.7;font-size:15.5px;}
+  .wrap{max-width:680px;margin:0 auto;padding:0 16px 90px;}
+
+  header{padding:46px 4px 26px;border-bottom:3px solid var(--txt);margin-bottom:8px;}
+  .kicker{font-size:11.5px;letter-spacing:.2em;color:var(--accent);font-weight:700;margin-bottom:10px;}
+  h1{font-family:'Playfair Display','Noto Sans KR',serif;font-weight:900;font-size:clamp(25px,6.4vw,36px);line-height:1.22;}
+  .deck{margin-top:12px;color:var(--sub);font-size:13.5px;font-weight:300;}
+
+  /* ---- 스티키 채점판 ---- */
+  #board{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:2px solid var(--txt);padding:10px 4px 12px;}
+  .b-row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;}
+  .b-stat{display:flex;gap:14px;font-size:13px;font-weight:700;}
+  .b-stat span b{font-family:'Playfair Display',serif;font-size:17px;color:var(--accent);}
+  .b-rate{font-size:13px;font-weight:900;}
+  .pbar{height:8px;background:var(--bg2);border:1px solid var(--line);margin-top:8px;overflow:hidden;}
+  .pbar i{display:block;height:100%;width:0%;background:#ef4444;transition:width .35s ease, background .35s ease;}
+
+  /* ---- 문제 카드 ---- */
+  .q{background:var(--bg);border:1px solid var(--line);border-top:4px solid var(--accent);margin-top:26px;padding:22px 18px 20px;}
+  .q-head{display:flex;align-items:center;gap:9px;margin-bottom:12px;flex-wrap:wrap;}
+  .q-no{font-family:'Playfair Display',serif;font-style:italic;font-weight:900;font-size:21px;color:var(--accent);}
+  .badge{font-size:10.5px;font-weight:700;padding:2.5px 9px;border-radius:99px;letter-spacing:.05em;}
+  .b-type{background:#1a1a1a;color:#fff;}
+  .b-easy{background:#f0fdf4;color:#15803d;border:1px solid #86efac;}
+  .b-mid{background:#fffbeb;color:#b45309;border:1px solid #fcd34d;}
+  .b-hard{background:var(--nobg);color:var(--no);border:1px solid var(--noline);}
+  .q-text{font-size:16px;font-weight:700;line-height:1.65;margin-bottom:16px;}
+
+  .opts{display:flex;flex-direction:column;gap:9px;}
+  .opt{display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;background:var(--bg2);border:1.5px solid var(--line);padding:12px 14px;font-family:'Noto Sans KR';font-size:14.5px;line-height:1.6;cursor:pointer;transition:.18s;border-radius:4px;color:var(--txt);}
+  .opt:hover:not(:disabled){border-color:var(--accent2);background:#fff;transform:translateX(3px);}
+  .opt:disabled{cursor:default;opacity:.92;}
+  .opt .mk{font-weight:900;color:var(--accent);flex-shrink:0;}
+  .opt.correct{background:var(--okbg);border-color:var(--ok);}
+  .opt.wrong{background:var(--nobg);border-color:var(--no);}
+  .tag{margin-left:auto;flex-shrink:0;font-size:11px;font-weight:900;padding:2px 8px;border-radius:99px;align-self:center;}
+  .tag.t-ok{background:var(--ok);color:#fff;} .tag.t-no{background:var(--no);color:#fff;}
+
+  .ox{display:flex;gap:10px;}
+  .ox .opt{justify-content:center;font-family:'Playfair Display',serif;font-size:26px;font-weight:900;padding:14px;}
+
+  .saWrap{display:flex;gap:8px;}
+  .saWrap input{flex:1;border:1.5px solid var(--line);background:var(--bg2);padding:12px 14px;font-family:'Noto Sans KR';font-size:15px;border-radius:4px;outline:none;min-width:0;}
+  .saWrap input:focus{border-color:var(--accent);background:#fff;}
+  .saWrap button{background:var(--accent);color:#fff;border:none;padding:0 20px;font-family:'Noto Sans KR';font-weight:700;font-size:14px;cursor:pointer;border-radius:4px;transition:.18s;}
+  .saWrap button:hover:not(:disabled){background:#be123c;}
+  .saWrap button:disabled{opacity:.45;cursor:default;}
+  .sa-hint{font-size:12px;color:var(--sub);margin-top:6px;}
+
+  .expl{display:none;margin-top:16px;background:var(--bg2);border-left:4px solid var(--accent);padding:14px 16px;font-size:13.5px;line-height:1.75;animation:slideIn .4s ease;}
+  .expl.show{display:block;}
+  .expl .et{font-size:11px;letter-spacing:.15em;font-weight:900;color:var(--accent);margin-bottom:6px;}
+  .expl .src{display:block;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);color:var(--sub);font-size:12.5px;}
+  .expl .src::before{content:'📌 근거 · ';font-weight:700;color:var(--txt);}
+  @keyframes slideIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+
+  /* ---- 결과 모달 ---- */
+  #modal{display:none;position:fixed;inset:0;background:rgba(26,26,26,.55);z-index:100;align-items:center;justify-content:center;padding:20px;}
+  #modal.show{display:flex;}
+  .mcard{background:var(--bg);max-width:420px;width:100%;padding:36px 28px;text-align:center;border-top:6px solid var(--accent);animation:pop .35s ease;}
+  @keyframes pop{from{opacity:0;transform:scale(.92);}to{opacity:1;transform:scale(1);}}
+  .m-grade{font-family:'Playfair Display',serif;font-size:74px;font-weight:900;color:var(--accent);line-height:1;}
+  .m-score{font-size:17px;font-weight:700;margin-top:10px;}
+  .m-msg{font-size:13.5px;color:var(--sub);margin-top:12px;line-height:1.7;}
+  .m-btns{margin-top:24px;display:flex;gap:10px;justify-content:center;}
+  .m-btns button{padding:11px 22px;font-family:'Noto Sans KR';font-weight:700;font-size:14px;cursor:pointer;border-radius:4px;transition:.2s;}
+  .m-retry{background:var(--accent);color:#fff;border:none;}
+  .m-retry:hover{background:#be123c;}
+  .m-close{background:#fff;color:var(--txt);border:1.5px solid var(--line);}
+</style>
+</head>
+<body>
+
+<header class="wrap" style="padding-left:16px;padding-right:16px;padding-bottom:22px;">
+  <div class="kicker">NOVA Real Invest · 2026.06.10 방송 복습</div>
+  <h1>퍼펙트 스톰과 자본의 새로운 공식<br><span style="color:var(--accent);">이해도 점검 시험</span></h1>
+  <p class="deck">총 10문제 · 객관식 6 / 단답형 2 / OX 2 · 보기를 클릭하면 즉시 채점되고 해설이 자동으로 펼쳐집니다.</p>
+</header>
+
+<div class="wrap">
+  <div id="board">
+    <div class="b-row">
+      <div class="b-stat">
+        <span>푼 문제 <b id="sSolved">0</b>/10</span>
+        <span>맞힌 문제 <b id="sCorrect">0</b></span>
+      </div>
+      <div class="b-rate">정답률 <span id="sRate" style="color:var(--accent);">0%</span></div>
+    </div>
+    <div class="pbar"><i id="sBar"></i></div>
+  </div>
+
+  <div id="quiz"></div>
+</div>
+
+<div id="modal">
+  <div class="mcard">
+    <div style="font-size:12px;letter-spacing:.2em;color:var(--sub);font-weight:700;margin-bottom:10px;">FINAL RESULT</div>
+    <div class="m-grade" id="mGrade">A</div>
+    <div class="m-score" id="mScore"></div>
+    <div class="m-msg" id="mMsg"></div>
+    <div class="m-btns">
+      <button class="m-retry" onclick="resetQuiz()">↺ 다시 풀기</button>
+      <button class="m-close" onclick="document.getElementById('modal').classList.remove('show')">닫기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id:1, type:'mc', difficulty:'easy',
+    question:'방송이 이날 폭락의 원인으로 제시한 "트라이파타이트(세 가지 충격의 융합)"에 해당하지 않는 것은?',
+    options:['미국과 이란의 군사 충돌','3년 만의 최고치를 기록한 CPI','SpaceX 등 메가 IPO발 수급 블랙홀','중국의 대만 봉쇄 훈련'],
+    answer:3,
+    explanation:'방송은 ① 미국–이란 군사 충돌(거시적 발화점), ② 3년 만의 최고 CPI 4.2%(인플레 충격), ③ SpaceX 등 메가 IPO로 인한 수급 블랙홀, 이 세 가지의 융합을 "트라이파타이트 쇼크"라고 규정했습니다. 중국·대만 이슈는 언급되지 않았습니다.',
+    source:'"세 가지 충격의 융합이라고 했습니다. 트라이파타이트라고 말할 수 있어요… 미국과 이란의 군사 충돌… 3년 만에 최고 CPI… 수급 블랙홀… SpaceX를 비롯한 메가 IPO"'
+  },
+  {
+    id:2, type:'mc', difficulty:'easy',
+    question:'이날 다우존스 지수의 하락폭으로 방송에서 언급된 수치는?',
+    options:['−453포인트','−953포인트','−1,253포인트','−2,000포인트'],
+    answer:1,
+    explanation:'다우는 953포인트(−1.9%) 폭락했고, 나스닥은 −2.0% 하락했습니다. 지난 하락(약 −4%)에 이어진 추가 하락으로, 방송은 전체 복구에 2개월 이상 걸릴 가능성이 높아졌다고 진단했습니다.',
+    source:'"다우가 무려 953포인트나 빠졌고요. NASDAQ 2% 빠졌습니다… 전체가 다 복구되는 데는 2개월 이상이 걸릴 가능성이 상당히 높아지게 됐습니다."'
+  },
+  {
+    id:3, type:'mc', difficulty:'normal',
+    question:'SMCI(슈퍼마이크로컴퓨터)가 하루 만에 −27.98% 폭락한 직접적 원인은?',
+    options:['390억 달러 백로그(수주 잔고) 취소','70억 달러 규모의 지분(주식) 조달 발표','CEO의 갑작스러운 사임','분기 실적의 대규모 적자 전환'],
+    answer:1,
+    explanation:'SMCI는 390억 달러 백로그라는 호재에도 불구하고, 부품 구매 자금을 위해 보통주 12.5억 + 예탁주 37.5억 + ATM 발행 20억 달러 등 총 70억 달러의 지분 조달을 발표했습니다. 대규모 주주 희석 우려가 폭발하며 하루 만에 −27.98%(−29.27달러) 폭락했습니다.',
+    source:'"70억 달러의 지분 조달이 필요하다. 이건 당연히 주가의 하락을 불러일으키는 거죠. 그러면서 무려 27.98%… 29불이 그냥 폭락을 한 겁니다."'
+  },
+  {
+    id:4, type:'sa', difficulty:'normal',
+    question:'SMCI가 조달 방식 중 하나로 발표해 충격을 준, "시장가에 신주를 수시로 풀어 파는" 발행 방식을 영어 약자 3글자로 쓰시오.',
+    accept:['atm','에이티엠','앳더머니','at the money','atthemoney'],
+    answerLabel:'ATM (At-The-Money 발행)',
+    explanation:'ATM(At-The-Money) 발행은 시장가에 맞춰 신주를 수시로 매도하는 방식으로, 기존 주주 입장에서는 언제 물량이 풀릴지 모르는 잠재적 매도 압력이 됩니다. 방송은 "눈 튀어나올 얘기"라고 표현했습니다.',
+    source:'"심지어 ATM 발행까지 한다… ATM이 뭐냐? 앳더머니. 바로 시장가에 주식을 푼다라는 얘기예요. 정말 눈 튀어나올 그런 얘기를 한 겁니다."'
+  },
+  {
+    id:5, type:'mc', difficulty:'normal',
+    question:'오라클(ORCL)에 대한 방송의 설명으로 옳은 것은?',
+    options:['실적이 부진해 시간외에서 10% 급락했다','실적은 훌륭했지만 400억 달러 조달 계획 발표로 시간외 급락했다','데이터센터 투자를 전면 중단한다고 발표했다','SMCI를 인수한다고 발표해 주가가 급등했다'],
+    answer:1,
+    explanation:'오라클은 IaaS 93% 성장, 총 RPO 6,380억 달러(사상 최대)라는 깜짝 실적을 냈음에도, 2027 회계연도 데이터센터 건설을 위한 400억 달러 부채/주식 조달 계획을 밝히자 시간외에서 −6%에서 −10%까지 급락했습니다. "완벽한 실적조차 AI CapEx의 무게를 견디지 못했다"는 것이 핵심입니다.',
+    source:'"오라클 오늘 실적 나왔어요… 실적은 끝내주죠. 하지만 여전히 자본지출에 대한 부담이 확인… 주식 조달 계획을 발표를 합니다. 400억 달러… 장후에 무려 10%나 빠졌네요."'
+  },
+  {
+    id:6, type:'ox', difficulty:'easy',
+    question:'방송에 따르면, CME 페드워치 기준 시장은 오는 12월 연준의 "금리 인하" 가능성을 43.7%로 보고 있다. (O/X)',
+    answer:'X',
+    explanation:'정답은 X입니다. 43.7%는 금리 "인하"가 아니라 "인상" 확률입니다. CPI 4.2% 충격으로 연내 금리인하 기대가 소멸했고, 오히려 12월 금리인상 전망이 확산되며 10년물 국채금리가 4.54%까지 올랐습니다.',
+    source:'"연내 금리인하 기대 소멸이 됐죠… 이번에 12월달에 금리인상이 거의 확실시 된다라는 거죠. 무려 43.7%… 국채금리가 4.54, 10년물이 올라갔습니다."'
+  },
+  {
+    id:7, type:'mc', difficulty:'normal',
+    question:'아마존의 발표로 Old Dominion(−6%), Saia(장중 −10%) 등 운송주가 연쇄 폭락했다. 그 발표의 내용은?',
+    options:['자체 항공 화물기 1,000대 도입','LTL(소량 화물) 배송 서비스를 미국 내 모든 비즈니스에 전면 개방','트럭 운송 사업부의 분사 상장','전 물류센터의 완전 무인화 선언'],
+    answer:1,
+    explanation:'아마존은 자체 입고용으로만 쓰던 LTL(Less Than Truckload·소량 화물) 배송 서비스를 미국 내 모든 비즈니스 주체에 전면 개방한다고 기습 발표했습니다. 8만 대 이상의 트레일러와 2만 4천 개 컨테이너 인프라를 무기로 기존 운송 시장을 직접 타격하는 것으로, 방송은 아마존을 "유통 생태계를 파괴하는 교란종"이라 표현했습니다.',
+    source:'"아마존이 창고용으로만 갖고 있던 LTL 소량화물 배송서비스를 미국 내 모든 비즈니스 주체에게 전면 개방하겠다라고 기습 발표… 올드도미니언, 싸이야 이런 아이들 전부 다 연쇄폭락"'
+  },
+  {
+    id:8, type:'sa', difficulty:'hard',
+    question:'방송이 제시한 AI 투자의 진화 비유: "이제는 골드러시의 곡괭이가 아니라, ○○○를 만드는 공장을 봐야 한다." 빈칸(○○○)에 들어갈 단어를 쓰시오.',
+    accept:['곡괭이','곡갱이','pickaxe','곡괭'],
+    answerLabel:'곡괭이 (→ 곡괭이를 만드는 공장)',
+    explanation:'과거의 곡괭이가 엔비디아·TSMC였다면, 이제는 "곡괭이를 만드는 공장" — 즉 반도체 제조장비(WFE)·쿨링·파워 등 인프라단을 봐야 한다는 것이 방송의 핵심 테제입니다. KLAC(+6.7%, 목표가 $2,500), AMAT(+5.5%, 목표가 $650), LRCX(+5.4%)가 폭락장에서 역주행한 근거로 제시됐고, 2027년 WFE 시장 전망치는 2,095억 달러로 상향됐습니다.',
+    source:'"지금은 곡괭이도 아닌 곡괭이를 만드는 공장에 봐야 된다라는 거죠. 바로 인프라단이라고 할 수 있는 쿨링, 파워… KLAC, AMAT, 그리고 LAM Research"'
+  },
+  {
+    id:9, type:'mc', difficulty:'hard',
+    question:'방송이 제시한 "바벨 포트폴리오" 전략의 구성으로 가장 적절한 것은?',
+    options:['왼쪽: 레버리지 ETF / 오른쪽: 암호화폐','왼쪽: 현금 30% + 에너지·필수소비재 헤지 / 오른쪽: WFE·전력망·냉각 등 인프라(조정 시 분할 매수)','왼쪽: 신흥국 채권 / 오른쪽: 메가 IPO 공모주 전량 청약','왼쪽: 금·은 실물 / 오른쪽: 하드웨어 설계사(NVDA·SMCI) 집중 매수'],
+    answer:1,
+    explanation:'왼쪽 추(30%+ 비중)는 에너지(XOM, CVX)·필수소비재(CASY)를 통한 방어벽과 메가 IPO발 투매에 즉각 대응할 30% 수준의 현금(Dry Powder)입니다. 오른쪽 추는 밸류에이션 부담이 큰 하드웨어 설계사에서 반도체 제조장비(WFE)·전력망·냉각 인프라로 타겟을 이동해 조정 시 분할 매수하는 것입니다. 6월 22일 엔비디아 지수 편입에 따른 8조 달러 패시브 자금 유입도 트리거로 언급됐습니다.',
+    source:'"해지할 것들을 좀 갖고 있어야 됩니다. 현금이 짱이죠… 30% 수준의 유동성 선제적 확보… 반도체 제조장비, 데이터센터, 전력망, 냉각 인프라 이런 데로 타겟을 압축하십시오."'
+  },
+  {
+    id:10, type:'ox', difficulty:'normal',
+    question:'방송에 따르면 시장의 평가 기준은 이제 "AI 수요가 있느냐"가 아니라 "그 수요를 주주 희석 없이 현금으로 바꿀 수 있느냐"로 이동했다. (O/X)',
+    answer:'O',
+    explanation:'정답은 O입니다. 이것이 방송 전체를 관통하는 클로징 메시지입니다. 돈이 없는 회사는 유상증자나 사채로 조달할 수밖에 없고(SMCI·오라클 사례), 캐시가 많은 구글·메타조차 조달에 나섰습니다. "자본 효율성이 지배하는 새로운 패러다임"에 대비하라는 것이 결론입니다.',
+    source:'"AI 수요가 있느냐? 요게 따지는 게 아니에요… 그 수요를 주주희석 없이 현금으로 바꿀 수 있느냐, 이게 중요한 거예요."'
+  }
+];
+
+let state = { solved: 0, correct: 0 };
+const DIFF = { easy:['쉬움','b-easy'], normal:['보통','b-mid'], hard:['어려움','b-hard'] };
+const TYPE = { mc:'객관식', sa:'단답형', ox:'OX' };
+
+function render() {
+  const root = document.getElementById('quiz');
+  root.innerHTML = '';
+  QUIZ_DATA.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'q'; card.id = 'q' + q.id;
+    let body = '';
+    if (q.type === 'mc') {
+      body = '<div class="opts">' + q.options.map((o, i) =>
+        `<button class="opt" data-i="${i}" onclick="answerMC(${q.id},${i},this)"><span class="mk">${'①②③④'[i]}</span><span>${o}</span></button>`
+      ).join('') + '</div>';
+    } else if (q.type === 'ox') {
+      body = `<div class="opts ox">
+        <button class="opt" data-v="O" onclick="answerOX(${q.id},'O',this)">O</button>
+        <button class="opt" data-v="X" onclick="answerOX(${q.id},'X',this)">X</button></div>`;
+    } else {
+      body = `<div class="saWrap">
+        <input type="text" id="sa${q.id}" placeholder="답을 입력하세요" onkeydown="if(event.key==='Enter')answerSA(${q.id})">
+        <button onclick="answerSA(${q.id})">제출</button></div>
+        <div class="sa-hint">입력 후 [제출] 또는 Enter</div>`;
+    }
+    card.innerHTML = `
+      <div class="q-head">
+        <span class="q-no">Q${q.id}.</span>
+        <span class="badge b-type">${TYPE[q.type]}</span>
+        <span class="badge ${DIFF[q.difficulty][1]}">${DIFF[q.difficulty][0]}</span>
+      </div>
+      <div class="q-text">${q.question}</div>
+      ${body}
+      <div class="expl" id="ex${q.id}">
+        <div class="et" id="et${q.id}"></div>
+        ${q.explanation}
+        <span class="src">${q.source}</span>
+      </div>`;
+    root.appendChild(card);
+  });
+}
+
+function grade(q, isCorrect) {
+  state.solved++;
+  if (isCorrect) state.correct++;
+  const ex = document.getElementById('ex' + q.id);
+  document.getElementById('et' + q.id).textContent = isCorrect ? '✓ 정답입니다 — 해설' : '✗ 오답입니다 — 해설';
+  ex.classList.add('show');
+  updateBoard();
+  if (state.solved === QUIZ_DATA.length) setTimeout(showResult, 600);
+}
+
+function answerMC(id, idx, btn) {
+  const q = QUIZ_DATA.find(x => x.id === id);
+  const card = document.getElementById('q' + id);
+  const opts = card.querySelectorAll('.opt');
+  opts.forEach(o => o.disabled = true);
+  const ok = idx === q.answer;
+  if (ok) {
+    btn.classList.add('correct');
+    btn.insertAdjacentHTML('beforeend', '<span class="tag t-ok">✓ 정답!</span>');
+  } else {
+    btn.classList.add('wrong');
+    btn.insertAdjacentHTML('beforeend', '<span class="tag t-no">✗ 오답</span>');
+    const right = card.querySelector(`.opt[data-i="${q.answer}"]`);
+    right.classList.add('correct');
+    right.insertAdjacentHTML('beforeend', '<span class="tag t-ok">정답</span>');
+  }
+  grade(q, ok);
+}
+
+function answerOX(id, v, btn) {
+  const q = QUIZ_DATA.find(x => x.id === id);
+  const card = document.getElementById('q' + id);
+  card.querySelectorAll('.opt').forEach(o => o.disabled = true);
+  const ok = v === q.answer;
+  if (ok) {
+    btn.classList.add('correct');
+    btn.insertAdjacentHTML('beforeend', '<span class="tag t-ok">✓ 정답!</span>');
+  } else {
+    btn.classList.add('wrong');
+    btn.insertAdjacentHTML('beforeend', '<span class="tag t-no">✗ 오답</span>');
+    const right = card.querySelector(`.opt[data-v="${q.answer}"]`);
+    right.classList.add('correct');
+    right.insertAdjacentHTML('beforeend', '<span class="tag t-ok">정답</span>');
+  }
+  grade(q, ok);
+}
+
+function answerSA(id) {
+  const q = QUIZ_DATA.find(x => x.id === id);
+  const input = document.getElementById('sa' + id);
+  const val = input.value.trim();
+  if (!val) { input.focus(); input.placeholder = '⚠️ 답을 입력해 주세요'; return; }
+  const norm = val.toLowerCase().replace(/[\s\-\.]/g, '');
+  const ok = q.accept.some(a => norm === a.replace(/[\s\-\.]/g, '') || norm.includes(a.replace(/[\s\-\.]/g, '')));
+  input.disabled = true;
+  const wrap = input.parentElement;
+  wrap.querySelector('button').disabled = true;
+  if (ok) {
+    input.style.background = 'var(--okbg)'; input.style.borderColor = 'var(--ok)';
+    wrap.insertAdjacentHTML('afterend', `<div style="margin-top:8px;font-size:13.5px;font-weight:700;color:var(--ok);">✓ 정답! — ${q.answerLabel}</div>`);
+  } else {
+    input.style.background = 'var(--nobg)'; input.style.borderColor = 'var(--no)';
+    wrap.insertAdjacentHTML('afterend', `<div style="margin-top:8px;font-size:13.5px;font-weight:700;color:var(--no);">✗ 오답 — 정답: <span style="color:var(--ok);">${q.answerLabel}</span></div>`);
+  }
+  grade(q, ok);
+}
+
+function updateBoard() {
+  document.getElementById('sSolved').textContent = state.solved;
+  document.getElementById('sCorrect').textContent = state.correct;
+  const rate = state.solved ? Math.round(state.correct / state.solved * 100) : 0;
+  document.getElementById('sRate').textContent = rate + '%';
+  const bar = document.getElementById('sBar');
+  bar.style.width = (state.solved / QUIZ_DATA.length * 100) + '%';
+  bar.style.background = rate < 40 ? '#ef4444' : (rate < 70 ? '#f59e0b' : '#22c55e');
+}
+
+function showResult() {
+  const score = state.correct * 10;
+  let g, msg;
+  if (score >= 90) { g = 'A'; msg = '완벽합니다! 트라이파타이트 쇼크부터 곡괭이 공장, 바벨 전략까지 방송의 핵심 논리를 정확히 꿰뚫고 있습니다. 🎉'; }
+  else if (score >= 70) { g = 'B'; msg = '훌륭합니다! 큰 흐름은 확실히 잡았습니다. SMCI/오라클의 조달 디테일과 수치 부분만 한 번 더 복습해 보세요. 👏'; }
+  else if (score >= 50) { g = 'C'; msg = '절반 이상을 맞혔습니다. "자본 조달 → 주주 희석 → 주가 폭락"이라는 인과 사슬을 중심으로 해설을 다시 읽어보면 점수가 크게 오를 거예요. 💪'; }
+  else { g = 'D'; msg = '아직 핵심 개념이 낯선 단계입니다. 괜찮습니다 — 분석 리포트의 섹션 I~III을 먼저 읽고 다시 도전해 보세요. 두 번째엔 분명 다릅니다. 🌱'; }
+  document.getElementById('mGrade').textContent = g;
+  document.getElementById('mScore').textContent = `총점 ${score}점 · ${state.correct}/10 정답`;
+  document.getElementById('mMsg').textContent = msg;
+  document.getElementById('modal').classList.add('show');
+}
+
+function resetQuiz() {
+  state = { solved: 0, correct: 0 };
+  document.getElementById('modal').classList.remove('show');
+  render();
+  updateBoard();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+render();
+updateBoard();
+</script>
+</body>
+</html>
