@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시험문제 — 평화 랠리와 AI 청구서의 시대 | CIA.chat 멤버미팅 2026.06.11</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#fafafa;
+  --ink:#1a1a1a; --sub:#777777;
+  --accent:#e11d48; --accent2:#f43f5e;
+  --line:#e5e5e5;
+  --green:#16a34a; --green-bg:#f0fdf4;
+  --red-bg:#fff1f2;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:'Noto Sans KR',sans-serif;
+  line-height:1.7; font-size:15.5px; word-break:keep-all;
+}
+.wrap{max-width:680px;margin:0 auto;padding:0 16px 80px}
+
+/* ===== scoreboard (sticky) ===== */
+#board{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(8px);
+  border-bottom:2px solid var(--ink);
+  padding:12px 16px 10px;margin:0 -16px 26px;
+}
+#board .row{display:flex;justify-content:space-between;align-items:baseline;max-width:680px;margin:0 auto;gap:8px}
+#board .bt{font-family:'Playfair Display',serif;font-weight:900;font-size:15px;letter-spacing:.02em}
+#board .bt span{color:var(--accent)}
+#board .nums{display:flex;gap:14px;font-size:12.5px;font-weight:700;color:#444;white-space:nowrap}
+#board .nums b{color:var(--accent);font-size:14px}
+#bar-wrap{max-width:680px;margin:8px auto 0;height:7px;background:#eee;border-radius:99px;overflow:hidden}
+#bar{height:100%;width:0%;background:#ef4444;border-radius:99px;transition:width .45s ease,background .45s ease}
+
+/* ===== header ===== */
+header.hd{padding:30px 0 24px;border-bottom:3px solid var(--ink);margin-bottom:30px}
+.hd .kick{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--sub);font-weight:500;margin-bottom:12px}
+.hd .kick b{color:var(--accent)}
+.hd h1{font-family:'Playfair Display','Noto Sans KR',serif;font-weight:900;font-size:clamp(25px,6.4vw,36px);line-height:1.3}
+.hd h1 .red{color:var(--accent)}
+.hd .deck{margin-top:12px;font-size:14px;color:#555}
+.hd .legend{margin-top:16px;display:flex;flex-wrap:wrap;gap:7px;font-size:11.5px}
+.lg{border:1px solid var(--line);background:var(--bg2);border-radius:999px;padding:4px 11px;font-weight:700;color:#555}
+
+/* ===== question card ===== */
+.q-card{border:1px solid var(--line);border-radius:14px;background:#fff;padding:22px 20px;margin-bottom:22px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.q-top{display:flex;align-items:center;gap:9px;margin-bottom:12px;flex-wrap:wrap}
+.q-no{font-family:'Playfair Display',serif;font-weight:900;font-style:italic;color:var(--accent);font-size:19px}
+.badge{font-size:10.5px;font-weight:700;letter-spacing:.06em;padding:3.5px 10px;border-radius:999px}
+.b-type{background:var(--ink);color:#fff}
+.b-easy{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
+.b-mid{background:#fffbeb;color:#b45309;border:1px solid #fde68a}
+.b-hard{background:var(--red-bg);color:var(--accent);border:1px solid #fecdd3}
+.q-text{font-size:16.5px;font-weight:700;line-height:1.65;margin-bottom:16px}
+
+/* options */
+.opts{display:grid;gap:9px}
+.opt{
+  display:flex;align-items:flex-start;gap:10px;
+  border:1.5px solid var(--line);border-radius:11px;background:var(--bg2);
+  padding:13px 14px;font-size:14.5px;font-weight:500;line-height:1.55;
+  cursor:pointer;text-align:left;font-family:inherit;color:var(--ink);
+  transition:border-color .15s,background .15s,transform .08s;
+  width:100%;position:relative;
+}
+.opt:hover:not(:disabled){border-color:var(--accent2);background:#fff}
+.opt:active:not(:disabled){transform:scale(.99)}
+.opt:disabled{cursor:default;opacity:1}
+.opt .ltr{flex-shrink:0;width:24px;height:24px;border-radius:50%;border:1.5px solid #ccc;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#888;background:#fff}
+.opt.correct{border-color:var(--green);background:var(--green-bg)}
+.opt.correct .ltr{background:var(--green);border-color:var(--green);color:#fff}
+.opt.wrong{border-color:var(--accent);background:var(--red-bg)}
+.opt.wrong .ltr{background:var(--accent);border-color:var(--accent);color:#fff}
+.opt .rbadge{margin-left:auto;flex-shrink:0;font-size:11px;font-weight:900;padding:3px 9px;border-radius:999px;align-self:center}
+.rb-ok{background:var(--green);color:#fff}
+.rb-no{background:var(--accent);color:#fff}
+
+/* OX */
+.ox{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ox .opt{justify-content:center;font-family:'Playfair Display',serif;font-size:30px;font-weight:900;padding:18px}
+
+/* short answer */
+.sa{display:flex;gap:8px}
+.sa input{
+  flex:1;border:1.5px solid var(--line);border-radius:11px;padding:12px 14px;
+  font-size:15px;font-family:inherit;outline:none;background:var(--bg2);min-width:0;
+}
+.sa input:focus{border-color:var(--accent)}
+.sa input:disabled{background:#f3f3f3;color:#666}
+.sa input.in-ok{border-color:var(--green);background:var(--green-bg)}
+.sa input.in-no{border-color:var(--accent);background:var(--red-bg)}
+.sa .submit{
+  flex-shrink:0;border:none;border-radius:11px;background:var(--ink);color:#fff;
+  font-weight:700;font-size:14px;padding:0 20px;cursor:pointer;font-family:inherit;transition:background .15s;
+}
+.sa .submit:hover:not(:disabled){background:var(--accent)}
+.sa .submit:disabled{background:#bbb;cursor:default}
+.sa-result{margin-top:10px;font-size:13.5px;font-weight:700;display:none}
+.sa-result.show{display:block}
+.sa-result.ok{color:var(--green)}
+.sa-result.no{color:var(--accent)}
+
+/* explanation */
+.expl{
+  display:none;margin-top:16px;border-top:1px dashed var(--line);padding-top:14px;
+  font-size:13.5px;line-height:1.75;color:#333;
+  animation:slideDown .4s ease;
+}
+.expl.show{display:block}
+@keyframes slideDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.expl .et{font-weight:900;color:var(--accent);font-size:12px;letter-spacing:.12em;margin-bottom:6px}
+.expl .src{margin-top:9px;background:var(--bg2);border-left:3px solid var(--accent);padding:10px 13px;border-radius:0 8px 8px 0;color:#555;font-size:12.8px}
+.expl .src b{color:var(--ink)}
+
+/* ===== final modal ===== */
+#overlay{
+  display:none;position:fixed;inset:0;background:rgba(26,26,26,.55);z-index:100;
+  align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);
+}
+#overlay.show{display:flex}
+#modal{
+  background:#fff;border-radius:18px;max-width:420px;width:100%;
+  padding:34px 26px;text-align:center;animation:pop .45s cubic-bezier(.2,1.4,.4,1);
+  border-top:6px solid var(--accent);
+}
+@keyframes pop{from{opacity:0;transform:scale(.85) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+#modal .mt{font-size:11.5px;letter-spacing:.18em;color:var(--sub);font-weight:700;text-transform:uppercase}
+#modal .grade{font-family:'Playfair Display',serif;font-weight:900;font-size:84px;line-height:1.1;color:var(--accent);margin:10px 0 2px}
+#modal .score{font-size:17px;font-weight:700;margin-bottom:6px}
+#modal .msg{font-size:13.5px;color:#555;line-height:1.7;margin-bottom:22px}
+#retry{
+  border:none;background:var(--accent);color:#fff;font-weight:700;font-size:15px;
+  padding:13px 32px;border-radius:999px;cursor:pointer;font-family:inherit;transition:background .2s;
+}
+#retry:hover{background:var(--accent2)}
+@media(max-width:400px){
+  .q-card{padding:18px 15px}
+  #board .nums{gap:9px;font-size:11.5px}
+}
+</style>
+</head>
+<body>
+
+<!-- sticky scoreboard -->
+<div id="board">
+  <div class="row">
+    <div class="bt">QUIZ<span>.</span> 채점판</div>
+    <div class="nums">
+      <span>푼 문제 <b id="sSolved">0</b>/10</span>
+      <span>맞힌 문제 <b id="sCorrect">0</b></span>
+      <span>정답률 <b id="sRate">0%</b></span>
+    </div>
+  </div>
+  <div id="bar-wrap"><div id="bar"></div></div>
+</div>
+
+<div class="wrap">
+
+<header class="hd">
+  <div class="kick"><b>CIA.chat</b> 멤버미팅 · 2026. 06. 11 (목) · NOVA Real Invest</div>
+  <h1>평화 랠리와 <span class="red">AI 청구서</span>의 시대<br>이해도 점검 시험</h1>
+  <p class="deck">총 10문제 — 객관식 6 · 단답형 2 · OX 2. 보기를 클릭하면 즉시 채점되고 해설이 자동으로 펼쳐집니다.</p>
+  <div class="legend">
+    <span class="lg">🟢 쉬움 3</span><span class="lg">🟡 보통 5</span><span class="lg">🔴 어려움 2</span>
+  </div>
+</header>
+
+<main id="quiz"></main>
+
+</div>
+
+<!-- final modal -->
+<div id="overlay">
+  <div id="modal">
+    <div class="mt">Final Result</div>
+    <div class="grade" id="mGrade">A</div>
+    <div class="score" id="mScore">10문제 중 10문제 정답</div>
+    <div class="msg" id="mMsg"></div>
+    <button id="retry">↺ 다시 풀기</button>
+  </div>
+</div>
+
+<script>
+/* =================== QUIZ DATA =================== */
+const QUIZ_DATA = [
+  {
+    id:1, type:'mc', difficulty:'easy',
+    question:'이날 시장이 장중 V자 반등을 만들어낸 직접적인 계기는 무엇인가?',
+    options:[
+      '연준의 깜짝 금리 인하 발표',
+      '트럼프 대통령의 이란 폭격 전격 취소 및 평화협정 임박 시사',
+      '스페이스X 상장 일정 연기 발표',
+      '5월 PPI가 예상보다 낮게 발표'
+    ],
+    answer:1,
+    explanation:'동일 시간대에 트럼프 대통령이 이란 폭격을 전격 취소하고 빅딜(39번째)이 임박했다는 소식이 전해지며 시장이 한순간에 V자 반등을 만들었다. PPI는 오히려 쇼크 수준으로 높게 나왔다.',
+    source:'"트럼프가 이란의 폭격을 전격 취소한다. 왜냐하면 이제 빅딜이 되고 있다… 아까 보셨던 V자 반등을 한순간에 만들어내었다."'
+  },
+  {
+    id:2, type:'mc', difficulty:'easy',
+    question:'스페이스X(SPCX) IPO의 공모가는 주당 얼마로 확정되었나?',
+    options:['$60','$100','$135','$200'],
+    answer:2,
+    explanation:'공모가는 주당 $135로 확정됐다(기업가치 $1.77T, 조달 규모 $75B). 참고로 모닝스타는 적정가를 $60으로 제시하며 고평가 의견을 냈다.',
+    source:'"내일은 대망의 스페이스X 상장이 있는 날이죠. 135불로 시작한다고 하니까요." / 슬라이드: 공모가 확정 $135/Share'
+  },
+  {
+    id:3, type:'ox', difficulty:'easy',
+    question:'OX — 5월 PPI는 전년 대비 +6.5%로, 2022년 11월 이후 최고치를 기록했다.',
+    options:['O','X'],
+    answer:0,
+    explanation:'맞다. 5월 PPI는 전월비 +1.1%, 전년비 +6.5%로 2022년 11월 이후(팬데믹 이후) 최고치였고, 가솔린 가격 +23.4% 폭등이 견인했다.',
+    source:'"전년 대비 6.5%예요. CPI보다 심하죠… 22년 11월 이후 최고치입니다. 팬데믹 이후 최고치."'
+  },
+  {
+    id:4, type:'mc', difficulty:'medium',
+    question:'버진 갤럭틱(SPCE)이 부채의 주식 전환(희석 요인)에도 불구하고 +23.5% 폭등한 이유로 노바가 지목한 것은?',
+    options:[
+      '스페이스X와의 대규모 부품 공급 계약 체결',
+      '어닝 서프라이즈 발표',
+      'SPCX와 티커가 비슷해서 따라 올라간 시장의 비합리성',
+      '정부의 우주산업 보조금 발표'
+    ],
+    answer:2,
+    explanation:'부채를 주식으로 바꾸면 희석으로 주가가 내려가는 게 정상인데 올라갔다. 노바는 SPCE와 SPCX의 티커가 비슷해 "정신 나간" 매수세가 몰린 것이라고 설명했다.',
+    source:'"SPCE가 SPCX하고 티커가 비슷해요. 주식시장에는 이런 일이 많습니다. 티커가 비슷하잖아요? 그럼 걔가 올라가요."'
+  },
+  {
+    id:5, type:'mc', difficulty:'medium',
+    question:'오라클(ORCL)이 어닝 비트(매출 $19.18B)에도 −8.5% 폭락한 구조적 이유로 노바가 지목한 "정체성 미스매치" 문제는?',
+    options:[
+      '클라우드 사업 철수 발표로 성장 동력 상실',
+      '사실상 데이터센터(하드웨어) 기업인데 소프트웨어 ETF(IGV 등)의 탑홀딩으로 분류되어 소프트웨어 투매에 함께 맞고 있다',
+      'CEO의 갑작스러운 사임',
+      '반도체 수급난으로 데이터센터 건설이 중단됐다'
+    ],
+    answer:1,
+    explanation:'오라클은 이제 데이터센터("딱따구리") 기업이지만, 과거 분류 관성으로 IGV 등 거의 모든 소프트웨어 ETF/펀드에 넘버원으로 들어가 있다. 소프트웨어 섹터가 페이드오프되는 지금, ETF 매도 물량에 억울하게 함께 두들겨 맞는 구조다. Capex $55.7B 폭증·FCF −$23.7B 적자·$40B 추가 조달 계획도 하락 요인.',
+    source:'"모든 소프트웨어 ETF, 모든 소프트웨어 펀드에 오라클이 넘버원으로 들어가 있는 거예요… 소프트웨어가 팔리는 와중에… 여기서 지금 타격을 받는 거야. 억울하게 된 거지."'
+  },
+  {
+    id:6, type:'mc', difficulty:'medium',
+    question:'에이전틱 AI 시대에 서버 CPU가 구조적으로 부활한다는 논리에서, 노바가 GPU와 CPU에 각각 비유한 역할은?',
+    options:[
+      'GPU = 사장님, CPU = 직원',
+      'GPU = 직원, CPU = 사장님(오케스트레이터)',
+      'GPU = 공장, CPU = 창고',
+      'GPU = 곡괭이, CPU = 금광'
+    ],
+    answer:1,
+    explanation:'여러 AI 에이전트(직원=GPU)를 두고 전체를 보며 빠르게 의사결정·조율(오케스트레이션)하는 역할이 CPU(사장님)다. 이 논리로 뱅크오브아메리카가 인텔을 더블 업그레이드했고 INTC는 +9.3% 급등했다.',
+    source:'"사장님은 CPU야. GPU는 뭐야? 직원이야 직원… 유능한 CPU, 유능한 사장님이 필요하다."'
+  },
+  {
+    id:7, type:'mc', difficulty:'hard',
+    question:'인텔 상승 내러티브에 동의하면서도 노바가 덧붙인 "쎄한 느낌"의 리스크는 무엇인가?',
+    options:[
+      '서버 CPU 시장을 AMD에 완전히 뺏길 것이다',
+      '미국 정부가 보조금을 회수할 것이다',
+      '현금이 없어 곧 유상증자나 사채 발행에 나설 수밖에 없을 것이다',
+      '테라팹 칩 계약이 곧 파기될 것이다'
+    ],
+    answer:2,
+    explanation:'노바가 실적 서류를 AI와 분석한 결과 인텔은 캐시가 없는데, 미국 내 공장 건설 약속과 테라팹 칩 위탁 계약 등 돈 쓸 곳은 잔뜩이다. FCF가 좋은 구글·메타조차 증자를 말하는 상황이니 인텔의 유증/사채는 시간문제라는 것(단, 서류 근거가 아닌 노바의 "느낌"임을 명시).',
+    source:'"캐시가 없어. 캐시가 없다고… 유증을 하거나 사채를 쓰거나 할 수밖에 없어. 저는 곧 요거 나온다… 그냥 쎄한 느낌이야, 나의 느낌."'
+  },
+  {
+    id:8, type:'short', difficulty:'medium',
+    question:'단답형 — 노바가 작년부터 일관되게 강조해온 기업 판별 기준으로, 이날 CASY·AVGO의 강세를 설명한 핵심 재무 지표는? (영문 약자 3글자 또는 한글 명칭)',
+    answer:['fcf','FCF','프리캐시플로','프리캐시플로어','잉여현금흐름','free cash flow'],
+    explanation:'정답은 FCF(잉여현금흐름, Free Cash Flow). 영업현금에서 자본지출을 뺀 실제 남는 돈이다. AVGO는 PER상 내려와야 정상인데 막대한 FCF가 주가를 지탱했고, 시장은 이제 Capex 대비 FCF 증명 여부로 수혜자와 지출자를 가른다.',
+    source:'"제가 지난해부터 계속 얘기한 게 뭐였어요? 프리캐시플로어. FCF, FCF 많이 들으셨을 거예요… 프리캐시플로어로 보여주고 있기 때문입니다."'
+  },
+  {
+    id:9, type:'short', difficulty:'hard',
+    question:'단답형 — 전날 방송에서 노바가 반도체 장비주(KLAC·LRCX 등)를 가리켜 사용했고, 이날 +12%대 폭등으로 적중한 비유 표현은? ("○○○를 만드는 공장")',
+    answer:['곡괭이','곡괭이를 만드는 공장','곡괭이 만드는 공장'],
+    explanation:'정답은 "곡괭이(를 만드는 공장)". 골드러시에서 금을 캐는 사람보다 곡괭이를 파는 쪽이 확실히 버는 것처럼, AI 골드러시의 확실한 수혜는 웨이퍼 팹 장비사라는 비유다. 이날 KLAC +12.9%, LRCX +12.7%로 적중했다.',
+    source:'"곡괭이를 만드는 공장 기억나나?… KLAC, LRCX, AMET 전부 다 노바가 말해준 겁니다 어제."'
+  },
+  {
+    id:10, type:'ox', difficulty:'medium',
+    question:'OX — 노바는 시장 건강을 위해 스페이스X가 상장 첫날 팝업한 뒤, 다음 날부터는 조정을 받아 상승분의 50% 이상을 반납하는 흐름이 바람직하다고 말했다.',
+    options:['O','X'],
+    answer:0,
+    explanation:'맞다. 첫날 팝업은 모든 IPO의 일반적 패턴이라 괜찮지만, 이후 7일 연속 상승한다면 리테일 자금이 한 곳으로 쏠리며 시장이 교란될 가능성이 높다고 봤다. 정석은 첫날 이후 흘러내리는 것이며, 노바는 "건강한 조정을 위해 폭락을 희망한다"고까지 표현했다.',
+    source:'"당일 팝업하는 건 오케이. 근데 그 다음날부터 폭락을 했으면 좋겠어요… 올라갔던 거에 50% 이상 까먹길 바랍니다. 그게 미국 전체 주식시장을 건강하게 만드는…"'
+  }
+];
+
+/* =================== STATE & RENDER =================== */
+let state = { solved:0, correct:0 };
+const $quiz = document.getElementById('quiz');
+
+const DIFF = { easy:['b-easy','쉬움'], medium:['b-mid','보통'], hard:['b-hard','어려움'] };
+const TYPE = { mc:'객관식', short:'단답형', ox:'OX' };
+const LETTERS = ['A','B','C','D'];
+
+function render(){
+  $quiz.innerHTML = '';
+  QUIZ_DATA.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'q' + q.id;
+
+    let body = '';
+    if (q.type === 'mc') {
+      body = `<div class="opts">` + q.options.map((o,i) =>
+        `<button class="opt" data-i="${i}"><span class="ltr">${LETTERS[i]}</span><span>${o}</span></button>`
+      ).join('') + `</div>`;
+    } else if (q.type === 'ox') {
+      body = `<div class="ox">` + q.options.map((o,i) =>
+        `<button class="opt" data-i="${i}"><span>${o}</span></button>`
+      ).join('') + `</div>`;
+    } else {
+      body = `<div class="sa">
+          <input type="text" placeholder="정답 입력" aria-label="단답형 정답 입력" maxlength="30">
+          <button class="submit">제출</button>
+        </div>
+        <div class="sa-result"></div>`;
+    }
+
+    card.innerHTML = `
+      <div class="q-top">
+        <span class="q-no">Q${q.id}.</span>
+        <span class="badge b-type">${TYPE[q.type]}</span>
+        <span class="badge ${DIFF[q.difficulty][0]}">${DIFF[q.difficulty][1]}</span>
+      </div>
+      <div class="q-text">${q.question}</div>
+      ${body}
+      <div class="expl">
+        <div class="et">EXPLANATION — 해설</div>
+        <div>${q.explanation}</div>
+        <div class="src"><b>원본 근거</b> · ${q.source}</div>
+      </div>`;
+    $quiz.appendChild(card);
+
+    if (q.type === 'mc' || q.type === 'ox') {
+      card.querySelectorAll('.opt').forEach(btn => {
+        btn.addEventListener('click', () => gradeChoice(q, card, btn));
+      });
+    } else {
+      const input = card.querySelector('input');
+      const submit = card.querySelector('.submit');
+      const go = () => gradeShort(q, card, input, submit);
+      submit.addEventListener('click', go);
+      input.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+    }
+  });
+}
+
+function gradeChoice(q, card, btn){
+  const i = parseInt(btn.dataset.i, 10);
+  const ok = (i === q.answer);
+  card.querySelectorAll('.opt').forEach(b => b.disabled = true);
+
+  if (ok) {
+    btn.classList.add('correct');
+    btn.insertAdjacentHTML('beforeend','<span class="rbadge rb-ok">✓ 정답!</span>');
+  } else {
+    btn.classList.add('wrong');
+    btn.insertAdjacentHTML('beforeend','<span class="rbadge rb-no">✗ 오답</span>');
+    const right = card.querySelector(`.opt[data-i="${q.answer}"]`);
+    right.classList.add('correct');
+    right.insertAdjacentHTML('beforeend','<span class="rbadge rb-ok">정답</span>');
+  }
+  finish(card, ok);
+}
+
+function normalize(s){
+  return (s || '').toString().trim().toLowerCase().replace(/\s+/g,'').replace(/[.,!?'"’]/g,'');
+}
+function gradeShort(q, card, input, submit){
+  const v = normalize(input.value);
+  if (!v) { input.focus(); input.placeholder = '답을 입력해 주세요'; return; }
+  const ok = q.answer.some(a => {
+    const na = normalize(a);
+    return v === na || (na.length >= 3 && v.includes(na)) || (v.length >= 3 && na.includes(v) && v.length >= Math.min(3, na.length));
+  });
+  input.disabled = true; submit.disabled = true;
+  input.classList.add(ok ? 'in-ok' : 'in-no');
+  const res = card.querySelector('.sa-result');
+  res.classList.add('show', ok ? 'ok' : 'no');
+  res.textContent = ok ? '✓ 정답입니다!' : `✗ 오답 — 정답: ${String(q.answer[0]).toUpperCase()}`;
+  finish(card, ok);
+}
+
+function finish(card, ok){
+  state.solved++;
+  if (ok) state.correct++;
+  card.querySelector('.expl').classList.add('show');
+  updateBoard();
+  if (state.solved === QUIZ_DATA.length) setTimeout(showModal, 700);
+}
+
+function updateBoard(){
+  const rate = state.solved ? Math.round(state.correct / state.solved * 100) : 0;
+  document.getElementById('sSolved').textContent = state.solved;
+  document.getElementById('sCorrect').textContent = state.correct;
+  document.getElementById('sRate').textContent = rate + '%';
+  const bar = document.getElementById('bar');
+  bar.style.width = (state.solved / QUIZ_DATA.length * 100) + '%';
+  bar.style.background = rate < 40 ? '#ef4444' : (rate < 70 ? '#f59e0b' : '#16a34a');
+}
+
+function showModal(){
+  const n = state.correct;
+  let grade, msg;
+  if (n >= 9) { grade='A'; msg='완벽합니다! 평화 랠리부터 AI 청구서의 양극화, 에이전틱 AI 논리까지 이날 방송의 핵심을 모두 꿰고 있습니다. 디스 이스 노바! 🏆'; }
+  else if (n >= 7) { grade='B'; msg='훌륭합니다. 큰 흐름은 확실히 잡았습니다. 틀린 문제의 해설과 원본 근거를 한 번 더 읽어보면 A는 금방입니다. 👏'; }
+  else if (n >= 5) { grade='C'; msg='절반 이상을 맞혔습니다. 수혜자 vs 지출자 매트릭스와 인텔·오라클 파트를 다시 복습해 보세요. 💪'; }
+  else { grade='D'; msg='아직 내용이 낯선 것 같습니다. 분석 리포트를 정독한 뒤 [다시 풀기]에 도전해 보세요. 적용해야 내 지식이 됩니다! 📖'; }
+  document.getElementById('mGrade').textContent = grade;
+  document.getElementById('mScore').textContent = `10문제 중 ${n}문제 정답 · 정답률 ${Math.round(n/10*100)}%`;
+  document.getElementById('mMsg').textContent = msg;
+  document.getElementById('overlay').classList.add('show');
+}
+
+document.getElementById('retry').addEventListener('click', () => {
+  state = { solved:0, correct:0 };
+  document.getElementById('overlay').classList.remove('show');
+  updateBoard();
+  render();
+  window.scrollTo({ top:0, behavior:'smooth' });
+});
+document.getElementById('overlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) e.currentTarget.classList.remove('show');
+});
+
+render();
+updateBoard();
+</script>
+</body>
+</html>
