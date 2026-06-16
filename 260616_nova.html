@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자본의 대이동 — NOVA Real Invest 2026.06.15</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #ffffff;
+    --bg2: #fafafa;
+    --text: #1a1a1a;
+    --text2: #777777;
+    --accent: #e11d48;
+    --accent2: #f43f5e;
+    --border: #e5e5e5;
+    --chart1: #e11d48;
+    --chart2: #1a1a1a;
+    --chart3: #6b7280;
+    --chart4: #2563eb;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 16px 60px;
+  }
+
+  /* ── 상단 헤더 ── */
+  .masthead {
+    border-bottom: 3px solid var(--accent);
+    padding: 28px 0 14px;
+    margin-bottom: 8px;
+  }
+  .masthead-channel {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .masthead-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 7vw, 38px);
+    font-weight: 900;
+    line-height: 1.15;
+    color: var(--text);
+  }
+  .masthead-title span { color: var(--accent); }
+  .masthead-sub {
+    font-size: 13px;
+    color: var(--text2);
+    margin-top: 8px;
+  }
+  .masthead-meta {
+    display: flex;
+    gap: 16px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .meta-tag {
+    font-size: 11px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    border-radius: 2px;
+    color: var(--text2);
+    letter-spacing: 0.5px;
+  }
+
+  /* ── 섹션 구조 ── */
+  .section {
+    margin: 36px 0;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section:last-of-type { border-bottom: none; }
+
+  .section-eyebrow {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(19px, 5vw, 24px);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+  .section-body { color: var(--text); }
+  .section-body p { margin-bottom: 12px; }
+
+  /* ── 강조 박스 ── */
+  .highlight-box {
+    background: var(--bg2);
+    border-left: 4px solid var(--accent);
+    padding: 14px 16px;
+    margin: 18px 0;
+    font-size: 14px;
+  }
+  .highlight-box strong { color: var(--accent); }
+
+  /* ── 데이터 테이블 ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 13px;
+  }
+  .data-table th {
+    background: var(--accent);
+    color: #fff;
+    padding: 9px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+  }
+  .data-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+    vertical-align: top;
+  }
+  .data-table tr:nth-child(even) td { background: #f3f4f6; }
+  .up { color: #16a34a; font-weight: 700; }
+  .down { color: var(--accent); font-weight: 700; }
+
+  /* ── 승자/패자 카드 ── */
+  .winner-loser-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .wl-card {
+    padding: 14px;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+  .wl-card.winner { background: #f0fdf4; border: 1px solid #bbf7d0; }
+  .wl-card.loser  { background: #fff1f2; border: 1px solid #fecdd3; }
+  .wl-card-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .wl-card.winner .wl-card-label { color: #16a34a; }
+  .wl-card.loser  .wl-card-label { color: var(--accent); }
+  .wl-item { margin-bottom: 4px; line-height: 1.5; }
+
+  /* ── 차트 ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin: 18px 0;
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas { opacity: 1; }
+
+  /* ── 플레이북 카드 ── */
+  .playbook {
+    margin: 16px 0;
+  }
+  .play-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .play-item:last-child { border-bottom: none; }
+  .play-num {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+    margin-top: 2px;
+  }
+  .play-content strong { display: block; font-size: 14px; margin-bottom: 4px; }
+  .play-content span { font-size: 13px; color: var(--text2); }
+
+  /* ── 경고/리스크 박스 ── */
+  .risk-box {
+    background: #fff7f7;
+    border: 1px solid #fecdd3;
+    border-left: 4px solid var(--accent);
+    padding: 14px 16px;
+    margin: 18px 0;
+    font-size: 13.5px;
+  }
+  .risk-box .risk-title {
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* ── 시뮬레이터 ── */
+  .simulator {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 18px;
+    margin: 18px 0;
+    border-radius: 4px;
+  }
+  .simulator h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 14px;
+    letter-spacing: 0.3px;
+  }
+  .sim-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .sim-label { font-size: 12px; color: var(--text2); min-width: 80px; }
+  .sim-value { font-size: 13px; font-weight: 700; color: var(--accent); min-width: 60px; text-align: right; }
+  .sim-slider {
+    flex: 1;
+    min-width: 120px;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+  .sim-result {
+    background: var(--text);
+    color: #fff;
+    padding: 12px 16px;
+    border-radius: 3px;
+    margin-top: 12px;
+    font-size: 13px;
+  }
+  .sim-result .result-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fbbf24;
+    display: block;
+  }
+  .reset-btn {
+    margin-top: 10px;
+    background: none;
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    color: var(--text2);
+    border-radius: 2px;
+  }
+  .reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── 진단 대시보드 ── */
+  .dashboard {
+    margin: 18px 0;
+  }
+  .dash-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .dash-card {
+    padding: 14px;
+    font-size: 13px;
+    border-radius: 4px;
+  }
+  .dash-card.down-card { background: #eff6ff; border: 1px solid #bfdbfe; }
+  .dash-card.up-card   { background: #fff7f7; border: 1px solid #fecdd3; }
+  .dash-card-title {
+    font-size: 10px;
+    letter-spacing: 2px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .dash-card.down-card .dash-card-title { color: #2563eb; }
+  .dash-card.up-card   .dash-card-title { color: var(--accent); }
+  .dash-item { margin-bottom: 5px; line-height: 1.5; color: var(--text); }
+
+  /* ── SpaceX 블랙홀 ── */
+  .blackhole-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 16px 0;
+  }
+  .bh-stat {
+    background: var(--text);
+    color: #fff;
+    padding: 14px;
+    border-radius: 4px;
+    text-align: center;
+  }
+  .bh-stat .bh-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--accent2);
+    display: block;
+  }
+  .bh-stat .bh-label { font-size: 11px; color: #d1d5db; margin-top: 2px; }
+
+  /* ── 섹터 로테이션 토글 ── */
+  .rotation-toggle {
+    margin: 18px 0;
+  }
+  .rt-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 0;
+    border-bottom: 2px solid var(--border);
+  }
+  .rt-tab {
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: var(--text2);
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    letter-spacing: 0.3px;
+    transition: all 0.2s;
+  }
+  .rt-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .rt-panel { display: none; padding: 16px 0; }
+  .rt-panel.active { display: block; }
+
+  /* ── 글로벌 증시 비교 ── */
+  .global-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 14px 0;
+  }
+  .global-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 12px;
+    border-radius: 3px;
+    font-size: 13px;
+  }
+  .global-card .gc-flag { font-size: 20px; }
+  .global-card .gc-name { font-weight: 700; margin: 4px 0 2px; }
+  .global-card .gc-pct { font-size: 18px; font-family: 'Playfair Display', serif; color: #16a34a; font-weight: 700; }
+  .global-card .gc-note { font-size: 11px; color: var(--text2); margin-top: 4px; }
+
+  /* ── 반응형 ── */
+  @media (max-width: 400px) {
+    .winner-loser-grid, .blackhole-grid, .global-grid, .dash-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ 헤더 ══ -->
+<div class="masthead fade-in">
+  <div class="masthead-channel">NOVA Real Invest · 2026.06.15 Live</div>
+  <div class="masthead-title">자본의 <span>대이동</span></div>
+  <div class="masthead-sub">지정학적 해빙, 기술 슈퍼사이클, 그리고 새로운 시장 질서</div>
+  <div class="masthead-meta">
+    <span class="meta-tag">지정학 해빙</span>
+    <span class="meta-tag">SpaceX 블랙홀</span>
+    <span class="meta-tag">FOMC 케빈 와시</span>
+    <span class="meta-tag">하반기 플레이북</span>
+  </div>
+</div>
+
+<!-- ══ 1. 오늘의 시장 ══ -->
+<div class="section fade-in">
+  <div class="section-eyebrow">Market Overview</div>
+  <div class="section-title">전 시장이 초록불 — 오늘 무슨 일이 있었나?</div>
+  <div class="section-body">
+    <p>다우, 나스닥, S&amp;P 500이 일제히 상승했다. 기술주가 특히 강했고, <strong>WDC +16%, 마이크론(MU) +10.8%</strong>가 AI 저장장치 랠리를 이끌었다. 배경엔 단 하나의 빅 이벤트가 있다 — 미국·이란 평화협정 타결 소식.</p>
+    <p>유가(WTI 원유)는 이틀 연속 5%씩 빠지며 <strong>80달러 초반대</strong>까지 하락했다. 이는 항공·크루즈·운송 섹터의 폭등과 정유주의 급락을 동시에 만들었다.</p>
+  </div>
+
+  <div class="chart-container fade-in">
+    <canvas id="marketChart" height="220"></canvas>
+  </div>
+</div>
+
+<!-- ══ 2. 지정학적 해빙 ══ -->
+<div class="section fade-in">
+  <div class="section-eyebrow">Geopolitical Thaw</div>
+  <div class="section-title">전쟁 프리미엄 소멸 — 땡겨 쓴 랠리의 실체</div>
+  <div class="section-body">
+    <p>지난 주 금요일부터 미·이란 평화협정 기대감이 시장에 스며들기 시작했고, 일요일 협정 타결 소식이 공식화됐다. 벤스 부통령은 "MOU 전자 서명은 완료, 스위스에서 공식 서명식 예정"이라 발표했다.</p>
+    <p>트럼프의 타이밍은 의도적이었다. 이번 주 수요일에 케빈 와시 연준 의장의 첫 FOMC가 예정돼 있었기 때문에, 불확실성을 FOMC 전에 제거해 시장에 완충재를 공급한 셈이다.</p>
+  </div>
+  <div class="highlight-box">
+    ⚠️ <strong>주의:</strong> 이스라엘은 레바논·시리아 관련 협정 내용에 반발, "한 발짝도 물러서지 않겠다"는 입장을 유지했다. 중동 리스크가 완전히 제거된 것은 아니다.
+  </div>
+  <div class="highlight-box">
+    📅 <strong>이번 주 일정:</strong> 수요일 — FOMC(케빈 와시 첫 데뷔) / 금요일 — 준틴스(Juneteenth) 미국 공휴일, 장 개장 없음 → 이번 주 실질 거래일 단축.
+  </div>
+</div>
+
+<!-- ══ 3. 승자와 패자 ══ -->
+<div class="section fade-in">
+  <div class="section-eyebrow">Sector Rotation</div>
+  <div class="section-title">오늘의 승자 &amp; 패자 — 유가 하락이 판을 뒤집다</div>
+  <div class="winner-loser-grid">
+    <div class="wl-card winner">
+      <div class="wl-card-label">✈ 승자</div>
+      <div class="wl-item"><strong>항공</strong> — UAL +3.9%, AAL +5.2%, DAL +4.0%</div>
+      <div class="wl-item"><strong>크루즈</strong> — NCLH +7.9%, RCL +6.6%</div>
+      <div class="wl-item"><strong>SCO (유가 역방향 ETF 2배)</strong> — 29달러까지 폭등</div>
+      <div class="wl-item"><strong>WDC</strong> — +16.1% (S&amp;P 최대 상승)</div>
+      <div class="wl-item"><strong>마이크론(MU)</strong> — +10.8%</div>
+      <div class="wl-item"><strong>EWI (한국 ETF)</strong> — +10%</div>
+    </div>
+    <div class="wl-card loser">
+      <div class="wl-card-label">🛢 패자</div>
+      <div class="wl-item"><strong>APA</strong> — -10% (섹터 내 최대 하락)</div>
+      <div class="wl-item"><strong>CVX</strong> — -3.76%</div>
+      <div class="wl-item"><strong>XOM</strong> — -3.75%</div>
+      <div class="wl-item"><strong>FOXA(Fox)</strong> — -15~17% (로쿠 인수 발표 후)</div>
+    </div>
+  </div>
+
+  <!-- 섹터 로테이션 토글 -->
+  <div class="rotation-toggle fade-in">
+    <div class="rt-tabs">
+      <button class="rt-tab active" onclick="switchTab(this,'rt-aviation')">항공/크루즈</button>
+      <button class="rt-tab" onclick="switchTab(this,'rt-ai')">AI 하드웨어</button>
+      <button class="rt-tab" onclick="switchTab(this,'rt-energy')">에너지주</button>
+    </div>
+    <div id="rt-aviation" class="rt-panel active">
+      <p>유류비는 항공사·크루즈사의 <strong>가장 큰 영업 비용</strong>이다. 원유가 5~10% 떨어지면 영업이익이 구조적으로 개선된다. 유가 하락이 지속될 경우 이들 업종의 비용 절감 효과가 수분기에 걸쳐 누적된다.</p>
+    </div>
+    <div id="rt-ai" class="rt-panel">
+      <p>AI 랠리의 중심이 GPU → HBM 메모리 → <strong>스토리지(저장장치)</strong>로 이동하고 있다. WDC(+16%)가 오늘의 증거다. 병목은 항상 새로운 병목으로 이어지며, 이 흐름을 따라가는 것이 핵심 전략이다.</p>
+    </div>
+    <div id="rt-energy" class="rt-panel">
+      <p>전쟁 프리미엄으로 고공 비행하던 정유·에너지주는 오늘 가장 큰 타격을 받았다. 유가 80달러 아래 지지 여부가 향후 정유주 반등 시점을 결정할 관건이다.</p>
+    </div>
+  </div>
+
+  <div class="chart-container fade-in">
+    <canvas id="sectorChart" height="220"></canvas>
+  </div>
+</div>
+
+<!-- ══ 4. SpaceX 블랙홀 ══ -->
+<div class="section fade-in">
+  <div class="section-eyebrow">SpaceX Black Hole Effect</div>
+  <div class="section-title">시총 2.5조 달러 — 개미 돈을 빨아들이는 블랙홀</div>
+  <div class="section-body">
+    <p>SpaceX(SPCX)는 상장 첫날 150달러에서 출발해 오늘 <strong>+19.6% 추가 상승, 200달러</strong>를 돌파했다. 공모가(135달러) 대비 단 이틀 만에 약 48% 급등했다.</p>
+  </div>
+  <div class="blackhole-grid fade-in">
+    <div class="bh-stat">
+      <span class="bh-num">$2.5T</span>
+      <div class="bh-label">시가총액 (미국 6위권)</div>
+    </div>
+    <div class="bh-stat">
+      <span class="bh-num">+~48%</span>
+      <div class="bh-label">공모가 대비 2일 수익률</div>
+    </div>
+    <div class="bh-stat">
+      <span class="bh-num">4%</span>
+      <div class="bh-label">시장 유통 주식(Float)</div>
+    </div>
+    <div class="bh-stat">
+      <span class="bh-num">$1T</span>
+      <div class="bh-label">일론 머스크 2030년 매출 목표</div>
+    </div>
+  </div>
+
+  <div class="section-body">
+    <p><strong>블랙홀 메커니즘:</strong> 전체 발행 주식 중 일론 머스크가 85%를 보유, 기관이 나머지 대부분을 가져가면서 시장에 유통되는 주식은 단 <strong>4%</strong>에 불과하다. 이 극소 유통량에 MSCI·러셀 지수 편입(강제 매수) 기대까지 더해지면 수급 왜곡이 극단화된다.</p>
+    <p><strong>ARK Effect:</strong> 캐시우드(ARK)가 4개 ETF를 통해 약 <strong>330만 주(약 5.3억 달러)</strong>를 집중 매수. 동시에 <strong>테슬라·AMD를 전량 처분</strong>했다 — ARK 입장에서 "씹다 버린 껌이 됐다"는 신호.</p>
+    <p><strong>오버슈팅 경고:</strong> 나스닥에만 편입된 SpaceX로 인해 지수가 실제보다 크게 오르는 착시(할로에이션) 현상이 나타나고 있다. 투기 자금의 유입이 현재 가속 중이나, <strong>9월에 예정된 대규모 락업(Lock-up) 해제</strong>는 최대 위험 요인이다.</p>
+  </div>
+  <div class="risk-box">
+    <div class="risk-title">⚠ 9월 SpaceX 락업 경고</div>
+    스페이스X의 락업 해제 예정일이 9월에 집중돼 있다. MSCI·러셀·S&amp;P 편입 기대로 강제 매수된 물량이 이 시점에 쏟아지면 지수 전반에 충격이 전이될 수 있다. 리스크 온으로 진입했다가 강제 장기 투자가 될 수 있음을 유의해야 한다.
+  </div>
+
+  <!-- 우주 생태계 ── -->
+  <p style="margin-top:16px; font-size:13.5px; margin-bottom:10px; font-weight:600;">SpaceX IPO 낙수효과 — 주목 우주 종목</p>
+  <table class="data-table">
+    <thead><tr><th>종목</th><th>포인트</th><th>목표주가</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Rocket Lab (RKLB)</strong></td>
+        <td>확고한 업계 2위, 1분기 수주잔고 22억 달러</td>
+        <td class="up">$135 (+40%↑)</td>
+      </tr>
+      <tr>
+        <td><strong>Firefly Aerospace (FLY)</strong></td>
+        <td>NASA 달 기지 프로젝트 최선호 기업으로 재선정</td>
+        <td class="up">$50 (+57%↑)</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="highlight-box">
+    💡 SpaceX 상장 당시 RKLB·ASTS·PL 등이 일시 급락했다 — 이는 우주 ETF/펀드가 SpaceX 편입을 위해 기존 보유 종목을 팔아 현금을 마련했기 때문. 실제 사업 가치는 훼손되지 않았다.
+  </div>
+</div>
+
+<!-- ══ 5. FOMC 케빈 와시 팩터 ══ -->
+<div class="section fade-in">
+  <div class="section-eyebrow">FOMC — The Warsh Factor</div>
+  <div class="section-title">포워드 가이던스 소멸 — 깜깜이 시대의 시작?</div>
+  <div class="section-body">
+    <p>수요일(6/16~17) FOMC는 <strong>케빈 와시 의장의 첫 번째 공개 통화정책 발표</strong>다. 시장은 금리 동결을 기본값으로 보고 있지만, 와시의 스타일이 전례와 완전히 다를 수 있다는 불안이 크다.</p>
+    <p>와시는 청문회에서 "시장에 힌트를 주지 않겠다"고 명시했다. 기존 연준이 활용해온 <strong>포워드 가이던스</strong>(다음 행보를 미리 암시하는 관행)를 폐지하겠다는 뜻이다. 충격적인 방식으로 정책을 발표해 시장에 더 빠른 효과를 유도하는 전략을 선호하는 인물로 알려졌다.</p>
+  </div>
+
+  <div class="dashboard fade-in">
+    <div class="dash-row">
+      <div class="dash-card down-card">
+        <div class="dash-card-title">↓ 하방 압력 (디플레 동인)</div>
+        <div class="dash-item">• 호르무즈 재개방으로 운송·에너지 비용 하락</div>
+        <div class="dash-item">• 유가 2일 연속 5%씩 급락</div>
+        <div class="dash-item">• 해운 보험료 전방위 정상화 기대</div>
+        <div class="dash-item">• 10년물 국채금리 4.47%로 하락</div>
+      </div>
+      <div class="dash-card up-card">
+        <div class="dash-card-title">↑ 상방 압력 (인플레 동인)</div>
+        <div class="dash-item">• 5월 도매물가 원자재 투입가격 전년비 +12% (2022년 이후 최대)</div>
+        <div class="dash-item">• 뉴욕 엠파이어 스테이트 제조업지수 부진 (신규 수주 3.5 급감)</div>
+      </div>
+    </div>
+  </div>
+  <div class="highlight-box">
+    📌 <strong>Warsh Factor 요약:</strong> 와시는 트럼프가 직접 지명한 인물. 매파 성향이 강하지만, 트럼프의 경기 부양 의지와 충돌할 가능성도 있다. "첫 FOMC에서 최소한의 인사치레는 하겠지"라는 기대와 "포워드 가이던스 없는 공포"가 공존하는 상태다.
+  </div>
+</div>
+
+<!-- ══ 6. AI 스토리지 병목 ══ -->
+<div class="section fade-in">
+  <div class="section-eyebrow">AI Infrastructure</div>
+  <div class="section-title">메모리 다음은 스토리지 — AI 병목의 다음 챕터</div>
+  <div class="section-body">
+    <p>AI 데이터센터의 저장 수요는 연 40~50% 급성장 중이지만, 공급 증설은 연 30~35% 성장에 그쳐 <strong>2~3년간 구조적 병목이 지속</strong>될 전망이다.</p>
+    <p>시장의 내러티브가 HBM 메모리에서 <strong>저장장치(스토리지)로 이동</strong>하고 있다는 신호가 오늘 WDC의 폭등에서 나타났다. 마이크론은 12분기 연속 HBM 업사이클 연장과 70% 이상 고마진 장기 계약 체결 기대가 여전히 살아있다.</p>
+  </div>
+  <table class="data-table">
+    <thead><tr><th>종목</th><th>오늘 등락</th><th>핵심 드라이버</th></tr></thead>
+    <tbody>
+      <tr><td><strong>WDC</strong></td><td class="up">+16.1%</td><td>하드디스크 쇼티지 수혜 + Morgan Stanley 목표가 $650</td></tr>
+      <tr><td><strong>마이크론(MU)</strong></td><td class="up">+10.8%</td><td>12분기 연속 HBM 업사이클, 장기계약 기대</td></tr>
+      <tr><td><strong>AMD</strong></td><td class="up">+7%</td><td>AI 메모리 최적화 기업 MEXT 인수 발표 (메모리 병목 해결)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="chart-container fade-in">
+    <canvas id="aiStorageChart" height="220"></canvas>
+  </div>
+</div>
+
+<!-- ══ 7. M&A 대조: AMD vs FOX ══ -->
+<div class="section fade-in">
+  <div class="section-eyebrow">M&A Contrast</div>
+  <div class="section-title">시대정신이 있는 M&amp;A vs 없는 M&amp;A</div>
+
+  <div class="winner-loser-grid">
+    <div class="wl-card winner">
+      <div class="wl-card-label">✅ AMD × MEXT</div>
+      <div class="wl-item"><strong>딜:</strong> AI 메모리 최적화 기업 인수</div>
+      <div class="wl-item"><strong>논리:</strong> AI 인프라 최대 페인포인트인 '메모리 제약' 해결 → 총소유비용(TCO) 절감</div>
+      <div class="wl-item"><strong>시장 반응:</strong> +7%, 시총 9,000억 달러 돌파</div>
+    </div>
+    <div class="wl-card loser">
+      <div class="wl-card-label">❌ FOX × Roku</div>
+      <div class="wl-item"><strong>딜:</strong> 스트리밍 플랫폼 Roku를 220억 달러에 인수</div>
+      <div class="wl-item"><strong>논리:</strong> 1억 가구 디지털 플랫폼 확보</div>
+      <div class="wl-item"><strong>시장 반응:</strong> FOXA -15~17%, 로쿠도 오히려 하락</div>
+    </div>
+  </div>
+  <div class="highlight-box">
+    💡 <strong>교훈:</strong> "시대정신"이 있는 기술적 병목 해결(AMD)에는 프리미엄이 붙고, 레거시 미디어의 재무 부담을 수반한 전환 시도(FOX)에는 징벌적 매도가 따른다. 인수가(주당 $160)보다 시장가($140)가 낮은 12% 딜 스프레드 이상 현상도 발생했다.
+  </div>
+</div>
+
+<!-- ══ 8. 글로벌 증시 ══ -->
+<div class="section fade-in">
+  <div class="section-eyebrow">Go Global Trade</div>
+  <div class="section-title">한국 코스피 글로벌 1위 — 밸류에이션 갭이 온다</div>
+  <div class="global-grid">
+    <div class="global-card">
+      <div class="gc-flag">🇰🇷</div>
+      <div class="gc-name">한국 KOSPI</div>
+      <div class="gc-pct">+5.2%</div>
+      <div class="gc-note">글로벌 랠리 1위. 삼성전자·SK하이닉스 AI 메모리 쌍두마차. EWI ETF 전 고점 돌파.</div>
+    </div>
+    <div class="global-card">
+      <div class="gc-flag">🇹🇼</div>
+      <div class="gc-name">대만 TAIEX</div>
+      <div class="gc-pct">+2.8%</div>
+      <div class="gc-note">연초 대비 +56% 폭등. 단 TSMC가 지수 견인, 나머지 종목 기여 미미.</div>
+    </div>
+    <div class="global-card">
+      <div class="gc-flag">🇯🇵</div>
+      <div class="gc-name">일본 NIKKEI</div>
+      <div class="gc-pct">+5.0%</div>
+      <div class="gc-note">3일 연속 랠리, 사상 최고치 경신. 정부 ETF 매수 부양 정책 지속.</div>
+    </div>
+    <div class="global-card">
+      <div class="gc-flag">🇺🇸</div>
+      <div class="gc-name">Valuation Gap</div>
+      <div class="gc-pct" style="font-size:15px; color:var(--accent)">저평가↑</div>
+      <div class="gc-note">S&P500 FWD P/E 20.5x vs 전세계(美 제외) 13.6x — 非美 시장 극심한 저평가 매력 부각.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 9. 하반기 플레이북 ══ -->
+<div class="section fade-in">
+  <div class="section-eyebrow">2H 2026 Playbook</div>
+  <div class="section-title">하반기 투자 플레이북 — 기관이 따라가는 3가지 전략</div>
+  <div class="playbook">
+    <div class="play-item">
+      <div class="play-num">1</div>
+      <div class="play-content">
+        <strong>전쟁 프리미엄 소멸 → 비용 절감 가시성 높은 섹터로 롱 포지션 구축</strong>
+        <span>유가 하락 직접 수혜: 항공(UAL, AAL, DAL), 크루즈(NCLH, RCL), 트럭킹. 에너지 비용이 영업 비용의 가장 큰 항목인 업종이 구조적 이익 개선 국면 진입.</span>
+      </div>
+    </div>
+    <div class="play-item">
+      <div class="play-num">2</div>
+      <div class="play-content">
+        <strong>AI 하드웨어 '딱따구리' 전략 — 병목이 이동하는 곳으로 따라가기</strong>
+        <span>GPU → HBM 메모리 → 스토리지(WDC). 바벨처럼 양쪽(구조적 AI 성장 + 유가 수혜 경기주)을 동시에 보유하는 테크&amp;사이클리컬 바벨 전략. JPMorgan 플레이북과 일치.</span>
+      </div>
+    </div>
+    <div class="play-item">
+      <div class="play-num">3</div>
+      <div class="play-content">
+        <strong>SpaceX 패시브 왜곡 모니터링 — 9월 락업 일정 반드시 체크</strong>
+        <span>나스닥 내 SpaceX로 인한 지수 오버슈팅이 단기 트레이딩 기회를 제공하지만, 9월 대규모 락업 해제 전 청산 계획이 없으면 강제 장기 보유가 될 수 있다. 날짜를 달력에 반드시 기록할 것.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 수익률 시뮬레이터 -->
+  <div class="simulator fade-in">
+    <h4>📊 유가 하락 수혜주 수익률 시뮬레이터</h4>
+    <div class="sim-row">
+      <span class="sim-label">투자 원금</span>
+      <input type="range" class="sim-slider" id="simPrincipal" min="100" max="10000" value="1000" step="100" oninput="calcSim()">
+      <span class="sim-value" id="simPrincipalVal">$1,000</span>
+    </div>
+    <div class="sim-row">
+      <span class="sim-label">예상 수익률</span>
+      <input type="range" class="sim-slider" id="simReturn" min="1" max="30" value="10" step="1" oninput="calcSim()">
+      <span class="sim-value" id="simReturnVal">10%</span>
+    </div>
+    <div class="sim-row">
+      <span class="sim-label">보유 기간(개월)</span>
+      <input type="range" class="sim-slider" id="simMonths" min="1" max="12" value="3" step="1" oninput="calcSim()">
+      <span class="sim-value" id="simMonthsVal">3개월</span>
+    </div>
+    <div class="sim-result">
+      <span>예상 수익금</span>
+      <span class="result-num" id="simProfit">$100</span>
+      <span id="simTotal" style="font-size:12px; color:#9ca3af;">최종 자산: $1,100</span>
+    </div>
+    <button class="reset-btn" onclick="resetSim()">↺ 초기화</button>
+  </div>
+</div>
+
+<!-- ══ 10. Tripadvisor ══ -->
+<div class="section fade-in">
+  <div class="section-eyebrow">Smart Restructuring</div>
+  <div class="section-title">트립어드바이저(TRIP) — 잘 모르면 하던 거 하세요</div>
+  <div class="section-body">
+    <p>여행 예약 플랫폼 트립어드바이저(TRIP)가 유럽 레스토랑 플랫폼 '더포크(TheFork)'를 아메리칸 익스프레스에 매각하고 약 <strong>7억 달러</strong>를 현금으로 수취했다. 시장은 이를 "가장 영리한 구조조정 모델"로 평가, TRIP 주가는 장중 <strong>+14%</strong> 급등했다.</p>
+    <p>비핵심 자산 처분 → 현금 유동성 확보 → 핵심 'Experiences' 부문에 자원 집중이라는 흐름은 AMD 딜과 같은 "시대정신 있는" 선택이다. 매각 대금은 TRIP 전체 시총의 약 50% 수준.</p>
+  </div>
+</div>
+
+<!-- ══ 푸터 ══ -->
+<footer style="margin-top:40px; padding-top:20px; border-top:1px solid var(--border); font-size:11px; color:var(--text2); line-height:1.8;">
+  <strong>면책 조항:</strong> 본 자료는 NOVA Real Invest 유튜브 라이브 방송(2026.06.15)을 정리한 <strong>학습·참고용 요약본</strong>입니다. 투자 조언이 아니며, 모든 투자 결정과 손익은 본인 책임입니다. 출연자의 개인적 의견이 포함되어 있으며, 실제 수익을 보장하지 않습니다.
+</footer>
+
+<script>
+/* ── 탭 전환 ── */
+function switchTab(btn, panelId) {
+  document.querySelectorAll('.rt-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.rt-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(panelId).classList.add('active');
+}
+
+/* ── Fade-in Observer ── */
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+/* ── 차트 configs ── */
+const chartConfigs = {};
+
+chartConfigs['marketChart'] = () => {
+  new Chart(document.getElementById('marketChart'), {
+    type: 'bar',
+    data: {
+      labels: ['WDC', 'EWI(한국)', 'MU', 'AMD', 'NCLH', 'NCLH', 'AAL', 'APA'],
+      datasets: [{
+        label: '등락률 (%)',
+        data: [16.1, 10, 10.8, 7, 7.9, 5.2, 5.2, -10],
+        backgroundColor: [
+          '#e11d48','#2563eb','#e11d48','#e11d48','#16a34a','#16a34a','#16a34a','#6b7280'
+        ],
+        borderRadius: 3,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        title: { display: true, text: '주요 종목 등락률 (2026.06.15)', font: { size: 12 } }
+      },
+      scales: {
+        y: {
+          ticks: { callback: v => v + '%' },
+          grid: { color: '#f0f0f0' }
+        },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+};
+
+chartConfigs['sectorChart'] = () => {
+  new Chart(document.getElementById('sectorChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['항공/크루즈 (유가 수혜)', 'AI 스토리지', '한국/글로벌', '에너지주 (손실)'],
+      datasets: [{
+        data: [35, 30, 20, 15],
+        backgroundColor: ['#16a34a', '#e11d48', '#2563eb', '#6b7280'],
+        borderWidth: 2,
+        borderColor: '#fff'
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 12 } },
+        title: { display: true, text: '오늘 섹터 로테이션 흐름', font: { size: 12 } }
+      }
+    }
+  });
+};
+
+chartConfigs['aiStorageChart'] = () => {
+  new Chart(document.getElementById('aiStorageChart'), {
+    type: 'line',
+    data: {
+      labels: ['2024', '2025', '2026E', '2027E', '2028E'],
+      datasets: [
+        {
+          label: 'AI 스토리지 수요 성장률',
+          data: [20, 30, 45, 55, 65],
+          borderColor: '#e11d48',
+          backgroundColor: 'rgba(225,29,72,0.1)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 4,
+        },
+        {
+          label: '공급 증설 성장률',
+          data: [18, 25, 32, 38, 45],
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37,99,235,0.05)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 4,
+          borderDash: [5,3],
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11 } } },
+        title: { display: true, text: 'AI 데이터센터 스토리지 수요 vs 공급 (추정)', font: { size: 12 } }
+      },
+      scales: {
+        y: {
+          ticks: { callback: v => v + '%' },
+          grid: { color: '#f0f0f0' }
+        },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+};
+
+/* ── Chart Observer ── */
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+/* ── 시뮬레이터 ── */
+function calcSim() {
+  const p = parseInt(document.getElementById('simPrincipal').value);
+  const r = parseInt(document.getElementById('simReturn').value) / 100;
+  const m = parseInt(document.getElementById('simMonths').value);
+  document.getElementById('simPrincipalVal').textContent = '$' + p.toLocaleString();
+  document.getElementById('simReturnVal').textContent = (r * 100) + '%';
+  document.getElementById('simMonthsVal').textContent = m + '개월';
+  const annualized = Math.pow(1 + r, m / 12) - 1;
+  const profit = Math.round(p * annualized);
+  const total = p + profit;
+  document.getElementById('simProfit').textContent = (profit >= 0 ? '+' : '') + '$' + profit.toLocaleString();
+  document.getElementById('simTotal').textContent = '최종 자산: $' + total.toLocaleString();
+}
+function resetSim() {
+  document.getElementById('simPrincipal').value = 1000;
+  document.getElementById('simReturn').value = 10;
+  document.getElementById('simMonths').value = 3;
+  calcSim();
+}
+calcSim();
+</script>
+</body>
+</html>
