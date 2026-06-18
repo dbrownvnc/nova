@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA 퀴즈 — The Great Divergence (2026.06.18)</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--bg2:#fafafa;--text:#1a1a1a;--text2:#777777;
+  --accent:#e11d48;--accent2:#f43f5e;--border:#e5e5e5;
+  --up:#16a34a;--down:#e11d48;
+  --correct:#dcfce7;--correct-bd:#16a34a;
+  --wrong:#fff1f2;--wrong-bd:#e11d48;
+}
+body{font-family:'Noto Sans KR',sans-serif;background:#f5f5f5;color:var(--text);min-height:100vh;padding-bottom:60px}
+
+/* ── Sticky Score Bar ── */
+.score-bar{
+  position:sticky;top:0;z-index:100;
+  background:var(--text);color:#fff;
+  padding:10px 16px;
+  display:flex;align-items:center;gap:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,.3);
+}
+.score-title{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.score-stats{display:flex;gap:12px;font-size:11px;font-weight:700;flex-shrink:0}
+.score-stat span{color:rgba(255,255,255,.5);font-weight:400}
+.progress-wrap{height:4px;background:#333;position:relative}
+.progress-fill{height:4px;width:0;transition:width .4s ease,background .4s ease;background:var(--down)}
+
+/* ── Header ── */
+.quiz-hdr{background:var(--text);color:#fff;padding:36px 16px 28px;text-align:center;border-bottom:3px solid var(--accent)}
+.quiz-hdr-eye{font-size:10px;letter-spacing:3px;color:var(--accent);font-weight:700;margin-bottom:10px;text-transform:uppercase}
+.quiz-hdr h1{font-family:'Playfair Display',serif;font-size:clamp(20px,5vw,30px);font-weight:900;margin-bottom:8px;line-height:1.2}
+.quiz-hdr p{font-size:12px;color:rgba(255,255,255,.6);line-height:1.6}
+
+/* ── Main ── */
+.qwrap{max-width:680px;margin:0 auto;padding:20px 14px}
+
+/* ── Question Card ── */
+.qcard{
+  background:var(--bg);border-radius:6px;
+  padding:20px 18px;margin-bottom:16px;
+  box-shadow:0 1px 4px rgba(0,0,0,.06);
+  border:1px solid var(--border);
+}
+.qcard-meta{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.qnum{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--accent);line-height:1}
+.qtype-badge{font-size:10px;padding:2px 8px;border-radius:12px;font-weight:700;letter-spacing:.5px}
+.badge-mc{background:#eff6ff;color:#1d4ed8}
+.badge-short{background:#fefce8;color:#854d0e}
+.badge-ox{background:#f0fdf4;color:#166534}
+.diff-badge{font-size:10px;padding:2px 8px;border-radius:12px;font-weight:700}
+.diff-easy{background:#f0fdf4;color:#15803d}
+.diff-medium{background:#fefce8;color:#b45309}
+.diff-hard{background:#fff1f2;color:#be123c}
+
+.qtext{font-size:15px;font-weight:700;line-height:1.6;margin-bottom:16px;color:var(--text)}
+
+/* ── Options ── */
+.options{display:flex;flex-direction:column;gap:8px}
+.opt-btn{
+  width:100%;text-align:left;padding:11px 14px;
+  border:1.5px solid var(--border);border-radius:4px;
+  background:var(--bg2);color:var(--text);
+  font-size:13px;font-family:'Noto Sans KR',sans-serif;
+  cursor:pointer;transition:all .15s ease;line-height:1.5;
+}
+.opt-btn:hover:not(:disabled){border-color:var(--accent);background:#fff1f2;color:var(--accent)}
+.opt-btn:disabled{cursor:default}
+.opt-btn.correct{background:var(--correct)!important;border-color:var(--correct-bd)!important;color:#15803d!important;font-weight:700}
+.opt-btn.wrong{background:var(--wrong)!important;border-color:var(--wrong-bd)!important;color:var(--accent)!important}
+.opt-result{display:inline-block;font-size:11px;font-weight:700;margin-left:6px;padding:1px 6px;border-radius:2px;vertical-align:middle}
+.opt-result.ok{background:#15803d;color:#fff}
+.opt-result.no{background:var(--accent);color:#fff}
+
+/* OX Buttons */
+.ox-group{display:flex;gap:10px}
+.ox-btn{
+  flex:1;padding:14px;border:2px solid var(--border);border-radius:4px;
+  background:var(--bg2);color:var(--text);font-size:26px;font-weight:700;
+  cursor:pointer;transition:all .15s;text-align:center;
+  font-family:'Playfair Display',serif;
+}
+.ox-btn:hover:not(:disabled){border-color:var(--accent);background:#fff1f2}
+.ox-btn:disabled{cursor:default}
+.ox-btn.correct{background:var(--correct)!important;border-color:var(--correct-bd)!important}
+.ox-btn.wrong{background:var(--wrong)!important;border-color:var(--wrong-bd)!important}
+
+/* Short Answer */
+.short-wrap{display:flex;gap:8px;flex-wrap:wrap}
+.short-input{
+  flex:1;min-width:0;padding:10px 12px;border:1.5px solid var(--border);border-radius:4px;
+  font-size:14px;font-family:'Noto Sans KR',sans-serif;color:var(--text);background:var(--bg2);
+}
+.short-input:focus{outline:none;border-color:var(--accent)}
+.short-input:disabled{background:#f9f9f9;color:var(--text2)}
+.short-input.correct-input{border-color:var(--correct-bd)!important;background:var(--correct)!important}
+.short-input.wrong-input{border-color:var(--wrong-bd)!important;background:var(--wrong)!important}
+.short-submit{
+  padding:10px 18px;background:var(--accent);color:#fff;border:none;border-radius:4px;
+  font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;
+  font-family:'Noto Sans KR',sans-serif;
+}
+.short-submit:hover:not(:disabled){background:var(--accent2)}
+.short-submit:disabled{background:var(--text2);cursor:default}
+.short-hint{font-size:11px;color:var(--text2);margin-top:6px}
+
+/* ── Explanation ── */
+.explanation{
+  display:none;
+  margin-top:14px;padding:12px 14px;
+  border-radius:4px;border-left:3px solid var(--accent);
+  background:#fff8f9;font-size:13px;color:#7f1d1d;line-height:1.65;
+}
+.explanation.show{display:block}
+.explanation .expl-head{font-weight:700;color:var(--accent);font-size:12px;letter-spacing:.5px;margin-bottom:5px;text-transform:uppercase}
+.explanation .expl-answer{font-size:12px;color:var(--text2);margin-top:6px}
+.explanation .expl-answer strong{color:var(--text);font-weight:700}
+
+/* ── Final Modal ── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:200;
+  align-items:center;justify-content:center;padding:16px;
+}
+.modal-overlay.show{display:flex}
+.modal-card{
+  background:#fff;border-radius:8px;padding:36px 24px;max-width:420px;width:100%;
+  text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.3);
+  animation:popIn .4s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+.modal-card h2{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;margin-bottom:8px;color:var(--text)}
+.modal-score{font-family:'Playfair Display',serif;font-size:56px;font-weight:900;color:var(--accent);margin:16px 0 4px}
+.modal-grade{display:inline-block;font-size:22px;font-weight:700;padding:4px 18px;border-radius:4px;margin-bottom:12px}
+.modal-msg{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:20px}
+.modal-restart{
+  background:var(--accent);color:#fff;border:none;border-radius:4px;
+  padding:12px 32px;font-size:14px;font-weight:700;cursor:pointer;
+  font-family:'Noto Sans KR',sans-serif;transition:background .15s;
+}
+.modal-restart:hover{background:var(--accent2)}
+.grade-A{background:#dcfce7;color:#15803d}
+.grade-B{background:#dbeafe;color:#1d4ed8}
+.grade-C{background:#fef9c3;color:#854d0e}
+.grade-D{background:#fff1f2;color:var(--accent)}
+
+@media(max-width:480px){
+  .score-stats{gap:8px;font-size:10px}
+  .qcard{padding:16px 14px}
+  .short-wrap{flex-direction:column}
+  .short-submit{width:100%}
+  .ox-btn{font-size:22px;padding:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Sticky Score Bar ── -->
+<div class="score-bar">
+  <div class="score-title">NOVA 2026.06.18 퀴즈</div>
+  <div class="score-stats">
+    <div><span>푼 문제 </span><strong id="sb-solved">0</strong><span> / 10</span></div>
+    <div><span>정답 </span><strong id="sb-correct">0</strong></div>
+    <div><strong id="sb-pct">0%</strong></div>
+  </div>
+</div>
+<div class="progress-wrap">
+  <div class="progress-fill" id="progress-fill"></div>
+</div>
+
+<!-- ── Header ── -->
+<div class="quiz-hdr">
+  <div class="quiz-hdr-eye">NOVA Real Invest · 2026.06.18</div>
+  <h1>The Great Divergence<br>시험 문제</h1>
+  <p>반도체 슈퍼사이클의 확장과 전통 IT의 위기 — 10문제</p>
+</div>
+
+<div class="qwrap" id="quiz-container"></div>
+
+<!-- ── Final Modal ── -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-card">
+    <div>🎉</div>
+    <h2>퀴즈 완료!</h2>
+    <div class="modal-score" id="modal-score">0 / 10</div>
+    <div class="modal-grade" id="modal-grade">—</div>
+    <div class="modal-msg" id="modal-msg">—</div>
+    <button class="modal-restart" onclick="restartQuiz()">↩ 다시 풀기</button>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════
+   QUIZ DATA
+═══════════════════════════════════════ */
+const QUIZ_DATA = [
+  {
+    id: 1,
+    type: 'ox',
+    difficulty: 'easy',
+    question: '2026년 6월 18일 방송 기준, WTI 원유 가격이 70달러대로 하락했다.',
+    answer: 'O',
+    explanation: '방송에서 "드디어 70불 대를 보고 있습니다. 오늘 최저치는 70불 39(약 $70.39)까지 내려갔었네요"라고 직접 언급했습니다.',
+    answerLabel: '정답: O (맞음)'
+  },
+  {
+    id: 2,
+    type: 'multiple',
+    difficulty: 'easy',
+    question: '트럼프 대통령이 발표한 "미국 본토 내 칩 설계 및 생산 합의"의 당사자 두 기업은?',
+    options: ['A. 삼성전자 – 인텔', 'B. 애플 – 인텔', 'C. 엔비디아 – 인텔', 'D. 애플 – TSMC'],
+    answer: 'B',
+    explanation: '"애플하고 인텔 미국 내 칩 설계 생산 합의 발표를 했는데 누가 했냐? 이게 이제 까리하죠. 트럼프 대통령이 했습니다"라고 방송에서 직접 언급했습니다.',
+    answerLabel: '정답: B (애플 – 인텔)'
+  },
+  {
+    id: 3,
+    type: 'multiple',
+    difficulty: 'easy',
+    question: '이날 발표로 인해 인텔(INTC) 주가는 장중 얼마나 상승했는가?',
+    options: ['A. 약 5%', 'B. 약 8%', 'C. 10% 이상', 'D. 약 20%'],
+    answer: 'C',
+    explanation: '"인텔만 혼자 10% 이상 폭등을 했습니다"라고 방송에서 언급했습니다. PDF 슬라이드에는 구체적으로 10.8%로 표시되어 있습니다.',
+    answerLabel: '정답: C (10% 이상, 구체적으로 10.8%)'
+  },
+  {
+    id: 4,
+    type: 'multiple',
+    difficulty: 'easy',
+    question: '팀 쿡 애플 CEO가 예고한 애플 제품 가격 인상 예상폭은?',
+    options: ['A. 약 5%', 'B. 약 10%', 'C. 약 15%', 'D. 약 20%'],
+    answer: 'D',
+    explanation: '"팀콕이 어제 발언을 했죠. 메모리 칩 이거 지금 되게 심각해. 그래서 우리 제품 가격을 20% 올릴 거야"라고 방송에서 직접 언급했습니다.',
+    answerLabel: '정답: D (약 20%)'
+  },
+  {
+    id: 5,
+    type: 'short',
+    difficulty: 'medium',
+    question: '일부 증권사가 제시한 마이크론(MU)의 목표주가는 얼마인가? (달러 단위로 입력)',
+    answer: ['1500', '1500달러', '$1500', '1,500', '1,500달러'],
+    correctDisplay: '$1,500',
+    explanation: '"오늘 나온 거 보니까 목표 주가를 1500불로 얘기한 아이들이 있어요. 그리고 앞으로 더 한 40% 더 올라갈 거라는 얘기죠"라고 방송에서 직접 언급했습니다.',
+    answerLabel: '정답: $1,500 (1500달러)'
+  },
+  {
+    id: 6,
+    type: 'multiple',
+    difficulty: 'medium',
+    question: '강의자가 설명한 AI 인프라 스택에서 "Layer 2"에 해당하는 분야는?',
+    options: [
+      'A. 전력 및 냉각 (Power & Cooling)',
+      'B. 컴퓨팅 GPU (Compute)',
+      'C. 네트워크 및 메모리 (Network & Memory)',
+      'D. AI 소프트웨어 플랫폼'
+    ],
+    answer: 'C',
+    explanation: 'PDF 슬라이드에서 "Layer 2 (데이터 이동 및 저장: Network & Memory) — Micron, Marvell. 거대한 연산 데이터를 빛의 속도로 이동시키고 임시 저장하는 필수 통로. 구조적 품귀 발생 중"으로 명시되어 있습니다.',
+    answerLabel: '정답: C (네트워크 및 메모리)'
+  },
+  {
+    id: 7,
+    type: 'multiple',
+    difficulty: 'medium',
+    question: '엑센츄어(ACN)의 가이던스 하향 조정의 주된 원인으로 방송에서 언급된 것은?',
+    options: [
+      'A. 경쟁사 증가로 인한 가격 경쟁 심화',
+      'B. 기업들이 AI 인프라에 예산을 전용하면서 IT 컨설팅 예산이 급감',
+      'C. 금리 인상으로 인한 기업 투자 위축',
+      'D. 정부 계약 종료'
+    ],
+    answer: 'B',
+    explanation: '"기업들이 본인들의 컨설팅 비용을 안 쓰기 시작한다는 거예요. 예산 배정을 안 하는 겁니다. 왜냐하면 AI 인프라. 여기에 사람들이 버짓을 더 많이 책정을 하는 거예요"라고 방송에서 설명했습니다.',
+    answerLabel: '정답: B (AI 인프라 예산 전용으로 컨설팅 예산 감소)'
+  },
+  {
+    id: 8,
+    type: 'multiple',
+    difficulty: 'hard',
+    question: '강의자가 설명한 현재 AI 랠리와 1999년 닷컴 버블의 결정적 차이점은?',
+    options: [
+      'A. 현재는 더 많은 섹터가 고루 상승하고 있다',
+      'B. 현재 AI 주도주들은 폭발적인 실적(EPS 756%)으로 뒷받침된다',
+      'C. 현재는 AI 버블이 전혀 없다',
+      'D. 1999년에는 인터넷 기술 자체가 없었다'
+    ],
+    answer: 'B',
+    explanation: '"얘는 실적이 그걸 받쳐준다는 얘기죠. 숫자로 증명한다는 겁니다. 폭발적 실적 여기 보시면 756%"라고 언급했습니다. 반면 닷컴 때는 "비즈니스 모델도 없었어요. 얘네들이 어떻게 돈을 버는지도 모르는 웹사이트"라고 대비했습니다.',
+    answerLabel: '정답: B (실적 756% 성장으로 뒷받침)'
+  },
+  {
+    id: 9,
+    type: 'ox',
+    difficulty: 'hard',
+    question: '강의자는 트럼프 대통령의 미국 내 반도체 온쇼어링(국내 생산) 전략이 경제적으로 충분히 실현 가능하다고 평가했다.',
+    answer: 'X',
+    explanation: '"이거는 좀 힘들죠. 분명히 비쌀 거라고 대만보다 비싸고. 말이 안 되는 거거든요. 기본적으로 저런 노동자들의 임금이 아무리 적게 줘도 한 6만 불은 줘야 된다. 그러면 안 되는 거예요. 게임이 일단 끝나는 겁니다"라며 명확하게 회의적 입장을 밝혔습니다.',
+    answerLabel: '정답: X (경제적 실현 가능성에 회의적)'
+  },
+  {
+    id: 10,
+    type: 'short',
+    difficulty: 'hard',
+    question: '강의자가 분기말에 예정된 글로벌 연기금·국부펀드의 자산 재배분(리밸런싱) 규모로 언급한 금액은? (억 달러 단위, 숫자만 입력 가능)',
+    answer: ['1650', '1650억', '1650억달러', '1,650억', '1,650억달러', '1650억 달러', '165billion'],
+    correctDisplay: '1,650억 달러',
+    explanation: 'PDF 자료의 "Upcoming Catalysts" 슬라이드에서 "1,650억 달러 규모 글로벌 연기금/국부펀드 자산 재배분(주식 매도) 매물 주의"로 명시되어 있으며, 방송에서도 "분기말 글로벌 연기금이라든지 ETF 펀드, 국부 펀드 전부 다 리밸런싱을 하는 거예요"라고 언급했습니다.',
+    answerLabel: '정답: 1,650억 달러'
+  }
+];
+
+/* ═══════════════════════════════════════
+   STATE
+═══════════════════════════════════════ */
+let state = { solved: 0, correct: 0 };
+
+/* ═══════════════════════════════════════
+   RENDER
+═══════════════════════════════════════ */
+function renderQuiz() {
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = '';
+
+  QUIZ_DATA.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'qcard';
+    card.id = `qcard-${q.id}`;
+
+    const diffLabel = { easy: '쉬움', medium: '보통', hard: '어려움' }[q.difficulty];
+    const diffClass = `diff-${q.difficulty}`;
+    const typeLabel = { multiple: '객관식', short: '단답형', ox: 'O/X' }[q.type];
+    const typeBadge = { multiple: 'badge-mc', short: 'badge-short', ox: 'badge-ox' }[q.type];
+
+    let bodyHTML = '';
+    if (q.type === 'multiple') {
+      bodyHTML = `<div class="options" id="opts-${q.id}">
+        ${q.options.map((opt, i) => {
+          const letter = ['A','B','C','D'][i];
+          return `<button class="opt-btn" data-qid="${q.id}" data-letter="${letter}" onclick="answerMC(${q.id},'${letter}',this)">${opt}</button>`;
+        }).join('')}
+      </div>`;
+    } else if (q.type === 'ox') {
+      bodyHTML = `<div class="ox-group" id="ox-${q.id}">
+        <button class="ox-btn" data-qid="${q.id}" onclick="answerOX(${q.id},'O',this)">O</button>
+        <button class="ox-btn" data-qid="${q.id}" onclick="answerOX(${q.id},'X',this)">X</button>
+      </div>`;
+    } else {
+      bodyHTML = `<div class="short-wrap">
+        <input class="short-input" type="text" id="short-${q.id}" placeholder="답을 입력하세요..." onkeydown="if(event.key==='Enter')submitShort(${q.id})">
+        <button class="short-submit" id="short-btn-${q.id}" onclick="submitShort(${q.id})">제출</button>
+      </div>
+      <div class="short-hint">※ 입력 후 엔터 또는 제출 버튼을 누르세요</div>`;
+    }
+
+    card.innerHTML = `
+      <div class="qcard-meta">
+        <div class="qnum">${String(idx + 1).padStart(2,'0')}</div>
+        <span class="qtype-badge ${typeBadge}">${typeLabel}</span>
+        <span class="diff-badge ${diffClass}">${diffLabel}</span>
+      </div>
+      <div class="qtext">${q.question}</div>
+      ${bodyHTML}
+      <div class="explanation" id="expl-${q.id}">
+        <div class="expl-head">📖 해설</div>
+        <div id="expl-text-${q.id}"></div>
+        <div class="expl-answer" id="expl-ans-${q.id}"></div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+/* ═══════════════════════════════════════
+   ANSWER HANDLERS
+═══════════════════════════════════════ */
+function answerMC(qid, letter, clickedBtn) {
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  if (!q) return;
+  const isCorrect = letter === q.answer;
+
+  // Disable all buttons
+  document.querySelectorAll(`[data-qid="${qid}"].opt-btn`).forEach(btn => {
+    btn.disabled = true;
+    const l = btn.getAttribute('data-letter');
+    if (l === q.answer) {
+      btn.classList.add('correct');
+      btn.innerHTML += '<span class="opt-result ok">✓ 정답</span>';
+    } else if (l === letter && !isCorrect) {
+      btn.classList.add('wrong');
+      btn.innerHTML += '<span class="opt-result no">✗ 오답</span>';
+    }
+  });
+
+  recordResult(qid, isCorrect, q.explanation, q.answerLabel);
+}
+
+function answerOX(qid, pick, clickedBtn) {
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  if (!q) return;
+  const isCorrect = pick === q.answer;
+
+  document.querySelectorAll(`#ox-${qid} .ox-btn`).forEach(btn => {
+    btn.disabled = true;
+  });
+
+  const oxBtns = document.querySelectorAll(`#ox-${qid} .ox-btn`);
+  oxBtns.forEach(btn => {
+    const txt = btn.textContent.trim();
+    if (txt === q.answer) btn.classList.add('correct');
+    else if (txt === pick && !isCorrect) btn.classList.add('wrong');
+  });
+
+  recordResult(qid, isCorrect, q.explanation, q.answerLabel);
+}
+
+function submitShort(qid) {
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  if (!q) return;
+  const input = document.getElementById(`short-${qid}`);
+  const btn = document.getElementById(`short-btn-${qid}`);
+  if (!input || input.disabled) return;
+
+  const userVal = input.value.trim().replace(/\s/g,'').toLowerCase();
+  const answers = q.answer.map(a => a.replace(/\s/g,'').toLowerCase());
+  const isCorrect = answers.includes(userVal);
+
+  input.disabled = true;
+  btn.disabled = true;
+  input.classList.add(isCorrect ? 'correct-input' : 'wrong-input');
+
+  recordResult(qid, isCorrect, q.explanation, q.answerLabel);
+}
+
+/* ═══════════════════════════════════════
+   SCORE + EXPLANATION
+═══════════════════════════════════════ */
+function recordResult(qid, isCorrect, explanation, answerLabel) {
+  state.solved++;
+  if (isCorrect) state.correct++;
+  updateScoreBar();
+  showExplanation(qid, isCorrect, explanation, answerLabel);
+
+  if (state.solved === QUIZ_DATA.length) {
+    setTimeout(showFinalModal, 700);
+  }
+}
+
+function showExplanation(qid, isCorrect, explanation, answerLabel) {
+  const expl = document.getElementById(`expl-${qid}`);
+  const explText = document.getElementById(`expl-text-${qid}`);
+  const explAns = document.getElementById(`expl-ans-${qid}`);
+
+  explText.textContent = explanation;
+  explAns.innerHTML = `<strong>${answerLabel}</strong>`;
+  expl.classList.add('show');
+
+  // Smooth scroll to explanation
+  setTimeout(() => {
+    expl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 100);
+}
+
+/* ═══════════════════════════════════════
+   SCORE BAR
+═══════════════════════════════════════ */
+function updateScoreBar() {
+  const pct = state.solved > 0 ? Math.round((state.correct / state.solved) * 100) : 0;
+  document.getElementById('sb-solved').textContent = state.solved;
+  document.getElementById('sb-correct').textContent = state.correct;
+  document.getElementById('sb-pct').textContent = pct + '%';
+
+  const fill = document.getElementById('progress-fill');
+  fill.style.width = (state.solved / QUIZ_DATA.length * 100) + '%';
+
+  // Color by accuracy
+  if (pct >= 70) fill.style.background = '#16a34a';
+  else if (pct >= 40) fill.style.background = '#f59e0b';
+  else fill.style.background = '#e11d48';
+}
+
+/* ═══════════════════════════════════════
+   FINAL MODAL
+═══════════════════════════════════════ */
+function showFinalModal() {
+  const score = state.correct;
+  const total = QUIZ_DATA.length;
+  const pct = Math.round(score / total * 100);
+
+  let grade, gradeClass, msg;
+  if (pct >= 90) {
+    grade = 'A'; gradeClass = 'grade-A';
+    msg = '훌륭합니다! 반도체 슈퍼사이클과 AI 인프라 흐름을 완벽하게 이해하고 계십니다. "This is NOVA!"';
+  } else if (pct >= 70) {
+    grade = 'B'; gradeClass = 'grade-B';
+    msg = '잘 하셨습니다! 핵심 개념은 파악하고 있으나 세부 수치나 심층 내용을 한 번 더 복습하면 완벽해집니다.';
+  } else if (pct >= 50) {
+    grade = 'C'; gradeClass = 'grade-C';
+    msg = '기본 개념은 이해했습니다. AI 인프라 스택 3레이어와 주요 종목별 흐름을 다시 한번 정리해 보세요.';
+  } else {
+    grade = 'D'; gradeClass = 'grade-D';
+    msg = '분석 리포트를 처음부터 다시 읽고, 핵심 수치와 인과 관계에 집중해서 복습해 보세요. 화이팅!';
+  }
+
+  document.getElementById('modal-score').textContent = `${score} / ${total}`;
+  const gradeEl = document.getElementById('modal-grade');
+  gradeEl.textContent = `등급 ${grade} (정답률 ${pct}%)`;
+  gradeEl.className = `modal-grade ${gradeClass}`;
+  document.getElementById('modal-msg').textContent = msg;
+  document.getElementById('modal').classList.add('show');
+}
+
+/* ═══════════════════════════════════════
+   RESTART
+═══════════════════════════════════════ */
+function restartQuiz() {
+  state = { solved: 0, correct: 0 };
+  updateScoreBar();
+  document.getElementById('progress-fill').style.width = '0';
+  document.getElementById('modal').classList.remove('show');
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── INIT ── */
+renderQuiz();
+updateScoreBar();
+</script>
+</body>
+</html>
