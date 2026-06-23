@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>두 시장의 이야기 — 거대한 섹터 로테이션 | NOVA Real Invest 분석</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#fafafa;
+    --txt:#1a1a1a; --txt2:#777777;
+    --accent:#e11d48; --accent2:#f43f5e;
+    --blue:#2563eb; --gray:#6b7280;
+    --line:#e5e5e5;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--bg); color:var(--txt);
+    font-family:'Noto Sans KR',sans-serif; font-weight:400;
+    line-height:1.75; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:0 22px;}
+
+  /* ===== HERO ===== */
+  .hero{padding:64px 22px 48px;border-bottom:1px solid var(--line);max-width:680px;margin:0 auto;}
+  .kicker{font-family:'Noto Sans KR';font-size:.72rem;font-weight:700;letter-spacing:.22em;
+    color:var(--accent);text-transform:uppercase;margin-bottom:22px;}
+  .hero h1{font-family:'Playfair Display',serif;font-weight:900;font-size:2.55rem;
+    line-height:1.16;letter-spacing:-.01em;margin-bottom:18px;}
+  .hero h1 em{font-style:italic;color:var(--accent);}
+  .dek{font-size:1.02rem;color:var(--txt2);font-weight:300;line-height:1.7;max-width:540px;}
+  .byline{margin-top:30px;font-size:.8rem;color:var(--txt2);letter-spacing:.03em;
+    display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;}
+  .byline b{color:var(--txt);font-weight:700;}
+
+  /* ===== TICKER STRIP ===== */
+  .strip{background:var(--txt);color:#fff;margin:0 auto;max-width:680px;
+    display:grid;grid-template-columns:1fr 1fr;}
+  .strip .cell{padding:20px 22px;}
+  .strip .cell:first-child{border-right:1px solid #333;}
+  .strip .lab{font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:#9aa;margin-bottom:8px;}
+  .strip .big{font-family:'Playfair Display',serif;font-weight:900;font-size:1.5rem;line-height:1.1;}
+  .strip .up{color:#34d399;} .strip .dn{color:var(--accent2);}
+  .strip .sub{font-size:.74rem;color:#999;margin-top:4px;}
+
+  /* ===== SECTION ===== */
+  section{padding:50px 0;border-bottom:1px solid var(--line);}
+  .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.2em;color:var(--accent);
+    text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--accent);display:inline-block;}
+  h2{font-family:'Playfair Display',serif;font-weight:700;font-size:1.85rem;line-height:1.25;
+    letter-spacing:-.01em;margin-bottom:8px;}
+  h2 .ko{font-family:'Noto Sans KR';font-weight:900;}
+  .lead{font-size:1.05rem;color:var(--txt);margin:18px 0;font-weight:500;}
+  p{margin:14px 0;font-size:.97rem;}
+  p .hl{color:var(--accent);font-weight:700;}
+  p strong{font-weight:700;}
+  .note{font-size:.82rem;color:var(--txt2);background:var(--bg2);border-left:3px solid var(--accent);
+    padding:12px 16px;margin:18px 0;line-height:1.6;}
+  .term{font-size:.8rem;color:var(--txt2);font-style:italic;}
+
+  /* ===== STAT ROW ===== */
+  .statrow{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);
+    border:1px solid var(--line);margin:24px 0;}
+  .statrow .s{background:var(--bg);padding:18px 16px;}
+  .statrow .s .n{font-family:'Playfair Display',serif;font-weight:900;font-size:1.7rem;line-height:1;}
+  .statrow .s .n.dn{color:var(--accent);} .statrow .s .n.up{color:#0a9d58;}
+  .statrow .s .t{font-size:.76rem;color:var(--txt2);margin-top:7px;line-height:1.4;}
+
+  /* ===== CHART ===== */
+  .chart-container{position:relative;max-height:340px;margin:26px 0 10px;}
+  .chart-container canvas{opacity:0;transition:opacity .4s ease;max-height:300px;}
+  .chart-container.chart-ready canvas{opacity:1;}
+  .cap{font-size:.76rem;color:var(--txt2);text-align:center;margin-top:6px;font-style:italic;}
+
+  /* ===== FUNNEL ===== */
+  .funnel{margin:28px 0;}
+  .fstep{border:1px solid var(--line);background:var(--bg2);padding:18px 18px;margin-bottom:10px;
+    position:relative;border-radius:4px;cursor:pointer;transition:.25s;}
+  .fstep:hover{background:#fff;box-shadow:0 4px 18px rgba(0,0,0,.06);transform:translateY(-1px);}
+  .fstep .ft{font-weight:900;font-size:1rem;margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+  .fstep .badge{font-size:.62rem;font-weight:700;letter-spacing:.05em;padding:3px 8px;border-radius:20px;color:#fff;}
+  .fstep .tick{font-family:'Playfair Display',serif;font-weight:700;font-size:.85rem;color:var(--txt);margin:6px 0;}
+  .fstep .fd{font-size:.84rem;color:var(--txt2);line-height:1.55;}
+  .f1{border-left:4px solid var(--accent);} .f1 .badge{background:var(--accent);}
+  .f2{border-left:4px solid var(--blue);} .f2 .badge{background:var(--blue);}
+  .f3{border-left:4px solid #0a9d58;} .f3 .badge{background:#0a9d58;}
+  .farrow{text-align:center;color:var(--line);font-size:1.1rem;line-height:1;margin:-4px 0 6px;}
+
+  /* ===== SIMULATOR ===== */
+  .sim{background:var(--bg2);border:1px solid var(--line);border-radius:6px;padding:24px 20px;margin:26px 0;}
+  .sim h4{font-family:'Noto Sans KR';font-weight:900;font-size:1.05rem;margin-bottom:6px;}
+  .sim .desc{font-size:.82rem;color:var(--txt2);margin-bottom:20px;}
+  .sim .ctrl{margin:16px 0;}
+  .sim label{font-size:.82rem;font-weight:700;display:flex;justify-content:space-between;margin-bottom:8px;}
+  .sim label span{color:var(--accent);font-family:'Playfair Display',serif;font-weight:700;}
+  input[type=range]{-webkit-appearance:none;width:100%;height:4px;background:var(--line);border-radius:4px;outline:none;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+    background:var(--accent);cursor:pointer;box-shadow:0 2px 6px rgba(225,29,72,.4);transition:.15s;}
+  input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15);}
+  input[type=range]::-moz-range-thumb{width:20px;height:20px;border:none;border-radius:50%;background:var(--accent);cursor:pointer;}
+  .simout{margin-top:20px;padding-top:18px;border-top:1px dashed var(--line);}
+  .simout .row{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;font-size:.9rem;}
+  .simout .row .v{font-family:'Playfair Display',serif;font-weight:900;font-size:1.25rem;}
+  .simout .verdict{margin-top:14px;padding:12px 14px;border-radius:5px;font-size:.86rem;font-weight:700;text-align:center;}
+  .btn-reset{margin-top:16px;width:100%;padding:11px;background:var(--txt);color:#fff;border:none;
+    border-radius:5px;font-family:'Noto Sans KR';font-weight:700;font-size:.84rem;cursor:pointer;letter-spacing:.04em;transition:.2s;}
+  .btn-reset:hover{background:var(--accent);}
+
+  /* ===== BRAIN DRAIN CARDS ===== */
+  .people{display:grid;gap:12px;margin:22px 0;}
+  .pcard{border:1px solid var(--line);border-radius:5px;padding:16px 18px;background:var(--bg2);}
+  .pcard .pn{font-weight:900;font-size:1.02rem;}
+  .pcard .pr{font-size:.8rem;color:var(--txt2);margin:3px 0 8px;}
+  .pcard .pm{font-size:.86rem;font-weight:700;color:var(--accent);}
+  .pcard .pm::before{content:"→ ";}
+
+  /* ===== POSITIONING MATRIX ===== */
+  .matrix{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:24px 0;}
+  .mcard{border-radius:6px;padding:16px 14px;border:1px solid var(--line);}
+  .mcard.over{background:rgba(10,157,88,.06);border-color:rgba(10,157,88,.3);}
+  .mcard.under{background:rgba(225,29,72,.05);border-color:rgba(225,29,72,.25);}
+  .mcard .mt{font-size:.74rem;font-weight:900;letter-spacing:.04em;margin-bottom:10px;text-transform:uppercase;}
+  .mcard.over .mt{color:#0a9d58;} .mcard.under .mt{color:var(--accent);}
+  .mcard ul{list-style:none;}
+  .mcard li{font-size:.82rem;padding:6px 0;border-top:1px solid rgba(0,0,0,.05);line-height:1.4;}
+  .mcard li:first-child{border-top:none;}
+  .mcard li b{font-weight:700;}
+  .mcard li small{display:block;color:var(--txt2);font-size:.72rem;}
+
+  /* ===== QUOTE ===== */
+  .pullquote{padding:44px 0;text-align:center;}
+  .pullquote .mark{font-family:'Playfair Display',serif;font-size:4rem;color:var(--accent);line-height:.5;opacity:.25;}
+  .pullquote q{font-family:'Playfair Display',serif;font-style:italic;font-weight:500;font-size:1.6rem;
+    line-height:1.4;display:block;margin:18px auto;max-width:540px;quotes:none;}
+  .pullquote q::before,.pullquote q::after{content:"";}
+  .pullquote .src{font-size:.8rem;color:var(--txt2);letter-spacing:.05em;}
+
+  /* ===== CALENDAR ===== */
+  .cal{margin:22px 0;border:1px solid var(--line);border-radius:6px;overflow:hidden;}
+  .cal .day{display:flex;border-bottom:1px solid var(--line);}
+  .cal .day:last-child{border-bottom:none;}
+  .cal .dh{flex:0 0 78px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;
+    font-weight:900;font-size:.82rem;text-align:center;padding:14px 8px;}
+  .cal .dc{padding:14px 16px;font-size:.86rem;line-height:1.6;}
+  .cal .dc b{font-weight:700;}
+
+  /* ===== SUMMARY DASHBOARD ===== */
+  .dash{display:grid;gap:12px;margin:24px 0;}
+  .dcard{border:1px solid var(--line);border-radius:6px;padding:20px;background:var(--bg2);}
+  .dcard .dt{font-family:'Playfair Display',serif;font-weight:700;font-size:1.2rem;margin-bottom:12px;color:var(--accent);}
+  .dcard ul{list-style:none;}
+  .dcard li{font-size:.88rem;padding:7px 0 7px 18px;position:relative;line-height:1.5;}
+  .dcard li::before{content:"";position:absolute;left:0;top:14px;width:6px;height:6px;background:var(--accent);border-radius:50%;}
+
+  /* ===== FOOTER ===== */
+  footer{padding:40px 22px 60px;text-align:center;color:var(--txt2);font-size:.78rem;line-height:1.7;}
+  footer .disc{font-size:.72rem;color:#aaa;margin-top:18px;max-width:560px;margin-left:auto;margin-right:auto;}
+
+  /* fade-in */
+  .fade-in{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+  .fade-in.visible{opacity:1;transform:translateY(0);}
+
+  @media(max-width:440px){
+    .hero h1{font-size:2rem;} h2{font-size:1.5rem;}
+    .strip .big{font-size:1.25rem;}
+    .matrix{grid-template-columns:1fr;}
+    .pullquote q{font-size:1.3rem;}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="kicker">NOVA Real Invest · 2026.06.23 시장 분석</div>
+  <h1>두 시장의 이야기,<br><em>거대한 섹터 로테이션</em></h1>
+  <p class="dek">나스닥은 급락하고 러셀 2000은 사상 최고치를 경신했다. 빅테크에서 빠져나간 자본은 증발한 것이 아니라, 시장의 '다른 쪽'으로 흘러가고 있다. 그 새로운 이동 경로를 따라가 본다.</p>
+  <div class="byline">
+    <span><b>김민수</b> · 수석 애널리스트</span>
+    <span>뉴욕 기준 2026년 6월 22일(월) 마감</span>
+  </div>
+</header>
+
+<!-- TICKER STRIP -->
+<div class="strip">
+  <div class="cell">
+    <div class="lab">Nasdaq Composite</div>
+    <div class="big dn">-1.32%</div>
+    <div class="sub">스페이스X·알파벳·아마존 동반 급락</div>
+  </div>
+  <div class="cell">
+    <div class="lab">Russell 2000</div>
+    <div class="big up">3,000 돌파</div>
+    <div class="sub">사상 최초 · 연초 대비 +21%</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- SECTION 1: 양극화 -->
+<section>
+  <div class="eyebrow">극단의 양극화</div>
+  <h2><span class="ko">하루에 두 개의 시장이 동시에 열렸다</span></h2>
+  <p class="lead">같은 날, 어떤 투자자는 "빅테크가 끝났다"는 공포에 떨었고, 어떤 투자자는 소외됐던 잡주·중소형주의 랠리에 환호했다.</p>
+  <p>나스닥 종합지수는 <span class="hl">-1.32%</span> 하락했다. 직전 4% 가까이 빠졌다가 회복한 이후 이렇게 큰 폭으로 빠진 적이 없었다. 가장 큰 충격은 <strong>스페이스X(SPCX)</strong>로, 무려 <span class="hl">-16.4%</span> 폭락하며 IPO 이후 최대 낙폭을 기록했다. 여기에 알파벳 -5%, 마이크로소프트 -3% 이상, 아마존 -4.7%까지 대형 기술주가 일제히 무너졌다.</p>
+  <p>반면 <strong>러셀 2000</strong>은 사상 처음으로 3,000선을 돌파했고, 다우존스 산업평균지수도 +0.29% 오르며 사상 첫 <strong>52,000</strong>을 넘어섰다. 다우는 <strong>캐타필라(CAT, +4%)</strong>가 148포인트를 견인했고, 러셀에서는 <strong>슈퍼마이크로(SMCI, +15.7%)</strong>가 주역이었다.</p>
+
+  <div class="statrow">
+    <div class="s"><div class="n dn">-16.4%</div><div class="t">스페이스X (SPCX)<br>IPO 이후 최대 낙폭, $154.60 마감</div></div>
+    <div class="s"><div class="n dn">-5%</div><div class="t">알파벳 (GOOGL)<br>시가총액 약 2,500억 달러 증발</div></div>
+    <div class="s"><div class="n up">+15.7%</div><div class="t">슈퍼마이크로 (SMCI)<br>러셀 랠리 주도</div></div>
+    <div class="s"><div class="n up">+30%</div><div class="t">HPE<br>엔비디아 유럽 서버 협업 뉴스</div></div>
+  </div>
+
+  <div class="chart-container fade-in">
+    <canvas id="chartDivergence" height="230"></canvas>
+  </div>
+  <p class="cap">2026.06.22 주요 종목 등락률 — 같은 날 시장의 정반대 두 얼굴</p>
+</section>
+
+<!-- SECTION 2: 거시 -->
+<section>
+  <div class="eyebrow">매크로의 귀환</div>
+  <h2><span class="ko">왜 하필 '돈이 아래로' 흘렀나</span></h2>
+  <p>핵심은 <span class="hl">지정학적 긴장 완화</span>다. 전쟁 휴전 기류로 에너지 가격이 급락하면서 인플레이션 우려가 완화됐고, 그동안 위쪽(빅테크)에 머물던 자본이 아래로 확산되는 <strong>낙수 효과</strong>가 나타났다.</p>
+  <p>금리에 가장 취약했던 자산이 바로 러셀, 즉 중소형주·성장주다. 그동안 고금리에 짓눌려 소외됐던 이들이 "이제서야" 반등의 순서를 맞은 것이다.</p>
+  <div class="note"><b>JPM Insight</b> — 소비자 신뢰지수가 바닥을 칠 때 소비순환주는 시장을 아웃퍼폼해 왔다. 지정학적 리스크 완화와 유가 하락은 하반기 전통 소비주·가치주 반등의 강력한 촉매다.</div>
+  <p>여기에 변수가 하나 더 붙었다. <strong>뱅크오브아메리카</strong>가 그동안의 '금리 동결' 전망을 뒤집고 <span class="hl">올해 연준의 금리 3회 인상</span> 가능성을 제기했다. 다만 케빈 하셋 의장이 트럼프 대통령이 지명한 인물인 만큼, 이론적 정석대로 공격적으로 움직이기는 어렵다는 단서가 붙는다.</p>
+</section>
+
+<!-- SECTION 3: 빅테크가 맞은 매 -->
+<section>
+  <div class="eyebrow">시장에 매 맞은 빅테크</div>
+  <h2><span class="ko">"돈이 많으니 쓴다"는 말이 깨진 날</span></h2>
+  <p>그동안 빅테크가 좋았던 이유는 한마디로 'AI의 미래'였다. 시장은 막대한 CapEx도 "돈이 많으니 쓰는 것"으로 이해했다. 그런데 알파벳의 계산기를 두드려 보니 <strong>잉여현금흐름(FCF)이 전년 대비 약 47% 급감</strong>했다.</p>
+  <p class="term">※ 잉여현금흐름(FCF): 기업이 영업으로 번 현금에서 설비투자 등을 빼고 실제로 손에 남는 현금. 배당·자사주·부채상환의 재원이 된다.</p>
+  <p>아직 상반기(6월)인데 벌써 AI 예산을 거의 다 써가고 있다는 신호다. 진행자는 "우버가 4개월 만에 AI 예산을 다 써버린" 사례를 빗대며, 빅테크의 현금 소진 속도를 심각하게 봐야 할 시점이 오고 있다고 평가했다.</p>
+
+  <div class="eyebrow" style="margin-top:36px;">Brain Drain</div>
+  <p class="lead">핵심 인재 유출 — 그것도 '경쟁사'로</p>
+  <p>알파벳에서 두 명의 핵심 인재가 빠져나갔다. 창업이 아니라 직접적인 경쟁사로의 이동이라는 점이 뼈아프다.</p>
+  <div class="people">
+    <div class="pcard">
+      <div class="pn">John Jumper</div>
+      <div class="pr">2024 노벨 화학상 수상자 · AlphaFold 리더</div>
+      <div class="pm">앤스로픽(Anthropic)으로 이직</div>
+    </div>
+    <div class="pcard">
+      <div class="pn">Noam Shazeer</div>
+      <div class="pr">Transformer 논문 공동 저자 · Gemini VP</div>
+      <div class="pm">OpenAI로 이직</div>
+    </div>
+  </div>
+  <p>여기에 <strong>800억 달러 규모 대형 주식 공모</strong> 자금 조달(버크셔 해서웨이 100억 달러 포함)에 따른 <span class="hl">주주 가치 희석</span> 우려까지 겹쳤다. 막대한 AI 인프라 투자 비용이 결국 FCF 고갈과 주주 가치 희석으로 직결된 셈이다.</p>
+</section>
+
+<!-- SECTION 4: 스페이스X -->
+<section>
+  <div class="eyebrow">스페이스X — 빛과 그림자</div>
+  <h2><span class="ko">폭등했어야 할 날, 200억 달러가 증발했다</span></h2>
+  <p>스페이스X는 사실 호재를 잔뜩 터뜨린 날이었다. <strong>빛(Light)</strong> 쪽을 보면, Reflection AI와 <strong>63억 달러 규모 데이터센터 계약</strong>을 체결했다고 발표했고, IPO 공모가 $135에서 단 며칠 만에 최고 $225.64까지 터치한 이력도 있었다.</p>
+  <p>하지만 시장은 <strong>그림자(Shadow)</strong>를 봤다. 상장 10일 만에 브리지론 상환 목적으로 <span class="hl">200억 달러 채권을 발행</span>한 것이다. 빚을 갚기 위한 대규모 부채 조달은 그 자체로 악재다. 게다가 S&P 전망상 잉여현금흐름 적자가 <strong>2029년까지 지속</strong>될 것으로 본다. 진행자는 "S&P가 2029년이라 하면 사실상 2030년으로 보는 게 맞다"며, S&P500 편입은 당분간 어렵다고 평가했다.</p>
+  <div class="note">결과적으로 주가는 단 하루 만에 <b>-16.4%($154.60 마감)</b> 폭락했다. 상장 첫날 종가 아래로 내려가며 약 200억 달러가 증발했다. 진행자의 결론은 한 문장이다 — <b>"IPO는 우리(개인 투자자)를 위한 게 아니다."</b></div>
+</section>
+
+<!-- SECTION 5: 자본 사슬 깔때기 -->
+<section>
+  <div class="eyebrow">자본 사슬 — 깔때기 구조</div>
+  <h2><span class="ko">돈은 증발하지 않았다. 흘러갔다</span></h2>
+  <p>골드러시 때 가장 많이 번 사람은 금을 캔 사람이 아니라 청바지와 곡괭이를 판 사람이었다. 그리고 지금은 그보다 더 아래, <span class="hl">곡괭이를 만드는 공장과 그 공장을 돌릴 전력</span>으로 자본이 향하고 있다. 각 단계를 눌러 자금의 흐름을 따라가 보자.</p>
+
+  <div class="funnel">
+    <div class="fstep f1">
+      <div class="ft"><span class="badge">지출의 주체</span></div>
+      <div class="tick">MSFT · GOOGL · AMZN</div>
+      <div class="fd">하이퍼스케일러 & 소프트웨어. MSFT 약 $1,900억, GOOGL 약 $1,800억 CapEx. 막대한 자본을 쏟아붓지만 수익화 지연으로 주가 하방 압력 발생.</div>
+    </div>
+    <div class="farrow">▼</div>
+    <div class="fstep f2">
+      <div class="ft"><span class="badge">1차 수혜자</span></div>
+      <div class="tick">NVDA · MU · SMCI · HPE</div>
+      <div class="fd">AI 반도체 & 서버 인프라. 상단의 막대한 CapEx가 직접적인 매출과 EPS 상승으로 꽂히는 구간.</div>
+    </div>
+    <div class="farrow">▼</div>
+    <div class="fstep f3">
+      <div class="ft"><span class="badge">최종 수혜자</span></div>
+      <div class="tick">CAT · GEV</div>
+      <div class="fd">전력 및 유틸리티 인프라. 데이터센터 가동을 위한 필수 불가결한 '전력' 생태계로 자금 응축.</div>
+    </div>
+  </div>
+  <div class="note"><b>승자는 돈을 쓰는 자가 아니라, 그 돈을 흡수하는 자다.</b> AI 투자의 중력이 최하단의 인프라로 자본을 끌어당기고 있다.</div>
+
+  <p style="margin-top:30px;">이날 결정적 단서가 하나 나왔다. 마이크로소프트가 텍사스 데이터센터를 위해 <strong>쉐브론(CVX)과 천연가스 계약</strong>을 맺었는데, 정작 오른 것은 쉐브론이 아니라 발전기·터빈을 만드는 <span class="hl">캐타필라와 GE 버노바(GEV)</span>였다. 전력을 공급받으려면 결국 발전소를 지어야 하기 때문이다.</p>
+  <p class="lead">진행자의 핵심 메시지: "AI는 테크가 아니라 <span class="hl">굴뚝산업</span>이다."</p>
+  <p>땅이 있어야 하고, 발전소를 지어야 하고, 그 옆에 창고형 냉장고(데이터센터)를 지어야 한다. AI를 휘황찬란한 기술로만 보지 말고, 신도시 하나가 새로 생기는 '공장'으로 이해해야 한다는 관점이다. 온사이트 파워플랜트 없이 허가만 내준 데이터센터들은 3~4년 후 전력 부족 문제에 직면할 수 있다는 경고도 덧붙였다.</p>
+</section>
+
+<!-- SECTION 6: 자본 흐름 시뮬레이터 -->
+<section>
+  <div class="eyebrow">인터랙티브 · 자본 흐름 추적기</div>
+  <h2><span class="ko">빅테크 CapEx, 어디로 떨어지나</span></h2>
+  <p class="desc" style="font-size:.92rem;color:var(--txt2);">하이퍼스케일러가 쏟아붓는 연간 CapEx를 조절하면, 깔때기 구조를 따라 각 단계로 흘러가는 자금 규모가 어떻게 달라지는지 직접 확인해 보자. (단계별 흡수 비율은 본문 내러티브를 단순화한 모형이며, 실제 회계 수치가 아닌 흐름 이해용입니다.)</p>
+
+  <div class="sim">
+    <h4>💧 자본 깔때기 시뮬레이터</h4>
+    <div class="desc">CapEx가 1차·최종 수혜자에게 어떻게 응축되는지 시각화합니다.</div>
+    <div class="ctrl">
+      <label>하이퍼스케일러 연간 CapEx <span id="capexVal">$3,700억</span></label>
+      <input type="range" id="capexSlider" min="1000" max="6000" step="100" value="3700">
+    </div>
+    <div class="ctrl">
+      <label>인프라 흡수 강도 (집중도) <span id="intensityVal">중</span></label>
+      <input type="range" id="intensitySlider" min="1" max="3" step="1" value="2">
+    </div>
+    <div class="simout">
+      <div class="row"><span>지출 주체 부담 (MSFT·GOOGL·AMZN)</span><span class="v" id="outSpend" style="color:var(--accent);">–$3,700억</span></div>
+      <div class="row"><span>1차 수혜 (NVDA·MU·SMCI·HPE)</span><span class="v" id="out1" style="color:var(--blue);">+$2,220억</span></div>
+      <div class="row"><span>최종 수혜 (CAT·GEV 전력)</span><span class="v" id="out2" style="color:#0a9d58;">+$888억</span></div>
+      <div class="verdict" id="verdict" style="background:rgba(37,99,235,.1);color:var(--blue);">자본이 인프라로 응축되는 전형적 구간</div>
+    </div>
+    <button class="btn-reset" id="resetSim">초기값으로 리셋</button>
+  </div>
+</section>
+
+<!-- SECTION 7: 바이오 M&A -->
+<section>
+  <div class="eyebrow">가치 창출의 다변화</div>
+  <h2><span class="ko">AI만 돈이 몰리는 게 아니다 — 바이오 M&A</span></h2>
+  <p>이날 또 하나의 거대한 가치 창출이 바이오 섹터에서 터졌다. <strong>애브비(AbbVie)</strong>가 중소형 바이오텍 <strong>아포지(APGE)</strong>를 주당 약 $109~$135 수준, 약 <span class="hl">109억 달러 전액 현금</span>으로 인수하기로 했다. 약 49% 프리미엄이 붙으면서 APGE는 하루 만에 +46~48% 급등했다.</p>
+  <p>이런 M&A가 반복되는 구조적 이유가 있다. 애브비·일라이릴리처럼 현금이 풍부한 대형 제약사는, 임상 결과가 나오고 특허가 있는 중소형 바이오텍을 그냥 사버리는 게 가장 쉽고 효율적이다. 반대로 러셀에 있는 성장주들은 고금리에 자금난을 겪으며 매물로 나온다. 진행자는 "끝물 장세에서 잡주와 바이오가 미친 듯이 폭등하는 전형적 패턴"이라며, 하반기에 이런 50%+ M&A 이벤트가 계속 나올 것으로 봤다.</p>
+  <div class="note" style="border-left-color:var(--gray);">⚠️ <b>리스크 고지</b> — 바이오 M&A는 결과를 예측하기 어렵고, 본 방송 진행자도 이를 "복권"에 비유했다. 개별 종목 베팅이 아니라 섹터 흐름 이해의 관점으로 받아들일 것.</div>
+</section>
+
+<!-- SECTION 8: 1650억 리밸런싱 -->
+<section>
+  <div class="eyebrow">2분기 말 · 역대급 리밸런싱</div>
+  <h2><span class="ko">$1,650억이 움직인다</span></h2>
+  <p>6월 말은 분기 리밸런싱(3·6·9·12월) 시점이다. JP모건 조사에 따르면 전 세계 연금·기금이 일제히 리밸런싱에 나서며, 이번엔 <span class="hl">역대급 규모</span>가 예상된다. 그동안 고평가된 빅테크를 팔고 안전자산으로 이동하는 흐름이며, 이날 시장 움직임과 상당히 일치한다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="chartRebalance" height="240"></canvas>
+  </div>
+  <p class="cap">글로벌 기관 자본 이동 추정 (단위: 억 달러)</p>
+
+  <div class="statrow">
+    <div class="s"><div class="n dn">$600억</div><div class="t">일본 연금기금(GPIF) 주식 매도</div></div>
+    <div class="s"><div class="n dn">$400억</div><div class="t">노르웨이 국부펀드 매도</div></div>
+    <div class="s"><div class="n dn">$550억</div><div class="t">미국 DB 연금 주식 매도</div></div>
+    <div class="s"><div class="n up">$150억</div><div class="t">균형 펀드(Balanced) 추가 주식 매수</div></div>
+  </div>
+  <p>유출된 자금의 상당 부분은 안전자산인 <strong>채권(Fixed Income)</strong>으로 대규모 이동할 것으로 본다. 진행자는 "이번 여름(6~7월)을 어떻게 보내느냐가 하반기 성패를 가른다"며 흐름을 무시하지 말 것을 강조했다.</p>
+</section>
+
+<!-- SECTION 9: 포지셔닝 -->
+<section>
+  <div class="eyebrow">2026 하반기 전략 포지셔닝</div>
+  <h2><span class="ko">무엇을 늘리고, 무엇을 줄일 것인가</span></h2>
+  <p>기관의 움직임을 시장은 따라갈 수밖에 없다. 큰 자본(고래)이 움직이는 방향을 기준으로, 진행자가 제시한 가치(Value)–성장(Growth) 축의 포지셔닝은 다음과 같다.</p>
+
+  <div class="matrix">
+    <div class="mcard over">
+      <div class="mt">▲ 비중 확대 · 인프라</div>
+      <ul>
+        <li><b>CAT · GEV</b><small>데이터센터 전력망 수혜</small></li>
+        <li><b>러셀 2000</b><small>매크로 수혜주</small></li>
+        <li><b>APGE</b><small>M&A 타겟 바이오텍</small></li>
+      </ul>
+    </div>
+    <div class="mcard over">
+      <div class="mt">▲ 비중 확대 · 픽스앤셔블</div>
+      <ul>
+        <li><b>MU · SMCI · HPE</b><small>확정된 매출과 HBM 사이클</small></li>
+      </ul>
+    </div>
+    <div class="mcard under">
+      <div class="mt">▼ 비중 축소 · 고평가</div>
+      <ul>
+        <li><b>PLTR · SPCX</b><small>밸류에이션 부담, FCF 적자</small></li>
+      </ul>
+    </div>
+    <div class="mcard under">
+      <div class="mt">▼ 비중 축소 · 하이퍼스케일러</div>
+      <ul>
+        <li><b>GOOGL · MSFT · AMZN</b><small>막대한 CapEx 리스크</small></li>
+      </ul>
+    </div>
+  </div>
+  <div class="note">단, "나는 장기 투자자"라면 얘기가 다르다. 다만 연말~하반기에 구글·MSFT·아마존에서 "CapEx를 줄여야 하는 것 아니냐"는 발언이 나오는 순간 AI 랠리는 빠르게 식을 수 있으니, 그 신호를 반드시 주시해야 한다는 조언이다. <br><br>⚠️ 진행자는 PLTR·테슬라를 "트레이딩 대상일 뿐 장기 투자 대상이 아니다"라고 강하게 표현했다. 이는 방송 진행자 개인의 견해·화법이며, 특정 종목 매도 권유가 아니다.</div>
+</section>
+
+<!-- QUOTE -->
+<div class="wrap">
+<div class="pullquote">
+  <div class="mark">"</div>
+  <q>사실(Facts)이 변하면,<br>나는 내 생각(Views)을 바꿉니다.</q>
+  <div class="src">— 앨런 그린스펀 (Alan Greenspan) · 전 연준 의장<br>2026년 6월 22일, 100세로 타계</div>
+</div>
+</div>
+
+<div class="wrap">
+<!-- SECTION 10: 이번 주 일정 -->
+<section>
+  <div class="eyebrow">주시할 일정</div>
+  <h2><span class="ko">후덜덜한 한 주</span></h2>
+  <div class="cal">
+    <div class="day"><div class="dh">화요일<br>장 마감 후</div><div class="dc"><b>카니발 · 페덱스 · KB홈 · 세레브라스</b> 실적 발표</div></div>
+    <div class="day"><div class="dh">수요일</div><div class="dc"><b>마이크론(MU)</b> 실적 — AI 메모리 사이클의 핵심 가늠자</div></div>
+    <div class="day"><div class="dh">목요일</div><div class="dc"><b>PCE</b> 물가지표 발표 — 연준 금리 경로의 핵심 변수</div></div>
+  </div>
+  <div class="note" style="border-left-color:var(--blue);"><b>실전 조언</b> — 장기 투자 계좌와 트레이딩(단투) 계좌는 반드시 분리하라. "냄비 하나에 두 가지 요리를 할 수는 없다." 유속이 빠른 시장일수록 계좌 분리가 마인드 컨트롤과 생존의 조건이 된다.</div>
+  <p>또한 트럼프 대통령의 정책 관련주(이날 퀀텀 서명 → IBM 폭등)처럼, 정치가 강한 힘을 발휘하는 시대인 만큼 정책 뉴스를 제때 챙기는 것이 중요하다고 강조했다.</p>
+</section>
+
+<!-- SUMMARY DASHBOARD -->
+<section>
+  <div class="eyebrow">The New Market Map · 요약</div>
+  <h2><span class="ko">하반기 전략 한눈에</span></h2>
+  <div class="dash">
+    <div class="dcard">
+      <div class="dt">매크로의 귀환</div>
+      <ul>
+        <li>유가 하락과 지정학적 긴장 완화</li>
+        <li>금리 민감주(러셀 2000) 부상</li>
+        <li>소형주 사상 첫 3,000선 돌파</li>
+      </ul>
+    </div>
+    <div class="dcard">
+      <div class="dt">인프라로의 집중</div>
+      <ul>
+        <li>빅테크 막대한 CapEx의 덫 탈출</li>
+        <li>확실한 현금흐름 타겟팅</li>
+        <li>마이크론·SMCI·캐터필러로 자본 집중</li>
+      </ul>
+    </div>
+    <div class="dcard">
+      <div class="dt">가치 창출의 다변화</div>
+      <ul>
+        <li>바이오 M&A 모멘텀 (109억 달러 애브비 딜)</li>
+        <li>글로벌 기관 $1,650억 역대급 리밸런싱</li>
+        <li>전통 산업의 재조명</li>
+      </ul>
+    </div>
+  </div>
+</section>
+</div>
+
+<footer>
+  <div>NOVA REAL INVEST · 2026년 하반기 전략 포지셔닝 분석 리포트</div>
+  <div class="disc">본 자료는 NOVA Real Invest 방송 내용을 정리·요약한 것으로, 투자 권유가 아닙니다. 모든 수치는 방송에서 언급된 원본 값을 따랐으며, 일부 데이터는 발표 시점·출처에 따라 차이가 있을 수 있습니다. 모든 투자 판단과 그 결과에 대한 책임은 투자자 본인에게 있습니다.</div>
+</footer>
+
+<script>
+  /* ===== fade-in observer ===== */
+  const fadeObs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        fadeObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+  /* ===== chart configs ===== */
+  const ACCENT='#e11d48', DARK='#1a1a1a', GRAY='#6b7280', BLUE='#2563eb', GREEN='#0a9d58';
+  Chart.defaults.font.family="'Noto Sans KR',sans-serif";
+  Chart.defaults.color='#777';
+
+  const chartConfigs = {};
+
+  chartConfigs['chartDivergence'] = () => {
+    new Chart(document.getElementById('chartDivergence'), {
+      type:'bar',
+      data:{
+        labels:['스페이스X','알파벳','아마존','MSFT','마이크론','캐터필러','SMCI','HPE'],
+        datasets:[{
+          label:'등락률 (%)',
+          data:[-16.4,-5,-4.7,-3,6.9,4,15.7,30],
+          backgroundColor:(c)=> c.raw>=0 ? GREEN : ACCENT,
+          borderRadius:4, barPercentage:0.72
+        }]
+      },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        plugins:{legend:{display:false},
+          tooltip:{callbacks:{label:(c)=> (c.raw>=0?'+':'')+c.raw+'%'}}},
+        scales:{
+          y:{grid:{color:'#eee'},ticks:{callback:(v)=>v+'%'}},
+          x:{grid:{display:false},ticks:{font:{size:10}}}
+        }
+      }
+    });
+  };
+
+  chartConfigs['chartRebalance'] = () => {
+    new Chart(document.getElementById('chartRebalance'), {
+      type:'bar',
+      data:{
+        labels:['일본 GPIF','노르웨이 국부','미국 DB연금','균형펀드 매수'],
+        datasets:[{
+          label:'억 달러',
+          data:[-600,-400,-550,150],
+          backgroundColor:(c)=> c.raw>=0 ? GREEN : ACCENT,
+          borderRadius:4, barPercentage:0.62
+        }]
+      },
+      options:{
+        indexAxis:'y',
+        responsive:true, maintainAspectRatio:false,
+        plugins:{legend:{display:false},
+          tooltip:{callbacks:{label:(c)=> (c.raw>=0?'+':'')+'$'+Math.abs(c.raw)+'억 '+(c.raw>=0?'매수':'매도')}}},
+        scales:{
+          x:{grid:{color:'#eee'},ticks:{callback:(v)=>'$'+Math.abs(v)+'억'}},
+          y:{grid:{display:false}}
+        }
+      }
+    });
+  };
+
+  const chartObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const canvas = e.target.querySelector('canvas');
+        if (canvas && chartConfigs[canvas.id]) {
+          chartConfigs[canvas.id]();
+          e.target.classList.add('chart-ready');
+          chartObs.unobserve(e.target);
+        }
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+  /* ===== Capital Funnel Simulator ===== */
+  const capexSlider=document.getElementById('capexSlider');
+  const intensitySlider=document.getElementById('intensitySlider');
+  const capexVal=document.getElementById('capexVal');
+  const intensityVal=document.getElementById('intensityVal');
+  const outSpend=document.getElementById('outSpend');
+  const out1=document.getElementById('out1');
+  const out2=document.getElementById('out2');
+  const verdict=document.getElementById('verdict');
+  const INTENSITY={1:{r1:0.50,r2:0.18,label:'저'},2:{r1:0.60,r2:0.24,label:'중'},3:{r1:0.70,r2:0.32,label:'고'}};
+
+  function fmt(n){return '$'+Math.round(n).toLocaleString()+'억';}
+  function updateSim(){
+    const capex=+capexSlider.value;
+    const inten=INTENSITY[+intensitySlider.value];
+    capexVal.textContent=fmt(capex);
+    intensityVal.textContent=inten.label;
+    const tier1=capex*inten.r1;
+    const tier2=capex*inten.r2;
+    outSpend.textContent='–'+fmt(capex);
+    out1.textContent='+'+fmt(tier1);
+    out2.textContent='+'+fmt(tier2);
+    const ratio=(tier1+tier2)/capex;
+    if(ratio>=0.95){verdict.textContent='⚡ 인프라 초집중 — 곡괭이·전력으로 자본 응축 극대화';
+      verdict.style.background='rgba(10,157,88,.12)';verdict.style.color=GREEN;}
+    else if(ratio>=0.78){verdict.textContent='자본이 인프라로 응축되는 전형적 구간';
+      verdict.style.background='rgba(37,99,235,.1)';verdict.style.color=BLUE;}
+    else{verdict.textContent='흡수율 낮음 — 자본 일부가 수익화 지연으로 정체';
+      verdict.style.background='rgba(225,29,72,.08)';verdict.style.color=ACCENT;}
+  }
+  capexSlider.addEventListener('input',updateSim);
+  intensitySlider.addEventListener('input',updateSim);
+  document.getElementById('resetSim').addEventListener('click',()=>{
+    capexSlider.value=3700;intensitySlider.value=2;updateSim();
+  });
+  updateSim();
+
+  /* funnel hover tap (mobile feedback) */
+  document.querySelectorAll('.fstep').forEach(f=>{
+    f.addEventListener('click',()=>{f.style.transform='scale(0.99)';
+      setTimeout(()=>f.style.transform='',150);});
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>퀴즈 — 거대한 섹터 로테이션 | NOVA Real Invest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#fafafa;
+    --txt:#1a1a1a; --txt2:#777777;
+    --accent:#e11d48; --accent2:#f43f5e;
+    --line:#e5e5e5;
+    --green:#0a9d58; --greenbg:#e7f7ee;
+    --redbg:#fdeaef;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg2);color:var(--txt);font-family:'Noto Sans KR',sans-serif;
+    line-height:1.7;-webkit-font-smoothing:antialiased;padding-bottom:60px;}
+  .wrap{max-width:680px;margin:0 auto;padding:0 18px;}
+
+  /* HEADER */
+  .head{background:var(--txt);color:#fff;padding:46px 18px 38px;text-align:center;}
+  .head .ky{font-size:.7rem;letter-spacing:.22em;color:var(--accent2);font-weight:700;text-transform:uppercase;margin-bottom:14px;}
+  .head h1{font-family:'Playfair Display',serif;font-weight:900;font-size:1.9rem;line-height:1.2;margin-bottom:10px;}
+  .head p{font-size:.84rem;color:#aaa;}
+
+  /* STICKY SCOREBOARD */
+  .score{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line);
+    box-shadow:0 2px 12px rgba(0,0,0,.05);}
+  .score .inner{max-width:680px;margin:0 auto;padding:12px 18px;}
+  .score .nums{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;}
+  .score .nums .item{text-align:center;flex:1;}
+  .score .nums .item .v{font-family:'Playfair Display',serif;font-weight:900;font-size:1.35rem;line-height:1;}
+  .score .nums .item .l{font-size:.64rem;color:var(--txt2);letter-spacing:.04em;margin-top:3px;}
+  .score .nums .item.acc .v{color:var(--accent);}
+  .bar{height:7px;background:var(--line);border-radius:10px;overflow:hidden;}
+  .bar .fill{height:100%;width:0%;background:var(--accent);border-radius:10px;transition:width .5s ease,background .4s;}
+
+  /* QUIZ CARD */
+  .quiz{padding:30px 0;}
+  .qcard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:24px 20px;margin-bottom:20px;}
+  .qtop{display:flex;align-items:center;gap:9px;margin-bottom:14px;flex-wrap:wrap;}
+  .qnum{font-family:'Playfair Display',serif;font-weight:900;font-size:1.15rem;color:var(--accent);}
+  .qbadge{font-size:.64rem;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.03em;}
+  .qbadge.easy{background:#e7f7ee;color:var(--green);}
+  .qbadge.mid{background:#fff3e0;color:#e07b00;}
+  .qbadge.hard{background:#fdeaef;color:var(--accent);}
+  .qtype{font-size:.64rem;font-weight:700;color:var(--txt2);border:1px solid var(--line);padding:3px 9px;border-radius:20px;}
+  .qtext{font-size:1.02rem;font-weight:700;line-height:1.55;margin-bottom:18px;}
+
+  /* OPTIONS */
+  .opts{display:flex;flex-direction:column;gap:9px;}
+  .opt{text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:8px;
+    padding:13px 15px;font-size:.92rem;font-family:'Noto Sans KR';cursor:pointer;
+    transition:.15s;display:flex;align-items:center;gap:11px;line-height:1.45;}
+  .opt:hover:not(:disabled){border-color:var(--accent);background:#fff7f9;}
+  .opt:disabled{cursor:default;}
+  .opt .mk{flex:0 0 24px;height:24px;border-radius:50%;border:1.5px solid var(--line);
+    display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;color:var(--txt2);}
+  .opt.correct{background:var(--greenbg);border-color:var(--green);color:#0a6b3d;font-weight:700;}
+  .opt.correct .mk{background:var(--green);border-color:var(--green);color:#fff;}
+  .opt.wrong{background:var(--redbg);border-color:var(--accent);color:#a3123a;font-weight:700;}
+  .opt.wrong .mk{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .opt .res{margin-left:auto;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:12px;}
+  .opt.correct .res{background:var(--green);color:#fff;}
+  .opt.wrong .res{background:var(--accent);color:#fff;}
+
+  /* SHORT ANSWER */
+  .short{display:flex;gap:8px;}
+  .short input{flex:1;border:1.5px solid var(--line);border-radius:8px;padding:12px 14px;
+    font-size:.95rem;font-family:'Noto Sans KR';outline:none;transition:.15s;}
+  .short input:focus{border-color:var(--accent);}
+  .short input:disabled{background:var(--bg2);}
+  .short button{background:var(--txt);color:#fff;border:none;border-radius:8px;padding:0 20px;
+    font-family:'Noto Sans KR';font-weight:700;font-size:.86rem;cursor:pointer;transition:.2s;white-space:nowrap;}
+  .short button:hover:not(:disabled){background:var(--accent);}
+  .short button:disabled{opacity:.5;cursor:default;}
+  .short.correct input{background:var(--greenbg);border-color:var(--green);color:#0a6b3d;font-weight:700;}
+  .short.wrong input{background:var(--redbg);border-color:var(--accent);color:#a3123a;font-weight:700;}
+  .sahint{font-size:.74rem;color:var(--txt2);margin-top:7px;}
+
+  /* OX */
+  .ox{display:flex;gap:10px;}
+  .ox button{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:18px;
+    font-size:1.4rem;font-weight:900;cursor:pointer;transition:.15s;font-family:'Playfair Display',serif;}
+  .ox button:hover:not(:disabled){border-color:var(--accent);background:#fff7f9;}
+  .ox button:disabled{cursor:default;}
+  .ox button.correct{background:var(--greenbg);border-color:var(--green);color:var(--green);}
+  .ox button.wrong{background:var(--redbg);border-color:var(--accent);color:var(--accent);}
+
+  /* EXPLANATION */
+  .exp{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .4s ease,margin .4s ease;
+    background:var(--bg2);border-radius:8px;padding:0 16px;}
+  .exp.show{max-height:600px;padding:16px;margin-top:16px;}
+  .exp .et{font-size:.78rem;font-weight:900;color:var(--accent);margin-bottom:7px;letter-spacing:.03em;}
+  .exp .ec{font-size:.88rem;color:#333;line-height:1.65;}
+  .exp .src{font-size:.78rem;color:var(--txt2);margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-style:italic;}
+
+  /* RESULT MODAL */
+  .modal{position:fixed;inset:0;background:rgba(26,26,26,.78);display:none;align-items:center;
+    justify-content:center;z-index:100;padding:20px;backdrop-filter:blur(4px);}
+  .modal.show{display:flex;animation:fade .3s ease;}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  .mbox{background:#fff;border-radius:16px;padding:38px 28px;max-width:380px;width:100%;text-align:center;
+    animation:pop .35s cubic-bezier(.2,1.2,.4,1);}
+  @keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+  .mbox .grade{font-family:'Playfair Display',serif;font-weight:900;font-size:4.5rem;line-height:1;margin-bottom:6px;}
+  .mbox .msg{font-size:1.05rem;font-weight:700;margin-bottom:18px;}
+  .mbox .mscore{font-size:.92rem;color:var(--txt2);margin-bottom:8px;}
+  .mbox .mscore b{color:var(--accent);font-size:1.3rem;font-family:'Playfair Display',serif;}
+  .mbox .mbar{height:8px;background:var(--line);border-radius:10px;overflow:hidden;margin:18px 0 24px;}
+  .mbox .mbar .mf{height:100%;background:var(--accent);border-radius:10px;}
+  .mbox button{width:100%;padding:14px;background:var(--txt);color:#fff;border:none;border-radius:9px;
+    font-family:'Noto Sans KR';font-weight:700;font-size:.92rem;cursor:pointer;transition:.2s;}
+  .mbox button:hover{background:var(--accent);}
+
+  footer{text-align:center;font-size:.74rem;color:#aaa;padding:30px 18px;line-height:1.6;}
+
+  @media(max-width:440px){
+    .head h1{font-size:1.5rem;}
+    .qtext{font-size:.96rem;}
+    .score .nums .item .v{font-size:1.15rem;}
+  }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <div class="ky">NOVA Real Invest · 이해도 점검</div>
+  <h1>거대한 섹터 로테이션 — 퀴즈</h1>
+  <p>방송 본문 기반 10문항 · 클릭 즉시 채점됩니다</p>
+</div>
+
+<!-- STICKY SCOREBOARD -->
+<div class="score">
+  <div class="inner">
+    <div class="nums">
+      <div class="item"><div class="v" id="solvedN">0 / 10</div><div class="l">푼 문제</div></div>
+      <div class="item"><div class="v" id="correctN" style="color:var(--green);">0</div><div class="l">맞힌 문제</div></div>
+      <div class="item acc"><div class="v" id="accN">0%</div><div class="l">정답률</div></div>
+    </div>
+    <div class="bar"><div class="fill" id="barFill"></div></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="quiz" id="quizRoot"></div>
+</div>
+
+<footer>NOVA REAL INVEST · 2026.06.23 방송 기반 학습 퀴즈<br>모든 문항은 방송 본문에 실제 등장한 내용으로만 구성되었습니다.</footer>
+
+<!-- RESULT MODAL -->
+<div class="modal" id="modal">
+  <div class="mbox">
+    <div class="grade" id="mGrade">A</div>
+    <div class="msg" id="mMsg">완벽합니다!</div>
+    <div class="mscore">10문제 중 <b id="mScore">0</b>문제 정답</div>
+    <div class="mbar"><div class="mf" id="mFill" style="width:0%;"></div></div>
+    <button id="retryBtn">다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id:1, type:'mc', difficulty:'easy',
+    question:'2026년 6월 22일, 나스닥 종합지수의 등락률은?',
+    options:['-1.32% 하락','+0.29% 상승','-3.00% 하락','+1.32% 상승'],
+    answer:0,
+    explanation:'나스닥 종합지수는 -1.32% 하락했습니다. 직전 4% 가까이 빠졌다 회복한 이후 이렇게 큰 폭으로 빠진 적이 없었다고 진행자가 강조했습니다.',
+    src:'본문: "오늘 나스닥 종합지수는 마이너스 1.32%나 하락을 했죠."'
+  },
+  {
+    id:2, type:'mc', difficulty:'mid',
+    question:'이날 나스닥 급락의 주범으로 지목된 스페이스X(SPCX)의 하락률은?',
+    options:['-5.0%','-8.4%','-16.4%','-25.0%'],
+    answer:2,
+    explanation:'스페이스X는 -16.4%($154.60 마감) 폭락하며 IPO 이후 최대 낙폭을 기록했습니다. 나스닥에 포함된 스페이스X의 급락이 지수 하락을 키웠습니다.',
+    src:'본문: "스페이스X SPCX ... 무려 16.43%나 빠졌습니다." / 슬라이드: -16.4% 폭락'
+  },
+  {
+    id:3, type:'ox', difficulty:'easy',
+    question:'이날 러셀 2000 지수는 사상 처음으로 3,000선을 돌파했다.',
+    answer:'O',
+    explanation:'맞습니다. 러셀 2000은 사상 최초로 3,000선을 돌파했고, 연초 대비 약 +21% 상승했습니다. 나스닥 급락과 정반대로 중소형주는 환호한 날이었습니다.',
+    src:'본문: "오늘 러셀 2000지수는 3000선을 돌파를 했어요 ... 연초 대비 한 21% 이상 상승."'
+  },
+  {
+    id:4, type:'mc', difficulty:'mid',
+    question:'다우존스가 사상 첫 52,000을 돌파하는 데 약 148포인트를 견인한 종목은?',
+    options:['엔비디아(NVDA)','캐터필러(CAT)','애플(AAPL)','보잉(BA)'],
+    answer:1,
+    explanation:'다우는 캐터필러(CAT, +4%)가 약 148포인트를 견인했습니다. 러셀 쪽에서는 슈퍼마이크로(SMCI, +15.7%)가 주역이었습니다.',
+    src:'본문: "캐타필라 그리고 SMCI 이 두 종목이 큰 역할을 했다 ... 캐타필라는 다우 쪽에서 먹어주는 아이."'
+  },
+  {
+    id:5, type:'short', difficulty:'mid',
+    question:'알파벳을 떠나 앤스로픽(Anthropic)으로 이직한, 2024년 노벨 화학상 수상자이자 AlphaFold 리더의 이름은? (성 또는 풀네임)',
+    answer:['점퍼','존 점퍼','jumper','john jumper','존점퍼'],
+    explanation:'존 점퍼(John Jumper)입니다. 2024 노벨 화학상 수상자이자 AlphaFold 리더로, 앤스로픽으로 이직했습니다. 또 다른 인재인 노암 샤지어(Transformer 공저자, Gemini VP)는 OpenAI로 이직했습니다.',
+    src:'본문: "2024년 노벨 화학상 수상자죠. 존 점퍼라는 사람 ... 앤스로픽으로 나간다."',
+    hint:'힌트: "존 ○○" (영문 성: J로 시작)'
+  },
+  {
+    id:6, type:'mc', difficulty:'hard',
+    question:'빅테크가 매를 맞은 핵심 근거로, 알파벳의 잉여현금흐름(FCF)이 전년 대비 얼마나 감소했다고 했나?',
+    options:['약 17% 감소','약 27% 감소','약 47% 감소','약 67% 감소'],
+    answer:2,
+    explanation:'알파벳의 FCF가 전년 대비 약 47% 급감했습니다. 아직 상반기인데 AI 예산을 거의 다 써간다는 신호로 해석됐고, 막대한 AI 인프라 투자가 FCF 고갈로 직결됐습니다.',
+    src:'본문: "프리캐시 플로어가 전년 대비 47%나 급감했습니다."'
+  },
+  {
+    id:7, type:'mc', difficulty:'mid',
+    question:'스페이스X 주가 급락의 핵심 악재로 지목된 것은?',
+    options:['Reflection AI와의 계약 무산','상장 10일 만에 브리지론 상환 목적 200억 달러 채권 발행','CEO 사임','데이터센터 화재'],
+    answer:1,
+    explanation:'상장 10일 만에 브리지론 상환을 위해 200억 달러 채권을 발행한 것이 핵심 악재였습니다. 빚을 갚기 위한 대규모 부채 조달인 데다, S&P 전망상 잉여현금흐름 적자가 2029년까지 지속될 것으로 봐 S&P500 편입도 당분간 어렵다는 평가가 나왔습니다.',
+    src:'본문: "빚을 없애려고 채권을 발행 ... 브릿지 론을 상환하기 위해서 ... 200억 달러가 날아가 버렸죠."'
+  },
+  {
+    id:8, type:'ox', difficulty:'mid',
+    question:'마이크로소프트가 텍사스 데이터센터를 위해 쉐브론(CVX)과 천연가스 계약을 맺자, 정작 가장 크게 오른 것은 쉐브론이었다.',
+    answer:'X',
+    explanation:'틀렸습니다. 오른 것은 쉐브론이 아니라 발전기·터빈을 만드는 캐터필러(CAT)와 GE 버노바(GEV)였습니다. 전력을 공급받으려면 결국 발전소를 지어야 하기 때문입니다. "AI는 굴뚝산업"이라는 메시지의 핵심 근거입니다.',
+    src:'본문: "어디가 올라갔어요? 발전기와 터빈을 만드는 캐타필라 GE 버노바 여기가 올라가게 된 겁니다."'
+  },
+  {
+    id:9, type:'short', difficulty:'hard',
+    question:'JP모건이 추정한 글로벌 기관의 2분기 말 역대급 자본 리밸런싱 규모는? (숫자, 단위: 억 달러)',
+    answer:['1650','1,650','1650억','1,650억','1650억 달러'],
+    explanation:'1,650억 달러입니다. 일본 GPIF 600억·노르웨이 국부펀드 400억·미국 DB연금 550억 달러 매도가 핵심이며, 균형펀드는 150억 달러를 추가 매수합니다. 유출 자금은 안전자산 채권으로 대규모 이동할 것으로 봤습니다.',
+    src:'본문/슬라이드: "1,650억 달러 ... 글로벌 기관의 2분기 말 역대급 자본 리밸런싱 규모."',
+    hint:'힌트: 네 자리 숫자 (1,6○○)'
+  },
+  {
+    id:10, type:'mc', difficulty:'easy',
+    question:'진행자가 "AI는 테크(기술)가 아니다"라며 거듭 강조한 비유는?',
+    options:['AI는 해커다','AI는 굴뚝산업(공장)이다','AI는 거품이다','AI는 게임이다'],
+    answer:1,
+    explanation:'진행자는 "AI는 해커가 아니라 굴뚝산업, 곧 공장"이라고 강조했습니다. 땅·발전소·창고형 냉장고(데이터센터)가 필요한, 신도시 하나가 새로 생기는 대규모 인프라로 이해해야 한다는 관점입니다.',
+    src:'본문: "AI는 굴뚝산업입니다. AI는 공장이에요 ... 그냥 공장이라고 생각하시면 돼요."'
+  }
+];
+
+let state = { solved:0, correct:0, done:new Set() };
+const root = document.getElementById('quizRoot');
+
+function normalize(s){return (s||'').toString().trim().toLowerCase().replace(/\s+/g,'').replace(/[.,]/g,'');}
+
+function render(){
+  root.innerHTML='';
+  QUIZ_DATA.forEach(q=>{
+    const card=document.createElement('div');
+    card.className='qcard';
+    card.id='card'+q.id;
+    const diffLabel={easy:'쉬움',mid:'보통',hard:'어려움'}[q.difficulty];
+    const diffClass={easy:'easy',mid:'mid',hard:'hard'}[q.difficulty];
+    const typeLabel={mc:'객관식',short:'단답형',ox:'O / X'}[q.type];
+
+    let body='';
+    if(q.type==='mc'){
+      body='<div class="opts">'+q.options.map((o,i)=>
+        `<button class="opt" data-i="${i}"><span class="mk">${String.fromCharCode(65+i)}</span><span>${o}</span></button>`
+      ).join('')+'</div>';
+    } else if(q.type==='short'){
+      body=`<div class="short"><input type="text" placeholder="정답을 입력하세요" autocomplete="off"><button class="sbtn">제출</button></div>
+            ${q.hint?`<div class="sahint">${q.hint}</div>`:''}`;
+    } else if(q.type==='ox'){
+      body=`<div class="ox"><button data-v="O">O</button><button data-v="X">X</button></div>`;
+    }
+
+    card.innerHTML=`
+      <div class="qtop">
+        <span class="qnum">Q${q.id}</span>
+        <span class="qbadge ${diffClass}">${diffLabel}</span>
+        <span class="qtype">${typeLabel}</span>
+      </div>
+      <div class="qtext">${q.question}</div>
+      ${body}
+      <div class="exp" id="exp${q.id}">
+        <div class="et">💡 해설</div>
+        <div class="ec">${q.explanation}</div>
+        <div class="src">${q.src}</div>
+      </div>`;
+    root.appendChild(card);
+
+    if(q.type==='mc') bindMC(card,q);
+    else if(q.type==='short') bindShort(card,q);
+    else if(q.type==='ox') bindOX(card,q);
+  });
+}
+
+function lock(card){card.querySelectorAll('button,input').forEach(el=>el.disabled=true);}
+function showExp(q){document.getElementById('exp'+q.id).classList.add('show');}
+
+function bindMC(card,q){
+  const opts=card.querySelectorAll('.opt');
+  opts.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      if(state.done.has(q.id))return;
+      const i=+btn.dataset.i;
+      const ok=(i===q.answer);
+      if(ok){btn.classList.add('correct');btn.querySelector('.res')||btn.insertAdjacentHTML('beforeend','<span class="res">✓ 정답!</span>');}
+      else{
+        btn.classList.add('wrong');btn.insertAdjacentHTML('beforeend','<span class="res">✗ 오답</span>');
+        opts[q.answer].classList.add('correct');
+        opts[q.answer].insertAdjacentHTML('beforeend','<span class="res">정답</span>');
+      }
+      lock(card);showExp(q);grade(q.id,ok);
+    });
+  });
+}
+
+function bindShort(card,q){
+  const input=card.querySelector('input');
+  const btn=card.querySelector('.sbtn');
+  const wrap=card.querySelector('.short');
+  function submit(){
+    if(state.done.has(q.id))return;
+    const val=normalize(input.value);
+    if(!val){input.focus();return;}
+    const ok=q.answer.some(a=>normalize(a)===val);
+    wrap.classList.add(ok?'correct':'wrong');
+    if(!ok){
+      const correctDisp=q.answer[1]||q.answer[0];
+      card.querySelector('.sahint')?.remove();
+      input.insertAdjacentHTML('afterend','');
+    }
+    lock(card);showExp(q);grade(q.id,ok);
+  }
+  btn.addEventListener('click',submit);
+  input.addEventListener('keydown',e=>{if(e.key==='Enter')submit();});
+}
+
+function bindOX(card,q){
+  const btns=card.querySelectorAll('.ox button');
+  btns.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      if(state.done.has(q.id))return;
+      const v=btn.dataset.v;
+      const ok=(v===q.answer);
+      if(ok)btn.classList.add('correct');
+      else{
+        btn.classList.add('wrong');
+        [...btns].find(b=>b.dataset.v===q.answer).classList.add('correct');
+      }
+      lock(card);showExp(q);grade(q.id,ok);
+    });
+  });
+}
+
+function grade(id,ok){
+  if(state.done.has(id))return;
+  state.done.add(id);
+  state.solved++;
+  if(ok)state.correct++;
+  updateBoard();
+  if(state.solved===QUIZ_DATA.length)setTimeout(showResult,500);
+}
+
+function updateBoard(){
+  document.getElementById('solvedN').textContent=state.solved+' / 10';
+  document.getElementById('correctN').textContent=state.correct;
+  const acc=state.solved?Math.round(state.correct/state.solved*100):0;
+  document.getElementById('accN').textContent=acc+'%';
+  const fill=document.getElementById('barFill');
+  fill.style.width=(state.solved*10)+'%';
+  let color='#e11d48';
+  if(acc>=70)color='#0a9d58'; else if(acc>=40)color='#e07b00';
+  fill.style.background=color;
+}
+
+function showResult(){
+  const score=state.correct;
+  let grade,msg;
+  if(score>=9){grade='A';msg='완벽합니다! 흐름을 완전히 꿰뚫었습니다.';}
+  else if(score>=7){grade='B';msg='훌륭합니다. 핵심을 잘 짚었어요.';}
+  else if(score>=5){grade='C';msg='기본기는 탄탄합니다. 한 번 더 복습해 볼까요?';}
+  else{grade='D';msg='리포트를 다시 보고 도전하면 분명 오릅니다!';}
+  document.getElementById('mGrade').textContent=grade;
+  document.getElementById('mMsg').textContent=msg;
+  document.getElementById('mScore').textContent=score;
+  document.getElementById('mFill').style.width=(score*10)+'%';
+  const c=document.getElementById('mGrade');
+  c.style.color = score>=7?'#0a9d58':(score>=5?'#e07b00':'#e11d48');
+  document.getElementById('modal').classList.add('show');
+}
+
+document.getElementById('retryBtn').addEventListener('click',()=>{
+  state={solved:0,correct:0,done:new Set()};
+  document.getElementById('modal').classList.remove('show');
+  render();updateBoard();
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+render();
+updateBoard();
+</script>
+</body>
+</html>
