@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Reality Check · 이해도 점검 퀴즈</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff;--bg2:#fafafa;--ink:#1a1a1a;--sub:#777777;
+  --rose:#e11d48;--rose2:#f43f5e;--gray:#6b7280;--blue:#2563eb;
+  --border:#e5e5e5;--green:#16a34a;--greenbg:#ecfdf3;--redbg:#fef2f4;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:'Noto Sans KR',sans-serif;
+  line-height:1.7;-webkit-font-smoothing:antialiased;padding-bottom:60px}
+.wrap{max-width:680px;margin:0 auto;padding:0 18px}
+.serif{font-family:'Playfair Display',serif}
+
+/* header */
+.head{padding:48px 0 26px;text-align:center;border-bottom:3px solid var(--ink)}
+.head .kick{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--rose);
+  font-weight:700;margin-bottom:14px}
+.head h1{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(28px,7vw,40px);
+  line-height:1.12;margin-bottom:10px}
+.head h1 em{font-style:italic;color:var(--rose)}
+.head p{font-size:14px;color:var(--sub)}
+
+/* sticky scoreboard */
+.score{position:sticky;top:0;z-index:50;background:var(--ink);color:#fff;
+  padding:13px 18px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.score-in{max-width:680px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.score .nums{display:flex;gap:16px;font-size:12.5px;flex:1;flex-wrap:wrap}
+.score .nums b{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;margin-right:3px}
+.score .nums .acc b{color:var(--rose2)}
+.bar-wrap{height:6px;background:#374151;border-radius:4px;overflow:hidden;margin-top:9px}
+.bar{height:100%;width:0;background:var(--rose);border-radius:4px;transition:width .4s ease,background .4s ease}
+.score-meta{max-width:680px;margin:0 auto}
+
+/* question card */
+.q{border:1px solid var(--border);margin:24px 0;background:var(--bg)}
+.q-top{display:flex;align-items:center;gap:10px;padding:16px 18px 0}
+.q-num{font-family:'Playfair Display',serif;font-weight:900;font-size:22px;color:var(--rose);line-height:1}
+.q-badges{display:flex;gap:6px;margin-left:auto}
+.badge{font-size:10px;letter-spacing:.08em;font-weight:700;padding:3px 8px;border-radius:2px;text-transform:uppercase}
+.badge.type{background:var(--ink);color:#fff}
+.badge.d-easy{background:#dcfce7;color:#166534}
+.badge.d-mid{background:#fef9c3;color:#854d0e}
+.badge.d-hard{background:#fee2e2;color:#991b1b}
+.q-text{padding:12px 18px 16px;font-size:16px;font-weight:500;line-height:1.55}
+
+/* options */
+.opts{padding:0 18px 18px;display:flex;flex-direction:column;gap:9px}
+.opt{border:1px solid var(--border);background:var(--bg);padding:13px 15px;font-size:14.5px;
+  cursor:pointer;display:flex;align-items:center;gap:11px;transition:.15s;text-align:left;
+  font-family:inherit;color:var(--ink);line-height:1.45;width:100%}
+.opt:hover:not(:disabled){border-color:var(--rose);background:#fff6f8}
+.opt .mk{flex-shrink:0;width:24px;height:24px;border:1.5px solid var(--border);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--sub)}
+.opt:disabled{cursor:default}
+.opt.correct{background:var(--greenbg);border-color:var(--green)}
+.opt.correct .mk{background:var(--green);border-color:var(--green);color:#fff}
+.opt.wrong{background:var(--redbg);border-color:var(--rose)}
+.opt.wrong .mk{background:var(--rose);border-color:var(--rose);color:#fff}
+.opt .res-badge{margin-left:auto;font-size:11px;font-weight:700;padding:3px 8px;border-radius:3px;flex-shrink:0}
+.opt.correct .res-badge{background:var(--green);color:#fff}
+.opt.wrong .res-badge{background:var(--rose);color:#fff}
+
+/* short answer */
+.short{padding:0 18px 18px;display:flex;gap:8px;flex-wrap:wrap}
+.short input{flex:1;min-width:160px;border:1px solid var(--border);padding:12px 14px;font-size:15px;
+  font-family:inherit;outline:none}
+.short input:focus{border-color:var(--rose)}
+.short input:disabled{background:var(--bg2);color:var(--sub)}
+.short button,.ox button{background:var(--ink);color:#fff;border:none;padding:12px 20px;font-size:14px;
+  font-weight:700;cursor:pointer;font-family:inherit;transition:.15s}
+.short button:hover:not(:disabled),.ox button:hover:not(:disabled){background:var(--rose)}
+.short button:disabled,.ox button:disabled{background:#cbd5e1;cursor:default}
+
+/* OX */
+.ox{padding:0 18px 18px;display:flex;gap:10px}
+.ox button{flex:1;font-size:22px;font-family:'Playfair Display',serif;padding:16px 0}
+.ox button.ox-o{background:var(--bg);color:var(--ink);border:1.5px solid var(--border)}
+.ox button.ox-x{background:var(--bg);color:var(--ink);border:1.5px solid var(--border)}
+.ox button.ox-o:hover:not(:disabled){border-color:var(--green);color:var(--green)}
+.ox button.ox-x:hover:not(:disabled){border-color:var(--rose);color:var(--rose)}
+.ox button.sel-correct{background:var(--greenbg);border-color:var(--green);color:var(--green)}
+.ox button.sel-wrong{background:var(--redbg);border-color:var(--rose);color:var(--rose)}
+.ox button.reveal{border-color:var(--green);color:var(--green)}
+
+/* explanation */
+.exp{max-height:0;overflow:hidden;transition:max-height .45s ease;background:var(--bg2);border-top:0 solid var(--border)}
+.exp.open{max-height:600px;border-top:1px solid var(--border)}
+.exp-in{padding:16px 18px}
+.exp .tag{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:7px;
+  display:flex;align-items:center;gap:7px}
+.exp .tag.ok{color:var(--green)}.exp .tag.no{color:var(--rose)}
+.exp .ans{font-weight:700;margin-bottom:8px;font-size:14px}
+.exp .ans b{color:var(--rose)}
+.exp p{font-size:13.5px;color:#444;line-height:1.65}
+.exp .src{margin-top:10px;font-size:12px;color:var(--sub);border-left:3px solid var(--border);padding-left:11px;font-style:italic}
+
+/* result modal */
+.modal{position:fixed;inset:0;background:rgba(26,26,26,.7);display:none;align-items:center;
+  justify-content:center;z-index:100;padding:22px}
+.modal.show{display:flex}
+.modal-card{background:#fff;max-width:420px;width:100%;text-align:center;padding:40px 28px;
+  border-top:5px solid var(--rose);animation:pop .3s ease}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.modal .grade{font-family:'Playfair Display',serif;font-size:72px;font-weight:900;line-height:1;color:var(--rose)}
+.modal .sc{font-size:18px;font-weight:700;margin:14px 0 4px}
+.modal .sc b{color:var(--rose);font-family:'Playfair Display',serif;font-size:24px}
+.modal .msg{font-size:14px;color:var(--sub);margin:10px 0 26px;line-height:1.6}
+.modal .again{background:var(--ink);color:#fff;border:none;padding:13px 30px;font-size:14px;
+  font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.04em;transition:.15s}
+.modal .again:hover{background:var(--rose)}
+
+.foot{text-align:center;padding:30px 0 10px}
+.foot .line{width:44px;height:2px;background:var(--rose);margin:0 auto 14px}
+.foot p{font-size:11.5px;color:var(--sub);letter-spacing:.04em}
+</style>
+</head>
+<body>
+
+<div class="head">
+  <div class="wrap">
+    <div class="kick">CIA.chat 멤버미팅 · 이해도 점검</div>
+    <h1 class="serif"><em>The Reality Check</em><br>인터랙티브 퀴즈</h1>
+    <p>총 10문제 · 보기를 누르면 즉시 채점 + 해설이 펼쳐집니다</p>
+  </div>
+</div>
+
+<!-- sticky scoreboard -->
+<div class="score">
+  <div class="score-in">
+    <div class="nums">
+      <span>푼 문제 <b id="sSolved">0</b>/ 10</span>
+      <span>맞힘 <b id="sCorrect">0</b></span>
+      <span class="acc">정답률 <b id="sAcc">0</b>%</span>
+    </div>
+  </div>
+  <div class="score-meta"><div class="bar-wrap"><div class="bar" id="sBar"></div></div></div>
+</div>
+
+<div class="wrap" id="quizRoot"></div>
+
+<div class="foot wrap">
+  <div class="line"></div>
+  <p>THE REALITY CHECK QUIZ · 2026.06.23 · 출처: CIA.chat 멤버미팅</p>
+</div>
+
+<!-- modal -->
+<div class="modal" id="modal">
+  <div class="modal-card">
+    <div class="grade" id="mGrade">A</div>
+    <div class="sc">10문제 중 <b id="mScore">0</b>문제 정답</div>
+    <div class="msg" id="mMsg"></div>
+    <button class="again" id="mAgain">다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id:1, type:'mc', difficulty:'easy',
+    question:'전날 한국 코스피에서 서킷브레이커가 작동했을 때, 장중 낙폭은 어느 수준이었나?',
+    options:['약 −3%','약 −5%','약 −10% (−9.99%)','약 −15%'],
+    answer:2,
+    explanation:'코스피가 거의 −9.99%까지 밀리며 서킷브레이커가 작동했다. 방송은 "지난번에 이어 또 한 번 이런 일이 일어났다"고 언급했다.',
+    source:'"가장 큰 게 한국 코스피… 서킷 브레이커가 작동이 됐죠. 거의 마이너스 9.99%니까 10%였습니다."'
+  },
+  {
+    id:2, type:'mc', difficulty:'mid',
+    question:'방송이 제시한 폭락의 방정식이다. 빈칸에 들어갈 말은?<br>「AI 인프라 과잉 투자 × (　　　) = 고밸류 기술주 멀티플 붕괴」',
+    options:['거래량 감소','할인율(금리) 급등','달러 약세','유가 하락'],
+    answer:1,
+    explanation:'금리가 오르면 할인율이 높아져 미래 현금흐름의 현재가치가 줄고, 고밸류 기술주의 멀티플이 무너진다. 방송은 "할인율 급등=금리 인상과 관련된 얘기"라고 설명했다.',
+    source:'"AI 인프라 과잉 투자와 할인율 급등. 이건 바로 금리 인상과 관련된 얘기를 하고 있는 겁니다."'
+  },
+  {
+    id:3, type:'mc', difficulty:'mid',
+    question:'시장에 충격을 준 뱅크 오브 아메리카(BofA) 리포트 기준, 7월 FOMC의 금리 인상 반영 확률은?',
+    options:['12%','37%','50%','75%'],
+    answer:1,
+    explanation:'7월 금리 인상 의견이 37%까지 늘었고, 9월에는 50%로 거의 확실시되는 수준까지 올랐다. 원래 시장은 첫 인상을 내년 1월쯤으로 보고 있었다.',
+    source:'"7월에 금리 인상이 37%, 그리고 9월달 보면 금리 인상이 거의 확실시됩니다. 50%로 늘어난 걸 볼 수 있어요."'
+  },
+  {
+    id:4, type:'ox', difficulty:'easy',
+    question:'야데니(Yardeni) 리포트는 이번 급락을 "버블의 파열"이라고 진단했다.',
+    answer:'X',
+    explanation:'야데니 리포트는 이를 "버블의 파열이 아니라, 옥석 가리기가 시작되는 건강한 진통(Healthy Pause)"으로 진단했다. 방송 진행자도 이에 공감을 표했다.',
+    source:'"건강한 진통이다. 야데니가 얘기를 했어요. 헬스 파스(Healthy Pause) 써주십시오."'
+  },
+  {
+    id:5, type:'mc', difficulty:'mid',
+    question:"AI Vendors(수익을 창출하는 자) 사례 중, '전년비 매출 94% 폭증, OpenAI와 $20B 계약'으로 소개된 기업은?",
+    options:['오라클 (ORCL)','세레브라스 (CBRS)','백블레이즈 (BLZE)','알파벳 (GOOGL)'],
+    answer:1,
+    explanation:'세레브라스(CBRS)는 전년비 매출 94% 폭증과 OpenAI와의 $20B 계약을 보유한 진짜 수혜주로 소개됐다. 다만 호실적에도 당일 주가는 −11%를 기록했다.',
+    source:'"세브라스는 오늘 실적 발표했는데… 매출이 94% 늘었다는데요. 전년비. 대단한 거죠."'
+  },
+  {
+    id:6, type:'short', difficulty:'mid',
+    question:'AI Vendors 사례로 등장한 백블레이즈(BLZE)의 당일 주가 상승률은 몇 %였나? (숫자만, 예: 43.6)',
+    answer:['43.6','+43.6','43.6%','43'],
+    explanation:'백블레이즈는 CoreWeave와의 $335M 스토리지 계약 발표와 함께 주가가 +43.6% 폭등했다.',
+    source:'"백블레이즈 같은 경우 코어위브와 스토리지 계약하면서 무려 43.6%나 폭등을 했고요."'
+  },
+  {
+    id:7, type:'mc', difficulty:'hard',
+    question:"데이터 이동(Data Traffic Jam) 병목을 푸는 '광통신·실리콘 포토닉스' 후방 밸류체인의 주목 기업이 아닌 것은?",
+    options:['ASML','램리서치 (LRCX)','크레도 (CRDO)','엔비디아 (NVDA)'],
+    answer:3,
+    explanation:'엔비디아는 과거의 집중인 연산(Compute/GPU)을 대표하며, 이미 높은 밸류에이션이 반영된 종목이다. 넥스트 기회인 광통신·실리콘 포토닉스의 주목 기업은 ASML, 램리서치(LRCX), 크레도(CRDO)다.',
+    source:'"넥스트 기회: 광통신 및 실리콘 포토닉스 — 주목 대상 기업: ASML, Lam Research(LRCX), Credo(CRDO)"'
+  },
+  {
+    id:8, type:'mc', difficulty:'easy',
+    question:'섹터 로테이션상 매도 영역(Outflows / Risk-Off)에 해당하는 것은?',
+    options:['IBM (+5%)','애브비 ABBV (+6.2%)','고평가 메모리 반도체 (MU·SNDK)','월마트 WMT (+1.9%)'],
+    answer:2,
+    explanation:'매도 영역은 고평가 메모리 반도체(마이크론 MU, 샌디스크 SNDK)와 고위험·레버리지 주식(AMC −24.8%)이다. IBM·애브비·월마트는 자금이 유입되는 매수 영역(Safe Havens)에 속한다.',
+    source:'"매도 영역: 고평가 메모리 반도체 — 마이크론(MU), 샌디스크(SNDK) 등 과매수 AI 하드웨어 집중 매도."'
+  },
+  {
+    id:9, type:'short', difficulty:'hard',
+    question:'6/24 마이크론(MU) 실적의 시장 컨센서스 매출 규모는? ($ 단위, 예: 34.6B 또는 34.6)',
+    answer:['34.6','$34.6b','34.6b','34.6billion','346'],
+    explanation:'시장 컨센서스 매출은 $34.6B이며, 옵션 시장은 실적 발표 전후 13~14%의 극심한 변동성을 이미 반영 중이었다.',
+    source:'"상황: 시장 컨센서스 매출 $34.6B. 옵션 시장은 실적 발표 전후 13~14%의 극심한 변동성을 반영 중."'
+  },
+  {
+    id:10, type:'ox', difficulty:'mid',
+    question:"바벨 전략의 '회피 대상(Avoidance)'에는 3배수 레버리지 ETF가 포함된다.",
+    answer:'O',
+    explanation:'회피 대상은 수익 증명 없이 자본 지출만 늘어나는 고부채 기업, 밈(Meme) 주식, 그리고 3배수 레버리지 ETF다. 바벨 전략은 양 끝(방어·검증된 넥스트 인프라)을 잡고 가운데의 위험을 비운다.',
+    source:'"회피 대상: 수익 증명 없이 자본 지출만 늘어나는 고부채 기업, 밈(Meme) 주식, 3배수 레버리지 ETF."'
+  }
+];
+
+const state = { solved:0, correct:0, done:{} };
+const root = document.getElementById('quizRoot');
+
+const diffMap = {easy:['쉬움','d-easy'], mid:['보통','d-mid'], hard:['어려움','d-hard']};
+const typeMap = {mc:'객관식', short:'단답형', ox:'O/X'};
+
+QUIZ_DATA.forEach(q=>{
+  const card=document.createElement('div');
+  card.className='q'; card.id='q'+q.id;
+  const [dLabel,dClass]=diffMap[q.difficulty];
+  let body='';
+  if(q.type==='mc'){
+    body='<div class="opts">'+q.options.map((o,i)=>
+      `<button class="opt" data-i="${i}"><span class="mk">${String.fromCharCode(65+i)}</span><span>${o}</span></button>`
+    ).join('')+'</div>';
+  } else if(q.type==='short'){
+    body=`<div class="short"><input type="text" placeholder="정답 입력..." autocomplete="off"><button>제출</button></div>`;
+  } else {
+    body=`<div class="ox"><button class="ox-o">O</button><button class="ox-x">X</button></div>`;
+  }
+  card.innerHTML=`
+    <div class="q-top">
+      <span class="q-num">${String(q.id).padStart(2,'0')}</span>
+      <div class="q-badges">
+        <span class="badge type">${typeMap[q.type]}</span>
+        <span class="badge ${dClass}">${dLabel}</span>
+      </div>
+    </div>
+    <div class="q-text">${q.question}</div>
+    ${body}
+    <div class="exp" id="exp${q.id}"><div class="exp-in"></div></div>`;
+  root.appendChild(card);
+
+  if(q.type==='mc'){
+    card.querySelectorAll('.opt').forEach(btn=>{
+      btn.addEventListener('click',()=>handleMC(q,card,btn));
+    });
+  } else if(q.type==='short'){
+    const inp=card.querySelector('input'), sb=card.querySelector('button');
+    sb.addEventListener('click',()=>handleShort(q,card,inp,sb));
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')sb.click();});
+  } else {
+    card.querySelectorAll('.ox button').forEach(btn=>{
+      btn.addEventListener('click',()=>handleOX(q,card,btn));
+    });
+  }
+});
+
+function norm(s){return (s||'').toString().trim().toLowerCase().replace(/\s+/g,'').replace(/[,]/g,'');}
+
+function handleMC(q,card,btn){
+  if(state.done[q.id])return;
+  const i=+btn.dataset.i, ok=(i===q.answer);
+  const opts=card.querySelectorAll('.opt');
+  opts.forEach(o=>o.disabled=true);
+  if(ok){
+    btn.classList.add('correct');
+    btn.insertAdjacentHTML('beforeend','<span class="res-badge">✓ 정답!</span>');
+  }else{
+    btn.classList.add('wrong');
+    btn.insertAdjacentHTML('beforeend','<span class="res-badge">✗ 오답</span>');
+    const cor=opts[q.answer];
+    cor.classList.add('correct');
+    cor.insertAdjacentHTML('beforeend','<span class="res-badge">✓ 정답</span>');
+  }
+  finish(q,ok);
+}
+
+function handleShort(q,card,inp,sb){
+  if(state.done[q.id])return;
+  if(!inp.value.trim()){inp.focus();return;}
+  const ok=q.answer.some(a=>norm(a)===norm(inp.value));
+  inp.disabled=true; sb.disabled=true;
+  sb.textContent= ok?'✓ 정답!':'✗ 오답';
+  sb.style.background= ok?'var(--green)':'var(--rose)';
+  inp.style.borderColor= ok?'var(--green)':'var(--rose)';
+  inp.style.color= ok?'var(--green)':'var(--rose)';
+  finish(q,ok);
+}
+
+function handleOX(q,card,btn){
+  if(state.done[q.id])return;
+  const picked= btn.classList.contains('ox-o')?'O':'X';
+  const ok=(picked===q.answer);
+  const all=card.querySelectorAll('.ox button');
+  all.forEach(b=>b.disabled=true);
+  if(ok){btn.classList.add('sel-correct');}
+  else{
+    btn.classList.add('sel-wrong');
+    all.forEach(b=>{ if((q.answer==='O'&&b.classList.contains('ox-o'))||(q.answer==='X'&&b.classList.contains('ox-x'))) b.classList.add('reveal'); });
+  }
+  finish(q,ok);
+}
+
+function finish(q,ok){
+  state.done[q.id]=true;
+  state.solved++;
+  if(ok)state.correct++;
+  updateScore();
+  // explanation
+  const exp=document.getElementById('exp'+q.id);
+  const tagCls= ok?'ok':'no';
+  const tagTxt= ok?'✓ 정답입니다':'✗ 다시 확인해 보세요';
+  let ansTxt='';
+  if(q.type==='mc') ansTxt='정답: <b>'+String.fromCharCode(65+q.answer)+'. '+q.options[q.answer]+'</b>';
+  else if(q.type==='ox') ansTxt='정답: <b>'+q.answer+'</b>';
+  else ansTxt='정답 예시: <b>'+q.answer[0]+'</b>';
+  exp.querySelector('.exp-in').innerHTML=
+    `<div class="tag ${tagCls}">${tagTxt}</div>
+     <div class="ans">${ansTxt}</div>
+     <p>${q.explanation}</p>
+     <div class="src">자막 근거 · ${q.source}</div>`;
+  exp.classList.add('open');
+  if(state.solved===QUIZ_DATA.length) setTimeout(showModal,500);
+}
+
+function updateScore(){
+  document.getElementById('sSolved').textContent=state.solved;
+  document.getElementById('sCorrect').textContent=state.correct;
+  const acc= state.solved? Math.round(state.correct/state.solved*100):0;
+  document.getElementById('sAcc').textContent=acc;
+  const bar=document.getElementById('sBar');
+  bar.style.width=acc+'%';
+  bar.style.background= acc<40?'#e11d48': acc<70?'#f59e0b':'#16a34a';
+}
+
+function showModal(){
+  const c=state.correct;
+  let grade,msg;
+  if(c>=9){grade='A';msg='탁월합니다. 시장의 구조적 전환을 완벽히 읽어냈습니다.';}
+  else if(c>=7){grade='B';msg='훌륭합니다. 핵심 흐름을 잘 잡았습니다. 놓친 부분만 복습하세요.';}
+  else if(c>=5){grade='C';msg='기본기는 갖췄습니다. 리포트를 한 번 더 정독해 보세요.';}
+  else {grade='D';msg='괜찮습니다. 분석 리포트를 다시 읽고 도전하면 분명 오릅니다.';}
+  document.getElementById('mGrade').textContent=grade;
+  document.getElementById('mScore').textContent=c;
+  document.getElementById('mMsg').textContent=msg;
+  document.getElementById('modal').classList.add('show');
+}
+
+document.getElementById('mAgain').addEventListener('click',()=>{ location.reload(); });
+document.getElementById('modal').addEventListener('click',e=>{
+  if(e.target.id==='modal') e.target.classList.remove('show');
+});
+updateScore();
+</script>
+</body>
+</html>
