@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 2.0: 수익성 검증의 시대 — NOVA Real Invest 분석</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#fafafa; --ink:#1a1a1a; --sub:#777777;
+    --rose:#e11d48; --rose2:#f43f5e; --line:#e5e5e5;
+    --blue:#2563eb; --gray:#6b7280;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:'Noto Sans KR',sans-serif; font-weight:400;
+    line-height:1.75; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px; margin:0 auto; padding:0 22px;}
+
+  /* ---------- HERO ---------- */
+  .hero{padding:64px 0 40px; border-bottom:1px solid var(--line);}
+  .kicker{
+    font-size:12px; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--rose); font-weight:700; margin-bottom:20px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .kicker::after{content:""; flex:1; height:1px; background:var(--line);}
+  .hero h1{
+    font-family:'Playfair Display',serif; font-weight:900;
+    font-size:clamp(38px,11vw,62px); line-height:1.02;
+    letter-spacing:-.01em; margin-bottom:18px;
+  }
+  .hero h1 em{font-style:italic; color:var(--rose);}
+  .hero .lede{font-size:17px; color:#333; max-width:90%;}
+  .meta{
+    margin-top:28px; display:flex; flex-wrap:wrap; gap:8px 18px;
+    font-size:12.5px; color:var(--sub); letter-spacing:.02em;
+  }
+  .meta b{color:var(--ink); font-weight:700;}
+
+  /* ---------- SECTION ---------- */
+  section{padding:46px 0; border-bottom:1px solid var(--line);}
+  .eyebrow{
+    font-size:11.5px; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--rose); font-weight:700; margin-bottom:12px;
+  }
+  h2{
+    font-family:'Playfair Display',serif; font-weight:700;
+    font-size:clamp(26px,7vw,36px); line-height:1.12;
+    letter-spacing:-.01em; margin-bottom:20px;
+  }
+  h3{font-size:18px; font-weight:700; margin:30px 0 12px; letter-spacing:-.01em;}
+  p{margin-bottom:16px; font-size:15.5px; color:#2a2a2a;}
+  p .hl{color:var(--rose); font-weight:700;}
+  strong{font-weight:700;}
+  .drop::first-letter{
+    font-family:'Playfair Display',serif; font-weight:900;
+    font-size:3.4em; float:left; line-height:.82;
+    margin:6px 12px 0 0; color:var(--rose);
+  }
+
+  /* ---------- BIG STAT ---------- */
+  .statrow{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); margin:24px 0;}
+  .stat{background:var(--bg); padding:20px 16px;}
+  .stat .n{font-family:'Playfair Display',serif; font-weight:900; font-size:30px; line-height:1; color:var(--ink);}
+  .stat .n.up{color:var(--rose);}
+  .stat .n.dn{color:var(--blue);}
+  .stat .l{font-size:12px; color:var(--sub); margin-top:8px; letter-spacing:.02em;}
+
+  /* ---------- PULLQUOTE ---------- */
+  .pull{
+    margin:30px 0; padding:24px 26px; background:var(--bg2);
+    border-left:3px solid var(--rose);
+    font-family:'Playfair Display',serif; font-style:italic;
+    font-size:20px; line-height:1.45; color:#222;
+  }
+  .pull cite{display:block; font-style:normal; font-family:'Noto Sans KR'; font-size:12px; color:var(--sub); margin-top:12px; letter-spacing:.04em;}
+
+  /* ---------- CHART ---------- */
+  .fade-in{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease;}
+  .fade-in.visible{opacity:1; transform:translateY(0);}
+  .chart-container{position:relative; max-height:340px; margin:22px 0 6px;}
+  .chart-container canvas{opacity:0; transition:opacity .4s ease; max-height:300px;}
+  .chart-container.chart-ready canvas{opacity:1;}
+  .caption{font-size:12px; color:var(--sub); text-align:center; margin-top:6px; letter-spacing:.02em;}
+  .chartcard{background:var(--bg2); border:1px solid var(--line); border-radius:10px; padding:18px 16px 12px;}
+  .chartcard h4{font-size:14px; font-weight:700; margin-bottom:4px; text-align:center;}
+
+  /* ---------- TABLE ---------- */
+  .tbl{width:100%; border-collapse:collapse; margin:22px 0; font-size:13.5px; overflow:hidden; border-radius:8px; border:1px solid var(--line);}
+  .tbl th{background:var(--rose); color:#fff; padding:12px 10px; text-align:left; font-weight:700; font-size:12.5px;}
+  .tbl td{padding:11px 10px; border-top:1px solid var(--line); background:var(--bg2);}
+  .tbl td:first-child{font-weight:700; color:var(--sub); width:30%;}
+
+  /* ---------- VS TOGGLE ---------- */
+  .vs{margin:24px 0; border:1px solid var(--line); border-radius:12px; overflow:hidden;}
+  .vs-tabs{display:grid; grid-template-columns:1fr 1fr;}
+  .vs-tab{padding:16px 10px; text-align:center; cursor:pointer; background:var(--bg2); border:none; font-family:inherit; transition:.2s;}
+  .vs-tab .t{font-size:16px; font-weight:900;}
+  .vs-tab .s{font-size:11px; color:var(--sub); margin-top:3px;}
+  .vs-tab.active{background:var(--bg);}
+  .vs-tab.win.active{box-shadow:inset 0 -3px 0 var(--rose);}
+  .vs-tab.win.active .t{color:var(--rose);}
+  .vs-tab.lose.active{box-shadow:inset 0 -3px 0 var(--blue);}
+  .vs-tab.lose.active .t{color:var(--blue);}
+  .vs-body{padding:22px 20px; min-height:140px;}
+  .vs-body .badge{display:inline-block; font-size:11px; font-weight:700; padding:4px 10px; border-radius:20px; margin-bottom:12px;}
+  .vs-body.w .badge{background:#fdecef; color:var(--rose);}
+  .vs-body.l .badge{background:#eaf0ff; color:var(--blue);}
+  .vs-body ul{list-style:none; font-size:14px;}
+  .vs-body li{padding:6px 0 6px 20px; position:relative; color:#2a2a2a;}
+  .vs-body li::before{content:""; position:absolute; left:0; top:13px; width:7px; height:7px; border-radius:50%;}
+  .vs-body.w li::before{background:var(--rose);}
+  .vs-body.l li::before{background:var(--blue);}
+
+  /* ---------- ROADMAP ---------- */
+  .road{margin:26px 0;}
+  .road-layer{
+    border:1px solid var(--line); border-radius:10px; margin-bottom:10px;
+    overflow:hidden; cursor:pointer; transition:.25s; background:var(--bg2);
+  }
+  .road-layer.open{border-color:var(--rose); background:var(--bg);}
+  .road-head{display:flex; align-items:center; gap:14px; padding:16px 18px;}
+  .road-tag{
+    font-family:'Playfair Display',serif; font-weight:900; font-size:13px;
+    color:#fff; background:var(--gray); min-width:62px; text-align:center;
+    padding:5px 0; border-radius:6px; letter-spacing:.02em;
+  }
+  .road-layer.open .road-tag{background:var(--rose);}
+  .road-layer[data-core="1"] .road-tag{background:var(--ink);}
+  .road-ttl{flex:1;}
+  .road-ttl .a{font-size:14.5px; font-weight:700;}
+  .road-ttl .b{font-size:11.5px; color:var(--sub);}
+  .road-arrow{color:var(--sub); font-size:18px; transition:.25s;}
+  .road-layer.open .road-arrow{transform:rotate(90deg); color:var(--rose);}
+  .road-body{max-height:0; overflow:hidden; transition:max-height .3s ease;}
+  .road-body div{padding:0 18px 18px; font-size:14px; color:#333;}
+
+  /* ---------- SIMULATOR ---------- */
+  .sim{background:var(--bg2); border:1px solid var(--line); border-radius:12px; padding:22px 20px; margin:24px 0;}
+  .sim h4{font-size:15px; font-weight:700; margin-bottom:6px;}
+  .sim p.note{font-size:13px; color:var(--sub); margin-bottom:18px;}
+  .sim-row{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px;}
+  .sim-row label{font-size:13px; font-weight:500;}
+  .sim-row .val{font-family:'Playfair Display',serif; font-weight:900; font-size:20px; color:var(--rose);}
+  input[type=range]{width:100%; accent-color:var(--rose); height:6px; cursor:pointer; margin-bottom:20px;}
+  .sim-out{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:8px; overflow:hidden; margin-bottom:14px;}
+  .sim-out .c{background:var(--bg); padding:16px 12px; text-align:center;}
+  .sim-out .c .bn{font-family:'Playfair Display',serif; font-weight:900; font-size:26px; line-height:1;}
+  .sim-out .c .bl{font-size:11px; color:var(--sub); margin-top:6px;}
+  .sim-msg{font-size:13.5px; line-height:1.5; padding:12px 14px; border-radius:8px; background:#fdecef; color:#9f1239;}
+  .sim-reset{margin-top:14px; background:none; border:1px solid var(--line); color:var(--sub); font-family:inherit; font-size:12px; padding:8px 16px; border-radius:20px; cursor:pointer; transition:.2s;}
+  .sim-reset:hover{border-color:var(--rose); color:var(--rose);}
+
+  /* ---------- MACRO SEESAW ---------- */
+  .seesaw{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:24px 0;}
+  .see{border:1px solid var(--line); border-radius:10px; padding:18px 16px; background:var(--bg2);}
+  .see .ico{font-size:24px; margin-bottom:8px;}
+  .see h5{font-size:14px; font-weight:700; margin-bottom:8px;}
+  .see.up h5{color:var(--rose);} .see.dn h5{color:var(--blue);}
+  .see p{font-size:12.5px; color:#444; margin:0;}
+
+  /* ---------- TAKEAWAY ---------- */
+  .take{background:var(--ink); color:#f4f4f4; border-radius:14px; padding:30px 26px; margin:30px 0;}
+  .take .eyebrow{color:var(--rose2);}
+  .take h2{color:#fff; font-size:26px; margin-bottom:16px;}
+  .take ul{list-style:none;}
+  .take li{padding:9px 0 9px 26px; position:relative; font-size:14.5px; color:#ddd; border-top:1px solid #333;}
+  .take li:first-child{border-top:none;}
+  .take li::before{content:"→"; position:absolute; left:0; color:var(--rose2); font-weight:700;}
+  .take li b{color:#fff;}
+
+  /* ---------- FOOTER ---------- */
+  footer{padding:40px 0 60px; text-align:center;}
+  footer .dis{font-size:11px; color:var(--sub); line-height:1.7; max-width:90%; margin:0 auto;}
+  footer .sig{font-family:'Playfair Display',serif; font-style:italic; font-size:15px; color:var(--ink); margin-bottom:18px;}
+
+  @media(max-width:420px){
+    .statrow{grid-template-columns:1fr;}
+    .seesaw{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">NOVA Real Invest · Market Deep Dive</div>
+    <h1>AI 2.0,<br><em>수익성 검증</em>의 시대</h1>
+    <p class="lede">겉으로는 고요했지만 속으로는 지각 변동이 일어난 하루. 시장은 더 이상 'AI'라는 단어에 열광하지 않는다. 이제 질문은 단 하나 — <strong>"그래서 돈은 얼마나 버는가."</strong></p>
+    <div class="meta">
+      <span><b>방송일</b> 2026.06.25</span>
+      <span><b>시장</b> 미국 증시</span>
+      <span><b>키워드</b> 마이크론 · 옥석 가리기 · 전력 병목</span>
+    </div>
+  </div>
+</header>
+
+<!-- 1. 시장 요약 -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">01 — Market Snapshot</div>
+    <h2>표면은 혼조, 내부는 재편</h2>
+    <p class="drop">지수만 보면 평온했다. 다우는 <span class="hl">+0.4%</span> 방어주가 받쳐 올랐고, S&amp;P 500은 -0.1%, 나스닥은 -0.4%로 마감했다. 그러나 대형 기술주는 매도세에 시달렸고, 5조 달러를 자랑하던 엔비디아 시가총액은 <strong>4.819조 달러</strong>로 내려앉았다.</p>
+    <p>공포지수(VIX)는 20을 넘어 <strong>20.19</strong>를 가리켰다. 통상 20을 돌파하면 시장이 불안에 들어선 신호로 읽힌다. 한편 유가 안정으로 10년물 국채금리는 4.41%, 2년물은 4.15%까지 내려왔다.</p>
+
+    <div class="chartcard fade-in">
+      <h4>오늘의 시장 지수 등락률 (%)</h4>
+      <div class="chart-container">
+        <canvas id="idxChart" height="230"></canvas>
+      </div>
+      <div class="caption">막대를 클릭하면 값이 토글됩니다 · 출처: 방송 자료</div>
+    </div>
+
+    <div class="statrow">
+      <div class="stat"><div class="n up">$70.02</div><div class="l">WTI 원유 · 전쟁 이전 수준 회귀</div></div>
+      <div class="stat"><div class="n dn">4.41%</div><div class="l">10년물 미국 국채금리</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. 매크로 패러독스 -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">02 — The Macro Paradox</div>
+    <h2>유가 급락 vs 금리 공포</h2>
+    <p>시장을 짓누르는 두 개의 상반된 힘이 동시에 작동했다. 하나는 시장을 살리고, 하나는 끌어내린다.</p>
+    <div class="seesaw">
+      <div class="see up">
+        <div class="ico">🛢️</div>
+        <h5>인플레이션 압력 완화</h5>
+        <p>호르무즈 해협 통항 정상화로 WTI 70달러선이 무너졌다. 운송비·소비자 물가 압력을 끌어내리는 우호적 신호.</p>
+      </div>
+      <div class="see dn">
+        <div class="ico">🏦</div>
+        <h5>연준의 매파적 스탠스</h5>
+        <p>뱅크오브아메리카(BofA)가 연내 최대 3회 금리 인상 전망을 제시. 시장의 긴축 공포를 자극했다.</p>
+      </div>
+    </div>
+    <p class="note" style="font-size:13px;color:var(--sub)">※ 위 금리 인상 전망은 BofA가 자사 고객을 대상으로 한 설문 결과로, 다수 투자자가 "연내 1회는 확실, 최대 3회까지 가능"이라 응답했다는 방송 설명에 근거합니다.</p>
+    <div class="pull">두 상반된 힘이 지수 상단을 제한하며, 밸류에이션이 높은 기술주에 차익 실현의 빌미를 제공했다.<cite>— 글로벌 시장 분석팀</cite></div>
+  </div>
+</section>
+
+<!-- 3. 마이크론 -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">03 — The Savior</div>
+    <h2>시장을 구원한 마이크론</h2>
+    <p class="drop">오후 들어 무너지던 분위기를 되돌린 건 마이크론 실적이었다. 단순한 '예상 상회'가 아니었다. <span class="hl">매출 +346%, 조정 EPS $25.11, 4분기 가이던스 500억 달러($50B).</span> 시간외 주가는 +16% 급등했다.</p>
+
+    <div class="statrow">
+      <div class="stat"><div class="n up">$41.46B</div><div class="l">Q3 매출 (전년比 +346%)</div></div>
+      <div class="stat"><div class="n up">$25.11</div><div class="l">Q3 조정 EPS</div></div>
+      <div class="stat"><div class="n">$50B</div><div class="l">Q4 가이던스</div></div>
+      <div class="stat"><div class="n up">+16%</div><div class="l">시간외 주가 반응</div></div>
+    </div>
+
+    <p>핵심은 <strong>HBM(고대역폭 메모리)</strong>이다. AI 데이터센터 메모리 공급 부족은 2027년까지 이어질 전망이며, 마이크론은 단기가 아닌 <strong>장기 계약</strong>으로 미리 현금을 확보하는 구조다. 압도적 현금 흐름을 숫자로 증명한 셈이다.</p>
+    <p style="font-size:13px;color:var(--sub)">※ HBM(High Bandwidth Memory): AI 연산에 필요한 대용량 데이터를 빠르게 주고받기 위해 메모리 칩을 수직으로 쌓아 올린 고성능 메모리.</p>
+  </div>
+</section>
+
+<!-- 4. 옥석 가리기 -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">04 — The Great AI Filter</div>
+    <h2>옥석 가리기: 진짜와 가짜</h2>
+    <p>같은 'AI 종목'이라도 운명이 갈렸다. 마이크론이 시간외 +16% 급등하던 그 날, 세레브라스는 정규장에서 -19.6% 폭락했다. 탭을 눌러 둘을 비교해 보자.</p>
+
+    <div class="vs">
+      <div class="vs-tabs">
+        <button class="vs-tab win active" data-vs="mu"><div class="t">마이크론 (MU)</div><div class="s">진짜 수혜주</div></button>
+        <button class="vs-tab lose" data-vs="cb"><div class="t">세레브라스 (CBRS)</div><div class="s">비용 함정</div></button>
+      </div>
+      <div class="vs-body w" id="vsBody">
+        <span class="badge">Proven Winner · 진짜 수혜주</span>
+        <ul>
+          <li>매출 폭발적 성장 (+346%) &amp; 압도적 가이던스</li>
+          <li>마진 84.9% — 최고치 갱신</li>
+          <li>시간외 +16% 급등</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="chartcard fade-in">
+      <h4>영업이익률(마진) 비교 — 같은 AI, 다른 체력</h4>
+      <div class="chart-container">
+        <canvas id="marginChart" height="240"></canvas>
+      </div>
+      <div class="caption">세레브라스는 매출 성장에도 마진이 47% → 36%로 하락</div>
+    </div>
+
+    <div class="pull">시장의 새로운 평가 기준은 '얼마나 빠르게 성장하는가'에서 '비용을 통제하며 얼마나 남기는가'로 구조적으로 이동했다.<cite>— The Great AI Filter</cite></div>
+
+    <p>세레브라스가 빠진 함정의 이름은 <strong>코스트 트랩(Cost Trap)</strong>이다. 매출은 늘지만 남는 게 없다. 사람들이 "차라리 압도적 마진을 챙기는 회사에 넣자"는 쪽으로 돈을 옮기면서, 두 종목의 격차는 더 벌어졌다.</p>
+  </div>
+</section>
+
+<!-- 5. 밸류체인 로드맵 -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">05 — Value Chain Evolution</div>
+    <h2>AI 2.0 밸류체인 확장 로드맵</h2>
+    <p>투자의 기회는 칩(Core)에서 시작해 필수 인프라(Layer 3)를 향해 방사형으로 이동 중이다. 각 단계를 눌러 어디까지 왔는지 확인해 보자.</p>
+
+    <div class="road">
+      <div class="road-layer" data-core="1">
+        <div class="road-head">
+          <span class="road-tag">CORE</span>
+          <div class="road-ttl"><div class="a">범용 GPU · Nvidia</div><div class="b">성숙 및 검증 구간</div></div>
+          <span class="road-arrow">›</span>
+        </div>
+        <div class="road-body"><div>AI 연산의 출발점. 이미 검증을 마친 성숙 단계로, 위스퍼 넘버(시장 기대치)를 넘지 못하면서 시가총액이 5조 → 4.819조 달러로 조정받았다.</div></div>
+      </div>
+
+      <div class="road-layer open">
+        <div class="road-head">
+          <span class="road-tag">L1</span>
+          <div class="road-ttl"><div class="a">AI 메모리 &amp; 맞춤형 칩 · Micron, Broadcom</div><div class="b">현재 수익 폭발 구간 ← 우리는 지금 여기</div></div>
+          <span class="road-arrow">›</span>
+        </div>
+        <div class="road-body"><div>지금 돈이 터지는 구간. 마이크론의 HBM이 84.9% 마진을 찍었고, 브로드컴(AVGO)은 OpenAI와 첫 커스텀 AI 추론칩 '할라페뇨(Jalapeño)'를 공개했다.</div></div>
+      </div>
+
+      <div class="road-layer">
+        <div class="road-head">
+          <span class="road-tag">L2</span>
+          <div class="road-ttl"><div class="a">ARM 기반 서버 CPU · Qualcomm</div><div class="b">확장 침투 구간</div></div>
+          <span class="road-arrow">›</span>
+        </div>
+        <div class="road-body"><div>빅테크가 비싼 엔비디아 GPU 대신 자체 설계 칩(ASIC)으로 다변화. 퀄컴은 데이터센터용 추론칩 '드래곤플라이 C1000'을 공개하고 메타 데이터센터 도입을 확정, 시간외 +15% 급등했다. 그 중심에 ARM 아키텍처가 있다.</div></div>
+      </div>
+
+      <div class="road-layer">
+        <div class="road-head">
+          <span class="road-tag">L3</span>
+          <div class="road-ttl"><div class="a">전력 &amp; 인프라 · Sunrun</div><div class="b">차세대 병목 해소 구간</div></div>
+          <span class="road-arrow">›</span>
+        </div>
+        <div class="road-body"><div>AI의 진짜 성장은 GPU가 아니라 전력망(Grid)이 결정한다. 선런(RUN)과 테슬라 에너지가 16GW 규모 분산형 가상발전소(VPP) 구축을 발표하며 선런 주가는 장중 최고 +12.5% 급등했다.</div></div>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--sub)">※ ASIC: 특정 용도에 맞춰 설계한 주문형 반도체 · VPP(가상발전소): 가정의 태양광·배터리 같은 분산 자원을 묶어 하나의 발전소처럼 운영하는 시스템.</p>
+  </div>
+</section>
+
+<!-- 6. 전력 병목 시뮬레이터 -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">06 — The Hidden Bottleneck</div>
+    <h2>AI의 숨겨진 병목, 전력</h2>
+    <p class="drop">데이터센터 허가는 넘쳐난다. 4,000건 이상이 승인됐지만, 실제 가동에 들어간 건 <span class="hl">20%도 되지 않는다.</span> 전봇대도, 송전 설비도 깔리지 않았기 때문이다. 1GW는 큰 가정집이 1년 동안 쓰는 전력의 막대한 배수에 해당한다.</p>
+    <p>그래서 그리드(전력망)와 가상발전소가 차세대 밸류체인으로 편입된다. 아래 시뮬레이터로 '허가 건수'와 '전력망 준비율'에 따라 실제로 몇 개가 가동되는지 직접 움직여 보자.</p>
+
+    <div class="sim">
+      <h4>⚡ 데이터센터 가동 시뮬레이터</h4>
+      <p class="note">허가만으로는 가동되지 않는다. 전력망이 받쳐줘야 비로소 돌아간다.</p>
+      <div class="sim-row"><label>승인된 허가 건수</label><span class="val" id="permVal">4,000건</span></div>
+      <input type="range" id="permits" min="1000" max="6000" step="100" value="4000">
+      <div class="sim-row"><label>전력망 준비율 (Grid Readiness)</label><span class="val" id="gridVal">20%</span></div>
+      <input type="range" id="grid" min="5" max="100" step="1" value="20">
+      <div class="sim-out">
+        <div class="c"><div class="bn" id="outActive" style="color:var(--rose)">800</div><div class="bl">실제 가동 가능</div></div>
+        <div class="c"><div class="bn" id="outStuck" style="color:var(--gray)">3,200</div><div class="bl">전력 부족으로 대기</div></div>
+      </div>
+      <div class="sim-msg" id="simMsg"></div>
+      <button class="sim-reset" id="simReset">초기값으로 리셋</button>
+    </div>
+  </div>
+</section>
+
+<!-- 7. 주변부 & 안전지대 -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">07 — Periphery &amp; Safe Zone</div>
+    <h2>주변부의 두 얼굴, 그리고 안전 지대</h2>
+
+    <h3>밈 주식의 귀환 vs 크립토의 한파</h3>
+    <table class="tbl">
+      <thead><tr><th>구분</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td>웬디스 +25%</td><td>펀더멘털과 무관한 레딧 중심 숏스퀴즈 부활. 유동성 투기 장세 잔존.</td></tr>
+        <tr><td>비트코인 &lt; $60K</td><td>ETF 대규모 자금 유출($181M)과 기관 차익 실현. 위험 자산 내 극심한 차별화.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>안전 지대 — 금융주와 정책 수혜 건설주</h3>
+    <p>연준 스트레스 테스트에서 <strong>32개 은행이 전원 통과</strong>, $708B 규모 손실 흡수력을 증명했다. JP모건은 대규모 자사주 매입과 배당 확대를 발표하며 방어적 대형주의 매력을 키웠다. "은행이 돈을 못 벌면 그 나라 경제는 끝"이라는 게 방송의 일관된 시각이다.</p>
+    <p>건설주에서는 '21세기 주택 청사진 법안'(규제 완화) 통과로 <strong>KB Home이 +16.4% 급등</strong>, 금리 인하 기대와 결합된 새로운 피난처로 부상했다.</p>
+
+    <h3>구시대의 퇴장, 테크의 지배</h3>
+    <p>6월 29일 알파벳(구글)이 다우존스에 편입(버라이즌 퇴출)된다. 전통 산업 지수조차 디지털 경제로 항복(Pivot)하며 매그니피센트 7 중 5개가 다우에 들어온다. 다만 노벨상 수상자 존 점퍼(앤스로픽 이직)와 노암 샤제르(OpenAI 이직) 등 구글 딥마인드 핵심 인재의 연쇄 이탈은 주가 상승을 제한하는 숨은 리스크다.</p>
+  </div>
+</section>
+
+<!-- 8. 포트폴리오 전략 -->
+<section style="border-bottom:none;">
+  <div class="wrap">
+    <div class="eyebrow">08 — Strategy</div>
+    <h2>바벨 전략: 양극단을 잡아라</h2>
+    <p>결론은 명료하다. 성장의 한쪽 끝과 방어의 다른 한쪽 끝을 동시에 쥐는 '바벨(Barbell)' 구성이다.</p>
+
+    <div class="take">
+      <div class="eyebrow">Growth · 성장</div>
+      <h2>한쪽 끝 — 검증된 성장</h2>
+      <ul>
+        <li>수익성이 <b>검증된 AI 인프라</b> (마이크론 등 메모리 대장주)</li>
+        <li>새롭게 확장되는 <b>밸류체인</b> (전력·맞춤형 칩) 선별 매수</li>
+        <li>마진 악화 기업은 <b>철저히 배제</b></li>
+      </ul>
+    </div>
+
+    <div class="take" style="background:#16243a;">
+      <div class="eyebrow" style="color:#93c5fd;">Defense · 방어</div>
+      <h2>다른 쪽 끝 — 단단한 방어</h2>
+      <ul>
+        <li>스트레스 테스트를 통과한 <b>대형 금융주</b></li>
+        <li>주주 환원 확대 및 <b>정책 수혜 가치주</b> 배치</li>
+        <li>커지는 <b>매크로 불확실성</b> 대비</li>
+      </ul>
+    </div>
+
+    <div class="pull" style="border-left-color:var(--ink);">시장의 초점은 '꿈'에서 '숫자'로 완벽히 넘어왔다. 실적을 증명하는 주식만이 다음 랠리를 주도할 것이다.<cite>— The Barbell Strategy</cite></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="sig">NOVA Real Invest · Market Deep Dive</div>
+    <p class="dis">본 자료는 방송 콘텐츠(엔터테인먼트)를 정리한 교육용 요약이며, 투자 자문이나 권유가 아닙니다. 모든 수치는 방송에서 제시된 값을 그대로 인용했으며 실제 사실과 다를 수 있습니다. 투자에 대한 모든 판단과 책임은 투자자 본인에게 있습니다.</p>
+  </div>
+</footer>
+
+<script>
+/* ===== Fade-in observer ===== */
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+/* ===== Chart configs ===== */
+const ROSE='#e11d48', INK='#1a1a1a', GRAY='#6b7280', BLUE='#2563eb';
+Chart.defaults.font.family = "'Noto Sans KR', sans-serif";
+Chart.defaults.color = '#777777';
+
+const chartConfigs = {};
+
+chartConfigs['idxChart'] = () => {
+  const data = [0.4, -0.1, -0.4, 3.59];
+  new Chart(document.getElementById('idxChart'), {
+    type:'bar',
+    data:{
+      labels:['다우','S&P 500','나스닥','VIX 변동'],
+      datasets:[{
+        data:data,
+        backgroundColor:data.map(v=> v>=0 ? (v>1?ROSE:'#1a1a1a') : BLUE),
+        borderRadius:5, barThickness:42
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false},
+        tooltip:{callbacks:{label:(c)=> (c.raw>=0?'+':'')+c.raw+'%'}}},
+      scales:{
+        y:{grid:{color:'#eee'}, ticks:{callback:v=>v+'%'}},
+        x:{grid:{display:false}}
+      }
+    }
+  });
+};
+
+chartConfigs['marginChart'] = () => {
+  new Chart(document.getElementById('marginChart'), {
+    type:'bar',
+    data:{
+      labels:['마이크론 (현재)','세레브라스 (이전)','세레브라스 (현재)'],
+      datasets:[{
+        label:'영업이익률 %',
+        data:[84.9, 47, 36],
+        backgroundColor:[ROSE, '#cbd5e1', BLUE],
+        borderRadius:5, barThickness:46
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false},
+        tooltip:{callbacks:{label:(c)=> c.raw+'%'}}},
+      scales:{
+        y:{grid:{color:'#eee'}, ticks:{callback:v=>v+'%'}, max:100},
+        x:{grid:{display:false}, ticks:{font:{size:11}}}
+      }
+    }
+  });
+};
+
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+/* ===== VS toggle ===== */
+const vsData = {
+  mu:{cls:'w', badge:'Proven Winner · 진짜 수혜주',
+    items:['매출 폭발적 성장 (+346%) & 압도적 가이던스','마진 84.9% — 최고치 갱신','시간외 +16% 급등']},
+  cb:{cls:'l', badge:'Cost Trap · 비용 함정',
+    items:['양호한 성장, 그러나 보수적 가이던스','마진 47% → 36% — 급락 경고','정규장 -19.6% 폭락']}
+};
+const vsBody = document.getElementById('vsBody');
+document.querySelectorAll('.vs-tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('.vs-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    const d = vsData[tab.dataset.vs];
+    vsBody.className = 'vs-body ' + d.cls;
+    vsBody.innerHTML = '<span class="badge">'+d.badge+'</span><ul>'+
+      d.items.map(i=>'<li>'+i+'</li>').join('')+'</ul>';
+  });
+});
+
+/* ===== Roadmap accordion ===== */
+document.querySelectorAll('.road-layer').forEach(layer=>{
+  layer.addEventListener('click', ()=>{
+    const body = layer.querySelector('.road-body');
+    const isOpen = layer.classList.contains('open');
+    document.querySelectorAll('.road-layer').forEach(l=>{
+      l.classList.remove('open');
+      l.querySelector('.road-body').style.maxHeight = null;
+    });
+    if(!isOpen){
+      layer.classList.add('open');
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
+  });
+});
+// open default L1 body height on load
+window.addEventListener('load', ()=>{
+  const def = document.querySelector('.road-layer.open .road-body');
+  if(def) def.style.maxHeight = def.scrollHeight + 'px';
+});
+
+/* ===== Power simulator ===== */
+const permits = document.getElementById('permits');
+const grid = document.getElementById('grid');
+const permVal = document.getElementById('permVal');
+const gridVal = document.getElementById('gridVal');
+const outActive = document.getElementById('outActive');
+const outStuck = document.getElementById('outStuck');
+const simMsg = document.getElementById('simMsg');
+
+function fmt(n){ return n.toLocaleString('ko-KR'); }
+function updateSim(){
+  const p = parseInt(permits.value);
+  const g = parseInt(grid.value);
+  const active = Math.round(p * g / 100);
+  const stuck = p - active;
+  permVal.textContent = fmt(p)+'건';
+  gridVal.textContent = g+'%';
+  outActive.textContent = fmt(active);
+  outStuck.textContent = fmt(stuck);
+  let msg;
+  if(g < 25){
+    msg = '⚠️ 현실에 가까운 구간입니다. 허가는 넘쳐도 전력망이 못 따라가 대다수가 대기 상태. 그래서 <b>전력·그리드 인프라</b>가 차세대 병목 해소처로 주목받습니다.';
+  } else if(g < 60){
+    msg = '🔌 전력망이 절반쯤 준비된 상태. 가동률이 올라가지만 여전히 상당수가 대기 중입니다.';
+  } else {
+    msg = '✅ 이상적인 가정. 전력망이 충분하다면 대부분 가동 가능하지만, 현실에서는 송전 설비·전봇대 부족으로 도달하기 어려운 수준입니다.';
+  }
+  simMsg.innerHTML = msg;
+}
+permits.addEventListener('input', updateSim);
+grid.addEventListener('input', updateSim);
+document.getElementById('simReset').addEventListener('click', ()=>{
+  permits.value = 4000; grid.value = 20; updateSim();
+});
+updateSim();
+</script>
+</body>
+</html>

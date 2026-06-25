@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 2.0 수익성 검증의 시대 — 인터랙티브 시험문제</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#fafafa; --ink:#1a1a1a; --sub:#777777;
+    --rose:#e11d48; --rose2:#f43f5e; --line:#e5e5e5;
+    --green:#15803d; --greenbg:#dcfce7; --red:#b91c1c; --redbg:#fee2e2;
+    --orange:#ea580c;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg2); color:var(--ink); font-family:'Noto Sans KR',sans-serif; line-height:1.7; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:680px; margin:0 auto; padding:0 18px 80px;}
+
+  /* ---- Sticky scoreboard ---- */
+  .board{position:sticky; top:0; z-index:50; background:rgba(255,255,255,.96); backdrop-filter:blur(8px); border-bottom:1px solid var(--line);}
+  .board-in{max-width:680px; margin:0 auto; padding:12px 18px;}
+  .board-stats{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;}
+  .board-stats .item{text-align:center; flex:1;}
+  .board-stats .n{font-family:'Playfair Display',serif; font-weight:900; font-size:20px; line-height:1;}
+  .board-stats .n.rose{color:var(--rose);}
+  .board-stats .l{font-size:10px; color:var(--sub); margin-top:3px; letter-spacing:.02em;}
+  .board-stats .divider{width:1px; height:28px; background:var(--line);}
+  .pbar{height:6px; background:var(--line); border-radius:6px; overflow:hidden;}
+  .pbar span{display:block; height:100%; width:0; background:var(--red); border-radius:6px; transition:width .4s ease, background .4s ease;}
+
+  /* ---- Header ---- */
+  header{padding:42px 0 30px; text-align:center;}
+  .eyebrow{font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--rose); font-weight:700; margin-bottom:14px;}
+  header h1{font-family:'Playfair Display',serif; font-weight:900; font-size:clamp(28px,8vw,42px); line-height:1.08; letter-spacing:-.01em; margin-bottom:14px;}
+  header p{font-size:14px; color:var(--sub); max-width:90%; margin:0 auto;}
+
+  /* ---- Question card ---- */
+  .q{background:var(--bg); border:1px solid var(--line); border-radius:14px; padding:24px 20px; margin-bottom:20px; box-shadow:0 1px 3px rgba(0,0,0,.03);}
+  .q-top{display:flex; align-items:center; gap:10px; margin-bottom:16px;}
+  .q-num{font-family:'Playfair Display',serif; font-weight:900; font-size:22px; color:var(--rose); min-width:34px;}
+  .q-badges{display:flex; gap:6px; flex-wrap:wrap;}
+  .tag{font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:20px; letter-spacing:.02em;}
+  .tag.type{background:#f1f5f9; color:#475569;}
+  .tag.d-easy{background:#dcfce7; color:#15803d;}
+  .tag.d-med{background:#fef3c7; color:#b45309;}
+  .tag.d-hard{background:#fee2e2; color:#b91c1c;}
+  .q-text{font-size:16px; font-weight:500; line-height:1.55; margin-bottom:18px;}
+
+  /* ---- Options ---- */
+  .opts{display:flex; flex-direction:column; gap:9px;}
+  .opt{display:flex; align-items:center; gap:11px; padding:13px 15px; border:1.5px solid var(--line); border-radius:10px; background:var(--bg); cursor:pointer; font-family:inherit; font-size:14.5px; text-align:left; transition:.15s; color:var(--ink); width:100%;}
+  .opt:hover:not(:disabled){border-color:var(--rose2); background:#fff5f7;}
+  .opt:disabled{cursor:default;}
+  .opt .mark{min-width:24px; height:24px; border-radius:50%; border:1.5px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:var(--sub); flex-shrink:0;}
+  .opt.correct{border-color:var(--green); background:var(--greenbg);}
+  .opt.correct .mark{background:var(--green); border-color:var(--green); color:#fff;}
+  .opt.wrong{border-color:var(--red); background:var(--redbg);}
+  .opt.wrong .mark{background:var(--red); border-color:var(--red); color:#fff;}
+  .opt .res{margin-left:auto; font-size:11px; font-weight:700; padding:3px 8px; border-radius:14px; display:none;}
+  .opt.correct .res{display:inline; background:var(--green); color:#fff;}
+  .opt.wrong .res{display:inline; background:var(--red); color:#fff;}
+
+  /* ---- Short answer ---- */
+  .short{display:flex; gap:8px;}
+  .short input{flex:1; padding:13px 15px; border:1.5px solid var(--line); border-radius:10px; font-family:inherit; font-size:14.5px; outline:none; transition:.15s;}
+  .short input:focus{border-color:var(--rose);}
+  .short input:disabled{background:var(--bg2);}
+  .short input.ok{border-color:var(--green); background:var(--greenbg);}
+  .short input.no{border-color:var(--red); background:var(--redbg);}
+  .short button{padding:0 20px; border:none; border-radius:10px; background:var(--ink); color:#fff; font-family:inherit; font-weight:700; font-size:14px; cursor:pointer; transition:.15s;}
+  .short button:hover{background:var(--rose);}
+  .short button:disabled{background:var(--sub); cursor:default;}
+
+  /* ---- OX ---- */
+  .ox{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .ox button{padding:18px; border:1.5px solid var(--line); border-radius:12px; background:var(--bg); font-family:'Playfair Display',serif; font-weight:900; font-size:26px; cursor:pointer; transition:.15s; color:var(--ink);}
+  .ox button:hover:not(:disabled){border-color:var(--rose2); background:#fff5f7;}
+  .ox button.correct{border-color:var(--green); background:var(--greenbg); color:var(--green);}
+  .ox button.wrong{border-color:var(--red); background:var(--redbg); color:var(--red);}
+  .ox button:disabled{cursor:default;}
+
+  /* ---- Explanation ---- */
+  .exp{max-height:0; overflow:hidden; transition:max-height .4s ease; margin-top:0;}
+  .exp.show{max-height:600px; margin-top:16px;}
+  .exp-in{background:var(--bg2); border-left:3px solid var(--rose); border-radius:0 8px 8px 0; padding:15px 16px;}
+  .exp-in .h{font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--rose); margin-bottom:7px; display:flex; align-items:center; gap:6px;}
+  .exp-in .ans{font-size:13.5px; font-weight:700; margin-bottom:6px;}
+  .exp-in p{font-size:13.5px; color:#444; line-height:1.6;}
+
+  /* ---- Result modal ---- */
+  .modal{position:fixed; inset:0; background:rgba(26,26,26,.6); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; z-index:100; padding:20px;}
+  .modal.show{display:flex; animation:fade .3s ease;}
+  @keyframes fade{from{opacity:0} to{opacity:1}}
+  .modal-card{background:var(--bg); border-radius:20px; max-width:380px; width:100%; padding:36px 28px; text-align:center; animation:pop .35s cubic-bezier(.2,.8,.3,1.2);}
+  @keyframes pop{from{transform:scale(.9); opacity:0} to{transform:scale(1); opacity:1}}
+  .modal-card .grade{font-family:'Playfair Display',serif; font-weight:900; font-size:72px; line-height:1; margin-bottom:8px;}
+  .modal-card .score{font-size:16px; color:var(--sub); margin-bottom:6px;}
+  .modal-card .score b{color:var(--ink); font-size:20px;}
+  .modal-card .msg{font-size:14px; color:#444; margin:18px 0 24px; line-height:1.55;}
+  .modal-card .pct{font-family:'Playfair Display',serif; font-weight:900; font-size:30px; color:var(--rose); margin-bottom:18px;}
+  .retry{padding:13px 30px; border:none; border-radius:30px; background:var(--rose); color:#fff; font-family:inherit; font-weight:700; font-size:15px; cursor:pointer; transition:.2s;}
+  .retry:hover{background:var(--rose2); transform:translateY(-1px);}
+
+  footer{text-align:center; padding:30px 0 0;}
+  footer p{font-size:11px; color:var(--sub); line-height:1.6;}
+</style>
+</head>
+<body>
+
+<div class="board">
+  <div class="board-in">
+    <div class="board-stats">
+      <div class="item"><div class="n" id="sSolved">0 / 10</div><div class="l">푼 문제</div></div>
+      <div class="divider"></div>
+      <div class="item"><div class="n rose" id="sCorrect">0</div><div class="l">맞힌 문제</div></div>
+      <div class="divider"></div>
+      <div class="item"><div class="n" id="sRate">0%</div><div class="l">정답률</div></div>
+    </div>
+    <div class="pbar"><span id="pbarFill"></span></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">NOVA Real Invest · 2026.06.25</div>
+    <h1>AI 2.0<br>수익성 검증의 시대</h1>
+    <p>방송 핵심 내용을 10문제로 점검합니다. 보기를 선택하면 즉시 채점되고 해설이 펼쳐집니다.</p>
+  </header>
+
+  <div id="quiz"></div>
+
+  <footer>
+    <p>본 퀴즈는 방송 콘텐츠(엔터테인먼트) 기반 교육용 자료입니다.<br>투자 자문이 아니며, 모든 판단의 책임은 본인에게 있습니다.</p>
+  </footer>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-card">
+    <div class="grade" id="mGrade">A</div>
+    <div class="pct" id="mPct">0%</div>
+    <div class="score">10문제 중 <b id="mScore">0</b>문제 정답</div>
+    <div class="msg" id="mMsg"></div>
+    <button class="retry" id="retryBtn">다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id:1, type:'mc', difficulty:'easy',
+    question:"마이크론이 발표한 Q3 매출 증가율(전년 동기 대비)은 얼마인가?",
+    options:["+134%","+216%","+346%","+512%"],
+    answer:2,
+    explanation:"방송에서 마이크론 매출이 전년 대비 +346% 증가했다고 명시했습니다. 단순 예상 상회를 넘어선 폭발적 성장으로, 시장을 구원한 핵심 실적이었습니다."
+  },
+  {
+    id:2, type:'mc', difficulty:'easy',
+    question:"세레브라스(CBRS)가 빠진 상황 — 매출은 늘지만 비용 때문에 남는 게 없는 상태를 부르는 용어는?",
+    options:["밸류 트랩","코스트 트랩(Cost Trap)","그로스 트랩","리퀴디티 트랩"],
+    answer:1,
+    explanation:"방송에서 세레브라스의 상태를 '코스트 트랩(Cost Trap)'이라고 채팅창에 적도록 강조했습니다. 매출은 늘려가지만 비용 함정에 빠져 마진이 계속 깨지는 구조를 가리킵니다."
+  },
+  {
+    id:3, type:'mc', difficulty:'med',
+    question:"방송에서 강조한 마이크론의 마진율(영업이익률)은 약 몇 %인가?",
+    options:["64.9%","74.9%","84.9%","94.9%"],
+    answer:2,
+    explanation:"마이크론의 마진은 정확히 84.9%(약 85%)로, 최고치를 갱신한 수준입니다. 방송은 '엔비디아보다 잘 버는 셈'이라며 이 수치를 거듭 강조했습니다."
+  },
+  {
+    id:4, type:'mc', difficulty:'med',
+    question:"5조(5트릴리언) 달러를 자랑하던 엔비디아의 시가총액은 얼마로 내려앉았는가?",
+    options:["4.819조 달러","4.519조 달러","3.819조 달러","4.119조 달러"],
+    answer:0,
+    explanation:"엔비디아 시가총액이 5조 달러에서 4.819조 달러로 하락했습니다. 방송은 '오해하지 말라'며, 위스퍼 넘버(시장 기대치)를 넘지 못해 조정받은 것이라 설명했습니다."
+  },
+  {
+    id:5, type:'mc', difficulty:'med',
+    question:"선런(RUN)과 테슬라 에너지가 발표한 분산형 가상발전소(VPP)의 규모는?",
+    options:["6GW","16GW","60GW","160GW"],
+    answer:1,
+    explanation:"선런과 테슬라가 16GW 규모의 분산형 가상발전소(VPP) 구축 파트너십을 발표했고, 선런 주가는 장중 최고 +12.5% 급등했습니다."
+  },
+  {
+    id:6, type:'mc', difficulty:'hard',
+    question:"'AI 2.0 밸류체인 확장 로드맵'에서 마이크론·브로드컴이 속한 '현재 수익 폭발 구간'은 어느 단계인가?",
+    options:["Core (범용 GPU)","Layer 1 (AI 메모리 & 맞춤형 칩)","Layer 2 (ARM 기반 서버 CPU)","Layer 3 (전력 & 인프라)"],
+    answer:1,
+    explanation:"로드맵에서 Layer 1은 'AI 메모리 & 맞춤형 칩(Micron, Broadcom)'으로, 현재 수익이 폭발하는 구간입니다. Core는 검증 구간(Nvidia), Layer 2는 ARM 서버(Qualcomm), Layer 3는 전력 인프라(Sunrun)입니다."
+  },
+  {
+    id:7, type:'short', difficulty:'med',
+    question:"6월 29일 다우존스 지수에 새로 편입되는 빅테크 기업의 이름은? (버라이즌이 퇴출됩니다)",
+    answer:["알파벳","구글","alphabet","google","알파벳(구글)","구글(알파벳)"],
+    explanation:"정답은 알파벳(구글)입니다. 6월 29일 알파벳이 다우에 편입(버라이즌 퇴출)되며, 다우 추종 펀드들의 매수 수요가 다우 지수를 떠받쳤습니다. 매그니피센트 7 중 5개가 다우에 편입됩니다."
+  },
+  {
+    id:8, type:'short', difficulty:'hard',
+    question:"브로드컴(AVGO)이 OpenAI와 함께 공개한 첫 커스텀 AI 추론칩의 이름은? (고추 이름)",
+    answer:["할라페뇨","jalapeño","jalapeno","할라피뇨"],
+    explanation:"정답은 할라페뇨(Jalapeño)입니다. 빅테크가 비싼 범용 GPU 대신 자체 설계 칩(ASIC)으로 다변화하는 흐름의 상징적 사건으로 소개됐습니다. (참고로 퀄컴의 데이터센터 칩은 '드래곤플라이 C1000')"
+  },
+  {
+    id:9, type:'ox', difficulty:'easy',
+    question:"연준의 스트레스 테스트에서 32개 은행이 전원 통과했다.",
+    answer:"O",
+    explanation:"O가 정답입니다. 32개 은행이 전원 통과하며 약 $708B 규모의 손실 흡수력을 증명했습니다. 방송은 JPM의 자사주 매입·배당 확대와 함께 금융주를 '안전 지대'로 평가했습니다."
+  },
+  {
+    id:10, type:'ox', difficulty:'med',
+    question:"마이크론은 단기 계약 중심으로 현금을 확보하고 있다.",
+    answer:"X",
+    explanation:"X가 정답입니다. 마이크론은 단기가 아닌 '장기 계약'으로 미리 현금을 땡겨받는 구조라고 방송이 강조했습니다. HBM·데이터센터 메모리 공급 부족이 2027년까지 지속될 전망이기 때문입니다."
+  }
+];
+
+let state = { solved:0, correct:0 };
+const solvedSet = new Set();
+
+const quiz = document.getElementById('quiz');
+const dMap = {easy:['쉬움','d-easy'], med:['보통','d-med'], hard:['어려움','d-hard']};
+const tMap = {mc:'객관식', short:'단답형', ox:'OX'};
+
+function render(){
+  quiz.innerHTML = '';
+  QUIZ_DATA.forEach(q=>{
+    const card = document.createElement('div');
+    card.className = 'q'; card.id = 'q'+q.id;
+    const [dLabel,dCls] = dMap[q.difficulty];
+    let inner = `
+      <div class="q-top">
+        <span class="q-num">${q.id}</span>
+        <div class="q-badges">
+          <span class="tag type">${tMap[q.type]}</span>
+          <span class="tag ${dCls}">${dLabel}</span>
+        </div>
+      </div>
+      <div class="q-text">${q.question}</div>`;
+
+    if(q.type==='mc'){
+      inner += '<div class="opts">';
+      q.options.forEach((o,i)=>{
+        inner += `<button class="opt" data-i="${i}">
+          <span class="mark">${String.fromCharCode(65+i)}</span>
+          <span>${o}</span><span class="res"></span></button>`;
+      });
+      inner += '</div>';
+    } else if(q.type==='short'){
+      inner += `<div class="short">
+        <input type="text" placeholder="정답을 입력하세요" autocomplete="off">
+        <button class="submit">제출</button></div>`;
+    } else if(q.type==='ox'){
+      inner += `<div class="ox">
+        <button data-v="O">O</button>
+        <button data-v="X">X</button></div>`;
+    }
+    inner += `<div class="exp"><div class="exp-in">
+      <div class="h" id="expH${q.id}"></div>
+      <p>${q.explanation}</p></div></div>`;
+    card.innerHTML = inner;
+    quiz.appendChild(card);
+    attach(card, q);
+  });
+}
+
+function attach(card, q){
+  if(q.type==='mc'){
+    card.querySelectorAll('.opt').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const i = parseInt(btn.dataset.i);
+        const ok = i===q.answer;
+        card.querySelectorAll('.opt').forEach((b,idx)=>{
+          b.disabled = true;
+          if(idx===q.answer){ b.classList.add('correct'); b.querySelector('.res').textContent='✓ 정답'; }
+        });
+        if(!ok){ btn.classList.add('wrong'); btn.querySelector('.res').textContent='✗ 오답'; }
+        finish(q, ok, card);
+      });
+    });
+  } else if(q.type==='short'){
+    const input = card.querySelector('input');
+    const sbtn = card.querySelector('.submit');
+    const submit = ()=>{
+      const val = input.value.trim().toLowerCase();
+      if(!val){ input.focus(); return; }
+      const ok = q.answer.some(a=> a.toLowerCase()===val);
+      input.disabled = true; sbtn.disabled = true;
+      input.classList.add(ok?'ok':'no');
+      if(!ok) input.value = input.value + '  →  정답: ' + q.answer[0];
+      finish(q, ok, card);
+    };
+    sbtn.addEventListener('click', submit);
+    input.addEventListener('keydown', e=>{ if(e.key==='Enter') submit(); });
+  } else if(q.type==='ox'){
+    card.querySelectorAll('.ox button').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const ok = btn.dataset.v===q.answer;
+        card.querySelectorAll('.ox button').forEach(b=>{
+          b.disabled = true;
+          if(b.dataset.v===q.answer) b.classList.add('correct');
+        });
+        if(!ok) btn.classList.add('wrong');
+        finish(q, ok, card);
+      });
+    });
+  }
+}
+
+function finish(q, ok, card){
+  if(solvedSet.has(q.id)) return;
+  solvedSet.add(q.id);
+  state.solved++;
+  if(ok) state.correct++;
+  const expH = card.querySelector('.exp .h');
+  expH.innerHTML = ok ? '✅ 정답입니다' : '❌ 오답입니다';
+  expH.style.color = ok ? 'var(--green)' : 'var(--red)';
+  const exp = card.querySelector('.exp');
+  exp.classList.add('show');
+  updateBoard();
+  if(state.solved===QUIZ_DATA.length){
+    setTimeout(showResult, 600);
+  }
+}
+
+function updateBoard(){
+  document.getElementById('sSolved').textContent = state.solved+' / 10';
+  document.getElementById('sCorrect').textContent = state.correct;
+  const rate = state.solved ? Math.round(state.correct/state.solved*100) : 0;
+  document.getElementById('sRate').textContent = rate+'%';
+  const fill = document.getElementById('pbarFill');
+  fill.style.width = rate+'%';
+  if(rate<40) fill.style.background = 'var(--red)';
+  else if(rate<70) fill.style.background = 'var(--orange)';
+  else fill.style.background = 'var(--green)';
+}
+
+function showResult(){
+  const score = state.correct;
+  const pct = Math.round(score/10*100);
+  let grade, msg;
+  if(score>=9){ grade='A'; msg='완벽에 가깝습니다. AI 2.0 밸류체인의 핵심을 정확히 꿰뚫었습니다.'; }
+  else if(score>=7){ grade='B'; msg='훌륭합니다. 큰 흐름은 확실히 잡았습니다. 놓친 부분만 다시 보세요.'; }
+  else if(score>=5){ grade='C'; msg='기본은 갖췄습니다. 마진·밸류체인 단계를 한 번 더 복습하면 좋겠습니다.'; }
+  else if(score>=3){ grade='D'; msg='핵심 수치와 옥석 가리기 개념을 다시 정리해 보세요.'; }
+  else { grade='F'; msg='리포트를 한 번 더 정독한 뒤 재도전을 권합니다.'; }
+  document.getElementById('mGrade').textContent = grade;
+  document.getElementById('mGrade').style.color = score>=7?'var(--green)':(score>=5?'var(--orange)':'var(--rose)');
+  document.getElementById('mPct').textContent = pct+'%';
+  document.getElementById('mScore').textContent = score;
+  document.getElementById('mMsg').textContent = msg;
+  document.getElementById('modal').classList.add('show');
+}
+
+document.getElementById('retryBtn').addEventListener('click', ()=>{
+  state = {solved:0, correct:0};
+  solvedSet.clear();
+  document.getElementById('modal').classList.remove('show');
+  updateBoard();
+  render();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+render();
+updateBoard();
+</script>
+</body>
+</html>
