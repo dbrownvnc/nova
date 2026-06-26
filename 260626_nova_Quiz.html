@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 자본의 단층선 — 이해도 점검 퀴즈 (2026.06.25)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#fafafa; --ink:#1a1a1a; --sub:#777777;
+    --accent:#e11d48; --accent2:#f43f5e; --blue:#2563eb; --gray:#6b7280;
+    --border:#e5e5e5; --green:#16a34a; --greenbg:#e7f6ec; --redbg:#fde4ea;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg2); color:var(--ink);
+    font-family:'Noto Sans KR',sans-serif; line-height:1.7;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:680px; margin:0 auto; background:var(--bg); min-height:100vh;}
+
+  /* ===== Sticky scoreboard ===== */
+  .scorebar{position:sticky; top:0; z-index:50; background:rgba(255,255,255,.97);
+    backdrop-filter:blur(8px); border-bottom:1px solid var(--border);
+    padding:12px 20px;}
+  .score-stats{display:flex; justify-content:space-between; align-items:center;
+    font-size:.78rem; margin-bottom:8px;}
+  .score-stats .item{text-align:center; flex:1;}
+  .score-stats .item .n{font-family:'Playfair Display',serif; font-weight:900;
+    font-size:1.25rem; color:var(--ink); display:block; line-height:1;}
+  .score-stats .item .n.rate{color:var(--accent);}
+  .score-stats .item .lbl{font-size:.64rem; color:var(--sub); letter-spacing:.04em;}
+  .score-stats .sep{width:1px; height:26px; background:var(--border);}
+  .pbar{height:6px; background:var(--border); border-radius:6px; overflow:hidden;}
+  .pbar i{display:block; height:100%; width:0%; border-radius:6px;
+    background:var(--accent); transition:width .5s ease, background .4s ease;}
+
+  /* ===== Header ===== */
+  header{padding:38px 24px 26px; border-bottom:2px solid var(--ink);}
+  .eyebrow{font-size:.7rem; letter-spacing:.3em; text-transform:uppercase;
+    color:var(--accent); font-weight:700; margin-bottom:14px;}
+  header h1{font-family:'Playfair Display',serif; font-weight:900; font-size:1.9rem;
+    line-height:1.18; letter-spacing:-.01em;}
+  header h1 em{font-style:italic; color:var(--accent);}
+  header p{font-size:.86rem; color:var(--sub); margin-top:12px;}
+
+  /* ===== Quiz cards ===== */
+  #quiz{padding:8px 20px 30px;}
+  .q-card{border:1px solid var(--border); border-radius:8px; padding:22px 20px;
+    margin:18px 0; background:#fff;}
+  .q-top{display:flex; align-items:center; gap:10px; margin-bottom:14px;}
+  .q-no{font-family:'Playfair Display',serif; font-weight:900; font-size:1.1rem;
+    color:var(--accent);}
+  .q-type{font-size:.66rem; font-weight:700; letter-spacing:.04em; padding:3px 9px;
+    border-radius:12px; background:#eef1f6; color:var(--gray);}
+  .q-diff{font-size:.66rem; font-weight:700; padding:3px 9px; border-radius:12px;
+    margin-left:auto;}
+  .d-easy{background:#e7f6ec; color:var(--green);}
+  .d-mid{background:#fef0e0; color:#c2700b;}
+  .d-hard{background:#fde4ea; color:var(--accent);}
+  .q-text{font-size:1rem; font-weight:500; line-height:1.55; margin-bottom:16px;}
+
+  /* options */
+  .opts{display:flex; flex-direction:column; gap:9px;}
+  .opt{display:flex; align-items:center; gap:11px; padding:13px 15px;
+    border:1px solid var(--border); border-radius:7px; cursor:pointer;
+    font-size:.92rem; transition:all .18s; background:#fff; text-align:left;
+    font-family:inherit; color:var(--ink); width:100%;}
+  .opt:hover:not(:disabled){border-color:var(--accent); background:#fff7f9;}
+  .opt:disabled{cursor:default;}
+  .opt .mk{width:24px; height:24px; flex:0 0 24px; border-radius:50%;
+    border:1.5px solid var(--border); display:flex; align-items:center;
+    justify-content:center; font-size:.78rem; font-weight:700; color:var(--sub);}
+  .opt.correct{background:var(--greenbg); border-color:var(--green);}
+  .opt.correct .mk{background:var(--green); color:#fff; border-color:var(--green);}
+  .opt.wrong{background:var(--redbg); border-color:var(--accent);}
+  .opt.wrong .mk{background:var(--accent); color:#fff; border-color:var(--accent);}
+  .badge{margin-left:auto; font-size:.72rem; font-weight:700; padding:2px 8px;
+    border-radius:10px;}
+  .badge.ok{background:var(--green); color:#fff;}
+  .badge.no{background:var(--accent); color:#fff;}
+
+  /* OX */
+  .ox{display:flex; gap:12px;}
+  .ox .opt{justify-content:center; font-size:1.3rem; font-weight:900;
+    font-family:'Playfair Display',serif; padding:18px;}
+
+  /* short answer */
+  .short{display:flex; gap:8px;}
+  .short input{flex:1; padding:13px 15px; border:1px solid var(--border);
+    border-radius:7px; font-family:inherit; font-size:.92rem; outline:none;}
+  .short input:focus{border-color:var(--accent);}
+  .short input:disabled{background:var(--bg2);}
+  .short button{padding:0 20px; background:var(--ink); color:#fff; border:none;
+    border-radius:7px; font-family:inherit; font-weight:700; font-size:.85rem;
+    cursor:pointer; transition:background .2s; white-space:nowrap;}
+  .short button:hover:not(:disabled){background:var(--accent);}
+  .short button:disabled{background:var(--gray); cursor:default;}
+  .short-hint{font-size:.72rem; color:var(--sub); margin-top:8px;}
+
+  /* explanation */
+  .expl{max-height:0; overflow:hidden; transition:max-height .4s ease, margin .3s;
+    margin-top:0;}
+  .expl.show{max-height:420px; margin-top:16px;}
+  .expl-in{background:var(--bg2); border-left:3px solid var(--accent);
+    border-radius:0 6px 6px 0; padding:14px 16px;}
+  .expl-in .et{font-size:.74rem; font-weight:700; color:var(--accent);
+    letter-spacing:.04em; margin-bottom:6px;}
+  .expl-in .ea{font-size:.86rem; line-height:1.6; color:var(--ink);}
+  .expl-in .ea b{color:var(--accent);}
+
+  /* ===== Result modal ===== */
+  .modal{position:fixed; inset:0; background:rgba(26,26,26,.6); backdrop-filter:blur(4px);
+    display:none; align-items:center; justify-content:center; z-index:100; padding:24px;}
+  .modal.show{display:flex;}
+  .modal-card{background:#fff; border-radius:14px; padding:36px 28px; max-width:380px;
+    width:100%; text-align:center; animation:pop .4s ease;}
+  @keyframes pop{from{transform:scale(.9); opacity:0;} to{transform:scale(1); opacity:1;}}
+  .modal-card .grade{font-family:'Playfair Display',serif; font-weight:900;
+    font-size:4.5rem; line-height:1; color:var(--accent);}
+  .modal-card .ttl{font-size:1.1rem; font-weight:700; margin:10px 0 4px;}
+  .modal-card .scoreline{font-size:.95rem; color:var(--sub); margin-bottom:6px;}
+  .modal-card .scoreline b{color:var(--ink); font-size:1.2rem;
+    font-family:'Playfair Display',serif;}
+  .modal-card .msg{font-size:.86rem; color:var(--ink); margin:16px 0 22px;
+    line-height:1.6;}
+  .modal-card button{width:100%; padding:13px; background:var(--ink); color:#fff;
+    border:none; border-radius:8px; font-family:inherit; font-weight:700;
+    font-size:.92rem; cursor:pointer; transition:background .2s;}
+  .modal-card button:hover{background:var(--accent);}
+
+  footer{padding:24px; text-align:center; font-size:.7rem; color:var(--sub);
+    border-top:1px solid var(--border); line-height:1.6;}
+
+  @media (max-width:480px){
+    header h1{font-size:1.55rem;}
+    .modal-card .grade{font-size:3.6rem;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Sticky scoreboard -->
+  <div class="scorebar">
+    <div class="score-stats">
+      <div class="item"><span class="n" id="stSolved">0</span><span class="lbl">푼 문제 / 10</span></div>
+      <div class="sep"></div>
+      <div class="item"><span class="n" id="stCorrect">0</span><span class="lbl">맞힌 문제</span></div>
+      <div class="sep"></div>
+      <div class="item"><span class="n rate" id="stRate">0%</span><span class="lbl">정답률</span></div>
+    </div>
+    <div class="pbar"><i id="pbar"></i></div>
+  </div>
+
+  <header>
+    <div class="eyebrow">CIA.chat 멤버미팅 · 이해도 점검</div>
+    <h1>AI 자본의 <em>단층선</em>, 얼마나 이해하셨나요?</h1>
+    <p>2026년 6월 25일 방송 내용 기반 10문제 · 보기를 누르면 즉시 채점되고 해설이 펼쳐집니다.</p>
+  </header>
+
+  <div id="quiz"></div>
+
+  <footer>
+    NOVA Real Invest · CIA.chat 멤버미팅 이해도 점검 퀴즈<br>
+    모든 문제는 2026.06.25 방송 내용에 근거합니다.
+  </footer>
+</div>
+
+<!-- Result modal -->
+<div class="modal" id="modal">
+  <div class="modal-card">
+    <div class="grade" id="mGrade">A</div>
+    <div class="ttl" id="mTitle">훌륭합니다!</div>
+    <div class="scoreline"><b id="mScore">0</b> / 10 정답</div>
+    <div class="msg" id="mMsg"></div>
+    <button id="mRetry">다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id:1, type:'mc', difficulty:'easy',
+    question:"2026년 6월 25일, AI 인프라 상승을 이끈 주역인 마이크론(MU)의 당일 등락률은?",
+    options:["+8.20%","+15.74%","+21.47%","+3.46%"],
+    answer:1,
+    explanation:"마이크론은 이날 <b>+15.74%</b> 급등하며 시장의 주인공이 됐습니다. 방송에서 '오늘 마이크론 미쳤다'며 핵심 사건으로 다뤘고, 슬라이드에도 MU +15.74%로 표기됐습니다."
+  },
+  {
+    id:2, type:'mc', difficulty:'easy',
+    question:"승자(수혜) 영역에서 당일 가장 큰 폭으로 오른 종목은?",
+    options:["MU 마이크론","AMAT 어플라이드","SNDK 샌디스크","NVDA 엔비디아"],
+    answer:2,
+    explanation:"<b>SNDK 샌디스크가 +21.47%</b>로 가장 크게 올랐습니다. 마이크론(+15.74%), AMAT(+13.4%)보다 높았으며, 방송에서도 'SNDK도 장난 아니었다'고 언급됐습니다."
+  },
+  {
+    id:3, type:'ox', difficulty:'easy',
+    question:"이날 다우 지수는 장중 사상 최고치(51,854.81)를 기록했다.",
+    answer:'O',
+    explanation:"<b>O (맞음)</b>. 다우는 장중 51,854.81로 사상 최고치를 찍은 뒤 다시 내려와 보합(똔똔)으로 마감했습니다. 지수는 평평했지만 그 아래에서 극단적 디커플링이 진행됐다는 게 이날의 핵심입니다."
+  },
+  {
+    id:4, type:'mc', difficulty:'mid',
+    question:"리레이팅을 촉발한 마이크론의 3분기 매출 규모는? (전년비 +346% 폭증)",
+    options:["250억 달러","414.6억 달러","1,000억 달러","119.2억 달러"],
+    answer:1,
+    explanation:"3분기 매출은 <b>414.6억 달러</b>로 전년비 346% 폭증했습니다. 데이터센터 매출만 250억 달러를 돌파했고, 1,000억 달러는 16개 SCA 기반 '누적 매출 하한선'을 가리킵니다."
+  },
+  {
+    id:5, type:'mc', difficulty:'mid',
+    question:"AI플레이션의 출발점으로, 메모리 가격이 최대 몇 배까지 급등했다고 했나?",
+    options:["1.5배","2.0배","2.5배","3.5배"],
+    answer:2,
+    explanation:"메모리 가격이 최대 <b>2.5배</b> 급등했습니다. 마이크론·샌디스크가 돈 되는 데이터센터용만 만들고 PC용 공급을 줄이면서 가격이 더 올라가는 구조라고 설명됐습니다."
+  },
+  {
+    id:6, type:'short', difficulty:'mid',
+    question:"AI 인프라(특히 메모리) 비용 상승이 최종 소비재 가격 인상으로 전가되는 현상을, 이날 방송이 '유가가 아니라 이것이 문제'라며 명명한 신조어는?",
+    answer:["AI플레이션","ai플레이션","AI 플레이션","에이아이플레이션","AI-flation","AIflation"],
+    "short-hint":"방송에서 '채팅창에 써보세요'라고 했던 단어",
+    explanation:"정답은 <b>AI플레이션</b>입니다. 방송은 '지금 우리는 유가를 걱정하는 게 아니라 AI플레이션이 문제'라며, AI 인프라 비용이 소비자 가격으로 전가되는 현상을 이 단어로 정의했습니다."
+  },
+  {
+    id:7, type:'mc', difficulty:'mid',
+    question:"멀티플 압축의 사례로 든 팔란티어(PLTR)의 Forward PER과 소프트웨어 섹터 평균 PER은?",
+    options:["41x vs 18x","61x vs 23x","23x vs 61x","85x vs 30x"],
+    answer:1,
+    explanation:"팔란티어 <b>Forward PER 61x</b> vs 소프트웨어 섹터 평균 <b>23x</b>로 밸류에이션 불균형이 컸습니다. 고금리에서 투자자들이 프리미엄을 거부하며 PLTR은 52주 신저가($107.27)로 떨어졌습니다."
+  },
+  {
+    id:8, type:'ox', difficulty:'mid',
+    question:"오랫동안 팔란티어를 공매도하던 마이클 버리가, 이날 드디어 그 숏 포지션을 청산했다는 뉴스가 나왔다.",
+    answer:'O',
+    explanation:"<b>O (맞음)</b>. 마이클 버리가 팔란티어 숏을 청산했다는 뉴스가 이날 나왔습니다. 방송은 '돈 많이 벌었을 것, 하나 맞췄다'고 평했습니다."
+  },
+  {
+    id:9, type:'short', difficulty:'hard',
+    question:"마이크론이 1,000억 달러 누적 매출 '하한선'을 확보한 근거인, 16개의 ___ 계약을 무엇이라 하나? (영문 약자 3글자 또는 한글 명칭)",
+    answer:["SCA","sca","전략고객계약","전략 고객 계약"],
+    "short-hint":"Strategic Customer Agreement",
+    explanation:"정답은 <b>SCA(전략고객계약)</b>입니다. 16개 전략고객계약을 기반으로 1,000억 달러 누적 매출 하한선을 확보해, 마이크론이 사이클 주식에서 '견고한 수익 지지 기반'을 갖춘 인프라 자산으로 평가받게 됐습니다."
+  },
+  {
+    id:10, type:'mc', difficulty:'hard',
+    question:"AI 인프라가 물리적 영역으로 확장된 사례로, 캐터필러(CAT)가 참여한 마이크로소프트 전력 프로젝트의 이름과 규모는?",
+    options:["Project Kilby · 2.67GW","Project Stargate · 5GW","Project Maia · 1.2GW","Project Olympus · 3.4GW"],
+    answer:0,
+    explanation:"캐터필러는 마이크로소프트의 <b>Project Kilby 2.67GW</b> 전력 공급망에 참여하며 장중 1,047달러로 사상 최고가를 경신했고, 역대 최고 수주 잔고 630억 달러를 달성했습니다. 전력·터빈이 새로운 '곡괭이'가 된 사례입니다."
+  }
+];
+
+let state = { solved:0, correct:0, done:new Set() };
+const quizEl = document.getElementById('quiz');
+
+function diffMeta(d){
+  if(d==='easy') return {cls:'d-easy', label:'쉬움'};
+  if(d==='hard') return {cls:'d-hard', label:'어려움'};
+  return {cls:'d-mid', label:'보통'};
+}
+function typeLabel(t){
+  return t==='mc' ? '객관식' : t==='ox' ? 'OX' : '단답형';
+}
+
+QUIZ_DATA.forEach(q=>{
+  const card=document.createElement('div');
+  card.className='q-card';
+  card.id='q'+q.id;
+  const dm=diffMeta(q.difficulty);
+
+  let inner=`<div class="q-top">
+      <span class="q-no">Q${q.id}</span>
+      <span class="q-type">${typeLabel(q.type)}</span>
+      <span class="q-diff ${dm.cls}">${dm.label}</span>
+    </div>
+    <div class="q-text">${q.question}</div>`;
+
+  if(q.type==='mc'){
+    inner+=`<div class="opts">`;
+    q.options.forEach((o,i)=>{
+      const mk=String.fromCharCode(65+i);
+      inner+=`<button class="opt" data-i="${i}"><span class="mk">${mk}</span><span>${o}</span></button>`;
+    });
+    inner+=`</div>`;
+  } else if(q.type==='ox'){
+    inner+=`<div class="opts ox">
+      <button class="opt" data-v="O"><span>O</span></button>
+      <button class="opt" data-v="X"><span>X</span></button>
+    </div>`;
+  } else {
+    inner+=`<div class="short">
+      <input type="text" placeholder="정답 입력..." autocomplete="off">
+      <button class="submit">제출</button>
+    </div>`;
+    if(q['short-hint']) inner+=`<div class="short-hint">💡 힌트: ${q['short-hint']}</div>`;
+  }
+
+  inner+=`<div class="expl"><div class="expl-in">
+      <div class="et">✦ 해설</div>
+      <div class="ea">${q.explanation}</div>
+    </div></div>`;
+
+  card.innerHTML=inner;
+  quizEl.appendChild(card);
+
+  // bind
+  if(q.type==='mc'){
+    card.querySelectorAll('.opt').forEach(btn=>{
+      btn.addEventListener('click', ()=>gradeMC(q, card, +btn.dataset.i));
+    });
+  } else if(q.type==='ox'){
+    card.querySelectorAll('.opt').forEach(btn=>{
+      btn.addEventListener('click', ()=>gradeOX(q, card, btn.dataset.v));
+    });
+  } else {
+    const inp=card.querySelector('input'), sub=card.querySelector('.submit');
+    sub.addEventListener('click', ()=>gradeShort(q, card, inp.value));
+    inp.addEventListener('keydown', e=>{ if(e.key==='Enter') gradeShort(q, card, inp.value); });
+  }
+});
+
+function lockExplain(card){
+  card.querySelector('.expl').classList.add('show');
+}
+function tally(isCorrect){
+  state.solved++;
+  if(isCorrect) state.correct++;
+  updateScore();
+  if(state.solved===QUIZ_DATA.length) setTimeout(showResult, 500);
+}
+function updateScore(){
+  document.getElementById('stSolved').textContent=state.solved;
+  document.getElementById('stCorrect').textContent=state.correct;
+  const rate = state.solved? Math.round(state.correct/state.solved*100) : 0;
+  document.getElementById('stRate').textContent=rate+'%';
+  const bar=document.getElementById('pbar');
+  bar.style.width=(state.solved/QUIZ_DATA.length*100)+'%';
+  let col=rate<40 ? '#e11d48' : rate<70 ? '#c2700b' : '#16a34a';
+  bar.style.background=col;
+}
+
+function gradeMC(q, card, picked){
+  if(state.done.has(q.id)) return;
+  state.done.add(q.id);
+  const opts=card.querySelectorAll('.opt');
+  const isCorrect = picked===q.answer;
+  opts.forEach((o,i)=>{
+    o.disabled=true;
+    if(i===q.answer){
+      o.classList.add('correct');
+      o.insertAdjacentHTML('beforeend','<span class="badge ok">✓ 정답</span>');
+    }
+    if(i===picked && !isCorrect){
+      o.classList.add('wrong');
+      o.insertAdjacentHTML('beforeend','<span class="badge no">✗ 오답</span>');
+    }
+  });
+  lockExplain(card);
+  tally(isCorrect);
+}
+
+function gradeOX(q, card, val){
+  if(state.done.has(q.id)) return;
+  state.done.add(q.id);
+  const opts=card.querySelectorAll('.opt');
+  const isCorrect = val===q.answer;
+  opts.forEach(o=>{
+    o.disabled=true;
+    const v=o.dataset.v;
+    if(v===q.answer){
+      o.classList.add('correct');
+      o.insertAdjacentHTML('beforeend','<span class="badge ok">✓ 정답</span>');
+    }
+    if(v===val && !isCorrect){
+      o.classList.add('wrong');
+      o.insertAdjacentHTML('beforeend','<span class="badge no">✗ 오답</span>');
+    }
+  });
+  lockExplain(card);
+  tally(isCorrect);
+}
+
+function normalize(s){
+  return s.toLowerCase().replace(/\s+/g,'').replace(/[().,·]/g,'');
+}
+function gradeShort(q, card, val){
+  if(state.done.has(q.id)) return;
+  if(!val.trim()) { card.querySelector('input').focus(); return; }
+  state.done.add(q.id);
+  const inp=card.querySelector('input'), sub=card.querySelector('.submit');
+  const accepted = q.answer.map(normalize);
+  const isCorrect = accepted.includes(normalize(val));
+  inp.disabled=true; sub.disabled=true;
+  inp.style.borderColor = isCorrect ? 'var(--green)' : 'var(--accent)';
+  inp.style.background = isCorrect ? 'var(--greenbg)' : 'var(--redbg)';
+  sub.textContent = isCorrect ? '✓ 정답' : '✗ 오답';
+  sub.style.background = isCorrect ? 'var(--green)' : 'var(--accent)';
+  if(!isCorrect){
+    const hint=document.createElement('div');
+    hint.className='short-hint';
+    hint.style.color='var(--accent)';
+    hint.style.fontWeight='700';
+    hint.innerHTML='정답: '+q.answer[0];
+    card.querySelector('.short').after(hint);
+  }
+  lockExplain(card);
+  tally(isCorrect);
+}
+
+function showResult(){
+  const score=state.correct;
+  let grade, ttl, msg;
+  if(score>=9){ grade='A'; ttl='완벽합니다!'; msg='인프라 로테이션의 큰 그림을 정확히 꿰뚫고 계시네요. 곡괭이와 삽의 차이를 완전히 이해하셨습니다.'; }
+  else if(score>=7){ grade='B'; ttl='훌륭합니다!'; msg='핵심 흐름을 잘 잡으셨습니다. 마이크론 실적과 AI플레이션의 연결고리를 한 번 더 복습하면 완벽해집니다.'; }
+  else if(score>=5){ grade='C'; ttl='잘하셨어요!'; msg='절반 이상 맞히셨습니다. 디커플링·멀티플 압축 같은 개념을 분석 리포트로 다시 보면 더 단단해집니다.'; }
+  else if(score>=3){ grade='D'; ttl='조금 더!'; msg='기본 줄거리는 잡으셨습니다. 분석 리포트를 정독한 뒤 다시 도전해 보세요.'; }
+  else { grade='F'; ttl='다시 한번!'; msg='괜찮습니다. 분석 리포트를 천천히 읽고 오면 점수가 확 오를 거예요.'; }
+
+  document.getElementById('mGrade').textContent=grade;
+  document.getElementById('mTitle').textContent=ttl;
+  document.getElementById('mScore').textContent=score;
+  document.getElementById('mMsg').textContent=msg;
+  document.getElementById('modal').classList.add('show');
+}
+
+document.getElementById('mRetry').addEventListener('click', ()=>{
+  state={ solved:0, correct:0, done:new Set() };
+  document.getElementById('modal').classList.remove('show');
+  quizEl.innerHTML='';
+  // re-render by reloading
+  location.reload();
+});
+
+updateScore();
+</script>
+</body>
+</html>
