@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>대순환의 시작 : AI 현실 점검 — 이해도 점검 퀴즈</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#fafafa; --ink:#1a1a1a; --sub:#777777;
+    --accent:#e11d48; --accent2:#f43f5e; --line:#e5e5e5;
+    --ok:#16a34a; --okbg:#ecfdf5; --no:#dc2626; --nobg:#fef2f2;
+    --orange:#f59e0b;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:'Noto Sans KR',sans-serif;line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:0 20px 70px}
+
+  /* sticky scoreboard */
+  .score{
+    position:sticky;top:0;z-index:50;background:#fff;
+    border-bottom:1px solid var(--line);padding:13px 20px 12px;
+    box-shadow:0 2px 12px rgba(0,0,0,.04);
+  }
+  .score .inner{max-width:680px;margin:0 auto}
+  .score-row{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;color:var(--sub)}
+  .score-row .nums{display:flex;gap:16px}
+  .score-row b{color:var(--ink);font-weight:700;font-size:14px}
+  .score-row .rate b{color:var(--accent);font-size:16px;font-family:'Playfair Display',serif}
+  .bar{height:6px;background:#eee;border-radius:6px;margin-top:9px;overflow:hidden}
+  .bar-fill{height:100%;width:0%;background:var(--no);border-radius:6px;transition:width .4s ease,background .4s ease}
+
+  /* header */
+  header{padding:46px 20px 30px;max-width:680px;margin:0 auto;text-align:center;border-bottom:3px solid var(--ink)}
+  .ey{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:14px}
+  header h1{font-family:'Playfair Display',serif;font-weight:900;font-size:30px;line-height:1.2;margin-bottom:12px}
+  header p{font-size:13.5px;color:var(--sub)}
+
+  /* card */
+  .q{border:1px solid var(--line);border-radius:6px;padding:22px 20px;margin:22px 0;background:#fff}
+  .q-head{display:flex;align-items:center;gap:9px;margin-bottom:14px}
+  .q-no{font-family:'Playfair Display',serif;font-weight:900;font-size:20px;color:var(--accent)}
+  .q-badge{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.03em}
+  .b-easy{background:#ecfdf5;color:#16a34a} .b-mid{background:#fffbeb;color:#d97706} .b-hard{background:#fef2f2;color:#dc2626}
+  .q-type{font-size:10.5px;color:var(--sub);border:1px solid var(--line);padding:3px 9px;border-radius:20px;margin-left:auto}
+  .q-text{font-size:15.5px;font-weight:500;line-height:1.6;margin-bottom:16px}
+
+  /* options */
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{
+    text-align:left;border:1px solid var(--line);background:var(--bg2);border-radius:5px;
+    padding:12px 14px;font-size:14px;font-family:inherit;cursor:pointer;color:var(--ink);
+    transition:.15s;display:flex;align-items:center;gap:10px;line-height:1.4;
+  }
+  .opt:hover:not(:disabled){border-color:var(--accent);background:#fff}
+  .opt:disabled{cursor:default}
+  .opt .mk{flex:0 0 22px;height:22px;border:1.5px solid var(--sub);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--sub)}
+  .opt.correct{background:var(--okbg);border-color:var(--ok)}
+  .opt.correct .mk{background:var(--ok);border-color:var(--ok);color:#fff}
+  .opt.wrong{background:var(--nobg);border-color:var(--no)}
+  .opt.wrong .mk{background:var(--no);border-color:var(--no);color:#fff}
+  .badge{margin-left:auto;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px}
+  .badge.ok{background:var(--ok);color:#fff} .badge.no{background:var(--no);color:#fff}
+
+  /* short answer */
+  .sa{display:flex;gap:8px}
+  .sa input{
+    flex:1;border:1px solid var(--line);border-radius:5px;padding:12px 14px;
+    font-size:14px;font-family:inherit;background:var(--bg2);
+  }
+  .sa input:focus{outline:none;border-color:var(--accent);background:#fff}
+  .sa button,.ox button{
+    border:none;border-radius:5px;padding:0 18px;font-size:14px;font-weight:700;
+    font-family:inherit;cursor:pointer;background:var(--ink);color:#fff;transition:.15s;
+  }
+  .sa button:hover,.ox button:hover{background:var(--accent)}
+  .sa button:disabled,.ox button:disabled{opacity:.4;cursor:default}
+  .ox{display:flex;gap:10px}
+  .ox button{flex:1;padding:14px 0;font-size:18px;background:var(--bg2);color:var(--ink);border:1px solid var(--line)}
+  .ox button:hover:not(:disabled){border-color:var(--accent);background:#fff}
+  .ox button.correct{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+  .ox button.wrong{background:var(--nobg);border-color:var(--no);color:var(--no)}
+
+  /* explanation */
+  .exp{max-height:0;overflow:hidden;transition:max-height .4s ease;margin-top:0}
+  .exp.show{max-height:400px;margin-top:16px}
+  .exp-in{background:var(--bg2);border-left:3px solid var(--accent);border-radius:0 5px 5px 0;padding:14px 16px}
+  .exp-in .tag{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.04em;margin-bottom:7px}
+  .exp-in .ans{font-size:13.5px;font-weight:700;margin-bottom:6px}
+  .exp-in .why{font-size:13px;color:#444;line-height:1.65}
+
+  /* final modal */
+  .modal{position:fixed;inset:0;background:rgba(26,26,26,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:24px}
+  .modal.show{display:flex}
+  .modal-card{background:#fff;border-radius:10px;max-width:380px;width:100%;padding:38px 28px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+  .modal-card .eybrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  .grade{font-family:'Playfair Display',serif;font-weight:900;font-size:72px;line-height:1;margin:14px 0 6px}
+  .modal-card .sc{font-size:15px;color:var(--sub);margin-bottom:6px}
+  .modal-card .sc b{color:var(--ink);font-size:17px}
+  .modal-card .msg{font-size:13.5px;color:#555;margin:14px 0 24px;line-height:1.6}
+  .modal-card button{border:none;border-radius:6px;padding:13px 28px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;background:var(--accent);color:#fff;width:100%}
+  .modal-card button:hover{background:var(--accent2)}
+
+  @media(max-width:480px){
+    header h1{font-size:24px}
+    .q{padding:18px 15px}
+    .grade{font-size:60px}
+  }
+</style>
+</head>
+<body>
+
+<!-- sticky scoreboard -->
+<div class="score">
+  <div class="inner">
+    <div class="score-row">
+      <div class="nums">
+        <span>푼 문제 <b id="sSolved">0</b> / 10</span>
+        <span>맞힌 문제 <b id="sCorrect">0</b></span>
+      </div>
+      <span class="rate">정답률 <b id="sRate">0%</b></span>
+    </div>
+    <div class="bar"><div class="bar-fill" id="sBar"></div></div>
+  </div>
+</div>
+
+<header>
+  <div class="ey">NOVA Real Invest · 2026.06.27</div>
+  <h1>대순환의 시작<br>이해도 점검 퀴즈</h1>
+  <p>총 10문제 · 클릭하면 즉시 채점되고 해설이 펼쳐집니다</p>
+</header>
+
+<div class="wrap" id="quiz"></div>
+
+<!-- final modal -->
+<div class="modal" id="modal">
+  <div class="modal-card">
+    <div class="eybrow">Quiz Complete</div>
+    <div class="grade" id="mGrade">A</div>
+    <div class="sc">10문제 중 <b id="mScore">0</b>문제 정답</div>
+    <div class="msg" id="mMsg"></div>
+    <button id="mRetry">↺ 다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id:1, type:'mc', difficulty:'easy',
+    question:"이번 한 주간 매그니피센트 7(빅테크)에서 증발한 시가총액 규모는?",
+    options:["약 3,000억 달러","약 1조 달러","약 3조 달러","약 10조 달러"],
+    answer:2,
+    explanation:"방송 도입부에서 '천문학적인 시총이 허공에서 증발하면서 3조 달러가 그냥 사라져버렸다'고 강조했습니다. 이것이 나스닥 주간 약 4.6% 하락의 핵심 배경입니다."
+  },
+  {
+    id:2, type:'mc', difficulty:'mid',
+    question:"이번 주 나스닥의 주간 하락폭으로 방송에서 언급된 수치는?",
+    options:["약 2.3%","약 4.6%","약 7.5%","약 10%"],
+    answer:1,
+    explanation:"'주간 나스닥을 보면 거의 4.6% 5% 빠진 것'이라 했고, 여기서 5%가 더 빠지면 10% 조정장에 진입한다고 설명했습니다."
+  },
+  {
+    id:3, type:'mc', difficulty:'mid',
+    question:"기술주 투매 속에서도 시장의 폭(Breadth)이 넓어졌다는 근거로 제시된 지표는?",
+    options:["S&P500 종목의 63%가 50일 이동평균선 상회","S&P500 전 종목이 신고가 경신","나스닥 거래량 50% 증가","VIX 지수 사상 최저"],
+    answer:0,
+    explanation:"'S&P500 종목에서 63% 정도가 50일 이동평균선을 상회하고 있다'며, 전체가 나쁜 게 아니라 셀렉티브하게 가야 살아남는 시장이 됐다고 설명했습니다."
+  },
+  {
+    id:4, type:'mc', difficulty:'hard',
+    question:"온세미컨덕터(ON Semi)가 인수를 발표한 회사와, 그 직후 기록한 주가 낙폭은?",
+    options:["엔비디아 인수 · 약 5% 하락","시냅틱스(Synaptics) 70억 달러 인수 · 약 23% 폭락","유니트리 인수 · 약 12% 하락","마이크론 인수 · 약 8% 하락"],
+    answer:1,
+    explanation:"온세미가 시냅틱스를 70억 달러에 인수한다고 발표한 직후 주가가 S&P500 최대 낙폭인 약 23%를 기록했습니다. 시장은 2030년 피지컬 AI 비전보다 당장의 지분 희석과 실행 리스크를 더 무겁게 봤습니다."
+  },
+  {
+    id:5, type:'mc', difficulty:'mid',
+    question:"모더나(MRNA)가 13% 급등한 직접적인 이유는?",
+    options:["FDA의 코로나 백신 재승인","투자자의 날에서 발표한 체내(In Vivo) CAR-T 파이프라인","빅테크의 모더나 인수 발표","고배당 정책 발표"],
+    answer:1,
+    explanation:"단순 섹터 순환매가 아니라, Science Day에서 발표한 체내(In Vivo) CAR-T 파이프라인(mRNA-6007)이 핵심입니다. 지질 나노입자(LNP)로 mRNA를 직접 주입해 체내 면역세포를 리프로그래밍하는 비용·시간 효율적 혁신으로 평가받았습니다."
+  },
+  {
+    id:6, type:'mc', difficulty:'easy',
+    question:"도바가 제시한 2026년 하반기 핵심 포트폴리오 전략의 이름은?",
+    options:["올인 AI 전략","전략적 바벨(Strategic Barbell) 모델","현금 100% 보유 전략","레버리지 추종 전략"],
+    answer:1,
+    explanation:"자산의 양극단(방어적 성장·배당 + 물리적 AI 인프라)을 조화롭게 구성하고, 가운데의 고평가 AI 소프트웨어는 피하는 '전략적 바벨 모델'을 결론으로 제시했습니다."
+  },
+  {
+    id:7, type:'sa', difficulty:'hard',
+    question:"카시카리가 금리 인상의 원인으로 지목한 것은 '물가'가 아니었습니다. 그가 진짜 원인으로 지목한 것은 무엇인가요? (핵심 키워드)",
+    accept:["ai 데이터센터","데이터센터","자본 차입","ai 인프라","ai인프라","인프라스트럭처","ai 투자","자본차입","차입"],
+    answerLabel:"AI 데이터센터가 유발하는 막대한 자본 차입(AI Infrastructure Borrowing)",
+    explanation:"통상 금리 인상의 원인은 물가지만, 카시카리는 AI 데이터센터 구축을 위한 수천억 달러의 자본 수요·차입이 자본 배분 경쟁을 촉발하고 중립 금리 자체를 끌어올린다고 봤습니다. ('AI 인프라', '자본 차입', '데이터센터' 등으로 답하면 정답)"
+  },
+  {
+    id:8, type:'sa', difficulty:'mid',
+    question:"AAON의 1분기 데이터센터 '액체 냉각' 매출 증가율(폭등률)은 몇 %였나요? (숫자만)",
+    accept:["187","187%","187 퍼센트"],
+    answerLabel:"187%",
+    explanation:"AAON은 혹한기 프리 쿨링(Free Cooling) 시스템을 적용해 1분기 데이터센터 액체 냉각 매출이 187% 폭등했고, 2026년 매출 성장 가이던스도 40~45%로 대폭 상향했습니다."
+  },
+  {
+    id:9, type:'sa', difficulty:'mid',
+    question:"차세대 원전(SMR) 기업 중 오클로(Oklo)의 핵심 파트너로 언급된 빅테크 기업은? (회사명)",
+    accept:["메타","meta","메타 플랫폼","메타플랫폼","meta platforms"],
+    answerLabel:"메타(Meta Platforms)",
+    explanation:"오클로의 냉각 기술은 액체 금속(나트륨)이며, 핵심 파트너는 메타(오하이오 파이크 카운티 1.2GW 캠퍼스)입니다. 참고로 X-Energy의 파트너는 아마존, NuScale은 두산에너빌리티입니다."
+  },
+  {
+    id:10, type:'ox', difficulty:'easy',
+    question:"도바는 이번 3조 달러 증발 현상을 '시장의 붕괴'라고 결론지었다.",
+    answer:false,
+    explanation:"X. 도바는 결론부터 분명히 했습니다 — '이런 현상은 시장의 붕괴가 아니라 거대한 디스트리뷰션(재분배)이며, 돈이 대순환을 시작한 것'이라고 강조했습니다."
+  }
+];
+
+const state = { solved:0, correct:0, done:new Set() };
+const quizEl = document.getElementById('quiz');
+const badgeClass = { easy:'b-easy', mid:'b-mid', hard:'b-hard' };
+const badgeText  = { easy:'쉬움', mid:'보통', hard:'어려움' };
+const typeText   = { mc:'객관식', sa:'단답형', ox:'O / X' };
+
+function norm(s){ return (s||'').toString().trim().toLowerCase().replace(/\s+/g,' '); }
+
+QUIZ_DATA.forEach(q => {
+  const card = document.createElement('div');
+  card.className = 'q';
+  card.id = 'q' + q.id;
+
+  let body = '';
+  if (q.type === 'mc'){
+    body = '<div class="opts">' + q.options.map((o,i)=>
+      `<button class="opt" data-i="${i}"><span class="mk">${String.fromCharCode(65+i)}</span><span>${o}</span></button>`
+    ).join('') + '</div>';
+  } else if (q.type === 'sa'){
+    body = `<div class="sa"><input type="text" placeholder="정답을 입력하세요" autocomplete="off"><button>제출</button></div>`;
+  } else {
+    body = `<div class="ox"><button data-v="true">O</button><button data-v="false">X</button></div>`;
+  }
+
+  card.innerHTML = `
+    <div class="q-head">
+      <span class="q-no">Q${q.id}</span>
+      <span class="q-badge ${badgeClass[q.difficulty]}">${badgeText[q.difficulty]}</span>
+      <span class="q-type">${typeText[q.type]}</span>
+    </div>
+    <div class="q-text">${q.question}</div>
+    ${body}
+    <div class="exp"><div class="exp-in">
+      <div class="tag">해설</div>
+      <div class="ans"></div>
+      <div class="why">${q.explanation}</div>
+    </div></div>`;
+  quizEl.appendChild(card);
+
+  const exp = card.querySelector('.exp');
+  const ansEl = card.querySelector('.exp .ans');
+
+  function finish(isCorrect){
+    if (state.done.has(q.id)) return;
+    state.done.add(q.id);
+    state.solved++; if (isCorrect) state.correct++;
+    updateScore();
+    exp.classList.add('show');
+    if (state.solved === QUIZ_DATA.length) setTimeout(showModal, 450);
+  }
+
+  if (q.type === 'mc'){
+    const opts = card.querySelectorAll('.opt');
+    opts.forEach(btn => btn.addEventListener('click', () => {
+      const i = +btn.dataset.i;
+      const isCorrect = i === q.answer;
+      opts.forEach(b => b.disabled = true);
+      opts[q.answer].classList.add('correct');
+      opts[q.answer].insertAdjacentHTML('beforeend','<span class="badge ok">✓ 정답</span>');
+      if (!isCorrect){
+        btn.classList.add('wrong');
+        btn.insertAdjacentHTML('beforeend','<span class="badge no">✗ 오답</span>');
+      }
+      ansEl.textContent = '정답 : ' + String.fromCharCode(65+q.answer) + '. ' + q.options[q.answer];
+      finish(isCorrect);
+    }));
+  } else if (q.type === 'sa'){
+    const input = card.querySelector('input');
+    const sub = card.querySelector('button');
+    const submit = () => {
+      const val = norm(input.value);
+      if (!val){ input.focus(); return; }
+      const isCorrect = q.accept.some(a => val.includes(norm(a)));
+      input.disabled = true; sub.disabled = true;
+      input.style.borderColor = isCorrect ? 'var(--ok)' : 'var(--no)';
+      input.style.background = isCorrect ? 'var(--okbg)' : 'var(--nobg)';
+      sub.textContent = isCorrect ? '✓ 정답' : '✗ 오답';
+      sub.style.background = isCorrect ? 'var(--ok)' : 'var(--no)';
+      ansEl.textContent = '정답 : ' + q.answerLabel;
+      finish(isCorrect);
+    };
+    sub.addEventListener('click', submit);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+  } else {
+    const btns = card.querySelectorAll('.ox button');
+    btns.forEach(btn => btn.addEventListener('click', () => {
+      const v = btn.dataset.v === 'true';
+      const isCorrect = v === q.answer;
+      btns.forEach(b => b.disabled = true);
+      const correctBtn = [...btns].find(b => (b.dataset.v === 'true') === q.answer);
+      correctBtn.classList.add('correct');
+      if (!isCorrect) btn.classList.add('wrong');
+      ansEl.textContent = '정답 : ' + (q.answer ? 'O' : 'X');
+      finish(isCorrect);
+    }));
+  }
+});
+
+function updateScore(){
+  document.getElementById('sSolved').textContent = state.solved;
+  document.getElementById('sCorrect').textContent = state.correct;
+  const rate = state.solved ? Math.round(state.correct / state.solved * 100) : 0;
+  document.getElementById('sRate').textContent = rate + '%';
+  const bar = document.getElementById('sBar');
+  bar.style.width = (state.solved / QUIZ_DATA.length * 100) + '%';
+  bar.style.background = rate < 40 ? 'var(--no)' : rate < 70 ? 'var(--orange)' : 'var(--ok)';
+}
+
+function showModal(){
+  const n = state.correct;
+  let grade, msg;
+  if (n >= 9){ grade='A'; msg='완벽합니다. 대순환의 흐름과 바벨 전략을 정확히 꿰뚫고 계시네요.'; }
+  else if (n >= 7){ grade='B'; msg='훌륭합니다. 핵심 논리는 확실히 잡으셨습니다. 세부 수치만 다시 점검해보세요.'; }
+  else if (n >= 5){ grade='C'; msg='절반은 넘기셨습니다. 도미노와 비용 압박 루프를 한 번 더 복습해보세요.'; }
+  else { grade='D'; msg='리포트를 다시 정독한 뒤 도전해보세요. 핵심은 \'재분배\'와 \'바벨\'입니다.'; }
+  document.getElementById('mGrade').textContent = grade;
+  document.getElementById('mScore').textContent = n;
+  document.getElementById('mMsg').textContent = msg;
+  const gc = { A:'var(--ok)', B:'#2563eb', C:'var(--orange)', D:'var(--no)' };
+  document.getElementById('mGrade').style.color = gc[grade];
+  document.getElementById('modal').classList.add('show');
+}
+
+document.getElementById('mRetry').addEventListener('click', () => location.reload());
+</script>
+</body>
+</html>
