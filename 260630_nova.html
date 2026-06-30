@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>쪼개서 성공 vs 합쳐서 성공 — 변동성 장세의 자본 배분 논리</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#fafafa; --text:#1a1a1a; --text2:#777777;
+    --accent:#e11d48; --accent2:#f43f5e; --border:#e5e5e5;
+    --c-blue:#2563eb; --c-gray:#6b7280;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:var(--bg);color:var(--text);
+    font-family:'Noto Sans KR',sans-serif;font-weight:400;
+    line-height:1.78;font-size:16px;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:0 22px}
+
+  /* ===== HERO ===== */
+  .hero{padding:64px 0 40px;border-bottom:2px solid var(--text)}
+  .eyebrow{
+    font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--accent);font-weight:700;margin-bottom:20px;
+  }
+  .hero h1{
+    font-family:'Playfair Display',serif;font-weight:800;
+    font-size:39px;line-height:1.16;letter-spacing:-.01em;margin-bottom:18px;
+  }
+  .hero h1 em{font-style:italic;color:var(--accent)}
+  .hero .dek{font-size:16.5px;color:var(--text2);font-weight:300;max-width:90%}
+  .meta{
+    display:flex;gap:18px;flex-wrap:wrap;margin-top:26px;
+    font-size:12.5px;color:var(--text2);letter-spacing:.02em;
+  }
+  .meta span{display:flex;align-items:center;gap:6px}
+  .meta b{color:var(--text);font-weight:500}
+
+  /* ===== SECTION ===== */
+  .section{padding:46px 0;border-bottom:1px solid var(--border)}
+  .kicker{
+    font-family:'Playfair Display',serif;font-style:italic;
+    font-size:15px;color:var(--accent);margin-bottom:8px;font-weight:600;
+  }
+  .section h2{
+    font-family:'Playfair Display',serif;font-weight:700;
+    font-size:27px;line-height:1.25;margin-bottom:8px;letter-spacing:-.01em;
+  }
+  .num{
+    font-family:'Playfair Display',serif;font-size:13px;color:var(--text2);
+    letter-spacing:.1em;margin-bottom:18px;display:block;
+  }
+  .section p{margin:14px 0;font-size:15.5px}
+  .lead{font-size:17px;color:var(--text);font-weight:400}
+  strong{font-weight:700;color:var(--text)}
+  .hl{color:var(--accent);font-weight:700}
+
+  /* ===== PULL QUOTE ===== */
+  .pull{
+    border-left:3px solid var(--accent);padding:6px 0 6px 22px;margin:28px 0;
+    font-family:'Playfair Display',serif;font-style:italic;
+    font-size:20px;line-height:1.5;color:var(--text);
+  }
+
+  /* ===== CALLOUT ===== */
+  .callout{
+    background:var(--bg2);border:1px solid var(--border);border-radius:4px;
+    padding:20px 22px;margin:26px 0;
+  }
+  .callout .ct{
+    font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--accent);font-weight:700;margin-bottom:10px;
+  }
+  .callout p{margin:8px 0;font-size:14.5px}
+  .callout p:first-of-type{margin-top:0}
+
+  /* ===== CHART ===== */
+  .chart-block{margin:32px 0}
+  .chart-cap{font-size:12.5px;color:var(--text2);margin-top:12px;text-align:center;font-style:italic}
+  .chart-title{font-size:14px;font-weight:700;margin-bottom:14px;letter-spacing:.01em}
+
+  /* ===== TABLE ===== */
+  .tbl{width:100%;border-collapse:collapse;margin:24px 0;font-size:14px}
+  .tbl th{
+    background:var(--accent);color:#fff;text-align:left;
+    padding:11px 13px;font-weight:500;font-size:13px;letter-spacing:.02em;
+  }
+  .tbl td{padding:11px 13px;border-bottom:1px solid var(--border);background:var(--bg2)}
+  .tbl tr td:first-child{font-weight:700}
+  .up{color:var(--accent);font-weight:700}
+  .down{color:var(--c-blue);font-weight:700}
+
+  /* ===== TERM ===== */
+  .term{
+    border:1px dashed var(--accent);border-radius:4px;padding:16px 18px;margin:22px 0;
+    background:#fff;
+  }
+  .term .tt{font-weight:700;color:var(--accent);font-size:14.5px;margin-bottom:6px}
+  .term p{font-size:14px;color:var(--text);margin:0}
+
+  /* ===== INTERACTIVE: DIVIDER LABEL ===== */
+  .vs-row{display:flex;gap:14px;margin:28px 0}
+  .vs-card{
+    flex:1;border:1px solid var(--border);border-radius:6px;padding:18px 16px;
+    background:var(--bg2);
+  }
+  .vs-card h4{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:6px}
+  .vs-card .pct{font-size:26px;font-weight:800;color:var(--accent);font-family:'Playfair Display',serif}
+  .vs-card p{font-size:13px;color:var(--text2);margin:8px 0 0}
+
+  /* ===== SIMULATOR ===== */
+  .sim{
+    border:1px solid var(--border);border-radius:8px;padding:24px 20px;margin:30px 0;
+    background:var(--bg2);
+  }
+  .sim h3{font-family:'Playfair Display',serif;font-size:19px;margin-bottom:6px}
+  .sim .sub{font-size:13px;color:var(--text2);margin-bottom:20px}
+  .sim-row{margin:18px 0}
+  .sim-row label{display:flex;justify-content:space-between;font-size:13.5px;font-weight:500;margin-bottom:8px}
+  .sim-row label .val{color:var(--accent);font-weight:700}
+  input[type=range]{
+    -webkit-appearance:none;width:100%;height:5px;border-radius:3px;
+    background:linear-gradient(90deg,var(--accent) 0%,var(--accent) 50%,#e5e5e5 50%);
+    outline:none;cursor:pointer;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+    background:var(--accent);cursor:pointer;border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);
+  }
+  input[type=range]::-moz-range-thumb{
+    width:20px;height:20px;border-radius:50%;background:var(--accent);
+    cursor:pointer;border:3px solid #fff;
+  }
+  .sim-out{
+    background:#fff;border:1px solid var(--border);border-radius:6px;
+    padding:18px;margin-top:20px;text-align:center;
+  }
+  .sim-out .big{font-family:'Playfair Display',serif;font-size:34px;font-weight:800;color:var(--accent)}
+  .sim-out .lbl{font-size:12px;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+  .sim-verdict{font-size:13.5px;margin-top:14px;padding:12px;border-radius:5px;background:var(--bg2);line-height:1.6}
+  .btn-reset{
+    margin-top:16px;width:100%;padding:11px;border:1px solid var(--accent);
+    background:#fff;color:var(--accent);font-family:'Noto Sans KR';font-weight:700;
+    font-size:13px;border-radius:5px;cursor:pointer;transition:.2s;
+  }
+  .btn-reset:hover{background:var(--accent);color:#fff}
+
+  /* ===== FLOW (pick & shovel) ===== */
+  .flow{margin:26px 0}
+  .flow-step{
+    display:flex;gap:14px;align-items:flex-start;padding:14px 0;
+    border-bottom:1px dashed var(--border);cursor:pointer;transition:.2s;
+  }
+  .flow-step:last-child{border-bottom:none}
+  .flow-step .n{
+    flex-shrink:0;width:30px;height:30px;border-radius:50%;
+    background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;
+    font-family:'Playfair Display',serif;font-weight:700;font-size:14px;
+  }
+  .flow-step .ftxt h5{font-size:14.5px;font-weight:700;margin-bottom:3px}
+  .flow-step .ftxt p{font-size:13px;color:var(--text2);margin:0}
+  .flow-step.dim{opacity:.4}
+
+  /* ===== STRATEGY CARDS ===== */
+  .strat{display:grid;gap:14px;margin:26px 0}
+  .strat-card{border:1px solid var(--border);border-left:4px solid var(--accent);
+    border-radius:5px;padding:18px 18px;background:#fff}
+  .strat-card .si{font-family:'Playfair Display',serif;font-weight:700;color:var(--accent);font-size:13px;letter-spacing:.05em;margin-bottom:6px}
+  .strat-card h4{font-size:15.5px;margin-bottom:6px}
+  .strat-card p{font-size:13.5px;color:var(--text2);margin:0}
+
+  /* ===== CLOSING ===== */
+  .closing{padding:54px 0 70px;text-align:center}
+  .closing .q{
+    font-family:'Playfair Display',serif;font-style:italic;font-size:23px;
+    line-height:1.5;margin:0 auto 16px;max-width:92%;
+  }
+  .closing .q .hl{font-style:normal}
+  .closing .sig{font-size:12px;color:var(--text2);letter-spacing:.18em;text-transform:uppercase;margin-top:30px}
+
+  @media(max-width:480px){
+    .hero h1{font-size:31px}
+    .section h2{font-size:23px}
+    .vs-row{flex-direction:column}
+    .pull{font-size:18px}
+    .closing .q{font-size:20px}
+  }
+
+  /* fade-in + chart pattern */
+  .fade-in{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+  .fade-in.visible{opacity:1;transform:translateY(0)}
+  .chart-container{position:relative;max-height:340px}
+  .chart-container canvas{opacity:0;transition:opacity .4s ease;max-height:300px}
+  .chart-container.chart-ready canvas{opacity:1}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Market Deep-Dive · 2026.06.30</div>
+    <h1>쪼개서 <em>성공</em>,<br>합쳐서 <em>성공</em>.</h1>
+    <p class="dek">정반대로 움직인 두 기업이 동시에 폭등한 날. 모순처럼 보이는 이 장면이 가리키는 단 하나의 진실 — <strong>자본 배분의 명확성</strong>.</p>
+    <div class="meta">
+      <span>📈 다우 <b>52,000 첫 돌파</b></span>
+      <span>🏷️ 10년물 <b>4.37%</b></span>
+      <span>⏱️ 읽는 시간 <b>약 9분</b></span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- INTRO -->
+  <section class="section">
+    <span class="kicker">오프닝</span>
+    <h2>다이내믹한 하루, 두 개의 모순</h2>
+    <span class="num">— PROLOGUE</span>
+    <p class="lead">5거래일 연속 흘러내리던 기술주가 갑자기 급반등했고, 다우지수는 사상 처음으로 <span class="hl">5만 2천 선</span>을 돌파했습니다. 그런데 이날 시장에는 정면으로 충돌하는 두 사건이 있었습니다.</p>
+    <p>한 회사는 자기 사업을 <strong>한칼에 쪼갰는데</strong> 주가가 두 자릿수로 폭등했고, 또 다른 회사는 거대한 경쟁 영역을 <strong>통째로 집어삼켰는데</strong> 똑같이 폭등했습니다. 정반대의 행보에 시장은 둘 다 환호했습니다.</p>
+    <p class="pull">"극심한 변동성이 지배하는 시장에서, 이 모순이 우리에게 말해주는 진짜 진실은 무엇인가?"</p>
+  </section>
+
+  <!-- MACRO -->
+  <section class="section">
+    <span class="kicker">매크로 환경</span>
+    <h2>먼저, 우리가 딛고 선 공기부터</h2>
+    <span class="num">— 01 · THE BACKDROP</span>
+    <p>주말 사이 거시경제 관점에서 안도감이 형성됐습니다. 중동발 지정학적 긴장이 한풀 꺾였고, 무엇보다 미국 대법원이 <strong>리사 쿡 연준 이사 해임 시도를 기각</strong>했습니다.</p>
+    <p>투자자가 가장 두려워하는 것은 <strong>중앙은행이 정치적 외풍에 흔들리는 것</strong>입니다. 통화정책이 흔들리면 인플레이션 통제라는 본연의 기능을 잃기 때문입니다. 이번 판결로 <span class="hl">연준의 정치적 독립성</span>이 재확인되며 시장을 짓누르던 불확실성이 걷혔습니다.</p>
+
+    <div class="callout">
+      <div class="ct">두 개의 매크로 호재</div>
+      <p>① 유가 하락 — 중동 긴장 완화</p>
+      <p>② 금리 안정화 — 10년물 채권 금리가 <strong>4.37% 선</strong>에서 안정. 연준 독립성 재확인의 직접적 결과</p>
+      <p style="margin-bottom:0">→ 이 둘이 맞물리며 <span class="hl">다우 52,000 돌파</span>의 동력이 됨</p>
+    </div>
+    <p>다만 지수가 뚫렸다고 해서 계좌 속 기술주가 모두 평화로운 것은 아니었습니다. 매크로가 안정돼도 개별 종목의 변동성은 여전히 현기증 날 수준이었습니다.</p>
+  </section>
+
+  <!-- TAIL RISK -->
+  <section class="section">
+    <span class="kicker">개별 종목 리스크</span>
+    <h2>'꼬리 리스크'라는 복병</h2>
+    <span class="num">— 02 · THE SMCI SHOCK</span>
+    <p>이날 슈퍼마이크로컴퓨터(<strong>SMCI</strong>)가 그 증거였습니다. 다른 반도체가 일제히 랠리하는 와중에 혼자 바닥으로 꽂혔습니다. 대만 검찰이 <strong>엔비디아 AI 칩 중국 밀수 의혹</strong>으로 SMCI 대만 사무소와 관계사를 전격 압수수색했기 때문입니다.</p>
+    <p>이것이 치명적이었던 이유는 단순한 대만 내부 문제가 아니라, 미국 법무부가 주도하는 <span class="hl">25억 달러 규모 밀수 네트워크 조사</span>와 연결되어 있다는 점이었습니다.</p>
+
+    <div class="term">
+      <div class="tt">📌 꼬리 리스크 (Tail Risk)</div>
+      <p>기업의 실적·기술력 같은 펀더멘탈과 <strong>전혀 무관하게</strong>, 규제 당국의 철퇴나 지정학적 제재 같은 외부의 극단적 변수 때문에 자본이 순식간에 증발하는 위험. 분포의 양 끝(꼬리)에서 드물게 발생하지만 일단 터지면 파괴력이 큽니다.</p>
+    </div>
+
+    <p class="pull">"비싼 돈 주고 산 유니폼이, 그 선수의 스캔들 하나로 하루아침에 걸레짝이 되는 것."</p>
+    <p>특정 선수의 스캔들은 밖에서 예측할 수도, 통제할 수도 없습니다. 그래서 사람들이 AI 개별 종목 '몰빵'을 두려워하는 것입니다. 그렇다면 — <strong>예측 불가능한 꼬리 리스크는 피하면서, 폭발적인 AI 성장의 과실만 누리려면?</strong></p>
+  </section>
+
+  <!-- PICK & SHOVEL -->
+  <section class="section">
+    <span class="kicker">해법 ①</span>
+    <h2>곡괭이와 삽을 사라</h2>
+    <span class="num">— 03 · PICK &amp; SHOVEL</span>
+    <p>답은 "특정 선수가 아니라"였습니다. 이날 삼성전자와 SK하이닉스가 한국 서남권·충청 지역에 무려 <span class="hl">5,180억 달러(약 8,000조 원)</span> 규모의 반도체·AI 초대형 허브 구축을 발표했습니다.</p>
+    <p>오픈AI 차세대 모델 발표 지연 등으로 "AI 투자가 정점을 찍은 것 아니냐"는 회의론이 슬금슬금 번지던 시점이었습니다. 그런데 발표 직후 가장 강하게 치솟은 건 AI 서비스 소프트웨어 기업이 아니었습니다.</p>
+
+    <div class="callout">
+      <div class="ct">골드러시의 진짜 승자</div>
+      <p>가장 강하게 오른 건 <strong>전공정 장비주</strong>였습니다.</p>
+      <p>· 어플라이드 머티리얼즈(AMAT) <span class="hl">+11.5%</span></p>
+      <p>· 램리서치 동반 랠리</p>
+      <p style="margin-bottom:0">금광을 캐는 사람보다, 곡괭이와 삽을 파는 공장이 먼저 환호받았습니다.</p>
+    </div>
+
+    <p>그러나 이날 가장 흥미로운 종목은 따로 있었습니다. <strong>세레브라스 시스템즈(CBRS)</strong> — 무려 <span class="hl">19% 폭등</span>. 캐시우드의 아크인베스트가 대거 매집했다는 뉴스도 있었지만, 핵심은 기술력에 있었습니다. AI 반도체의 필수품인 고대역폭 메모리(HBM) <strong>없이도</strong> AI 연산을 해내는 독특한 구조였습니다.</p>
+
+    <div class="term">
+      <div class="tt">📌 진짜 병목은 '연산'이 아니라 '데이터 전송'</div>
+      <p>프로세서가 아무리 빨라도 데이터를 창고에서 가져오는 길이 막히면 소용없습니다. 엔비디아 등 현재 아키텍처는 이 병목을 풀려고 <strong>HBM</strong>이라는 초고속 메모리를 씁니다. 그런데 HBM은 만들기가 너무 까다로워 극심한 공급 부족, 이른바 <strong>'치플레이션(Chip-flation)'</strong>을 겪고 있습니다.</p>
+    </div>
+
+    <p>HBM이 데이터를 실어 나르는 넓은 <strong>8차선 고속도로</strong>라면, 세레브라스의 독자적 <strong>온칩 SRAM</strong> 방식은 프로세서와 데이터를 아예 <span class="hl">같은 사무실 책상 위</span>에 둔 셈입니다. 고속도로가 얼마나 넓은지 신경 쓸 필요 없이 바로 꺼내 씁니다. 프로세서와 메모리를 하나의 거대한 실리콘 웨이퍼에 통합해, 외부 HBM 공급망에 얽매일 필요가 사라진 것입니다.</p>
+    <p>시장이 19% 프리미엄을 준 건 그냥 칩을 잘 만들어서가 아니라, AI 인프라의 가장 치명적 약점인 <strong>메모리 공급 병목을 우회하는 구조적 대안</strong>을 제시했기 때문입니다.</p>
+
+    <div class="chart-block fade-in">
+      <div class="chart-title">📊 이날의 종목별 등락률 — 인프라·정체성이 이긴 하루</div>
+      <div class="chart-container">
+        <canvas id="chartMove" height="240"></canvas>
+      </div>
+      <p class="chart-cap">막대를 클릭하면 강조 표시됩니다. 곡괭이(장비·대안 인프라)와 명확한 정체성 쪽이 강했습니다.</p>
+    </div>
+  </section>
+
+  <!-- SPLIT vs MERGE -->
+  <section class="section">
+    <span class="kicker">해법 ②</span>
+    <h2>쪼개기 vs 합치기, 같은 논리</h2>
+    <span class="num">— 04 · CAPITAL ALLOCATION</span>
+
+    <div class="vs-row">
+      <div class="vs-card">
+        <h4>컴캐스트</h4>
+        <div class="pct">+22~26%</div>
+        <p>분사(스핀오프) — 미디어 자산을 떼어냄</p>
+      </div>
+      <div class="vs-card">
+        <h4>로켓랩</h4>
+        <div class="pct">+16%</div>
+        <p>합병 — 80억 달러에 이리듐 흡수</p>
+      </div>
+    </div>
+
+    <p><strong>컴캐스트</strong>는 알짜 미디어 자산 — 유니버설 픽처스, 스트리밍 피콕, 테마파크, 영국 스카이 미디어 — 를 모조리 떼어내 <strong>세금 면제 방식의 독립법인</strong>으로 분사한다고 발표했습니다. 본체엔 무선통신망과 광대역 인터넷만 남는데도 투자자들은 돈을 싸들고 달려왔습니다.</p>
+
+    <div class="term">
+      <div class="tt">📌 복합기업 할인 (Conglomerate Discount)</div>
+      <p>성격이 완전히 다른 사업들이 한 지붕 아래 묶이면, 시장은 그 '정체성이 모호한 기업(짬짜면)'을 제대로 평가하지 못해 가치를 깎아 매깁니다. 안정적 통신 배당을 보고 샀더니, 그 요금으로 흥행 실패한 헐리우드 영화에 돈을 날리는 꼴을 봐야 했던 것이 그 예입니다.</p>
+    </div>
+
+    <p>깔끔하게 분리하자 억눌렸던 밸류에이션이 터졌습니다. 본체는 강력한 잉여 현금흐름으로 배당과 통신 인프라에 집중하고, 분사된 미디어 법인은 공격적 외부 자본을 유연하게 조달할 수 있게 됐습니다.</p>
+
+    <p>반대로 <strong>로켓랩</strong>은 <span class="hl">80억 달러</span>에 이리듐 커뮤니케이션스를 흡수합병했고, 주가는 16% 뛰었습니다(피인수된 이리듐도 25% 급등). 이리듐은 <strong>66개의 저궤도 통신 위성망</strong>, 글로벌 주파수 면허, 250만 명의 충성 가입자를 보유한 회사입니다.</p>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="n">1</div>
+        <div class="ftxt"><h5>과거: 단순 '택배기사'</h5><p>로켓을 우주로 쏘아 올리는 발사체 사업 — 시간이 갈수록 마진이 줄어드는 소모성 사업</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="n">2</div>
+        <div class="ftxt"><h5>이리듐 합병</h5><p>택배 트럭 + 고속도로 톨게이트 + 그 길의 상권까지 한 번에 장악</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="n">3</div>
+        <div class="ftxt"><h5>현재: 수직 통합 완성</h5><p>위성망으로 매달 통신비를 거두는 '황금알 네트워크'. 스페이스X 독점 모델을 단숨에 복제</p></div>
+      </div>
+    </div>
+
+    <p class="pull">"쪼개서 본질에 집중한 컴캐스트, 수직 통합으로 생태계를 완성한 로켓랩 — 자본을 가장 명확한 정체성에 썼다는 점에서 완전히 일맥상통한다."</p>
+  </section>
+
+  <!-- WRONG ALLOCATION -->
+  <section class="section">
+    <span class="kicker">반면교사</span>
+    <h2>잘못 쓴 자본은 어떻게 버려지는가</h2>
+    <span class="num">— 05 · THE TRAP</span>
+    <p><strong>버라이즌</strong>은 이날 다우존스 지수에서 상징적으로 퇴출됐습니다. 지수 편출입에 따른 패시브 자금 이탈도 있었지만, 진짜 핵심은 경영진의 <span class="hl">최악의 자본 배분 실패</span>였습니다.</p>
+    <p>버라이즌은 영국 BT그룹과 <strong>6억 2,500만 달러</strong> 규모 합작법인을 세운다고 발표했는데, 그 목적이 <strong>구형 유선 통신 인프라 구축</strong>이었습니다. 로켓랩과 스페이스X가 저궤도 위성을 깔며 우주 시대를 준비하는 시점에, 땅을 파고 구리선을 묻는 데 수천억 원을 태운 것입니다.</p>
+
+    <table class="tbl">
+      <thead><tr><th>기업</th><th>자본 배분 방향</th><th>시장 반응</th></tr></thead>
+      <tbody>
+        <tr><td>버라이즌</td><td>구형 유선망(구리선) 투자</td><td class="down">다우 퇴출</td></tr>
+        <tr><td>차터</td><td>스페이스X 스타링크 위성 모바일 제휴 논의</td><td class="up">+20%</td></tr>
+      </tbody>
+    </table>
+    <p><strong>차터 커뮤니케이션스</strong>는 스페이스X의 스타링크와 위성 기반 모바일 파트너십을 논의 중이라는 소식 하나로 20% 폭등했습니다. 자본을 어디에 배치하느냐가 기업의 명운을 완벽하게 갈랐습니다.</p>
+  </section>
+
+  <!-- MANUFACTURING -->
+  <section class="section">
+    <span class="kicker">확장된 시야</span>
+    <h2>제조업·소비재로 번지는 같은 법칙</h2>
+    <span class="num">— 06 · BEYOND TECH</span>
+    <p>이 법칙은 통신주만의 문제가 아닙니다. <strong>테슬라</strong>는 FSD 자율주행 하드웨어 AI3 업그레이드와 2분기 인도량 기대감으로 <span class="hl">8% 급등</span>했습니다. 반면 전통 내연기관의 상징이자 독일 경제의 심장인 <strong>폭스바겐</strong>은 설립 이후 처음으로 <strong>독일 본토 공장 4곳 폐쇄, 10만 명 감축</strong>이라는 충격적 구조조정을 발표했습니다. 소프트웨어·전기차라는 단일 정체성을 가진 기업은 혁신하고, 과거 유산에 짓눌린 기업은 매몰비용에 무너집니다.</p>
+
+    <div class="callout">
+      <div class="ct">공급망 병목이 소비재의 숨통을 조인다</div>
+      <p>해운사 <strong>머스크</strong>가 공급망 병목으로 운임 가이던스를 상향. 해운사는 돈을 쓸어담지만, 물건을 배에 실어 파는 소비재 기업엔 비상사태.</p>
+      <p style="margin-bottom:0">→ 곧 발표될 <strong>나이키 실적</strong>이 미국 소비 둔화의 리트머스 시험지. 나이키는 이번 분기에만 <span class="hl">24% 폭락</span>, 온러닝·호카 같은 신흥 브랜드에 밀리는 중.</p>
+    </div>
+    <p>나이키는 제품 경쟁력은 떨어지고 운송비는 치솟는데, 지갑이 얇아진 소비자에게 가격 인상으로 비용을 떠넘기지도 못하는 <strong>완벽한 진퇴양난</strong>에 빠졌습니다. 기술주 투자자라도 소비재의 마진 축소 압력과 구형 산업의 도태를 거울 삼아 전략을 짜야 합니다.</p>
+  </section>
+
+  <!-- SIMULATOR -->
+  <section class="section">
+    <span class="kicker">인터랙티브</span>
+    <h2>자본 배분 명확성 시뮬레이터</h2>
+    <span class="num">— TRY IT</span>
+    <p>오늘의 핵심은 결국 "자본을 얼마나 명확한 정체성에 쓰느냐"였습니다. 아래에서 가상 기업의 두 가지 변수를 직접 움직여, 시장이 어떻게 반응하는지 느껴보세요. <em>(교육용 모델 — 실제 투자 권유가 아닙니다.)</em></p>
+
+    <div class="sim">
+      <h3>What-if: 시장은 어디에 환호하는가</h3>
+      <p class="sub">정체성 선명도와 자본 투입 방향을 조절해 보세요.</p>
+
+      <div class="sim-row">
+        <label>정체성 선명도 <span class="val" id="vClar">70%</span></label>
+        <input type="range" id="sClar" min="0" max="100" value="70">
+      </div>
+      <div class="sim-row">
+        <label>미래형 인프라 투자 비중 <span class="val" id="vFut">60%</span></label>
+        <input type="range" id="sFut" min="0" max="100" value="60">
+      </div>
+
+      <div class="sim-out">
+        <div class="big" id="simScore">+18%</div>
+        <div class="lbl">예상 시장 반응 (모델값)</div>
+        <div class="sim-verdict" id="simVerdict"></div>
+      </div>
+      <button class="btn-reset" id="resetSim">초기값으로 리셋</button>
+    </div>
+  </section>
+
+  <!-- SUMMARY -->
+  <section class="section">
+    <span class="kicker">핵심 전략</span>
+    <h2>오늘의 3가지 결론</h2>
+    <span class="num">— TAKEAWAYS</span>
+    <div class="strat">
+      <div class="strat-card">
+        <div class="si">FIRST</div>
+        <h4>묻지마 개별 종목은 피하고, 인프라를 잡아라</h4>
+        <p>한국 반도체 허브 같은 대규모 캐펙스가 보증하는 인프라, 특히 HBM 부족 속 온칩 SRAM 같은 대체 기술로 부상하는 세레브라스형 기업.</p>
+      </div>
+      <div class="strat-card">
+        <div class="si">SECOND</div>
+        <h4>정체성을 선명하게 만드는 변화에 집중하라</h4>
+        <p>분사든 전략적 M&amp;A든, 컴캐스트·로켓랩처럼 확고한 정체성과 진정한 밸류에이션 리레이팅이 일어나는 쪽으로 시야를 넓혀라.</p>
+      </div>
+      <div class="strat-card">
+        <div class="si">THIRD</div>
+        <h4>과거의 영광에 취한 함정을 피하라</h4>
+        <p>버라이즌·폭스바겐처럼 잘못된 자본 배분으로 매몰비용에 짓눌리는 구형 산업의 늪을 반드시 피하라.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="ct">+ 보너스 팁</div>
+      <p style="margin-bottom:0">DTCC(미국 예탁결제원)가 <strong>24시간 주식 청산 모델</strong>(이른바 24×5)을 도입했습니다. 야간에 터지는 글로벌 거시 이벤트에도 실시간 대응이 가능해진 셈입니다.</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- CLOSING -->
+<section class="closing">
+  <div class="wrap">
+    <div class="eyebrow" style="text-align:center">도발적인 화두</div>
+    <p class="q">"머지않아 <span class="hl">우주(Space)</span>가 IT·헬스케어처럼 독립된 포트폴리오 섹터로 자리 잡고,<br>지상의 전통 빅테크들은 결국 <span class="hl">'궤도 위 건물주'</span>에게 평생 월세를 내는 세입자로 전락하는 것은 아닐까?"</p>
+    <p style="font-size:14px;color:var(--text2)">지상에서 우주로 넘어가는 거대한 패러다임 전환 속에서, 당신의 포트폴리오는 지금 어느 쪽을 향하고 있습니까?</p>
+    <div class="sig">Market Deep-Dive · End of Report</div>
+  </div>
+</section>
+
+<script>
+/* ===== fade-in observer ===== */
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+/* ===== chart configs ===== */
+const chartConfigs = {};
+chartConfigs['chartMove'] = () => {
+  const labels = ['이리듐','세레브라스','차터','컴캐스트(고)','테슬라','로켓랩','AMAT','나이키'];
+  const data   = [25, 19, 20, 26, 8, 16, 11.5, -24];
+  const ctx = document.getElementById('chartMove');
+  const baseColors = data.map(v => v < 0 ? '#2563eb' : '#e11d48');
+  const chart = new Chart(ctx, {
+    type: 'bar',
+    data: { labels, datasets: [{
+      label: '등락률 (%)', data,
+      backgroundColor: baseColors,
+      borderRadius: 4, borderSkipped: false
+    }]},
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      onClick: (evt, els) => {
+        if(!els.length) return;
+        const idx = els[0].index;
+        const cols = data.map((v,i)=> i===idx ? (v<0?'#1a1a1a':'#1a1a1a') : (v<0?'#2563eb':'#e11d48'));
+        chart.data.datasets[0].backgroundColor = cols;
+        chart.update();
+      },
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:(c)=> ` ${c.parsed.y > 0 ? '+' : ''}${c.parsed.y}%`}}
+      },
+      scales:{
+        y:{ grid:{color:'#eee'}, ticks:{callback:v=>v+'%', font:{size:11}, color:'#777'} },
+        x:{ grid:{display:false}, ticks:{font:{size:10.5}, color:'#1a1a1a', maxRotation:55, minRotation:35} }
+      }
+    }
+  });
+};
+
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+/* ===== simulator ===== */
+(function(){
+  const sClar = document.getElementById('sClar');
+  const sFut  = document.getElementById('sFut');
+  const vClar = document.getElementById('vClar');
+  const vFut  = document.getElementById('vFut');
+  const out   = document.getElementById('simScore');
+  const verdict = document.getElementById('simVerdict');
+  const reset = document.getElementById('resetSim');
+
+  function paint(slider){
+    const v = +slider.value;
+    slider.style.background =
+      `linear-gradient(90deg,var(--accent) 0%,var(--accent) ${v}%,#e5e5e5 ${v}%)`;
+  }
+  function compute(){
+    const clar = +sClar.value;   // 정체성 선명도
+    const fut  = +sFut.value;    // 미래형 인프라 비중
+    vClar.textContent = clar + '%';
+    vFut.textContent  = fut + '%';
+    paint(sClar); paint(sFut);
+
+    // 모델: 명확성·미래성이 높을수록 +, 둘 다 낮으면 -
+    let score = (clar - 50) * 0.34 + (fut - 50) * 0.30;
+    score = Math.round(score * 10) / 10;
+    out.textContent = (score >= 0 ? '+' : '') + score + '%';
+    out.style.color = score >= 0 ? 'var(--accent)' : 'var(--c-blue)';
+
+    let msg;
+    if (clar >= 65 && fut >= 60){
+      msg = '✅ <b>컴캐스트·로켓랩·차터 유형</b> — 명확한 정체성 + 미래형 자본 배분. 시장은 밸류에이션 리레이팅으로 화답합니다.';
+    } else if (clar < 45 && fut < 40){
+      msg = '⚠️ <b>버라이즌·폭스바겐 유형</b> — 모호한 정체성 + 과거 유산 투자. 매몰비용의 늪, 자금 이탈 위험.';
+    } else if (fut >= 60 && clar < 50){
+      msg = '🔎 방향은 미래지만 정체성이 흐립니다. \'짬짜면\' 할인(복합기업 할인)을 받을 수 있어요.';
+    } else {
+      msg = '➖ 시장이 판단을 유보하는 중간 지대. 한쪽으로 명확하게 베팅할수록 반응이 커집니다.';
+    }
+    verdict.innerHTML = msg;
+  }
+  [sClar, sFut].forEach(s => s.addEventListener('input', compute));
+  reset.addEventListener('click', () => { sClar.value=70; sFut.value=60; compute(); });
+  compute();
+})();
+</script>
+</body>
+</html>
