@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>표면과 현실의 착시 — 나스닥 폭등과 닷컴 붕괴의 평행이론</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#ffffff; --bg2:#fafafa; --text:#1a1a1a; --text2:#777777;
+  --accent:#e11d48; --accent2:#f43f5e; --line:#e5e5e5;
+  --blue:#2563eb; --gray:#6b7280;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:'Noto Sans KR',sans-serif; font-weight:400;
+  line-height:1.75; letter-spacing:-0.01em;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:680px; margin:0 auto; padding:0 22px;}
+
+/* ===== HERO ===== */
+.hero{padding:60px 0 44px; border-bottom:2px solid var(--text);}
+.eyebrow{
+  font-size:12px; letter-spacing:0.22em; text-transform:uppercase;
+  color:var(--accent); font-weight:700; margin-bottom:20px;
+}
+.hero h1{
+  font-family:'Playfair Display',serif; font-weight:900;
+  font-size:40px; line-height:1.18; letter-spacing:-0.02em;
+  margin-bottom:22px; word-break:keep-all;
+}
+.hero h1 em{font-style:italic; color:var(--accent);}
+.hero .lead{font-size:16px; color:var(--text2); font-weight:400; word-break:keep-all;}
+.meta{
+  margin-top:28px; padding-top:20px; border-top:1px solid var(--line);
+  font-size:12.5px; color:var(--text2); display:flex; flex-wrap:wrap; gap:14px;
+}
+.meta span b{color:var(--text); font-weight:500;}
+
+/* ===== SECTION ===== */
+section{padding:46px 0; border-bottom:1px solid var(--line);}
+.sec-num{
+  font-family:'Playfair Display',serif; font-style:italic;
+  font-size:15px; color:var(--accent); font-weight:700; margin-bottom:8px;
+}
+h2{
+  font-family:'Playfair Display',serif; font-weight:700;
+  font-size:27px; line-height:1.3; letter-spacing:-0.01em;
+  margin-bottom:20px; word-break:keep-all;
+}
+h3{
+  font-size:17px; font-weight:700; margin:30px 0 12px;
+  word-break:keep-all; color:var(--text);
+}
+p{margin-bottom:16px; font-size:15.3px; word-break:keep-all;}
+strong{font-weight:700; color:var(--accent);}
+.plain strong{color:var(--text);}
+
+/* ===== PULLQUOTE / PARALLEL BOX ===== */
+.pull{
+  border-left:3px solid var(--accent); padding:6px 0 6px 20px;
+  margin:26px 0; font-family:'Playfair Display',serif; font-style:italic;
+  font-size:20px; line-height:1.5; color:var(--text); word-break:keep-all;
+}
+
+/* ===== STAT ROW ===== */
+.statrow{display:flex; gap:12px; flex-wrap:wrap; margin:24px 0;}
+.stat{
+  flex:1; min-width:140px; background:var(--bg2);
+  border:1px solid var(--line); border-radius:10px; padding:18px 16px;
+}
+.stat .num{
+  font-family:'Playfair Display',serif; font-weight:900;
+  font-size:30px; color:var(--accent); line-height:1;
+}
+.stat .num.dark{color:var(--text);}
+.stat .lab{font-size:12.5px; color:var(--text2); margin-top:8px; line-height:1.5;}
+
+/* ===== CHART ===== */
+.chart-wrap{
+  background:var(--bg2); border:1px solid var(--line);
+  border-radius:12px; padding:20px 16px 12px; margin:26px 0;
+}
+.chart-title{font-size:13.5px; font-weight:700; margin-bottom:4px;}
+.chart-sub{font-size:12px; color:var(--text2); margin-bottom:14px;}
+.chart-container{position:relative; max-height:340px;}
+.chart-container canvas{opacity:0; transition:opacity 0.4s ease; max-height:300px;}
+.chart-container.chart-ready canvas{opacity:1;}
+.chart-note{font-size:11.5px; color:var(--text2); margin-top:10px; text-align:right;}
+
+/* ===== TABLE ===== */
+.tbl{width:100%; border-collapse:collapse; margin:22px 0; font-size:13.3px;}
+.tbl th{
+  background:var(--accent); color:#fff; padding:11px 12px;
+  text-align:left; font-weight:700; font-size:12.5px;
+}
+.tbl td{padding:11px 12px; border-bottom:1px solid var(--line); background:var(--bg2);}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl td.hi{color:var(--accent); font-weight:700;}
+
+/* ===== SIMULATOR ===== */
+.sim{
+  background:#1a1a1a; color:#fff; border-radius:14px;
+  padding:26px 22px; margin:30px 0;
+}
+.sim .tag{
+  font-size:11px; letter-spacing:0.16em; text-transform:uppercase;
+  color:var(--accent2); font-weight:700; margin-bottom:10px;
+}
+.sim h3{color:#fff; margin-top:0; font-size:18px;}
+.sim p{color:#bbb; font-size:13.5px;}
+.sim label{display:block; font-size:13px; color:#ddd; margin:18px 0 8px; font-weight:500;}
+.sim label span{color:var(--accent2); font-weight:700; float:right;}
+.sim input[type=range]{
+  width:100%; -webkit-appearance:none; appearance:none; height:5px;
+  background:#3a3a3a; border-radius:5px; outline:none; cursor:pointer;
+}
+.sim input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none; appearance:none; width:20px; height:20px;
+  background:var(--accent); border-radius:50%; cursor:pointer;
+  border:3px solid #fff;
+}
+.sim input[type=range]::-moz-range-thumb{
+  width:20px; height:20px; background:var(--accent); border-radius:50%;
+  cursor:pointer; border:3px solid #fff;
+}
+.sim-out{
+  background:#252525; border-radius:10px; padding:18px; margin-top:22px;
+  text-align:center;
+}
+.sim-out .big{
+  font-family:'Playfair Display',serif; font-weight:900; font-size:38px;
+  color:var(--accent2); line-height:1;
+}
+.sim-out .cap{font-size:12.5px; color:#aaa; margin-top:8px;}
+.sim-reset{
+  margin-top:16px; width:100%; padding:11px; background:transparent;
+  border:1px solid #555; color:#ccc; border-radius:8px; font-size:13px;
+  cursor:pointer; font-family:inherit; transition:all 0.2s;
+}
+.sim-reset:hover{background:#333; border-color:#777;}
+
+/* ===== FADE ===== */
+.fade-in{opacity:0; transform:translateY(18px); transition:opacity 0.7s ease, transform 0.7s ease;}
+.fade-in.visible{opacity:1; transform:translateY(0);}
+
+/* ===== END ===== */
+.end{padding:50px 0 70px; text-align:center;}
+.end .q{
+  font-family:'Playfair Display',serif; font-style:italic; font-size:21px;
+  line-height:1.55; word-break:keep-all; color:var(--text);
+}
+.end .sig{margin-top:24px; font-size:12px; color:var(--text2); letter-spacing:0.1em;}
+
+@media(max-width:420px){
+  .hero h1{font-size:31px;}
+  h2{font-size:23px;}
+  .stat .num{font-size:25px;}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <header class="hero fade-in">
+    <div class="eyebrow">2026 상반기 심층탐구 · Deep Dive</div>
+    <h1>화려한 지수 아래, <em>기어들은 반대로</em> 돌고 있다</h1>
+    <p class="lead">나스닥 +20%, 다우 5만 2천 돌파. 숫자만 보면 황금기다. 그런데 월가의 거장들은 2000년 닷컴 붕괴 직전에나 들리던 경고음을 조용히 울리고 있다. 표면과 현실의 착시, 그 이면을 해부한다.</p>
+    <div class="meta">
+      <span><b>주제</b> 거시경제 · 시장구조</span>
+      <span><b>기준</b> 2026년 상반기 마감</span>
+      <span><b>구분</b> 경제 관점 분석</span>
+    </div>
+  </header>
+
+  <!-- 01 표면 -->
+  <section class="fade-in">
+    <div class="sec-num">01 — The Surface</div>
+    <h2>표면: 숫자만 보면 완벽한 축제</h2>
+    <p>2026년 상반기가 방금 마감됐다. 지수만 놓고 보면 완전히 축제 분위기다. <strong>나스닥은 20% 치솟았고</strong>, <strong>다우지수는 역사상 처음으로 5만 2천 선을 돌파</strong>했다. 하지만 이 화려한 포장지를 한 꺼풀만 벗겨내면, 그 안의 기어들은 전혀 다른 방향으로 삐걱거리며 맞물려 있다.</p>
+
+    <div class="statrow">
+      <div class="stat"><div class="num">+20%</div><div class="lab">나스닥 상반기 상승률</div></div>
+      <div class="stat"><div class="num dark">52,000</div><div class="lab">다우지수 사상 첫 돌파선</div></div>
+    </div>
+
+    <p class="plain">이 랠리를 만든 세 개의 방아쇠가 있다. 흥미롭게도 첫 번째 방아쇠는 뉴욕도 실리콘밸리도 아닌 <strong>중동</strong>에서 당겨졌다.</p>
+  </section>
+
+  <!-- 02 세 개의 방아쇠 -->
+  <section class="fade-in">
+    <div class="sec-num">02 — The Triggers</div>
+    <h2>랠리를 만든 세 개의 방아쇠</h2>
+
+    <h3>① 중동 휴전 → 유가 40% 폭락</h3>
+    <p>카타르 도하에서 진행 중인 미국·이란 휴전 중재회담이 글로벌 금융시장의 숨통을 틔웠다. 호르무즈 해협을 둘러싼 지정학적 긴장이 완화되자, 글로벌 유가 기준인 <strong>WTI(서부 텍사스산 원유)가 배럴당 70달러 선까지 떨어졌다</strong>. 최고점 119달러에서 무려 40% 폭락한 것이다. 기름값 하락은 곧 경제 전체를 짓누르던 인플레이션 공포가 가라앉았다는 뜻이다.</p>
+
+    <div class="chart-wrap fade-in">
+      <div class="chart-title">WTI 유가 — 최고점 대비 40% 하락</div>
+      <div class="chart-sub">인플레이션 공포 완화의 직접적 신호</div>
+      <div class="chart-container">
+        <canvas id="chartOil" height="220"></canvas>
+      </div>
+      <div class="chart-note">단위: 배럴당 달러($)</div>
+    </div>
+
+    <h3>② 견고한 노동시장 → 완벽한 시나리오 기대</h3>
+    <p>5월 구인건수 통계도 놀라웠다. 시장은 고금리로 기업들이 채용을 줄여 <strong>697만 건</strong> 정도로 떨어질 거라 예상했지만, 실제로는 <strong>760만 건</strong>이 나왔다. 연준이 금리를 이렇게 높게 유지하는데도 경제의 기초 체력인 노동시장이 전혀 꺾이지 않았다는 뜻이다. '침체 없이 인플레이션만 잡히는' 완벽한 시나리오에 대한 기대감이 커졌다.</p>
+
+    <h3>③ 대법원 판결 → 연준 독립성 방어</h3>
+    <p>연방대법원이 리사 쿡 연준 이사 해임 시도를 차단했다. 정치적 입장을 배제하고 시장 메커니즘 관점에서만 보면, 이는 강력한 안도감을 준다. 중앙은행의 핵심은 결국 <strong>독립성</strong>이기 때문이다. 통화정책이 정치권 압력에 휘둘리지 않고 예측 가능하게 움직일 거라는 확신이 다우 5만 2천 돌파의 밑거름이 됐다.</p>
+  </section>
+
+  <!-- 03 괴리 -->
+  <section class="fade-in">
+    <div class="sec-num">03 — The Anomaly</div>
+    <h2>이상한 신호: 다우와 나스닥이 찢어졌다</h2>
+    <p>여기서 자료를 파고들면 아주 이상한 점이 나온다. 상반기 마감 직전 7거래일 동안 <strong>다우는 +0.5%</strong> 올랐는데, 정작 기술주 중심의 <strong>나스닥은 -5.0%</strong> 하락했다. 두 지수의 단기 격차가 5.5%포인트나 벌어진 것이다. 같은 미국 경제를 기반으로 하는데 왜 이렇게 극단적으로 찢어질까.</p>
+
+    <div class="chart-wrap fade-in">
+      <div class="chart-title">마감 직전 7거래일 — 5.5%p의 괴리</div>
+      <div class="chart-sub">다우는 오르고, 나스닥은 무너졌다</div>
+      <div class="chart-container">
+        <canvas id="chartGap" height="220"></canvas>
+      </div>
+      <div class="chart-note">단위: 등락률(%)</div>
+    </div>
+
+    <div class="pull">1971년 나스닥 출범 이후, 두 지수가 이 정도로 극심하게 괴리된 경우는 전체 거래일의 단 1%. 그리고 그것은 2000년 닷컴버블 붕괴 직전이었다.</div>
+
+    <p>통계적으로 이런 수준의 괴리가 발생했을 때, <strong>3개월 내에 시장이 20% 이상 하락하는 약세장(베어마켓)에 진입할 확률은 66.9%</strong>에 달한다.</p>
+
+    <div class="statrow">
+      <div class="stat"><div class="num">1%</div><div class="lab">1971년 이후 이 정도 괴리가 나온 거래일 비중</div></div>
+      <div class="stat"><div class="num">66.9%</div><div class="lab">3개월 내 약세장 진입 확률</div></div>
+    </div>
+
+    <h3>비유: RPM은 터지는데 바퀴는 헛돈다</h3>
+    <p class="plain">지금 상황은 고속도로를 달리는 자동차와 같다. 엔진의 RPM(나스닥 기술주)은 계기판 붉은 선을 넘을 만큼 미친 듯이 돌고 있다. 그런데 <strong>변속기가 고장 나서 그 동력이 바퀴(다우=실물 경제)로 전달되지 않고 헛돌고 있다.</strong> 동력이 전달되지 않는데 RPM만 계속 높이면, 결국 엔진은 과열돼 터진다.</p>
+  </section>
+
+  <!-- 04 AI 하드웨어 엔진 -->
+  <section class="fade-in">
+    <div class="sec-num">04 — The Engine</div>
+    <h2>미친 RPM의 정체: AI 하드웨어</h2>
+    <p>지금 이 과열된 RPM을 만들어내는 핵심 엔진이 AI 하드웨어 섹터다. 세미애널리시스 리포트는 <strong>엔비디아의 하반기 데이터센터 매출이 월가 예상치를 20% 초과</strong>할 거라 분석했다. 그동안 발목을 잡았던 HBM4 메모리 공급 병목이 풀렸다는 뜻이다.</p>
+
+    <h3>병목이란 무엇이었나 — 천재 요리사의 창고</h3>
+    <p class="plain">엔비디아 GPU를 세계 최고로 빠른 천재 요리사라고 해보자. 요리 재료(데이터)는 HBM이라는 별도 창고에 보관돼 있다. 요리사는 엄청 빠른데, 창고에서 재료를 꺼내오는 컨베이어 벨트가 너무 느렸고, 창고 짓는 속도도 요리사를 못 따라갔다. 이것이 병목이었다. 이제 차세대 <strong>베라루빈 플랫폼</strong>이 빠른 속도로 생산되며 그 문제가 풀리고 있다. AMD 역시 2나노 서버 CPU '베니스' 기대감에 월가 목표주가가 <strong>700달러</strong>까지 올랐다.</p>
+
+    <div class="pull">그러나 이 화려한 기술력 이면에, 진짜 리스크는 따로 도사리고 있었다.</div>
+
+    <p>대만 사법당국이 슈퍼마이크로컴퓨터 대만 사무소를 전격 압수수색하자 <strong>주가가 단숨에 8% 폭락</strong>했다. 아무리 수요가 폭발하고 병목을 해결해도, 이 거대한 AI 산업 전체가 미·중 지정학 패권 경쟁이라는 얇은 살얼음판 위에 서 있다는 증명이다. 수출 통제 리스크 하나만 터지면, 기업의 실제 돈 버는 능력과 상관없이 주가는 하루아침에 무너질 수 있다.</p>
+  </section>
+
+  <!-- 05 두 갈래 베팅 -->
+  <section class="fade-in">
+    <div class="sec-num">05 — The Split Bet</div>
+    <h2>가장 똑똑한 돈들의 정반대 베팅</h2>
+    <p>시장의 가장 똑똑한 돈들은 이미 갈라졌다. 한쪽은 우회로를 찾고, 다른 한쪽은 붕괴에 베팅한다.</p>
+
+    <h3>캐시우드 — 살얼음판을 우회하다</h3>
+    <p class="plain">아크인베스트 캐시우드는 AI 반도체 스타트업 <strong>세레브라스</strong> 주식을 대거 사들였고, 이 회사 주가는 단숨에 20% 급등했다. 세레브라스는 HBM을 아예 쓰지 않는다. SLM 기술로 요리사의 '도마 위'에 모든 재료를 한꺼번에 올려버렸다. 거대한 하나의 웨이퍼 칩 안에 메모리를 꽉 채워, 외부 창고를 오가는 병목 자체를 없앤 것이다. 결과적으로 대만·중국발 지정학 리스크에서 한결 자유로워진다.</p>
+
+    <h3>마이클 버리 — 붕괴에 돈을 걸다</h3>
+    <p>반대로 영화 <em>빅쇼트</em>의 실제 모델 마이클 버리는 정반대로 움직였다. 포트폴리오를 보면 <strong>엔비디아를 198달러선, 테슬라를 416달러선에서 대규모 공매도</strong>했다. 심지어 반도체 ETF 전체가 무너진다는 쪽에도 돈을 걸었다. 같은 시장을 보며 한쪽은 '혁명은 계속된다', 한쪽은 '이것은 버블이다'에 베팅하는 것이 지금 시장의 가장 기괴한 풍경이다.</p>
+
+    <table class="tbl">
+      <thead><tr><th>구분</th><th>캐시우드 (아크)</th><th>마이클 버리</th></tr></thead>
+      <tbody>
+        <tr><td>방향</td><td class="hi">매수 (Long)</td><td class="hi">공매도 (Short)</td></tr>
+        <tr><td>핵심 종목</td><td>세레브라스 (+20%)</td><td>엔비디아·테슬라</td></tr>
+        <tr><td>논리</td><td>기술적 우회 = 혁명 지속</td><td>구조적 과열 = 붕괴</td></tr>
+        <tr><td>ETF 베팅</td><td>—</td><td>반도체 ETF 하락</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 06 전력 인프라 -->
+  <section class="fade-in">
+    <div class="sec-num">06 — The Physical World</div>
+    <h2>잊고 있던 진실: AI는 전기를 먹고 자란다</h2>
+    <p>우리는 AI를 클라우드 속 마법의 뇌라고 생각한다. 하지만 AI는 마법이 아니라 <strong>전기를 엄청나게 먹고 자라는 거대한 기계 장치</strong>다. 칩이 아무리 좋아도 전기가 없으면 그냥 고철이다. AI 섹터가 소프트웨어를 넘어 전력 인프라라는 물리적 세계로 확장되고 있다.</p>
+
+    <p>이를 증명하는 데이터가 블룸에너지에서 나왔다. 이 회사가 자산운용사 브룩필드와 맺은 AI 인프라 전력 공급 파트너십 규모를 <strong>기존 50억 달러에서 250억 달러로 5배 키웠다.</strong></p>
+
+    <div class="chart-wrap fade-in">
+      <div class="chart-title">전력 인프라로 쏠리는 자본</div>
+      <div class="chart-sub">블룸에너지–브룩필드 파트너십 5배 확대</div>
+      <div class="chart-container">
+        <canvas id="chartPower" height="220"></canvas>
+      </div>
+      <div class="chart-note">단위: 억 달러</div>
+    </div>
+
+    <p>더 충격적인 건 GE 버노바의 가스터빈 가격표다. 높이 31피트(약 9.4m)짜리 거대한 가스터빈이 지난 3년간 <strong>가격이 300% 폭등</strong>해, 대당 2억 5천만 달러(약 3천억 원)에 달한다. 소프트웨어는 코드 몇 줄로 복사되지만, 이 중공업 터빈은 3D 프린터로 찍어낼 수 없다. 쇳물을 붓고 정밀하게 깎아 몇 달에 걸쳐 조립해야 하는 극한의 물리적 작업이기 때문이다.</p>
+
+    <div class="pull">우리가 소파에서 챗봇에게 저녁 메뉴를 물을 때, 지구 어딘가에서는 중소국가 하나가 쓰는 전기를 만드느라 3천억 원짜리 가스터빈이 맹렬히 불을 뿜고 있다.</div>
+
+    <!-- SIMULATOR: 가스터빈 가격 -->
+    <div class="sim fade-in">
+      <div class="tag">Interactive · What-if</div>
+      <h3>🔧 가스터빈 가격 시뮬레이터</h3>
+      <p>3년간 300% 상승이 실감나지 않는다면, 상승률을 직접 움직여 대당 가격이 어떻게 변하는지 확인해보세요. (기준가: 3년 전 약 6,250만 달러)</p>
+      <label>3년 누적 상승률 <span id="turbLabel">300%</span></label>
+      <input type="range" id="turbSlider" min="0" max="500" value="300" step="10">
+      <div class="sim-out">
+        <div class="big" id="turbOut">$2.50억</div>
+        <div class="cap" id="turbCap">대당 약 3,000억 원 (환율 1,200원 가정)</div>
+      </div>
+      <button class="sim-reset" id="turbReset">초기값으로 리셋 (300%)</button>
+    </div>
+  </section>
+
+  <!-- 07 우주 -->
+  <section class="fade-in">
+    <div class="sec-num">07 — Orbit</div>
+    <h2>인프라는 우주 궤도까지 뻗어간다</h2>
+
+    <h3>스페이스X — 43억 달러의 강제 매수</h3>
+    <p>스페이스X가 <strong>나스닥 100지수 편입</strong>을 확정했다. 시장은 이를 '자금의 거대한 블랙홀이 열렸다'고 표현한다. 지수를 기계적으로 추종하는 패시브 펀드들은, 스페이스X가 바스켓에 들어가는 순간 구조적으로 이 주식을 강제 매수해야 한다. 그 기계적 매수 규모만 약 <strong>43억 달러</strong>로 추산된다.</p>
+    <p class="plain">다만 BNP 파리바의 냉정한 분석에 따르면, 착시도 존재한다. 현재 FCC 규제상 스페이스X가 위성을 띄웠다고 버라이즌·AT&T의 지상망을 강제 이용하거나 로밍을 요구할 권리는 없다. 스마트폰의 작은 안테나가 저궤도 위성과 직접 대용량 데이터를 주고받는 것도 배터리·전파 간섭 등 물리적 장벽이 높다. <strong>기존 통신망이 당장 무너진다는 건 과도한 착시</strong>라는 것이다.</p>
+
+    <h3>로켓랩 — 스포츠카 대신 장갑차</h3>
+    <p class="plain">진짜 지각변동은 로켓랩에서 나왔다. 이 회사가 위성통신기업 <strong>이리듐을 80억 달러에 인수</strong>했다. 스탈링크가 광대역(브로드밴드)이라면, 이리듐은 L밴드라는 완전히 다른 주파수를 쓴다. 스탈링크가 빠른 스포츠카(화상회의·유튜브)라면, L밴드는 장갑차다. 속도는 느려도 허리케인이 몰아치든 에베레스트 한가운데든 날씨·지형을 무시하고 신호를 뚫는다. 255만 구독자를 가진 이리듐 인수로, 로켓랩은 스페이스X와 정면으로 싸우는 대신 군사작전·선박구조 같은 <strong>절대 뺏기지 않을 틈새 시장</strong>을 확보했다. 발사부터 위성망 운영까지 아우르는 풀스택 우주기업으로 도약한 것이다.</p>
+  </section>
+
+  <!-- 08 소비경제 착시 -->
+  <section class="fade-in">
+    <div class="sec-num">08 — The Consumer Illusion</div>
+    <h2>지갑 사정: 실적 서프라이즈의 진짜 얼굴</h2>
+    <p>미래 기술 얘기에서 눈을 돌려 현실 소비경제를 보자. 나이키 실적이 발표됐다. 주당순이익(EPS)이 예상치 0.13달러를 훨씬 뛰어넘은 <strong>0.72달러</strong>. 표면적으로는 훌륭해 보인다. 하지만 그 이면을 분석하면 완벽한 착시다.</p>
+    <p>그 0.72달러 속에는 약 <strong>9억 8,600만 달러 규모의 일회성 관세 환급금</strong>이 포함돼 있었다. 정부에서 돌려받은 돈이 실적으로 잡힌 것이다. 게다가 가장 중요한 펀더멘탈인 <strong>중국 시장 매출은 오히려 12% 감소</strong>했다. 실적 서프라이즈가 아니라 회계적 착시였다.</p>
+
+    <div class="chart-wrap fade-in">
+      <div class="chart-title">나이키 EPS — 표면 vs 실질</div>
+      <div class="chart-sub">일회성 관세 환급금을 걷어내면?</div>
+      <div class="chart-container">
+        <canvas id="chartNike" height="220"></canvas>
+      </div>
+      <div class="chart-note">단위: 주당순이익($) · 실질은 환급금 제외 추정 개념</div>
+    </div>
+
+    <p class="plain">나이키뿐만이 아니다. 콘센트릭스는 실적이 예상치에서 아주 살짝 빗나가고 가이던스를 조금 낮췄을 뿐인데, <strong>주가가 11% 넘게 폭락</strong>했다. 지금 시장이 소비재·서비스 기업에게 얼마나 무자비한 '완벽함'을 요구하는지 보여준다. 알고리즘들은 소비 둔화 조짐이 조금만 보여도 기계적으로 매도 폭탄을 던진다.</p>
+  </section>
+
+  <!-- 09 트럼프 포트폴리오 -->
+  <section class="fade-in">
+    <div class="sec-num">09 — The Hedge</div>
+    <h2>규칙을 만드는 자들의 양면 베팅</h2>
+    <p>정치권 인사들의 자산 흐름은 어떤가. 트럼프 전 대통령의 927페이지 분량 2025년 재산 공개 내역이 나왔다. 정치 논쟁을 빼고 중립적 거시지표로만 보면, 시장 트렌드와 정치권 투자가 완벽하게 일치한다. 그 방식이 아주 극단적인 <strong>양면 베팅</strong>이다.</p>
+
+    <div class="statrow">
+      <div class="stat"><div class="num">$5.15억</div><div class="lab">암호화폐 관련 수익 (월드리버티 파이낸셜 토큰 판매 등)</div></div>
+      <div class="stat"><div class="num dark">$2,500만</div><div class="lab">엔비디아·애플 대규모 매수 (수출 규제 승인 뉴스 당일)</div></div>
+    </div>
+
+    <p>한편으로는 가장 디지털적인 자산(암호화폐·첨단 기술주)에 돈을 쏟아부었다. 그런데 동시에 다른 한편으로는 <strong>50만~100만 달러 상당의 실물 금괴</strong>를 보유하고 있었다. 디지털 혁명으로 돈을 벌면서도, 기저에 깔린 파국적 리스크를 가장 오래된 실물 안전자산인 금으로 헤지하고 있는 것이다.</p>
+  </section>
+
+  <!-- 10 금 도발적 질문 -->
+  <section class="fade-in">
+    <div class="sec-num">10 — The Provocation</div>
+    <h2>마지막 퍼즐: 금은 반전을 준비하는가</h2>
+    <p>트럼프 포트폴리오에 있던 그 금. 지금 금 가격 차트는 <strong>1월 최고점 대비 25% 하락</strong>하면서 50일 이동평균선이 200일선을 뚫고 내려가는 이른바 <strong>데드크로스</strong> 직전에 와 있다. 차트상으로는 알고리즘들이 무조건 팔도록 설계된 폭락 시그널이다.</p>
+    <p>그런데 지난 45년 데이터를 보면 완전한 반전이 있다. <strong>데드크로스 발생 1개월 후, 금값은 오히려 57% 확률로 상승</strong>했다. 지금 겉으로는 가격이 떨어지는 것 같지만, 전 세계 중앙은행들은 내년에도 조용히 금을 매집하겠다고 답하고 있다.</p>
+
+    <!-- SIMULATOR: 데드크로스 확률 -->
+    <div class="sim fade-in">
+      <div class="tag">Interactive · Signal vs History</div>
+      <h3>🪙 데드크로스 이후 시나리오</h3>
+      <p>차트가 보내는 '팔라'는 시그널과, 45년 역사 데이터가 보여주는 '올랐다'는 확률. 두 개의 진실이 충돌한다. 슬라이더로 과거 상승 확률을 가정해 100번 중 몇 번 올랐는지 확인해보세요.</p>
+      <label>1개월 후 상승 확률 <span id="goldLabel">57%</span></label>
+      <input type="range" id="goldSlider" min="0" max="100" value="57" step="1">
+      <div class="sim-out">
+        <div class="big" id="goldOut">57 / 100</div>
+        <div class="cap" id="goldCap">100번 중 오른 횟수 · 나머지 43번은 하락</div>
+      </div>
+      <button class="sim-reset" id="goldReset">역사적 값으로 리셋 (57%)</button>
+    </div>
+  </section>
+
+  <!-- END -->
+  <div class="end fade-in">
+    <p class="q">세상의 모든 자금이 AI와 우주로 쏠리는 지금, 과연 중앙은행들이 조용히 사모으는 이 전통의 안전자산 '금'이 가장 의외의 반전을 보여줄 수 있을까?</p>
+    <p class="sig">표면적인 착시에 속지 않는 것 — 그것이 핵심이다.</p>
+    <div class="meta" style="justify-content:center; border-top:1px solid var(--line); margin-top:34px; padding-top:24px;">
+      <span><b>분석</b> 심층탐구 리포트</span>
+      <span><b>구성</b> 원본 자막 기반</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ===== FADE-IN OBSERVER ===== */
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+/* ===== CHART DEFAULTS ===== */
+Chart.defaults.font.family = "'Noto Sans KR', sans-serif";
+Chart.defaults.font.size = 12;
+Chart.defaults.color = '#777777';
+const ACC = '#e11d48', DARK = '#1a1a1a', GRAY = '#6b7280', BLUE = '#2563eb';
+
+/* ===== CHART CONFIGS ===== */
+const chartConfigs = {};
+
+chartConfigs['chartOil'] = () => {
+  new Chart(document.getElementById('chartOil'), {
+    type: 'bar',
+    data: {
+      labels: ['최고점', '현재 (WTI)'],
+      datasets: [{
+        data: [119, 70],
+        backgroundColor: [GRAY, ACC],
+        borderRadius: 6, barThickness: 70
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => '$' + c.parsed.y + ' /배럴' } }
+      },
+      scales: {
+        y: { beginAtZero: true, grid: { color: '#eee' }, ticks: { callback: v => '$' + v } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+};
+
+chartConfigs['chartGap'] = () => {
+  new Chart(document.getElementById('chartGap'), {
+    type: 'bar',
+    data: {
+      labels: ['다우지수', '나스닥'],
+      datasets: [{
+        data: [0.5, -5.0],
+        backgroundColor: [DARK, ACC],
+        borderRadius: 6, barThickness: 70
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => (c.parsed.y > 0 ? '+' : '') + c.parsed.y + '%' } }
+      },
+      scales: {
+        y: { grid: { color: '#eee' }, ticks: { callback: v => v + '%' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+};
+
+chartConfigs['chartPower'] = () => {
+  new Chart(document.getElementById('chartPower'), {
+    type: 'bar',
+    data: {
+      labels: ['기존 파트너십', '확대 후'],
+      datasets: [{
+        data: [50, 250],
+        backgroundColor: [GRAY, ACC],
+        borderRadius: 6, barThickness: 70
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => c.parsed.y + '억 달러' } }
+      },
+      scales: {
+        y: { beginAtZero: true, grid: { color: '#eee' }, ticks: { callback: v => v + '억' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+};
+
+chartConfigs['chartNike'] = () => {
+  new Chart(document.getElementById('chartNike'), {
+    type: 'bar',
+    data: {
+      labels: ['시장 예상', '발표 실적', '환급금 제외(추정)'],
+      datasets: [{
+        data: [0.13, 0.72, 0.20],
+        backgroundColor: [GRAY, ACC, DARK],
+        borderRadius: 6, barThickness: 56
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => '$' + c.parsed.y.toFixed(2) + ' EPS' } }
+      },
+      scales: {
+        y: { beginAtZero: true, grid: { color: '#eee' }, ticks: { callback: v => '$' + v } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+};
+
+/* ===== CHART OBSERVER ===== */
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+/* ===== SIMULATOR 1: 가스터빈 ===== */
+(function(){
+  const BASE = 0.625; // 3년 전 기준가 (억 달러): 2.5 / 4 (= +300%)
+  const slider = document.getElementById('turbSlider');
+  const label = document.getElementById('turbLabel');
+  const out = document.getElementById('turbOut');
+  const cap = document.getElementById('turbCap');
+  const reset = document.getElementById('turbReset');
+  function update(){
+    let pct = parseInt(slider.value);
+    if (isNaN(pct) || pct < 0) pct = 0;
+    const price = BASE * (1 + pct / 100); // 억 달러
+    const won = price * 100000000 * 1200; // 원
+    const jo = won / 1000000000000; // 조 단위
+    label.textContent = pct + '%';
+    out.textContent = '$' + price.toFixed(2) + '억';
+    cap.textContent = '대당 약 ' + (jo >= 1 ? jo.toFixed(2) + '조 원' : (won/100000000).toFixed(0) + '억 원') + ' (환율 1,200원 가정)';
+  }
+  slider.addEventListener('input', update);
+  reset.addEventListener('click', () => { slider.value = 300; update(); });
+  update();
+})();
+
+/* ===== SIMULATOR 2: 금 데드크로스 ===== */
+(function(){
+  const slider = document.getElementById('goldSlider');
+  const label = document.getElementById('goldLabel');
+  const out = document.getElementById('goldOut');
+  const cap = document.getElementById('goldCap');
+  const reset = document.getElementById('goldReset');
+  function update(){
+    let p = parseInt(slider.value);
+    if (isNaN(p) || p < 0) p = 0; if (p > 100) p = 100;
+    label.textContent = p + '%';
+    out.textContent = p + ' / 100';
+    cap.textContent = '100번 중 오른 횟수 · 나머지 ' + (100 - p) + '번은 하락';
+  }
+  slider.addEventListener('input', update);
+  reset.addEventListener('click', () => { slider.value = 57; update(); });
+  update();
+})();
+</script>
+</body>
+</html>
