@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>위대한 AI 현실 점검과 거대한 자금 이동 — 인터랙티브 시험문제</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --bg-sub:#fafafa;
+    --text:#1a1a1a; --text-sub:#777777;
+    --accent:#e11d48; --accent2:#f43f5e;
+    --border:#e5e5e5;
+    --ok:#16a34a; --ok-bg:#f0fdf4;
+    --no:#dc2626; --no-bg:#fef2f2;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);
+    line-height:1.7;font-size:15.5px;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:0 16px 80px;}
+
+  /* ── 스티키 채점판 ── */
+  #scoreboard{
+    position:sticky;top:0;z-index:100;background:#fff;
+    border-bottom:2px solid var(--text);padding:12px 16px 10px;
+    box-shadow:0 3px 12px rgba(0,0,0,.06);
+  }
+  .sb-inner{max-width:680px;margin:0 auto;}
+  .sb-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;}
+  .sb-title{
+    font-family:'Playfair Display','Noto Sans KR',serif;font-weight:900;font-size:14px;
+    color:var(--accent);letter-spacing:.04em;
+  }
+  .sb-stats{display:flex;gap:14px;font-size:13px;font-weight:500;color:var(--text-sub);}
+  .sb-stats b{color:var(--text);font-weight:900;font-size:14.5px;}
+  .sb-stats .rate b{color:var(--accent);}
+  .sb-bar{height:7px;background:#efefef;border-radius:4px;margin-top:9px;overflow:hidden;}
+  #sbFill{height:100%;width:0%;background:#dc2626;border-radius:4px;transition:width .45s ease, background .45s ease;}
+
+  /* ── 헤더 ── */
+  header{padding:44px 0 30px;border-bottom:3px solid var(--text);margin-bottom:36px;}
+  .eyebrow{
+    display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.16em;color:var(--accent);
+    border:1px solid var(--accent);padding:3px 10px;border-radius:2px;margin-bottom:14px;
+  }
+  h1{
+    font-family:'Playfair Display','Noto Sans KR',serif;font-size:clamp(24px,5.8vw,34px);
+    font-weight:900;line-height:1.32;word-break:keep-all;margin-bottom:12px;
+  }
+  h1 em{font-style:normal;color:var(--accent);}
+  .sub{font-size:14px;color:var(--text-sub);word-break:keep-all;}
+
+  /* ── 문제 카드 ── */
+  .q-card{
+    background:#fff;border:1px solid var(--border);border-radius:14px;
+    padding:24px 20px;margin-bottom:24px;box-shadow:0 1px 4px rgba(0,0,0,.04);
+  }
+  .q-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+  .q-num{
+    font-family:'Playfair Display',serif;font-weight:900;font-size:22px;color:var(--accent);
+    line-height:1;
+  }
+  .badge{
+    font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.05em;
+  }
+  .badge.type{background:#f1f1f1;color:#555;}
+  .badge.d-easy{background:#eefdf3;color:#15803d;border:1px solid #bbe9cd;}
+  .badge.d-mid{background:#fff7ed;color:#c2610c;border:1px solid #f9dcbb;}
+  .badge.d-hard{background:#fef2f2;color:#b91c1c;border:1px solid #f6c6c6;}
+  .q-text{font-size:16px;font-weight:700;word-break:keep-all;margin-bottom:18px;line-height:1.65;}
+
+  .opts{display:flex;flex-direction:column;gap:10px;}
+  .opt{
+    display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;
+    background:var(--bg-sub);border:1.5px solid var(--border);border-radius:10px;
+    padding:13px 14px;font-family:'Noto Sans KR';font-size:14.5px;line-height:1.6;
+    cursor:pointer;transition:all .18s;word-break:keep-all;color:var(--text);
+  }
+  .opt:hover:not(:disabled){border-color:var(--accent);background:#fff;transform:translateX(3px);}
+  .opt:focus-visible{outline:3px solid var(--accent2);outline-offset:2px;}
+  .opt:disabled{cursor:default;}
+  .opt .mk{
+    min-width:24px;height:24px;border-radius:50%;background:#fff;border:1.5px solid #ccc;
+    display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;flex-shrink:0;
+  }
+  .opt.correct{background:var(--ok-bg);border-color:var(--ok);color:#14532d;font-weight:700;}
+  .opt.correct .mk{background:var(--ok);border-color:var(--ok);color:#fff;}
+  .opt.wrong{background:var(--no-bg);border-color:var(--no);color:#7f1d1d;font-weight:700;}
+  .opt.wrong .mk{background:var(--no);border-color:var(--no);color:#fff;}
+  .opt.dim{opacity:.5;}
+
+  .ox-row{display:flex;gap:12px;}
+  .ox-row .opt{justify-content:center;font-size:24px;font-weight:900;padding:16px;}
+
+  .short-row{display:flex;gap:10px;}
+  .short-row input[type=text]{
+    flex:1;border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;
+    font-family:'Noto Sans KR';font-size:15px;outline:none;transition:border .2s;min-width:0;
+  }
+  .short-row input[type=text]:focus{border-color:var(--accent);}
+  .short-row input[type=text]:disabled{background:var(--bg-sub);color:var(--text-sub);}
+  .submit-btn{
+    background:var(--accent);color:#fff;border:none;border-radius:10px;padding:12px 20px;
+    font-family:'Noto Sans KR';font-size:14px;font-weight:700;cursor:pointer;transition:background .2s;
+    flex-shrink:0;
+  }
+  .submit-btn:hover:not(:disabled){background:#be123c;}
+  .submit-btn:disabled{background:#ddd;cursor:default;}
+  .submit-btn:focus-visible{outline:3px solid var(--accent2);outline-offset:2px;}
+  .input-warn{font-size:12px;color:var(--no);margin-top:6px;display:none;}
+
+  .verdict{
+    display:inline-flex;align-items:center;gap:6px;margin-top:14px;
+    font-size:13px;font-weight:900;padding:6px 14px;border-radius:20px;
+  }
+  .verdict.ok{background:var(--ok-bg);color:var(--ok);border:1px solid #bbe9cd;}
+  .verdict.no{background:var(--no-bg);color:var(--no);border:1px solid #f6c6c6;}
+
+  .expl{
+    display:none;margin-top:14px;background:var(--bg-sub);border-left:4px solid var(--accent);
+    border-radius:0 10px 10px 0;padding:15px 16px;font-size:13.5px;line-height:1.75;word-break:keep-all;
+    animation:slideDown .4s ease;
+  }
+  .expl.show{display:block;}
+  .expl .e-tag{font-weight:900;color:var(--accent);font-size:12px;letter-spacing:.08em;display:block;margin-bottom:6px;}
+  .expl .src{
+    display:block;margin-top:10px;padding-top:10px;border-top:1px dashed #ddd;
+    color:var(--text-sub);font-size:12.5px;font-style:italic;
+  }
+  @keyframes slideDown{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+
+  /* ── 최종 결과 ── */
+  #finalCard{
+    display:none;background:var(--text);color:#fff;border-radius:18px;
+    padding:38px 24px;text-align:center;margin-top:36px;animation:pop .5s ease;
+  }
+  #finalCard.show{display:block;}
+  @keyframes pop{from{opacity:0;transform:scale(.94);}to{opacity:1;transform:scale(1);}}
+  #finalCard .f-label{font-size:12px;letter-spacing:.22em;color:#bbb;font-weight:700;margin-bottom:12px;}
+  #finalGrade{
+    font-family:'Playfair Display',serif;font-size:74px;font-weight:900;color:var(--accent2);
+    line-height:1;
+  }
+  #finalScore{font-size:17px;font-weight:700;margin-top:12px;}
+  #finalMsg{font-size:13.5px;color:#ccc;margin-top:10px;word-break:keep-all;line-height:1.7;}
+  #retryBtn{
+    margin-top:24px;background:var(--accent);color:#fff;border:none;border-radius:26px;
+    padding:13px 34px;font-family:'Noto Sans KR';font-size:14.5px;font-weight:900;cursor:pointer;
+    transition:all .2s;
+  }
+  #retryBtn:hover{background:var(--accent2);transform:translateY(-2px);}
+  #retryBtn:focus-visible{outline:3px solid #fff;outline-offset:2px;}
+
+  footer{margin-top:50px;font-size:11.5px;color:var(--text-sub);text-align:center;word-break:keep-all;line-height:1.8;}
+  @media(max-width:400px){
+    .sb-stats{gap:9px;font-size:12px;}
+    .q-card{padding:20px 15px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- 실시간 채점판 -->
+<div id="scoreboard">
+  <div class="sb-inner">
+    <div class="sb-row">
+      <span class="sb-title">LIVE SCORE</span>
+      <div class="sb-stats">
+        <span>푼 문제 <b id="sbSolved">0</b>/10</span>
+        <span>맞힌 문제 <b id="sbCorrect">0</b></span>
+        <span class="rate">정답률 <b id="sbRate">0%</b></span>
+      </div>
+    </div>
+    <div class="sb-bar"><div id="sbFill"></div></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<header>
+  <span class="eyebrow">INTERACTIVE QUIZ · 2026.07.02</span>
+  <h1>위대한 AI 현실 점검과<br><em>거대한 자금 이동</em> — 이해도 점검 10문제</h1>
+  <p class="sub">보기를 클릭하면 즉시 채점되고 해설이 자동으로 펼쳐집니다. 모든 문제는 원본 방송 자막에 근거해 출제되었습니다.</p>
+</header>
+
+<div id="quizArea"></div>
+
+<!-- 최종 결과 -->
+<div id="finalCard">
+  <div class="f-label">FINAL RESULT</div>
+  <div id="finalGrade">A</div>
+  <div id="finalScore"></div>
+  <div id="finalMsg"></div>
+  <button id="retryBtn">↺ 다시 풀기</button>
+</div>
+
+<footer>본 퀴즈는 2026년 7월 2일 자 방송 자막 내용만을 근거로 출제되었습니다.<br>특정 종목의 매수·매도 추천이 아니며, 투자 판단의 책임은 투자자 본인에게 있습니다.</footer>
+
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id: 1, type: 'mc', difficulty: 'easy',
+    question: '이날 메타(META)가 장중 10% 이상 폭등한 결정적 이유는 무엇인가?',
+    options: [
+      '새로운 SNS 플랫폼 출시 발표',
+      '자체 AI 인프라의 남는 유휴 컴퓨팅 전력을 외부 기업에 판매하겠다고 발표',
+      '엔비디아 지분을 전량 매각했다는 소식',
+      '광고 매출이 예상치를 두 배 상회'
+    ],
+    answer: 1,
+    explanation: '블룸버그 보도에 따르면 메타는 자체 AI 인프라를 구축하고 거기서 남는 유휴 컴퓨팅 전력을 외부 기업에 판매하겠다고 밝혔고, 이 소식에 장중 10% 이상 폭등하며 S&P500 상승을 견인했습니다.',
+    source: '"메타가... 자체 AI 인프라를 구축하고 거기서 남는 이른바 유휴 컴퓨팅 전력을 외부 기업에 판매하겠다는 겁니다" / "S&P500을 거의 뭐 멱살 잡고 끌어올린 메타, META의 장중 10% 이상 폭등"'
+  },
+  {
+    id: 2, type: 'mc', difficulty: 'easy',
+    question: '방송에 따르면 메타의 컴퓨팅 파워 중 유휴 상태(놀고 있는) 비중은 약 몇 %인가?',
+    options: ['약 15%', '약 25%', '약 35%', '약 50%'],
+    answer: 2,
+    explanation: '메타는 올해에만 1,250억~1,450억 달러의 인프라 투자를 진행 중인데, 컴퓨팅 파워 중 약 35%가 유휴 상태였습니다. 이 감가상각 덩어리를 매몰비용으로 두는 대신 외부에 임대해 수익원으로 전환하려는 것이 메타의 전략입니다.',
+    source: '"메타의 컴퓨팅 파워 중 약 35%가 유휴... 그러니까 그냥 놀고 있다는 겁니다"'
+  },
+  {
+    id: 3, type: 'mc', difficulty: 'normal',
+    question: '디인포메이션 보도에 따르면, 오픈AI 엔지니어들이 소프트웨어 최적화로 달성한 성과는?',
+    options: [
+      '챗GPT 응답 속도를 10배 향상',
+      '비로그인 방문자용 챗GPT 구동에 필요한 엔비디아 GPU 수를 절반 이하로 감축',
+      '자체 AI 칩 개발 완료로 엔비디아 칩 전량 대체',
+      '데이터센터 전력 소비를 90% 절감'
+    ],
+    answer: 1,
+    explanation: '오픈AI는 소프트웨어 최적화를 통해 비로그인 방문자 대상 챗GPT 구동에 필요한 GPU 수를 절반 이하로 줄였습니다. 메타의 유휴 칩 임대(공급 증가)와 결합해 "칩을 새로 살 이유가 사라진다"는 AI 하드웨어 수요 고점론에 불을 붙였습니다.',
+    source: '"오픈 AI 엔지니어들이 소프트웨어 최적화를 통해서 비로그인 방문자 대상 챗GPT 구동에 필요한 엔비디아 GPU 수를 절반 이하로 줄이는 데 성공했다고 합니다"'
+  },
+  {
+    id: 4, type: 'mc', difficulty: 'normal',
+    question: "'빅쇼트'의 실제 주인공 마이클 버리가 이번에 대규모 공매도를 건 대상의 조합으로 옳은 것은?",
+    options: [
+      '테슬라 + 나스닥100 ETF(QQQ)',
+      '엔비디아 + 마이크론',
+      '캐터필러 + 반도체 ETF(SOXX)',
+      '메타 + 코어위브'
+    ],
+    answer: 2,
+    explanation: '버리는 캐터필러(CAT)와 반도체 ETF인 SOXX에 대규모 공매도를 걸었고, 현 상황을 2000년 닷컴버블 수준의 과열이라고 경고했습니다. 특히 AI 데이터센터 발전기 테마로 PER 50배를 넘긴 캐터필러의 밸류에이션을 정면 겨냥했습니다.',
+    source: '"마이클 버리가 캐터필러 그리고 반도체 ETF인 SOXX에 대규모 공매도를 걸었다는 사실이 오늘 장중에 공개됐단 말이죠" / "버리는 이걸 2000년 닷컴버블 수준의 과열이라고 경고"'
+  },
+  {
+    id: 5, type: 'mc', difficulty: 'normal',
+    question: '신임 연준 의장 케빈 워시가 포르투갈 신트라 포럼에서 보인 행보로 옳지 않은 것은?',
+    options: [
+      '7월 금리 결정에 대한 포워드 가이던스를 전면 거부했다',
+      '"인플레이션 2% 목표에 굽힘이 없다"고 밝혔다',
+      '"금리 인하를 기대한다면 실망하게 될 것"이라고 못 박았다',
+      '시장 안정을 위해 7월 금리 인하를 사실상 예고했다'
+    ],
+    answer: 3,
+    explanation: '워시는 금리 인하 예고와 정반대의 매파적 행보를 보였습니다. 가이던스를 전면 거부하고, 2% 목표 고수와 "금리 인하를 기대하면 실망할 것"이라는 발언을 내놓았으며, 그 직후 미 10년물 국채금리가 장중 4.5%대까지 급등했습니다.',
+    source: '"7월 금리 결정에 대한 Forward Guidance... 전면 거부" / "인플레이션 2% 목표에 굽힘이 없다. 그리고 금리 인하를 기대한다면 실망하게 될 것이라고 아주 단호하게 못 박았습니다"'
+  },
+  {
+    id: 6, type: 'mc', difficulty: 'hard',
+    question: '나이키는 중화권 매출이 17% 급감하고 전망치까지 낮췄음에도 주가가 4.9% 반등했다. 방송이 짚은 "결정적인" 요인은?',
+    options: [
+      '북미 매출이 사상 최대치를 경신해서',
+      '미국 정부의 관세 환급으로 약 9억 8,600만 달러의 혜택을 받아서',
+      '자사주 대량 매입 계획을 발표해서',
+      '중국 정부와 신규 합작사 설립에 합의해서'
+    ],
+    answer: 1,
+    explanation: '신임 CEO 엘리엇 힐의 턴어라운드 기대감도 작용했지만, 방송이 "결정적"이라고 짚은 것은 미국 정부의 관세 환급 효과로 받은 9억 8,600만 달러(약 10억 달러)의 혜택입니다. 정부 정책이 기업의 운명을 하루아침에 바꿀 수 있다는 사례로 제시됐습니다.',
+    source: '"물론 신임 CEO 엘리엇 힐의 턴어라운드 기대감도 작용했지만 결정적인 건 미국 정부의 관세 환급 효과로 무려 9억 8천 6백만 달러의 혜택을 받았습니다"'
+  },
+  {
+    id: 7, type: 'short', difficulty: 'normal',
+    question: '트럼프 대통령이 새로 임명한 연준 의장으로, 신트라 포럼에서 포워드 가이던스를 전면 거부한 인물의 이름은? (한글로 입력)',
+    answer: ['케빈 워시', '케빈워시', '워시'],
+    explanation: '트럼프 대통령이 새로 임명한 연준 의장 케빈 워시입니다. 파월 전 의장과 완전히 다른 행보로, 시장에 어떤 힌트도 주지 않겠다고 선언하며 강한 매파적 발언을 쏟아냈습니다.',
+    source: '"도날드 트럼프 대통령이 새로 임명한 연준 의장, 케빈 워시가 등판했습니다"'
+  },
+  {
+    id: 8, type: 'short', difficulty: 'normal',
+    question: '제너럴 밀스(GIS)가 발표한 향후 4년간의 비용 절감 계획 규모는 총 몇십억 달러인가? (숫자만 입력, 단위: 십억 달러 → 예시: 50억 달러라면 "50")',
+    answer: ['30', '30억', '30억 달러', '30억달러'],
+    explanation: '제너럴 밀스는 향후 4년간 30억 달러의 비용 절감 계획을 발표했고, 이날 주가가 8.5% 폭등했습니다. "꿈이 아니라 지금 당장 손에 쥐어줄 현금이 있다"는 것을 증명한 사례로, 반도체 이탈 자금이 방어주로 이동하는 흐름을 상징합니다.',
+    source: '"제너럴 밀스는 단순히 실적이 예상을 깬 것을 넘어서 향후 4년간 30억 달러라는 아주 매서운 비용 절감 계획을 발표했습니다"'
+  },
+  {
+    id: 9, type: 'ox', difficulty: 'easy',
+    question: '셔터스톡의 주가가 29% 이상 폭락한 것은, 게티이미지와의 37억 달러 규모 합병이 영국 규제당국의 독점 방지 조건에 부딪혔기 때문이다.',
+    answer: 'O',
+    explanation: '맞습니다. 셔터스톡은 게티이미지와 37억 달러 규모의 합병을 추진했으나 영국 규제당국의 독점 방지 조건이라는 규제 리스크에 부딪혀 주가가 29% 이상 폭락했습니다.',
+    source: '"주가가 무려 29% 이상 폭락했거든요. 아, 게티 이미지 합병 건 말이죠? 네, 게티 이미지와 37억 달러 규모의 합병을 추진했는데 영국 규제당국의 독점 방지 조건을..."'
+  },
+  {
+    id: 10, type: 'ox', difficulty: 'hard',
+    question: '트럼프 대통령의 재무 공개에 따르면, 대통령 본인의 엔비디아 주식 매수(500만~2,500만 달러 규모)는 정부의 엔비디아·AMD 우방국 수출 완화 정책 발표보다 먼저 이뤄졌다.',
+    answer: 'X',
+    explanation: '순서가 반대입니다. 정부가 수출 완화 정책을 발표한 지 일주일 뒤에 대통령 본인이 엔비디아 주식을 매수했습니다. 백악관은 "어떠한 이해상충도 없다"는 입장이고, 윤리 감시단체들은 "심각한 이해상충"이라 비판하는 등 양측 해석이 충돌하고 있습니다.',
+    source: '"정부가 엔비디아와 AMD에 대한 우방국 수출 완화 정책을 발표... 발표한 지 일주일 뒤에 대통령 본인이 500만 달러에서 2,500만 달러 규모의 엔비디아 주식을 개인적으로 매수했습니다"'
+  }
+];
+
+const TOTAL = QUIZ_DATA.length;
+let state = { solved: 0, correct: 0 };
+
+const quizArea = document.getElementById('quizArea');
+const sbSolved = document.getElementById('sbSolved');
+const sbCorrect = document.getElementById('sbCorrect');
+const sbRate = document.getElementById('sbRate');
+const sbFill = document.getElementById('sbFill');
+
+const typeLabel = { mc: '객관식', short: '단답형', ox: 'OX' };
+const diffLabel = { easy: ['쉬움','d-easy'], normal: ['보통','d-mid'], hard: ['어려움','d-hard'] };
+const CIRCLED = ['①','②','③','④'];
+
+function render() {
+  quizArea.innerHTML = '';
+  QUIZ_DATA.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'q' + q.id;
+
+    let bodyHTML = '';
+    if (q.type === 'mc') {
+      bodyHTML = '<div class="opts">' + q.options.map((op, i) =>
+        `<button class="opt" data-i="${i}"><span class="mk">${CIRCLED[i]}</span><span>${op}</span></button>`
+      ).join('') + '</div>';
+    } else if (q.type === 'ox') {
+      bodyHTML = `<div class="ox-row">
+        <button class="opt" data-v="O"><span>⭕ O</span></button>
+        <button class="opt" data-v="X"><span>❌ X</span></button>
+      </div>`;
+    } else {
+      bodyHTML = `<div class="short-row">
+        <input type="text" placeholder="정답을 입력하세요" aria-label="단답형 정답 입력" maxlength="40">
+        <button class="submit-btn">제출</button>
+      </div>
+      <div class="input-warn">답을 입력한 뒤 제출해 주세요.</div>`;
+    }
+
+    const [dTxt, dCls] = diffLabel[q.difficulty];
+    card.innerHTML = `
+      <div class="q-head">
+        <span class="q-num">Q${String(q.id).padStart(2,'0')}</span>
+        <span class="badge type">${typeLabel[q.type]}</span>
+        <span class="badge ${dCls}">${dTxt}</span>
+      </div>
+      <div class="q-text">${q.question}</div>
+      ${bodyHTML}
+      <div class="verdict-slot"></div>
+      <div class="expl">
+        <span class="e-tag">💡 해설</span>
+        ${q.explanation}
+        <span class="src">📜 원본 자막 근거: ${q.source}</span>
+      </div>`;
+    quizArea.appendChild(card);
+    attach(card, q);
+  });
+}
+
+function attach(card, q) {
+  if (q.type === 'mc') {
+    card.querySelectorAll('.opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const pick = +btn.dataset.i;
+        const isOk = pick === q.answer;
+        card.querySelectorAll('.opt').forEach((b, i) => {
+          b.disabled = true;
+          if (i === q.answer) b.classList.add('correct');
+          else if (i === pick) b.classList.add('wrong');
+          else b.classList.add('dim');
+        });
+        finish(card, isOk);
+      });
+    });
+  } else if (q.type === 'ox') {
+    card.querySelectorAll('.opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const pick = btn.dataset.v;
+        const isOk = pick === q.answer;
+        card.querySelectorAll('.opt').forEach(b => {
+          b.disabled = true;
+          if (b.dataset.v === q.answer) b.classList.add('correct');
+          else if (b.dataset.v === pick) b.classList.add('wrong');
+          else b.classList.add('dim');
+        });
+        finish(card, isOk);
+      });
+    });
+  } else {
+    const input = card.querySelector('input');
+    const btn = card.querySelector('.submit-btn');
+    const warn = card.querySelector('.input-warn');
+    const submit = () => {
+      const raw = input.value.trim();
+      if (!raw) { warn.style.display = 'block'; input.focus(); return; }
+      warn.style.display = 'none';
+      const norm = raw.replace(/\s+/g, '').toLowerCase();
+      const isOk = q.answer.some(a => norm === a.replace(/\s+/g, '').toLowerCase());
+      input.disabled = true; btn.disabled = true;
+      input.style.borderColor = isOk ? 'var(--ok)' : 'var(--no)';
+      input.style.background = isOk ? 'var(--ok-bg)' : 'var(--no-bg)';
+      finish(card, isOk, '정답: ' + q.answer[0]);
+      };
+    btn.addEventListener('click', submit);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+  }
+}
+
+function finish(card, isOk, extra) {
+  const slot = card.querySelector('.verdict-slot');
+  const v = document.createElement('span');
+  v.className = 'verdict ' + (isOk ? 'ok' : 'no');
+  v.textContent = isOk ? '✓ 정답!' : ('✗ 오답' + (extra ? ' — ' + extra : ''));
+  slot.appendChild(v);
+  card.querySelector('.expl').classList.add('show');
+
+  state.solved += 1;
+  if (isOk) state.correct += 1;
+  updateBoard();
+  if (state.solved === TOTAL) setTimeout(showFinal, 500);
+}
+
+function updateBoard() {
+  sbSolved.textContent = state.solved;
+  sbCorrect.textContent = state.correct;
+  const rate = state.solved === 0 ? 0 : Math.round(state.correct / state.solved * 100);
+  sbRate.textContent = rate + '%';
+  sbFill.style.width = (state.solved / TOTAL * 100) + '%';
+  sbFill.style.background = rate < 40 ? '#dc2626' : rate < 70 ? '#f59e0b' : '#16a34a';
+}
+
+function showFinal() {
+  const score = state.correct * 10;
+  const g = score >= 90 ? 'A' : score >= 70 ? 'B' : score >= 50 ? 'C' : 'D';
+  const msgs = {
+    A: '완벽에 가깝습니다! AI 하드웨어 수요 고점론부터 자금 순환매의 흐름까지 정확히 꿰뚫고 계시네요. 🎉',
+    B: '훌륭합니다! 핵심 흐름은 확실히 잡으셨어요. 틀린 문제의 해설만 한 번 더 확인하면 완벽합니다. 👏',
+    C: '좋은 출발입니다. 메타의 전략과 연준 발언 부분을 리포트에서 다시 읽어보시면 큰 그림이 잡힐 거예요. 💪',
+    D: '괜찮습니다, 오늘 시장은 정말 복잡했으니까요. 해설과 함께 다시 풀면 정답률이 훌쩍 오를 겁니다. 🌱'
+  };
+  document.getElementById('finalGrade').textContent = g;
+  document.getElementById('finalScore').textContent = `총점 ${score}점 / 100점 · ${state.correct}문제 정답`;
+  document.getElementById('finalMsg').textContent = msgs[g];
+  const fc = document.getElementById('finalCard');
+  fc.classList.add('show');
+  fc.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+document.getElementById('retryBtn').addEventListener('click', () => {
+  state = { solved: 0, correct: 0 };
+  document.getElementById('finalCard').classList.remove('show');
+  updateBoard();
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+render();
+updateBoard();
+</script>
+</body>
+</html>
