@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>퀴즈 — 삼성 19배 대박에도 반도체 대폭락</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&family=Noto+Sans+KR:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff;
+  --bg-alt:#fafafa;
+  --text:#1a1a1a;
+  --text-sub:#777777;
+  --accent:#e11d48;
+  --accent-2:#f43f5e;
+  --border:#e5e5e5;
+  --green:#16a34a;
+  --green-bg:#eafbf0;
+  --red:#dc2626;
+  --red-bg:#fde9e9;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Noto Sans KR',sans-serif;
+  max-width:640px;
+  margin:0 auto;
+  padding-bottom:60px;
+}
+.serif{font-family:'Playfair Display',serif;}
+
+header{
+  padding:28px 20px 20px;
+  border-bottom:1px solid var(--border);
+}
+header .eyebrow{
+  font-size:11px;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  color:var(--accent);
+  font-weight:700;
+  margin-bottom:10px;
+}
+header h1{
+  font-family:'Playfair Display',serif;
+  font-weight:900;
+  font-size:24px;
+  line-height:1.35;
+}
+header p{
+  font-size:13px;
+  color:var(--text-sub);
+  margin-top:10px;
+}
+
+/* Sticky Scoreboard */
+.scoreboard{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  padding:12px 20px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.04);
+}
+.score-row{
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:var(--text-sub);
+  margin-bottom:8px;
+}
+.score-row b{
+  color:var(--text);
+  font-size:14px;
+  font-family:'Playfair Display',serif;
+}
+.progress-bar-bg{
+  width:100%;
+  height:7px;
+  background:var(--border);
+  border-radius:4px;
+  overflow:hidden;
+}
+.progress-bar-fill{
+  height:100%;
+  width:0%;
+  background:var(--red);
+  transition:width 0.4s ease, background 0.4s ease;
+}
+
+main{padding:24px 20px;}
+
+.q-card{
+  background:var(--bg-alt);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:20px 18px;
+  margin-bottom:18px;
+}
+.q-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+.q-num{
+  font-family:'Playfair Display',serif;
+  font-weight:900;
+  font-size:15px;
+  color:var(--accent);
+}
+.q-diff{
+  font-size:10.5px;
+  font-weight:700;
+  padding:3px 9px;
+  border-radius:20px;
+  text-transform:uppercase;
+  letter-spacing:0.04em;
+}
+.diff-easy{background:#e7f6ec;color:#1a7a3c;}
+.diff-medium{background:#fef3e0;color:#a15c00;}
+.diff-hard{background:#fde3e6;color:var(--accent);}
+
+.q-text{
+  font-size:15px;
+  font-weight:500;
+  line-height:1.6;
+  margin-bottom:16px;
+}
+
+.options{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.opt-btn{
+  text-align:left;
+  padding:12px 14px;
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:6px;
+  font-size:13.5px;
+  font-family:'Noto Sans KR',sans-serif;
+  cursor:pointer;
+  transition:background 0.2s, border-color 0.2s;
+  color:var(--text);
+}
+.opt-btn:not(:disabled):hover{
+  border-color:var(--accent);
+}
+.opt-btn:disabled{cursor:not-allowed;}
+.opt-btn.correct{
+  background:var(--green-bg);
+  border-color:var(--green);
+  color:#0f5a2a;
+  font-weight:700;
+}
+.opt-btn.wrong{
+  background:var(--red-bg);
+  border-color:var(--red);
+  color:#8a1414;
+  font-weight:700;
+}
+.badge{
+  display:inline-block;
+  font-size:11px;
+  font-weight:700;
+  padding:2px 8px;
+  border-radius:20px;
+  margin-left:8px;
+}
+.badge-correct{background:var(--green);color:#fff;}
+.badge-wrong{background:var(--red);color:#fff;}
+
+.ox-row{display:flex;gap:10px;}
+.ox-btn{
+  flex:1;
+  padding:14px;
+  font-size:18px;
+  font-weight:900;
+  font-family:'Playfair Display',serif;
+  border:2px solid var(--border);
+  background:#fff;
+  border-radius:8px;
+  cursor:pointer;
+}
+.ox-btn:disabled{cursor:not-allowed;}
+.ox-btn.correct{background:var(--green-bg);border-color:var(--green);color:#0f5a2a;}
+.ox-btn.wrong{background:var(--red-bg);border-color:var(--red);color:#8a1414;}
+
+.short-answer-row{
+  display:flex;
+  gap:8px;
+}
+.short-answer-row input{
+  flex:1;
+  padding:12px 14px;
+  border:1px solid var(--border);
+  border-radius:6px;
+  font-size:14px;
+  font-family:'Noto Sans KR',sans-serif;
+}
+.short-answer-row input:disabled{background:#f0f0f0;color:var(--text-sub);}
+.short-answer-row button{
+  padding:0 18px;
+  background:var(--text);
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  font-weight:700;
+  font-size:13px;
+  cursor:pointer;
+}
+.short-answer-row button:disabled{background:#bbb;cursor:not-allowed;}
+
+.feedback-line{
+  margin-top:10px;
+  font-size:13px;
+  font-weight:700;
+}
+.feedback-line.correct{color:var(--green);}
+.feedback-line.wrong{color:var(--red);}
+
+.explanation{
+  margin-top:14px;
+  padding:14px 16px;
+  background:#fff;
+  border:1px dashed var(--accent-2);
+  border-radius:6px;
+  font-size:12.5px;
+  color:#444;
+  line-height:1.7;
+  display:none;
+}
+.explanation.show{display:block;}
+.explanation .exp-label{
+  font-weight:700;
+  color:var(--accent);
+  font-size:11.5px;
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+  margin-bottom:6px;
+  display:block;
+}
+
+/* Final result */
+.result-card{
+  display:none;
+  text-align:center;
+  background:linear-gradient(135deg,#1a1a1a,#3a1420);
+  color:#fff;
+  border-radius:12px;
+  padding:36px 24px;
+  margin-top:10px;
+}
+.result-card.show{display:block;}
+.result-card .r-eyebrow{
+  font-size:11px;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  color:var(--accent-2);
+  font-weight:700;
+  margin-bottom:14px;
+}
+.result-card .r-grade{
+  font-family:'Playfair Display',serif;
+  font-weight:900;
+  font-size:64px;
+  line-height:1;
+  margin-bottom:6px;
+}
+.result-card .r-score{
+  font-size:15px;
+  color:#ddd;
+  margin-bottom:14px;
+}
+.result-card .r-msg{
+  font-size:13.5px;
+  color:#e8e8e8;
+  line-height:1.7;
+  margin-bottom:22px;
+}
+.retry-btn{
+  padding:12px 28px;
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  font-weight:700;
+  font-size:13.5px;
+  cursor:pointer;
+  font-family:'Noto Sans KR',sans-serif;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">CIA.chat Members Briefing · 이해도 점검</div>
+  <h1 class="serif">삼성 19배 대박에도<br>반도체 대폭락 — 10문제</h1>
+  <p>본문 브리핑 내용을 얼마나 정확히 이해했는지 확인해보세요. 정답을 클릭하면 즉시 채점되고 해설이 펼쳐집니다.</p>
+</header>
+
+<div class="scoreboard">
+  <div class="score-row">
+    <span>푼 문제 <b id="solvedCount">0</b> / 10</span>
+    <span>맞힌 문제 <b id="correctCount">0</b></span>
+    <span>정답률 <b id="accuracyPct">0%</b></span>
+  </div>
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+</div>
+
+<main id="quizContainer"></main>
+
+<div class="result-card" id="resultCard">
+  <div class="r-eyebrow">Final Score</div>
+  <div class="r-grade" id="resultGrade">A</div>
+  <div class="r-score" id="resultScore">10 / 10</div>
+  <div class="r-msg" id="resultMsg"></div>
+  <button class="retry-btn" id="retryBtn">다시 풀기</button>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id: 1,
+    type: 'mc',
+    difficulty: 'easy',
+    question: '삼성전자의 2분기 영업이익은 전년 대비 몇 배 폭증했다고 언급되었나요?',
+    options: ['5배', '10배', '19배', '30배'],
+    answer: '19배',
+    explanation: '원본 자막: "삼성전자의 2분기 영업이익이 89조원 무려 19배가 폭증했습니다." 89.4조 원으로, 사상 최대 실적이었습니다.'
+  },
+  {
+    id: 2,
+    type: 'mc',
+    difficulty: 'easy',
+    question: '이번 유가 급등을 촉발한 지정학적 리스크가 발생한 지역은 어디인가요?',
+    options: ['말라카 해협', '호르무즈 해협', '수에즈 운하', '파나마 운하'],
+    answer: '호르무즈 해협',
+    explanation: '원본 자막: "호르무즈에서 장선이 피격되었습니다." 카타르 LNG선과 사우디 유조선이 호르무즈 해협 인근에서 피격당하며 브렌트유가 급등했습니다.'
+  },
+  {
+    id: 3,
+    type: 'short',
+    difficulty: 'medium',
+    question: '미국 재무부(OFAC)가 오늘부로 전격 철회한다고 발표한 조치는 무엇인가요? (예: "○○산 원유 판매 허가")',
+    answer: '이란산 원유 판매 허가',
+    acceptable: ['이란산 원유 판매 허가', '이란 원유 판매 허가', '이란산원유판매허가', '이란산 원유 허가'],
+    explanation: '원본 자막: "미국 재무부가 무슨 일을 했습니까? 이제 오늘부터 이란산 원유 판매 허가를 전격 철회한다라는 경제 제재를 때렸습니다."'
+  },
+  {
+    id: 4,
+    type: 'ox',
+    difficulty: 'easy',
+    question: '삼성전자는 사상 최대 실적 발표 이후 주가가 상승했다.',
+    answer: 'X',
+    explanation: '실적 발표에도 불구하고 삼성전자 주가는 -6.9% 하락했습니다. 시장은 이미 좋은 실적을 "선반영"했기 때문에, 기대치를 넘어서지 못하면 오히려 차익 실현 매물이 나온다는 것을 보여준 사례입니다.'
+  },
+  {
+    id: 5,
+    type: 'mc',
+    difficulty: 'medium',
+    question: '아마존이 AI 인프라 자금 조달을 위해 발행한다고 밝힌 회사채 규모는 얼마인가요?',
+    options: ['100억 달러', '150억 달러', '250억 달러', '500억 달러'],
+    answer: '250억 달러',
+    explanation: '원본 자막: "아마존도 AI 인프라 자금 조달을 위해서 250억 달러 8개의 트렌치 달러채를 발행을 한다는 겁니다." 8개 트랜치로 나누어 발행됩니다.'
+  },
+  {
+    id: 6,
+    type: 'mc',
+    difficulty: 'medium',
+    question: '메타의 차세대 모델(워터멜론)은 이전 모델 대비 컴퓨팅 파워를 몇 배 더 요구한다고 언급되었나요?',
+    options: ['2배', '5배', '10배', '20배'],
+    answer: '10배',
+    explanation: '원본 자막: "이전보다 컴퓨팅 파워를 10배를 잡아먹는다고 합니다." 이는 D램 수요와 비용 급증, 나아가 전력 비용 부담으로 이어진다고 설명되었습니다.'
+  },
+  {
+    id: 7,
+    type: 'short',
+    difficulty: 'medium',
+    question: '리비안(RIVN) 주가가 15.1% 폭락한 직접적인 원인은 무엇인가요? (한 단어 또는 짧은 구로 답하세요)',
+    answer: '유상증자',
+    acceptable: ['유상증자', '유상증자 발표', '증자', '지분 희석', '주식 발행'],
+    explanation: '원본 자막: "리비안 주가가 무려 15%나 폭락을 했습니다... 대출을 못 받으니까 유상증자 주식 찍어내가지고 조달하겠다라는 거예요." 고금리로 대출이 어려워지자 공장 건설 자금을 유상증자로 조달하겠다고 발표한 것이 원인입니다.'
+  },
+  {
+    id: 8,
+    type: 'ox',
+    difficulty: 'hard',
+    question: '스페이스X는 나스닥-100 지수 편입 직후 패시브 자금 유입 기대감으로 주가가 급등했다.',
+    answer: 'X',
+    explanation: '기대와 달리 스페이스X는 상장일 종가 대비 5~7% 급락하며 $149.47에 마감했습니다. 유통 물량이 단 3~5%에 불과한 상태에서 선반영된 밸류에이션과 차익 실현 매물이 충돌한 결과입니다.'
+  },
+  {
+    id: 9,
+    type: 'short',
+    difficulty: 'hard',
+    question: '방송에서 스페이스X 대비 20% 할인된 가격으로 투자할 수 있는 "프록시 트레이드(페어 트레이딩)" 대상으로 언급한 종목은 무엇인가요?',
+    answer: '에코스타',
+    acceptable: ['에코스타', 'ECHO', '에코스타(ECHO)', 'echostar', '에코스타 echo'],
+    explanation: '원본 자막: "에코스타를 여러분들이 투자를 하시면 사실 스페이스X보다 20%나 저렴한 할인 투자법을 사용하시는 거다." 에코스타(ECHO)는 스페이스X와 경쟁 관계에 있으며 이미 수익을 내고 있다고 설명되었습니다.'
+  },
+  {
+    id: 10,
+    type: 'mc',
+    difficulty: 'medium',
+    question: '버텍스가 크리네틱스(CRNX)를 인수한 금액과 프리미엄으로 옳은 것은?',
+    options: ['50억 달러, 50% 프리미엄', '100억 달러, 102% 프리미엄', '150억 달러, 80% 프리미엄', '200억 달러, 120% 프리미엄'],
+    answer: '100억 달러, 102% 프리미엄',
+    explanation: '원본 자막: "버텍스 같은 경우 말단 비대증 치료제를 보유한 크리넥틱스를 전액 현금 100억 달러... 프리미엄을 102%나 더 쳐준 겁니다." 그 결과 크리네틱스 주가는 하루 만에 98.8% 폭등했습니다.'
+  }
+];
+
+let state = { solved: 0, correct: 0 };
+const total = QUIZ_DATA.length;
+
+function normalize(str){
+  return str.toLowerCase().replace(/\s+/g,'').replace(/[()./]/g,'');
+}
+
+function renderQuiz(){
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+  document.getElementById('resultCard').classList.remove('show');
+
+  QUIZ_DATA.forEach((q) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'card-' + q.id;
+
+    const diffLabel = q.difficulty === 'easy' ? '쉬움' : q.difficulty === 'medium' ? '보통' : '어려움';
+
+    let bodyHtml = `
+      <div class="q-head">
+        <span class="q-num">Q${q.id}</span>
+        <span class="q-diff diff-${q.difficulty}">${diffLabel}</span>
+      </div>
+      <div class="q-text">${q.question}</div>
+    `;
+
+    if (q.type === 'mc') {
+      bodyHtml += `<div class="options" id="opts-${q.id}">`;
+      q.options.forEach((opt, idx) => {
+        bodyHtml += `<button class="opt-btn" data-qid="${q.id}" data-opt="${idx}" onclick="handleMC(${q.id}, ${idx})">${opt}</button>`;
+      });
+      bodyHtml += `</div>`;
+    } else if (q.type === 'ox') {
+      bodyHtml += `<div class="ox-row" id="opts-${q.id}">
+        <button class="ox-btn" data-val="O" onclick="handleOX(${q.id}, 'O')">O</button>
+        <button class="ox-btn" data-val="X" onclick="handleOX(${q.id}, 'X')">X</button>
+      </div>`;
+    } else if (q.type === 'short') {
+      bodyHtml += `<div class="short-answer-row" id="opts-${q.id}">
+        <input type="text" id="input-${q.id}" placeholder="답을 입력하세요" onkeydown="if(event.key==='Enter') handleShort(${q.id})">
+        <button onclick="handleShort(${q.id})">제출</button>
+      </div>`;
+    }
+
+    bodyHtml += `<div class="feedback-line" id="feedback-${q.id}"></div>`;
+    bodyHtml += `<div class="explanation" id="exp-${q.id}"><span class="exp-label">해설</span>${q.explanation}</div>`;
+
+    card.innerHTML = bodyHtml;
+    container.appendChild(card);
+  });
+
+  updateScoreboard();
+}
+
+function updateScoreboard(){
+  document.getElementById('solvedCount').textContent = state.solved;
+  document.getElementById('correctCount').textContent = state.correct;
+  const pct = state.solved > 0 ? Math.round((state.correct / state.solved) * 100) : 0;
+  document.getElementById('accuracyPct').textContent = pct + '%';
+  const fill = document.getElementById('progressFill');
+  fill.style.width = (state.solved / total * 100) + '%';
+  if (pct < 40) fill.style.background = 'var(--red)';
+  else if (pct < 70) fill.style.background = '#f59e0b';
+  else fill.style.background = 'var(--green)';
+
+  if (state.solved === total) {
+    showFinalResult();
+  }
+}
+
+function disableOptions(qid){
+  const opts = document.querySelectorAll(`#opts-${qid} button, #opts-${qid} input`);
+  opts.forEach(el => el.disabled = true);
+}
+
+function showExplanation(qid){
+  document.getElementById('exp-' + qid).classList.add('show');
+}
+
+function handleMC(qid, idx){
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  const btns = document.querySelectorAll(`#opts-${qid} .opt-btn`);
+  if (btns[0].disabled) return; // already answered
+
+  const chosenText = q.options[idx];
+  const isCorrect = chosenText === q.answer;
+
+  btns.forEach((btn, i) => {
+    if (q.options[i] === q.answer) {
+      btn.classList.add('correct');
+      btn.innerHTML += ' <span class="badge badge-correct">✓ 정답!</span>';
+    } else if (i === idx && !isCorrect) {
+      btn.classList.add('wrong');
+      btn.innerHTML += ' <span class="badge badge-wrong">✗ 오답</span>';
+    }
+  });
+
+  finalizeAnswer(qid, isCorrect);
+}
+
+function handleOX(qid, val){
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  const btns = document.querySelectorAll(`#opts-${qid} .ox-btn`);
+  if (btns[0].disabled) return;
+
+  const isCorrect = val === q.answer;
+  btns.forEach(btn => {
+    if (btn.dataset.val === q.answer) btn.classList.add('correct');
+    else if (btn.dataset.val === val && !isCorrect) btn.classList.add('wrong');
+  });
+
+  finalizeAnswer(qid, isCorrect);
+}
+
+function handleShort(qid){
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  const input = document.getElementById('input-' + qid);
+  if (input.disabled) return;
+  const userVal = input.value.trim();
+  if (!userVal) { input.focus(); return; }
+
+  const normUser = normalize(userVal);
+  const acceptableList = q.acceptable || [q.answer];
+  const isCorrect = acceptableList.some(a => normalize(a) === normUser);
+
+  input.disabled = true;
+  const btn = document.querySelector(`#opts-${qid} button`);
+  if (btn) btn.disabled = true;
+
+  if (isCorrect) {
+    input.style.background = '#eafbf0';
+    input.style.borderColor = 'var(--green)';
+  } else {
+    input.style.background = '#fde9e9';
+    input.style.borderColor = 'var(--red)';
+    input.value = userVal + '  (정답: ' + q.answer + ')';
+  }
+
+  finalizeAnswer(qid, isCorrect);
+}
+
+function finalizeAnswer(qid, isCorrect){
+  disableOptions(qid);
+  const fb = document.getElementById('feedback-' + qid);
+  fb.textContent = isCorrect ? '✓ 정답입니다!' : '✗ 오답입니다.';
+  fb.className = 'feedback-line ' + (isCorrect ? 'correct' : 'wrong');
+  showExplanation(qid);
+
+  state.solved += 1;
+  if (isCorrect) state.correct += 1;
+  updateScoreboard();
+}
+
+function showFinalResult(){
+  const pct = Math.round((state.correct / total) * 100);
+  let grade = 'D';
+  let msg = '';
+  if (pct >= 90) { grade = 'A'; msg = '완벽합니다! 브리핑 핵심 내용을 정확히 꿰뚫고 계시네요.'; }
+  else if (pct >= 70) { grade = 'B'; msg = '훌륭해요! 핵심 흐름은 대부분 잘 짚으셨습니다.'; }
+  else if (pct >= 50) { grade = 'C'; msg = '조금 더 복습이 필요해요. 해설을 다시 한번 읽어보세요.'; }
+  else { grade = 'D'; msg = '리포트를 다시 한번 꼼꼼히 읽어보시길 권해요.'; }
+
+  document.getElementById('resultGrade').textContent = grade;
+  document.getElementById('resultScore').textContent = state.correct + ' / ' + total;
+  document.getElementById('resultMsg').textContent = msg;
+  document.getElementById('resultCard').classList.add('show');
+}
+
+document.getElementById('retryBtn').addEventListener('click', () => {
+  state = { solved: 0, correct: 0 };
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+renderQuiz();
+</script>
+</body>
+</html>

@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>대순환의 시작 — 자본의 이동과 밸류에이션 현실 점검</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,900;1,600&family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#ffffff;
+  --bg-alt:#fafafa;
+  --text:#1a1a1a;
+  --text-sub:#777777;
+  --accent:#e11d48;
+  --accent-2:#f43f5e;
+  --border:#e5e5e5;
+  --blue:#2563eb;
+  --gray:#6b7280;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Noto Sans KR',sans-serif;
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  max-width:640px;
+  margin:0 auto;
+  overflow-x:hidden;
+}
+.serif{font-family:'Playfair Display',serif;}
+
+/* ===== HERO ===== */
+.hero{
+  padding:56px 24px 40px;
+  border-bottom:1px solid var(--border);
+}
+.hero .eyebrow{
+  font-size:12px;
+  letter-spacing:0.18em;
+  color:var(--accent);
+  font-weight:700;
+  text-transform:uppercase;
+  margin-bottom:18px;
+}
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-weight:900;
+  font-size:clamp(32px,8vw,44px);
+  line-height:1.15;
+  letter-spacing:-0.01em;
+  margin-bottom:16px;
+}
+.hero h1 em{
+  font-style:italic;
+  color:var(--accent);
+}
+.hero .sub{
+  font-size:15px;
+  color:var(--text-sub);
+  font-weight:400;
+  border-left:3px solid var(--accent);
+  padding-left:14px;
+  margin-top:20px;
+}
+.hero .meta{
+  display:flex;
+  gap:16px;
+  margin-top:24px;
+  font-size:12px;
+  color:var(--text-sub);
+}
+.hero .meta span{
+  padding:4px 10px;
+  background:var(--bg-alt);
+  border:1px solid var(--border);
+  border-radius:2px;
+}
+
+/* ===== fade-in ===== */
+.fade-in{
+  opacity:0;
+  transform:translateY(18px);
+  transition:opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-in.visible{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* ===== SECTION ===== */
+section{
+  padding:44px 24px;
+  border-bottom:1px solid var(--border);
+}
+section.alt{background:var(--bg-alt);}
+.section-label{
+  font-size:11px;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  color:var(--accent);
+  font-weight:700;
+  margin-bottom:10px;
+}
+h2{
+  font-family:'Playfair Display',serif;
+  font-weight:700;
+  font-size:clamp(22px,6vw,28px);
+  line-height:1.3;
+  margin-bottom:16px;
+}
+h3{
+  font-family:'Playfair Display',serif;
+  font-weight:600;
+  font-size:18px;
+  margin:22px 0 10px;
+}
+p{
+  font-size:15px;
+  margin-bottom:14px;
+  color:#333;
+}
+.lede{
+  font-size:16.5px;
+  color:var(--text);
+  font-weight:400;
+}
+strong{font-weight:700;color:var(--text);}
+.accent-text{color:var(--accent);font-weight:700;}
+
+/* ===== 4 events grid ===== */
+.grid-4{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:20px;
+}
+.event-card{
+  background:var(--bg-alt);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:16px 14px;
+}
+.event-card .num{
+  font-family:'Playfair Display',serif;
+  font-size:28px;
+  font-weight:900;
+  color:var(--accent);
+  line-height:1;
+}
+.event-card .label{
+  font-size:12.5px;
+  font-weight:700;
+  margin-top:8px;
+  color:var(--text);
+}
+.event-card .desc{
+  font-size:11.5px;
+  color:var(--text-sub);
+  margin-top:4px;
+  line-height:1.5;
+}
+
+/* ===== stat gauges ===== */
+.gauge-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin:20px 0;
+}
+.gauge-card{
+  background:var(--bg-alt);
+  border:1px solid var(--border);
+  padding:16px;
+  border-radius:4px;
+  text-align:center;
+}
+.gauge-card .g-label{
+  font-size:11px;
+  color:var(--text-sub);
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  margin-bottom:6px;
+}
+.gauge-card .g-val{
+  font-family:'Playfair Display',serif;
+  font-size:26px;
+  font-weight:900;
+  color:var(--accent);
+}
+
+/* ===== chart container (mandated pattern) ===== */
+.chart-container{
+  position:relative;
+  max-height:340px;
+  margin:20px 0;
+  background:var(--bg-alt);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:14px 10px 6px;
+}
+.chart-container canvas{
+  opacity:0;
+  transition:opacity 0.4s ease;
+  max-height:300px;
+}
+.chart-container.chart-ready canvas{
+  opacity:1;
+}
+.chart-caption{
+  font-size:11px;
+  color:var(--text-sub);
+  text-align:center;
+  margin-top:6px;
+}
+
+/* ===== pull quote ===== */
+.pullquote{
+  font-family:'Playfair Display',serif;
+  font-style:italic;
+  font-size:20px;
+  line-height:1.5;
+  color:var(--text);
+  border-left:3px solid var(--accent);
+  padding:6px 0 6px 18px;
+  margin:24px 0;
+}
+
+/* ===== ripple diagram ===== */
+.ripple-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:0;
+  margin:24px 0;
+}
+.ripple-ring{
+  width:100%;
+  border-radius:12px;
+  padding:20px 16px;
+  text-align:center;
+  position:relative;
+}
+.ripple-ring.r1{
+  background:linear-gradient(135deg,#1a1a1a,#333);
+  color:#fff;
+  z-index:2;
+  width:78%;
+}
+.ripple-ring.r2{
+  background:linear-gradient(135deg,#fde8ec,#fbd0d9);
+  color:#7a1030;
+  width:100%;
+  margin-top:-14px;
+  padding-top:34px;
+}
+.ripple-ring .rt{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;opacity:0.75;margin-bottom:4px;}
+.ripple-ring .rv{font-family:'Playfair Display',serif;font-weight:700;font-size:16px;}
+.ripple-detail{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:14px;
+}
+.ripple-detail .d-card{
+  background:var(--bg-alt);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:10px 12px;
+  font-size:12px;
+  color:var(--text-sub);
+}
+.ripple-detail .d-card b{display:block;color:var(--text);font-size:12.5px;margin-bottom:4px;}
+
+/* ===== compare table ===== */
+.compare-table{
+  width:100%;
+  border-collapse:collapse;
+  margin:18px 0;
+  font-size:13px;
+}
+.compare-table th{
+  background:var(--accent);
+  color:#fff;
+  padding:10px 8px;
+  font-weight:700;
+  text-align:left;
+}
+.compare-table td{
+  padding:10px 8px;
+  background:var(--bg-alt);
+  border-bottom:1px solid var(--border);
+  vertical-align:top;
+}
+.compare-table tr:nth-child(even) td{background:#f4f4f4;}
+
+/* ===== interactive slider ===== */
+.sim-box{
+  background:var(--bg-alt);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:20px 18px;
+  margin:22px 0;
+}
+.sim-box .sim-title{
+  font-size:13px;
+  font-weight:700;
+  color:var(--accent);
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+  margin-bottom:4px;
+}
+.sim-box .sim-desc{
+  font-size:12.5px;
+  color:var(--text-sub);
+  margin-bottom:16px;
+}
+.sim-slider-row{
+  margin-bottom:10px;
+}
+.sim-slider-row label{
+  font-size:12px;
+  color:var(--text-sub);
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:6px;
+}
+.sim-slider-row label .val{
+  font-weight:700;
+  color:var(--text);
+}
+input[type=range]{
+  width:100%;
+  accent-color:var(--accent);
+  height:4px;
+}
+.sim-result{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:16px;
+}
+.sim-result .r-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:12px;
+  text-align:center;
+}
+.sim-result .r-card .r-label{font-size:10.5px;color:var(--text-sub);text-transform:uppercase;letter-spacing:0.05em;}
+.sim-result .r-card .r-val{font-family:'Playfair Display',serif;font-weight:900;font-size:20px;margin-top:4px;}
+.sim-reset{
+  margin-top:14px;
+  width:100%;
+  padding:10px;
+  background:var(--text);
+  color:#fff;
+  border:none;
+  border-radius:4px;
+  font-size:12.5px;
+  font-weight:700;
+  cursor:pointer;
+  font-family:'Noto Sans KR',sans-serif;
+}
+.sim-reset:active{opacity:0.8;}
+
+/* ===== action plan ===== */
+.action-list{margin:20px 0;display:flex;flex-direction:column;gap:10px;}
+.action-item{
+  display:flex;
+  gap:14px;
+  background:var(--bg-alt);
+  border:1px solid var(--border);
+  border-left:4px solid var(--accent);
+  border-radius:4px;
+  padding:14px 16px;
+}
+.action-item .a-num{
+  font-family:'Playfair Display',serif;
+  font-weight:900;
+  font-size:22px;
+  color:var(--accent);
+  min-width:28px;
+}
+.action-item .a-title{font-weight:700;font-size:14px;margin-bottom:4px;}
+.action-item .a-desc{font-size:12.5px;color:var(--text-sub);line-height:1.6;}
+
+/* ===== footer / disclaimer ===== */
+footer{
+  padding:32px 24px 60px;
+  font-size:11.5px;
+  color:var(--text-sub);
+  line-height:1.8;
+}
+footer .disclaimer-box{
+  background:var(--bg-alt);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:16px;
+  margin-top:12px;
+}
+footer .disclaimer-title{
+  font-weight:700;
+  color:var(--text);
+  font-size:12px;
+  margin-bottom:6px;
+}
+</style>
+</head>
+<body>
+
+<div class="hero fade-in">
+  <div class="eyebrow">CIA.chat Members Briefing · 2026.07.07</div>
+  <h1>대순환의 시작<br><em>자본의 이동</em>과<br>밸류에이션 현실 점검</h1>
+  <p class="sub">삼성전자 영업이익 19배 폭증에도 반도체 전 종목이 동반 폭락한 하루. 유가 급등, 모멘텀 붕괴, 그리고 조용히 방향을 바꾸는 1.5조 달러의 자본 흐름을 짚는다.</p>
+  <div class="meta">
+    <span>2026년 하반기 브리핑</span>
+    <span>경제·시황 분석</span>
+  </div>
+</div>
+
+<section class="fade-in">
+  <div class="section-label">Overview</div>
+  <h2>시장을 뒤흔든 4대 핵심 축</h2>
+  <p class="lede">단 하루 만에 네 가지 사건이 동시에 시장을 흔들었다. 실적은 사상 최고였지만 주가는 반대로 움직였고, 지정학적 불안은 유가를 밀어올렸으며, 화제의 종목들은 뉴스와 반대로 갔다. 그 사이 자본은 소리 없이 새로운 곳으로 옮겨가고 있다.</p>
+  <div class="grid-4">
+    <div class="event-card">
+      <div class="num">19x</div>
+      <div class="label">AI 밸류에이션 리셋</div>
+      <div class="desc">삼성전자 이익 19배 폭증에도 반도체 동반 폭락</div>
+    </div>
+    <div class="event-card">
+      <div class="num">+5%</div>
+      <div class="label">지정학적 리스크 회귀</div>
+      <div class="desc">호르무즈 해협 피격, 유가 급등</div>
+    </div>
+    <div class="event-card">
+      <div class="num">$1.5B</div>
+      <div class="label">모멘텀 주식의 함정</div>
+      <div class="desc">스페이스X 나스닥 편입 역설, 리비안 유증 충격</div>
+    </div>
+    <div class="event-card">
+      <div class="num">$10B</div>
+      <div class="label">자본의 새 피난처</div>
+      <div class="desc">방어주·바이오 M&A·소프트웨어로 자금 순환</div>
+    </div>
+  </div>
+</section>
+
+<section class="alt fade-in">
+  <div class="section-label">Macro Pressure</div>
+  <h2>호르무즈 피격과 되살아난 인플레이션 공포</h2>
+  <p>거시경제에 가장 큰 압력을 주는 것은 결국 물가이고, 물가는 유가에서, 유가는 중동 정세에서 온다. 호르무즈 해협 인근에서 카타르 LNG선과 사우디 유조선이 피격당했고, 카타르·사우디 양국은 공격적인 대응 수위를 예고했다. 이에 미국 재무부(OFAC)는 이란산 원유 판매 허가를 전격 철회하는 제재를 발표했다.</p>
+  <div class="gauge-row">
+    <div class="gauge-card">
+      <div class="g-label">Brent Crude</div>
+      <div class="g-val">$75.77</div>
+    </div>
+    <div class="gauge-card">
+      <div class="g-label">US 10Y Treasury</div>
+      <div class="g-val">4.51%</div>
+    </div>
+  </div>
+  <p>브렌트유는 장중 $75.77, WTI는 $72를 돌파하며 하루 만에 5% 이상 급등했다. 유가 급등은 인플레이션 공포를 다시 자극하고, 이는 곧바로 미국 10년물 국채금리를 4.51%까지 밀어올렸다. 케빈 워시 연준 의장이 금리 방향에 대해 침묵을 유지하면서 시장은 방향성 없는 횡보 내지 박스권 흐름을 이어갈 가능성이 높다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="section-label">AI Paradox</div>
+  <h2>사상 최대 실적에 무너진 글로벌 반도체</h2>
+  <p class="lede">오늘 가장 논란이 된 차트다. 삼성전자의 2분기 영업이익은 89.4조 원, 전년 대비 무려 19배 폭증했다. HBM4는 완판됐고 2027년까지 물량이 예약돼 있다는 소식까지 나왔다. 그런데 결과는 정반대였다.</p>
+  <div class="chart-container fade-in">
+    <canvas id="chartParadox" height="220"></canvas>
+  </div>
+  <p class="chart-caption">기대(실적) vs 현실(주가 반응) — 완벽한 선반영의 증거</p>
+  <table class="compare-table">
+    <tr><th>종목</th><th>당일 주가 반응</th></tr>
+    <tr><td>삼성전자 (서울)</td><td>-6.9%</td></tr>
+    <tr><td>인텔 (INTC)</td><td>-9.67%</td></tr>
+    <tr><td>어플라이드 머티어리얼즈 (AMAT)</td><td>-10%</td></tr>
+    <tr><td>AMD</td><td>-8%</td></tr>
+    <tr><td>마이크론 (MU)</td><td>-7%</td></tr>
+  </table>
+  <div class="pullquote">"실적이 아무리 좋아도 기대치가 하늘 끝에 가 있으면 주가는 따라갈 수 없다." — 선반영(Priced-in)의 법칙</div>
+  <p>여기에 지정학적 균열도 겹쳤다. 미국의 강력한 대중 수출 통제로 엔비디아의 생태계 장악력에 금이 가기 시작했다는 우려다. 중국은 하드웨어·소프트웨어·소부장 전 영역에서 빠르게 추격 중이며, 특히 AI 스타트업 딥시크는 규제를 우회하기 위해 자체 인퍼런스 칩 개발에 착수했다.</p>
+  <h3>미국 vs 중국, 투자 구조의 차이</h3>
+  <table class="compare-table">
+    <tr><th>구분</th><th>미국 (하이퍼스케일러)</th><th>중국</th></tr>
+    <tr><td>투자 방식</td><td>각자 경쟁적으로 캐펙스 집행</td><td>정부 주도로 역할 분담, 중복 투자 최소화</td></tr>
+    <tr><td>효율성</td><td>경쟁으로 인한 낭비 발생</td><td>빈틈없는 구조 형성 중</td></tr>
+  </table>
+</section>
+
+<section class="alt fade-in">
+  <div class="section-label">Hyperscaler Dilemma</div>
+  <h2>1.5조 달러 캐펙스의 양면성</h2>
+  <p>2027년까지 글로벌 클라우드·AI 인프라 캐펙스는 1.5조 달러에 이를 전망이다(BofA). 아마존은 이날 AI 인프라 자금 조달을 위해 250억 달러 규모, 8개 트랜치의 회사채를 발행한다고 발표했다. 구글 역시 앞서 채권 발행에 나선 바 있다. 결국 캐펙스를 감당하려면 부채가 필요하다는 뜻이다.</p>
+  <div class="ripple-wrap">
+    <div class="ripple-ring r1">
+      <div class="rt">Debt</div>
+      <div class="rv">$25B 회사채 발행 (Amazon)</div>
+    </div>
+  </div>
+  <div class="ripple-detail">
+    <div class="d-card"><b>비용 인플레이션</b>메타 신모델 '워터멜론'은 이전 대비 컴퓨팅 파워를 10배 요구. D램 스팟 가격은 전 분기 대비 40% 급등.</div>
+    <div class="d-card"><b>전력 비용 격차</b>미국 전기료가 중국 대비 약 40% 비싸, AI 인프라의 본질은 결국 '전력 장사'.</div>
+  </div>
+  <p>결국 질문은 하나로 모인다. 이 막대한 지출의 최종 승자는 누구인가. 반도체인가, 아니면 유틸리티·전력·원전 기업인가. 시장은 아직 답을 정하지 못했다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="section-label">Ripple Effect</div>
+  <h2>전이되는 충격: 반도체를 넘어 전력·인프라로</h2>
+  <p>충격은 반도체(Silicon Core)에서 시작해 전력·인프라로 번지고 있다. GE 버노바(전력망·터빈)는 10% 폭락했고, 175MW 데이터센터 가동이라는 호재 뉴스에도 불구하고 Applied Digital은 8% 급락했다. 아이온큐 등 양자컴퓨팅 종목도 7%대 동반 하락했다.</p>
+  <div class="ripple-wrap">
+    <div class="ripple-ring r1">
+      <div class="rt">1차 충격 · Silicon Core</div>
+      <div class="rv">AI 칩 (NVDA·MU·INTC) · 장비(AMAT -10%)</div>
+    </div>
+    <div class="ripple-ring r2">
+      <div class="rt">2차 파문 · Infrastructure & Power</div>
+      <div class="rv">GE Vernova -10% · Applied Digital -8% · 양자컴퓨팅 -7%대</div>
+    </div>
+  </div>
+  <p>시장이 지금 요구하는 것은 용량 확보 뉴스가 아니라 <strong>실질 현금흐름(Cash Flow)</strong>이다. 앞으로 실적 발표 시즌에서는 '누가 실제로 돈을 벌고 있는가'가 핵심 판별 기준이 될 전망이다.</p>
+</section>
+
+<section class="alt fade-in">
+  <div class="section-label">Momentum Paradox</div>
+  <h2>소문에 사고 뉴스에 팔아라 — 스페이스X의 역설</h2>
+  <p>스페이스X는 사상 최단 기간에 나스닥-100 지수에 편입되며 패시브 펀드로부터 약 43억~100억 달러의 기계적 매수 유입이 기대됐다. 그러나 현실은 정반대였다. 상장일 종가 대비 5~7% 급락하며 $149.47에 마감했다. 원인은 단 3~5%에 불과한 유통 물량(Float)과 선반영된 밸류에이션, 그리고 대규모 차익 실현 매물의 충돌이다.</p>
+  <div class="chart-container fade-in">
+    <canvas id="chartMomentum" height="220"></canvas>
+  </div>
+  <p class="chart-caption">기대된 자금 유입 vs 실제 주가 반응</p>
+  <p>일론 머스크가 지분의 85%를 보유해 실제 유통 물량이 극히 적다 보니, 남은 소량의 주식을 두고 개미 투자자들이 초단위로 사고파는 구조가 형성돼 있다. 이 때문에 오를 때는 급등, 내릴 때는 급락하는 변동성이 반복된다.</p>
+  <div class="pullquote">"통신입니다. 스페이스X가 돈을 벌 수 있는 길은 결국 통신(스타링크)밖에 없어요."</div>
+</section>
+
+<section class="fade-in">
+  <div class="section-label">Valuation War</div>
+  <h2>월가가 바라보는 스페이스X의 장기 가치</h2>
+  <p>목표주가는 극과 극이다. Moffett Nathanson은 $131을, Raymond James는 $800을 제시했다. 현재 주가는 $149 부근이다. Bear 진영은 100GW 규모의 우주 궤도 AI 인프라 구축이 물리적·자원적으로 불가능하다고 보는 반면, Bull 진영은 통신과 AI의 결합이 30조 달러 규모의 시장(TAM)을 열 것으로 본다.</p>
+
+  <div class="sim-box">
+    <div class="sim-title">밸류에이션 시뮬레이터</div>
+    <div class="sim-desc">Bear ↔ Bull 시나리오 사이에서 슬라이더를 움직여 잠재 등락률을 확인해보세요. (기준 주가 $149)</div>
+    <div class="sim-slider-row">
+      <label>시나리오 위치 <span class="val" id="simScenarioLabel">중립</span></label>
+      <input type="range" id="simSlider" min="0" max="100" value="50">
+    </div>
+    <div class="sim-result">
+      <div class="r-card">
+        <div class="r-label">예상 목표주가</div>
+        <div class="r-val" id="simTarget">$465</div>
+      </div>
+      <div class="r-card">
+        <div class="r-label">현재가 대비</div>
+        <div class="r-val" id="simReturn">+212%</div>
+      </div>
+    </div>
+    <button class="sim-reset" id="simReset">중립(50%)으로 초기화</button>
+  </div>
+  <p style="font-size:11.5px;color:var(--text-sub);">* 위 시뮬레이터는 방송에서 언급된 Bear($131)~Bull($800) 목표주가 스펙트럼을 선형 보간한 참고용 도구이며, 실제 투자 판단의 근거가 될 수 없습니다.</p>
+</section>
+
+<section class="alt fade-in">
+  <div class="section-label">Liquidity Trap</div>
+  <h2>유동성의 함정: 리비안 사태</h2>
+  <p>리비안은 에너지부(DOE) 대출 조건 충족과 공장 건설 자금을 위해 7,500만 주(약 15억 달러) 규모의 유상증자를 기습 발표했다. 2분기 매출 가이던스는 시장 예상을 웃돌았지만, 시장은 '현금 소진(Cash Burn)'과 '주주가치 희석'에 냉혹하게 반응했다.</p>
+  <div class="chart-container fade-in">
+    <canvas id="chartRivian" height="220"></canvas>
+  </div>
+  <p class="chart-caption">리비안발 EV 섹터 동반 하락</p>
+  <p>루시드도 9% 폭락했고, 테슬라 역시 3% 하락하며 전기차 섹터 전체가 같은 방향으로 흔들렸다. 자동차 비즈니스는 소프트웨어와 달리 공장이라는 물리적 자산이 필요하고, 고금리 환경에서 대출이 막히면 결국 지분 희석을 감수한 증자로 이어질 수밖에 없다는 것이 이번 사태의 핵심이다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="section-label">Capital Rotation</div>
+  <h2>자본의 대이동 — 세 갈래 흐름</h2>
+  <h3>① 확실한 파이프라인을 향한 100억 달러 딜</h3>
+  <p>버텍스는 말단비대증 치료제(Palsonify, 피크 매출 50억 달러 예상)를 보유한 크리네틱스(CRNX)를 전액 현금 100억 달러, 전일 종가 대비 102% 프리미엄(주당 85달러)에 인수한다고 발표했다. 그 결과 크리네틱스 주가는 하루 만에 98.8% 폭등했다. AI 인프라의 불확실성에서 빠져나온 유동성이 명확한 현금흐름을 지닌 헬스케어·바이오 M&A 타겟으로 이동 중이다.</p>
+
+  <h3>② 캐펙스가 필요 없는 소프트웨어·플랫폼</h3>
+  <p>Cognizant는 구글 클라우드 제휴 확대 소식에 6% 급등했다. 메타의 Muse 이미지 AI 모델 공개 역시 우호적으로 받아들여지며, '돈을 쓰지 않고도 벌 수 있는' 소프트웨어 기업으로 스마트 머니가 이동하는 역설적 흐름이 나타나고 있다.</p>
+
+  <h3>③ 저변동성 퀄리티 포트폴리오</h3>
+  <p>S&P 500 모멘텀 지수(AI 주도)는 시장을 70% 아웃퍼폼하며 닷컴버블 수준의 쏠림을 보였고, 변동성(VIX) 확대에 대응해 기관 자금이 로테이션을 시작했다. 월가(UBS·Jefferies)가 주목하는 Low-Stress 방어주는 다음과 같다.</p>
+  <table class="compare-table">
+    <tr><th>종목</th><th>섹터</th><th>포인트</th></tr>
+    <tr><td>월마트 (WMT)</td><td>필수소비재</td><td>여름 가격 인하로 점유율 +1%</td></tr>
+    <tr><td>애브비 (ABBV)</td><td>헬스케어</td><td>잉여현금흐름 5.2%</td></tr>
+    <tr><td>록히드마틴 (LMT)</td><td>우주항공/방산</td><td>배당수익률 2.59%, 안정적 방어력</td></tr>
+  </table>
+</section>
+
+<section class="alt fade-in">
+  <div class="section-label">Action Plan</div>
+  <h2>최고투자책임자(CIO)를 위한 하반기 액션 플랜</h2>
+  <div class="action-list">
+    <div class="action-item">
+      <div class="a-num">1</div>
+      <div>
+        <div class="a-title">AI 밸류체인 내 옥석 가리기 즉시 실행</div>
+        <div class="a-desc">단순 캐펙스 규모가 아닌, 실제 소프트웨어 수익 창출력과 마진 방어력을 입증한 플랫폼 기업으로 포트폴리오 압축 (하드웨어 비중 축소).</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="a-num">2</div>
+      <div>
+        <div class="a-title">유동성 고갈 기업 철저히 배제</div>
+        <div class="a-desc">스페이스X·리비안 사례처럼 고금리 환경에서 잉여현금흐름이 묶이거나 잦은 지분 희석이 불가피한 자산은 즉시 매도 검토.</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="a-num">3</div>
+      <div>
+        <div class="a-title">방어주 및 M&A 타겟 선취매</div>
+        <div class="a-desc">유가 급등과 밸류에이션 부담이 겹친 국면. 필수소비재·헬스케어(바이오 M&A) 등 현금흐름이 견고한 Low-Stress 섹터로 로테이션 가속.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="fade-in">
+  <div class="section-label">Market Read</div>
+  <h2>S&P 지수는 어디로: 지지선, 거래량, 그리고 변수 하나</h2>
+  <p>S&P 500과 QQQ는 몇 개의 지지선에 받쳐지며 큰 무리 없는 횡보를 이어가고 있다. 문제는 거래량이 계속 감소하고 있다는 점이다. 다들 휴가철이라 시장 참여가 저조한 상태다. VIX 지수는 16 정도로, 아직 크게 불안한 수준은 아니다.</p>
+  <div class="pullquote">"메가캡이 움직여야 지수가 움직인다. 그리고 가장 큰 변수는 결국 이란과의 관계, 호르무즈 해협 문제다."</div>
+  <p>과거 패턴은 반복된다. 하락장이나 조정장이 오면 가장 먼저, 가장 크게 무너지는 것은 잡주(소형·저품질주)이고, 반등할 때 가장 빠르고 크게 오르는 것은 <strong class="accent-text">M7·빅테크·메가캡</strong>이다. 부동산 시장에서 가장 좋은 입지가 하락기에도 가장 먼저 회복하는 것과 같은 원리다.</p>
+</section>
+
+<footer>
+  <div class="disclaimer-box">
+    <div class="disclaimer-title">⚠️ 투자 유의사항</div>
+    본 콘텐츠는 특정 유튜브 방송(CIA.chat 멤버 미팅, 2026.07.07)의 자막 내용을 요약·정리한 자료이며, 투자 자문이나 종목 추천을 목적으로 하지 않습니다. 언급된 목표주가, 수치, 전망은 방송 진행자 및 인용된 기관의 견해로 실제 시장 결과와 다를 수 있습니다. 모든 투자 판단과 그 결과에 대한 책임은 투자자 본인에게 있으며, 투자 전 반드시 공시자료 확인 및 전문가와의 상담을 권장합니다.
+  </div>
+</footer>
+
+<script>
+// ===== fade-in observer =====
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// ===== chart configs =====
+const chartConfigs = {};
+
+chartConfigs['chartParadox'] = () => {
+  new Chart(document.getElementById('chartParadox'), {
+    type: 'bar',
+    data: {
+      labels: ['삼성전자','인텔(INTC)','AMAT','AMD','마이크론(MU)'],
+      datasets: [{
+        label: '당일 주가 반응 (%)',
+        data: [-6.9, -9.67, -10, -8, -7],
+        backgroundColor: '#e11d48',
+        borderRadius: 4,
+        maxBarThickness: 32
+      }]
+    },
+    options: {
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{ legend:{ display:false } },
+      scales:{
+        y:{ ticks:{ color:'#777' }, grid:{ color:'#e5e5e5' } },
+        x:{ ticks:{ color:'#1a1a1a', font:{ size:10.5 } }, grid:{ display:false } }
+      }
+    }
+  });
+};
+
+chartConfigs['chartMomentum'] = () => {
+  new Chart(document.getElementById('chartMomentum'), {
+    type: 'bar',
+    data: {
+      labels: ['기대: 패시브 자금 유입 ($B)','현실: 주가 변동 (%)'],
+      datasets: [{
+        label: '스페이스X 나스닥-100 편입',
+        data: [10, -6.8],
+        backgroundColor: ['#2563eb','#e11d48'],
+        borderRadius: 4,
+        maxBarThickness: 40
+      }]
+    },
+    options: {
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{ legend:{ display:false } },
+      scales:{
+        y:{ ticks:{ color:'#777' }, grid:{ color:'#e5e5e5' } },
+        x:{ ticks:{ color:'#1a1a1a', font:{ size:10.5 } }, grid:{ display:false } }
+      }
+    }
+  });
+};
+
+chartConfigs['chartRivian'] = () => {
+  new Chart(document.getElementById('chartRivian'), {
+    type: 'bar',
+    data: {
+      labels: ['리비안(RIVN)','루시드(LCID)','테슬라(TSLA)'],
+      datasets: [{
+        label: '당일 주가 하락률 (%)',
+        data: [-15.1, -9, -3],
+        backgroundColor: '#e11d48',
+        borderRadius: 4,
+        maxBarThickness: 40
+      }]
+    },
+    options: {
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{ legend:{ display:false } },
+      scales:{
+        y:{ ticks:{ color:'#777' }, grid:{ color:'#e5e5e5' } },
+        x:{ ticks:{ color:'#1a1a1a', font:{ size:11 } }, grid:{ display:false } }
+      }
+    }
+  });
+};
+
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+// ===== valuation simulator =====
+const BEAR = 131, BULL = 800, CURRENT = 149;
+const simSlider = document.getElementById('simSlider');
+const simTarget = document.getElementById('simTarget');
+const simReturn = document.getElementById('simReturn');
+const simScenarioLabel = document.getElementById('simScenarioLabel');
+const simResetBtn = document.getElementById('simReset');
+
+function updateSim(val){
+  const t = val / 100;
+  const target = Math.round(BEAR + (BULL - BEAR) * t);
+  const ret = ((target - CURRENT) / CURRENT * 100).toFixed(0);
+  simTarget.textContent = '$' + target;
+  simReturn.textContent = (ret >= 0 ? '+' : '') + ret + '%';
+  let label = '중립';
+  if (t < 0.2) label = 'Bear 근접';
+  else if (t < 0.45) label = 'Bear 우세';
+  else if (t <= 0.55) label = '중립';
+  else if (t <= 0.8) label = 'Bull 우세';
+  else label = 'Bull 근접';
+  simScenarioLabel.textContent = label;
+}
+simSlider.addEventListener('input', (e) => updateSim(e.target.value));
+simResetBtn.addEventListener('click', () => {
+  simSlider.value = 50;
+  updateSim(50);
+});
+updateSim(50);
+</script>
+</body>
+</html>
