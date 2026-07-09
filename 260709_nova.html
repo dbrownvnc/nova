@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기름과 실리콘 — 지정학 위기 속 AI 관련주 생존 전략</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#ffffff; --bg-soft:#fafafa;
+    --ink:#1a1a1a; --ink-soft:#777777;
+    --accent:#e11d48; --accent-soft:#f43f5e;
+    --line:#e5e5e5; --blue:#2563eb; --gray:#6b7280;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:'Noto Sans KR',sans-serif;
+    line-height:1.75; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:0 22px;}
+  .eyebrow{
+    font-size:12px; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--accent); font-weight:700; margin-bottom:14px;
+  }
+  h1,h2,h3{font-family:'Playfair Display',serif; color:var(--ink);}
+
+  /* ---- Masthead / Hero ---- */
+  .masthead{
+    padding:56px 0 30px; border-bottom:3px solid var(--ink);
+  }
+  .masthead .kicker{
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:11px; color:var(--ink-soft); letter-spacing:.08em;
+    margin-bottom:22px; text-transform:uppercase;
+  }
+  .hero-title{
+    font-size:2.5rem; font-weight:900; line-height:1.14;
+    letter-spacing:-.01em; margin-bottom:18px;
+  }
+  .hero-title em{ font-style:italic; color:var(--accent); }
+  .hero-dek{
+    font-size:1.02rem; color:var(--ink-soft); font-weight:400; line-height:1.6;
+    padding-top:10px; border-top:1px solid var(--line);
+  }
+  .byline{
+    display:flex; gap:16px; margin-top:24px; font-size:12px; color:var(--ink-soft);
+  }
+
+  /* ---- Sections ---- */
+  section{ padding:44px 0; border-bottom:1px solid var(--line); }
+  .section-label{
+    font-family:'Playfair Display',serif; font-style:italic;
+    font-size:13px; color:var(--accent); margin-bottom:8px;
+  }
+  h2.section-title{
+    font-size:1.55rem; font-weight:700; margin-bottom:18px; line-height:1.3;
+  }
+  p{ margin-bottom:16px; font-size:.98rem; color:#333; }
+  .lede{
+    font-size:1.12rem; color:var(--ink); font-weight:500;
+    border-left:3px solid var(--accent); padding-left:16px; margin-bottom:22px;
+  }
+  strong{ color:var(--ink); font-weight:700; }
+  .accent-text{ color:var(--accent); font-weight:700; }
+
+  /* pull quote */
+  .pullquote{
+    font-family:'Playfair Display',serif; font-style:italic;
+    font-size:1.3rem; line-height:1.5; color:var(--ink);
+    padding:26px 0; margin:26px 0; border-top:1px solid var(--ink); border-bottom:1px solid var(--ink);
+  }
+  .pullquote span{ display:block; font-family:'Noto Sans KR',sans-serif; font-style:normal;
+    font-size:11px; letter-spacing:.1em; color:var(--ink-soft); margin-top:10px; text-transform:uppercase; }
+
+  /* stat grid */
+  .stat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line);
+    margin:22px 0; border:1px solid var(--line); }
+  .stat-cell{ background:var(--bg); padding:18px 14px; }
+  .stat-num{ font-family:'Playfair Display',serif; font-size:1.7rem; font-weight:700; color:var(--accent); }
+  .stat-num.down{ color:var(--gray); }
+  .stat-label{ font-size:11.5px; color:var(--ink-soft); margin-top:4px; line-height:1.4; }
+
+  /* chart container */
+  .chart-container{ position:relative; max-height:340px; margin:24px 0 8px; background:var(--bg-soft);
+    border:1px solid var(--line); border-radius:2px; padding:18px 14px 10px; }
+  .chart-container canvas{ opacity:0; transition:opacity .4s ease; max-height:280px; }
+  .chart-container.chart-ready canvas{ opacity:1; }
+  .chart-caption{ font-size:11px; color:var(--ink-soft); margin-top:10px; text-align:center; }
+
+  .fade-in{ opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease; }
+  .fade-in.visible{ opacity:1; transform:translateY(0); }
+
+  /* comparison table */
+  table{ width:100%; border-collapse:collapse; margin:20px 0; font-size:.86rem; }
+  th{ background:var(--accent); color:#fff; padding:9px 8px; text-align:left; font-weight:600; font-size:.78rem; }
+  td{ padding:9px 8px; background:var(--bg-soft); border-bottom:1px solid var(--line); }
+  tr:nth-child(even) td{ background:#f4f4f4; }
+  .neg{ color:var(--gray); font-weight:600; } .pos{ color:var(--accent); font-weight:600; }
+
+  /* simulator */
+  .sim-box{ background:var(--bg-soft); border:1px solid var(--line); border-radius:4px; padding:22px 18px; margin:24px 0; }
+  .sim-title{ font-family:'Playfair Display',serif; font-weight:700; font-size:1.05rem; margin-bottom:4px; }
+  .sim-sub{ font-size:12px; color:var(--ink-soft); margin-bottom:18px; }
+  .slider-row{ margin-bottom:16px; }
+  .slider-row label{ display:flex; justify-content:space-between; font-size:13px; font-weight:600; margin-bottom:8px; }
+  input[type=range]{ width:100%; accent-color:var(--accent); cursor:pointer; }
+  .sim-result{ display:flex; gap:1px; margin-top:18px; background:var(--line); border:1px solid var(--line);}
+  .sim-cell{ flex:1; background:#fff; padding:14px 10px; text-align:center; }
+  .sim-cell .v{ font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:700; }
+  .sim-cell .l{ font-size:10.5px; color:var(--ink-soft); margin-top:4px; }
+  .sim-reset{ margin-top:14px; width:100%; padding:10px; background:var(--ink); color:#fff; border:none;
+    border-radius:3px; font-size:12.5px; font-weight:600; cursor:pointer; font-family:'Noto Sans KR',sans-serif; }
+  .sim-reset:hover{ background:var(--accent); }
+  .sim-note{ font-size:10.5px; color:var(--ink-soft); margin-top:12px; line-height:1.5; }
+
+  /* winner/loser cards */
+  .wl-grid{ display:flex; flex-direction:column; gap:10px; margin:18px 0; }
+  .wl-card{ display:flex; justify-content:space-between; align-items:center; padding:13px 14px;
+    background:var(--bg-soft); border-left:3px solid var(--line); border-radius:2px; }
+  .wl-card.win{ border-left-color:var(--accent); }
+  .wl-card.lose{ border-left-color:var(--gray); }
+  .wl-name{ font-weight:600; font-size:.92rem; }
+  .wl-reason{ font-size:11px; color:var(--ink-soft); margin-top:2px; }
+  .wl-pct{ font-family:'Playfair Display',serif; font-weight:700; font-size:1.15rem; white-space:nowrap; margin-left:10px; }
+  .wl-pct.up{ color:var(--accent); } .wl-pct.down{ color:var(--gray); }
+
+  /* barbell diagram */
+  .barbell{ display:flex; align-items:center; justify-content:center; margin:26px 0 10px; gap:0; }
+  .bar-weight{ width:78px; height:78px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    flex-direction:column; text-align:center; font-size:11px; font-weight:700; color:#fff; }
+  .bar-weight.energy{ background:var(--ink); }
+  .bar-weight.tech{ background:var(--accent); }
+  .bar-rod{ height:6px; background:var(--line); flex:1; max-width:120px; }
+  .bar-weight span{ display:block; font-size:9px; font-weight:400; opacity:.8; margin-top:2px; }
+
+  /* closing */
+  .closing{ padding:50px 0 60px; }
+  .closing h2{ font-size:1.6rem; margin-bottom:16px; }
+  .question-box{ background:var(--ink); color:#fff; padding:26px 22px; border-radius:3px; margin:22px 0; }
+  .question-box .qlabel{ font-size:11px; letter-spacing:.15em; text-transform:uppercase; color:var(--accent-soft); margin-bottom:10px; font-weight:700; }
+  .question-box p{ color:#f0f0f0; font-size:1rem; font-family:'Playfair Display',serif; font-style:italic; line-height:1.6; margin-bottom:0; }
+
+  .disclaimer{ font-size:10.5px; color:var(--ink-soft); line-height:1.7; padding:24px 0 60px;
+    border-top:1px solid var(--line); margin-top:10px; }
+  .disclaimer strong{ color:var(--ink-soft); }
+
+  .source-tag{ display:inline-block; font-size:10px; color:var(--ink-soft); background:var(--bg-soft);
+    border:1px solid var(--line); padding:3px 8px; border-radius:20px; margin-top:6px; }
+
+  @media(max-width:400px){
+    .hero-title{ font-size:2rem; }
+    .stat-grid{ grid-template-columns:1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- MASTHEAD -->
+  <header class="masthead">
+    <div class="kicker">
+      <span>MARKET DEEP DIVE</span>
+      <span>2026.07.09</span>
+    </div>
+    <h1 class="hero-title">기름과 <em>실리콘</em>,<br>같은 폭풍 속<br>다른 항로</h1>
+    <p class="hero-dek">지정학 위기가 유가를 흔들고 국채금리를 밀어 올린 하루, 기술주는 왜 살아남은 종목과 무너진 종목으로 두 쪽이 났는가.</p>
+    <div class="byline">
+      <span>ECONOMY DESK</span>
+      <span>·</span>
+      <span>READ 8 MIN</span>
+    </div>
+  </header>
+
+  <!-- SECTION 1: TRIGGER -->
+  <section>
+    <div class="section-label">Chapter 1</div>
+    <h2 class="section-title">도화선 — 문장 하나가 시장을 발작시켰다</h2>
+    <p class="lede">"이란과의 임시 휴전은 끝났다." 트럼프 대통령의 발언이 추가 군사 행동 가능성을 강하게 시사하면서, 잠잠하던 시장은 순식간에 폭발했다.</p>
+    <p>발언 직후 가장 먼저 충격파를 흡수한 곳은 원유 시장이었다. WTI와 브렌트유가 동시에 5% 급등하며 배럴당 <strong>78달러</strong> 선을 순식간에 돌파했다. 뒤이어 주식시장은 곧바로 패닉셀링에 들어갔고, 다우존스 지수는 500포인트 이상, 약 1.1% 급락했다.</p>
+    <p>더 눈여겨봐야 할 지표는 채권시장이었다. 10년물 국채금리가 장중 <strong>4.58%</strong>까지 치솟으며 4주 최고치를 기록했다. 유가 급등과 금리 급등이 동시에 벌어졌다는 것은, 이 사건이 단순한 하루짜리 해프닝이 아니라 인플레이션 재점화 신호로 읽힐 수 있다는 뜻이다.</p>
+
+    <div class="chart-container fade-in">
+      <canvas id="chartShock" height="230"></canvas>
+    </div>
+    <p class="chart-caption">발언 직후 즉각 반응한 3대 지표 변화율</p>
+
+    <div class="stat-grid fade-in">
+      <div class="stat-cell"><div class="stat-num">+5%</div><div class="stat-label">WTI·브렌트유 급등폭, $78선 돌파</div></div>
+      <div class="stat-cell"><div class="stat-num down">-1.1%</div><div class="stat-label">다우존스 지수, 500pt 이상 급락</div></div>
+      <div class="stat-cell"><div class="stat-num">4.58%</div><div class="stat-label">10년물 국채금리 장중 고점(4주 최고)</div></div>
+      <div class="stat-cell"><div class="stat-num down">deeply<br>divided</div><div class="stat-label">6월 FOMC 의사록, 연준 위원 간 인플레 경로 이견</div></div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: INFLATION TAX -->
+  <section>
+    <div class="section-label">Chapter 2</div>
+    <h2 class="section-title">유가라는 중력 — 경제 전체를 짓누르다</h2>
+    <p>유가 상승을 단순히 "주유비가 비싸진다"는 문제로 보면 안 되는 이유가 여기 있다. 유가는 경제 전체를 짓누르는 <span class="accent-text">인플레이션 세금</span>으로 작용한다.</p>
+    <div class="pullquote">
+      유가라는 중력이 갑자기 무거워지니, 허공을 날아오르려던 산업들이 제일 먼저 땅으로 곤두박질쳤다.
+      <span>— 방송 중 비유</span>
+    </div>
+    <p>연료비 부담 우려에 아메리칸 항공이 3.3%, 카니발 크루즈가 3.86% 급락했다. 동시에 국채금리 상승은 모기지 금리를 밀어 올려 주택 관련주에도 이중으로 작용했다. 홈디포가 2.5%, 셔윈윌리엄스가 3.4% 하락하며 건설·주택 관련주가 줄줄이 약세를 보였다.</p>
+
+    <table>
+      <tr><th>종목</th><th>섹터</th><th>등락률</th></tr>
+      <tr><td>아메리칸 항공</td><td>항공</td><td class="neg">-3.3%</td></tr>
+      <tr><td>카니발 크루즈</td><td>여행</td><td class="neg">-3.86%</td></tr>
+      <tr><td>홈디포</td><td>주택 소매</td><td class="neg">-2.5%</td></tr>
+      <tr><td>셔윈윌리엄스</td><td>주택 소매</td><td class="neg">-3.4%</td></tr>
+    </table>
+    <p style="font-size:.85rem;color:var(--ink-soft);">고유가(연료비)와 고금리(모기지)가 동시에 작용하며 여행·주택 관련 소비재 업종에 이중의 압박을 가한 사례.</p>
+  </section>
+
+  <!-- SECTION 3: ENERGY WINNERS -->
+  <section>
+    <div class="section-label">Chapter 3</div>
+    <h2 class="section-title">유일한 피난처 — 그런데 왜 정유주인가</h2>
+    <p>S&P500의 열한 개 주요 섹터 중 유일하게 상승한 곳은 에너지였다. 엑손모빌 +3.9%, 쉐브론 +3.5%, 코노코필립스와 쉘도 동반 상승했다. 하지만 진짜 흥미로운 지점은 따로 있었다. 원유를 직접 캐는 탐사기업보다, 정유주가 훨씬 크게 뛰었다는 사실이다.</p>
+
+    <div class="chart-container fade-in">
+      <canvas id="chartRefinery" height="230"></canvas>
+    </div>
+    <p class="chart-caption">탐사기업 vs 정유기업 당일 등락률 비교</p>
+
+    <p><strong>이유는 수익 창출 구조의 차이다.</strong> 정유사는 이미 값싸게 사둔 원유 재고를 갖고 있는 상태에서, 시장에 파는 휘발유·경유 가격만 즉시 올려버릴 수 있다. 빵집이 싼 밀가루를 미리 사뒀다가 빵 값만 먼저 올려 받는 것과 같은 이치다. 이 정제마진 개선과 재고평가 이익이 발레로(+6.26%)와 마라톤 페트롤리엄(+5.37%)을 탐사기업보다 더 크게 밀어 올렸다.</p>
+    <p>실적 발표를 앞둔 필수소비재 펩시코 역시 방어주로서 상승 흐름을 탔다. 거시 충격 국면에서 포트폴리오 밸런싱이 왜 중요한지 보여주는 사례다.</p>
+  </section>
+
+  <!-- SECTION 4: BARBELL SIMULATOR -->
+  <section>
+    <div class="section-label">Chapter 4</div>
+    <h2 class="section-title">바벨 전략 — 정유주에 몰빵해도 되는가</h2>
+    <p>결론부터 말하면, <strong>아니다.</strong> 지정학 뉴스만 쫓아 정유주에 올라타는 것은 투자가 아니라 도박이다. 내일 지정학 긴장이 풀리거나, 글로벌 경기 침체로 원유 수요가 급감하면 고점에 진입한 투자자는 그대로 물릴 수 있다. 여기에 오펙플러스의 증산 가능성까지 겹치면 장기 수요 둔화 리스크도 상존한다.</p>
+    <p>그래서 필요한 것은 포트폴리오의 양극단을 잡는 <span class="accent-text">바벨(Barbell) 전략</span>이다. 한쪽에는 방어용 정유주를, 다른 한쪽에는 성장을 주도할 고품질 AI 대장주를 배치하는 구조다.</p>
+
+    <div class="barbell fade-in">
+      <div class="bar-weight energy">정유주<span>방어</span></div>
+      <div class="bar-rod"></div>
+      <div class="bar-weight tech">AI 대장주<span>성장</span></div>
+    </div>
+
+    <div class="sim-box">
+      <div class="sim-title">바벨 배분 시뮬레이터</div>
+      <div class="sim-sub">정유주와 AI 대장주 비중을 조절하며 이번 급락일 기준 포트폴리오 반응을 가늠해보세요.</div>
+      <div class="slider-row">
+        <label><span>정유주 (발레로·마라톤 페트롤리엄 평균)</span><span id="energyPctLabel">50%</span></label>
+        <input type="range" id="energySlider" min="0" max="100" value="50">
+      </div>
+      <div class="slider-row">
+        <label><span>AI 대장주 (브로드컴·엔비디아 평균)</span><span id="techPctLabel">50%</span></label>
+        <input type="range" id="techSlider" min="0" max="100" value="50" disabled>
+      </div>
+      <div class="sim-result">
+        <div class="sim-cell"><div class="v" id="simReturn">+4.6%</div><div class="l">이번 급락일<br>가상 포트폴리오 등락률</div></div>
+        <div class="sim-cell"><div class="v" id="simRisk">중간</div><div class="l">체감 변동성<br>수준</div></div>
+      </div>
+      <button class="sim-reset" id="simResetBtn">50 : 50 균형으로 초기화</button>
+      <div class="sim-note">※ 정유주 값은 발레로(+6.26%)·마라톤 페트롤리엄(+5.37%) 평균, AI 대장주 값은 브로드컴(+5.9%)·엔비디아(+3.7%) 평균을 사용한 단순 예시 계산이며, 실제 투자 성과나 미래 수익률을 보장하지 않습니다.</div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: TECH BIFURCATION -->
+  <section>
+    <div class="section-label">Chapter 5</div>
+    <h2 class="section-title">쇼미더머니 — 기술주는 두 갈래로 찢어졌다</h2>
+    <p>거시 충격 속에서 기술주가 다 같이 무너진 게 아니다. 데이터가 보여주는 현실은 꽤 잔인하다. S&P500 정보기술 섹터 종목의 <strong class="accent-text">29%</strong>가 52주 장중 고점 대비 20% 이상 하락한 상태, 사실상 기술적 약세장에 진입했다.</p>
+
+    <div class="chart-container fade-in">
+      <canvas id="chartBifurcation" height="230"></canvas>
+    </div>
+    <p class="chart-caption">S&P500 정보기술 섹터 — 52주 고점 대비 20%+ 하락 종목 비중</p>
+
+    <p>AMD -6.5%, 인텔 -5%, 필라델피아 반도체 지수는 전 고점 대비 16% 하락했다. 특허 소송이 겹친 나비타스 세미컨덕터는 -9%, 애널리스트 신중론이 나온 모더나는 -7.5% 급락했다. 과거에는 'AI'라는 단어만 붙어도 주가가 올랐지만, 이제는 철저한 실적 증명, 이른바 <strong>쇼미더머니의 시대</strong>다.</p>
+  </section>
+
+  <!-- SECTION 6: WINNERS AND LOSERS -->
+  <section>
+    <div class="section-label">Chapter 6</div>
+    <h2 class="section-title">VIP 라운지 — 누가 입장하고 누가 쫓겨났나</h2>
+    <p>이 아수라장 속에서도 나스닥을 지탱한 두 영웅이 있었다.</p>
+
+    <div class="wl-grid fade-in">
+      <div class="wl-card win">
+        <div><div class="wl-name">브로드컴</div><div class="wl-reason">애플과 2031년까지 최소 300억 달러 규모 맞춤형 칩 공급 계약</div></div>
+        <div class="wl-pct up">+5.9%</div>
+      </div>
+      <div class="wl-card win">
+        <div><div class="wl-name">엔비디아</div><div class="wl-reason">BofA 애널리스트, 주가 부진을 "밸류에이션 디스카운트"로 평가</div></div>
+        <div class="wl-pct up">+3.7%</div>
+      </div>
+      <div class="wl-card win">
+        <div><div class="wl-name">마이크론</div><div class="wl-reason">장중 -4%까지 급락 후 데이터센터 수요 재확인되며 반등 마감</div></div>
+        <div class="wl-pct up">+1.17%</div>
+      </div>
+      <div class="wl-card win">
+        <div><div class="wl-name">펭귄솔루션즈</div><div class="wl-reason">AI 인프라 부문 시장 컨센서스 상회 실적(어닝 비트)</div></div>
+        <div class="wl-pct up">급등</div>
+      </div>
+      <div class="wl-card lose">
+        <div><div class="wl-name">썰런</div><div class="wl-reason">분산형 AI 데이터센터 파일럿 발표에도 자본집약적 사업 구조 우려</div></div>
+        <div class="wl-pct down">-1.56%</div>
+      </div>
+      <div class="wl-card lose">
+        <div><div class="wl-name">팔란티어</div><div class="wl-reason">민주당 의원들의 정치적 조사 가능성을 다룬 FT 기사 여파</div></div>
+        <div class="wl-pct down">-1.57%</div>
+      </div>
+    </div>
+
+    <p>썰런의 사례는 중요한 질문을 던진다. 국채금리가 급등해 자본비용이 비싸진 지금, 자본집약적이고 부채가 많은 기업은 "꿈을 꾸려면 먼저 이자 갚을 능력을 보여라"는 시장의 냉정한 심사를 통과해야 한다. 반면 중국 공급망 규제라는 외부 리스크와 무관하게 자체 소비 회복 기대감으로 10% 강세를 보인 알리바바는 대조적인 사례다.</p>
+  </section>
+
+  <!-- SECTION 7: SPACE VALUATION -->
+  <section>
+    <div class="section-label">Chapter 7</div>
+    <h2 class="section-title">우주산업의 저울 — 결국 돈 문제로 귀결된다</h2>
+    <p>높은 자본비용 시대, 시장은 "미래의 꿈에 얼마를 지불할 것인가"를 아주 차갑게 계산한다. 스페이스X는 나스닥100 편입이라는 호재에도 불구하고 고점 대비 29% 하락한 상태다. 반면 블루오리진은 1,300억 달러 가치평가를 내세우며 100억 달러 조달을 시도 중이다.</p>
+  </section>
+
+  <!-- CLOSING -->
+  <section class="closing">
+    <div class="section-label">Epilogue</div>
+    <h2>정리 — 그리고 남는 질문 하나</h2>
+    <p>이란발 지정학 리스크가 유가를 폭등시켰고, 이는 인플레이션을 재점화하며 항공·주택 등 경제 전반에 타격을 줬다. 개인 투자자에게는 정유주와 고품질 AI 대장주로 나뉘는 바벨 전략이 필요하며, 실체 없는 AI 테마주와 부채 높은 종목은 경계해야 한다.</p>
+
+    <div class="question-box">
+      <div class="qlabel">Food for thought</div>
+      <p>AI 혁신의 가장 큰 장애물은 엔비디아의 첨단 칩 부족이 아니라, 그 칩을 돌리는 데 필요한 막대한 에너지 그 자체일 수 있다. 고유가와 전력 부족이 일상화된다면, 구시대의 유물 취급받던 쉐브론·엑손모빌 같은 전통 에너지 기업이야말로 AI 산업의 목줄을 쥔 진정한 기술주로 재평가받는 날이 오지 않을까.</p>
+    </div>
+    <p style="font-size:.9rem;">에너지가 AI의 혁신 속도를 결정하는 열쇠가 된다는 이 시나리오 앞에서, 당신의 포트폴리오는 준비되어 있는가.</p>
+  </section>
+
+  <div class="disclaimer">
+    <strong>투자 유의사항</strong> — 본 콘텐츠는 방송 자료를 바탕으로 한 시장 분석 요약이며, 특정 종목의 매수·매도를 권유하는 투자 자문이 아닙니다. 모든 수치는 원본 방송 시점 기준이며 실시간 시세와 다를 수 있습니다. 투자 판단과 그 책임은 투자자 본인에게 있습니다.
+  </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+
+  const fadeObs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        fadeObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+  Chart.defaults.font.family = "'Noto Sans KR', sans-serif";
+  Chart.defaults.color = '#777777';
+
+  const chartConfigs = {};
+
+  chartConfigs['chartShock'] = () => {
+    new Chart(document.getElementById('chartShock'), {
+      type: 'bar',
+      data: {
+        labels: ['WTI/브렌트유', '다우존스', '10년물 금리'],
+        datasets: [{
+          label: '변화',
+          data: [5.0, -1.1, 4.58],
+          backgroundColor: ['#e11d48', '#6b7280', '#2563eb'],
+          borderRadius: 4,
+          maxBarThickness: 60
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false },
+          tooltip: { callbacks: { label: (c) => c.dataIndex===2 ? c.parsed.y+'%' : (c.parsed.y>0?'+':'')+c.parsed.y+'%' } } },
+        scales: { y: { grid: { color: '#e5e5e5' }, ticks: { callback: v => v+'%' } },
+                  x: { grid: { display: false } } }
+      }
+    });
+  };
+
+  chartConfigs['chartRefinery'] = () => {
+    new Chart(document.getElementById('chartRefinery'), {
+      type: 'bar',
+      data: {
+        labels: ['엑손모빌', '쉐브론', '발레로', '마라톤 페트롤리엄'],
+        datasets: [{
+          label: '등락률(%)',
+          data: [3.9, 3.5, 6.26, 5.37],
+          backgroundColor: ['#1a1a1a','#1a1a1a','#e11d48','#e11d48'],
+          borderRadius: 4,
+          maxBarThickness: 46
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false },
+          tooltip: { callbacks: { label: (c) => '+'+c.parsed.x+'%' } } },
+        scales: { x: { grid: { color: '#e5e5e5' }, ticks: { callback: v => v+'%' } },
+                  y: { grid: { display: false } } }
+      }
+    });
+  };
+
+  chartConfigs['chartBifurcation'] = () => {
+    new Chart(document.getElementById('chartBifurcation'), {
+      type: 'doughnut',
+      data: {
+        labels: ['52주 고점 대비 -20% 이상', '나머지 종목'],
+        datasets: [{
+          data: [29, 71],
+          backgroundColor: ['#e11d48', '#e5e5e5'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, cutout: '68%',
+        plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } }
+      }
+    });
+  };
+
+  const chartObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const canvas = e.target.querySelector('canvas');
+        if (canvas && chartConfigs[canvas.id]) {
+          chartConfigs[canvas.id]();
+          e.target.classList.add('chart-ready');
+          chartObs.unobserve(e.target);
+        }
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+  // Barbell simulator
+  const energySlider = document.getElementById('energySlider');
+  const energyLabel = document.getElementById('energyPctLabel');
+  const techLabel = document.getElementById('techPctLabel');
+  const simReturn = document.getElementById('simReturn');
+  const simRisk = document.getElementById('simRisk');
+  const resetBtn = document.getElementById('simResetBtn');
+
+  const ENERGY_RETURN = (6.26 + 5.37) / 2; // Valero + Marathon avg
+  const TECH_RETURN = (5.9 + 3.7) / 2;     // Broadcom + Nvidia avg
+
+  function updateSim(){
+    const ePct = parseInt(energySlider.value, 10);
+    const tPct = 100 - ePct;
+    energyLabel.textContent = ePct + '%';
+    techLabel.textContent = tPct + '%';
+    const blended = (ENERGY_RETURN * ePct + TECH_RETURN * tPct) / 100;
+    simReturn.textContent = (blended >= 0 ? '+' : '') + blended.toFixed(2) + '%';
+    const balance = Math.abs(ePct - 50);
+    simRisk.textContent = balance <= 15 ? '낮음(균형)' : balance <= 35 ? '중간' : '높음(편중)';
+  }
+  energySlider.addEventListener('input', updateSim);
+  resetBtn.addEventListener('click', () => { energySlider.value = 50; updateSim(); });
+  updateSim();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>퀴즈 — 지정학 위기와 유가 폭등 속 AI 관련주</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,500&family=Noto+Sans+KR:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --bg-soft:#fafafa;
+    --ink:#1a1a1a; --ink-soft:#777777;
+    --accent:#e11d48; --accent-soft:#f43f5e;
+    --line:#e5e5e5; --green:#16a34a; --green-bg:#eafaf0;
+    --red-bg:#fdecec;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{ background:var(--bg); color:var(--ink); font-family:'Noto Sans KR',sans-serif; line-height:1.6; padding-bottom:60px;}
+  .wrap{ max-width:600px; margin:0 auto; padding:0 18px; }
+  h1,h2{ font-family:'Playfair Display',serif; }
+
+  header.top{ padding:26px 0 18px; border-bottom:2px solid var(--ink); }
+  header.top .eyebrow{ font-size:11px; letter-spacing:.2em; color:var(--accent); font-weight:700; text-transform:uppercase; margin-bottom:8px;}
+  header.top h1{ font-size:1.5rem; font-weight:900; line-height:1.3; }
+  header.top p{ font-size:.85rem; color:var(--ink-soft); margin-top:8px; }
+
+  /* Sticky scoreboard */
+  .scoreboard{
+    position:sticky; top:0; z-index:50; background:#fff;
+    border-bottom:1px solid var(--line); padding:12px 18px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.04);
+  }
+  .score-row{ display:flex; justify-content:space-between; align-items:center; max-width:600px; margin:0 auto 8px; font-size:.8rem; }
+  .score-item{ text-align:center; }
+  .score-item .n{ font-family:'Playfair Display',serif; font-weight:700; font-size:1.15rem; color:var(--ink); }
+  .score-item .l{ font-size:9.5px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.04em; }
+  .score-item.correct .n{ color:var(--accent); }
+  .progress-bar-outer{ max-width:600px; margin:0 auto; height:6px; background:var(--line); border-radius:4px; overflow:hidden; }
+  .progress-bar-inner{ height:100%; width:0%; background:#e11d48; transition:width .4s ease, background .4s ease; border-radius:4px; }
+
+  /* question cards */
+  .q-card{ margin:26px 0; padding:20px 16px; background:var(--bg-soft); border:1px solid var(--line); border-radius:6px; }
+  .q-head{ display:flex; align-items:center; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
+  .q-num{ font-family:'Playfair Display',serif; font-weight:700; color:var(--accent); font-size:.95rem; }
+  .q-diff{ font-size:9.5px; padding:2px 8px; border-radius:10px; font-weight:700; letter-spacing:.03em; }
+  .diff-easy{ background:#e8f5ec; color:#15803d; }
+  .diff-medium{ background:#fff4e5; color:#c2760c; }
+  .diff-hard{ background:var(--red-bg); color:var(--accent); }
+  .q-type{ font-size:9.5px; color:var(--ink-soft); border:1px solid var(--line); padding:2px 8px; border-radius:10px; }
+  .q-text{ font-size:.98rem; font-weight:600; margin-bottom:14px; line-height:1.5; }
+
+  .options{ display:flex; flex-direction:column; gap:8px; }
+  .opt-btn{
+    text-align:left; padding:11px 13px; background:#fff; border:1.5px solid var(--line);
+    border-radius:5px; font-size:.88rem; cursor:pointer; font-family:'Noto Sans KR',sans-serif;
+    transition:all .15s ease; position:relative; color:var(--ink);
+  }
+  .opt-btn:hover:not(:disabled){ border-color:var(--accent); }
+  .opt-btn:disabled{ cursor:default; }
+  .opt-btn.correct-ans{ background:var(--green-bg); border-color:var(--green); color:#15803d; font-weight:700; }
+  .opt-btn.wrong-ans{ background:var(--red-bg); border-color:var(--accent); color:var(--accent); font-weight:700; }
+  .badge{ float:right; font-size:.75rem; font-weight:700; }
+
+  .ox-row{ display:flex; gap:10px; }
+  .ox-btn{
+    flex:1; padding:16px; font-size:1.3rem; font-weight:900; border-radius:5px;
+    border:1.5px solid var(--line); background:#fff; cursor:pointer; font-family:'Playfair Display',serif;
+  }
+  .ox-btn:hover:not(:disabled){ border-color:var(--accent); }
+  .ox-btn.correct-ans{ background:var(--green-bg); border-color:var(--green); color:#15803d; }
+  .ox-btn.wrong-ans{ background:var(--red-bg); border-color:var(--accent); color:var(--accent); }
+
+  .short-row{ display:flex; gap:8px; }
+  .short-row input{
+    flex:1; padding:11px 13px; border:1.5px solid var(--line); border-radius:5px; font-size:.9rem;
+    font-family:'Noto Sans KR',sans-serif;
+  }
+  .short-row input:focus{ outline:none; border-color:var(--accent); }
+  .short-row button{
+    padding:0 18px; background:var(--ink); color:#fff; border:none; border-radius:5px;
+    font-weight:700; font-size:.85rem; cursor:pointer; font-family:'Noto Sans KR',sans-serif;
+  }
+  .short-row button:hover:not(:disabled){ background:var(--accent); }
+  .short-row button:disabled, .short-row input:disabled{ opacity:.6; cursor:default; }
+  .short-feedback{ margin-top:10px; font-size:.85rem; font-weight:700; padding:8px 12px; border-radius:5px; display:none; }
+  .short-feedback.correct{ background:var(--green-bg); color:#15803d; display:block; }
+  .short-feedback.wrong{ background:var(--red-bg); color:var(--accent); display:block; }
+
+  .explanation{
+    margin-top:14px; padding:13px 14px; background:#fff; border-left:3px solid var(--accent);
+    border-radius:3px; font-size:.83rem; color:#333; line-height:1.65; display:none;
+  }
+  .explanation.show{ display:block; animation:slideDown .3s ease; }
+  .explanation b{ color:var(--accent); }
+  @keyframes slideDown{ from{opacity:0; transform:translateY(-6px);} to{opacity:1; transform:translateY(0);} }
+
+  /* final result */
+  .final-card{
+    display:none; margin:36px 0; padding:36px 22px; text-align:center;
+    background:var(--ink); color:#fff; border-radius:10px;
+  }
+  .final-card.show{ display:block; animation:slideDown .5s ease; }
+  .final-grade{ font-family:'Playfair Display',serif; font-size:4rem; font-weight:900; color:var(--accent-soft); line-height:1; }
+  .final-score{ font-size:1rem; color:#ddd; margin-top:10px; }
+  .final-msg{ font-size:.9rem; color:#bbb; margin-top:14px; font-style:italic; font-family:'Playfair Display',serif; }
+  .retry-btn{
+    margin-top:22px; padding:12px 28px; background:var(--accent); color:#fff; border:none;
+    border-radius:30px; font-weight:700; font-size:.85rem; cursor:pointer; font-family:'Noto Sans KR',sans-serif;
+  }
+  .retry-btn:hover{ background:var(--accent-soft); }
+</style>
+</head>
+<body>
+
+<div class="scoreboard">
+  <div class="score-row">
+    <div class="score-item"><div class="n" id="solvedCount">0/10</div><div class="l">푼 문제</div></div>
+    <div class="score-item correct"><div class="n" id="correctCount">0</div><div class="l">맞힌 문제</div></div>
+    <div class="score-item"><div class="n" id="accPct">0%</div><div class="l">정답률</div></div>
+  </div>
+  <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
+</div>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Quiz · 10 Questions</div>
+    <h1>지정학 위기와 유가 폭등,<br>AI 관련주는 살아남을까</h1>
+    <p>방송 내용을 얼마나 정확히 이해했는지 확인해보세요. 보기를 클릭하면 즉시 채점됩니다.</p>
+  </header>
+
+  <div id="quizContainer"></div>
+
+  <div class="final-card" id="finalCard">
+    <div class="final-grade" id="finalGrade">A</div>
+    <div class="final-score" id="finalScore">10 / 10 정답</div>
+    <div class="final-msg" id="finalMsg"></div>
+    <button class="retry-btn" id="retryBtn">다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id:1, type:'mc', difficulty:'easy',
+    question:'트럼프 대통령의 어떤 발언이 시장에 충격을 주며 유가와 금리를 동시에 밀어 올렸나요?',
+    options:['이란과의 임시 휴전이 끝났다고 선언하며 추가 군사 행동 가능성을 시사', '연준에 즉각적인 금리 인상을 요구', '중국에 대한 신규 관세 부과를 발표', '원유 수출 금지 조치를 발표'],
+    answer:0,
+    explanation:'트럼프 대통령이 "이란과의 임시 휴전은 끝났다. 오버다"라고 선언하며 추가 군사 행동 가능성을 강하게 시사했고, 이 발언 하나가 잠잠하던 시장을 단숨에 폭발시켰습니다.'
+  },
+  {
+    id:2, type:'short', difficulty:'easy',
+    question:'유가 폭등으로 WTI·브렌트유가 배럴당 몇 달러 선을 돌파했나요? (숫자만 입력)',
+    answer:'78',
+    explanation:'WTI와 브렌트유 가격이 5% 급등하며 배럴당 78달러 선을 순식간에 돌파했습니다.'
+  },
+  {
+    id:3, type:'mc', difficulty:'medium',
+    question:'유가 폭등 소식 직후 다우존스 지수는 얼마나 급락했나요?',
+    options:['약 0.3%', '약 1.1%', '약 3.5%', '약 5.0%'],
+    answer:1,
+    explanation:'다우존스 지수는 500포인트 이상, 약 1.1% 급락하며 패닉셀링으로 이어졌습니다.'
+  },
+  {
+    id:4, type:'short', difficulty:'medium',
+    question:'10년물 국채금리는 장중 몇 %까지 치솟으며 4주 최고치를 기록했나요? (숫자만 입력, 예: 4.58)',
+    answer:'4.58',
+    explanation:'10년물 국채금리는 장중 4.58%까지 치솟으며 4주 최고치를 기록했습니다. 유가 급등과 금리 급등이 동시에 벌어진 것은 인플레이션이 재점화되는 신호로 해석됩니다.'
+  },
+  {
+    id:5, type:'ox', difficulty:'easy',
+    question:'케빈 워시 의장체제의 연준 위원들은 6월 FOMC 당시 인플레이션 안정 경로를 두고 이미 의견이 크게 갈려 있었다.',
+    answer:'O',
+    explanation:'6월 FOMC 의사록에 따르면 위원들은 물가 안정 경로를 두고 이미 심각하게 분열(deeply divided)된 상태였고, 다수 위원이 인플레이션 상방 리스크를 경고하던 와중에 유가 폭등이라는 악재가 겹쳤습니다.'
+  },
+  {
+    id:6, type:'mc', difficulty:'medium',
+    question:'발레로(+6.26%) 같은 정유주가 탐사기업보다 더 크게 상승한 핵심 이유는 무엇인가요?',
+    options:['정부의 세금 감면 발표', '이미 싸게 사둔 재고 원유로 만든 제품 가격을 즉시 올려 얻는 정제마진·재고평가 이익', '해외 원유 수입 금지 조치', '경쟁사 파산에 따른 반사이익'],
+    answer:1,
+    explanation:'정유사는 이미 창고에 싼값에 사둔 원유가 가득한 상태에서 휘발유·경유 판매가를 즉시 올릴 수 있어 정제마진 개선과 재고평가 이익이 즉각 발생합니다. 이 때문에 발레로(+6.26%), 마라톤 페트롤리엄(+5.37%)이 엑손모빌·쉐브론 같은 탐사기업보다 더 크게 뛰었습니다.'
+  },
+  {
+    id:7, type:'mc', difficulty:'medium',
+    question:'브로드컴이 5.9% 급등한 직접적인 이유는 무엇인가요?',
+    options:['자체 AI 반도체 신제품 출시', '애플과 2031년까지 최소 300억 달러 규모의 미국 내 맞춤형 칩 공급 계약 체결', '정부 보조금 지급 확정', '경쟁사 나비타스의 소송 패소'],
+    answer:1,
+    explanation:'브로드컴은 애플과 2031년까지 최소 300억 달러 규모의 미국 내 맞춤형 칩 공급 계약을 체결했다는 소식에 5.9% 급등했습니다. 거시경제가 흔들려도 확실한 대형 고객사를 확보했다는 가시성이 시장을 안심시켰습니다.'
+  },
+  {
+    id:8, type:'short', difficulty:'hard',
+    question:'뱅크오브아메리카 애널리스트가 엔비디아의 최근 주가 부진을 두고 내린 평가를 방송에서는 무엇이라 표현했나요? (한글로 입력, 예: OO 디스카운트)',
+    answer:'밸류에이션 디스카운트',
+    explanation:'뱅크오브아메리카 비벡 아리아 애널리스트가 엔비디아의 주가 부진을 "매력적인 할인 구간", 즉 밸류에이션 디스카운트라고 평가하면서 주가가 3.7% 급반등했습니다.'
+  },
+  {
+    id:9, type:'ox', difficulty:'medium',
+    question:'S&P500 정보기술 섹터 종목의 29%가 52주 장중 고점 대비 20% 이상 하락한 상태였다.',
+    answer:'O',
+    explanation:'S&P500 정보기술 섹터 종목의 무려 29%가 52주 장중 고점 대비 20% 이상 하락해 있었습니다. AMD -6.5%, 인텔 -5%, 필라델피아 반도체 지수는 전 고점 대비 16% 하락하는 등 기술주 내부에서도 뚜렷한 양극화가 나타났습니다.'
+  },
+  {
+    id:10, type:'mc', difficulty:'hard',
+    question:'AI 정부 계약 기대감으로 반등을 노리던 팔란티어가 오히려 1.57% 하락한 원인은 무엇인가요?',
+    options:['분기 실적 부진 발표', '민주당 의원들의 정치적 조사(스크루티니) 가능성을 다룬 파이낸셜타임스 기사', '핵심 고객사의 계약 해지', '내부자 대량 매도 공시'],
+    answer:1,
+    explanation:'팔란티어는 민주당 의원들의 정치적 조사 가능성을 다룬 파이낸셜타임스 기사 하나에 1.57% 하락했습니다. 이는 고밸류에이션 주식일수록 작은 정치적 불확실성에도 투자자들이 민감하게 반응해 차익 실현에 나선다는 점을 보여주는 사례로 소개되었습니다.'
+  }
+];
+
+let state = { solved: 0, correct: 0, answered: {} };
+const container = document.getElementById('quizContainer');
+
+function diffLabel(d){ return d==='easy' ? '쉬움' : d==='medium' ? '보통' : '어려움'; }
+function typeLabel(t){ return t==='mc' ? '객관식' : t==='short' ? '단답형' : 'OX'; }
+
+function renderQuestion(q, idx){
+  const card = document.createElement('div');
+  card.className = 'q-card';
+  card.id = 'qcard-' + q.id;
+
+  let bodyHtml = '';
+  if(q.type === 'mc'){
+    bodyHtml = `<div class="options" id="opts-${q.id}">` +
+      q.options.map((opt,i)=>`<button class="opt-btn" data-idx="${i}" onclick="answerMC(${q.id},${i})">${opt}</button>`).join('') +
+      `</div>`;
+  } else if(q.type === 'ox'){
+    bodyHtml = `<div class="ox-row" id="opts-${q.id}">
+      <button class="ox-btn" data-val="O" onclick="answerOX(${q.id},'O')">O</button>
+      <button class="ox-btn" data-val="X" onclick="answerOX(${q.id},'X')">X</button>
+    </div>`;
+  } else if(q.type === 'short'){
+    bodyHtml = `<div class="short-row">
+      <input type="text" id="input-${q.id}" placeholder="답을 입력하세요">
+      <button onclick="answerShort(${q.id})">제출</button>
+    </div>
+    <div class="short-feedback" id="feedback-${q.id}"></div>`;
+  }
+
+  card.innerHTML = `
+    <div class="q-head">
+      <span class="q-num">Q${idx+1}</span>
+      <span class="q-diff diff-${q.difficulty}">${diffLabel(q.difficulty)}</span>
+      <span class="q-type">${typeLabel(q.type)}</span>
+    </div>
+    <div class="q-text">${q.question}</div>
+    ${bodyHtml}
+    <div class="explanation" id="exp-${q.id}"><b>해설</b><br>${q.explanation}</div>
+  `;
+  container.appendChild(card);
+}
+
+QUIZ_DATA.forEach((q,idx)=>renderQuestion(q,idx));
+
+function updateScoreboard(){
+  document.getElementById('solvedCount').textContent = state.solved + '/10';
+  document.getElementById('correctCount').textContent = state.correct;
+  const pct = state.solved > 0 ? Math.round((state.correct/state.solved)*100) : 0;
+  document.getElementById('accPct').textContent = pct + '%';
+  const bar = document.getElementById('progressBar');
+  bar.style.width = pct + '%';
+  bar.style.background = pct < 40 ? '#e11d48' : pct < 70 ? '#f59e0b' : '#16a34a';
+
+  if(state.solved === 10){
+    showFinal();
+  }
+}
+
+function markSolved(qid, isCorrect){
+  if(state.answered[qid]) return false;
+  state.answered[qid] = true;
+  state.solved++;
+  if(isCorrect) state.correct++;
+  updateScoreboard();
+  const exp = document.getElementById('exp-' + qid);
+  exp.classList.add('show');
+  return true;
+}
+
+function answerMC(qid, idx){
+  const q = QUIZ_DATA.find(x=>x.id===qid);
+  if(state.answered[qid]) return;
+  const opts = document.querySelectorAll(`#opts-${qid} .opt-btn`);
+  const isCorrect = idx === q.answer;
+  opts.forEach((btn,i)=>{
+    btn.disabled = true;
+    if(i === q.answer){
+      btn.classList.add('correct-ans');
+      btn.innerHTML += ' <span class="badge">✓ 정답!</span>';
+    } else if(i === idx && !isCorrect){
+      btn.classList.add('wrong-ans');
+      btn.innerHTML += ' <span class="badge">✗ 오답</span>';
+    }
+  });
+  markSolved(qid, isCorrect);
+}
+
+function answerOX(qid, val){
+  const q = QUIZ_DATA.find(x=>x.id===qid);
+  if(state.answered[qid]) return;
+  const btns = document.querySelectorAll(`#opts-${qid} .ox-btn`);
+  const isCorrect = val === q.answer;
+  btns.forEach(btn=>{
+    btn.disabled = true;
+    if(btn.dataset.val === q.answer) btn.classList.add('correct-ans');
+    else if(btn.dataset.val === val && !isCorrect) btn.classList.add('wrong-ans');
+  });
+  markSolved(qid, isCorrect);
+}
+
+function answerShort(qid){
+  const q = QUIZ_DATA.find(x=>x.id===qid);
+  if(state.answered[qid]) return;
+  const input = document.getElementById('input-' + qid);
+  const val = input.value.trim().replace(/\s/g,'').toLowerCase();
+  const correctVal = q.answer.replace(/\s/g,'').toLowerCase();
+  const isCorrect = val.length > 0 && (val === correctVal || correctVal.includes(val) && val.length >= 2);
+  const feedback = document.getElementById('feedback-' + qid);
+  input.disabled = true;
+  input.nextElementSibling.disabled = true;
+  if(isCorrect){
+    feedback.textContent = '✓ 정답! (' + q.answer + ')';
+    feedback.className = 'short-feedback correct';
+  } else {
+    feedback.textContent = '✗ 오답 — 정답은 "' + q.answer + '" 입니다';
+    feedback.className = 'short-feedback wrong';
+  }
+  markSolved(qid, isCorrect);
+}
+
+function showFinal(){
+  const pct = Math.round((state.correct/10)*100);
+  let grade, msg;
+  if(pct >= 90){ grade='A'; msg='완벽에 가까운 이해도입니다. 시장의 디테일을 놓치지 않으셨네요.'; }
+  else if(pct >= 70){ grade='B'; msg='핵심 흐름을 잘 파악하셨습니다. 몇 가지 디테일만 더 챙기면 완벽해요.'; }
+  else if(pct >= 50){ grade='C'; msg='큰 그림은 이해했지만, 세부 수치를 다시 확인해보면 좋겠습니다.'; }
+  else{ grade='D'; msg='분석 리포트를 다시 한번 훑어보시길 권해드립니다.'; }
+
+  document.getElementById('finalGrade').textContent = grade;
+  document.getElementById('finalScore').textContent = state.correct + ' / 10 정답 (정답률 ' + pct + '%)';
+  document.getElementById('finalMsg').textContent = msg;
+  document.getElementById('finalCard').classList.add('show');
+  document.getElementById('finalCard').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+document.getElementById('retryBtn').addEventListener('click', function(){
+  state = { solved: 0, correct: 0, answered: {} };
+  container.innerHTML = '';
+  QUIZ_DATA.forEach((q,idx)=>renderQuestion(q,idx));
+  document.getElementById('finalCard').classList.remove('show');
+  updateScoreboard();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+updateScoreboard();
+</script>
+</body>
+</html>
