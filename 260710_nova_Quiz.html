@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 인프라 폭주 - 이해도 점검 퀴즈</title>
+<style>
+  :root{
+    --bg:#ffffff; --bg-sub:#fafafa;
+    --text:#1a1a1a; --text-sub:#777777;
+    --accent:#e11d48; --accent-sub:#f43f5e;
+    --line:#e5e5e5;
+    --green:#16a34a; --red:#dc2626;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:'Noto Sans KR', sans-serif; line-height:1.6;
+    padding-bottom:60px;
+  }
+  .wrap{ max-width:680px; margin:0 auto; padding:0 18px; }
+
+  .titlebar{
+    text-align:center; padding:34px 18px 20px;
+    border-bottom:1px solid var(--line);
+  }
+  .titlebar .eyebrow{ font-size:11.5px; letter-spacing:.2em; color:var(--accent); font-weight:700; text-transform:uppercase; margin-bottom:10px; }
+  .titlebar h1{ font-family:'Playfair Display', Georgia, serif; font-style:italic; font-weight:700; font-size:23px; }
+
+  .scoreboard{
+    position:sticky; top:0; z-index:50;
+    background:#fff; border-bottom:1px solid var(--line);
+    padding:12px 18px; box-shadow:0 2px 8px rgba(0,0,0,0.04);
+  }
+  .score-row{
+    max-width:680px; margin:0 auto;
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:13px; color:var(--text-sub); margin-bottom:8px;
+  }
+  .score-row b{ color:var(--text); font-size:14px; }
+  .bar-track{ max-width:680px; margin:0 auto; height:8px; background:var(--bg-sub); border-radius:4px; overflow:hidden; border:1px solid var(--line); }
+  .bar-fill{ height:100%; width:0%; background:var(--red); transition:width .4s ease, background .4s ease; }
+
+  .qcard{
+    background:#fff; border:1px solid var(--line); border-radius:8px;
+    padding:20px 18px; margin:18px 0;
+  }
+  .qhead{ display:flex; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
+  .qnum{ font-family:'Playfair Display', Georgia, serif; font-weight:900; color:var(--accent); font-size:17px; }
+  .badge{ font-size:11px; padding:2px 8px; border-radius:10px; font-weight:700; }
+  .badge.easy{ background:#e7f6ec; color:var(--green); }
+  .badge.medium{ background:#fff4e5; color:#c2740c; }
+  .badge.hard{ background:#fde8ea; color:var(--red); }
+  .badge.type{ background:var(--bg-sub); color:var(--text-sub); }
+
+  .qtext{ font-size:15.5px; font-weight:500; margin-bottom:14px; }
+
+  .options{ display:flex; flex-direction:column; gap:8px; }
+  .opt{
+    text-align:left; padding:12px 14px; border:1px solid var(--line);
+    background:var(--bg-sub); border-radius:6px; font-size:14px;
+    cursor:pointer; transition:all .15s ease; color:var(--text);
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .opt:hover:not(:disabled){ border-color:var(--accent); }
+  .opt:disabled{ cursor:not-allowed; }
+  .opt.correct{ background:#e7f6ec; border-color:var(--green); color:#166534; font-weight:700; }
+  .opt.wrong{ background:#fde8ea; border-color:var(--red); color:#991b1b; font-weight:700; }
+  .opt .tagbadge{ font-size:11px; font-weight:700; padding:2px 8px; border-radius:10px; }
+  .opt.correct .tagbadge{ background:var(--green); color:#fff; }
+  .opt.wrong .tagbadge{ background:var(--red); color:#fff; }
+
+  .ox-row{ display:flex; gap:12px; }
+  .ox-btn{
+    flex:1; padding:16px; border:1px solid var(--line); background:var(--bg-sub);
+    border-radius:8px; font-size:20px; font-weight:900; cursor:pointer;
+    color:var(--text); transition:all .15s ease;
+  }
+  .ox-btn:hover:not(:disabled){ border-color:var(--accent); }
+  .ox-btn:disabled{ cursor:not-allowed; }
+  .ox-btn.correct{ background:#e7f6ec; border-color:var(--green); color:var(--green); }
+  .ox-btn.wrong{ background:#fde8ea; border-color:var(--red); color:var(--red); }
+
+  .short-row{ display:flex; gap:8px; }
+  .short-row input{
+    flex:1; padding:12px 14px; border:1px solid var(--line); border-radius:6px;
+    font-size:14px; font-family:inherit;
+  }
+  .short-row input:disabled{ background:var(--bg-sub); }
+  .short-row button{
+    padding:12px 18px; border:none; background:var(--accent); color:#fff;
+    border-radius:6px; font-weight:700; font-size:13.5px; cursor:pointer;
+  }
+  .short-row button:disabled{ background:#ccc; cursor:not-allowed; }
+
+  .result-badge{
+    display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700;
+    padding:4px 10px; border-radius:12px; margin-top:10px;
+  }
+  .result-badge.ok{ background:#e7f6ec; color:var(--green); }
+  .result-badge.no{ background:#fde8ea; color:var(--red); }
+
+  .explain{
+    max-height:0; overflow:hidden; transition:max-height .4s ease;
+    font-size:13.5px; color:#444; background:var(--bg-sub);
+    border-left:3px solid var(--accent); border-radius:0 6px 6px 0;
+  }
+  .explain.open{ max-height:300px; margin-top:14px; padding:12px 14px; }
+  .explain b{ color:var(--accent); }
+
+  .final{
+    display:none; text-align:center; padding:40px 22px; margin:24px 0;
+    background:var(--text); color:#fff; border-radius:10px;
+  }
+  .final.show{ display:block; }
+  .final .grade{ font-family:'Playfair Display', Georgia, serif; font-size:56px; font-weight:900; color:var(--accent-sub); }
+  .final h3{ font-size:19px; margin:8px 0 6px; }
+  .final p{ font-size:13.5px; color:#ccc; margin-bottom:20px; }
+  .final button{
+    padding:12px 28px; background:var(--accent); color:#fff; border:none;
+    border-radius:6px; font-weight:700; font-size:14px; cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="titlebar">
+  <div class="eyebrow">Quiz · 이해도 점검</div>
+  <h1>AI 인프라 폭주, 얼마나 이해했나요?</h1>
+</div>
+
+<div class="scoreboard">
+  <div class="score-row">
+    <span>푼 문제 <b id="solvedCount">0</b> / 10</span>
+    <span>맞힌 문제 <b id="correctCount">0</b></span>
+    <span>정답률 <b id="rateCount">0%</b></span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" id="barFill"></div></div>
+</div>
+
+<div class="wrap">
+  <div id="quizList"></div>
+  <div class="final" id="finalBox">
+    <div class="grade" id="finalGrade">A</div>
+    <h3 id="finalTitle">완벽합니다!</h3>
+    <p id="finalMsg">오늘의 AI 인프라 폭주, 완전히 이해하셨네요.</p>
+    <button onclick="resetQuiz()">다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  { id:1, type:'ox', difficulty:'easy',
+    question:'전쟁 공포와 연준의 금리 인상 경고에도 불구하고, 이날 나스닥 지수는 하락 마감했다.',
+    answer:'X',
+    explanation:'나스닥은 오히려 <b>1.3%</b> 상승 마감했습니다. "오늘 나스닥은 1.3%나 올랐고, S&P500, 러셀2000 모두 꽤 큰 폭으로 상승 마감했다"는 내용이 원본에 나옵니다.' },
+
+  { id:2, type:'mc', difficulty:'easy',
+    question:'장 초반 급등했던 WTI 유가는 이날 배럴당 얼마까지 하락하며 마감했나?',
+    options:['65달러', '72달러', '80달러', '90달러'],
+    answer:'72달러',
+    explanation:'원본에 "결국 WTI 유가가 배럴당 <b>72달러</b> 때까지 오히려 하락하면서 마감했다"고 언급됩니다. 시장이 중간선거를 앞둔 정치적 계산을 반영해 장기 확전 가능성을 낮게 봤기 때문입니다.' },
+
+  { id:3, type:'mc', difficulty:'medium',
+    question:'마이크론이 2035년까지 미국 내 첨단 메모리 반도체 생산에 투자하겠다고 밝힌 총 규모는?',
+    options:['1,500억 달러', '2,000억 달러', '2,500억 달러', '3,000억 달러'],
+    answer:'2,500억 달러',
+    explanation:'"마이크론은 2035년까지 미국 내 첨단 메모리 반도체 생산에 무려 <b>2,500억 달러</b>를 투자하겠다고 밝혔다"고 나옵니다. 기존 2,000억 달러 계획에서 500억 달러를 상향한 수치입니다.' },
+
+  { id:4, type:'mc', difficulty:'medium',
+    question:'마이크론이 텍사스 실리콘 웨이퍼 공장과 관련해 5억 달러를 지원하며 10년 장기 공급 계약을 맺은 기업은?',
+    options:['TSMC', '글로벌웨이퍼스', '삼성전자', '인텔'],
+    answer:'글로벌웨이퍼스',
+    explanation:'"텍사스 공장의 경우 <b>글로벌웨이퍼스</b>라는 기업에 5억 달러를 지원하면서 10년짜리 장기 공급 계약을 맺었다"는 내용이 원본에 있습니다.' },
+
+  { id:5, type:'ox', difficulty:'easy',
+    question:'마이크론과 글로벌웨이퍼스의 텍사스 공급 계약 기간은 10년이다.',
+    answer:'O',
+    explanation:'원본에서 "10년짜리 장기 공급 계약을 맺었다"고 명확히 언급하며, 진행자도 "10년이요? 완전히 묶어두겠다는 거네요?"라고 확인합니다.' },
+
+  { id:6, type:'mc', difficulty:'medium',
+    question:'메타가 2027년까지 14기가와트 컴퓨팅 목표를 위해 TSMC를 통해 양산하기로 한 자체 설계 AI 칩의 이름은?',
+    options:['아이리스', '오로라', '트레이니엄', '블랙웰'],
+    answer:'아이리스',
+    explanation:'"당장 9월부터 <b>아이리스</b>라는 자체 설계 AI 칩을 대만 TSMC를 통해 양산하겠다는 내용이 폭로됐다"고 원본에 나옵니다.' },
+
+  { id:7, type:'short', difficulty:'hard',
+    question:'비트코인 채굴 기업이었던 마라홀딩스가 텍사스에 확보한 전력 부지 규모는 총 몇 기가와트인가? (숫자만, 예: 4.8)',
+    answer:'4.8',
+    explanation:'"총 4.8기가와트 규모의 AI 고성능 컴퓨팅 인프라 캠퍼스를 짓겠다고 발표하면서 주가가 15% 가까이 급등했다"고 언급됩니다.' },
+
+  { id:8, type:'mc', difficulty:'medium',
+    question:'렉스페이스는 팔란티어와의 AI 파트너십이라는 긍정적 뉴스에도 주가가 33.7% 폭락했다. 그 이유는?',
+    options:['CEO가 사임했기 때문', '2026년 매출·EBITDA 전망치를 크게 낮췄기 때문', '팔란티어가 계약을 파기했기 때문', '회계 부정이 적발됐기 때문'],
+    answer:'2026년 매출·EBITDA 전망치를 크게 낮췄기 때문',
+    explanation:'"2026년 매출이랑 이비티다(EBITDA) 전망치를 크게 낮췄다"는 내용이 원본에 나옵니다. AI 전환이 곧바로 실적으로 이어지지 않는다는 현실을 반영한 결과입니다.' },
+
+  { id:9, type:'mc', difficulty:'medium',
+    question:'이날 발표된 미국 신규 실업수당 청구 건수(21만 5천 건)는 시장 예상치와 비교해 어땠나?',
+    options:['예상치보다 낮게 나왔다', '예상치보다 높게 나왔다', '예상치와 정확히 일치했다', '발표가 연기됐다'],
+    answer:'예상치보다 낮게 나왔다',
+    explanation:'"신규 실업수당 청구 건수가 21만 5천 건으로 예상치보다 꽤 낮게 나왔다"고 나오며, 이는 고용이 탄탄하다는 신호로 해석되어 위험자산 선호를 부추겼습니다.' },
+
+  { id:10, type:'short', difficulty:'hard',
+    question:'아스트라제네카와 아이오니스가 공동 개발했으나 임상 3상에 실패해 아스트라제네카 시가총액 270억 달러를 증발시킨 심장질환 치료제의 이름은?',
+    answer:'와이누아',
+    explanation:'"아스트라제네카랑 아이오니스가 공동 개발하던 심장질환 치료제 <b>와이누아</b>가 임상 3상에서 실패"했다는 내용이 원본에 나옵니다. 아스트라제네카 주가는 7~10%, 아이오니스는 20~24% 폭락했습니다.' }
+];
+
+let state = { solved:0, correct:0 };
+
+function diffLabel(d){ return d==='easy' ? '쉬움' : d==='medium' ? '보통' : '어려움'; }
+function typeLabel(t){ return t==='mc' ? '객관식' : t==='ox' ? 'OX' : '단답형'; }
+
+function renderQuiz(){
+  const list = document.getElementById('quizList');
+  list.innerHTML = '';
+  QUIZ_DATA.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'qcard';
+    card.id = 'card-' + q.id;
+
+    let bodyHtml = '';
+    if(q.type === 'mc'){
+      bodyHtml = `<div class="options">` + q.options.map(opt =>
+        `<button class="opt" onclick="answerMC(${q.id}, '${opt.replace(/'/g,"\\'")}')">${opt}<span class="tagbadge" style="display:none;"></span></button>`
+      ).join('') + `</div>`;
+    } else if(q.type === 'ox'){
+      bodyHtml = `<div class="ox-row">
+        <button class="ox-btn" onclick="answerOX(${q.id}, 'O')">O</button>
+        <button class="ox-btn" onclick="answerOX(${q.id}, 'X')">X</button>
+      </div>`;
+    } else {
+      bodyHtml = `<div class="short-row">
+        <input type="text" id="short-${q.id}" placeholder="답을 입력하세요">
+        <button onclick="answerShort(${q.id})">제출</button>
+      </div>`;
+    }
+
+    card.innerHTML = `
+      <div class="qhead">
+        <span class="qnum">Q${idx+1}</span>
+        <span class="badge ${q.difficulty}">${diffLabel(q.difficulty)}</span>
+        <span class="badge type">${typeLabel(q.type)}</span>
+      </div>
+      <div class="qtext">${q.question}</div>
+      ${bodyHtml}
+      <div class="explain" id="explain-${q.id}"><b>해설</b> — <span></span></div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+function lockCard(id){
+  const card = document.getElementById('card-' + id);
+  card.querySelectorAll('button').forEach(b => b.disabled = true);
+  const input = card.querySelector('input');
+  if(input) input.disabled = true;
+}
+
+function showExplain(id, isCorrect, explanationText){
+  const el = document.getElementById('explain-' + id);
+  el.querySelector('span').innerHTML = explanationText;
+  el.classList.add('open');
+  const card = document.getElementById('card-' + id);
+  const badge = document.createElement('div');
+  badge.className = 'result-badge ' + (isCorrect ? 'ok' : 'no');
+  badge.innerHTML = isCorrect ? '✓ 정답!' : '✗ 오답';
+  card.querySelector('.qtext').after(badge);
+}
+
+function updateScore(isCorrect){
+  state.solved++;
+  if(isCorrect) state.correct++;
+  document.getElementById('solvedCount').innerText = state.solved;
+  document.getElementById('correctCount').innerText = state.correct;
+  const rate = Math.round((state.correct / state.solved) * 100);
+  document.getElementById('rateCount').innerText = rate + '%';
+  const fill = document.getElementById('barFill');
+  fill.style.width = rate + '%';
+  fill.style.background = rate >= 70 ? '#16a34a' : rate >= 40 ? '#ea8c1e' : '#dc2626';
+
+  if(state.solved === QUIZ_DATA.length){
+    setTimeout(showFinal, 400);
+  }
+}
+
+function answerMC(id, chosen){
+  const q = QUIZ_DATA.find(x => x.id === id);
+  const card = document.getElementById('card-' + id);
+  const opts = card.querySelectorAll('.opt');
+  const isCorrect = chosen === q.answer;
+  opts.forEach(btn => {
+    const text = btn.childNodes[0].textContent.trim();
+    if(text === q.answer){
+      btn.classList.add('correct');
+      btn.querySelector('.tagbadge').style.display = 'inline-block';
+      btn.querySelector('.tagbadge').innerText = '정답';
+    } else if(text === chosen && !isCorrect){
+      btn.classList.add('wrong');
+      btn.querySelector('.tagbadge').style.display = 'inline-block';
+      btn.querySelector('.tagbadge').innerText = '오답';
+    }
+  });
+  lockCard(id);
+  showExplain(id, isCorrect, q.explanation);
+  updateScore(isCorrect);
+}
+
+function answerOX(id, chosen){
+  const q = QUIZ_DATA.find(x => x.id === id);
+  const card = document.getElementById('card-' + id);
+  const btns = card.querySelectorAll('.ox-btn');
+  const isCorrect = chosen === q.answer;
+  btns.forEach(btn => {
+    const val = btn.innerText.trim();
+    if(val === q.answer) btn.classList.add('correct');
+    else if(val === chosen && !isCorrect) btn.classList.add('wrong');
+  });
+  lockCard(id);
+  showExplain(id, isCorrect, q.explanation);
+  updateScore(isCorrect);
+}
+
+function answerShort(id){
+  const q = QUIZ_DATA.find(x => x.id === id);
+  const input = document.getElementById('short-' + id);
+  const val = input.value.trim();
+  if(!val){ input.focus(); return; }
+  const isCorrect = val.replace(/\s/g,'') === q.answer.replace(/\s/g,'');
+  input.style.borderColor = isCorrect ? '#16a34a' : '#dc2626';
+  input.style.background = isCorrect ? '#e7f6ec' : '#fde8ea';
+  lockCard(id);
+  showExplain(id, isCorrect, q.explanation + (isCorrect ? '' : ` (정답: ${q.answer})`));
+  updateScore(isCorrect);
+}
+
+function showFinal(){
+  const rate = Math.round((state.correct / QUIZ_DATA.length) * 100);
+  let grade, title, msg;
+  if(rate >= 90){ grade='A'; title='완벽합니다!'; msg='오늘의 AI 인프라 폭주, 완전히 이해하셨네요.'; }
+  else if(rate >= 70){ grade='B'; title='훌륭해요!'; msg='핵심 흐름을 잘 짚어내셨습니다.'; }
+  else if(rate >= 50){ grade='C'; title='잘하셨어요!'; msg='조금만 더 복습하면 완벽해질 거예요.'; }
+  else { grade='D'; title='다시 도전해보세요'; msg='리포트를 한 번 더 읽고 재도전해보세요.'; }
+  document.getElementById('finalGrade').innerText = grade;
+  document.getElementById('finalTitle').innerText = title;
+  document.getElementById('finalMsg').innerText = msg + ` (${state.correct}/${QUIZ_DATA.length} 문제, 정답률 ${rate}%)`;
+  document.getElementById('finalBox').classList.add('show');
+  document.getElementById('finalBox').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function resetQuiz(){
+  state = { solved:0, correct:0 };
+  document.getElementById('solvedCount').innerText = '0';
+  document.getElementById('correctCount').innerText = '0';
+  document.getElementById('rateCount').innerText = '0%';
+  document.getElementById('barFill').style.width = '0%';
+  document.getElementById('finalBox').classList.remove('show');
+  renderQuiz();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+renderQuiz();
+</script>
+</body>
+</html>

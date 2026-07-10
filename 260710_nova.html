@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>전쟁 공포도 씹어먹은 AI 인프라 폭주</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,600&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#ffffff; --bg-sub:#fafafa;
+    --text:#1a1a1a; --text-sub:#777777;
+    --accent:#e11d48; --accent-sub:#f43f5e;
+    --line:#e5e5e5;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:'Noto Sans KR', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.75;
+  }
+  .wrap{max-width:680px; margin:0 auto; padding:0 22px 80px;}
+  .fade-in{ opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease; }
+  .fade-in.visible{ opacity:1; transform:translateY(0); }
+
+  /* HERO */
+  .hero{
+    padding:64px 22px 40px; text-align:center;
+    background:linear-gradient(180deg,#fff 0%, var(--bg-sub) 100%);
+    border-bottom:1px solid var(--line);
+  }
+  .hero .eyebrow{
+    font-size:12.5px; letter-spacing:.22em; color:var(--accent);
+    font-weight:700; text-transform:uppercase; margin-bottom:18px;
+  }
+  .hero h1{
+    font-family:'Playfair Display', serif; font-weight:900;
+    font-size:34px; line-height:1.28; letter-spacing:-.01em;
+    max-width:640px; margin:0 auto 18px;
+  }
+  .hero h1 em{ font-style:italic; color:var(--accent); }
+  .hero .sub{ font-size:14.5px; color:var(--text-sub); max-width:520px; margin:0 auto; }
+  .hero .meta{ margin-top:26px; font-size:12px; color:var(--text-sub); letter-spacing:.05em; }
+
+  section{ padding:44px 0; border-bottom:1px solid var(--line); }
+  section:last-of-type{ border-bottom:none; }
+
+  .kicker{
+    display:inline-block; font-size:11.5px; font-weight:700; color:#fff;
+    background:var(--accent); padding:4px 10px; border-radius:2px;
+    letter-spacing:.08em; margin-bottom:14px;
+  }
+  h2{
+    font-family:'Playfair Display', serif; font-weight:700; font-style:italic;
+    font-size:25px; line-height:1.35; margin-bottom:16px; letter-spacing:-.01em;
+  }
+  h3{
+    font-family:'Noto Sans KR', sans-serif; font-weight:700; font-size:16.5px;
+    color:var(--accent); margin:22px 0 10px;
+  }
+  p{ font-size:15px; color:#333; margin-bottom:14px; }
+  p.lead{ font-size:16.5px; color:var(--text); font-weight:500; }
+  strong{ color:var(--text); font-weight:700; }
+  .accent-text{ color:var(--accent); font-weight:700; }
+
+  .pullquote{
+    font-family:'Playfair Display', serif; font-style:italic; font-weight:600;
+    font-size:20px; line-height:1.5; color:var(--text);
+    border-left:3px solid var(--accent); padding:4px 0 4px 20px; margin:24px 0;
+  }
+
+  .stat-row{
+    display:flex; gap:10px; margin:20px 0; flex-wrap:wrap;
+  }
+  .stat-card{
+    flex:1 1 140px; background:var(--bg-sub); border:1px solid var(--line);
+    border-radius:4px; padding:16px 14px; text-align:center;
+  }
+  .stat-card .num{
+    font-family:'Playfair Display', serif; font-weight:900; font-size:22px;
+    color:var(--accent);
+  }
+  .stat-card .num.down{ color:#2563eb; }
+  .stat-card .label{ font-size:11.5px; color:var(--text-sub); margin-top:4px; }
+
+  .divider-word{
+    text-align:center; font-family:'Playfair Display', serif; font-style:italic;
+    font-size:18px; color:var(--text-sub); margin:6px 0 26px;
+  }
+
+  .chart-container{ position:relative; max-height:340px; background:var(--bg-sub); border:1px solid var(--line); border-radius:6px; padding:16px 12px 8px; margin:18px 0; }
+  .chart-container canvas{ opacity:0; transition:opacity .4s ease; max-height:290px; }
+  .chart-container.chart-ready canvas{ opacity:1; }
+  .chart-caption{ font-size:11.5px; color:var(--text-sub); text-align:center; margin-top:6px; }
+
+  .clue-cards{ display:flex; flex-direction:column; gap:10px; margin:18px 0; }
+  .clue-card{
+    background:var(--bg-sub); border:1px solid var(--line); border-radius:6px;
+    padding:16px; cursor:pointer; transition:border-color .2s ease;
+  }
+  .clue-card:hover{ border-color:var(--accent); }
+  .clue-card .q{
+    display:flex; align-items:center; justify-content:space-between;
+    font-weight:700; font-size:14.5px;
+  }
+  .clue-card .tag{
+    font-size:11px; background:var(--accent); color:#fff; padding:2px 8px; border-radius:10px;
+  }
+  .clue-card .arrow{ color:var(--accent); font-size:18px; transition:transform .25s ease; }
+  .clue-card.open .arrow{ transform:rotate(180deg); }
+  .clue-card .ans{
+    max-height:0; overflow:hidden; transition:max-height .35s ease;
+    font-size:13.5px; color:#444;
+  }
+  .clue-card.open .ans{ max-height:200px; margin-top:10px; padding-top:10px; border-top:1px dashed var(--line); }
+
+  .toggle-bar{ display:flex; gap:8px; margin:18px 0 14px; }
+  .toggle-btn{
+    flex:1; padding:10px; border:1px solid var(--line); background:var(--bg);
+    border-radius:6px; font-family:'Noto Sans KR'; font-weight:700; font-size:13.5px;
+    color:var(--text-sub); cursor:pointer; transition:all .2s ease;
+  }
+  .toggle-btn.active{ background:var(--accent); color:#fff; border-color:var(--accent); }
+
+  table{ width:100%; border-collapse:collapse; margin:14px 0; font-size:13.5px; }
+  th{ background:var(--accent); color:#fff; padding:9px 8px; text-align:left; font-weight:700; }
+  td{ background:var(--bg-sub); padding:9px 8px; border-bottom:1px solid var(--line); }
+  td.num{ text-align:right; font-weight:700; }
+  .up{ color:var(--accent); } .down-num{ color:#2563eb; }
+
+  .term{ font-size:12.5px; color:var(--text-sub); background:var(--bg-sub); border-radius:3px; padding:1px 5px; }
+
+  .closing{
+    background:var(--text); color:#fff; padding:56px 22px; text-align:center;
+    border-radius:0;
+  }
+  .closing h2{ color:#fff; font-style:italic; }
+  .closing p{ color:#ccc; }
+  .closing .question{
+    font-family:'Playfair Display', serif; font-style:italic; font-size:19px;
+    color:var(--accent-sub); margin:22px 0; line-height:1.6;
+  }
+  .footer-note{ text-align:center; font-size:11.5px; color:var(--text-sub); padding:26px 22px 0; }
+</style>
+</head>
+<body>
+
+<div class="hero fade-in">
+  <div class="eyebrow">Market Deep Dive · 2026.07.09</div>
+  <h1>전쟁의 포성도 못 막은<br><em>AI 인프라</em> 폭주</h1>
+  <p class="sub">이란-미국 무력 충돌 재개, 연준의 금리 인상 경고, IMF 성장률 하향까지 — 겹겹의 악재 속에서 나스닥은 왜 올랐나</p>
+  <div class="meta">CIA.chat · NOVA Real Invest · 2026년 7월 9일 방송 분석</div>
+</div>
+
+<div class="wrap">
+
+<section class="fade-in">
+  <span class="kicker">PROLOGUE</span>
+  <h2>상식이 통하지 않은 하루</h2>
+  <p class="lead">이란과 미국의 무력 충돌이 재개되고, 연준은 금리 인상 가능성을 경고했습니다. 원래대로라면 투자자들은 위험한 자산을 피해 현금이나 국채로 숨어야 정상입니다.</p>
+  <p>하지만 오늘 시장은 정반대로 움직였습니다. 투자자들은 오히려 <strong>가장 변동성이 큰 AI 인프라</strong> 쪽으로 수천억 달러를 쏟아부었습니다. 나스닥은 <span class="accent-text">1.3%</span> 올랐고, S&P500과 러셀2000도 함께 상승 마감했습니다.</p>
+  <div class="pullquote">"거대한 태풍이 몰아치는데, 사람들은 대피하기는커녕 서핑보드를 들고 바다로 뛰어드는 격이었다."</div>
+</section>
+
+<section class="fade-in">
+  <span class="kicker">01 · BACKGROUND</span>
+  <h2>이날을 뒤흔든 4가지 악재</h2>
+  <p>트럼프 대통령이 이란과의 휴전 종료를 선언하면서 무력 충돌이 재개됐습니다. 이란이 미군 시설을 미사일로 공격했다는 소식에 <span class="term">호르무즈 해협</span>(중동 원유가 지나가는 핵심 통로) 봉쇄 공포까지 겹쳤습니다.</p>
+  <p>동시에 연준의 6월 FOMC(연방공개시장위원회) 회의록이 공개됐는데, 위원들이 <strong>금리 인상 필요성</strong>을 직접 언급했습니다. 이유는 역설적으로 AI였습니다 — 빅테크들의 막대한 데이터센터·전력망 투자가 오히려 물가를 밀어올리고 있다는 겁니다.</p>
+  <div class="stat-row">
+    <div class="stat-card"><div class="num">3.0%</div><div class="label">IMF 2026 세계 성장률 전망 (하향)</div></div>
+    <div class="stat-card"><div class="num">↑</div><div class="label">中 6월 생산자물가 상승</div></div>
+    <div class="stat-card"><div class="num">+1.3%</div><div class="label">나스닥 상승 마감</div></div>
+  </div>
+  <p>전쟁, 금리 인상 경고, 성장 둔화, 물가 상승 압력 — 이 중 하나만 터져도 증시가 흔들리는 게 보통인데, 오늘은 넷이 겹쳤는데도 시장은 올랐습니다.</p>
+</section>
+
+<section class="fade-in">
+  <span class="kicker">02 · THE CLUES</span>
+  <h2>시장이 찾아낸 두 가지 단서</h2>
+  <p>시장 참여자들은 거시경제 악재 이면에서 자신들에게 유리한 신호를 재빨리 찾아냈습니다. 카드를 눌러 각 단서를 확인해보세요.</p>
+
+  <div class="clue-cards" id="clueCards">
+    <div class="clue-card" onclick="this.classList.toggle('open')">
+      <div class="q"><span>단서 1. 유가는 왜 오히려 떨어졌나</span><span class="arrow">⌄</span></div>
+      <div class="ans">WTI 유가는 장 초반 급등 후 오히려 <strong>배럴당 72달러</strong>까지 하락 마감했습니다. 시장은 올해 미국 중간선거를 의식한 트럼프 대통령이 유가 폭등으로 이어질 전면전까지는 가지 않을 것이라 베팅한 것으로 해석됩니다. 공포스러운 미사일 뉴스를 단기 정치 이벤트로 소화한 셈입니다.</div>
+    </div>
+    <div class="clue-card" onclick="this.classList.toggle('open')">
+      <div class="q"><span>단서 2. 고용은 여전히 탄탄했다</span><span class="arrow">⌄</span></div>
+      <div class="ans">이날 발표된 미국 신규 실업수당 청구 건수는 <strong>21만 5천 건</strong>으로 예상치보다 낮게 나왔습니다. 기업들이 아직 인력을 감축하지 않고 있다는 뜻입니다. 유가는 통제되고 고용은 무너지지 않았다는 두 퍼즐이 맞춰지자, 대기 자금이 굳이 국채·현금에 머물 이유가 사라졌습니다.</div>
+    </div>
+  </div>
+  <p>이렇게 위험 회피 이유가 사라진 자금은 곧바로 가장 확실하게 돈이 몰리는 곳, <strong>AI 인프라</strong>로 향했습니다.</p>
+</section>
+
+<section class="fade-in">
+  <span class="kicker">03 · HARDWARE BOOM</span>
+  <h2>하드웨어 생태계의 잔치</h2>
+  <h3>마이크론, 2,500억 달러 베팅</h3>
+  <p>마이크론은 2035년까지 미국 내 첨단 메모리 반도체 생산에 <strong>2,500억 달러</strong>를 투자하겠다고 밝혔습니다. 기존 계획이던 2,000억 달러에서 한 번에 500억 달러를 상향한 규모입니다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="microneChart" height="220"></canvas>
+  </div>
+  <div class="chart-caption">마이크론 미국 내 반도체 투자 계획 변화 (단위: 억 달러)</div>
+
+  <p>이 자금은 뉴욕주 클레이의 초대형 공장과 텍사스 실리콘 웨이퍼 공장에 투입됩니다. 특히 텍사스에서는 글로벌웨이퍼스에 5억 달러를 지원하며 <strong>10년짜리 장기 공급 계약</strong>을 맺었습니다. 목표는 미국 내 D램 생산 비중을 40%까지 끌어올리는 것입니다.</p>
+  <p>보통 이런 대규모 투자는 감가상각 부담 때문에 악재로 받아들여지기 쉽지만, 오늘 마이크론 주가는 장중 한때 9%까지 오르며 종가 기준 약 <span class="accent-text">4.5%</span> 상승했습니다. 그만큼 HBM(고대역폭 메모리, AI 서버용 고성능 칩) 수요가 공급을 압도하는 상황이 오래갈 거란 확신이 깔려 있습니다.</p>
+  <p>같은 날 SK하이닉스는 미국 ADR(예탁증서 — 한국 시장을 거치지 않고 미국에서 달러로 사고팔 수 있게 한 증서) 발행에 기관 수요가 폭발했습니다. 글로벌 메모리 1, 2위 기업이 동시에 대규모 자금을 끌어모으며 메모리 산업의 팽창 속도가 예상을 뛰어넘고 있음을 보여줬습니다.</p>
+
+  <h3>메타의 자체 칩 &amp; 마라홀딩스의 전력 베팅</h3>
+  <p>유출된 메타 내부 메모에 따르면, 메타는 2027년까지 컴퓨팅 능력을 <strong>14기가와트</strong>로 늘리는 목표를 세웠고, 9월부터 자체 설계 AI 칩 '아이리스'를 대만 TSMC를 통해 양산할 계획입니다.</p>
+  <p>빅테크가 자체 칩을 만들면 엔비디아에 악재로 보일 수 있지만, 실제로는 그렇지 않습니다. 엔비디아 칩을 사겠다는 전 세계 대기 수요가 워낙 크기 때문에, 누가 칩을 설계하든 결국 <strong>제조 장비</strong>를 파는 기업들이 수혜를 봅니다.</p>
+  <p>비트코인 채굴 기업이던 마라홀딩스는 텍사스에 4.8기가와트 규모의 전력 부지를 인수해 AI 고성능 컴퓨팅 캠퍼스를 짓겠다고 밝히며 주가가 15% 가까이 급등했습니다. 이 외에도 애플·브로드컴의 300억 달러 칩 공급 계약, 광통신 기업 루멘텀의 11.1% 급등이 이어졌습니다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="stockChart" height="240"></canvas>
+  </div>
+  <div class="chart-caption">이날 등락률 비교 — 하드웨어 인프라 vs 소프트웨어·전통산업 (%)</div>
+</section>
+
+<section class="fade-in">
+  <span class="kicker">04 · SOFTWARE COLLAPSE</span>
+  <h2>정반대로 흔들린 소프트웨어</h2>
+  <div class="toggle-bar">
+    <button class="toggle-btn active" onclick="showSW('sales')">세일즈포스</button>
+    <button class="toggle-btn" onclick="showSW('legal')">렉스페이스</button>
+    <button class="toggle-btn" onclick="showSW('sbux')">스타벅스·IBM</button>
+  </div>
+  <div id="swDetail" style="background:var(--bg-sub); border:1px solid var(--line); border-radius:6px; padding:16px; font-size:14px; min-height:110px;"></div>
+
+  <p style="margin-top:18px;">지난 수십 년간 기술 시장을 지배해 온 SaaS(구독형 소프트웨어) 기업들의 비즈니스 모델 자체가 흔들리고 있습니다. AI가 사람을 대체하면 계정당 과금 모델이 무너질 수 있다는 우려, 그리고 기업들이 외부 소프트웨어 대신 자체 AI로 내부 시스템을 구축하려는 움직임 때문입니다.</p>
+  <div class="pullquote">비싼 돈 주고 사 먹던 요리(구독형 소프트웨어) 대신, 주방기구(AI 하드웨어)만 사서 직접 요리해 먹겠다는 것.</div>
+</section>
+
+<section class="fade-in">
+  <span class="kicker">05 · REAL ECONOMY</span>
+  <h2>얼어붙은 실물 경제</h2>
+  <p>기술 기업들이 수십조 원을 쏟아붓는 동안, 소비자와 실물 경제는 차가운 현실을 마주하고 있었습니다.</p>
+  <table>
+    <tr><th>기업/지표</th><th>내용</th><th>결과</th></tr>
+    <tr><td>펩시코</td><td>매출 예상 상회, 북미 음료 판매량 -4%</td><td class="num down-num">주가 -3~4%</td></tr>
+    <tr><td>리바이스</td><td>호실적 + 가이던스 상향에도 기대치 미달</td><td class="num down-num">주가 하락</td></tr>
+    <tr><td>기존주택판매</td><td>6월 -2.4%, 중간가격 44만 600달러 (사상 최고)</td><td class="num">거래 위축</td></tr>
+    <tr><td>델타항공</td><td>제트유 가격 상승 우려</td><td class="num down-num">EPS -30% 우려</td></tr>
+  </table>
+  <p>펩시코 CEO는 이란 전쟁 여파로 오른 휘발유 가격이 소비를 압박하고 있다고 직접 밝혔습니다. AI 세계의 무한한 자본과 소비자의 팍팍한 지갑 사이 괴리가 뚜렷하게 드러난 하루였습니다.</p>
+
+  <h3>개별 악재도 가혹했다</h3>
+  <p>아스트라제네카·아이오니스가 공동 개발한 심장질환 치료제 '와이누아'의 임상 3상이 실패하며 아스트라제네카 시가총액이 270억 달러 증발, 주가는 7~10%, 아이오니스는 20~24% 폭락했습니다. 워너브라더스와 1,100억 달러 규모 합병을 추진 중이던 파라마운트는 반독점 조사 우려만으로 주가가 5.6~9% 하락했습니다.</p>
+</section>
+
+<div class="closing fade-in">
+  <span class="kicker">EPILOGUE</span>
+  <h2>계산서는 누가 낼 것인가</h2>
+  <p>오늘 목격한 건 두 개로 완전히 갈라진 세계였습니다. 중동의 포성도 멈추지 못한 AI 반도체·인프라 질주, 비즈니스 모델 붕괴를 걱정하는 소프트웨어 기업들, 그리고 물가와 씨름하는 실물 경제.</p>
+  <div class="question">"무한 성장을 쫓는 AI가 전력·물·토지, 그리고 소비자의 지갑이라는 지구의 물리적 한계와 충돌하는 순간, 이 인프라 과잉 투자의 마지막 청구서는 과연 누가 지불하게 될까?"</div>
+</div>
+
+<p class="footer-note">본 리포트는 2026년 7월 9일 방송된 CIA.chat·NOVA Real Invest 콘텐츠를 바탕으로 정리되었습니다.</p>
+
+</div>
+
+<script>
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+const chartConfigs = {};
+
+chartConfigs['microneChart'] = () => {
+  new Chart(document.getElementById('microneChart'), {
+    type: 'bar',
+    data: {
+      labels: ['기존 계획', '수정 발표 (2035년까지)'],
+      datasets: [{
+        label: '투자 규모 (억 달러)',
+        data: [2000, 2500],
+        backgroundColor: ['#6b7280', '#e11d48'],
+        borderRadius: 4,
+        barThickness: 46
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { label: (ctx) => `${ctx.parsed.y.toLocaleString()}억 달러` } } },
+      scales: { y: { beginAtZero: true, ticks: { callback: v => v.toLocaleString() } } }
+    }
+  });
+};
+
+chartConfigs['stockChart'] = () => {
+  new Chart(document.getElementById('stockChart'), {
+    type: 'bar',
+    data: {
+      labels: ['마라홀딩스', '루멘텀', '마이크론', '세일즈포스', 'IBM', '파라마운트', '아스트라제네카', '렉스페이스'],
+      datasets: [{
+        label: '당일 등락률 (%)',
+        data: [15, 11.1, 4.5, -2.5, -3, -7, -8.5, -33.7],
+        backgroundColor: (ctx) => ctx.raw >= 0 ? '#e11d48' : '#2563eb',
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { label: (ctx) => `${ctx.parsed.x > 0 ? '+' : ''}${ctx.parsed.x}%` } } },
+      scales: { x: { ticks: { callback: v => v + '%' } } }
+    }
+  });
+};
+
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+const swData = {
+  sales: `<strong>세일즈포스</strong> — BofA·키뱅크의 투자의견 하향으로 주가 약 -2~3%. 주력 AI 제품 '에이전트포스'가 실질 매출·모멘텀을 증명하지 못한다는 지적. AI가 인력을 대체하면 계정당 과금 모델 자체가 흔들릴 수 있다는 우려가 커졌습니다.`,
+  legal: `<strong>렉스페이스</strong> — 팔란티어와의 AI 파트너십이라는 긍정적 뉴스에도 불구, 2026년 매출·EBITDA 전망치를 크게 낮추면서 주가가 무려 -33.7% 폭락. AI 전환이 곧바로 실적으로 이어지지 않는다는 현실을 그대로 반영했습니다.`,
+  sbux: `<strong>스타벅스·IBM</strong> — 스타벅스가 연간 4억 달러에 달하는 외부 소프트웨어 지출을 줄이고, MS 재고관리 시스템과 IBM 유지보수 툴을 대체할 자체 AI를 개발 중이라는 소식. IBM 주가 -2~4%, 마이크로소프트 -0.8% 하락.`
+};
+function showSW(key){
+  document.getElementById('swDetail').innerHTML = swData[key];
+  document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+showSW('sales');
+</script>
+</body>
+</html>
