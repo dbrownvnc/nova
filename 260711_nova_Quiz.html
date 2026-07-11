@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>퀴즈 — 미국 거시경제 위기 압도한 AI 실물 수요</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,600&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --bg-soft:#fafafa; --text:#1a1a1a; --text-soft:#777777;
+    --accent:#e11d48; --accent2:#f43f5e; --line:#e5e5e5; --blue:#2563eb; --gray:#6b7280;
+    --green:#16a34a; --green-bg:#eafaf0; --red-bg:#fdecec;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);}
+  body{font-family:'Noto Sans KR',sans-serif;line-height:1.6;max-width:520px;margin:0 auto;padding-bottom:60px;}
+
+  .header{padding:28px 20px 18px;border-bottom:1px solid var(--line);}
+  .eyebrow{font-size:11px;letter-spacing:.2em;font-weight:700;color:var(--accent);text-transform:uppercase;}
+  h1{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;margin:10px 0 6px;line-height:1.3;}
+  .header p{font-size:13px;color:var(--text-soft);margin:0;}
+
+  /* sticky scoreboard */
+  .scoreboard{
+    position:sticky; top:0; z-index:50;
+    background:#fff; border-bottom:1px solid var(--line);
+    padding:12px 20px; box-shadow:0 2px 10px rgba(0,0,0,0.04);
+  }
+  .score-row{display:flex; justify-content:space-between; font-size:12px; color:var(--text-soft); margin-bottom:8px; font-weight:500;}
+  .score-row b{color:var(--text); font-family:'Playfair Display',serif; font-size:14px;}
+  .progress-track{width:100%; height:8px; background:var(--line); border-radius:5px; overflow:hidden;}
+  .progress-fill{height:100%; width:0%; background:#dc2626; transition:width .4s ease, background .4s ease; border-radius:5px;}
+
+  .quiz-list{padding:20px;}
+  .qcard{
+    background:var(--bg-soft); border:1px solid var(--line); border-radius:12px;
+    padding:18px 16px; margin-bottom:16px;
+  }
+  .qhead{display:flex; align-items:center; gap:8px; margin-bottom:10px;}
+  .qnum{font-family:'Playfair Display',serif; font-style:italic; font-weight:700; color:var(--accent); font-size:14px;}
+  .badge{font-size:10px; font-weight:700; padding:3px 8px; border-radius:20px;}
+  .badge-easy{background:#e0f2fe; color:#0369a1;}
+  .badge-medium{background:#fef3c7; color:#b45309;}
+  .badge-hard{background:#fde7ec; color:var(--accent);}
+  .badge-type{background:#ede9fe; color:#6d28d9; margin-left:auto;}
+  .qtext{font-size:14.5px; font-weight:500; margin-bottom:14px; line-height:1.55;}
+
+  .options{display:flex; flex-direction:column; gap:8px;}
+  .opt{
+    display:flex; align-items:center; gap:10px;
+    padding:11px 12px; background:#fff; border:1px solid var(--line); border-radius:8px;
+    font-size:13.5px; cursor:pointer; transition:all .15s; position:relative;
+  }
+  .opt:active{transform:scale(0.985);}
+  .opt.correct{background:var(--green-bg); border-color:var(--green); color:#166534;}
+  .opt.wrong{background:var(--red-bg); border-color:#ef4444; color:#991b1b;}
+  .opt.disabled{pointer-events:none; opacity:.85;}
+  .opt-badge{
+    margin-left:auto; font-size:10.5px; font-weight:700; padding:2px 7px; border-radius:20px; white-space:nowrap;
+  }
+  .opt-badge.ok{background:var(--green); color:#fff;}
+  .opt-badge.no{background:#ef4444; color:#fff;}
+
+  .ox-row{display:flex; gap:10px;}
+  .ox-btn{
+    flex:1; padding:16px; text-align:center; font-size:22px; font-weight:900;
+    background:#fff; border:1px solid var(--line); border-radius:10px; cursor:pointer; transition:all .15s;
+    font-family:'Playfair Display',serif;
+  }
+  .ox-btn.correct{background:var(--green-bg); border-color:var(--green); color:#166534;}
+  .ox-btn.wrong{background:var(--red-bg); border-color:#ef4444; color:#991b1b;}
+  .ox-btn.disabled{pointer-events:none; opacity:.85;}
+
+  .short-row{display:flex; gap:8px;}
+  .short-input{
+    flex:1; padding:11px 12px; border:1px solid var(--line); border-radius:8px;
+    font-size:13.5px; font-family:'Noto Sans KR',sans-serif; background:#fff; color:var(--text);
+  }
+  .short-input:disabled{background:var(--bg-soft); opacity:.85;}
+  .short-submit{
+    padding:11px 16px; background:var(--accent); color:#fff; border:none; border-radius:8px;
+    font-weight:700; font-size:13px; cursor:pointer; white-space:nowrap;
+  }
+  .short-submit:disabled{background:var(--gray); pointer-events:none;}
+  .short-feedback{margin-top:10px; font-size:12.5px; font-weight:700; display:none; padding:8px 10px; border-radius:6px;}
+  .short-feedback.correct{display:block; background:var(--green-bg); color:#166534;}
+  .short-feedback.wrong{display:block; background:var(--red-bg); color:#991b1b;}
+
+  .explain{
+    margin-top:14px; padding:13px 14px; background:#fff; border-left:3px solid var(--accent);
+    border-radius:4px; font-size:12.5px; color:var(--text-soft); line-height:1.6;
+    display:none; animation:reveal .35s ease;
+  }
+  .explain.show{display:block;}
+  @keyframes reveal{ from{opacity:0; transform:translateY(-6px);} to{opacity:1; transform:translateY(0);} }
+  .explain b{color:var(--text);}
+  .explain .src{
+    display:block; margin-top:8px; font-size:11.5px; color:var(--gray); font-style:italic;
+    border-top:1px dashed var(--line); padding-top:8px;
+  }
+
+  /* final result */
+  .final{
+    display:none; margin:20px; padding:34px 22px; text-align:center;
+    background:linear-gradient(160deg,#fff 0%, var(--bg-soft) 100%);
+    border:1px solid var(--line); border-radius:16px;
+  }
+  .final.show{display:block; animation:reveal .5s ease;}
+  .final .grade{
+    font-family:'Playfair Display',serif; font-size:56px; font-weight:900; color:var(--accent); line-height:1;
+  }
+  .final .grade-label{font-size:12px; color:var(--text-soft); letter-spacing:.15em; text-transform:uppercase; margin-top:6px; font-weight:700;}
+  .final .score-big{font-size:16px; margin:16px 0 4px; font-weight:700;}
+  .final .msg{font-size:13.5px; color:var(--text-soft); margin:10px 0 22px; line-height:1.6;}
+  .retry-btn{
+    padding:12px 28px; background:var(--accent); color:#fff; border:none; border-radius:30px;
+    font-weight:700; font-size:13.5px; cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="eyebrow">QUIZ · 10 Questions</div>
+  <h1>오늘의 시황, 얼마나 이해했나요?</h1>
+  <p>SK하이닉스 상장부터 AI 인플레이션 역설까지 — 방송 내용을 바탕으로 한 10문제</p>
+</div>
+
+<div class="scoreboard">
+  <div class="score-row">
+    <span>푼 문제 <b id="solvedCount">0</b> / 10</span>
+    <span>맞힌 문제 <b id="correctCount">0</b></span>
+    <span>정답률 <b id="accuracyPct">0%</b></span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<div class="quiz-list" id="quizList"></div>
+<div class="final" id="finalCard"></div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id:1, type:'mc', difficulty:'medium',
+    question:'연준이 이번 봄 인플레이션 상승 원인으로 지목한 세 가지 중, 방송에서 "가장 놀라웠다"고 언급한 세 번째 원인은?',
+    options:['관세의 영향','이란 전쟁 여파로 인한 에너지 비용 상승','AI 인프라 구축에 따른 반도체·메모리 가격 압력','달러 약세로 인한 수입물가 상승'],
+    answer:2,
+    explanation:'연준은 인플레이션 상승 원인으로 ①관세 ②이란 전쟁발 에너지 비용 상승 ③AI 인프라 구축에 따른 반도체·메모리 가격 압력, 세 가지를 지목했습니다. 방송에서는 이 세 번째 원인에 대해 "저도 자료 보고 약간 멍했어요"라며 놀라움을 표현했습니다.'
+  },
+  {
+    id:2, type:'short', difficulty:'easy',
+    question:'SK하이닉스가 나스닥 상장으로 조달한 금액은 약 얼마인가요? (단위 포함, 예: OO억 달러)',
+    accept:['265억 달러','265억달러','26.5조원','26,500,000,000달러','$26.5 billion','265억'],
+    answer:'265억 달러',
+    explanation:'SK하이닉스는 주당 149달러에 1억 7,790만 주를 발행해 265억 달러를 조달했습니다. 이는 스페이스X 이후 최대 규모이자 외국 기업의 미국 상장 역사상 최대 규모입니다.'
+  },
+  {
+    id:3, type:'ox', difficulty:'easy',
+    question:'SK하이닉스의 나스닥 상장 티커명은 "SKHY"이다.',
+    answer:true,
+    explanation:'맞습니다. 방송에서 "티커명이 SKHY로 거래를 시작했는데 그 결과가 진짜 경이로웠다"고 설명했습니다. ADR(미국예탁증서) 형태로 상장했습니다.'
+  },
+  {
+    id:4, type:'mc', difficulty:'hard',
+    question:'SK하이닉스 상장 직후 경쟁사 마이크론 주가가 장 초반 하락한 이유로 방송이 설명한 것은?',
+    options:['마이크론의 실적이 시장 기대치를 크게 밑돌아서','마이크론의 HBM 기술 경쟁력이 훼손됐다는 소식 때문에','포트폴리오 비중을 맞추기 위한 기계적인 패시브 자금 로테이션 때문에','마이크론이 자체적으로 감산을 발표했기 때문에'],
+    answer:2,
+    explanation:'방송은 이를 "265억 달러짜리 거대한 바위가 포트폴리오 바구니에 굴러 들어온 것"에 비유했습니다. 기관들이 비중을 맞추기 위해 마이크론 같은 기존 종목을 조금씩 팔아 자리를 비워준 것이며, 마이크론의 펀더멘털이 훼손된 것은 아니라고 설명했습니다.'
+  },
+  {
+    id:5, type:'short', difficulty:'easy',
+    question:'메타가 2027년까지 확장하겠다고 발표한 컴퓨팅 용량은 몇 기가와트(GW)인가요? (숫자만)',
+    accept:['14','14gw','14기가와트','14 기가와트','14GW'],
+    answer:'14기가와트',
+    explanation:'메타는 컴퓨팅 용량을 올해 7기가와트에서 2027년 14기가와트로, 정확히 두 배 늘리겠다고 발표했습니다. 방송에서는 이를 "웬만한 소규모 국가의 전체 전력망 규모와 맞먹는다"고 설명했습니다.'
+  },
+  {
+    id:6, type:'mc', difficulty:'hard',
+    question:'메타가 브로드컴과 함께 자체 AI칩을 생산하기로 한 것에 대해, 방송이 "자동차 공장" 비유로 설명한 핵심 요지는 무엇인가?',
+    options:['자체 칩이 엔비디아 GPU를 완전히 대체할 것이다','자체 칩은 가벼운 추론 작업에 쓰이는 보완재이며 학습용 GPU 수요는 줄지 않는다','자체 칩 생산으로 메타의 엔비디아 의존도가 즉시 사라진다','자체 칩은 비용 절감을 위한 임시방편에 불과하다'],
+    answer:1,
+    explanation:'방송은 학습(training)을 "강력하고 비싼 불도저(엔비디아 GPU)가 필요한 작업", 추론(inference) 등 가벼운 반복 작업을 "맞춤형 컨베이어 벨트(자체 칩)로 충분한 작업"에 비유했습니다. 즉 완전한 대체가 아니라 효율적인 보완이라는 것이 핵심입니다.'
+  },
+  {
+    id:7, type:'ox', difficulty:'medium',
+    question:'메타의 자체 AI칩 생산 발표 이후, 엔비디아 주가는 하락했다.',
+    answer:false,
+    explanation:'틀렸습니다. 엔비디아 주가는 오히려 4% 급등해 시가총액 5조 달러를 다시 넘어섰습니다. 메타의 인프라 확장이 오히려 엔비디아 GPU 수요를 함께 키운다고 시장이 해석했기 때문입니다.'
+  },
+  {
+    id:8, type:'mc', difficulty:'medium',
+    question:'델타항공이 훌륭한 실적(EPS 1.56달러)에도 주가가 하락한 가장 큰 이유는?',
+    options:['승객 수가 예상보다 적었기 때문에','역대 최대 규모인 44억 1천만 달러의 연료비 지출 때문에','경쟁 항공사와의 가격 경쟁 심화 때문에','노조와의 임금 협상 결렬 때문에'],
+    answer:1,
+    explanation:'델타항공은 이란발 지정학적 긴장으로 유가가 오르면서 이번 분기에만 자사 역사상 최대치인 44억 1천만 달러를 연료비로 지출했습니다. 훌륭한 실적에도 불구하고 비용 상승 우려가 이를 압도해 주가는 1.8~3% 하락했습니다.'
+  },
+  {
+    id:9, type:'mc', difficulty:'medium',
+    question:'AI와 무관한 윤활유 브랜드 WD-40이 10.7% 급등한 배경으로 방송이 강조한 핵심 개념은?',
+    options:['정부 보조금 지원','가격 결정력(대체재가 없어 가격을 올려도 수요가 유지되는 힘)','대규모 자사주 매입','해외 시장 신규 진출'],
+    answer:1,
+    explanation:'WD-40은 대체할 저렴한 복제품이 마땅치 않은 필수재적 성격 덕분에, 원자재·인건비 상승분을 제품 가격 인상으로 전가하고도 소비자 이탈 없이 이익률을 방어했습니다. 방송은 이를 "가치투자의 가장 고전적이고 강력한 무기, 가격 결정력"이라고 설명했습니다.'
+  },
+  {
+    id:10, type:'mc', difficulty:'medium',
+    question:'스테이블코인 USDC 발행사 서클(Circle)이 미국 통화감독청(OCC)으로부터 받은 것은?',
+    options:['가상자산 거래소 라이선스','국립신탁은행 설립 최종 승인','연방준비제도 이사회 의석','나스닥 우선 상장 자격'],
+    answer:1,
+    explanation:'서클은 OCC로부터 국립신탁은행 설립에 대한 최종 승인을 받았습니다. 이로써 전통 시중은행과 동등한 수준의 규제·보호를 받는 합법적 수탁기관이 되어, 기관 투자자 자금이 안심하고 유입될 수 있는 공식 통로가 열렸습니다.'
+  }
+];
+
+let state = { solved:0, correct:0 };
+
+const typeLabel = {mc:'객관식', short:'단답형', ox:'OX'};
+const diffLabel = {easy:'쉬움', medium:'보통', hard:'어려움'};
+
+function renderQuiz(){
+  const list = document.getElementById('quizList');
+  list.innerHTML = '';
+  QUIZ_DATA.forEach((q, idx)=>{
+    const card = document.createElement('div');
+    card.className = 'qcard';
+    card.id = 'qcard-'+q.id;
+
+    let bodyHtml = `
+      <div class="qhead">
+        <span class="qnum">Q${idx+1}</span>
+        <span class="badge badge-${q.difficulty}">${diffLabel[q.difficulty]}</span>
+        <span class="badge badge-type">${typeLabel[q.type]}</span>
+      </div>
+      <div class="qtext">${q.question}</div>
+    `;
+
+    if(q.type === 'mc'){
+      bodyHtml += `<div class="options" id="opts-${q.id}">`;
+      q.options.forEach((opt, i)=>{
+        bodyHtml += `<div class="opt" data-idx="${i}" onclick="answerMC(${q.id}, ${i})"><span>${opt}</span></div>`;
+      });
+      bodyHtml += `</div>`;
+    } else if(q.type === 'ox'){
+      bodyHtml += `
+        <div class="ox-row">
+          <div class="ox-btn" onclick="answerOX(${q.id}, true)">O</div>
+          <div class="ox-btn" onclick="answerOX(${q.id}, false)">X</div>
+        </div>`;
+    } else if(q.type === 'short'){
+      bodyHtml += `
+        <div class="short-row">
+          <input type="text" class="short-input" id="short-${q.id}" placeholder="답을 입력하세요">
+          <button class="short-submit" id="short-btn-${q.id}" onclick="answerShort(${q.id})">제출</button>
+        </div>
+        <div class="short-feedback" id="short-fb-${q.id}"></div>`;
+    }
+
+    bodyHtml += `<div class="explain" id="explain-${q.id}"><b>해설</b><br>${q.explanation}</div>`;
+
+    card.innerHTML = bodyHtml;
+    list.appendChild(card);
+  });
+}
+
+function updateScoreboard(){
+  document.getElementById('solvedCount').textContent = state.solved;
+  document.getElementById('correctCount').textContent = state.correct;
+  const pct = state.solved ? Math.round((state.correct/state.solved)*100) : 0;
+  document.getElementById('accuracyPct').textContent = pct + '%';
+  const fill = document.getElementById('progressFill');
+  fill.style.width = (state.solved/10*100) + '%';
+  if(pct < 40) fill.style.background = '#dc2626';
+  else if(pct < 70) fill.style.background = '#f59e0b';
+  else fill.style.background = '#16a34a';
+
+  if(state.solved >= 10){
+    showFinal();
+  }
+}
+
+function markSolved(isCorrect){
+  state.solved += 1;
+  if(isCorrect) state.correct += 1;
+  updateScoreboard();
+}
+
+function revealExplain(qid){
+  document.getElementById('explain-'+qid).classList.add('show');
+}
+
+function answerMC(qid, chosenIdx){
+  const q = QUIZ_DATA.find(x=>x.id===qid);
+  const optsWrap = document.getElementById('opts-'+qid);
+  if(optsWrap.dataset.done) return;
+  optsWrap.dataset.done = '1';
+
+  const opts = optsWrap.querySelectorAll('.opt');
+  opts.forEach((el, i)=>{
+    el.classList.add('disabled');
+    el.onclick = null;
+    if(i === q.answer){
+      el.classList.add('correct');
+      el.insertAdjacentHTML('beforeend', '<span class="opt-badge ok">✓ 정답!</span>');
+    } else if(i === chosenIdx){
+      el.classList.add('wrong');
+      el.insertAdjacentHTML('beforeend', '<span class="opt-badge no">✗ 오답</span>');
+    }
+  });
+  revealExplain(qid);
+  markSolved(chosenIdx === q.answer);
+}
+
+function answerOX(qid, chosen){
+  const q = QUIZ_DATA.find(x=>x.id===qid);
+  const card = document.getElementById('qcard-'+qid);
+  const btns = card.querySelectorAll('.ox-btn');
+  if(card.dataset.oxDone) return;
+  card.dataset.oxDone = '1';
+
+  btns.forEach(btn=>{
+    const isO = btn.textContent.trim() === 'O';
+    const btnVal = isO ? true : false;
+    btn.classList.add('disabled');
+    btn.onclick = null;
+    if(btnVal === q.answer){
+      btn.classList.add('correct');
+    } else if(btnVal === chosen){
+      btn.classList.add('wrong');
+    }
+  });
+  revealExplain(qid);
+  markSolved(chosen === q.answer);
+}
+
+function normalize(s){
+  return s.toString().trim().toLowerCase().replace(/\s+/g,'').replace(/[.,]/g,'');
+}
+
+function answerShort(qid){
+  const q = QUIZ_DATA.find(x=>x.id===qid);
+  const input = document.getElementById('short-'+qid);
+  const btn = document.getElementById('short-btn-'+qid);
+  if(input.disabled) return;
+  const val = input.value.trim();
+  if(!val){
+    input.focus();
+    return;
+  }
+  const normVal = normalize(val);
+  const isCorrect = q.accept.some(a => normalize(a) === normVal || normVal.includes(normalize(a)) || normalize(a).includes(normVal));
+
+  input.disabled = true;
+  btn.disabled = true;
+  const fb = document.getElementById('short-fb-'+qid);
+  fb.classList.add(isCorrect ? 'correct' : 'wrong');
+  fb.textContent = isCorrect ? `✓ 정답! (모범답안: ${q.answer})` : `✗ 오답 · 정답: ${q.answer}`;
+
+  revealExplain(qid);
+  markSolved(isCorrect);
+}
+
+function showFinal(){
+  const finalCard = document.getElementById('finalCard');
+  const pct = Math.round((state.correct/10)*100);
+  let grade, msg;
+  if(pct >= 90){ grade='A'; msg='완벽에 가까운 이해도예요! 오늘 시황의 핵심 논리를 정확히 짚어냈습니다.'; }
+  else if(pct >= 70){ grade='B'; msg='탄탄하게 이해하셨네요. 몇 가지 디테일만 다시 살펴보면 완벽할 것 같아요.'; }
+  else if(pct >= 50){ grade='C'; msg='큰 흐름은 잡으셨어요. 해설을 다시 읽어보며 세부 내용을 보완해보세요.'; }
+  else { grade='D'; msg='리포트를 한 번 더 읽어보시길 추천해요. 핵심 이벤트 위주로 다시 정리해보세요.'; }
+
+  finalCard.innerHTML = `
+    <div class="grade">${grade}</div>
+    <div class="grade-label">Final Grade</div>
+    <div class="score-big">${state.correct} / 10 정답 · 정답률 ${pct}%</div>
+    <div class="msg">${msg}</div>
+    <button class="retry-btn" onclick="resetQuiz()">다시 풀기</button>
+  `;
+  finalCard.classList.add('show');
+  finalCard.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function resetQuiz(){
+  state = { solved:0, correct:0 };
+  document.getElementById('finalCard').classList.remove('show');
+  document.getElementById('finalCard').innerHTML = '';
+  renderQuiz();
+  updateScoreboard();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+renderQuiz();
+updateScoreboard();
+</script>
+</body>
+</html>

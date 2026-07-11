@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>미국 거시경제 위기 압도한 AI 실물 수요 — SK하이닉스</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,600&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-soft:#fafafa;
+    --text:#1a1a1a;
+    --text-soft:#777777;
+    --accent:#e11d48;
+    --accent2:#f43f5e;
+    --line:#e5e5e5;
+    --blue:#2563eb;
+    --gray:#6b7280;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);}
+  body{
+    font-family:'Noto Sans KR',sans-serif;
+    font-weight:400;
+    line-height:1.75;
+    max-width:520px;
+    margin:0 auto;
+    padding:0 0 60px 0;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--accent);color:#fff;}
+
+  /* ---------- Typography ---------- */
+  h1,h2,h3{font-family:'Playfair Display',serif;margin:0;color:var(--text);}
+  .eyebrow{
+    font-family:'Noto Sans KR',sans-serif;
+    font-size:11px;
+    letter-spacing:.22em;
+    font-weight:700;
+    color:var(--accent);
+    text-transform:uppercase;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:56px 24px 34px;
+    border-bottom:1px solid var(--line);
+    position:relative;
+  }
+  .hero .kicker{display:flex;align-items:center;gap:8px;margin-bottom:18px;}
+  .hero .kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);}
+  .hero h1{
+    font-size:34px;
+    line-height:1.18;
+    font-weight:900;
+    letter-spacing:-0.01em;
+    margin-bottom:16px;
+  }
+  .hero h1 em{color:var(--accent);font-style:italic;}
+  .hero .sub{
+    font-size:14.5px;
+    color:var(--text-soft);
+    font-weight:400;
+    line-height:1.6;
+  }
+  .hero .meta{
+    display:flex;
+    gap:14px;
+    margin-top:22px;
+    font-size:12px;
+    color:var(--text-soft);
+    font-weight:500;
+  }
+  .hero .meta span{position:relative;padding-left:14px;}
+  .hero .meta span:first-child{padding-left:0;}
+  .hero .meta span:not(:first-child)::before{
+    content:"";position:absolute;left:0;top:4px;width:4px;height:4px;border-radius:50%;background:var(--gray);
+  }
+
+  /* ---------- Sections ---------- */
+  section{padding:44px 24px;border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  .section-num{
+    font-family:'Playfair Display',serif;
+    font-style:italic;
+    font-size:13px;
+    color:var(--accent);
+    margin-bottom:10px;
+    display:block;
+  }
+  h2.title{
+    font-size:24px;
+    font-weight:700;
+    line-height:1.3;
+    margin-bottom:6px;
+  }
+  h2.title .accent{color:var(--accent);}
+  .lede{
+    font-size:14px;
+    color:var(--text-soft);
+    margin-bottom:22px;
+    line-height:1.65;
+  }
+  p{font-size:15px;margin:0 0 16px;color:var(--text);}
+  p:last-child{margin-bottom:0;}
+  strong{font-weight:700;}
+  .note{
+    font-size:13px;
+    color:var(--text-soft);
+    background:var(--bg-soft);
+    border-left:3px solid var(--accent);
+    padding:12px 14px;
+    border-radius:2px;
+    margin:18px 0;
+  }
+
+  /* ---------- Pull quote ---------- */
+  .pullquote{
+    font-family:'Playfair Display',serif;
+    font-style:italic;
+    font-size:19px;
+    line-height:1.5;
+    color:var(--text);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:20px 4px;
+    margin:24px 0;
+  }
+  .pullquote span{color:var(--accent);font-weight:700;font-style:normal;}
+
+  /* ---------- Stat grid ---------- */
+  .stat-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin:20px 0;
+    border-radius:4px;
+    overflow:hidden;
+  }
+  .stat-cell{
+    background:#fff;
+    padding:16px 14px;
+  }
+  .stat-cell .num{
+    font-family:'Playfair Display',serif;
+    font-weight:900;
+    font-size:22px;
+    color:var(--accent);
+    display:block;
+    line-height:1.1;
+  }
+  .stat-cell .lbl{
+    font-size:11.5px;
+    color:var(--text-soft);
+    margin-top:4px;
+    display:block;
+  }
+
+  /* ---------- Fade in / chart ---------- */
+  .fade-in{opacity:0;transform:translateY(18px);transition:opacity .7s ease, transform .7s ease;}
+  .fade-in.visible{opacity:1;transform:translateY(0);}
+  .chart-container{position:relative;max-height:340px;background:var(--bg-soft);border-radius:8px;padding:16px 12px 8px;margin:20px 0;}
+  .chart-container canvas{opacity:0;transition:opacity .4s ease;max-height:300px;}
+  .chart-container.chart-ready canvas{opacity:1;}
+  .chart-title{font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+  .chart-title::before{content:"";width:8px;height:8px;background:var(--accent);border-radius:2px;}
+  .chart-caption{font-size:11px;color:var(--text-soft);margin-top:8px;text-align:center;}
+
+  /* ---------- Interactive widgets ---------- */
+  .widget{
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:20px 16px;
+    margin:22px 0;
+  }
+  .widget-head{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+  .widget-icon{font-size:15px;}
+  .widget-title{font-size:14px;font-weight:700;}
+  .widget-desc{font-size:12px;color:var(--text-soft);margin-bottom:16px;line-height:1.55;}
+  .slider-row{margin-bottom:16px;}
+  .slider-row:last-of-type{margin-bottom:0;}
+  .slider-label{
+    display:flex;justify-content:space-between;
+    font-size:12.5px;font-weight:500;margin-bottom:8px;
+  }
+  .slider-label .val{color:var(--accent);font-weight:700;font-family:'Playfair Display',serif;}
+  input[type=range]{
+    -webkit-appearance:none;width:100%;height:4px;border-radius:2px;
+    background:var(--line);outline:none;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+    background:var(--accent);cursor:pointer;border:3px solid #fff;box-shadow:0 0 0 1px var(--accent);
+  }
+  input[type=range]::-moz-range-thumb{
+    width:18px;height:18px;border-radius:50%;background:var(--accent);cursor:pointer;border:3px solid #fff;box-shadow:0 0 0 1px var(--accent);
+  }
+  .result-box{
+    margin-top:16px;
+    background:#fff;
+    border-radius:8px;
+    padding:14px;
+    border:1px dashed var(--accent2);
+  }
+  .result-row{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;padding:5px 0;}
+  .result-row .r-label{color:var(--text-soft);}
+  .result-row .r-val{font-weight:700;font-family:'Playfair Display',serif;font-size:15px;}
+  .result-verdict{
+    margin-top:10px;font-size:12.5px;font-weight:500;
+    padding:9px 10px;border-radius:6px;background:var(--bg-soft);
+    line-height:1.5;
+  }
+  .reset-btn{
+    margin-top:14px;
+    width:100%;
+    padding:10px;
+    background:transparent;
+    border:1px solid var(--accent);
+    color:var(--accent);
+    font-family:'Noto Sans KR',sans-serif;
+    font-weight:700;
+    font-size:12.5px;
+    border-radius:6px;
+    cursor:pointer;
+    transition:background .2s, color .2s;
+  }
+  .reset-btn:active{background:var(--accent);color:#fff;}
+
+  /* ---------- Basket rotation widget ---------- */
+  .basket{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:14px 0 6px;
+  }
+  .basket-bar{
+    flex:1;height:34px;border-radius:8px;overflow:hidden;display:flex;
+    border:1px solid var(--line);
+  }
+  .basket-seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:10.5px;color:#fff;font-weight:700;transition:width .35s ease;white-space:nowrap;overflow:hidden;}
+  .seg-sk{background:var(--accent);}
+  .seg-mu{background:var(--gray);}
+  .seg-etc{background:#d1d5db;color:#555;}
+  .basket-legend{display:flex;gap:14px;font-size:11px;color:var(--text-soft);margin-top:10px;flex-wrap:wrap;}
+  .basket-legend span{display:flex;align-items:center;gap:5px;}
+  .legend-dot{width:8px;height:8px;border-radius:2px;display:inline-block;}
+
+  /* ---------- Divergence table ---------- */
+  .div-table{width:100%;border-collapse:collapse;margin:18px 0;font-size:12.5px;}
+  .div-table th{background:var(--accent);color:#fff;padding:9px 8px;font-weight:700;text-align:left;}
+  .div-table th:last-child,.div-table td:last-child{text-align:right;}
+  .div-table td{padding:9px 8px;border-bottom:1px solid var(--line);background:var(--bg-soft);}
+  .div-table tr:nth-child(odd) td{background:#fff;}
+  .up{color:var(--accent);font-weight:700;}
+  .down{color:var(--blue);font-weight:700;}
+  .tag{font-size:10px;padding:2px 6px;border-radius:20px;font-weight:700;}
+  .tag-ai{background:#fde7ec;color:var(--accent);}
+  .tag-trad{background:#eef2ff;color:var(--blue);}
+
+  /* ---------- Toggle tabs (rivalry section) ---------- */
+  .toggle-tabs{display:flex;gap:8px;margin-bottom:14px;}
+  .toggle-tab{
+    flex:1;padding:9px 4px;text-align:center;border-radius:20px;
+    font-size:12px;font-weight:700;border:1px solid var(--line);
+    background:#fff;color:var(--text-soft);cursor:pointer;transition:all .2s;
+  }
+  .toggle-tab.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .tab-panel{display:none;font-size:13px;line-height:1.65;background:#fff;padding:14px;border-radius:8px;border:1px solid var(--line);}
+  .tab-panel.active{display:block;}
+
+  /* ---------- Divider / closing ---------- */
+  .divider-orn{text-align:center;color:var(--accent);font-size:18px;margin:6px 0 30px;letter-spacing:8px;}
+  .closer{
+    padding:50px 24px 60px;
+    background:var(--bg-soft);
+    text-align:center;
+  }
+  .closer h2{font-size:22px;font-weight:700;margin-bottom:14px;line-height:1.4;}
+  .closer p{font-size:14px;color:var(--text-soft);max-width:420px;margin:0 auto 10px;}
+  .closer .signoff{
+    margin-top:26px;font-family:'Playfair Display',serif;font-style:italic;
+    font-size:13px;color:var(--accent);
+  }
+
+  .toc{background:var(--bg-soft);margin:0 24px 0;padding:20px 18px;border-radius:10px;border:1px solid var(--line);position:relative;top:-20px;}
+  .toc-title{font-size:11px;letter-spacing:.15em;font-weight:700;color:var(--text-soft);margin-bottom:10px;text-transform:uppercase;}
+  .toc-item{display:flex;align-items:baseline;gap:10px;font-size:13px;padding:6px 0;border-bottom:1px dashed var(--line);}
+  .toc-item:last-child{border-bottom:none;}
+  .toc-item .n{font-family:'Playfair Display',serif;font-style:italic;color:var(--accent);font-weight:700;min-width:18px;}
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<div class="hero">
+  <div class="kicker"><span class="dot"></span><span class="eyebrow">MARKET DEEP DIVE · 2026.07.11</span></div>
+  <h1>미국 증시, 두 개의 전선을<br>뚫어낸 <em>AI 실물 수요</em></h1>
+  <p class="sub">지정학적 유가 충격과 끈적한 인플레이션이 동시에 시장을 압박한 하루. 하지만 SK하이닉스의 사상 최대급 나스닥 상장이 그 모든 악재를 압도해버렸다 — 오늘의 자료를 중학생도 이해할 수 있게 풀어봤다.</p>
+  <div class="meta">
+    <span>2026년 7월 10일(금) 장중 기준</span>
+    <span>거시경제 · 반도체 · 빅테크</span>
+  </div>
+</div>
+
+<div class="toc fade-in">
+  <div class="toc-title">Contents</div>
+  <div class="toc-item"><span class="n">01</span> 양면 전선 — 유가와 인플레이션의 협공</div>
+  <div class="toc-item"><span class="n">02</span> SK하이닉스, 265억 달러의 증명</div>
+  <div class="toc-item"><span class="n">03</span> 메타 × 엔비디아, 모순처럼 보이는 동맹</div>
+  <div class="toc-item"><span class="n">04</span> 두 개로 쪼개진 시장 — 전통경제의 그늘</div>
+  <div class="toc-item"><span class="n">05</span> 스테이블코인, 제도권에 편입되다</div>
+  <div class="toc-item"><span class="n">06</span> 마무리 — AI가 스스로 목을 조를까?</div>
+</div>
+
+<!-- ================= 01 ================= -->
+<section>
+  <span class="section-num fade-in">01 · Macro Pressure</span>
+  <h2 class="title fade-in">시장을 짓누른 <span class="accent">두 개의 전선</span></h2>
+  <p class="lede fade-in">보통이라면 벌써 폭락했어야 할 상황. 그런데 시장은 버텼다.</p>
+
+  <p class="fade-in">7월 10일 장 초반, S&P500을 포함한 주요 지수가 일제히 하락 출발했다. 발단은 소셜미디어에 올라온 짧은 글 하나 — 트럼프 전 대통령이 <strong>"이란과의 휴전은 끝났다"</strong>고 재차 선언한 직후였다. 이 발언은 호르무즈 해협(중동의 원유 수송 통로, 원유의 상당량이 지나가는 좁은 바닷길)을 통한 원유 수송에 차질이 생길 수 있다는 우려를 자극해 유가와 시장을 동시에 흔들었다.</p>
+
+  <div class="note fade-in">이 리포트는 발언의 정치적·외교적 옳고 그름을 판단하지 않는다. 오직 이 발언이 유가와 주식시장에 어떤 기계적 영향을 줬는지, 사실만 다룬다.</div>
+
+  <p class="fade-in">더 무거운 건 따로 있었다. 연준(미국의 중앙은행, 금리를 결정하는 기관)이 발표한 통화정책 보고서가 이번 봄 인플레이션이 다시 오른 원인으로 세 가지를 콕 집었다.</p>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">연준이 지목한 인플레이션 상승 3대 원인</div>
+    <canvas id="fedChart" height="220"></canvas>
+    <div class="chart-caption">막대를 눌러보면 각 원인에 대한 설명이 나옵니다.</div>
+  </div>
+  <div id="fedExplain" class="result-box fade-in" style="display:none;"></div>
+
+  <div class="pullquote fade-in">기존 상식은 "기술이 발전하면 물가가 내린다"였다. 하지만 <span>AI 인프라 구축</span>은 다르다 — 구리, 콘크리트, 전력망, 값비싼 칩 같은 무거운 실물 자원을 끊임없이 빨아들이기 때문에 오히려 물가를 밀어올린다.</div>
+
+  <p class="fade-in">인플레이션이 안 꺾이면 연준은 금리를 낮출 수 없다. 금리가 높으면 미래 수익을 현재가치로 평가받는 고성장주에게는 특히 치명적이다. 도망칠 명분은 완벽했다 — 그런데 시장은 도망치지 않았다.</p>
+</section>
+
+<!-- ================= 02 ================= -->
+<section>
+  <span class="section-num fade-in">02 · The Main Event</span>
+  <h2 class="title fade-in">SK하이닉스, <span class="accent">265억 달러</span>의 증명</h2>
+  <p class="lede fade-in">오늘 시장 분위기를 통째로 뒤집은 단 하나의 이벤트.</p>
+
+  <p class="fade-in">SK하이닉스가 나스닥에 데뷔했다. 주당 149달러에 1억 7,790만 주를 발행해 <strong>265억 달러</strong>를 조달했는데, 이는 스페이스X 이후 최대 규모이자 외국 기업의 미국 상장 역사상 최대 규모다. 상장 방식은 ADR(미국예탁증서 — 외국 주식을 미국 투자자가 달러로 쉽게 사고팔 수 있게 만든 증서), 티커명은 <strong>SKHY</strong>.</p>
+
+  <div class="stat-grid fade-in">
+    <div class="stat-cell"><span class="num">$149</span><span class="lbl">공모가</span></div>
+    <div class="stat-cell"><span class="num">$170+</span><span class="lbl">장중 최고가</span></div>
+    <div class="stat-cell"><span class="num">+13~14%</span><span class="lbl">종가 상승률</span></div>
+    <div class="stat-cell"><span class="num">$265억</span><span class="lbl">조달 금액</span></div>
+  </div>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">SK하이닉스(SKHY) 상장 당일 주가 흐름</div>
+    <canvas id="skChart" height="220"></canvas>
+    <div class="chart-caption">공모가 → 장중 최고가 → 종가, 단위: 달러</div>
+  </div>
+
+  <p class="fade-in">보통 이렇게 큰 물량이 시장에 풀리면 자금이 분산돼 주가가 오르기 어렵다. 그런데도 두 자릿수 상승을 기록했다는 건, 엔비디아·AMD의 AI 가속기에 필수인 HBM(고대역폭 메모리 — AI 반도체가 데이터를 빠르게 주고받도록 돕는 고성능 메모리)에 대한 투자 수요가 여전히 굶주려 있다는 뜻이다.</p>
+
+  <div class="widget fade-in">
+    <div class="widget-head"><span class="widget-icon">🪣</span><span class="widget-title">왜 마이크론 주가는 하락했나 — 포트폴리오 바구니 시뮬레이터</span></div>
+    <div class="widget-desc">기관 투자자의 포트폴리오는 정해진 크기의 바구니와 같다. 슬라이더를 움직여 265억 달러짜리 SK하이닉스가 바구니에 들어올 때 다른 종목 비중이 어떻게 눌리는지 확인해보세요.</div>
+    <div class="slider-row">
+      <div class="slider-label"><span>SK하이닉스(SKHY) 신규 편입 비중</span><span class="val" id="skWeightVal">0%</span></div>
+      <input type="range" id="skWeight" min="0" max="100" value="0" step="5">
+    </div>
+    <div class="basket">
+      <div class="basket-bar">
+        <div class="basket-seg seg-sk" id="segSk" style="width:0%;">SKHY</div>
+        <div class="basket-seg seg-mu" id="segMu" style="width:22%;">마이크론</div>
+        <div class="basket-seg seg-etc" id="segEtc" style="width:78%;">기타 메모리주</div>
+      </div>
+    </div>
+    <div class="basket-legend">
+      <span><span class="legend-dot" style="background:var(--accent);"></span>SK하이닉스</span>
+      <span><span class="legend-dot" style="background:var(--gray);"></span>마이크론</span>
+      <span><span class="legend-dot" style="background:#d1d5db;"></span>기타</span>
+    </div>
+    <div class="result-verdict" id="basketVerdict">슬라이더를 움직여보세요. SK하이닉스 비중이 커질수록 마이크론·기타 종목 비중은 기계적으로 줄어듭니다 — 이는 펀더멘털 훼손이 아니라 <strong>패시브 자금의 로테이션(자리 이동)</strong>입니다.</div>
+  </div>
+</section>
+
+<!-- ================= 03 ================= -->
+<section>
+  <span class="section-num fade-in">03 · Meta × Nvidia</span>
+  <h2 class="title fade-in">모순처럼 보이지만 <span class="accent">아닌 동맹</span></h2>
+  <p class="lede fade-in">최대 고객이 경쟁자가 됐는데, 왜 엔비디아 주가는 올랐을까?</p>
+
+  <p class="fade-in">메타 주가는 하루 만에 6% 가까이, 주간으로는 14% 급등하며 2024년 2월 이후 최고의 한 주를 보냈다. 신모델 '뮤즈 스파크 1.1' 발표도 있었지만, 시장이 진짜 환호한 건 인프라 확장 규모였다.</p>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">메타의 컴퓨팅 용량 확장 계획</div>
+    <canvas id="metaChart" height="220"></canvas>
+    <div class="chart-caption">단위: 기가와트(GW) · 소규모 국가의 전력망과 맞먹는 규모</div>
+  </div>
+
+  <p class="fade-in">메타는 컴퓨팅 용량을 올해 7기가와트에서 2027년 14기가와트로 두 배 늘리고, 남는 컴퓨팅 자원을 클라우드처럼 외부에 임대하겠다고 밝혔다. 자본 지출 기업에서 인프라 수익 모델 기업으로 스스로를 재정의한 셈이다.</p>
+
+  <p class="fade-in">동시에 메타는 브로드컴과 손잡고 9월부터 자체 AI 칩을 대량 생산한다고 발표했다. 최대 고객이 경쟁자가 되는 것처럼 보였지만, 엔비디아 주가는 오히려 4% 급등해 시가총액 5조 달러를 다시 넘어섰다.</p>
+
+  <div class="widget fade-in">
+    <div class="widget-head"><span class="widget-icon">🏭</span><span class="widget-title">자동차 공장 비유로 이해하기</span></div>
+    <div class="widget-desc">탭을 눌러 두 가지 작업의 차이를 비교해보세요.</div>
+    <div class="toggle-tabs">
+      <div class="toggle-tab active" data-tab="train">학습 (Training)</div>
+      <div class="toggle-tab" data-tab="infer">추론 (Inference)</div>
+    </div>
+    <div class="tab-panel active" id="panel-train">
+      <strong>🚜 강력하고 비싼 불도저 — 엔비디아 GPU</strong><br><br>
+      초거대 AI 모델의 기반을 다지는 무겁고 복잡한 학습 단계에는 반드시 최신 GPU라는 강력한 불도저가 대량으로 필요하다. 이 수요는 당분간 대체 불가능하다.
+    </div>
+    <div class="tab-panel" id="panel-infer">
+      <strong>🛤️ 맞춤형 컨베이어 벨트 — 메타 자체 칩</strong><br><br>
+      이미 만들어진 모델로 추천 알고리즘을 띄우는 등 가벼운 반복 작업(추론)에는 비싼 불도저 대신, 딱 맞는 효율적인 컨베이어 벨트(자체 칩)면 충분하다. 완전한 대체가 아니라 보완이다.
+    </div>
+  </div>
+
+  <p class="fade-in">공장 부지(14기가와트)가 두 배로 커지면 그 안을 채울 불도저(GPU) 수요도 함께 폭발한다. 자체 칩은 엔비디아의 파이를 뺏는 게 아니라 생태계 전체의 파이를 키우고 있다는 걸 시장이 정확히 가격에 반영했다.</p>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">낙수효과 — 인프라 관련주 동반 상승</div>
+    <canvas id="haloChart" height="220"></canvas>
+    <div class="chart-caption">14GW 확장이 통신·서버·냉각 장비 업체로 번진 하루</div>
+  </div>
+</section>
+
+<!-- ================= 04 ================= -->
+<section>
+  <span class="section-num fade-in">04 · The Great Divergence</span>
+  <h2 class="title fade-in">한 지붕 아래 <span class="accent">두 개의 시장</span></h2>
+  <p class="lede fade-in">AI 파티에 초대받지 못한 전통 경제는 정반대의 위기를 겪고 있다.</p>
+
+  <p class="fade-in">델타항공은 월가 예상을 뛰어넘는 실적(EPS 1.56달러)에 가이던스까지 상향했지만 주가는 1.8~3% 하락했다. 이란발 유가 상승 탓에 이번 분기 연료비로 사상 최대인 44억 1천만 달러를 썼기 때문이다. 코스트코도 6월 매출이 기대치에 못 미치며 4.21% 빠졌고, 금리에 민감한 중소형주 지수 러셀2000은 대형주가 날아오르는 와중에도 2주 연속 하락했다.</p>
+
+  <p class="fade-in">반면 AI와 전혀 무관한 윤활유 브랜드 WD-40은 깜짝 실적으로 10.7% 급등했다. 비결은 <strong>가격 결정력</strong>(대체재가 마땅치 않아 값을 올려도 소비자가 계속 사는 힘)이었다. 운임 상승 기대감을 받은 물류기업 JB헌트도 4% 올랐다.</p>
+
+  <table class="div-table fade-in">
+    <tr><th>기업</th><th>구분</th><th>등락</th></tr>
+    <tr><td>델타항공</td><td><span class="tag tag-trad">전통경제</span></td><td class="down">−1.8~3%</td></tr>
+    <tr><td>코스트코</td><td><span class="tag tag-trad">전통경제</span></td><td class="down">−4.21%</td></tr>
+    <tr><td>러셀2000</td><td><span class="tag tag-trad">중소형주</span></td><td class="down">2주 연속 하락</td></tr>
+    <tr><td>WD-40</td><td><span class="tag tag-ai">가격결정력</span></td><td class="up">+10.7%</td></tr>
+    <tr><td>JB헌트</td><td><span class="tag tag-ai">가격결정력</span></td><td class="up">+4%</td></tr>
+  </table>
+
+  <div class="note fade-in">투자 체크리스트: 내 포트폴리오 종목이 ① AI 혁신의 날개를 달았는가, 아니면 최소한 ② 인플레이션 비를 막을 가격 결정력이라는 우산을 가졌는가?</div>
+</section>
+
+<!-- ================= 05 ================= -->
+<section>
+  <span class="section-num fade-in">05 · Crypto Goes Mainstream</span>
+  <h2 class="title fade-in">스테이블코인, <span class="accent">은행이 되다</span></h2>
+  <p class="lede fade-in">규제 불확실성이라는 할인 요인이 오늘 사라졌다.</p>
+
+  <p class="fade-in">나스닥에서 부실 코인 관련 17개 종목이 무더기로 상장폐지되는 옥석 가리기가 진행되는 동안, USDC 발행사 <strong>서클(Circle)</strong>은 미국 통화감독청(OCC)으로부터 국립신탁은행 설립 최종 승인을 받았다. 주가는 장중 14%까지 치솟았다가 5% 상승으로 마감했다.</p>
+
+  <p class="fade-in">이제 서클은 전통 시중은행과 동등한 수준의 규제·보호를 받는 합법적 수탁기관이 됐다. 연기금이나 대형 자산운용사처럼 법적 테두리가 불분명한 곳에는 돈을 맡길 수 없던 기관 투자자들에게, 블록체인 생태계로 안심하고 들어올 수 있는 공식 파이프라인이 뚫린 셈이다.</p>
+</section>
+
+<!-- ================= 06 CLOSER ================= -->
+<div class="closer">
+  <span class="eyebrow fade-in">Closing Thought</span>
+  <h2 class="fade-in">AI가 스스로<br>목을 조를 수도 있을까?</h2>
+  <p class="fade-in">SK하이닉스의 265억 달러, 메타의 14기가와트 — 오늘의 밸류에이션은 허황된 기대가 아니라 눈으로 확인 가능한 실물 자본 지출이 떠받치고 있다. 하지만 연준은 그 AI 인프라 구축 자체를 인플레이션의 세 번째 원인으로 지목했다.</p>
+
+  <div class="widget fade-in" style="text-align:left;">
+    <div class="widget-head"><span class="widget-icon">🌀</span><span class="widget-title">역설 시뮬레이터 — AI 투자와 금리의 줄다리기</span></div>
+    <div class="widget-desc">AI 인프라 투자 강도를 조절하면, 이 방송이 짚은 논리에 따라 실물 자원 수요·물가 압력·금리 전망이 어떻게 바뀌는지 개념적으로 보여줍니다. (실제 경제지표가 아닌 방송 내 논리를 시각화한 예시입니다)</div>
+    <div class="slider-row">
+      <div class="slider-label"><span>AI 인프라 투자 강도</span><span class="val" id="aiIntensityVal">50</span></div>
+      <input type="range" id="aiIntensity" min="0" max="100" value="50" step="5">
+    </div>
+    <div class="result-box">
+      <div class="result-row"><span class="r-label">실물 자원(구리·전력·칩) 수요</span><span class="r-val" id="rDemand">중간</span></div>
+      <div class="result-row"><span class="r-label">물가 상승 압력</span><span class="r-val" id="rInflation">중간</span></div>
+      <div class="result-row"><span class="r-label">연준의 금리 인하 여력</span><span class="r-val" id="rRate">중간</span></div>
+      <div class="result-verdict" id="paradoxVerdict">AI 투자가 늘수록 실물 자원 수요와 물가 압력이 커지고, 그만큼 금리 인하 여력은 줄어듭니다 — 결국 AI 성장에 필요한 저금리 환경 자체를 AI가 갉아먹는 역설.</div>
+    </div>
+    <button class="reset-btn" id="paradoxReset">초기값으로 리셋</button>
+  </div>
+
+  <p class="fade-in">AI 인프라가 전력망·구리·반도체를 계속 탐욕스럽게 집어삼키며 물가와 금리를 높은 채로 묶어둔다면, 종국에는 AI 스스로 자신의 성장 조건인 저금리 시대라는 생명줄을 조르게 되는 건 아닐까. 여러분의 포트폴리오는 이 질문에 어떤 답을 준비하고 있는가.</p>
+
+  <div class="signoff fade-in">— 오늘의 심층 분석을 마치며</div>
+</div>
+
+<script>
+function initFade(){
+  const fadeObs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        fadeObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+}
+initFade();
+
+const ROSE = '#e11d48';
+const ROSE2 = '#f43f5e';
+const INK = '#1a1a1a';
+const GRAY = '#6b7280';
+const BLUE = '#2563eb';
+
+const chartConfigs = {};
+
+chartConfigs['fedChart'] = () => {
+  new Chart(document.getElementById('fedChart'), {
+    type: 'bar',
+    data: {
+      labels: ['관세 영향', '이란발 에너지 비용', 'AI 인프라 반도체·메모리'],
+      datasets: [{
+        data: [1,1,1.4],
+        backgroundColor: [GRAY, BLUE, ROSE],
+        borderRadius: 6,
+        maxBarThickness: 46
+      }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:()=> '지목된 원인'}} },
+      scales:{ y:{display:false}, x:{ticks:{font:{size:10.5},color:INK}, grid:{display:false}} },
+      onClick:(evt, els)=>{
+        const box = document.getElementById('fedExplain');
+        const texts = [
+          '① <strong>관세</strong> — 수입품에 붙는 세금이 올라가며 물가 전반을 밀어올림.',
+          '② <strong>이란발 에너지 비용</strong> — 호르무즈 해협 리스크로 유가·운송비·원자재 가격 상승.',
+          '③ <strong>AI 인프라 반도체·메모리 가격 압력</strong> — 데이터센터 건설이 구리·전력·칩 수요를 급증시켜 물가를 밀어올림. 방송에서 가장 놀라웠던 포인트.'
+        ];
+        if(els.length){ box.style.display='block'; box.innerHTML = texts[els[0].index]; }
+      }
+    }
+  });
+};
+
+chartConfigs['skChart'] = () => {
+  new Chart(document.getElementById('skChart'), {
+    type: 'line',
+    data: {
+      labels: ['공모가','장중 최고가','종가(마감)'],
+      datasets: [{
+        label:'SKHY 주가($)',
+        data: [149, 170, 169],
+        borderColor: ROSE,
+        backgroundColor: 'rgba(225,29,72,0.12)',
+        fill:true, tension:0.35,
+        pointBackgroundColor: ROSE,
+        pointRadius:5, pointHoverRadius:7,
+        borderWidth:3
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false} },
+      scales:{
+        y:{ suggestedMin:140, ticks:{color:GRAY, font:{size:10.5}, callback:(v)=>'$'+v}, grid:{color:'#eee'} },
+        x:{ ticks:{color:INK, font:{size:11}}, grid:{display:false} }
+      }
+    }
+  });
+};
+
+chartConfigs['metaChart'] = () => {
+  new Chart(document.getElementById('metaChart'), {
+    type: 'bar',
+    data: {
+      labels: ['2026년', '2027년(목표)'],
+      datasets: [{
+        data:[7,14],
+        backgroundColor:[GRAY, ROSE],
+        borderRadius:8, maxBarThickness:70
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:(c)=>c.parsed.y+' GW'}} },
+      scales:{
+        y:{ ticks:{color:GRAY, font:{size:10.5}, callback:(v)=>v+'GW'}, grid:{color:'#eee'} },
+        x:{ ticks:{color:INK, font:{size:12, weight:'700'}}, grid:{display:false} }
+      }
+    }
+  });
+};
+
+chartConfigs['haloChart'] = () => {
+  new Chart(document.getElementById('haloChart'), {
+    type:'bar',
+    data:{
+      labels:['루멘텀\n(광통신)','HPE\n(서버·클라우드)','세레브라스\n(AI칩)','엔비디아\n(GPU)'],
+      datasets:[{
+        data:[11.13, 9.94, 9.25, 4],
+        backgroundColor:[ROSE, ROSE2, '#fb7185', INK],
+        borderRadius:6, maxBarThickness:40
+      }]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:(c)=>'+'+c.parsed.x+'%'}} },
+      scales:{
+        x:{ ticks:{color:GRAY, font:{size:10.5}, callback:(v)=>v+'%'}, grid:{color:'#eee'} },
+        y:{ ticks:{color:INK, font:{size:10.5}}, grid:{display:false} }
+      }
+    }
+  });
+};
+
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+/* ---------- Basket rotation widget ---------- */
+const skWeight = document.getElementById('skWeight');
+const skWeightVal = document.getElementById('skWeightVal');
+const segSk = document.getElementById('segSk');
+const segMu = document.getElementById('segMu');
+const segEtc = document.getElementById('segEtc');
+const basketVerdict = document.getElementById('basketVerdict');
+
+function updateBasket(){
+  const w = parseInt(skWeight.value,10);
+  skWeightVal.textContent = w + '%';
+  const remaining = 100 - w;
+  const muW = Math.round(remaining * 0.22);
+  const etcW = remaining - muW;
+  segSk.style.width = w + '%';
+  segMu.style.width = muW + '%';
+  segEtc.style.width = etcW + '%';
+  segSk.textContent = w > 8 ? 'SKHY' : '';
+  segMu.textContent = muW > 8 ? '마이크론' : '';
+  segEtc.textContent = etcW > 8 ? '기타' : '';
+  if(w===0){
+    basketVerdict.innerHTML = '슬라이더를 움직여보세요. SK하이닉스 비중이 커질수록 마이크론·기타 종목 비중은 기계적으로 줄어듭니다 — 이는 펀더멘털 훼손이 아니라 <strong>패시브 자금의 로테이션(자리 이동)</strong>입니다.';
+  } else if(w<40){
+    basketVerdict.innerHTML = 'SK하이닉스가 바구니에 들어오는 만큼 마이크론 비중이 소폭 줄어듭니다. 실제 오늘 마이크론은 장 초반 <strong>약 2% 하락</strong>했습니다.';
+  } else {
+    basketVerdict.innerHTML = '265억 달러짜리 바위가 바구니 안에서 존재감을 키울수록, 기관은 다른 메모리주 비중을 계속 덜어내야 합니다. 마이크론의 경쟁력이 훼손된 게 아니라 <strong>바위가 들어갈 자리를 비워주는 과정</strong>일 뿐입니다.';
+  }
+}
+skWeight.addEventListener('input', updateBasket);
+updateBasket();
+
+/* ---------- Tabs ---------- */
+document.querySelectorAll('.toggle-tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('.toggle-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-'+tab.dataset.tab).classList.add('active');
+  });
+});
+
+/* ---------- Paradox simulator ---------- */
+const aiIntensity = document.getElementById('aiIntensity');
+const aiIntensityVal = document.getElementById('aiIntensityVal');
+const rDemand = document.getElementById('rDemand');
+const rInflation = document.getElementById('rInflation');
+const rRate = document.getElementById('rRate');
+const paradoxVerdict = document.getElementById('paradoxVerdict');
+
+function levelLabel(v){
+  if(v<30) return {t:'낮음', c: BLUE};
+  if(v<70) return {t:'중간', c: INK};
+  return {t:'높음', c: ROSE};
+}
+function invLevelLabel(v){
+  if(v<30) return {t:'충분함', c: ROSE};
+  if(v<70) return {t:'제한적', c: INK};
+  return {t:'거의 없음', c: BLUE};
+}
+function updateParadox(){
+  const v = parseInt(aiIntensity.value,10);
+  aiIntensityVal.textContent = v;
+  const d = levelLabel(v), i = levelLabel(v), r = invLevelLabel(v);
+  rDemand.textContent = d.t; rDemand.style.color = d.c;
+  rInflation.textContent = i.t; rInflation.style.color = i.c;
+  rRate.textContent = r.t; rRate.style.color = r.c;
+  if(v<30){
+    paradoxVerdict.innerHTML = 'AI 투자가 절제되면 실물 자원 수요·물가 압력이 낮아, 연준이 금리를 내릴 여력이 상대적으로 커집니다. 다만 AI 인프라 확장 속도는 느려질 수 있습니다.';
+  } else if(v<70){
+    paradoxVerdict.innerHTML = '현재 시장과 유사한 균형 지점입니다. AI 투자가 물가를 밀어올리지만, 실물 자본 지출이 밸류에이션을 뒷받침하는 힘도 함께 커집니다.';
+  } else {
+    paradoxVerdict.innerHTML = 'AI 투자가 폭발적으로 늘수록 구리·전력·칩 수요가 물가를 강하게 밀어올려, 연준의 금리 인하 여력은 거의 사라집니다. 결국 AI 성장의 생명줄인 저금리 환경을 AI 스스로 조르는 역설적 상황.';
+  }
+}
+aiIntensity.addEventListener('input', updateParadox);
+document.getElementById('paradoxReset').addEventListener('click', ()=>{
+  aiIntensity.value = 50;
+  updateParadox();
+});
+updateParadox();
+</script>
+</body>
+</html>
