@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>호르무즈 봉쇄, 금리 발작 — 반도체 치킨게임의 재림</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#fafafa;
+    --text:#1a1a1a; --text2:#777777;
+    --accent:#e11d48; --accent2:#f43f5e;
+    --tblbg:#fafafa; --tblhead:#e11d48; --border:#e5e5e5;
+    --blue:#2563eb; --gray:#6b7280;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:'Noto Sans KR', sans-serif;
+    line-height:1.75; -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  .wrap{max-width:640px; margin:0 auto; padding:0 20px;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    background:var(--text); color:#fff;
+    padding:54px 20px 40px;
+    position:relative; overflow:hidden;
+  }
+  .hero::after{
+    content:""; position:absolute; right:-60px; top:-60px;
+    width:220px; height:220px; border-radius:50%;
+    background:radial-gradient(circle, rgba(225,29,72,0.35), transparent 70%);
+  }
+  .kicker{
+    font-size:12px; letter-spacing:3px; color:var(--accent2);
+    font-weight:700; text-transform:uppercase; margin-bottom:14px;
+  }
+  .hero h1{
+    font-family:'Playfair Display', serif; font-weight:800;
+    font-size:32px; line-height:1.28; letter-spacing:-0.5px;
+  }
+  .hero .sub{
+    margin-top:16px; font-size:14.5px; color:#cfcfcf; font-weight:300;
+  }
+  .hero .meta{
+    margin-top:26px; display:flex; gap:14px; flex-wrap:wrap;
+    font-size:11.5px; color:#999;
+  }
+  .hero .meta span{border:1px solid #444; padding:4px 10px; border-radius:20px;}
+
+  /* ---------- Section ---------- */
+  section{padding:38px 0;}
+  section + section{border-top:1px solid var(--border);}
+  .eyebrow{
+    font-size:11.5px; font-weight:700; letter-spacing:2px;
+    color:var(--accent); text-transform:uppercase; margin-bottom:10px;
+  }
+  h2{
+    font-family:'Playfair Display', serif; font-weight:700;
+    font-size:23px; line-height:1.35; margin-bottom:16px; letter-spacing:-0.3px;
+  }
+  h3{
+    font-family:'Noto Sans KR'; font-weight:700; font-size:16px;
+    margin:22px 0 10px; color:var(--text);
+  }
+  p{font-size:15px; color:#333; margin-bottom:12px;}
+  .lead{font-size:16px; color:var(--text); font-weight:500;}
+  strong{color:var(--accent); font-weight:700;}
+  .muted{color:var(--text2); font-size:13px;}
+
+  /* ---------- Fade-in ---------- */
+  .fade-in{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease;}
+  .fade-in.visible{opacity:1; transform:translateY(0);}
+
+  /* ---------- Cards ---------- */
+  .card{
+    background:var(--bg2); border:1px solid var(--border); border-radius:10px;
+    padding:18px 18px; margin:14px 0;
+  }
+  .card-title{font-weight:700; font-size:14.5px; margin-bottom:6px; display:flex; align-items:center; gap:8px;}
+  .dot{width:8px; height:8px; border-radius:50%; background:var(--accent); flex-shrink:0;}
+
+  .stat-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:18px 0;}
+  .stat{
+    background:var(--text); color:#fff; border-radius:10px; padding:16px 14px;
+  }
+  .stat .num{font-family:'Playfair Display'; font-size:22px; font-weight:800; color:var(--accent2);}
+  .stat .label{font-size:11.5px; color:#bbb; margin-top:4px;}
+
+  /* ---------- Domino ---------- */
+  .domino{display:flex; flex-direction:column; gap:0; margin:20px 0;}
+  .domino-step{
+    display:flex; gap:12px; align-items:flex-start;
+    padding:14px 0; border-bottom:1px dashed var(--border);
+  }
+  .domino-step:last-child{border-bottom:none;}
+  .domino-num{
+    width:28px; height:28px; border-radius:50%; background:var(--accent);
+    color:#fff; font-weight:800; font-size:13px; display:flex;
+    align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .domino-body .t{font-weight:700; font-size:14.5px;}
+  .domino-body .d{font-size:13.5px; color:var(--text2); margin-top:2px;}
+
+  /* ---------- Chart container (REQUIRED pattern) ---------- */
+  .chart-container{position:relative; max-height:340px; margin:20px 0;}
+  .chart-container canvas{opacity:0; transition:opacity .4s ease; max-height:300px;}
+  .chart-container.chart-ready canvas{opacity:1;}
+  .chart-caption{font-size:11.5px; color:var(--text2); text-align:center; margin-top:6px;}
+
+  /* ---------- Table ---------- */
+  table{width:100%; border-collapse:collapse; margin:16px 0; font-size:13px;}
+  th{background:var(--tblhead); color:#fff; padding:9px 8px; text-align:left; font-weight:600;}
+  td{background:var(--tblbg); padding:9px 8px; border-bottom:1px solid var(--border);}
+  tr:last-child td{border-bottom:none;}
+  .neg{color:var(--accent); font-weight:700;}
+  .pos{color:var(--blue); font-weight:700;}
+
+  /* ---------- Simulator ---------- */
+  .sim{
+    background:var(--text); color:#fff; border-radius:12px; padding:22px 18px; margin:20px 0;
+  }
+  .sim h4{font-size:14.5px; font-weight:700; margin-bottom:4px;}
+  .sim .desc{font-size:12.5px; color:#aaa; margin-bottom:16px;}
+  .sim-row{margin-bottom:16px;}
+  .sim-row label{font-size:12.5px; color:#ccc; display:flex; justify-content:space-between; margin-bottom:8px;}
+  .sim-row label span{color:var(--accent2); font-weight:700;}
+  input[type=range]{
+    width:100%; -webkit-appearance:none; height:4px; border-radius:2px;
+    background:#444; outline:none;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:18px; height:18px; border-radius:50%;
+    background:var(--accent); cursor:pointer; border:3px solid #fff;
+  }
+  .sim-result{
+    background:rgba(255,255,255,0.06); border-radius:8px; padding:14px;
+    text-align:center; margin-top:10px;
+  }
+  .sim-result .price{font-family:'Playfair Display'; font-size:26px; font-weight:800;}
+  .sim-result .status{font-size:12px; margin-top:6px; font-weight:700; padding:4px 10px; border-radius:20px; display:inline-block;}
+  .status-safe{background:rgba(37,99,235,0.2); color:#60a5fa;}
+  .status-warn{background:rgba(225,29,72,0.2); color:var(--accent2);}
+  .reset-btn{
+    margin-top:14px; width:100%; padding:10px; border-radius:8px; border:1px solid #555;
+    background:transparent; color:#ccc; font-size:12.5px; cursor:pointer; font-family:'Noto Sans KR';
+  }
+  .reset-btn:active{background:#333;}
+
+  /* ---------- Calendar ---------- */
+  .cal{display:flex; flex-direction:column; gap:10px; margin:18px 0;}
+  .cal-item{
+    display:flex; gap:12px; background:var(--bg2); border:1px solid var(--border);
+    border-radius:10px; padding:13px 14px; align-items:flex-start;
+  }
+  .cal-day{
+    font-family:'Playfair Display'; font-weight:800; font-size:13px; color:var(--accent);
+    min-width:44px; text-align:center; background:#fff; border:1px solid var(--accent);
+    border-radius:6px; padding:6px 4px;
+  }
+  .cal-body .t{font-weight:700; font-size:13.5px;}
+  .cal-body .d{font-size:12.5px; color:var(--text2); margin-top:2px;}
+
+  /* ---------- Strategy ---------- */
+  .strategy{
+    border:1px solid var(--border); border-radius:10px; padding:16px 16px; margin:14px 0;
+    border-left:4px solid var(--accent);
+  }
+  .strategy .num{font-size:11px; font-weight:700; color:var(--accent); letter-spacing:1px;}
+  .strategy h4{font-size:15px; margin:4px 0 8px; font-weight:700;}
+  .strategy p{font-size:13.5px; margin-bottom:0;}
+
+  .quote-block{
+    background:var(--text); color:#eee; border-radius:12px; padding:26px 22px; margin:22px 0;
+    text-align:center;
+  }
+  .quote-block p{
+    font-family:'Playfair Display'; font-style:italic; font-size:17px; color:#fff;
+    line-height:1.5; margin-bottom:0;
+  }
+
+  .disclaimer{
+    font-size:11px; color:var(--text2); background:var(--bg2); border-radius:10px;
+    padding:14px 16px; margin-top:20px; line-height:1.6;
+  }
+
+  footer{
+    text-align:center; padding:30px 20px 10px; font-size:11.5px; color:var(--text2);
+  }
+  footer .brand{font-family:'Playfair Display'; font-weight:800; color:var(--accent); font-size:14px; margin-bottom:6px;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="kicker">NOVA REAL INVEST · 마켓 브리핑</div>
+  <h1>호르무즈 봉쇄, 금리 발작<br>그리고 반도체 치킨게임의 재림</h1>
+  <p class="sub">지정학적 충격 하나가 유가·금리·기술주를 동시에 흔든 하루. 2026년 7월 13일, 시장의 판이 바뀌고 있다.</p>
+  <div class="meta">
+    <span>2026.07.13 (월)</span>
+    <span>뉴욕장 기준</span>
+    <span>매크로 · 반도체</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ================= EXECUTIVE SUMMARY ================= -->
+<section class="fade-in">
+  <div class="eyebrow">Executive Summary</div>
+  <h2>하루 만에 벌어진 3가지 충격</h2>
+  <p class="lead">트럼프 대통령의 호르무즈 발언 한마디가 유가·금리·기술주까지 도미노처럼 무너뜨렸다. 이건 단순한 하락장이 아니라, 돈이 통째로 도망치는 <strong>자본도피(Capital Flight)</strong>다.</p>
+
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>① 매크로 충격 (The Macro Shock)</div>
+    <p style="font-size:13.5px; margin-bottom:0;">트럼프, 호르무즈 해협 통과 화물에 <strong>20% 수수료</strong> 부과 및 전면 봉쇄 선언 → 브렌트유 <strong>+9.6%</strong>, 10년물 국채금리 <strong>4.61%</strong> 터치</p>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>② 반도체·AI 붕괴 (Tech &amp; AI Meltdown)</div>
+    <p style="font-size:13.5px; margin-bottom:0;">SK하이닉스 한국 본장 <strong>-15.4%</strong> 폭락(1997년 이후 최대 낙폭) → 나스닥 -1.6%, 필라델피아 반도체지수 -4.8%</p>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>③ 자본 도피 (Capital Flight)</div>
+    <p style="font-size:13.5px; margin-bottom:0;">나스닥·기술주에서 빠진 돈이 <strong>에너지·방어주·M&amp;A 타겟</strong>으로 이동 중. 마라톤 페트롤리엄(MPC) 사상 최고가 경신</p>
+  </div>
+</section>
+
+<!-- ================= GEOPOLITICAL TRIGGER ================= -->
+<section class="fade-in">
+  <div class="eyebrow">Geopolitical Trigger</div>
+  <h2>호르무즈가 쏘아 올린 인플레이션 뇌관</h2>
+  <p>주말 사이 이란-미국 대립이 이스라엘, 예멘까지 확전되는 양상을 보였다. 미 중부사령부(CENTCOM)는 이란 <strong>140개 목표물을 타격</strong>했고, 밤새 폭격이 이어졌다는 소식이다. 여기에 트럼프 대통령이 <strong>7월 14일(내일) 오후 4시 호르무즈 해협 봉쇄</strong>를 발효하겠다고 선언하면서, 통과 화물에 20% 수수료를 부과하겠다는 발언까지 더해져 시장이 그대로 흔들렸다.</p>
+
+  <h3>💥 주말 사이 벌어진 일</h3>
+  <table>
+    <tr><th>지표</th><th>변화</th></tr>
+    <tr><td>브렌트유(Brent)</td><td class="neg">+9.6% (2020년 5월 이후 최대 상승폭)</td></tr>
+    <tr><td>10년물 국채금리</td><td class="neg">4.61% 터치 (일부 기관 4.8% 전망)</td></tr>
+    <tr><td>해협 통과 선박 수</td><td class="neg">주말 사이 52% 급감 (Kpler 데이터)</td></tr>
+    <tr><td>미국 내 휘발유</td><td class="neg">7~10일 내 갤런당 $4 도달 전망</td></tr>
+  </table>
+  <p class="muted">※ (편집자 주) 배럴(원유통 단위) 가격이 오르면 물류비·생산비가 전방위로 오르고, 이는 물가(인플레이션) 상승 압력으로 이어진다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="chartRate" height="220"></canvas>
+  </div>
+  <div class="chart-caption">10년물 국채금리 추이 및 시장 전망치 (%)</div>
+</section>
+
+<!-- ================= DOMINO ================= -->
+<section class="fade-in">
+  <div class="eyebrow">The Macro Domino Effect</div>
+  <h2>왜 유가 급등이 나스닥의 목을 조르는가</h2>
+  <p>기름값이 오르는데 왜 엔비디아·마이크론 주가가 박살 났을까? 5단계 도미노를 따라가면 답이 보인다.</p>
+
+  <div class="domino">
+    <div class="domino-step">
+      <div class="domino-num">1</div>
+      <div class="domino-body">
+        <div class="t">지정학적 단절 (Oil Shock)</div>
+        <div class="d">호르무즈 봉쇄 재개 → 브렌트유 배럴당 $83.30 돌파</div>
+      </div>
+    </div>
+    <div class="domino-step">
+      <div class="domino-num">2</div>
+      <div class="domino-body">
+        <div class="t">물가 재점화 (Inflation Fears)</div>
+        <div class="d">화요일 발표될 CPI(소비자물가지수) 2.9% 상회 우려 증폭</div>
+      </div>
+    </div>
+    <div class="domino-step">
+      <div class="domino-num">3</div>
+      <div class="domino-body">
+        <div class="t">매파적 연준 (Hawkish Pivot)</div>
+        <div class="d">Fed 월러 이사 매파적 발언, 신임 워시 의장 데뷔 증언 앞두고 긴장 고조</div>
+      </div>
+    </div>
+    <div class="domino-step">
+      <div class="domino-num">4</div>
+      <div class="domino-body">
+        <div class="t">할인율 급등 (Yield Spike)</div>
+        <div class="d">2년물 4.261%, 10년물 4.61%로 급등 — 자본 조달 비용 압박</div>
+      </div>
+    </div>
+    <div class="domino-step">
+      <div class="domino-num">5</div>
+      <div class="domino-body">
+        <div class="t">기술주 밸류에이션 압축 (Valuation Compression)</div>
+        <div class="d">고밸류 AI/성장주에 직격탄. 나스닥 -1.6%, AI 섹터 큰 폭 하락</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>월러 이사의 이상한 비유</div>
+    <p style="font-size:13.5px; margin-bottom:0;">월러 연준이사는 지금의 시장 심리를 두고 "실제와 판타지를 착각하고 있다"는 취지로 강하게 비판했다. 원래 매파적인 인물이 아님에도 이런 발언을 했다는 것 자체가, 그만큼 시장이 금리 인하 기대를 잘못 갖고 있다는 경고 신호로 해석된다. 현재 <strong>9월 금리 인상 확률은 51.3%</strong>로 시장이 반영 중이며, 12월 추가 인상 가능성도 거론된다.</p>
+  </div>
+</section>
+
+<!-- ================= SK HYNIX ================= -->
+<section class="fade-in">
+  <div class="eyebrow">Epicenter</div>
+  <h2>SK하이닉스 쇼크와 반도체 치킨게임의 재림</h2>
+  <p>지난 금요일 미국 ADR로 상장한 SK하이닉스가 2일 차 만에 <strong>9.3% 폭락</strong>했다. 한국 본장에서 전날(월요일) <strong>15.4% 폭락</strong>한 여파다. 이는 1997년 외환위기 이후 최대 낙폭이며, 시가총액 1조 달러 클럽에서도 탈락했다. 외국인은 단일 종목에서 $1.1B(약 11억 달러) 순매도를 기록했다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="chartSemi" height="220"></canvas>
+  </div>
+  <div class="chart-caption">반도체·메모리 관련주 낙폭 비교 (%)</div>
+
+  <h3>⚔️ 펀더멘털 충돌: 수요 논리 vs 공급 공포</h3>
+  <div class="card">
+    <div class="card-title" style="color:var(--blue)"><span class="dot" style="background:var(--blue)"></span>수요 논리 (Demand)</div>
+    <p style="font-size:13.5px; margin-bottom:0;">SK하이닉스 CEO 곽노정은 "2027년 업계 최악의 공급 부족이 올 것이며, 수요가 2030년대까지 초과할 것"이라고 밝혔다.</p>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>공급 공포 (Supply Glut)</div>
+    <p style="font-size:13.5px; margin-bottom:0;">한국투자증권은 2분기 영업이익이 컨센서스를 8% 하회할 것으로 전망. 범용 메모리 대비 HBM(고대역폭 메모리) 가격 인상이 지연되고 있다는 우려다.</p>
+  </div>
+  <p>결국 논리는 이렇다 — 수요가 넘쳐서 다들 공장을 짓고 있는데, 공장을 짓는 데 들어가는 돈이 워낙 크다 보니 2~3년 뒤 영업이익과 EPS(주당순이익)가 오히려 깎일 것이라는 계산을, 지금 시장이 미리 하고 있는 것이다.</p>
+
+  <h3>📦 5,360억 달러 규모의 메모리 증설 경쟁</h3>
+  <table>
+    <tr><th>기업/국가</th><th>투자 내역</th></tr>
+    <tr><td>삼성·SK (한국)</td><td>총 $536B 메가 클러스터 투자, 용인 클러스터 양산 시점 2029년으로 앞당김</td></tr>
+    <tr><td>마이크론 (미국)</td><td>미국 내 투자 계획 $200B → $250B로 확대</td></tr>
+  </table>
+  <p class="muted">한편 시장의 시그널은 모순적이다. Evercore ISI는 샌디스크 목표가를 $1,400→$3,100(최대 $4,000)로 크게 상향했지만, 주가는 당일 <strong>12.7% 폭락</strong>했다. 애널리스트의 단기 수요 전망보다, 2028년 이후 대규모 증설 경쟁에 따른 마진 축소를 시장이 먼저 반영하고 있다는 뜻이다.</p>
+
+  <p>TSMC는 6월 매출이 전년 대비 <strong>68% 급증</strong>했음에도 불구하고 주가는 오히려 하락했다. 수요가 이렇게 넘치는데도, 시장은 2028년 목표로 늘어나는 공장 투자가 결국 마진 축소로 이어질 것을 계산하고 있는 것이다. 삼성·SK는 용인·호남에, 미국은 인텔·마이크론·테슬라·스페이스X까지 투자 경쟁에 뛰어든 상태다.</p>
+</section>
+
+<!-- ================= BIG TECH DILEMMA ================= -->
+<section class="fade-in">
+  <div class="eyebrow">Big Tech's Dilemma</div>
+  <h2>천문학적 투자 비용 vs 지연되는 수익</h2>
+  <div class="stat-grid">
+    <div class="stat">
+      <div class="num">5GW</div>
+      <div class="label">메타, 루이지애나 데이터센터 확장 (단일 프로젝트 $50B 돌파)</div>
+    </div>
+    <div class="stat">
+      <div class="num">99%↑</div>
+      <div class="label">1년간 AI 관련 회사채 폭증 ($270B 도달, 아마존 단일 $92B 조달)</div>
+    </div>
+  </div>
+  <p>이런 엄청난 수요와 매출 증가에도 불구하고, 시장은 이제 <strong>"돈을 언제 버는데?"</strong>라는 질문을 하기 시작했다. 앱러빈 같은 경우 광고 지면이 계속 줄고 있다는 우려가 나온다. 밸류에이션(기업가치 평가)에 대한 의심은 사실 거의 1년 가까이 쌓여온 것이다. 대형 우량기업들이 굳이 회사채를 발행하고 전환사채를 재발행하는 모습까지 보이자, "이거 정말 괜찮은 걸까"라는 질문이 시장 전반에 퍼지고 있다.</p>
+</section>
+
+<!-- ================= CAPITAL ROTATION ================= -->
+<section class="fade-in">
+  <div class="eyebrow">Capital Rotation Heatmap</div>
+  <h2>스마트 머니의 피난처</h2>
+  <p>돈은 거짓말을 하지 않는다. 나스닥100에서 자금이 빠르게 이탈(-1.6%)하는 동안, 에너지·금융·방어주에는 자금이 유입되고 있다.</p>
+
+  <h3>🔻 Risk-Off (자금 이탈)</h3>
+  <div class="card"><p style="font-size:13.5px; margin-bottom:0;">나스닥100 유출 가속(-1.6%). 테슬라(TSLA)는 옵티머스·로보택시 상용화 타임라인 의구심이 재점화되며 -3.2%.</p></div>
+
+  <h3>🔺 Safe Haven (자금 유입)</h3>
+  <div class="card"><p style="font-size:13.5px; margin-bottom:0;"><strong>에너지</strong>: 지정학 수혜, 마라톤 페트롤리엄(MPC) 장중 +3.7%, 사상 최고가 $296 돌파<br><strong>금융</strong>: 대형 은행 M&A 규제 완화 및 실적 기대감 유입<br><strong>방어주</strong>: 필수소비재·헬스케어 중심, S&P 동일가중지수 상대적 선방</p></div>
+
+  <p>이번 주는 <strong>2분기 실적 시즌</strong>이 금융 섹터부터 본격 시작된다. 오늘 하루만 보더라도 퍼스트 하와이안 은행은 실적이 좋게 나왔음에도 시장 전체 분위기 때문에 주가가 빠졌다. 이번 주에는 골드만삭스, JP모건 등 대형 은행 실적이 줄줄이 예정돼 있다.</p>
+</section>
+
+<!-- ================= ALPHA TACTICS ================= -->
+<section class="fade-in">
+  <div class="eyebrow">Alpha Tactics</div>
+  <h2>시장의 노이즈를 뚫는 개별 기회들</h2>
+
+  <h3>🤝 M&A 프리미엄</h3>
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>MGM 리조트 비상장화</div>
+    <p style="font-size:13.5px; margin-bottom:0;">Barry Diller가 MGM 잔여 지분에 대해 주당 $48.30 인수를 제안(기업가치 $12.4B). 약세장 속에서도 주가는 2.4% 상승하며 제안가에 바짝 붙어 거래됐다.</p>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>파라마운트-워너브라더스 합병</div>
+    <p style="font-size:13.5px; margin-bottom:0;">12개 주 법무장관의 합병 저지 소송 제기에도 불구하고, 파라마운트 +2.5%, WBD +3.8% 상승 — 시장은 법적 리스크보다 합병 시너지에 더 무게를 두는 모습.</p>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>퍼스트 하와이안</div>
+    <p style="font-size:13.5px; margin-bottom:0;">$2B 규모 TriCo 인수로 본토 진출을 노리며, 지역 은행 M&A 모멘텀을 입증했다.</p>
+  </div>
+
+  <h3>📈 개별 종목 시그널</h3>
+  <table>
+    <tr><th>종목</th><th>등락</th><th>시그널</th></tr>
+    <tr><td>쇼피파이 (SHOP)</td><td class="pos">+1.8%</td><td>제프리스 매수의견 상향, B2B 마진력 부각</td></tr>
+    <tr><td>니오 (NIO)</td><td class="pos">+3.14%</td><td>골드만삭스 매수의견·목표가 $7 상향(+46% 업사이드)</td></tr>
+    <tr><td>ARM Holdings</td><td class="neg">-6.8%</td><td>50일 이동평균선($300) 지지력 테스트 중</td></tr>
+  </table>
+  <p class="muted">쇼피파이는 결제망·유료 멤버십 기반의 현금 창출력이, 니오는 잉여현금흐름 턴어라운드 기대감이, ARM은 AI 인프라 심리의 최우선 관전 포인트가 $300선 붕괴 여부에 달려 있다는 점이 각각의 핵심이다.</p>
+
+  <h3>🩹 숏스퀴즈 후보</h3>
+  <p style="font-size:13.5px;">그동안 과도하게 두들겨 맞은 소프트웨어주(피그마 등)와 사이버보안주는 숏스퀴즈(공매도 청산에 따른 급반등) 가능성이 거론된다. 또한 시장이 안 좋을 때 통상 바이오텍이 강세를 보이는 패턴도 함께 기억해둘 필요가 있다.</p>
+</section>
+
+<!-- ================= SIMULATOR ================= -->
+<section class="fade-in">
+  <div class="eyebrow">Interactive · Support Level Simulator</div>
+  <h2>ARM·마이크론, 지지선은 버틸까?</h2>
+  <p>슬라이더를 움직여 각 종목의 현재가가 핵심 지지선 대비 어디쯤 있는지 직접 확인해보자. 값은 방송에서 언급된 실제 지지선을 기준으로 한다.</p>
+
+  <div class="sim">
+    <h4>ARM Holdings — 50일 이동평균선 테스트</h4>
+    <div class="desc">핵심 지지선: <strong style="color:#fff">$300</strong> · 세 번째 터치 중 (붕괴 시 추가 하락 우려)</div>
+    <div class="sim-row">
+      <label>현재가 시뮬레이션 <span id="armVal">$300</span></label>
+      <input type="range" id="armSlider" min="250" max="340" value="300" step="1">
+    </div>
+    <div class="sim-result">
+      <div class="price" id="armPrice">$300</div>
+      <div class="status status-warn" id="armStatus">⚠️ 지지선 정확히 테스트 중</div>
+    </div>
+  </div>
+
+  <div class="sim">
+    <h4>마이크론 (Micron) — 지지선 확보 여부</h4>
+    <div class="desc">핵심 지지선: <strong style="color:#fff">$990 ~ $995</strong> · 현재가 $918까지 하락한 상태</div>
+    <div class="sim-row">
+      <label>현재가 시뮬레이션 <span id="muVal">$918</span></label>
+      <input type="range" id="muSlider" min="850" max="1050" value="918" step="1">
+    </div>
+    <div class="sim-result">
+      <div class="price" id="muPrice">$918</div>
+      <div class="status status-warn" id="muStatus">⚠️ 지지선 이미 이탈</div>
+    </div>
+  </div>
+  <button class="reset-btn" onclick="resetSim()">초기값으로 리셋</button>
+  <p class="muted">※ 방송 원문: "추격매수 하지 마십시오. 물타기 하지 마십시오." 엔비디아는 베라루빈 로드맵이라는 별도 성장 동력이 있어 마이크론과는 다르게 봐야 한다는 점도 함께 강조됐다.</p>
+</section>
+
+<!-- ================= CALENDAR ================= -->
+<section class="fade-in">
+  <div class="eyebrow">The Catalyst Matrix</div>
+  <h2>향후 72시간, 액션 캘린더</h2>
+  <p>이번 주는 안전벨트를 단단히 매야 한다. 브레이크를 밟을 준비와 액셀을 밟을 준비를 동시에 해야 하는 한 주다.</p>
+
+  <div class="cal">
+    <div class="cal-item">
+      <div class="cal-day">화요일<br>7/14</div>
+      <div class="cal-body">
+        <div class="t">미국 CPI 발표 · 호르무즈 봉쇄 발효(오후 4시)</div>
+        <div class="d">인플레이션 2.9% 상회 여부가 연준 매파 전환의 결정적 변수. 케빈 워시 청문회 발언도 예정.</div>
+      </div>
+    </div>
+    <div class="cal-item">
+      <div class="cal-day">수요일<br>7/15</div>
+      <div class="cal-body">
+        <div class="t">PPI 발표 · ASML 실적</div>
+        <div class="d">ASML은 반도체 장비(곡괭이) 제조사로, AI 하드웨어 수요 펀더멘털 검증의 핵심 데이터.</div>
+      </div>
+    </div>
+    <div class="cal-item">
+      <div class="cal-day">목요일<br>7/16</div>
+      <div class="cal-body">
+        <div class="t">트럼프 대통령 국정연설 (밤 9시)</div>
+        <div class="d">전국 동시 방송 예정. 어떤 발언이 나올지 예측 불가하며 시장에 큰 영향 예상.</div>
+      </div>
+    </div>
+    <div class="cal-item">
+      <div class="cal-day">이번주</div>
+      <div class="cal-body">
+        <div class="t">대형 은행 2분기 실적 개막</div>
+        <div class="d">JP모건, 골드만삭스 등 금융주 실적 발표. 스페이스X IPO 수수료 수익 확인 및 하반기 M&A 가이던스도 주목.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STRATEGY ================= -->
+<section class="fade-in">
+  <div class="eyebrow">Billionaire's Playbook</div>
+  <h2>3대 핵심 대응 전략</h2>
+
+  <div class="strategy">
+    <div class="num">전략 1</div>
+    <h4>AI 포지션 옥석 가리기 및 방어 (Hold &amp; Observe)</h4>
+    <p>단기 수급 공백(ARM $300, 마이크론 $990~995 지지선) 확인 전까지 AI 관련주 추격 매수는 엄격히 자제. 엔비디아의 구조적 로드맵(베라루빈)과 단기 노이즈는 철저히 분리해서 봐야 한다.</p>
+  </div>
+  <div class="strategy">
+    <div class="num">전략 2</div>
+    <h4>포트폴리오 헷지 로테이션 (Tactical Hedge)</h4>
+    <p>유가발 인플레이션 장기화 리스크에 대비, 에너지(마라톤 페트롤리엄, 셰브론) 및 방어주(필수소비재/헬스케어) 섹터 비중을 일시적으로 확대.</p>
+  </div>
+  <div class="strategy">
+    <div class="num">전략 3</div>
+    <h4>틈새시장 알파 포착 (Niche Alpha Targeting)</h4>
+    <p>밸류에이션 부담이 적은 B2B 커머스(쇼피파이), 공매도 과열 소프트웨어주(피그마 등) 숏스퀴즈 기회, MGM 리조트 등 대형 M&A 아비트라지를 모니터링.</p>
+  </div>
+
+  <p class="muted">방송에서는 "이 세 가지 전략을 모두 소화하기 어렵다면, 무리해서 움직이지 말고 전략 1(관망)만 지켜도 된다"고 강조했다.</p>
+</section>
+
+<!-- ================= CONCLUSION ================= -->
+<section class="fade-in">
+  <div class="eyebrow">Closing Note</div>
+  <h2>위기는 기회다, 단 현금이 있는 사람에게만</h2>
+  <p>2026년 하반기는 더 어려워질 수 있고 변동성은 더 커질 수 있다. 이런 장에서 감정적으로 대처하면 시장의 먹잇감이 될 수밖에 없다. 오늘 짚은 매크로 도미노 현상은 결코 새로운 이야기가 아니다. 그럼에도 반복해서 어려움을 겪는 이유는, 과거 자신이 겪은 어려움을 기록하지 않기 때문이라는 지적이 나왔다.</p>
+
+  <div class="quote-block">
+    <p>"주식시장은 원칙과 규칙을 가진 사람이 잘할 수 있는 공간이다. 나, 여러분, 기관 트레이더, 헤지펀드, 심지어 AI까지 — 모두 똑같은 조건 하에서 움직이는 게임이다."</p>
+  </div>
+
+  <p>결국 시장의 소음(Noise) 속에서 구조적 신호(Signal)를 읽어야 한다. 단기적 공포는 유동성 이동의 궤적을 숨기지 못한다. 거대한 자본의 이동을 추적하는 것, 그것이 이번 한 주를 버텨내는 핵심이다.</p>
+
+  <div class="disclaimer">
+    ⚠️ 경고 및 면책조항: 본 리포트는 특정 유튜브 방송 콘텐츠를 요약·분석한 것으로, 게재된 정보나 수치는 실제 사실과 다를 수 있습니다. 본 내용을 투자 정보 또는 투자 조언으로 참고하지 마시기 바랍니다. 모든 투자 판단과 그 결과에 대한 책임은 투자자 본인에게 있으며, 원금 손실의 위험이 있는 고위험 자산입니다.
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <div class="brand">CIA.chat</div>
+  <div>NOVA Real Invest 방송 분석 리포트 · 2026.07.13</div>
+</footer>
+
+<script>
+  // 1단계: fade-in observer
+  const fadeObs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        fadeObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+  // 2단계+3단계: chartConfigs + observer
+  const chartConfigs = {};
+
+  chartConfigs['chartRate'] = () => {
+    new Chart(document.getElementById('chartRate'), {
+      type: 'line',
+      data: {
+        labels: ['6월말', '7/10', '7/11', '7/12(주말)', '7/13(현재)', '연말 전망(비관)'],
+        datasets: [{
+          label: '10년물 국채금리 (%)',
+          data: [4.30, 4.38, 4.42, 4.50, 4.61, 4.80],
+          borderColor: '#e11d48',
+          backgroundColor: 'rgba(225,29,72,0.08)',
+          fill: true,
+          tension: 0.35,
+          pointBackgroundColor: '#e11d48',
+          pointRadius: 4,
+          borderWidth: 2.5
+        },{
+          label: '경고선 (4.4)',
+          data: [4.4,4.4,4.4,4.4,4.4,4.4],
+          borderColor: '#6b7280',
+          borderDash: [5,5],
+          pointRadius: 0,
+          borderWidth: 1.5
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position:'bottom', labels:{ font:{size:10.5}, boxWidth:12 } } },
+        scales: {
+          y: { min:4.0, max:5.0, ticks:{font:{size:10.5}} },
+          x: { ticks:{font:{size:9.5}} }
+        }
+      }
+    });
+  };
+
+  chartConfigs['chartSemi'] = () => {
+    new Chart(document.getElementById('chartSemi'), {
+      type: 'bar',
+      data: {
+        labels: ['SK하이닉스\n(한국본장)','SK하이닉스\n(美ADR)','마이크론','샌디스크','ARM','웨스턴디지털','엔비디아'],
+        datasets: [{
+          label: '당일 등락률 (%)',
+          data: [-15.4, -9.3, -6.4, -12.7, -6.8, -6.8, -3.5],
+          backgroundColor: ['#e11d48','#e11d48','#f43f5e','#e11d48','#f43f5e','#f43f5e','#6b7280'],
+          borderRadius: 5
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display:false } },
+        scales: {
+          y: { ticks:{font:{size:10.5}}, title:{display:true,text:'%',font:{size:10}} },
+          x: { ticks:{font:{size:9}} }
+        }
+      }
+    });
+  };
+
+  const chartObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const canvas = e.target.querySelector('canvas');
+        if (canvas && chartConfigs[canvas.id]) {
+          chartConfigs[canvas.id]();
+          e.target.classList.add('chart-ready');
+          chartObs.unobserve(e.target);
+        }
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+  // Simulator logic
+  const armSlider = document.getElementById('armSlider');
+  const muSlider = document.getElementById('muSlider');
+
+  function updateArm(){
+    const v = parseInt(armSlider.value);
+    document.getElementById('armVal').textContent = '$' + v;
+    document.getElementById('armPrice').textContent = '$' + v;
+    const statusEl = document.getElementById('armStatus');
+    if (v < 300){
+      statusEl.className = 'status status-warn';
+      statusEl.textContent = '🔴 지지선($300) 붕괴 — 추가 하락 경계 구간';
+    } else if (v < 310){
+      statusEl.className = 'status status-warn';
+      statusEl.textContent = '⚠️ 지지선 정확히 테스트 중';
+    } else {
+      statusEl.className = 'status status-safe';
+      statusEl.textContent = '🔵 지지선 상단 회복';
+    }
+  }
+  function updateMu(){
+    const v = parseInt(muSlider.value);
+    document.getElementById('muVal').textContent = '$' + v;
+    document.getElementById('muPrice').textContent = '$' + v;
+    const statusEl = document.getElementById('muStatus');
+    if (v < 990){
+      statusEl.className = 'status status-warn';
+      statusEl.textContent = '🔴 지지선($990~995) 이미 이탈';
+    } else if (v <= 995){
+      statusEl.className = 'status status-warn';
+      statusEl.textContent = '⚠️ 지지선 근접 테스트 중';
+    } else {
+      statusEl.className = 'status status-safe';
+      statusEl.textContent = '🔵 지지선 상단 확보';
+    }
+  }
+  armSlider.addEventListener('input', updateArm);
+  muSlider.addEventListener('input', updateMu);
+  function resetSim(){
+    armSlider.value = 300; muSlider.value = 918;
+    updateArm(); updateMu();
+  }
+  updateArm(); updateMu();
+</script>
+
+</body>
+</html>
