@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자본의 대이동: AI 예산 재편이 촉발한 시장의 균열과 기회</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,600&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#ffffff; --bg-soft:#fafafa;
+    --text:#1a1a1a; --text-soft:#777777;
+    --accent:#e11d48; --accent2:#f43f5e;
+    --line:#e5e5e5;
+    --c1:#e11d48; --c2:#1a1a1a; --c3:#6b7280; --c4:#2563eb;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:'Noto Sans KR',sans-serif; line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:640px; margin:0 auto; padding:0 20px 80px;}
+  h1,h2,h3{font-family:'Playfair Display',serif; letter-spacing:-0.01em;}
+  a{color:var(--accent);}
+
+  /* HERO */
+  .hero{
+    padding:56px 20px 40px; background:var(--bg);
+    border-bottom:1px solid var(--line);
+    text-align:left;
+  }
+  .hero .eyebrow{
+    font-size:12px; letter-spacing:0.16em; color:var(--accent);
+    font-weight:700; text-transform:uppercase; margin-bottom:14px;
+  }
+  .hero h1{
+    font-size:32px; font-weight:800; line-height:1.28; margin:0 0 18px;
+    color:var(--text);
+  }
+  .hero .sub{font-size:15px; color:var(--text-soft); margin-bottom:22px;}
+  .hero .meta{
+    display:flex; gap:14px; font-size:12px; color:var(--text-soft);
+    border-top:1px solid var(--line); padding-top:14px; flex-wrap:wrap;
+  }
+  .hero .meta b{color:var(--text);}
+
+  section{padding:38px 20px; border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  .kicker{
+    font-size:12px; font-weight:700; letter-spacing:0.12em; color:var(--accent);
+    text-transform:uppercase; margin-bottom:10px;
+  }
+  h2{font-size:23px; font-weight:700; margin:0 0 16px; color:var(--text);}
+  h3{font-size:17px; font-weight:700; margin:24px 0 10px; color:var(--text);}
+  p{font-size:15px; color:#333; margin:0 0 14px;}
+  .lead{font-size:16.5px; color:var(--text); font-weight:500;}
+
+  .card{
+    background:var(--bg-soft); border:1px solid var(--line); border-radius:10px;
+    padding:18px 18px; margin:16px 0;
+  }
+  .card.accent{border-left:4px solid var(--accent);}
+  .quote{
+    font-family:'Playfair Display',serif; font-style:italic; font-size:16px;
+    color:var(--text); padding:16px 18px; background:var(--bg-soft);
+    border-left:4px solid var(--accent); border-radius:6px; margin:16px 0;
+  }
+  .quote span{display:block; margin-top:8px; font-family:'Noto Sans KR',sans-serif;
+    font-style:normal; font-size:12px; color:var(--text-soft);}
+
+  .two-col{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  @media(max-width:420px){.two-col{grid-template-columns:1fr;}}
+  .stat-box{
+    background:var(--bg-soft); border:1px solid var(--line); border-radius:10px;
+    padding:14px; text-align:center;
+  }
+  .stat-box .num{font-family:'Playfair Display',serif; font-size:26px; font-weight:800;}
+  .stat-box .num.up{color:var(--c4);}
+  .stat-box .num.down{color:var(--accent);}
+  .stat-box .lab{font-size:12px; color:var(--text-soft); margin-top:4px;}
+
+  table{width:100%; border-collapse:collapse; font-size:13.5px; margin:16px 0;}
+  th{background:var(--accent); color:#fff; padding:9px 10px; text-align:left; font-weight:700;}
+  td{padding:9px 10px; border-bottom:1px solid var(--line); background:var(--bg-soft);}
+  tr:last-child td{border-bottom:none;}
+
+  .tag{
+    display:inline-block; font-size:11px; font-weight:700; padding:3px 9px;
+    border-radius:20px; background:rgba(225,29,72,0.1); color:var(--accent);
+    margin-right:6px; margin-bottom:6px;
+  }
+  .tag.blue{background:rgba(37,99,235,0.1); color:var(--c4);}
+  .tag.gray{background:rgba(107,114,128,0.12); color:var(--c3);}
+
+  /* fade-in / chart pattern (mandatory) */
+  .fade-in{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease;}
+  .fade-in.visible{opacity:1; transform:translateY(0);}
+  .chart-container{position:relative; max-height:340px;}
+  .chart-container canvas{opacity:0; transition:opacity .4s ease; max-height:300px;}
+  .chart-container.chart-ready canvas{opacity:1;}
+
+  /* pipeline timeline */
+  .pipeline{display:flex; justify-content:space-between; align-items:flex-end; margin:20px 0 6px; gap:6px;}
+  .pipe-step{flex:1; text-align:center;}
+  .pipe-jar{
+    width:100%; height:70px; border-radius:8px 8px 4px 4px; border:2px solid var(--text);
+    position:relative; overflow:hidden; background:#fff;
+  }
+  .pipe-jar .fill{position:absolute; bottom:0; left:0; width:100%;}
+  .pipe-step .yr{font-size:11px; color:var(--text-soft); margin-top:6px; font-weight:700;}
+  .pipe-step .badge{
+    font-size:9px; font-weight:800; color:#fff; background:var(--accent);
+    padding:2px 5px; border-radius:4px; position:absolute; top:4px; left:4px; right:4px;
+  }
+
+  /* matrix */
+  .matrix{
+    display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr;
+    border:2px solid var(--text); border-radius:10px; overflow:hidden; margin:18px 0 8px;
+    min-height:280px;
+  }
+  .matrix .q{
+    padding:14px 12px; cursor:pointer; border:1px solid var(--line);
+    display:flex; flex-direction:column; justify-content:center;
+    transition:background .2s ease, transform .15s ease;
+  }
+  .matrix .q:hover{transform:scale(1.015);}
+  .matrix .q1{background:rgba(225,29,72,0.12);}
+  .matrix .q2{background:rgba(244,63,94,0.08);}
+  .matrix .q3{background:rgba(107,114,128,0.1); grid-column:1/3;}
+  .matrix .q .qlabel{font-size:10px; font-weight:700; color:var(--text-soft); text-transform:uppercase; margin-bottom:4px;}
+  .matrix .q .qnames{font-family:'Playfair Display',serif; font-weight:700; font-size:15px; color:var(--text);}
+  .matrix-axis{display:flex; justify-content:space-between; font-size:11px; color:var(--text-soft); padding:0 4px;}
+  .matrix-detail{
+    margin-top:14px; background:var(--bg-soft); border:1px solid var(--line); border-radius:8px;
+    padding:14px; font-size:13.5px; min-height:56px; transition:opacity .2s ease;
+  }
+  .matrix-detail b{color:var(--accent);}
+
+  /* simulator */
+  .sim{
+    background:var(--bg-soft); border:1px solid var(--line); border-radius:12px;
+    padding:20px 18px; margin:16px 0;
+  }
+  .sim .row{margin-bottom:16px;}
+  .sim label{display:block; font-size:13px; font-weight:700; margin-bottom:8px;}
+  .sim input[type=range]{
+    width:100%; -webkit-appearance:none; height:6px; border-radius:4px;
+    background:linear-gradient(90deg, var(--c4), var(--accent)); outline:none;
+  }
+  .sim input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:22px; height:22px; border-radius:50%;
+    background:#fff; border:3px solid var(--accent); cursor:pointer;
+    box-shadow:0 1px 4px rgba(0,0,0,0.3);
+  }
+  .sim-bars{display:flex; height:34px; border-radius:6px; overflow:hidden; margin-top:12px; border:1px solid var(--line);}
+  .sim-bars .hw{background:var(--accent); display:flex; align-items:center; justify-content:center; color:#fff; font-size:11px; font-weight:700; transition:width .25s ease;}
+  .sim-bars .sw{background:var(--c4); display:flex; align-items:center; justify-content:center; color:#fff; font-size:11px; font-weight:700; transition:width .25s ease;}
+  .sim-readout{
+    margin-top:14px; font-size:13.5px; padding:12px; border-radius:8px;
+    background:#fff; border:1px dashed var(--accent);
+  }
+  .sim-readout b{color:var(--accent);}
+  .reset-btn{
+    margin-top:12px; border:1px solid var(--text); background:#fff; color:var(--text);
+    font-size:12px; font-weight:700; padding:7px 14px; border-radius:20px; cursor:pointer;
+  }
+  .reset-btn:hover{background:var(--text); color:#fff;}
+
+  .action-grid{display:grid; grid-template-columns:1fr; gap:12px; margin:16px 0;}
+  .action-card{border-radius:10px; padding:16px; border:1px solid var(--line);}
+  .action-card.open{background:rgba(37,99,235,0.06); border-left:4px solid var(--c4);}
+  .action-card.close{background:rgba(107,114,128,0.08); border-left:4px solid var(--c3);}
+  .action-card.check{background:rgba(225,29,72,0.06); border-left:4px solid var(--accent);}
+  .action-card .atitle{font-weight:800; font-size:14px; margin-bottom:6px;}
+  .action-card p{margin:0; font-size:13.5px;}
+
+  .final-note{
+    background:var(--text); color:#fff; border-radius:12px; padding:22px 20px; margin-top:10px;
+    text-align:center;
+  }
+  .final-note .fh{font-family:'Playfair Display',serif; font-size:19px; font-weight:700; margin-bottom:8px;}
+  .final-note p{color:#ddd; font-size:14px; margin:0;}
+
+  footer{
+    padding:26px 20px 10px; text-align:center; font-size:11.5px; color:var(--text-soft);
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow">CIA.chat · Market Briefing · 2026.07.14</div>
+  <h1>자본의 대이동:<br>AI 예산 재편이 촉발한<br>시장의 균열과 기회</h1>
+  <p class="sub">CPI 둔화라는 표면적 호재 속에서, IBM의 하루 25% 폭락이 드러낸 것은 &mdash; 기업들의 IT 예산이 소프트웨어에서 메모리·서버로 통째로 옮겨가고 있다는 구조적 신호였습니다.</p>
+  <div class="meta">
+    <span><b>날짜</b> 2026.07.14 (화)</span>
+    <span><b>핵심 지표</b> IBM -25.2%</span>
+    <span><b>출처</b> CIA.chat</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+<section class="fade-in">
+  <div class="kicker">Chapter 1 · 두 개의 얼굴</div>
+  <h2>인플레이션 둔화의 환호를 집어삼킨 이상 현상</h2>
+  <p class="lead">7월 14일 미국 증시는 겉으로는 평온했습니다. 하지만 그 속에는 시장의 방향을 뒤흔들 균열이 숨어 있었습니다.</p>
+  <p>미국 6월 소비자물가지수(CPI, 물가가 얼마나 올랐는지 보여주는 지표)가 3.5%로 나오면서 전월 대비 0.4%포인트 낮아졌습니다. 2020년 5월 이후 가장 큰 월간 하락폭입니다. 이 소식에 10년물 국채금리(정부가 돈을 빌릴 때 내는 이자율로, 시장 전체 대출 이자의 기준이 됨)가 4.585%까지 내려갔고, 나스닥은 0.90% 반등했습니다.</p>
+  <div class="two-col">
+    <div class="stat-box"><div class="num up">3.5%</div><div class="lab">6월 CPI (전월비 -0.4%p)</div></div>
+    <div class="stat-box"><div class="num up">4.585%</div><div class="lab">10년물 국채금리</div></div>
+  </div>
+  <p>그런데 다우지수만 유독 급락했습니다. 원인은 단 하나, <b>IBM</b>이었습니다. 거대 IT 기업 IBM이 단 하루 만에 시가총액 680억 달러(약 94조 원)가 증발했고, 주가는 25.2% 폭락했습니다. 완벽해 보이는 매크로(거시경제) 호재 속에서 개별 기업이 무너진 이 사건이, 오늘 시장이 진짜로 하고 싶었던 이야기입니다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="kicker">Chapter 2 · 진원지</div>
+  <h2>"이번 분기 우리는 흔들렸다" &mdash; CEO의 자백</h2>
+  <p>IBM 붕괴의 진원지는 아르빈드 크리슈나 CEO가 투자자들에게 보낸 서한이었습니다.</p>
+  <div class="quote">
+    고객들이 향후 가격 인상에 대비해 서버, 스토리지, 메모리에 예산을 집중하면서 기존 소프트웨어 계약이 지연되었습니다.
+    <span>— 아르빈드 크리슈나, IBM CEO 서한 中</span>
+  </div>
+  <p>이 한 문장이 의미하는 것은 명확합니다. <b>일감 자체가 사라진 게 아니라, 예산의 우선순위가 강제로 바뀐 것</b>입니다. 메모리·서버 공급이 부족하고 수요는 폭발적이다 보니, 거의 모든 기업이 여기에만 예산을 몰아넣고 있습니다. 반면 소프트웨어·컨설팅 같은 항목은 예산에서 통째로 밀려났습니다.</p>
+  <p>그 결과 IBM의 2분기 인프라 부문 매출은 7% 감소했고, 조정 주당순이익(EPS, 회사가 한 주당 얼마나 벌었는지 보여주는 숫자)은 2.93달러로 시장 예상치를 큰 폭으로 밑돌았습니다. 단순한 실적 미스가 아니라, <b>자본이 흐르는 방향 자체가 영구적으로 바뀌고 있다는 신호</b>라는 해석이 나오는 이유입니다.</p>
+  <p>실제로 그동안 시장은 소프트웨어·컨설팅·인프라를 골고루 갖춘 '다각화된' 회사를 좋은 회사로 여겼습니다. 하지만 지금은 다릅니다. AI·인프라에 몰빵(집중)하지 않은 회사는 IBM처럼 그 대가를 치르고 있습니다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="kicker">Chapter 3 · Pipeline 1</div>
+  <h2>인프라 선점: 2027년까지 닫혀버린 메모리 공급망</h2>
+  <p>IBM에서 빠져나간 예산은 어디로 갔을까요. 정답은 메모리 반도체입니다.</p>
+  <div class="pipeline">
+    <div class="pipe-step">
+      <div class="pipe-jar"><div class="fill" style="height:35%; background:#fde68a;"></div></div>
+      <div class="yr">2024</div>
+    </div>
+    <div class="pipe-step">
+      <div class="pipe-jar"><div class="fill" style="height:60%; background:#fca5a5;"></div></div>
+      <div class="yr">2025</div>
+    </div>
+    <div class="pipe-step">
+      <div class="pipe-jar"><span class="badge">완판</span><div class="fill" style="height:95%; background:var(--accent);"></div></div>
+      <div class="yr">2026</div>
+    </div>
+    <div class="pipe-step">
+      <div class="pipe-jar"><span class="badge">완판</span><div class="fill" style="height:95%; background:var(--accent);"></div></div>
+      <div class="yr">2027</div>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:12px; color:var(--text-soft);">Chokepoint Timeline · 메모리 공급망 완판 시점</p>
+
+  <h3>SK하이닉스: "솔드아웃(완판)" 한마디의 위력</h3>
+  <p>SK하이닉스 회장이 26~27년 물량이 완판되었다고 언급하자, 주가는 장중 약 27% 폭등했습니다. 바클레이스는 목표주가를 330달러로 제시했는데, 이는 당시 주가(180~190달러 선) 대비 거의 2배에 가까운 수치입니다.</p>
+  <p>마이크론은 같은 날 4.9% 상승에 그쳤습니다. 이미 많이 오른 상태라 추가 상승 여력(룸)이 크지 않다는 시각과, SK하이닉스는 상대적으로 '신선하다'는 평가가 엇갈립니다. 실제로 마이크론 차트는 한 달 사이 1,250달러 고점을 찍은 뒤 981달러까지 내려온 헤드앤숄더(머리어깨형, 하락 전환을 암시하는 차트 패턴) 형태를 보이고 있어 단기적으로는 박스권에 머물 가능성이 언급됐습니다.</p>
+  <p>중국의 6월 반도체 관련 수출도 전년 대비 약 27% 급등했는데, 이는 메모리 공급 부족 현상이 전 세계적으로 심화되고 있다는 또 다른 증거로 제시됐습니다.</p>
+
+  <h3>사이버보안: 예산 재편의 두 번째 수혜처</h3>
+  <p>IBM CEO는 실적 부진의 또 다른 이유로 "사이버보안 우려로 일반 프로젝트를 보류하고 있다"는 점도 언급했습니다. AI가 만들어낸 새로운 사이버 위협 우려로 고객들이 프로젝트를 멈추고 있다는 것입니다. 이 발언은 오히려 사이버보안 관련주에 호재로 해석돼, 크라우드스트라이크 +12%, 옥타 +10%, 다크트레이스(디스켈레어) +7%가 상승했습니다. 이날 백악관도 사이버보안 관련 성명을 발표하며 상승세를 뒷받침했습니다.</p>
+
+  <h3>곡괭이를 파는 사람들: 대형 투자은행</h3>
+  <p>'AI 골드러시가 나면 곡괭이 파는 사람이 가장 돈을 번다'는 통념처럼, 이번엔 자금을 조달해주는 대형 투자은행이 수혜를 봤습니다. IPO·회사채·전환사채 발행, M&A 자문을 담당하는 투자은행 관련주는 장중 6%, 장후 30% 급등해 하루 동안 36% 폭등했습니다. 골드만삭스 역시 어닝 서프라이즈로 주가가 약 10% 움직였는데, 특히 스페이스X 관련 수수료 수익이 약 130% 폭증한 것이 실적을 이끌었습니다.</p>
+
+  <div class="chart-container fade-in" style="margin-top:10px;">
+    <canvas id="dailyMoveChart" height="230"></canvas>
+  </div>
+  <p style="font-size:12px; color:var(--text-soft); text-align:center; margin-top:6px;">7월 14일 주요 종목 당일 등락률 비교</p>
+</section>
+
+<section class="fade-in">
+  <div class="kicker">Chapter 4 · 전략적 재편</div>
+  <h2>진짜 가격 결정력을 가진 승자 판별법</h2>
+  <p>오늘 하루의 사건들을 하나의 매트릭스로 정리하면, 자본이 어디로 흘러가고 어디서 빠져나가는지 한눈에 보입니다. <b>사분면을 눌러보세요.</b></p>
+
+  <div class="matrix" id="matrixGrid">
+    <div class="q q1" data-detail="예산 수혜 + 타협 불가 필수 지출이 겹치는 구간입니다. 메모리(SK하이닉스·마이크론)는 없으면 AI 서버를 못 만드는 필수재이고, 사이버보안(크라우드스트라이크)은 비용을 아끼기 어려운 항목입니다. 가격을 올려도 수요가 잘 버텨주는 '초강세' 구간입니다.">
+      <div class="qlabel">1사분면 · AI 수혜 高 / 가격결정력 高</div>
+      <div class="qnames">SK Hynix · Micron<br>CrowdStrike</div>
+    </div>
+    <div class="q q2" data-detail="AI 인프라 교체 수요와 그에 따른 자금 조달로 수혜를 보지만, 경기 흐름에 따라 실적이 오르내리는 '경기 민감형' 수혜주입니다. 골드만삭스는 IPO·M&A 수수료, 델은 서버 하드웨어 교체 수요의 수혜를 받습니다.">
+      <div class="qlabel">2사분면 · AI 수혜 高 / 가격결정력 低</div>
+      <div class="qnames">Goldman Sachs<br>Dell</div>
+    </div>
+    <div class="q q3" data-detail="예산 이동의 희생양들입니다. IBM은 레거시 소프트웨어 계약 지연의 직격탄을 맞았고, 애플은 원가 상승분을 소비자에게 넘기기 어려운 구조입니다. HCA헬스케어는 소비자 재무 악화의 여파를, 세일즈포스는 소프트웨어 예산 축소의 영향을 받는 구간입니다.">
+      <div class="qlabel">3/4사분면 · AI 수혜 低 / 거시경제 압박 高</div>
+      <div class="qnames">IBM · Salesforce · HCA Healthcare · Apple</div>
+    </div>
+  </div>
+  <div class="matrix-axis"><span>← 필수 지출·가격결정력 높음</span><span>경기 민감·가격결정력 낮음 →</span></div>
+  <div class="matrix-detail" id="matrixDetail">사분면을 눌러보면 해당 그룹에 대한 설명이 여기에 나타납니다.</div>
+  <p style="margin-top:14px;">단순한 테마 맹신은 위험합니다. 자본이 유입되는 곳과, 그 원가 상승분을 고객에게 그대로 전가할 수 있는 '가격결정력'을 함께 가진 소수의 기업만이 진짜 프리미엄을 독식합니다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="kicker">Chapter 5 · Tail Risk 1</div>
+  <h2>원가 상승의 부메랑: 애플의 이례적 등급 하향</h2>
+  <p>애플은 어제 52주 신고가를 찍었습니다. 하지만 오늘 이 기록의 의미를 두고 시장의 해석이 완전히 엇갈렸습니다.</p>
+  <p>한쪽에서는 "애플이 아이폰·맥북 가격을 200~300달러 올려도 어차피 잘 팔리니 오히려 더 벌 것"이라 봤습니다. 하지만 다른 쪽에서는 "메모리 원가가 너무 비싸져서, 가격을 올려도 남는 게 별로 없을 것"이라는 정반대 분석이 나왔습니다. 내부자가 아니면 정확한 원가 구조를 알 수 없기에 이런 해석 차이가 발생합니다.</p>
+  <div class="card accent">
+    <b>KeyBanc 리포트 핵심</b>
+    <p style="margin:8px 0 0;">애플 투자등급을 '비중축소(Underweight)'로 하향, 목표가 250달러 제시 &mdash; 당시 주가(314.86달러) 대비 약 20%의 하락 여력을 시사했습니다.</p>
+  </div>
+  <p>메모리 3사가 AI 칩 생산에 집중하며 범용 D램 공급까지 부족해졌고, 이는 반도체 섹터 전체에 강력한 가격결정력을 부여했습니다. 문제는 이 가격결정력이 SK하이닉스에는 호재지만, 그 메모리를 사서 스마트폰·PC를 만들어야 하는 애플 같은 제조사에는 치명적인 마진 압박이라는 점입니다. 아래 시뮬레이터로 이 상충 관계를 직접 체감해 보세요.</p>
+
+  <div class="sim">
+    <div class="row">
+      <label>메모리·하드웨어 원가 상승 압박 <span id="pressureVal">50</span>%</label>
+      <input type="range" id="pressureSlider" min="0" max="100" value="50">
+    </div>
+    <div class="sim-bars">
+      <div class="hw" id="hwBar" style="width:50%;">원가 부담</div>
+      <div class="sw" id="swBar" style="width:50%;">가격 전가 여력</div>
+    </div>
+    <div class="sim-readout" id="simReadout">
+      원가 상승 압박이 절반 수준일 때는, 가격 인상분으로 원가 상승을 어느 정도 상쇄할 수 있는 <b>균형 구간</b>입니다.
+    </div>
+    <button class="reset-btn" id="simReset">초기값으로 리셋</button>
+  </div>
+  <p style="font-size:12px; color:var(--text-soft);">※ 이 시뮬레이터는 KeyBanc 리포트가 제기한 '원가 상승 vs 수요 탄력성' 구도를 이해를 돕기 위해 단순화한 것으로, 실제 애플의 재무 결과를 예측하지 않습니다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="kicker">Chapter 6 · Tail Risk 2</div>
+  <h2>뉴욕주, AI 데이터센터에 전면 금지령</h2>
+  <p>뉴욕주는 향후 1년간 AI 데이터센터 신규 건설을 전면 금지하는 모라토리엄(일시 중단 조치)을 선언했습니다. 명분은 두 가지입니다.</p>
+  <div class="two-col">
+    <div class="stat-box"><div class="num down">1년</div><div class="lab">데이터센터 신규 건설 전면 금지</div></div>
+    <div class="stat-box"><div class="num" style="color:var(--c3);">2가지</div><div class="lab">전력망 안전성 · 기후변화 목표</div></div>
+  </div>
+  <p>미국에서 가장 부유한 주(州)로 꼽히는 뉴욕조차, 빅테크의 막대한 자금력으로도 해결할 수 없는 두 가지 한계 &mdash; <b>부족한 전력망</b>과 <b>부족한 부지</b> &mdash; 를 이유로 손을 든 것입니다.</p>
+  <p>이 규제가 뉴욕에서 그치지 않고 다른 주로 확산될 가능성이 이번 사건의 핵심 리스크로 지목됐습니다. 뉴욕은 정책 유행을 선도하는 지역으로 평가받기 때문입니다. 만약 확산된다면, 그동안 증시를 이끌었던 하이퍼스케일러(대형 클라우드 기업)들의 AI 설비투자(캐펙스)는 강제로 속도를 줄일 수밖에 없습니다. 이는 AI 인프라 확장 속도 둔화라는, 증시 관점에서 반드시 한 번은 반영해야 할 리스크입니다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="kicker">Chapter 7 · Tail Risk 3</div>
+  <h2>지표 이면의 균열: 소비자와 기업의 재무 건전성 한계</h2>
+  <p>거시경제 지표는 좋은데, 정작 그 안에서 살아가는 사람들의 살림살이는 나빠지고 있다는 모순이 오늘 데이터에서 드러났습니다. 물가가 오르는 속도만큼 소득이 늘지 않아, 월급만으로 생활하는 사람들이 원치 않아도 실질적으로 가난해지고 있다는 것입니다. 여기에 건강보험을 잃는 무보험자도 늘어나는 추세입니다.</p>
+
+  <div class="card">
+    <b>HCA Healthcare -6.9%</b>
+    <p style="margin:8px 0 0;">무보험 환자 급증과 보험 지급 구조 악화로 4억 달러 규모의 세전 손실이 발생했습니다. 돈이 없어 병원에 가지 못하는 현상이 숫자로 드러난 사례입니다.</p>
+  </div>
+  <div class="card">
+    <b>Lucid Group &mdash; 장중 -57%</b>
+    <p style="margin:8px 0 0;">파산보호 신청 및 비상장 전환 루머로 장중 57%까지 폭락, 한때 거래가 정지(헬트)됐습니다. 회사는 사실을 부인했지만 정규장 -16.2%, 장후 추가 -4%로 하루 동안 총 20% 가까이 하락 마감했습니다. 고금리가 장기화되며 자금 조달에 어려움을 겪는 기업들의 취약성을 보여준 사례입니다.</p>
+  </div>
+  <p>이 두 사례는 고금리 국면이 길어질수록 소비자와 기업 모두의 재무 건전성이 한계에 다다르고 있다는, 거시경제의 취약한 고리를 보여줍니다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="kicker">Chapter 8 · Action Plan</div>
+  <h2>'맹목적 테마 투자'의 종말, 자본의 유체역학에 올라타라</h2>
+  <p>여러분의 자본을 물이나 기름처럼 흐르는 유체로 생각해 보세요. 이제 중요한 것은 그 유체를 어디로 흘려보낼지 결정하는 밸브 조작입니다.</p>
+  <div class="action-grid">
+    <div class="action-card open">
+      <div class="atitle">🔵 집중 (Concentrate) &mdash; 밸브 열기</div>
+      <p>기업 예산 이동의 최종 도착지이자 가격결정력을 쥔 HBM/메모리(SK하이닉스, 마이크론)와 사이버보안(크라우드스트라이크)으로 핵심 포지션을 압축.</p>
+    </div>
+    <div class="action-card close">
+      <div class="atitle">⚪ 회피 (Avoid) &mdash; 밸브 닫기</div>
+      <p>예산 삭감의 직접적 타격을 받는 레거시 IT 소프트웨어, 원가 상승분을 소비자에게 전가하기 어려운 하드웨어 비중 축소.</p>
+    </div>
+    <div class="action-card check">
+      <div class="atitle">🔴 방어 (Hedge) &mdash; 압력 체크</div>
+      <p>반도체 섹터 변동성이 최고치에 달한 상황. M&A·트레이딩 호황의 안정적 수익을 내는 대형 금융주(골드만삭스) 편입으로 포트폴리오 밸런스 방어.</p>
+    </div>
+  </div>
+  <div class="final-note">
+    <div class="fh">AI가 모든 기술주에 자동 호재가 되는 장세는 끝났습니다.</div>
+    <p>앞으로의 수익은 '자본이 빠져나가는 곳'을 피하고 '자본이 고이는 곳'을 선점하는 디테일에서 결정됩니다.</p>
+  </div>
+</section>
+
+</div>
+
+<footer>ⓒ 2026 CIA.chat &middot; 본 리포트는 정보 제공을 목적으로 하며 투자 조언이 아닙니다.</footer>
+
+<script>
+  // Step 1: fade-in observer (mandatory pattern)
+  const fadeObs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        fadeObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+  // Step 2/3: chart configs + observer (mandatory pattern)
+  const chartConfigs = {};
+  chartConfigs['dailyMoveChart'] = () => {
+    const labels = ['IBM','SK하이닉스','마이크론','크라우드스트라이크','옥타','골드만삭스','루시드(일간)','HCA헬스케어','애플'];
+    const data = [-25.2, 27, 4.9, 12, 10, 10, -20, -6.9, -0.77];
+    const colors = data.map(v => v >= 0 ? '#2563eb' : '#e11d48');
+    new Chart(document.getElementById('dailyMoveChart'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: '당일 등락률(%)',
+          data,
+          backgroundColor: colors,
+          borderRadius: 4
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { color: '#e5e5e5' }, ticks: { color: '#777777', font: { size: 11 } } },
+          y: { grid: { display: false }, ticks: { color: '#1a1a1a', font: { size: 11 } } }
+        }
+      }
+    });
+  };
+
+  const chartObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const canvas = e.target.querySelector('canvas');
+        if (canvas && chartConfigs[canvas.id]) {
+          chartConfigs[canvas.id]();
+          e.target.classList.add('chart-ready');
+          chartObs.unobserve(e.target);
+        }
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+  // Matrix interactivity
+  document.querySelectorAll('#matrixGrid .q').forEach(q => {
+    q.addEventListener('click', () => {
+      document.getElementById('matrixDetail').innerHTML = '<b>' + q.querySelector('.qnames').innerHTML.replace('<br>', ' · ') + '</b><br><br>' + q.dataset.detail;
+    });
+  });
+
+  // Simulator interactivity
+  const slider = document.getElementById('pressureSlider');
+  const hwBar = document.getElementById('hwBar');
+  const swBar = document.getElementById('swBar');
+  const pressureVal = document.getElementById('pressureVal');
+  const simReadout = document.getElementById('simReadout');
+
+  function updateSim(val){
+    pressureVal.textContent = val;
+    hwBar.style.width = val + '%';
+    swBar.style.width = (100 - val) + '%';
+    let msg;
+    if (val < 30) {
+      msg = '원가 압박이 낮아 애플처럼 가격결정력이 약한 기업도 <b>비교적 여유 있게</b> 마진을 지킬 수 있는 구간입니다.';
+    } else if (val < 70) {
+      msg = '원가 상승 압박이 중간 수준일 때는, 가격 인상으로 어느 정도 상쇄가 가능한 <b>균형 구간</b>입니다. KeyBanc 리포트가 우려한 지점이 바로 이 근처입니다.';
+    } else {
+      msg = '원가 압박이 과도해지면 가격을 올려도 마진이 줄어드는 <b>수요 파괴 구간</b>에 진입할 수 있습니다. 판매량 감소가 가격 인상분보다 커지는 상황입니다.';
+    }
+    simReadout.innerHTML = msg;
+  }
+
+  slider.addEventListener('input', (e) => updateSim(parseInt(e.target.value)));
+  document.getElementById('simReset').addEventListener('click', () => {
+    slider.value = 50;
+    updateSim(50);
+  });
+  updateSim(50);
+</script>
+
+</body>
+</html>
