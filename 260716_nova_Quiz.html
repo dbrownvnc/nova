@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>퀴즈 - 페이팔 530억 달러 메가딜</title>
+<style>
+  :root{
+    --bg:#ffffff; --bg-sub:#fafafa;
+    --text:#1a1a1a; --text-sub:#777777;
+    --accent:#e11d48; --accent2:#f43f5e;
+    --border:#e5e5e5;
+    --green:#16a34a; --green-bg:#dcfce7;
+    --red:#dc2626; --red-bg:#fee2e2;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Noto Sans KR', -apple-system, sans-serif;
+    background:var(--bg); color:var(--text); line-height:1.6;
+    padding-bottom:60px;
+  }
+  .wrap{max-width:520px; margin:0 auto; padding:0 16px;}
+
+  .top-header{
+    background:var(--text); color:#fff; padding:28px 16px 20px; text-align:center;
+  }
+  .top-header .eyebrow{font-size:11px; letter-spacing:2px; color:var(--accent2); font-weight:700; margin-bottom:8px;}
+  .top-header h1{font-family:'Playfair Display', 'Noto Sans KR', serif; font-size:22px; font-weight:900;}
+
+  .scoreboard{
+    position: sticky; top:0; z-index:100;
+    background:#fff; border-bottom:2px solid var(--accent);
+    padding:12px 16px; box-shadow:0 2px 10px rgba(0,0,0,0.06);
+  }
+  .scoreboard .sb-row{
+    display:flex; justify-content:space-between; font-size:12.5px; font-weight:700; margin-bottom:8px;
+  }
+  .sb-row span.val{color:var(--accent);}
+  .sb-bar-bg{ width:100%; height:8px; background:#eee; border-radius:20px; overflow:hidden; }
+  .sb-bar-fill{ height:100%; width:0%; background:#dc2626; transition: width .4s ease, background .4s ease; border-radius:20px; }
+
+  .q-card{
+    background:#fff; border:1px solid var(--border); border-radius:12px;
+    margin:18px 0; padding:18px; box-shadow:0 1px 4px rgba(0,0,0,0.03);
+  }
+  .q-head{ display:flex; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
+  .q-num{ font-family:'Playfair Display', serif; font-weight:900; color:var(--accent); font-size:15px; }
+  .diff-badge{ font-size:10px; font-weight:700; padding:3px 8px; border-radius:10px; }
+  .diff-easy{ background:#dcfce7; color:#16a34a; }
+  .diff-medium{ background:#fef3c7; color:#b45309; }
+  .diff-hard{ background:#fee2e2; color:#dc2626; }
+  .type-badge{ font-size:10px; font-weight:700; padding:3px 8px; border-radius:10px; background:#f3f4f6; color:#555; }
+
+  .q-text{ font-size:15px; font-weight:500; margin-bottom:14px; line-height:1.6; }
+
+  .options{ display:flex; flex-direction:column; gap:8px; }
+  .opt-btn{
+    text-align:left; padding:12px 14px; border:1.5px solid var(--border); border-radius:8px;
+    background:#fff; font-size:13.5px; cursor:pointer; transition:all .15s ease;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .opt-btn:active{ transform:scale(0.98); }
+  .opt-btn.correct{ background:var(--green-bg); border-color:var(--green); color:#166534; font-weight:700; }
+  .opt-btn.wrong{ background:var(--red-bg); border-color:var(--red); color:#991b1b; font-weight:700; }
+  .opt-btn:disabled{ cursor:default; }
+  .opt-badge{ font-size:11px; font-weight:900; }
+
+  .ox-row{ display:flex; gap:12px; }
+  .ox-btn{
+    flex:1; padding:16px; border:1.5px solid var(--border); border-radius:10px;
+    background:#fff; font-size:20px; font-weight:900; cursor:pointer; transition:all .15s ease;
+  }
+  .ox-btn.correct{ background:var(--green-bg); border-color:var(--green); color:var(--green); }
+  .ox-btn.wrong{ background:var(--red-bg); border-color:var(--red); color:var(--red); }
+  .ox-btn:disabled{ cursor:default; }
+
+  .short-wrap{ display:flex; gap:8px; }
+  .short-input{
+    flex:1; padding:12px 14px; border:1.5px solid var(--border); border-radius:8px; font-size:14px;
+    font-family:inherit;
+  }
+  .short-input:disabled{ background:#f3f4f6; }
+  .submit-btn{
+    padding:12px 18px; border:none; border-radius:8px; background:var(--accent); color:#fff;
+    font-weight:700; font-size:13.5px; cursor:pointer;
+  }
+  .submit-btn:disabled{ background:#ccc; cursor:default; }
+
+  .feedback{
+    margin-top:10px; padding:8px 12px; border-radius:8px; font-size:13px; font-weight:700;
+    display:none;
+  }
+  .feedback.show{ display:block; }
+  .feedback.correct{ background:var(--green-bg); color:#166534; }
+  .feedback.wrong{ background:var(--red-bg); color:#991b1b; }
+
+  .explain{
+    max-height:0; overflow:hidden; transition:max-height .4s ease;
+    margin-top:0;
+  }
+  .explain.open{ max-height:300px; margin-top:12px; }
+  .explain-inner{
+    background:var(--bg-sub); border-left:3px solid var(--accent); border-radius:6px;
+    padding:12px 14px; font-size:12.5px; color:var(--text-sub); line-height:1.7;
+  }
+  .explain-inner b{ color:var(--text); }
+
+  .result-section{
+    display:none; text-align:center; padding:36px 20px; background:var(--text); color:#fff;
+    border-radius:16px; margin:24px 0;
+  }
+  .result-section.show{ display:block; }
+  .result-section .grade{
+    font-family:'Playfair Display', serif; font-size:56px; font-weight:900; color:var(--accent2);
+    margin:10px 0;
+  }
+  .result-section .score-text{ font-size:16px; margin-bottom:6px; }
+  .result-section .msg{ font-size:13px; color:#ccc; margin-bottom:20px; }
+  .retry-btn{
+    padding:12px 28px; border:none; border-radius:30px; background:var(--accent); color:#fff;
+    font-weight:700; font-size:14px; cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="top-header">
+  <div class="eyebrow">QUIZ TIME</div>
+  <h1>페이팔 530억 딜 & 반도체 전쟁 이해도 체크</h1>
+</div>
+
+<div class="scoreboard">
+  <div class="sb-row">
+    <div>푼 문제 <span class="val" id="sbSolved">0</span> / 10</div>
+    <div>맞힌 문제 <span class="val" id="sbCorrect">0</span></div>
+    <div>정답률 <span class="val" id="sbRate">0%</span></div>
+  </div>
+  <div class="sb-bar-bg"><div class="sb-bar-fill" id="sbBar"></div></div>
+</div>
+
+<div class="wrap">
+  <div id="quizContainer"></div>
+
+  <div class="result-section" id="resultSection">
+    <div class="score-text">최종 점수</div>
+    <div class="grade" id="finalGrade">A</div>
+    <div class="score-text" id="finalScoreText">10문제 중 0문제 정답</div>
+    <div class="msg" id="finalMsg"></div>
+    <button class="retry-btn" id="retryBtn">다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id: 1, type: 'ox', difficulty: 'easy',
+    question: "PPI(생산자물가지수)는 CPI(소비자물가지수)와 완전히 같은 지표다.",
+    answer: 'X',
+    explanation: "PPI는 생산자물가지수로, CPI(소비자물가지수)와는 다른 지표입니다. 다만 방송에서는 'PPI가 언제나 나오는 걸 보면 결국에는 PCE(개인소비지출)하고 비슷하게 나온다'며 PPI가 향후 물가 흐름을 프로젝션(예측)하는 선행 신호 역할을 한다고 설명했습니다."
+  },
+  {
+    id: 2, type: 'mc', difficulty: 'easy',
+    question: "오늘 페이팔 인수를 제안한 주체는 어디였습니까?",
+    options: ["애플과 아마존", "대형 사모펀드와 스트라이프(Stripe)", "구글과 마이크로소프트", "비자와 마스터카드"],
+    answer: 1,
+    explanation: "원본 자막: '사모펀드 회사하고 스트라이프가 같이 일을 제안한 거예요. 총액 534억 달러의 인수 제안.' 즉 대형 사모펀드와 스트라이프가 공동으로 페이팔 인수를 제안했습니다."
+  },
+  {
+    id: 3, type: 'mc', difficulty: 'medium',
+    question: "페이팔 인수 제안 가격(주당)은 얼마였습니까?",
+    options: ["50달러 00센트", "55달러 52센트", "60달러 50센트", "65달러 00센트"],
+    answer: 2,
+    explanation: "원본 자막: '딜의 가격은 얼마냐? 60불 50전입니다. 60불 50전 준다고 했어요.' 참고로 당일 주가는 장중 55.52달러를 가리켰고, 제안가는 그보다 약 28% 프리미엄이 붙은 가격입니다."
+  },
+  {
+    id: 4, type: 'short', difficulty: 'medium',
+    question: "애플의 시가총액이 오늘 상승으로 근접하게 된 규모는 얼마입니까? (숫자와 단위로 답하세요, 예: 5조 달러)",
+    answer: "5조 달러",
+    acceptable: ["5조달러", "5trillion", "5 trillion", "5T", "5조"],
+    explanation: "원본 자막: '시가총액 5트릴리언을 바라보고 있습니다. 지금 5트릴리언은 엔비디아 혼자 혼자 이러고 있어요. 근데 이제 애플이 도전하면서...' 애플이 4% 이상 상승하며 시가총액 5조 달러에 근접, 시총 2위를 탈환했습니다."
+  },
+  {
+    id: 5, type: 'mc', difficulty: 'medium',
+    question: "중국 규제당국(CAC)이 오늘 승인한 것은 무엇입니까?",
+    options: ["테슬라의 자율주행 기능", "애플 인텔리전스(AI 기능)", "엔비디아의 중국 수출", "페이팔의 중국 진출"],
+    answer: 1,
+    explanation: "원본 자막: '까다롭기로 유명한 중국에서 CAC라는 기관에서 규제당국이죠. 애플 인텔리전스를 전격 승인을 했습니다. 여기에 중국의 빅테크죠. 알리바바의 QN(Qwen) 엔진과 바이두의 AI 모델을 애플 플랫폼에 통합하기로 확정됐습니다.'"
+  },
+  {
+    id: 6, type: 'mc', difficulty: 'easy',
+    question: "ASML의 장비 주문(백로그)이 밀려있는 시점은 언제까지입니까?",
+    options: ["2026년까지", "2027년까지", "2028년까지", "2030년까지"],
+    answer: 2,
+    explanation: "원본 자막: '얘네는 주문이 언제까지 밀려있냐? 2028년입니다. 2028년까지 지금 백로그가 밀려있습니다. 정말 독점적인 회사다.' 이는 노바가 이미 6월부터 언급했던 '곡괭이를 만드는 공장' 논리와 연결됩니다."
+  },
+  {
+    id: 7, type: 'short', difficulty: 'hard',
+    question: "워런 버핏(버크셔 해서웨이)이 현재 보유하고 있는 현금 규모는 얼마입니까? (숫자와 단위로 답하세요, 예: 4천억 달러)",
+    answer: "4천억 달러",
+    acceptable: ["4천억달러", "400billion", "4000억원", "4000억달러", "4000억"],
+    explanation: "원본 자막: '모두 다 캐시로 만들어놨죠. 무려 4천억 달러입니다. 4천억 달러. 왜 이렇게 자꾸 현금을 모으는 걸까요?' 버핏은 포트폴리오도 120여 개 종목에서 50여 개로 압축했습니다."
+  },
+  {
+    id: 8, type: 'mc', difficulty: 'medium',
+    question: "마이크론(MU) 주가 급락의 직접적 원인이 된 중국 기업은 어디입니까?",
+    options: ["알리바바", "창신메모리(CXMT)", "바이두", "텐센트"],
+    answer: 1,
+    explanation: "원본 자막: '중국의 창신메모리 CXMT라는 회사가 IPO를 상장을 추진하고 있습니다... 무려 규모가 85억 달러 규모입니다. 85.5억 달러... 경쟁 시그널 하나 나오니까 전부 다 매도폭탄을 눌러버린 것이었습니다.'"
+  },
+  {
+    id: 9, type: 'ox', difficulty: 'medium',
+    question: "오늘 S&P500 구성 종목 중 절반이 넘는 종목이 상승했다.",
+    answer: 'X',
+    explanation: "원본 자막: '오늘 상승을 이루어낸 아이들은 몇 개 정도 될까? 230개 정도밖에 안 되는 상황을 우리가 볼 수 있었습니다.' 500개 중 230개만 상승했으므로 절반(250개)에 못 미쳤습니다."
+  },
+  {
+    id: 10, type: 'mc', difficulty: 'hard',
+    question: "블랙록의 래리 핑크는 향후 12개월 시장에 대해 어떤 입장을 밝혔습니까?",
+    options: [
+      "매우 약세적(bearish)이며 현금 비중을 늘려야 한다",
+      "매우 강세적(bullish)이며 호실적이 근거다",
+      "중립적이며 관망이 최선이다",
+      "코멘트를 거부했다"
+    ],
+    answer: 1,
+    explanation: "원본 자막: '나는 향후 12개월 내에 시장에 대해서 매우 방(공격)적으로 보고 있다... Very bullish하게 보고 있다. 왜? 호실적. 호실적 때문이다.' 이는 워런 버핏의 방어적 견해와 정반대되는 입장입니다."
+  }
+];
+
+let state = { solved: 0, correct: 0 };
+
+function renderQuiz(){
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+  QUIZ_DATA.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'card-' + q.id;
+
+    const diffLabel = q.difficulty === 'easy' ? '쉬움' : (q.difficulty === 'medium' ? '보통' : '어려움');
+    const typeLabel = q.type === 'mc' ? '객관식' : (q.type === 'ox' ? 'O/X' : '단답형');
+
+    let bodyHtml = '';
+    if(q.type === 'mc'){
+      bodyHtml = `<div class="options" id="opts-${q.id}">` +
+        q.options.map((opt, i) => `<button class="opt-btn" data-idx="${i}" onclick="answerMC(${q.id}, ${i})"><span>${opt}</span><span class="opt-badge"></span></button>`).join('') +
+        `</div>`;
+    } else if(q.type === 'ox'){
+      bodyHtml = `<div class="ox-row" id="opts-${q.id}">
+        <button class="ox-btn" data-val="O" onclick="answerOX(${q.id}, 'O')">O</button>
+        <button class="ox-btn" data-val="X" onclick="answerOX(${q.id}, 'X')">X</button>
+      </div>`;
+    } else {
+      bodyHtml = `<div class="short-wrap">
+        <input type="text" class="short-input" id="input-${q.id}" placeholder="정답을 입력하세요">
+        <button class="submit-btn" id="submit-${q.id}" onclick="answerShort(${q.id})">제출</button>
+      </div>`;
+    }
+
+    card.innerHTML = `
+      <div class="q-head">
+        <span class="q-num">Q${q.id}</span>
+        <span class="diff-badge diff-${q.difficulty}">${diffLabel}</span>
+        <span class="type-badge">${typeLabel}</span>
+      </div>
+      <div class="q-text">${q.question}</div>
+      ${bodyHtml}
+      <div class="feedback" id="fb-${q.id}"></div>
+      <div class="explain" id="explain-${q.id}">
+        <div class="explain-inner"><b>💡 해설</b><br>${q.explanation}</div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function updateScoreboard(){
+  document.getElementById('sbSolved').textContent = state.solved;
+  document.getElementById('sbCorrect').textContent = state.correct;
+  const rate = state.solved > 0 ? Math.round((state.correct / state.solved) * 100) : 0;
+  document.getElementById('sbRate').textContent = rate + '%';
+  const bar = document.getElementById('sbBar');
+  bar.style.width = rate + '%';
+  if(rate < 40) bar.style.background = '#dc2626';
+  else if(rate < 70) bar.style.background = '#f97316';
+  else bar.style.background = '#16a34a';
+
+  if(state.solved >= QUIZ_DATA.length){
+    showResult();
+  }
+}
+
+function showFeedback(qid, isCorrect){
+  const fb = document.getElementById('fb-' + qid);
+  fb.classList.add('show');
+  fb.classList.add(isCorrect ? 'correct' : 'wrong');
+  fb.textContent = isCorrect ? '✓ 정답입니다!' : '✗ 오답입니다.';
+  document.getElementById('explain-' + qid).classList.add('open');
+}
+
+function answerMC(qid, idx){
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  const optsWrap = document.getElementById('opts-' + qid);
+  if(optsWrap.dataset.answered) return;
+  optsWrap.dataset.answered = '1';
+
+  const buttons = optsWrap.querySelectorAll('.opt-btn');
+  const isCorrect = idx === q.answer;
+  buttons.forEach((btn, i) => {
+    btn.disabled = true;
+    if(i === q.answer){
+      btn.classList.add('correct');
+      btn.querySelector('.opt-badge').textContent = '✓ 정답!';
+    } else if(i === idx && !isCorrect){
+      btn.classList.add('wrong');
+      btn.querySelector('.opt-badge').textContent = '✗ 오답';
+    }
+  });
+
+  state.solved++;
+  if(isCorrect) state.correct++;
+  showFeedback(qid, isCorrect);
+  updateScoreboard();
+}
+
+function answerOX(qid, val){
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  const optsWrap = document.getElementById('opts-' + qid);
+  if(optsWrap.dataset.answered) return;
+  optsWrap.dataset.answered = '1';
+
+  const buttons = optsWrap.querySelectorAll('.ox-btn');
+  const isCorrect = val === q.answer;
+  buttons.forEach(btn => {
+    btn.disabled = true;
+    if(btn.dataset.val === q.answer){
+      btn.classList.add('correct');
+    } else if(btn.dataset.val === val && !isCorrect){
+      btn.classList.add('wrong');
+    }
+  });
+
+  state.solved++;
+  if(isCorrect) state.correct++;
+  showFeedback(qid, isCorrect);
+  updateScoreboard();
+}
+
+function answerShort(qid){
+  const q = QUIZ_DATA.find(x => x.id === qid);
+  const input = document.getElementById('input-' + qid);
+  const submitBtn = document.getElementById('submit-' + qid);
+  if(input.disabled) return;
+  const raw = input.value.trim();
+  if(raw === ''){
+    input.focus();
+    return;
+  }
+  const normalized = raw.replace(/\s/g, '').toLowerCase();
+  const candidates = [q.answer, ...(q.acceptable || [])].map(a => a.replace(/\s/g, '').toLowerCase());
+  const isCorrect = candidates.includes(normalized);
+
+  input.disabled = true;
+  submitBtn.disabled = true;
+  input.style.borderColor = isCorrect ? '#16a34a' : '#dc2626';
+  input.style.background = isCorrect ? '#dcfce7' : '#fee2e2';
+
+  state.solved++;
+  if(isCorrect) state.correct++;
+  showFeedback(qid, isCorrect);
+  const fb = document.getElementById('fb-' + qid);
+  if(!isCorrect){
+    fb.textContent = `✗ 오답입니다. (정답: ${q.answer})`;
+  }
+  updateScoreboard();
+}
+
+function showResult(){
+  const total = QUIZ_DATA.length;
+  const rate = Math.round((state.correct / total) * 100);
+  let grade = 'D', msg = '다시 한번 방송을 복습해보세요!';
+  if(rate >= 90){ grade = 'A'; msg = '완벽합니다! 핵심 내용을 정확히 파악하셨네요.'; }
+  else if(rate >= 70){ grade = 'B'; msg = '훌륭해요! 조금만 더 다지면 완벽합니다.'; }
+  else if(rate >= 50){ grade = 'C'; msg = '괜찮아요! 해설을 다시 읽어보시면 좋겠어요.'; }
+
+  document.getElementById('finalGrade').textContent = grade;
+  document.getElementById('finalScoreText').textContent = `${total}문제 중 ${state.correct}문제 정답 (${rate}%)`;
+  document.getElementById('finalMsg').textContent = msg;
+  document.getElementById('resultSection').classList.add('show');
+  document.getElementById('resultSection').scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+document.getElementById('retryBtn').addEventListener('click', () => {
+  state = { solved: 0, correct: 0 };
+  document.getElementById('resultSection').classList.remove('show');
+  renderQuiz();
+  updateScoreboard();
+  window.scrollTo({ top:0, behavior:'smooth' });
+});
+
+renderQuiz();
+updateScoreboard();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자본의 대이동 - 페이팔 530억 달러 메가딜 분석</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#ffffff; --bg-sub:#fafafa;
+    --text:#1a1a1a; --text-sub:#777777;
+    --accent:#e11d48; --accent2:#f43f5e;
+    --border:#e5e5e5;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:'Noto Sans KR', sans-serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  .wrap{max-width:520px; margin:0 auto; padding:0 20px;}
+
+  /* Hero */
+  .hero{
+    background:var(--text); color:#fff;
+    padding:48px 20px 36px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:""; position:absolute; right:-40px; top:-40px;
+    width:160px; height:160px; border-radius:50%;
+    background:radial-gradient(circle, var(--accent) 0%, transparent 70%);
+    opacity:0.4;
+  }
+  .hero .eyebrow{
+    font-size:12px; letter-spacing:3px; text-transform:uppercase;
+    color:var(--accent2); font-weight:700; margin-bottom:14px;
+  }
+  .hero h1{
+    font-family:'Playfair Display', serif;
+    font-size:30px; line-height:1.35; font-weight:900;
+    margin-bottom:16px;
+  }
+  .hero .sub{font-size:14px; color:#cfcfcf; font-weight:300;}
+  .hero .meta{
+    display:flex; gap:12px; margin-top:20px; font-size:12px; color:#999;
+    border-top:1px solid #333; padding-top:16px;
+  }
+
+  section{padding:36px 0; border-bottom:1px solid var(--border);}
+  section:last-of-type{border-bottom:none;}
+
+  .section-num{
+    font-family:'Playfair Display', serif;
+    font-size:13px; color:var(--accent); font-weight:700;
+    letter-spacing:2px; margin-bottom:8px;
+  }
+  h2{
+    font-family:'Playfair Display', serif;
+    font-size:22px; font-weight:900; margin-bottom:14px; line-height:1.4;
+  }
+  h3{
+    font-size:16px; font-weight:700; margin:18px 0 8px; color:var(--accent);
+  }
+  p{font-size:14.5px; color:var(--text); margin-bottom:12px;}
+  p.sub-text{color:var(--text-sub); font-size:13.5px;}
+  .lead{
+    font-size:15.5px; font-weight:500; padding:14px 16px;
+    background:var(--bg-sub); border-left:3px solid var(--accent);
+    margin-bottom:18px; border-radius:2px;
+  }
+
+  ul.bullet{margin:10px 0 16px 0; padding-left:0; list-style:none;}
+  ul.bullet li{
+    font-size:14px; padding:10px 0 10px 20px; position:relative;
+    border-bottom:1px dashed var(--border);
+  }
+  ul.bullet li::before{
+    content:"—"; position:absolute; left:0; color:var(--accent); font-weight:700;
+  }
+  ul.bullet li b{color:var(--text);}
+  ul.bullet li:last-child{border-bottom:none;}
+
+  .stat-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:16px 0;
+  }
+  .stat-card{
+    background:var(--bg-sub); border:1px solid var(--border); border-radius:8px;
+    padding:14px; text-align:center;
+  }
+  .stat-card .num{
+    font-family:'Playfair Display', serif; font-size:22px; font-weight:900; color:var(--accent);
+  }
+  .stat-card .label{font-size:11.5px; color:var(--text-sub); margin-top:4px;}
+
+  .badge{
+    display:inline-block; font-size:11px; font-weight:700; padding:3px 10px;
+    border-radius:20px; margin-right:6px; margin-bottom:6px;
+  }
+  .badge.up{background:#fee2e2; color:var(--accent);}
+  .badge.down{background:#e5e7eb; color:#4b5563;}
+
+  table{width:100%; border-collapse:collapse; margin:14px 0; font-size:13px;}
+  th{
+    background:var(--accent); color:#fff; padding:9px 8px; text-align:left; font-weight:700;
+  }
+  td{padding:9px 8px; background:var(--bg-sub); border-bottom:1px solid var(--border);}
+  tr:last-child td{border-bottom:none;}
+
+  .quote-box{
+    background:var(--text); color:#fff; padding:22px 18px; border-radius:10px;
+    margin:18px 0; position:relative;
+  }
+  .quote-box .name{color:var(--accent2); font-weight:700; font-size:13px; margin-bottom:8px;}
+  .quote-box p{color:#eee; font-size:14px; margin-bottom:0;}
+
+  .vs-wrap{display:flex; gap:10px; margin:16px 0;}
+  .vs-card{flex:1; padding:16px 12px; border-radius:10px; border:1px solid var(--border);}
+  .vs-card.buffett{background:#f5f5f5;}
+  .vs-card.fink{background:#fff1f2;}
+  .vs-card .who{font-weight:900; font-size:14px; margin-bottom:6px;}
+  .vs-card .stance{font-size:11px; font-weight:700; color:var(--text-sub); margin-bottom:8px;}
+  .vs-card p{font-size:12.5px; margin-bottom:0;}
+
+  .chart-container {
+    position: relative;
+    max-height: 340px;
+    margin: 18px 0;
+    background:var(--bg-sub); border-radius:10px; padding:14px;
+    border:1px solid var(--border);
+  }
+  .chart-container canvas {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    max-height: 300px;
+  }
+  .chart-container.chart-ready canvas {
+    opacity: 1;
+  }
+  .chart-title{font-size:13px; font-weight:700; margin-bottom:8px; color:var(--text);}
+
+  .fade-in{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease;}
+  .fade-in.visible{opacity:1; transform:translateY(0);}
+
+  /* quadrant interactive */
+  .quad-wrap{
+    position:relative; width:100%; aspect-ratio:1/1; background:var(--bg-sub);
+    border:1px solid var(--border); border-radius:10px; margin:16px 0; overflow:hidden;
+  }
+  .quad-line{position:absolute; background:var(--border);}
+  .quad-h{left:0; right:0; top:50%; height:1px;}
+  .quad-v{top:0; bottom:0; left:50%; width:1px;}
+  .quad-label{
+    position:absolute; font-size:10px; color:var(--text-sub); font-weight:700;
+  }
+  .quad-dot{
+    position:absolute; width:34px; height:34px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:900; color:#fff; cursor:pointer;
+    transform:translate(-50%,-50%); transition:transform .2s ease;
+    box-shadow:0 2px 6px rgba(0,0,0,0.2);
+  }
+  .quad-dot:active{transform:translate(-50%,-50%) scale(1.15);}
+  .quad-tooltip{
+    display:none; position:absolute; background:var(--text); color:#fff; font-size:11.5px;
+    padding:10px 12px; border-radius:8px; width:200px; z-index:10; line-height:1.5;
+    box-shadow:0 4px 14px rgba(0,0,0,0.25);
+  }
+  .quad-tooltip.show{display:block;}
+
+  /* accordion */
+  .acc-item{border:1px solid var(--border); border-radius:8px; margin-bottom:10px; overflow:hidden;}
+  .acc-head{
+    padding:13px 14px; background:var(--bg-sub); font-size:14px; font-weight:700;
+    display:flex; justify-content:space-between; align-items:center; cursor:pointer;
+  }
+  .acc-head .arrow{transition:transform .3s ease; color:var(--accent);}
+  .acc-item.open .arrow{transform:rotate(180deg);}
+  .acc-body{max-height:0; overflow:hidden; transition:max-height .35s ease;}
+  .acc-body-inner{padding:14px; font-size:13px; color:var(--text-sub);}
+
+  .footer-note{
+    background:var(--bg-sub); padding:20px; border-radius:10px; margin-top:20px;
+    font-size:11.5px; color:var(--text-sub); line-height:1.7;
+  }
+  .tag-strategy{
+    display:flex; align-items:flex-start; gap:12px; margin-bottom:16px;
+    padding:14px; background:var(--bg-sub); border-radius:10px; border:1px solid var(--border);
+  }
+  .tag-strategy .num-circle{
+    flex-shrink:0; width:30px; height:30px; border-radius:50%; background:var(--accent);
+    color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:13px;
+  }
+  .tag-strategy .content b{display:block; font-size:14px; margin-bottom:4px;}
+  .tag-strategy .content p{font-size:12.5px; margin-bottom:0; color:var(--text-sub);}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">CIA · NOVA REAL INVEST 분석</div>
+    <h1>자본의 대이동,<br>지각변동의 하루</h1>
+    <p class="sub">중국의 85억 달러 반도체 굴기 속 페이팔 530억 달러 메가딜 — 지금 살아남을 독점 해자주는?</p>
+    <div class="meta">
+      <span>2025.07.15 (뉴욕시간)</span>
+      <span>·</span>
+      <span>미국 증시 브리핑</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<section class="fade-in">
+  <div class="section-num">01 · MARKET OVERVIEW</div>
+  <h2>지수는 오르지만, 내부는 끓고 있다</h2>
+  <p class="lead">겉으로 보이는 지수는 평온했지만, S&P500 내부에서는 절반 이상의 종목이 하락하는 극단적인 자본 이동(로테이션)이 벌어진 하루였습니다. 마치 빈익빈 부익부처럼, 오르는 종목과 빠지는 종목이 극명하게 갈렸습니다.</p>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="num">230개</div>
+      <div class="label">오늘 상승한 종목 수 (S&P500 500개 중)</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">270개+</div>
+      <div class="label">하락 또는 부진한 종목 수</div>
+    </div>
+  </div>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">S&P500 상승/하락 종목 비율 (오늘)</div>
+    <canvas id="chartBreadth" height="220"></canvas>
+  </div>
+
+  <h3>디스인플레이션 신호, 그러나 안심은 이르다</h3>
+  <ul class="bullet">
+    <li>미국 6월 PPI(생산자물가지수) <b>-0.3% 하락</b> (예상치 0.0%를 하회)</li>
+    <li>근원(코어) PPI는 전월 대비 <b>+0.2%</b> 상승에 그침 (에너지 가격 하락 영향, 휘발유 -12%)</li>
+    <li>10년물 국채금리 <b>4.55%대</b>로 하락 — 하지만 진짜 안심하려면 <b>4.4% 이하</b>로 내려가야 함</li>
+    <li>어제 발표된 소비자물가지수(CPI)도 양호했던 데 이어 PPI까지 서프라이즈로 나오며 시장은 한때 "인플레이션 끝났다"는 기대감에 3대 지수 모두 상승 마감</li>
+  </ul>
+
+  <h3>그러나 유가·지정학 리스크가 발목</h3>
+  <p>미국 중부사령부(센트콤)가 호르무즈 해협 인근을 90회 이상 타격했다는 소식이 전해지며 WTI(서부텍사스산 원유)는 <b>79달러</b>, 브렌트유는 <b>84달러</b>까지 급등했습니다. 이는 과거(PPI)가 아닌 현재와 미래의 비용을 보여주는 유가가 오르고 있다는 신호로, 기업 실적에 부담을 줍니다.</p>
+
+  <p class="sub-text">실제로 유나이티드 항공은 오늘 실적 발표에서 제트유 가격이 34% 급등해 연간 연료비가 60억 달러에 달한다고 밝히며 주가가 하락했습니다. 매크로 지표는 개선됐지만 개별 기업의 비용 부담(마진 압박)은 오히려 커지고 있다는 뜻입니다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="section-num">02 · MEGA DEAL</div>
+  <h2>페이팔, 534억 달러에 팔리나?</h2>
+  <p class="lead">오늘 시장을 가장 뜨겁게 달군 소식은 사모펀드와 스트라이프(Stripe)가 공동으로 페이팔을 인수하겠다고 제안한 것입니다. 이 소식이 전해지자 페이팔(PYPL) 주가는 장전부터 급등해 하루 만에 <b>17.24%</b> 폭등했습니다.</p>
+
+  <table>
+    <tr><th>항목</th><th>내용</th></tr>
+    <tr><td>인수 총액</td><td>534억 달러</td></tr>
+    <tr><td>제안 가격</td><td>주당 60달러 50센트</td></tr>
+    <tr><td>프리미엄</td><td>약 28%</td></tr>
+    <tr><td>구조</td><td>170억 달러 출자 + 500억 달러 확약 금융</td></tr>
+    <tr><td>인수 주체</td><td>대형 사모펀드 + 스트라이프</td></tr>
+  </table>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">Stripe vs PayPal/Venmo — 무엇을 합치는가</div>
+    <canvas id="chartDeal" height="220"></canvas>
+  </div>
+
+  <h3>왜 이 딜이 역사적인가</h3>
+  <ul class="bullet">
+    <li><b>스트라이프</b>: 웹사이트·이커머스 결제 인프라의 절대 강자. 연간 <b>1.9조 달러</b> 규모 가맹점 결제를 처리하지만 아직 비상장 회사</li>
+    <li><b>페이팔/벤모</b>: 전 세계 <b>4억 3천만 명</b>의 소비자 지갑(월렛) 네트워크 보유</li>
+    <li>두 회사가 합쳐지면 비자·마스터카드급 초대형 핀테크 공룡 탄생 — "인프라(가맹점) + 소비자(지갑)"의 완벽한 결합</li>
+  </ul>
+
+  <h3>변수: 독과점 리스크</h3>
+  <p>다만 이사회와 주주가 딜을 수용하더라도 <b>독과점 심사</b>라는 큰 산이 남아있습니다. 과거 넷플릭스가 비슷한 이슈로 홍역을 치른 사례처럼, 이 딜 역시 규제 당국의 승인이라는 관문을 통과해야 합니다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="section-num">03 · CAPITAL FLOW</div>
+  <h2>돈은 어디서 빠지고, 어디로 몰리나</h2>
+  <p class="lead">'묻지마 AI 투자'의 시대는 끝났습니다. 스마트 머니는 이제 실질적인 독점력과 병목(에너지·소비자)을 장악한 기업으로 재배치되고 있습니다.</p>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">오늘의 자본 이탈 vs 자본 유입 (등락률 %)</div>
+    <canvas id="chartFlow" height="240"></canvas>
+  </div>
+
+  <h3>🔴 자본 이탈</h3>
+  <ul class="bullet">
+    <li><b>IBM (-25%)</b>: 역사상 최악의 하루. 기업들이 AI 하드웨어(엔비디아 칩, 메모리)에 예산을 몰아주면서 소프트웨어 관련 지출이 후순위로 밀림</li>
+    <li><b>SpaceX</b>: 공모가(135달러)를 하회하며 130달러대까지 하락. 2030년까지도 흑자를 못 낼 것이라는 밸류에이션 부담이 계속 제기됨</li>
+    <li><b>마이크론(MU, -8%)</b>: 중국의 메모리 회사 창신메모리(CXMT)가 85.5억 달러 규모의 IPO를 추진한다는 소식에 경쟁 우려로 매도세, 필라델피아 반도체지수 3% 급락 주도</li>
+  </ul>
+
+  <h3>🟢 자본 유입</h3>
+  <ul class="bullet">
+    <li><b>애플 (+4%)</b>: 중국 규제당국(CAC)이 애플 인텔리전스(AI 기능)를 승인 — 알리바바 Qwen, 바이두 AI 모델과 통합 확정. 시가총액 5조 달러에 근접, 시총 2위 탈환</li>
+    <li><b>ASML</b>: 2028년까지 장비 주문이 이미 꽉 찬 백로그 상태 — "곡괭이를 만드는 공장"으로서의 독점력 재입증</li>
+    <li><b>윌리엄스(WMB)</b>: 블랙록 등이 참여한 조인트벤처 형태로 전력 인프라에 53.4억 달러 규모 계약 체결</li>
+  </ul>
+</section>
+
+<section class="fade-in">
+  <div class="section-num">04 · MOAT MATRIX</div>
+  <h2>독점 해자 vs 밸류에이션 부담: 4분면 진단</h2>
+  <p class="lead">아래 매트릭스를 눌러보면, 실적 가시성·독점력이 높은 기업일수록 밸류에이션 부담을 견뎌낼 힘이 있다는 것을 알 수 있습니다. 반대로 독점력 없이 고평가된 기업은 작은 악재에도 큰 매도 폭탄을 맞습니다.</p>
+
+  <div class="quad-wrap" id="quadWrap">
+    <div class="quad-line quad-h"></div>
+    <div class="quad-line quad-v"></div>
+    <div class="quad-label" style="top:8px; left:8px;">실적·독점력 ↑</div>
+    <div class="quad-label" style="bottom:8px; left:8px;">비즈니스 위협</div>
+    <div class="quad-label" style="bottom:8px; right:8px; text-align:right;">밸류에이션 부담 ↑</div>
+    <div class="quad-label" style="top:8px; right:8px; text-align:right;">극단적 리스크</div>
+
+    <div class="quad-dot" data-tip="AAPL · 소비자 접점과 대체 불가능한 플랫폼 해자. 프리미엄 유지 가능 영역." style="left:32%; top:28%; background:#e11d48;">AAPL</div>
+    <div class="quad-dot" data-tip="ASML · 2028년까지 장비 주문 백로그 완료. 장비 독점 해자로 프리미엄 유지." style="left:58%; top:22%; background:#e11d48;">ASML</div>
+    <div class="quad-dot" data-tip="IBM · 레거시 소프트웨어 사업 모델이 AI 시대에 위협받는 구간." style="left:20%; top:72%; background:#6b7280;">IBM</div>
+    <div class="quad-dot" data-tip="MU · 중국 CXMT의 경쟁 심화 우려로 밸류에이션 부담이 커지는 극단적 리스크 구간." style="left:70%; top:80%; background:#1a1a1a;">MU</div>
+    <div class="quad-dot" data-tip="SpaceX · 2030년까지 적자 예상, 미래 마진에 대한 의구심이 큰 극단적 리스크 구간." style="left:82%; top:70%; background:#1a1a1a;">SpaceX</div>
+  </div>
+  <p class="sub-text" style="text-align:center;">💡 원(동그라미)을 눌러보면 각 기업의 위치와 이유를 볼 수 있어요</p>
+  <div class="quad-tooltip" id="quadTip"></div>
+</section>
+
+<section class="fade-in">
+  <div class="section-num">05 · WALL STREET</div>
+  <h2>진짜 승자는 월스트리트다</h2>
+  <p class="lead">JP모건 회장 제이미 다이먼은 "AI 랠리의 가장 확실한 수혜자는 트레이딩 수수료와 ETF 운용 보수를 쓸어 담는 월스트리트"라고 말했습니다. 실제 숫자로도 증명되고 있습니다.</p>
+
+  <div class="chart-container fade-in">
+    <div class="chart-title">모건스탠리 vs 블랙록 2분기 핵심 지표</div>
+    <canvas id="chartWallst" height="240"></canvas>
+  </div>
+
+  <ul class="bullet">
+    <li><b>모건스탠리</b>: 2분기 순매출 213억 달러, 주식 트레이딩 수익 69% 급증(63억 달러), 자산관리 신규 자금 대거 유입</li>
+    <li><b>블랙록</b>: 2분기에만 1,920억 달러 유입, 상반기 누적 3,210억 달러 유입 (전년 동기 대비 약 2배). 주가도 급등</li>
+  </ul>
+  <p class="sub-text">시장의 변동성과 유동성이 커질수록, 그 사이에서 수수료를 버는 금융·은행주가 구조적으로 유리한 위치에 있다는 뜻입니다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="section-num">06 · MAIN STREET</div>
+  <h2>실물 경기는 이미 식고 있다</h2>
+  <p class="lead">AI·금융 랠리와는 별개로, 소비자와 실물 경제에 직접 맞닿은 기업들은 어려움을 겪고 있습니다.</p>
+
+  <div class="acc-list">
+    <div class="acc-item">
+      <div class="acc-head">펜테어(PNR) -22% <span class="arrow">▾</span></div>
+      <div class="acc-body"><div class="acc-body-inner">수영장 설비 회사. 주택시장 둔화로 신규 수영장 건설이 줄면서 매출 역성장. 재료비·인건비 상승(관세 영향)으로 수영장 하나 짓는 데 30만~50만 달러까지 비용이 치솟은 상황.</div></div>
+    </div>
+    <div class="acc-item">
+      <div class="acc-head">엘레반스 헬스(ELV) -8.5% <span class="arrow">▾</span></div>
+      <div class="acc-body"><div class="acc-body-inner">헬스 인슈런스(의료보험) 회사. 메디케이드 가입자 감소와 고령층 의료비용 급증이 겹치며 정부 지원 축소 우려까지 더해짐.</div></div>
+    </div>
+    <div class="acc-item">
+      <div class="acc-head">루시드(LCID) -16% <span class="arrow">▾</span></div>
+      <div class="acc-body"><div class="acc-body-inner">전기차 회사. 차량 판매 부진과 소비자들의 지출 위축(학자금 대출 연체율 20%)이 겹치며 유동성 우려 확대.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="fade-in">
+  <div class="section-num">07 · BUFFETT vs FINK</div>
+  <h2>극단적으로 엇갈린 두 거장의 시선</h2>
+  <p class="lead">"모두가 도박을 선호할 때 가치를 찾기 어렵다" — 오마하의 현인 워런 버핏과 "향후 12개월 매우 강세적"이라는 블랙록 래리 핑크. 신구 세대의 시선이 완전히 팽팽하게 맞서고 있습니다.</p>
+
+  <div class="vs-wrap">
+    <div class="vs-card buffett">
+      <div class="who">워런 버핏</div>
+      <div class="stance">방어와 경계</div>
+      <p>포트폴리오를 120여 개에서 50여 개로 압축. 현금 보유액 사상 최대 <b>4,000억 달러</b>. "모두가 도박을 선호할 때 가치를 찾기 어렵다"</p>
+    </div>
+    <div class="vs-card fink">
+      <div class="who">래리 핑크</div>
+      <div class="stance">공격과 낙관</div>
+      <p>블랙록 AUM(운용자산) <b>15조 달러</b> 돌파. "향후 12개월 시장에 대해 매우 강세적" — 호실적과 마진 개선이 근거</p>
+    </div>
+  </div>
+  <p class="sub-text">두 견해가 정면으로 부딪히는 지금, 극단적 낙관과 극단적 경계가 역사상 가장 강하게 충돌하는 변곡점에 서 있다고 볼 수 있습니다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="section-num">08 · STRATEGY</div>
+  <h2>지금 취할 수 있는 3가지 전략</h2>
+
+  <div class="tag-strategy">
+    <div class="num-circle">1</div>
+    <div class="content">
+      <b>독점력 중심의 포트폴리오 압축</b>
+      <p>애플, ASML처럼 "얘네밖에 없지"라고 할 수 있는 대체 불가능한 기업으로 종목을 압축. 지수 추종 ETF를 무작정 담는 전략은 지양.</p>
+    </div>
+  </div>
+  <div class="tag-strategy">
+    <div class="num-circle">2</div>
+    <div class="content">
+      <b>M&A 모멘텀 탐색</b>
+      <p>오늘 페이팔 사례처럼 대형 사모펀드나 인프라 자본이 프리미엄을 얹어 인수에 나서는 M&A 딜 마켓 흐름을 지속적으로 체크.</p>
+    </div>
+  </div>
+  <div class="tag-strategy">
+    <div class="num-circle">3</div>
+    <div class="content">
+      <b>실물 침체·지정학 리스크 헷지</b>
+      <p>중산층 이하 소비 위축과 중동發 지정학 리스크에 대비해, 경기와 무관하게 수익을 내는 금융·은행주로 방어선을 구축.</p>
+    </div>
+  </div>
+
+  <div class="quote-box">
+    <div class="name">오늘의 한 줄</div>
+    <p>지수는 평온해 보이지만, 수면 아래 자본은 이미 승자와 패자를 극단적으로 재편하고 있다. 3배 레버리지 상품은 변동성이 큰 지금 3일 이상 보유하지 말 것.</p>
+  </div>
+</section>
+
+<div class="footer-note">
+  ⚠️ 본 콘텐츠는 정보 제공 및 엔터테인먼트 목적으로 제작되었으며 투자 조언이 아닙니다. 모든 투자 판단과 결과에 대한 책임은 투자자 본인에게 있습니다. 원본 방송 및 자막을 기반으로 요약·정리한 자료입니다.
+</div>
+
+</div>
+
+<script>
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+const chartConfigs = {};
+
+chartConfigs['chartBreadth'] = () => {
+  new Chart(document.getElementById('chartBreadth'), {
+    type: 'doughnut',
+    data: {
+      labels: ['상승 (230개)', '하락/보합 (270개)'],
+      datasets: [{
+        data: [230, 270],
+        backgroundColor: ['#e11d48', '#e5e5e5'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ position:'bottom', labels:{ font:{ size:11 }, color:'#1a1a1a' } } }
+    }
+  });
+};
+
+chartConfigs['chartDeal'] = () => {
+  new Chart(document.getElementById('chartDeal'), {
+    type: 'bar',
+    data: {
+      labels: ['가맹점 결제 규모', '사용자 네트워크'],
+      datasets: [
+        { label: 'Stripe (조 달러)', data: [1.9, 0], backgroundColor: '#2563eb' },
+        { label: 'PayPal/Venmo (억 명)', data: [0, 4.3], backgroundColor: '#e11d48' }
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      scales:{ y:{ beginAtZero:true, ticks:{ font:{size:10} } }, x:{ ticks:{ font:{size:10} } } },
+      plugins:{ legend:{ position:'bottom', labels:{ font:{ size:11 } } } }
+    }
+  });
+};
+
+chartConfigs['chartFlow'] = () => {
+  new Chart(document.getElementById('chartFlow'), {
+    type: 'bar',
+    data: {
+      labels: ['IBM', 'SpaceX*', 'Micron', 'Apple', 'ASML', 'Williams'],
+      datasets: [{
+        label: '등락 방향 (%)',
+        data: [-25, -3.7, -8, 4, 2.23, 0],
+        backgroundColor: ['#1a1a1a','#1a1a1a','#6b7280','#e11d48','#e11d48','#2563eb']
+      }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      scales:{ y:{ ticks:{ font:{size:10} } }, x:{ ticks:{ font:{size:10} } } },
+      plugins:{ legend:{ display:false } }
+    }
+  });
+};
+
+chartConfigs['chartWallst'] = () => {
+  new Chart(document.getElementById('chartWallst'), {
+    type: 'bar',
+    data: {
+      labels: ['순매출/유입 규모', '2분기 유입액(BLK) / 트레이딩수익증가율(MS)'],
+      datasets: [
+        { label: '모건스탠리', data: [213.5, 69], backgroundColor: '#e11d48' },
+        { label: '블랙록', data: [null, null], backgroundColor: '#2563eb' }
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      scales:{ y:{ beginAtZero:true, ticks:{ font:{size:10} } }, x:{ ticks:{ font:{size:9} } } },
+      plugins:{ legend:{ position:'bottom', labels:{ font:{ size:11 } } } }
+    }
+  });
+};
+
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+// Accordion
+document.querySelectorAll('.acc-head').forEach(head => {
+  head.addEventListener('click', () => {
+    const item = head.parentElement;
+    const body = item.querySelector('.acc-body');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.acc-item').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.acc-body').style.maxHeight = null;
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
+  });
+});
+
+// Quadrant tooltip
+const quadTip = document.getElementById('quadTip');
+const quadWrap = document.getElementById('quadWrap');
+document.querySelectorAll('.quad-dot').forEach(dot => {
+  dot.addEventListener('click', (evt) => {
+    evt.stopPropagation();
+    const tip = dot.getAttribute('data-tip');
+    quadTip.textContent = tip;
+    quadTip.classList.add('show');
+    const rect = dot.getBoundingClientRect();
+    const wrapRect = quadWrap.getBoundingClientRect();
+    let left = rect.left - wrapRect.left - 90;
+    left = Math.max(4, Math.min(left, wrapRect.width - 204));
+    let top = rect.top - wrapRect.top + 40;
+    if (top + 100 > wrapRect.height) top = rect.top - wrapRect.top - 100;
+    quadTip.style.left = left + 'px';
+    quadTip.style.top = top + 'px';
+  });
+});
+document.addEventListener('click', () => quadTip.classList.remove('show'));
+</script>
+
+</body>
+</html>
