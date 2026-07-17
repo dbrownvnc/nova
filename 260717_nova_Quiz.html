@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>퀴즈: 애플의 영악함, TSMC발 거품 붕괴 경고</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --bg-alt:#fafafa; --text:#1a1a1a; --text-sub:#777777;
+    --accent:#e11d48; --accent2:#f43f5e; --border:#e5e5e5;
+    --green:#16a34a; --red:#dc2626;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg-alt); color:var(--text); font-family:'Noto Sans KR',sans-serif;
+    max-width:480px; margin:0 auto; padding-bottom:50px;
+  }
+  h1,.serif{font-family:'Playfair Display',serif;}
+  .hero{
+    background:var(--text); color:#fff; padding:36px 20px 24px; text-align:center;
+  }
+  .hero h1{font-size:22px; font-weight:900; margin-bottom:6px;}
+  .hero p{font-size:12.5px; color:#ccc;}
+  .scoreboard{
+    position:sticky; top:0; z-index:50;
+    background:#fff; border-bottom:1px solid var(--border);
+    padding:12px 18px; box-shadow:0 2px 8px rgba(0,0,0,0.06);
+  }
+  .score-row{display:flex; justify-content:space-between; font-size:12.5px; font-weight:700; margin-bottom:8px;}
+  .score-row span{color:var(--text-sub); font-weight:500;}
+  .score-row b{color:var(--accent);}
+  .progress-bg{width:100%; height:8px; background:#eee; border-radius:6px; overflow:hidden;}
+  .progress-fill{height:100%; width:0%; background:var(--red); transition: width .3s, background .3s;}
+
+  .quiz-list{padding:18px;}
+  .q-card{
+    background:#fff; border:1px solid var(--border); border-radius:14px;
+    padding:18px; margin-bottom:16px;
+  }
+  .q-head{display:flex; align-items:center; gap:8px; margin-bottom:10px;}
+  .q-num{
+    font-family:'Playfair Display',serif; font-weight:900; font-size:15px; color:var(--accent);
+  }
+  .diff{
+    font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; color:#fff;
+  }
+  .diff.easy{background:#16a34a;}
+  .diff.mid{background:#d97706;}
+  .diff.hard{background:var(--accent);}
+  .q-text{font-size:14.5px; font-weight:700; margin-bottom:14px; line-height:1.5;}
+  .opt-btn{
+    display:block; width:100%; text-align:left; padding:11px 14px; margin-bottom:8px;
+    border:1.5px solid var(--border); border-radius:10px; background:#fff;
+    font-size:13.5px; cursor:pointer; transition:.15s; color:var(--text);
+  }
+  .opt-btn:disabled{cursor:default;}
+  .opt-btn.correct{background:#dcfce7; border-color:var(--green); color:#14532d; font-weight:700;}
+  .opt-btn.wrong{background:#fee2e2; border-color:var(--red); color:#7f1d1d; font-weight:700;}
+  .opt-btn .tag{float:right; font-size:11px; font-weight:900;}
+
+  .ox-row{display:flex; gap:10px;}
+  .ox-row .opt-btn{flex:1; text-align:center; font-weight:900; font-size:16px; padding:14px;}
+
+  .sa-row{display:flex; gap:8px;}
+  .sa-row input{
+    flex:1; padding:10px 12px; border:1.5px solid var(--border); border-radius:10px; font-size:13.5px;
+  }
+  .sa-row button{
+    padding:10px 16px; border:none; border-radius:10px; background:var(--accent); color:#fff;
+    font-weight:700; font-size:13px; cursor:pointer;
+  }
+  .sa-row button:disabled{background:#ccc; cursor:default;}
+
+  .explain{
+    display:none; margin-top:12px; padding:12px 14px; background:var(--bg-alt);
+    border-left:3px solid var(--accent); border-radius:8px; font-size:13px; color:var(--text-sub);
+  }
+  .explain.show{display:block;}
+  .explain b{color:var(--text);}
+
+  .result-badge{
+    display:inline-block; margin-top:6px; font-size:11.5px; font-weight:900; padding:3px 10px; border-radius:20px;
+  }
+  .result-badge.ok{background:#dcfce7; color:#14532d;}
+  .result-badge.no{background:#fee2e2; color:#7f1d1d;}
+
+  #finalCard{
+    display:none; margin:18px; padding:26px 20px; text-align:center;
+    background:#fff; border-radius:16px; border:2px solid var(--accent);
+  }
+  #finalCard.show{display:block;}
+  #finalCard .grade{font-family:'Playfair Display',serif; font-size:48px; font-weight:900; color:var(--accent);}
+  #finalCard .score-text{font-size:15px; font-weight:700; margin:8px 0 4px;}
+  #finalCard .msg{font-size:13px; color:var(--text-sub); margin-bottom:16px;}
+  #retryBtn{
+    padding:10px 22px; border:none; border-radius:10px; background:var(--text); color:#fff;
+    font-weight:700; font-size:13px; cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>📝 오늘의 시장 이해도 퀴즈</h1>
+  <p>애플의 영악함, TSMC발 거품 붕괴 경고 — CIA.chat 2026.07.16</p>
+</div>
+
+<div class="scoreboard">
+  <div class="score-row">
+    <span>진행 <b id="solvedNum">0</b>/10</span>
+    <span>맞힌 문제 <b id="correctNum">0</b></span>
+    <span>정답률 <b id="rateNum">0%</b></span>
+  </div>
+  <div class="progress-bg"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<div class="quiz-list" id="quizList"></div>
+<div id="finalCard">
+  <div class="grade" id="gradeText">A</div>
+  <div class="score-text" id="scoreText">10문제 중 10개 정답</div>
+  <div class="msg" id="msgText"></div>
+  <button id="retryBtn">🔄 다시 풀기</button>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id:1, type:'mc', difficulty:'easy',
+    question:'TSMC의 2026년 2분기 매출은 전년 대비 몇 % 증가했나요?',
+    options:['22.1%','33.7%','45.0%','12.4%'],
+    answer:1,
+    explanation:'원본: "2분기 매출 33.7% 올랐습니다." TSMC는 순이익도 77.4% 폭증하며 완벽한 실적을 보여줬습니다.'
+  },
+  {
+    id:2, type:'mc', difficulty:'mid',
+    question:'화자가 애플의 사업 방식을 비유한 전략은 무엇인가요?',
+    options:['테슬라 모델 전략','스탠다드 오일(정유업) 전략','아마존 플라이휠 전략','구글 검색 전략'],
+    answer:1,
+    explanation:'원본: "애플 스탠다드 오일 전략이라고 써놨습니다." 록펠러가 원유를 직접 시추하지 않고 정제·유통으로 돈을 번 것처럼, 애플도 기술을 직접 개발하기보다 남의 기술을 가져와 편집·유통해 돈을 번다는 비유입니다.'
+  },
+  {
+    id:3, type:'mc', difficulty:'mid',
+    question:'골드만삭스의 High-Beta Momentum Index는 7월 상반기 기준 얼마나 하락했나요?',
+    options:['-10%','-15%','-24%','-35%'],
+    answer:2,
+    explanation:'원본: "지금 이런 얘기를 하고 있습니다... 15일만 봤을 때 마이너스 24점." 역대 최악의 성과라고 언급되었습니다.'
+  },
+  {
+    id:4, type:'mc', difficulty:'easy',
+    question:'오늘 실적 발표 후 장중 10% 급등하며 다우지수를 방어한 헬스케어 종목은?',
+    options:['애보트(ABT)','일라이릴리(LLY)','유나이티드헬스(UNH)','화이자(PFE)'],
+    answer:2,
+    explanation:'원본: "유나이티드헬스 EPS $6.38... 장중 10% 급등하며 다우 지수 방어." 4월 저점 대비 크게 회복한 W자 차트를 보여줬습니다.'
+  },
+  {
+    id:5, type:'mc', difficulty:'mid',
+    question:'일라이릴리가 28억 달러에 인수한 사이키델릭 기반 정신질환 신약 기업은?',
+    options:['모더나','아타이 베클리(ATAI)','바이오젠','리제네론'],
+    answer:1,
+    explanation:'원본: "일라이릴리가 사이큐델릭 기반 정신질환 신약 기업인 아타이 베클리 여기를 또 샀어요." ATAI 주가는 이 소식에 34% 폭등했습니다.'
+  },
+  {
+    id:6, type:'mc', difficulty:'hard',
+    question:'시장을 매파적으로 해석하게 만든 "완만하게 더 높은 금리가 위험의 균형을 맞출 것"이라는 발언을 한 인물은?',
+    options:['제롬 파월','로리 로건(댈러스 연준 총재)','재닛 옐런','케빈 워시'],
+    answer:1,
+    explanation:'원본: "연준이온 로건입니다. 연준이온 로건. 달라스 연준 총재죠... 완만하게 더 높은 금리가 위험한 균형을 맞출 것입니다." 이 발언 이후 10년물 국채금리가 4.57%까지 튀어 올랐습니다.'
+  },
+  {
+    id:7, type:'short', difficulty:'mid',
+    question:'TSMC가 미국 애리조나에 추가로 확정한 투자 금액은 얼마인가요? (숫자만, 단위: 억 달러)',
+    answer:['100','1000'],
+    displayAnswer:'100억 달러 단위 아님 → $100B (1,000억 달러)',
+    explanation:'원본: "TSMC 애리조나 추가 투자 100 빌리언 확정." $100B, 즉 약 1,000억 달러입니다.'
+  },
+  {
+    id:8, type:'short', difficulty:'easy',
+    question:'방송 다음날인 7월 17일 금요일은 매주 세 번째 금요일로, 시장에서 무슨 날로 불리나요? (한글로)',
+    answer:['옵션만기일','옵션 만기일','네마녀의날','네 마녀의 날'],
+    displayAnswer:'옵션 만기일',
+    explanation:'원본: "내일 세 번째 금요일입니다... 옵션 만개일입니다." 세 번째 금요일은 옵션 만기일로, 시장 변동성이 커질 수 있는 날로 언급되었습니다.'
+  },
+  {
+    id:9, type:'ox', difficulty:'easy',
+    question:'TSMC 관련주들이 급락한 이유는 TSMC의 실적이 나빴기 때문이다.',
+    answer:false,
+    explanation:'TSMC 실적은 매출 +33.7%, 순이익 +77.4%로 매우 좋았습니다. 급락 이유는 실적이 아니라 대규모 CapEx(설비투자) 확대에 따른 공급 과잉·마진 압박 우려였습니다.'
+  },
+  {
+    id:10, type:'ox', difficulty:'hard',
+    question:'화자는 애플이 최첨단 기술을 직접 개발하는 데 집중한다고 설명했다.',
+    answer:false,
+    explanation:'원본: "애플은 최첨단 기술 이딴 거 관심 없어... 애플은 뭐야? 편집회사야." 애플은 직접 R&D보다 남의 기술을 가져와 제품으로 편집·유통하는 데 집중한다고 설명했습니다.'
+  }
+];
+
+let state = { solved: 0, correct: 0 };
+
+function updateScoreboard(){
+  document.getElementById('solvedNum').textContent = state.solved;
+  document.getElementById('correctNum').textContent = state.correct;
+  const rate = state.solved ? Math.round((state.correct/state.solved)*100) : 0;
+  document.getElementById('rateNum').textContent = rate + '%';
+  const fill = document.getElementById('progressFill');
+  fill.style.width = rate + '%';
+  if(rate < 40) fill.style.background = '#dc2626';
+  else if(rate < 70) fill.style.background = '#d97706';
+  else fill.style.background = '#16a34a';
+
+  if(state.solved === QUIZ_DATA.length){
+    showFinal();
+  }
+}
+
+function diffLabel(d){
+  if(d==='easy') return ['쉬움','easy'];
+  if(d==='mid') return ['보통','mid'];
+  return ['어려움','hard'];
+}
+
+function renderQuiz(){
+  const list = document.getElementById('quizList');
+  list.innerHTML = '';
+  QUIZ_DATA.forEach((q, idx)=>{
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    const [dLabel, dClass] = diffLabel(q.difficulty);
+    let optsHTML = '';
+
+    if(q.type === 'mc'){
+      optsHTML = q.options.map((opt,i)=>
+        `<button class="opt-btn" data-idx="${i}">${opt}</button>`
+      ).join('');
+    } else if(q.type === 'ox'){
+      optsHTML = `<div class="ox-row">
+        <button class="opt-btn" data-val="true">O</button>
+        <button class="opt-btn" data-val="false">X</button>
+      </div>`;
+    } else if(q.type === 'short'){
+      optsHTML = `<div class="sa-row">
+        <input type="text" placeholder="정답을 입력하세요" />
+        <button class="submitBtn">제출</button>
+      </div>`;
+    }
+
+    card.innerHTML = `
+      <div class="q-head">
+        <span class="q-num">Q${idx+1}</span>
+        <span class="diff ${dClass}">${dLabel}</span>
+      </div>
+      <div class="q-text">${q.question}</div>
+      <div class="opts">${optsHTML}</div>
+      <div class="explain" id="explain-${q.id}"></div>
+    `;
+    list.appendChild(card);
+    attachHandlers(card, q);
+  });
+}
+
+function markSolved(card, q, isCorrect, correctText){
+  state.solved++;
+  if(isCorrect) state.correct++;
+  updateScoreboard();
+
+  const explainEl = card.querySelector(`#explain-${q.id}`);
+  const badge = document.createElement('div');
+  badge.className = 'result-badge ' + (isCorrect ? 'ok' : 'no');
+  badge.textContent = isCorrect ? '✓ 정답!' : '✗ 오답';
+  explainEl.innerHTML = '';
+  explainEl.appendChild(badge);
+  const p = document.createElement('div');
+  p.style.marginTop = '6px';
+  p.innerHTML = (correctText ? `<b>정답: ${correctText}</b><br>` : '') + q.explanation;
+  explainEl.appendChild(p);
+  explainEl.classList.add('show');
+}
+
+function attachHandlers(card, q){
+  if(q.type === 'mc'){
+    const btns = card.querySelectorAll('.opt-btn');
+    btns.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const idx = parseInt(btn.dataset.idx);
+        const isCorrect = idx === q.answer;
+        btns.forEach(b=>{
+          b.disabled = true;
+          const bi = parseInt(b.dataset.idx);
+          if(bi === q.answer) b.classList.add('correct');
+          else if(bi === idx && !isCorrect) b.classList.add('wrong');
+        });
+        markSolved(card, q, isCorrect, q.options[q.answer]);
+      });
+    });
+  } else if(q.type === 'ox'){
+    const btns = card.querySelectorAll('.opt-btn');
+    btns.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const val = btn.dataset.val === 'true';
+        const isCorrect = val === q.answer;
+        btns.forEach(b=>{
+          b.disabled = true;
+          const bv = b.dataset.val === 'true';
+          if(bv === q.answer) b.classList.add('correct');
+          else if(bv === val && !isCorrect) b.classList.add('wrong');
+        });
+        markSolved(card, q, isCorrect, q.answer ? 'O' : 'X');
+      });
+    });
+  } else if(q.type === 'short'){
+    const input = card.querySelector('input');
+    const submitBtn = card.querySelector('.submitBtn');
+    const submit = ()=>{
+      if(input.disabled) return;
+      const val = input.value.trim().replace(/\s/g,'').toLowerCase();
+      const isCorrect = q.answer.some(a => a.replace(/\s/g,'').toLowerCase() === val);
+      input.disabled = true;
+      submitBtn.disabled = true;
+      input.style.background = isCorrect ? '#dcfce7' : '#fee2e2';
+      input.style.borderColor = isCorrect ? '#16a34a' : '#dc2626';
+      markSolved(card, q, isCorrect, q.displayAnswer);
+    };
+    submitBtn.addEventListener('click', submit);
+    input.addEventListener('keydown', (e)=>{ if(e.key==='Enter') submit(); });
+  }
+}
+
+function showFinal(){
+  const rate = Math.round((state.correct/QUIZ_DATA.length)*100);
+  let grade, msg;
+  if(rate >= 90){ grade='A'; msg='완벽합니다! 오늘 방송 내용을 정확히 이해하고 계시네요. 👏'; }
+  else if(rate >= 70){ grade='B'; msg='훌륭해요! 핵심 흐름을 잘 파악하고 계십니다.'; }
+  else if(rate >= 50){ grade='C'; msg='괜찮아요! 조금만 더 복습하면 완벽해질 거예요.'; }
+  else{ grade='D'; msg='리포트를 한 번 더 살펴보며 복습해보는 건 어떨까요?'; }
+
+  document.getElementById('gradeText').textContent = grade;
+  document.getElementById('scoreText').textContent = `10문제 중 ${state.correct}개 정답 (정답률 ${rate}%)`;
+  document.getElementById('msgText').textContent = msg;
+  document.getElementById('finalCard').classList.add('show');
+}
+
+document.getElementById('retryBtn').addEventListener('click', ()=>{
+  state = { solved:0, correct:0 };
+  updateScoreboard();
+  document.getElementById('finalCard').classList.remove('show');
+  renderQuiz();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+renderQuiz();
+updateScoreboard();
+</script>
+</body>
+</html>
