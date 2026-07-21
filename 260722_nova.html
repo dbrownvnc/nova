@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>거시적 역풍을 뚫고 솟아오른 양대 엔진 | CIA.chat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,900;1,600&family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#ffffff; --bg-soft:#fafafa;
+  --text:#1a1a1a; --text-soft:#777777;
+  --accent:#e11d48; --accent-2:#f43f5e;
+  --c1:#e11d48; --c2:#1a1a1a; --c3:#6b7280; --c4:#2563eb;
+  --line:#e5e5e5;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:'Noto Sans KR',sans-serif;
+  line-height:1.7; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:640px; margin:0 auto; padding:0 22px 80px;}
+.fade-in{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease;}
+.fade-in.visible{opacity:1; transform:translateY(0);}
+.chart-container{position:relative; max-height:340px;}
+.chart-container canvas{opacity:0; transition:opacity .4s ease; max-height:300px;}
+.chart-container.chart-ready canvas{opacity:1;}
+
+/* HERO */
+.hero{
+  padding:56px 22px 40px; background:var(--text); color:#fff; position:relative; overflow:hidden;
+}
+.hero::after{
+  content:""; position:absolute; right:-60px; top:-60px; width:220px; height:220px;
+  border-radius:50%; background:radial-gradient(circle,var(--accent) 0%, transparent 70%); opacity:.5;
+}
+.eyebrow{
+  font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent-2);
+  font-weight:700; margin-bottom:14px;
+}
+.hero h1{
+  font-family:'Playfair Display',serif; font-weight:700; font-size:30px; line-height:1.32; margin:0 0 14px;
+}
+.hero p{ color:#c7c7c7; font-size:14.5px; margin:0 0 22px; }
+.hero .meta{ display:flex; gap:16px; font-size:11.5px; color:#9a9a9a; border-top:1px solid #333; padding-top:14px; flex-wrap:wrap;}
+.hero .meta b{color:#fff; font-weight:600;}
+
+section{ padding:38px 0; border-bottom:1px solid var(--line); }
+.kicker{
+  font-family:'Playfair Display',serif; font-style:italic; color:var(--accent);
+  font-size:13px; margin:0 0 6px; letter-spacing:.02em;
+}
+h2{
+  font-family:'Playfair Display',serif; font-weight:700; font-size:23px; margin:0 0 16px; line-height:1.35;
+}
+h3{ font-size:16px; font-weight:700; margin:22px 0 8px; }
+p{ font-size:14.5px; margin:0 0 12px; color:#333; }
+.lede{ font-size:16px; color:var(--text); font-weight:500; }
+.term{ color:var(--text-soft); font-weight:400; }
+
+.snapshot-grid{
+  display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:18px;
+}
+.snap-card{
+  background:var(--bg-soft); border:1px solid var(--line); border-radius:4px; padding:14px 12px;
+}
+.snap-card .label{ font-size:11px; color:var(--text-soft); margin-bottom:4px; }
+.snap-card .val{ font-family:'Playfair Display',serif; font-size:22px; font-weight:700; }
+.up{ color:#16a34a; } .down{ color:var(--accent); }
+
+.risk-row{ display:flex; flex-direction:column; gap:10px; margin-top:16px; }
+.risk-card{
+  border-left:3px solid var(--accent); background:var(--bg-soft); padding:14px 16px; border-radius:2px;
+}
+.risk-card .rtitle{ font-weight:700; font-size:13.5px; display:flex; justify-content:space-between; align-items:baseline;}
+.risk-card .rval{ font-family:'Playfair Display',serif; color:var(--accent); font-size:15px; }
+.risk-card p{ margin:8px 0 0; font-size:13.5px; }
+
+.flow{ display:flex; flex-direction:column; gap:0; margin:20px 0; }
+.flow-step{ border:1px solid var(--line); border-radius:4px; padding:14px 16px; position:relative;}
+.flow-step .ftag{ font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); font-weight:700;}
+.flow-step .fbig{ font-family:'Playfair Display',serif; font-size:26px; font-weight:700; margin:4px 0;}
+.flow-arrow{ text-align:center; color:var(--accent); font-size:18px; margin:2px 0; }
+
+.chip-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+.chip{
+  background:var(--text); color:#fff; border-radius:20px; padding:8px 14px; font-size:12.5px; font-weight:600;
+}
+.chip span{ color:#4ade80; margin-left:6px; }
+
+.earn-card{
+  background:var(--bg-soft); border:1px solid var(--line); border-radius:6px; padding:16px; margin-top:14px;
+}
+.earn-card .etop{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px;}
+.earn-card .ename{ font-weight:700; font-size:15px; }
+.earn-card .epct{ font-family:'Playfair Display',serif; font-weight:700; color:#16a34a; font-size:17px;}
+.earn-card ul{ margin:8px 0 0; padding-left:18px; font-size:13.5px; color:#333; }
+.earn-card li{ margin-bottom:4px; }
+
+table{ width:100%; border-collapse:collapse; margin-top:16px; font-size:13px; }
+th{ background:var(--accent); color:#fff; text-align:left; padding:9px 8px; font-weight:600;}
+td{ background:var(--bg-soft); padding:9px 8px; border-bottom:1px solid var(--line); vertical-align:top;}
+tr.win td:first-child{ color:#16a34a; font-weight:700; }
+tr.lose td:first-child{ color:var(--accent); font-weight:700; }
+
+.big-stat{
+  text-align:center; padding:26px 0; background:var(--text); color:#fff; border-radius:8px; margin:18px 0;
+}
+.big-stat .num{ font-family:'Playfair Display',serif; font-size:52px; font-weight:900; color:var(--accent-2); line-height:1;}
+.big-stat .cap{ font-size:12.5px; color:#aaa; margin-top:8px; }
+
+.callout{
+  background:#fff5f6; border:1px solid #f3c8ce; border-left:4px solid var(--accent);
+  padding:14px 16px; border-radius:4px; font-size:13.5px; margin-top:14px;
+}
+.callout b{ color:var(--accent); }
+
+/* interactive checklist */
+.check-list{ display:flex; flex-direction:column; gap:10px; margin-top:18px; }
+.check-item{
+  background:var(--bg-soft); border:1px solid var(--line); border-radius:6px; padding:14px 16px; cursor:pointer;
+  transition:background .2s ease, border-color .2s ease;
+}
+.check-item.open{ border-color:var(--accent); background:#fff5f6; }
+.check-item .chead{ display:flex; justify-content:space-between; align-items:center; font-weight:700; font-size:14px;}
+.check-item .chead .num{ color:var(--accent); font-family:'Playfair Display',serif; margin-right:8px;}
+.check-item .chead .arrow{ color:var(--text-soft); transition:transform .2s ease; font-size:12px;}
+.check-item.open .arrow{ transform:rotate(180deg); }
+.check-body{ max-height:0; overflow:hidden; transition:max-height .3s ease; font-size:13.5px; color:#333;}
+.check-item.open .check-body{ max-height:200px; margin-top:10px; }
+
+.closing{
+  font-family:'Playfair Display',serif; font-style:italic; font-size:16px; text-align:center;
+  padding:30px 10px; color:var(--text);
+}
+footer{ text-align:center; font-size:11px; color:var(--text-soft); padding:30px 0 0; }
+</style>
+</head>
+<body>
+
+<div class="hero fade-in">
+  <div class="eyebrow">CIA.chat · Market Briefing</div>
+  <h1>거시적 역풍을 뚫고<br>솟아오른 양대 엔진</h1>
+  <p>AI 반도체의 귀환과 가치주의 르네상스가 만들어낸 극적인 랠리 분석</p>
+  <div class="meta">
+    <div>DATE&nbsp;&nbsp;<b>2026.07.21 (화)</b></div>
+    <div>STATUS&nbsp;&nbsp;<b>장 마감 후 분석</b></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<section class="fade-in">
+  <div class="kicker">Market Snapshot</div>
+  <h2>공포가 지배하던 시장, 하루 만에 반전</h2>
+  <p class="lede">"AI는 끝났다", "반도체는 지하 2층까지 간다" — 어제까지의 공포가 오늘은 "AI 반도체의 귀환"이라는 말로 바뀌었습니다. 하지만 진짜 승부는 아직 시작도 안 했습니다. 내일 나올 <span class="term">빅테크(대형 기술기업)</span> 실적이 이 반등을 증명하느냐가 관건입니다.</p>
+  <div class="snapshot-grid">
+    <div class="snap-card"><div class="label">나스닥</div><div class="val up">+1.3%</div></div>
+    <div class="snap-card"><div class="label">S&amp;P 500</div><div class="val up">+0.9%</div></div>
+    <div class="snap-card"><div class="label">러셀 2000 (중소형주)</div><div class="val up">↑</div></div>
+    <div class="snap-card"><div class="label">다우존스</div><div class="val up">+0.7%</div></div>
+  </div>
+  <div class="chart-container fade-in" style="margin-top:20px;">
+    <canvas id="idxChart" height="220"></canvas>
+  </div>
+  <p style="font-size:12.5px;color:var(--text-soft);margin-top:6px;">필라델피아 반도체지수(SOX, 반도체 기업들만 모아놓은 지수)는 +5.2% 급등하며 3거래일 연속 하락세를 끊어냈습니다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="kicker">Wall of Worry</div>
+  <h2>그럼에도 남아있는 3가지 걱정거리</h2>
+  <p>지수는 올랐지만, 시장을 짓누르는 위험은 하나도 사라지지 않았습니다. 오히려 더 뚜렷해졌죠.</p>
+  <div class="risk-row">
+    <div class="risk-card">
+      <div class="rtitle"><span>지정학 &amp; 에너지</span><span class="rval">$91.03/bbl</span></div>
+      <p>미국-이란 무력 충돌 10일째 지속. 예멘 후티 반군이 사우디 주요 항구의 해상 봉쇄를 선언하면서 브렌트유(국제 원유 기준 가격)가 치솟았습니다. 운송비 증가로 물가 상승 압력도 커지고 있습니다.</p>
+    </div>
+    <div class="risk-card">
+      <div class="rtitle"><span>금리 &amp; 인플레이션</span><span class="rval">4.594%</span></div>
+      <p>미국 10년물 국채 금리(정부가 10년 동안 빌린 돈에 주는 이자율)가 급등했습니다. 끈적한 물가 전망과 지정학적 위기 고조로 5bp(0.05%포인트) 이상 뛰었고, 고평가된 성장주들의 차입 비용 부담이 커졌습니다.</p>
+    </div>
+    <div class="risk-card">
+      <div class="rtitle"><span>무역전쟁 리스크</span><span class="rval">캐나다 50%</span></div>
+      <p>트럼프 대통령이 캐나다산 제품 약 200억 달러 규모에 50% 추가 관세를 결정했고, 다음 달부터는 수십 개국을 대상으로 10% 관세를 추가로 검토 중입니다. 무역전쟁은 여전히 진행형입니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="fade-in">
+  <div class="kicker">Catalyst</div>
+  <h2>AI의 화려한 귀환</h2>
+  <p>오늘 랠리를 이끈 진짜 주인공은 반도체였습니다. 그 시작은 뜻밖에도 중국발 뉴스였어요.</p>
+  <div class="flow">
+    <div class="flow-step">
+      <div class="ftag">The Trigger</div>
+      <p style="margin:0;">중국 오픈소스 AI 모델(누구나 무료로 가져다 쓸 수 있는 AI, Kimi K3 등)이 확산되면서, 기업들이 <b>클라우드를 빌려 쓰는 대신 자체 하드웨어를 직접 갖춰야 한다</b>는 계산이 나오기 시작했습니다. 하드웨어 단가가 낮아지면 더 많은 기업이 도입하게 되고, 이는 GPU와 고대역폭메모리(HBM, AI 연산에 필요한 고성능 메모리) 수요 폭증으로 이어진다는 논리입니다.</p>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">
+      <div class="ftag">Primary Impact</div>
+      <div class="fbig up">Micron +12.2%</div>
+      <p style="margin:0;">AI 인프라 투자 수익성에 대한 우려를 단숨에 불식시킨 강력한 반전 신호였습니다.</p>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">
+      <div class="ftag">Ripple Effect</div>
+      <div class="chip-row">
+        <div class="chip">Sandisk <span>+14%</span></div>
+        <div class="chip">Western Digital <span>+12.5%</span></div>
+        <div class="chip">Teradyne <span>+12%</span></div>
+        <div class="chip">AMD <span>+8%</span></div>
+        <div class="chip">Marvell <span>+6.68%</span></div>
+        <div class="chip">Nvidia <span>+1.97%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="chart-container fade-in" style="margin-top:22px;">
+    <canvas id="aiChart" height="220"></canvas>
+  </div>
+
+  <h3>슈퍼마이크로(SMCI), 시간외에서 또 한 번 폭등</h3>
+  <p>SMCI는 정규장에서도 7% 넘게 올랐는데, 장 마감 후에는 무려 15~20%까지 치솟았습니다. <b>60억 달러 이상의 막대한 신규 수주 잔고</b>를 미리 발표했기 때문입니다. 매출총이익률도 15%에서 17%로 개선될 것이라고 밝혔죠. 그동안 SMCI는 회계 관련 논란과 경쟁 심화로 많이 밀려있었지만, 이번 발표로 "AI 서버 수요는 죽지 않았다"는 걸 증명했습니다.</p>
+  <p>여기에 <b>엔비디아가 네비우스(Nebius) 지분을 9.3%까지 늘렸다</b>는 소식까지 겹치면서 네비우스 주가는 +16.48% 급등했습니다. 단순한 GPU 판매처를 넘어 AI 클라우드 생태계 파트너로 자리잡고 있다는 신호로 해석됩니다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="kicker">Earnings Spotlight</div>
+  <h2>가치주·산업재의 조용한 반격</h2>
+  <p>화려한 AI 랠리 뒤에서, 전통적인 기업들도 각자의 방식으로 시장을 지탱했습니다.</p>
+
+  <div class="earn-card">
+    <div class="etop"><div class="ename">3M (MMM)</div><div class="epct">+7.32%</div></div>
+    <ul>
+      <li>2분기 조정 EPS $2.40 (시장 예상 $2.25 상회)</li>
+      <li>조정 영업이익률 24.9% (+40bp 개선)</li>
+      <li>연간 EPS 가이던스 $8.80~$8.95로 상향</li>
+      <li>소송·구조조정 터널을 지나 14분기 연속 실적 상회, 다우지수 상승을 사실상 홀로 방어</li>
+    </ul>
+  </div>
+  <div class="earn-card">
+    <div class="etop"><div class="ename">제너럴 모터스 (GM)</div><div class="epct">+4.9%</div></div>
+    <ul>
+      <li>2분기 조정 EPS $3.57 (시장 예상 $3.19 상회)</li>
+      <li>북미 이익 전년 대비 43% 급증</li>
+      <li>전기차 판매는 둔화됐지만, 수익성 높은 트럭·SUV가 북미에서 많이 팔리며 5개 분기 만에 매출 성장 회복</li>
+      <li>연간 가이던스 상향, 현금 흐름도 견고</li>
+    </ul>
+  </div>
+
+  <div class="callout">두 회사 모두 <b>"고금리에도 돈을 버는 전통 기업"</b>이라는 공통점이 있습니다. 화려하진 않지만, 실제로 매출을 증명하고 있다는 점이 오늘 시장에서 후한 점수를 받았습니다.</div>
+</section>
+
+<section class="fade-in">
+  <div class="kicker">IP Power</div>
+  <h2>장난감 회사가 아니라 IP(지적재산권) 회사</h2>
+  <div class="earn-card">
+    <div class="etop"><div class="ename">해즈브로 (HAS)</div><div class="epct">+8.8%</div></div>
+    <p style="margin:0;">해즈브로의 진짜 무기는 장난감이 아니라 카드게임 <b>매직 더 개더링(Magic: The Gathering)</b>이었습니다. 캐릭터·콘텐츠를 다른 회사에 빌려주고 받는 라이센스 매출이 전년 대비 32% 증가하며, 사상 최초로 단일 분기 매출 5억 달러를 돌파했습니다.</p>
+  </div>
+  <div class="callout">고금리와 소비 둔화 속에서도, <b>강력한 팬덤을 가진 IP(지적재산권)는 거시경제 영향을 거의 비껴간다</b>는 것을 보여준 사례입니다.</div>
+</section>
+
+<section class="fade-in">
+  <div class="kicker">Comparison Matrix</div>
+  <h2>가이던스 심판대: 실적보다 무서운 건 전망치</h2>
+  <p class="lede">지금까지 나온 실적 중 <b>어닝 미스(실적이 예상보다 나쁨)는 단 한 건도 없습니다.</b> 문제는 <span class="term">가이던스(회사가 스스로 제시하는 향후 전망치)</span>였습니다.</p>
+  <table>
+    <tr><th>승자</th><th>내용</th></tr>
+    <tr class="win"><td>3M +7.3%</td><td>가이던스 상향, 마진 방어</td></tr>
+    <tr class="win"><td>GM +4.9%</td><td>가이던스 상향, 이익률 급증</td></tr>
+    <tr class="win"><td>해즈브로 +8.8%</td><td>매출·EBITDA 가이던스 동반 상향</td></tr>
+  </table>
+  <table>
+    <tr><th>패자</th><th>내용</th></tr>
+    <tr class="lose"><td>다나허 -11%</td><td>실적은 상회했지만 3분기 성장률을 2~3%로 낮춤</td></tr>
+    <tr class="lose"><td>D.R.호튼</td><td>실적 상회에도 주택 인도량 전망치 하향</td></tr>
+    <tr class="lose"><td>MSCI -10.14%</td><td>영업비용 가이던스 상향으로 급락</td></tr>
+    <tr class="lose"><td>할리버튼 -5.7%</td><td>이익 상회에도 고객사 지출 둔화 우려</td></tr>
+  </table>
+</section>
+
+<section class="fade-in">
+  <div class="kicker">Case Study</div>
+  <h2>다나허 폭락이 남긴 교훈</h2>
+  <div class="big-stat">
+    <div class="num">-10.99%</div>
+    <div class="cap">S&amp;P500 최악의 하루 수익률 · 2001년 이후 최대 낙폭</div>
+  </div>
+  <p><b>The Paradox</b> — 다나허의 2분기 조정 EPS($1.94)와 매출은 모두 월가 예상치를 훌쩍 상회했습니다. 영업현금흐름과 잉여현금흐름도 막대했죠. 실적만 보면 우등생입니다.</p>
+  <p><b>The Verdict</b> — 그런데 3분기 핵심 매출 성장률 가이던스를 2~3%로 제시했습니다. 시장 예상치는 3.6%였죠. 겨우 0.6~1.6%포인트 차이지만, 시장은 냉정하게 반응했습니다. 다나허의 주력 사업은 병원·연구소용 바이오 실험·테스트 장비인데, 고금리 상황에서는 이런 "잡주(투기성이 강한 종목)"들이 특히 취약합니다.</p>
+  <div class="callout"><b>지금 시장은 '지나간 호실적'에 프리미엄을 주지 않습니다.</b> 미래 성장 재가속이 지연된다고 판단되는 순간, 고평가된 밸류에이션(적정 주가 수준)은 단 하루 만에 무너질 수 있습니다.</div>
+</section>
+
+<section class="fade-in">
+  <div class="kicker">M&amp;A &amp; Broadening</div>
+  <h2>스마트 머니는 어디로 움직이나</h2>
+  <h3>Utz Brands (UTZ) +89%</h3>
+  <p>독일 인터스낵(Intersnack)이 주당 $14.25(전일 대비 91% 프리미엄), 총 29억 달러 규모로 전격 인수를 결정했습니다. 성장 둔화를 겪는 필수소비재 업계에서, 확실한 브랜드와 유통망을 가진 기업에 대한 인수합병(M&amp;A) 베팅이 다시 살아나는 신호입니다.</p>
+  <h3>빅테크를 제외한 '나머지 493개' 기업</h3>
+  <div class="chart-container fade-in">
+    <canvas id="broadChart" height="220"></canvas>
+  </div>
+  <p>매그니피센트7(대형 기술주 7종목)을 제외한 S&amp;P500 내 493개 기업의 2분기 순이익이 <b>22.8% 증가</b>할 것으로 전망됩니다. 2021년 4분기 이후 최고치로, 빅테크만이 아니라 시장 전반이 이익을 내고 있다는 건강한 신호입니다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="kicker">Sector Watch</div>
+  <h2>금리에 민감한 업종은 여전히 취약</h2>
+  <p>10년물 금리가 급등하면 곤란해지는 기업들이 있습니다. 블룸에너지, D.R.호튼, 캐터필라 같은 곳들이죠. 이런 기업들은 계약할 때 선급금을 받기보다 자금을 미리 끌어와 사업을 진행하는 경우가 많아, 금리 상승에 특히 취약합니다.</p>
+  <p>주택건설주에는 또 다른 악재도 있습니다. 금리가 오르면 30년 만기 모기지(주택담보대출) 금리가 7%까지 오를 수 있는데, 이렇게 되면 주택 구매자들은 그냥 관망할 수밖에 없습니다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="kicker">Tomorrow Matters More</div>
+  <h2>내일이 진짜다: 3가지 관전 포인트</h2>
+  <p class="lede">알파벳(구글), 테슬라, IBM, 텍사스 인스트루먼트, 서비스나우까지 — 내일 AI를 대표하는 기업들의 실적이 줄줄이 발표됩니다. 오늘의 반등이 진짜인지 가짜인지는 내일 판가름납니다.</p>
+  <div class="check-list" id="checklist">
+    <div class="check-item">
+      <div class="chead"><span><span class="num">01</span>AI 캐펙스는 늘어났나</span><span class="arrow">▾</span></div>
+      <div class="check-body">마이크론과 SMCI가 쏘아 올린 인프라 랠리가 정당화되려면, 빅테크의 AI 자본지출(캐펙스, 설비투자)이 계속 늘어나야 합니다. "이제 지출을 줄이겠다"는 말이 나오면 가장 무서운 시나리오가 현실화됩니다.</div>
+    </div>
+    <div class="check-item">
+      <div class="chead"><span><span class="num">02</span>가이던스가 전부다</span><span class="arrow">▾</span></div>
+      <div class="check-body">과거 실적(Beat)은 중요하지 않습니다. 가이던스가 미래 매크로 역풍을 이겨낼 수 없다고 판단되는 순간, 다나허(-11%)나 MSCI(-10%)처럼 무자비한 매도세에 직면합니다.</div>
+    </div>
+    <div class="check-item">
+      <div class="chead"><span><span class="num">03</span>현금을 버는 기업인가</span><span class="arrow">▾</span></div>
+      <div class="check-body">금리가 오르든 유가가 오르든 상관없이 매출·현금창출력·마진을 증명한 3M, GM, 해즈브로 같은 기업들은 앞으로도 살아남을 가능성이 높습니다.</div>
+    </div>
+  </div>
+</section>
+
+<div class="closing fade-in">
+  "오늘이 시작점일 수는 있으나, 오늘로 끝나버릴 수도 있다"<br>— 내일, 진짜 승부가 시작됩니다.
+</div>
+
+<footer>CIA.chat Market Briefing · 2026.07.21</footer>
+</div>
+
+<script>
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+const chartConfigs = {};
+
+chartConfigs['idxChart'] = () => {
+  new Chart(document.getElementById('idxChart'), {
+    type: 'bar',
+    data: {
+      labels: ['나스닥', 'S&P 500', '다우존스', 'SOX(반도체)'],
+      datasets: [{
+        data: [1.3, 0.9, 0.7, 5.2],
+        backgroundColor: ['#e11d48','#1a1a1a','#6b7280','#2563eb'],
+        borderRadius: 4,
+        maxBarThickness: 46
+      }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:(c)=>` +${c.raw}%`}} },
+      scales:{ y:{ ticks:{callback:(v)=>v+'%'}, grid:{color:'#eee'} }, x:{ grid:{display:false} } }
+    }
+  });
+};
+
+chartConfigs['aiChart'] = () => {
+  new Chart(document.getElementById('aiChart'), {
+    type: 'bar',
+    data: {
+      labels: ['샌디스크','WD','마이크론','테라다인','AMD','마블','엔비디아'],
+      datasets: [{
+        data: [14, 12.5, 12.2, 12, 8, 6.68, 1.97],
+        backgroundColor: '#e11d48',
+        borderRadius: 4,
+        maxBarThickness: 30
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:(c)=>` +${c.raw}%`}} },
+      scales:{ x:{ ticks:{callback:(v)=>v+'%'}, grid:{color:'#eee'} }, y:{ grid:{display:false} } }
+    }
+  });
+};
+
+chartConfigs['broadChart'] = () => {
+  new Chart(document.getElementById('broadChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['나머지 493개 기업 순이익 성장', ''],
+      datasets: [{
+        data: [22.8, 77.2],
+        backgroundColor: ['#e11d48', '#f2f2f2'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false, cutout:'72%',
+      plugins:{ legend:{display:false}, tooltip:{enabled:false} }
+    }
+  });
+};
+
+const chartObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const canvas = e.target.querySelector('canvas');
+      if (canvas && chartConfigs[canvas.id]) {
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+document.querySelectorAll('.check-item').forEach(item => {
+  item.addEventListener('click', () => item.classList.toggle('open'));
+});
+</script>
+</body>
+</html>
