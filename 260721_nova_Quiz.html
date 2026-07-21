@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 2라운드 : 방패 주식 5대 전략 — 이해도 퀴즈</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#fafafa; --ink:#1a1a1a; --sub:#777777;
+    --accent:#e11d48; --accent2:#f43f5e; --line:#e5e5e5;
+    --green:#059669; --greenbg:#ecfdf5; --redbg:#fef2f2;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg2); color:var(--ink); font-family:'Noto Sans KR',sans-serif; line-height:1.7}
+  .wrap{max-width:680px; margin:0 auto; background:var(--bg); min-height:100vh}
+
+  /* ===== sticky scoreboard ===== */
+  .board{position:sticky; top:0; z-index:50; background:rgba(255,255,255,.96); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); padding:12px 20px 14px}
+  .board-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:9px}
+  .board-title{font-family:'Playfair Display',serif; font-weight:700; font-size:15px; letter-spacing:-.01em}
+  .board-stats{display:flex; gap:14px; font-size:12.5px; font-weight:700}
+  .board-stats .s{color:var(--sub); font-weight:500}
+  .board-stats .s b{color:var(--ink); font-weight:700}
+  .board-stats .rate{color:var(--accent)}
+  .bar{height:7px; border-radius:5px; background:#eee; overflow:hidden}
+  .bar-fill{height:100%; width:0%; border-radius:5px; background:var(--accent); transition:width .4s ease, background .4s ease}
+
+  /* ===== header ===== */
+  header{padding:40px 20px 30px; border-bottom:3px solid var(--ink)}
+  .eyebrow{font-size:11.5px; letter-spacing:.3em; text-transform:uppercase; color:var(--accent); font-weight:700; margin-bottom:14px; display:flex; align-items:center; gap:9px}
+  .eyebrow::before{content:""; width:26px; height:2px; background:var(--accent)}
+  header h1{font-family:'Playfair Display',serif; font-weight:900; font-size:clamp(28px,7.4vw,40px); line-height:1.12; letter-spacing:-.01em}
+  header h1 em{font-style:italic; color:var(--accent)}
+  header p{margin-top:14px; color:var(--sub); font-size:14px}
+
+  /* ===== quiz ===== */
+  #quiz{padding:16px 20px 40px}
+  .q{background:var(--bg); border:1px solid var(--line); border-radius:14px; padding:24px 20px; margin:16px 0; box-shadow:0 1px 3px rgba(0,0,0,.03)}
+  .q-head{display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap}
+  .q-no{font-family:'Playfair Display',serif; font-size:30px; font-weight:900; color:var(--accent); line-height:1}
+  .q-badges{display:flex; gap:6px}
+  .badge{font-size:10.5px; font-weight:700; padding:4px 9px; border-radius:20px; letter-spacing:.02em}
+  .badge.type{background:#eef2ff; color:#4338ca}
+  .badge.d-easy{background:#ecfdf5; color:#059669}
+  .badge.d-mid{background:#fffbeb; color:#b45309}
+  .badge.d-hard{background:#fef2f2; color:#dc2626}
+  .q-text{font-size:16.5px; font-weight:700; line-height:1.6; margin-bottom:18px}
+
+  .opts{display:flex; flex-direction:column; gap:9px}
+  .opt{text-align:left; background:var(--bg2); border:1.5px solid var(--line); border-radius:10px; padding:14px 16px; font-family:inherit; font-size:14.5px; color:var(--ink); cursor:pointer; transition:.18s; display:flex; gap:11px; align-items:flex-start; line-height:1.5}
+  .opt:hover:not(:disabled){border-color:var(--accent); background:#fff}
+  .opt:disabled{cursor:default}
+  .opt .key{flex:0 0 22px; height:22px; border-radius:50%; background:#e5e5e5; color:#555; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; transition:.18s}
+  .opt.correct{background:var(--greenbg); border-color:var(--green); color:#065f46}
+  .opt.correct .key{background:var(--green); color:#fff}
+  .opt.wrong{background:var(--redbg); border-color:var(--accent); color:#991b1b}
+  .opt.wrong .key{background:var(--accent); color:#fff}
+  .opt .verdict{margin-left:auto; font-size:11.5px; font-weight:700; align-self:center; white-space:nowrap}
+
+  /* OX */
+  .ox{display:flex; gap:12px}
+  .ox .opt{flex:1; justify-content:center; font-size:20px; font-weight:900; padding:20px 0}
+  .ox .opt .key{display:none}
+
+  /* short answer */
+  .short{display:flex; gap:9px}
+  .short input{flex:1; border:1.5px solid var(--line); border-radius:10px; padding:14px 16px; font-family:inherit; font-size:14.5px; outline:none; transition:.18s}
+  .short input:focus{border-color:var(--accent)}
+  .short input:disabled{background:var(--bg2)}
+  .short .sub-btn{background:var(--ink); color:#fff; border:none; border-radius:10px; padding:0 20px; font-family:inherit; font-weight:700; font-size:14px; cursor:pointer; transition:.18s}
+  .short .sub-btn:hover{background:var(--accent)}
+  .short .sub-btn:disabled{background:#ccc; cursor:default}
+  .short-hint{font-size:11.5px; color:var(--sub); margin-top:8px}
+
+  /* explanation */
+  .expl{max-height:0; overflow:hidden; transition:max-height .35s ease; margin-top:0}
+  .expl.show{max-height:400px; margin-top:16px}
+  .expl-in{background:var(--bg2); border-left:4px solid var(--accent); border-radius:0 10px 10px 0; padding:15px 16px}
+  .expl-in .res{font-weight:700; font-size:13.5px; margin-bottom:6px}
+  .expl-in .res.o{color:var(--green)}
+  .expl-in .res.x{color:var(--accent)}
+  .expl-in p{font-size:13.5px; color:#444; line-height:1.65}
+  .expl-in .ans-line{font-size:13px; margin-top:8px; padding-top:8px; border-top:1px dashed var(--line); color:var(--sub)}
+  .expl-in .ans-line b{color:var(--ink)}
+
+  /* ===== final modal ===== */
+  .overlay{position:fixed; inset:0; background:rgba(26,26,26,.6); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; z-index:100; padding:20px}
+  .overlay.show{display:flex}
+  .modal{background:#fff; border-radius:20px; max-width:400px; width:100%; padding:36px 30px; text-align:center; animation:pop .35s ease}
+  @keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+  .modal .grade{font-family:'Playfair Display',serif; font-size:72px; font-weight:900; line-height:1; margin-bottom:6px}
+  .modal .score{font-size:15px; color:var(--sub); margin-bottom:18px}
+  .modal .score b{color:var(--ink); font-size:20px; font-weight:700}
+  .modal .msg{font-size:15px; line-height:1.6; margin-bottom:26px}
+  .modal .again{background:var(--accent); color:#fff; border:none; border-radius:30px; padding:14px 32px; font-family:inherit; font-weight:700; font-size:15px; cursor:pointer; transition:.2s}
+  .modal .again:hover{background:var(--ink)}
+
+  footer{text-align:center; padding:24px 20px 40px; font-size:11.5px; color:var(--sub)}
+  @media(max-width:420px){ .short{flex-direction:column} .short .sub-btn{padding:12px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- sticky scoreboard -->
+  <div class="board">
+    <div class="board-top">
+      <div class="board-title">이해도 퀴즈</div>
+      <div class="board-stats">
+        <span class="s">푼 문제 <b id="solved">0</b>/10</span>
+        <span class="s">맞힌 <b id="correct">0</b></span>
+        <span class="rate">정답률 <span id="rate">0</span>%</span>
+      </div>
+    </div>
+    <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+  </div>
+
+  <header>
+    <div class="eyebrow">NOVA Real Invest · 2026.07.21</div>
+    <h1>AI 2라운드<br><em>방패 주식</em> 이해도 체크</h1>
+    <p>방송 내용을 얼마나 이해했는지 확인해 보세요. 보기를 클릭하면 즉시 채점되고 해설이 열립니다. 총 10문제.</p>
+  </header>
+
+  <div id="quiz"></div>
+
+  <footer>출처 · NOVA Real Invest 라이브 방송 (2026.07.21) · 본 퀴즈는 학습용이며 투자 조언이 아닙니다.</footer>
+</div>
+
+<!-- final modal -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="grade" id="mGrade">A</div>
+    <div class="score">10문제 중 <b id="mScore">0</b>문제 정답</div>
+    <div class="msg" id="mMsg"></div>
+    <button class="again" id="againBtn">↺ 다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id:1, type:'mc', difficulty:'easy',
+    question:'방송 시점 미국 10년물 국채 금리는 몇 %로 언급됐나요?',
+    options:['3.897%','4.597%','5.125%','4.097%'],
+    answer:1,
+    explanation:'진행자는 10년물 금리가 4.597%에 도달했으며, 4.5% 이상은 위험 구간이고 4.4% 아래로 가야 안전하다고 강조했습니다. 지정학 → 유가 → 금리 발작으로 이어진 거시경제 연쇄의 핵심 지표입니다.'
+  },
+  {
+    id:2, type:'mc', difficulty:'mid',
+    question:'IREN 주가가 장중 20% 폭등한 핵심 이유로 방송에서 강조한 것은?',
+    options:[
+      '비트코인 가격이 사상 최고치를 경신해서',
+      'Microsoft·Nvidia 등과 신규 계약을 맺고 계약금의 45%를 선급금으로 받아서',
+      '주식 액면분할을 발표해서',
+      'S&P 500 지수에 신규 편입돼서'
+    ],
+    answer:1,
+    explanation:'IREN은 Microsoft·Nvidia 등과 28억 달러 규모 신규 계약을 땄고, 무엇보다 계약금의 45%를 선급금(돈을 미리 땡겨 받음)으로 받았습니다. 방송은 "말뿐인 계약이 아니라 실제로 돈이 들어오는 게 중요하다"고 반복 강조했습니다.'
+  },
+  {
+    id:3, type:'ox', difficulty:'easy',
+    question:'AMD의 Helios 랙스케일 솔루션은 이미 제품이 완성되어 마이크로소프트에 출하 중이다.',
+    answer:'X',
+    explanation:'틀렸습니다. 방송은 이것이 아직 "말풍선"이며 설계·계획만 있는 상태라고 설명했습니다. 연말 딜리버리 예정이고, 엔비디아의 쿠다(CUDA) 생태계를 이길 수 있을지는 완전히 다른 문제라고 지적했습니다. 실체가 없다는 걸 시장이 깨닫자 장중 7% 급등분을 반납해 +1.47%로 마감했습니다.'
+  },
+  {
+    id:4, type:'short', difficulty:'mid',
+    question:'"싼 모델이 확산되면 오히려 수요가 폭발해 더 많은 인프라가 필요해진다"는 원리를 뜻하는 경제 용어를 쓰세요. (한글 또는 영문)',
+    answer:['제번스의 역설','제번스 역설','jevons paradox','제본스의 역설','제본스 역설','jevons','제번스'],
+    displayAnswer:'제번스의 역설 (Jevons Paradox)',
+    explanation:'구독자 채팅에서 "제번스의 역설"이 언급됐고 진행자가 극찬했습니다. 단위당 비용이 싸지면 수요가 폭발 → 공급이 다시 딸림 → 더 많은 GPU·데이터센터·메모리·전기가 필요해집니다. 그래서 오늘 엔비디아·마이크론·AMD·인텔이 함께 올랐습니다.',
+    hint:'힌트: 19세기 영국 경제학자의 이름이 붙은 역설입니다.'
+  },
+  {
+    id:5, type:'mc', difficulty:'mid',
+    question:'스페이스X(SPCX)에 대한 방송 내용으로 옳은 것은?',
+    options:[
+      '공모가를 크게 웃돌며 신고가를 경신했다',
+      '공모가 $135를 이탈해 $119.85로 마감했고, 고점 대비 시총 1조 달러가 증발했다',
+      '확정 계약과 선급금으로 펀더멘탈 승자로 꼽혔다',
+      '스타십 발사 성공으로 급등했다'
+    ],
+    answer:1,
+    explanation:'SPCX는 공모가 $135를 이탈해 $119.85로 마감(-3.44%), 스타십 발사 지연과 함께 고점 대비 시총 1조 달러가 증발하며 메타에 역전당했습니다. 방송은 "꿈파리·미래파리가 통하지 않는 Phase 2 시대"의 대표 사례로 들었습니다.'
+  },
+  {
+    id:6, type:'mc', difficulty:'hard',
+    question:'Hut 8이 맺은 텍사스 Beacon Point 임대 계약의 규모와 기간은?',
+    options:[
+      '28억 달러 · 5년',
+      '502억 달러 · 10년',
+      '98억 달러 · 15년 장기',
+      '704억 달러 · 20년'
+    ],
+    answer:2,
+    explanation:'Hut 8은 텍사스 Beacon Point 임대로 98억 달러 규모의 15년 장기 계약을 맺었습니다(주가 +10.31%). 인프라 구축 비용이 어마무시하기 때문에 장기 계약이 필수라는 점을 "인테리어가 빵빵할수록 임대 계약이 길어지는 리테일"에 비유했습니다. (캠퍼스 총 용량 704MW, 전체 잠재가치 502억 달러는 별개 수치)'
+  },
+  {
+    id:7, type:'short', difficulty:'easy',
+    question:'"말뿐인 MOU"와 대비되며, 계약과 동시에 돈을 미리 받아 확실한 수익을 보장하는 것을 뜻하는, 방송이 꼽은 오늘의 키워드를 쓰세요.',
+    answer:['선급금','선수금','선급금 계약','선수금 계약'],
+    displayAnswer:'선급금 (또는 선수금)',
+    explanation:'방송은 "선급금/선수금"을 오늘의 키워드로 반복 강조했습니다. 돈을 미리 받으면 무리한 전환사채 발행(지분 희석)이나 고금리 차입 없이도 인프라를 폭발적으로 늘릴 수 있어, IREN·Hut 8 같은 네오클라우드의 핵심 강점이 됩니다.',
+    hint:'힌트: 세 글자, 돈을 "미리" 받는 것.'
+  },
+  {
+    id:8, type:'mc', difficulty:'mid',
+    question:'AMC 엔터테인먼트가 +26.8% 급등한 배경으로 방송에서 언급되지 않은 것은?',
+    options:[
+      "'The Odyssey' 2.75억 달러 흥행",
+      '106년 역사상 최대 분기 매출 (15억 9,670만 달러)',
+      '조정 EBITDA 70% 급등',
+      'AI 데이터센터 신규 임대 계약 체결'
+    ],
+    answer:3,
+    explanation:"AMC의 급등 배경은 'The Odyssey' 흥행, 106년 최대 분기 매출, EBITDA 70% 급등이었습니다. 흥행이 임계점을 넘으면 직원 수는 그대로라 뒤는 다 남는 '영업 레버리지'가 핵심입니다. AI 데이터센터 임대는 IREN·Hut 8 이야기로, AMC와 무관합니다."
+  },
+  {
+    id:9, type:'mc', difficulty:'mid',
+    question:'파라마운트-워너브라더스 디스커버리(WBD) 합병에 제동을 건 것은?',
+    options:[
+      '주주총회 부결',
+      '유럽연합(EU)의 규제',
+      '12개 주의 반독점 소송과 연방법원의 14일간 임시금지명령',
+      '미국 국세청의 세무조사'
+    ],
+    answer:2,
+    explanation:'12개 주가 반독점(Antitrust) 소송을 걸었고, 캘리포니아 연방법원이 14일간 임시금지명령을 발부했습니다. 부채 포함 약 1,100억 달러 규모의 이 딜이 막히면서 규제 리스크가 부각됐고, WBD 주가는 -3.59% 하락하며 미디어 섹터 투자심리를 냉각시켰습니다.'
+  },
+  {
+    id:10, type:'ox', difficulty:'hard',
+    question:'방송이 제시한 "상승 돌파(Green)" 조건 중 하나는 S&P 500 지수가 7,500선을 회복하는 것이다.',
+    answer:'O',
+    explanation:'맞습니다. Green(상승 돌파) 조건은 ① S&P 500 지수 7,500선 회복 ② 10년물 금리 4.6% 하회 안정화 ③ 브렌트유 $90 아래 진정입니다. 반대로 Red(하락 전염) 조건은 10년물 4.7% 돌파, 브렌트유 $95 돌파, 핵심 빅테크 가이던스 쇼크입니다.'
+  }
+];
+
+let state = { solved:0, correct:0, done:{} };
+
+const quizEl = document.getElementById('quiz');
+const dMap = {easy:['쉬움','d-easy'], mid:['보통','d-mid'], hard:['어려움','d-hard']};
+const tMap = {mc:'객관식', ox:'OX', short:'단답형'};
+
+function render(){
+  quizEl.innerHTML = '';
+  QUIZ_DATA.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'q'; card.id = 'q'+q.id;
+    const [dLabel, dClass] = dMap[q.difficulty];
+    let body = '';
+
+    if(q.type === 'mc'){
+      body = '<div class="opts">' + q.options.map((o,i)=>
+        `<button class="opt" data-i="${i}"><span class="key">${String.fromCharCode(65+i)}</span><span>${o}</span></button>`
+      ).join('') + '</div>';
+    } else if(q.type === 'ox'){
+      body = `<div class="ox">
+        <button class="opt" data-v="O">O</button>
+        <button class="opt" data-v="X">X</button></div>`;
+    } else if(q.type === 'short'){
+      body = `<div class="short">
+        <input type="text" placeholder="정답 입력..." autocomplete="off">
+        <button class="sub-btn">제출</button></div>
+        <div class="short-hint">${q.hint||''}</div>`;
+    }
+
+    card.innerHTML = `
+      <div class="q-head">
+        <span class="q-no">${String(q.id).padStart(2,'0')}</span>
+        <div class="q-badges">
+          <span class="badge type">${tMap[q.type]}</span>
+          <span class="badge ${dClass}">${dLabel}</span>
+        </div>
+      </div>
+      <div class="q-text">${q.question}</div>
+      ${body}
+      <div class="expl" id="expl${q.id}"><div class="expl-in"></div></div>`;
+    quizEl.appendChild(card);
+    attach(q, card);
+  });
+}
+
+function attach(q, card){
+  if(q.type === 'mc'){
+    card.querySelectorAll('.opt').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const i = parseInt(btn.dataset.i);
+        const isCorrect = i === q.answer;
+        gradeMC(q, card, i, isCorrect);
+      });
+    });
+  } else if(q.type === 'ox'){
+    card.querySelectorAll('.opt').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const v = btn.dataset.v;
+        gradeOX(q, card, v, v === q.answer);
+      });
+    });
+  } else if(q.type === 'short'){
+    const input = card.querySelector('input');
+    const sbtn = card.querySelector('.sub-btn');
+    const submit = ()=>{
+      const val = input.value.trim().toLowerCase().replace(/\s/g,'');
+      if(!val) return;
+      const ok = q.answer.some(a => a.toLowerCase().replace(/\s/g,'') === val);
+      gradeShort(q, card, ok);
+    };
+    sbtn.addEventListener('click', submit);
+    input.addEventListener('keydown', e=>{ if(e.key==='Enter') submit(); });
+  }
+}
+
+function gradeMC(q, card, chosen, ok){
+  const opts = card.querySelectorAll('.opt');
+  opts.forEach((o,idx)=>{
+    o.disabled = true;
+    if(idx === q.answer){
+      o.classList.add('correct');
+      o.insertAdjacentHTML('beforeend','<span class="verdict">✓ 정답</span>');
+    }
+    if(idx === chosen && !ok){
+      o.classList.add('wrong');
+      o.insertAdjacentHTML('beforeend','<span class="verdict">✗ 오답</span>');
+    }
+  });
+  showExpl(q, ok);
+  record(q.id, ok);
+}
+
+function gradeOX(q, card, chosen, ok){
+  const opts = card.querySelectorAll('.opt');
+  opts.forEach(o=>{
+    o.disabled = true;
+    if(o.dataset.v === q.answer) o.classList.add('correct');
+    if(o.dataset.v === chosen && !ok) o.classList.add('wrong');
+  });
+  showExpl(q, ok);
+  record(q.id, ok);
+}
+
+function gradeShort(q, card, ok){
+  const input = card.querySelector('input');
+  const sbtn = card.querySelector('.sub-btn');
+  input.disabled = true; sbtn.disabled = true;
+  input.style.borderColor = ok ? 'var(--green)' : 'var(--accent)';
+  input.style.background = ok ? 'var(--greenbg)' : 'var(--redbg)';
+  showExpl(q, ok);
+  record(q.id, ok);
+}
+
+function showExpl(q, ok){
+  const box = document.getElementById('expl'+q.id);
+  const inner = box.querySelector('.expl-in');
+  let ansLine = '';
+  if(q.type === 'short') ansLine = `<div class="ans-line">정답 : <b>${q.displayAnswer}</b></div>`;
+  else if(q.type === 'ox') ansLine = `<div class="ans-line">정답 : <b>${q.answer}</b></div>`;
+  else ansLine = `<div class="ans-line">정답 : <b>${String.fromCharCode(65+q.answer)}. ${q.options[q.answer]}</b></div>`;
+  inner.innerHTML = `
+    <div class="res ${ok?'o':'x'}">${ok?'✓ 정답입니다!':'✗ 아쉬워요'}</div>
+    <p>${q.explanation}</p>
+    ${ansLine}`;
+  box.classList.add('show');
+}
+
+function record(id, ok){
+  if(state.done[id]) return;
+  state.done[id] = true;
+  state.solved++;
+  if(ok) state.correct++;
+  updateBoard();
+  if(state.solved === QUIZ_DATA.length) setTimeout(showModal, 500);
+}
+
+function updateBoard(){
+  document.getElementById('solved').textContent = state.solved;
+  document.getElementById('correct').textContent = state.correct;
+  const rate = state.solved ? Math.round(state.correct/state.solved*100) : 0;
+  document.getElementById('rate').textContent = rate;
+  const fill = document.getElementById('barFill');
+  fill.style.width = (state.solved/QUIZ_DATA.length*100) + '%';
+  let color = '#e11d48';
+  if(rate >= 70) color = '#059669';
+  else if(rate >= 40) color = '#f59e0b';
+  fill.style.background = color;
+}
+
+function showModal(){
+  const n = state.correct;
+  let grade, msg;
+  if(n >= 9){ grade='A'; msg='완벽합니다! Phase 2의 핵심을 꿰뚫고 계시네요. 계약서와 선급금을 보는 눈이 확실합니다.'; }
+  else if(n >= 7){ grade='B'; msg='훌륭해요! 큰 흐름은 잘 잡으셨습니다. 놓친 디테일만 다시 보면 완벽해집니다.'; }
+  else if(n >= 5){ grade='C'; msg='절반 이상 맞혔습니다. 거시 연쇄와 승자·패자 구분을 한 번 더 복습해 보세요.'; }
+  else{ grade='D'; msg='괜찮아요, 복습이 곧 실력입니다. 리포트를 다시 훑고 재도전해 보세요!'; }
+  document.getElementById('mGrade').textContent = grade;
+  document.getElementById('mGrade').style.color = n>=7 ? '#059669' : (n>=5 ? '#f59e0b' : '#e11d48');
+  document.getElementById('mScore').textContent = n;
+  document.getElementById('mMsg').textContent = msg;
+  document.getElementById('overlay').classList.add('show');
+}
+
+document.getElementById('againBtn').addEventListener('click', ()=>{
+  state = { solved:0, correct:0, done:{} };
+  updateBoard();
+  document.getElementById('overlay').classList.remove('show');
+  render();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+render();
+updateBoard();
+</script>
+</body>
+</html>
