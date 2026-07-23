@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>테슬라 실적·마진·FCF 모두 실패! 구글 클라우드 82% 성장의 숨겨진 함정</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,900;1,600&family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#ffffff; --bg-soft:#fafafa;
+    --ink:#1a1a1a; --ink-soft:#777777;
+    --accent:#e11d48; --accent-2:#f43f5e;
+    --line:#e5e5e5;
+    --c1:#e11d48; --c2:#1a1a1a; --c3:#6b7280; --c4:#2563eb;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:'Noto Sans KR', sans-serif;
+    line-height:1.75; -webkit-font-smoothing:antialiased;
+    max-width:640px; margin:0 auto; overflow-x:hidden;
+  }
+  ::selection{ background:var(--accent); color:#fff; }
+  a{ color:var(--accent); }
+
+  /* ---------- Masthead ---------- */
+  .masthead{
+    padding:34px 24px 22px; border-bottom:3px solid var(--ink);
+  }
+  .kicker{
+    font-size:12px; letter-spacing:.22em; font-weight:700; color:var(--accent);
+    text-transform:uppercase; margin-bottom:14px; display:flex; align-items:center; gap:10px;
+  }
+  .kicker::before{ content:""; width:22px; height:2px; background:var(--accent); display:inline-block; }
+  .issue-date{ font-size:12px; color:var(--ink-soft); margin-bottom:20px; letter-spacing:.02em; }
+  h1.headline{
+    font-family:'Playfair Display', serif; font-weight:900;
+    font-size:34px; line-height:1.18; letter-spacing:-0.01em; color:var(--ink);
+  }
+  h1.headline em{ font-style:italic; color:var(--accent); }
+  .dek{
+    margin-top:16px; font-size:15.5px; color:var(--ink-soft); font-weight:400; line-height:1.7;
+  }
+  .byline{
+    margin-top:22px; font-size:12.5px; color:var(--ink-soft);
+    display:flex; justify-content:space-between; border-top:1px solid var(--line); padding-top:14px;
+  }
+  .byline b{ color:var(--ink); font-weight:600; }
+
+  /* ---------- Section shell ---------- */
+  section{ padding:40px 24px; border-bottom:1px solid var(--line); }
+  section.soft{ background:var(--bg-soft); }
+  .eyebrow{
+    font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent);
+    font-weight:700; margin-bottom:10px;
+  }
+  h2{
+    font-family:'Playfair Display', serif; font-weight:700; font-size:23px;
+    line-height:1.32; color:var(--ink); margin-bottom:6px; letter-spacing:-0.01em;
+  }
+  .sub{ font-size:13.5px; color:var(--ink-soft); margin-bottom:20px; }
+  p{ font-size:15px; margin-bottom:14px; color:#2a2a2a; }
+  p:last-child{ margin-bottom:0; }
+  .lede::first-letter{
+    font-family:'Playfair Display', serif; font-size:52px; font-weight:900; color:var(--accent);
+    float:left; line-height:0.8; margin:6px 8px 0 0;
+  }
+  strong{ color:var(--ink); font-weight:700; }
+  .term{ color:var(--accent); font-weight:600; }
+  .note{ font-size:12.5px; color:var(--ink-soft); }
+
+  /* ---------- fade-in ---------- */
+  .fade-in{ opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease; }
+  .fade-in.visible{ opacity:1; transform:translateY(0); }
+
+  /* ---------- pull quote ---------- */
+  .pullquote{
+    margin:22px 0; padding:20px 20px 20px 22px; border-left:3px solid var(--accent);
+    background:var(--bg-soft);
+  }
+  .pullquote p{
+    font-family:'Playfair Display', serif; font-style:italic; font-weight:600;
+    font-size:19px; color:var(--ink); line-height:1.5;
+  }
+
+  /* ---------- stat strip ---------- */
+  .stat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); margin:20px 0; border:1px solid var(--line); }
+  .stat-cell{ background:#fff; padding:16px; }
+  .stat-cell .num{ font-family:'Playfair Display', serif; font-weight:900; font-size:26px; color:var(--accent); line-height:1; }
+  .stat-cell .num.down{ color:var(--c3); }
+  .stat-cell .lbl{ font-size:11.5px; color:var(--ink-soft); margin-top:6px; }
+
+  /* ---------- chart ---------- */
+  .chart-container{ position:relative; max-height:340px; margin:20px 0 8px; }
+  .chart-container canvas{ opacity:0; transition:opacity .4s ease; max-height:300px; }
+  .chart-container.chart-ready canvas{ opacity:1; }
+  .chart-caption{ font-size:12px; color:var(--ink-soft); text-align:center; margin-top:8px; }
+
+  /* ---------- divider label ---------- */
+  .divider{
+    display:flex; align-items:center; gap:12px; margin:8px 0 26px;
+  }
+  .divider .tag{
+    font-family:'Playfair Display', serif; font-weight:700; font-style:italic; font-size:13px; color:var(--ink-soft);
+  }
+  .divider::after{ content:""; flex:1; height:1px; background:var(--line); }
+
+  /* ---------- table ---------- */
+  table{ width:100%; border-collapse:collapse; margin:18px 0; font-size:13.5px; }
+  th{ background:var(--accent); color:#fff; text-align:left; padding:10px 12px; font-weight:600; font-size:12.5px; }
+  td{ padding:10px 12px; background:var(--bg-soft); border-bottom:1px solid var(--line); }
+  tr:last-child td{ border-bottom:none; }
+  td.hi{ color:var(--accent); font-weight:700; }
+
+  /* ---------- scenario toggle ---------- */
+  .scenario-box{ margin:20px 0; border:1px solid var(--line); }
+  .scenario-tabs{ display:flex; }
+  .scenario-tabs button{
+    flex:1; padding:13px; font-family:'Noto Sans KR'; font-weight:700; font-size:13.5px;
+    border:none; cursor:pointer; background:var(--bg-soft); color:var(--ink-soft); transition:.2s;
+  }
+  .scenario-tabs button.active.bull{ background:var(--accent); color:#fff; }
+  .scenario-tabs button.active.bear{ background:var(--c2); color:#fff; }
+  .scenario-panel{ display:none; padding:20px; }
+  .scenario-panel.active{ display:block; }
+  .scenario-panel ul{ padding-left:18px; }
+  .scenario-panel li{ font-size:14px; margin-bottom:10px; color:#2a2a2a; }
+  .scenario-panel li b{ color:var(--ink); }
+
+  /* ---------- equation ---------- */
+  .equation{
+    margin:22px 0; padding:24px 18px; background:var(--ink); color:#fff; text-align:center;
+  }
+  .equation .eq-row{ display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; font-size:13px; margin-bottom:14px; color:#aaa;}
+  .equation .eq-row span{ padding:6px 10px; border:1px solid #444; font-weight:600; color:#eee; }
+  .equation .eq-result{
+    font-family:'Playfair Display', serif; font-weight:900; font-size:22px; color:var(--accent-2);
+  }
+
+  /* ---------- calendar ---------- */
+  .cal-list{ margin:20px 0; }
+  .cal-item{ display:flex; gap:14px; padding:14px 0; border-bottom:1px solid var(--line); }
+  .cal-item:last-child{ border-bottom:none; }
+  .cal-date{
+    font-family:'Playfair Display', serif; font-weight:700; font-size:13px; color:var(--accent);
+    min-width:74px; flex-shrink:0;
+  }
+  .cal-body b{ display:block; font-size:14.5px; color:var(--ink); margin-bottom:3px; }
+  .cal-body span{ font-size:12.5px; color:var(--ink-soft); }
+
+  /* ---------- barbell ---------- */
+  .barbell{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:20px 0; }
+  .barbell .side{ padding:18px 14px; }
+  .barbell .defense{ background:#f1f3f5; border-top:3px solid var(--c3); }
+  .barbell .offense{ background:#fdecef; border-top:3px solid var(--accent); }
+  .barbell h3{ font-family:'Playfair Display', serif; font-size:15px; margin-bottom:10px; }
+  .barbell .defense h3{ color:var(--c3); }
+  .barbell .offense h3{ color:var(--accent); }
+  .barbell ul{ list-style:none; }
+  .barbell li{ font-size:13px; margin-bottom:8px; padding-left:12px; position:relative; color:#333; }
+  .barbell li::before{ content:"—"; position:absolute; left:-2px; color:var(--ink-soft); }
+
+  /* ---------- glossary ---------- */
+  .glossary{ margin:20px 0; }
+  .g-item{ padding:12px 0; border-bottom:1px dashed var(--line); }
+  .g-item:last-child{ border:none; }
+  .g-term{ font-weight:700; font-size:13.5px; color:var(--accent); }
+  .g-def{ font-size:13px; color:var(--ink-soft); margin-top:3px; }
+
+  /* ---------- closing ---------- */
+  .closing{
+    padding:44px 24px 40px; background:var(--ink); color:#eee;
+  }
+  .closing h2{ color:#fff; }
+  .closing p{ color:#ccc; }
+  .closing .sub{ color:#999; }
+  .closing .pullquote{ background:#242424; border-left-color:var(--accent-2); }
+  .closing .pullquote p{ color:#fff; }
+
+  footer{
+    padding:26px 24px 40px; text-align:center;
+  }
+  footer .brand{ font-family:'Playfair Display', serif; font-weight:900; font-size:15px; letter-spacing:.02em; margin-bottom:6px; }
+  footer .disclaimer{ font-size:11px; color:var(--ink-soft); line-height:1.6; margin-top:14px; }
+
+  @media (max-width:380px){
+    h1.headline{ font-size:28px; }
+    .stat-grid{ grid-template-columns:1fr; }
+    .barbell{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="kicker">Premium Market Briefing</div>
+  <div class="issue-date">2026년 7월 23일 · CIA.chat Creative Investors Association</div>
+  <h1 class="headline">테슬라, 실적·마진·현금흐름 <em>세 마리 토끼</em> 다 놓치다</h1>
+  <p class="dek">구글 클라우드는 82% 성장했다. 그런데 주가는 왜 빠졌을까? 오늘 시장이 던진 단 하나의 질문 — "얼마를 투자했는가"가 아니라 "얼마를 남겼는가" — 를 중심으로 오늘의 실적 시즌을 해부한다.</p>
+  <div class="byline">
+    <span>CIA.chat Research Desk</span>
+    <span><b>2026.07.22</b> 미국 증시 마감 기준</span>
+  </div>
+</div>
+
+<section class="fade-in">
+  <div class="eyebrow">Opening</div>
+  <h2>지표는 고요했지만, 내부는 완벽히 쪼개졌다</h2>
+  <p class="sub">S&amp;P 500 −0.14% · 나스닥 하락 · 다우 하락</p>
+  <p class="lede">겉으로 보이는 하루는 평온했다. S&amp;P 500 지수는 −0.14%라는, 거의 눈에 띄지도 않는 작은 하락으로 장을 마쳤다. 나스닥과 다우 지수도 소폭 하락했을 뿐이다. 하지만 지수 밑을 들여다보면 이야기가 완전히 달라진다. 시장은 더 이상 <span class="term">"AI"</span>라는 단어 하나만으로 프리미엄(웃돈)을 주지 않는다. 실제로 돈을 버는 회사와 약속만 남은 회사 사이에서 <span class="term">디커플링(동반 움직임이 깨지고 서로 다른 방향으로 가는 현상)</span>이 본격적으로 시작됐다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="chartDivergence" height="230"></canvas>
+  </div>
+  <p class="chart-caption">주요 종목 당일 등락률 — 같은 AI 테마 안에서도 극과 극으로 갈렸다</p>
+
+  <p>슈퍼마이크로컴퓨터(SMCI)는 마진이 개선됐다는 소식에 <strong>+24%</strong> 폭등했고, 마라톤 페트롤리엄(MPC)은 유가 급등 수혜로 신고가를 경신했다. 반대편에는 다나허(DHR)가 25년 만의 최대 낙폭인 <strong>−11%</strong>를 기록했고, 페가시스템즈(PEGA)는 AI 수익성 우려로 <strong>−16%</strong> 급락했다.</p>
+</section>
+
+<section class="soft fade-in">
+  <div class="eyebrow">Macro Pressure</div>
+  <h2>인플레이션의 재점화 — 시장을 짓누르는 매크로 압력솥</h2>
+  <p class="sub">스태그플레이션(경기침체+물가상승이 동시에 오는 상황) 우려가 가격에 반영되고 있다</p>
+
+  <div class="stat-grid fade-in">
+    <div class="stat-cell">
+      <div class="num">$94.07</div>
+      <div class="lbl">브렌트유 (+3.4%) · 6주 만의 최고치, 호르무즈 해협 운송 차질 우려</div>
+    </div>
+    <div class="stat-cell">
+      <div class="num">4.66%</div>
+      <div class="lbl">美 10년물 국채금리 · 인플레이션 재가속 우려로 연준 금리 인상 가능성 대두</div>
+    </div>
+    <div class="stat-cell">
+      <div class="num">5%</div>
+      <div class="lbl">美 30년물 국채금리 · 2007년 이후 최장 체류에 근접, 자금 조달 비용 압박</div>
+    </div>
+    <div class="stat-cell">
+      <div class="num down">−0.14%</div>
+      <div class="lbl">S&amp;P 500 당일 종가 · 겉보기와 달리 내부는 완전히 갈라졌다</div>
+    </div>
+  </div>
+
+  <p>유가가 오르면 국채금리가 오르고, 국채금리가 오르면 시장금리도 자동으로 따라 올라간다. 여기에 연준이 금리를 <strong>내리기는커녕 오히려 올릴 수도 있다</strong>는 부담감까지 겹쳐 있다. 지금까지는 "금리가 내려갈 것"이라는 상상이 주가를 떠받쳐 왔는데, 그 구조 자체가 흔들리고 있다는 뜻이다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="eyebrow">Debt Check</div>
+  <h2>고금리의 역풍 — 빅테크의 4,890억 달러 AI 부채 청구서</h2>
+  <p class="sub">과거엔 영업으로 번 돈으로 투자했다. 지금은 빚으로 투자한다.</p>
+  <p>마이크로소프트, 아마존, 메타 등 하이퍼스케일러(초대형 데이터센터 운영 기업)들은 데이터센터와 AI 인프라를 짓는 데 이미 <strong>4,890억 달러</strong>를 썼다. 문제는 이 돈이 <span class="term">회사가 장사해서 번 돈이 아니라 빚(채권 발행)</span>이라는 점이다. 국채금리가 4%대 후반에서 5%대로 고착화되는 지금, 빚으로 쌓아올린 투자는 금리 상승에 극도로 취약할 수밖에 없다.</p>
+  <div class="pullquote">
+    <p>"고밸류 성장주는 강력한 할인율(미래 이익을 현재 가치로 환산할 때 쓰는 비율) 앞에서 가장 먼저 흔들린다."</p>
+  </div>
+  <p>금리가 오르면 할인율도 오르고, 할인율이 오르면 먼 미래의 이익을 약속하는 고성장주의 현재 가치는 깎여나간다. 빚으로 짓는 AI 인프라 경쟁이 계속될수록, 이 셈법은 점점 더 냉정해진다.</p>
+</section>
+
+<section class="soft fade-in">
+  <div class="eyebrow">Magnificent 7</div>
+  <h2>매그니피센트 7의 딜레마 — 매출보다 무서운 현금 소진 속도</h2>
+  <p class="sub">알파벳(구글) 클라우드 82% 성장 · 테슬라 인도량 사상 최고 — 그런데도 주가는 빠졌다</p>
+  <p>오늘 실적 발표의 핵심은 역설이었다. 알파벳(구글의 모회사)의 클라우드 매출은 <strong>82%</strong>나 성장했다. 테슬라의 인도량(고객에게 실제로 넘긴 차량 수)도 사상 최고치를 기록했다. 매출만 보면 두 회사 모두 최고의 한 해를 보내고 있는 셈이다.</p>
+  <p>그런데 실제로 벌어진 일은 <span class="term">"밑 빠진 독에 물 붓기"</span>였다. 알파벳은 AI 관련 자본지출(설비 투자)이 449억 달러로 전년 대비 <strong>100% 이상 급증</strong>했다. 테슬라는 영업이익이 <strong>57% 감소</strong>했고, 영업이익률은 <strong>1.4%</strong>까지 추락했다. 잉여현금흐름(FCF, 기업이 실제로 손에 쥐는 여유 현금)은 2년 내 최저치를 기록하며 마이너스로 전환됐다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="chartMargin" height="230"></canvas>
+  </div>
+  <p class="chart-caption">테슬라 영업이익률 추이 — 인도량 사상 최고에도 마진은 붕괴했다</p>
+
+  <p>결국 매출(Top-line)이라는 깔때기 위쪽은 힘차게 쏟아지고 있지만, 자본지출과 마진 훼손이라는 구멍으로 현금이 그대로 새어나가고 있다. 알파벳은 그나마 여유가 있지만, 테슬라는 이 흐름이 계속되면 심각해질 수 있다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="eyebrow">The Counter-Proof</div>
+  <h2>하드웨어의 완벽한 증명 — SMCI, 매출은 커도 남는 게 없다는 비판을 깼다</h2>
+  <p class="sub">총마진 가이던스 8.2% → 17%, 신규 수주 600억 달러 돌파</p>
+  <p>슈퍼마이크로컴퓨터(SMCI)는 그동안 "매출은 계속 느는데 마진이 너무 낮다"는 비판을 받아왔다. 서버 부품을 사다가 조립해서 파는 구조라 마진을 남기기 어려운 사업이었기 때문이다. 그런데 어제와 오늘 이틀간 주가가 <strong>+24%</strong> 폭등했다. 6월 한 달 매출을 발표하면서 <strong>총마진 가이던스를 8.2%에서 17%로, 두 배 이상</strong> 올려버린 것이다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="chartSmci" height="230"></canvas>
+  </div>
+  <p class="chart-caption">SMCI 총마진 가이던스 상향 — 비용을 줄인 게 아니라 가격을 올렸다</p>
+
+  <p>비용을 줄인 게 아니다. <strong>수요가 워낙 강하다 보니 가격을 크게 올렸는데도 주문이 밀려들고 있다</strong>는 뜻이다. 게다가 SMCI는 일론 머스크의 스페이스X AI로부터 기가와트급 데이터센터 구축 계약을 따내며 <strong>신규 수주 잔고가 600억 달러</strong>를 넘어섰다. AI 인프라 수요가 여전히 견고하다는 것을 하드웨어 밸류체인 전체에 입증해 보인 사건이다.</p>
+</section>
+
+<section class="soft fade-in">
+  <div class="eyebrow">Power Infrastructure</div>
+  <h2>전력 인프라의 현실 점검 — 완벽한 실행을 요구하는 시장</h2>
+  <p class="sub">기대치가 높으면 좋은 실적에도 주가가 빠지고, 새로운 대안에는 환호한다</p>
+  <p>GE 버노바(GEV)는 신규 주문 242억 달러라는 호실적을 냈지만 주가는 <strong>−8.7%</strong> 하락했다. 이유는 EPS(주당순이익)가 예상치를 밑돌았고, 해상풍력 사업에서 4억 달러 손실이 났기 때문이다. GEV는 주가수익비율(PER)이 44배에 달할 만큼 미래 기대가 이미 잔뜩 반영된 종목이다. 기대치가 높을수록 작은 흠집에도 주가는 크게 흔들린다.</p>
+  <p>반면 폐항공기의 제트엔진을 뜯어내 AI 데이터센터용 가스터빈(전력을 만드는 발전 설비)으로 개조하는 FTAI 에비에이션은 10억 달러 규모의 신규 계약을 따내며 <strong>+10%</strong> 급등했다. 항공기 부품 회사가 전력 사업에 뛰어들었다는 사실 자체가, 데이터센터들이 그만큼 전력을 확보하기 위해 절박하다는 것을 보여준다.</p>
+  <div class="pullquote">
+    <p>"AI 데이터센터용 가스터빈은 여전히 공급이 딸리고, 수요는 넘쳐난다."</p>
+  </div>
+</section>
+
+<section class="fade-in">
+  <div class="eyebrow">Publisher Squeeze</div>
+  <h2>AI 데이터센터 라이선싱의 모순 — 구글이 콘텐츠 원천을 말려 죽이고 있다</h2>
+  <p class="sub">USA Today 트래픽 −50%, 비즈니스 인사이더 트래픽 −85%</p>
+  <p>구글 AI가 검색 결과를 요약해서 바로 답을 보여주기 시작하면서, 사람들은 더 이상 원본 기사가 있는 웹사이트로 넘어갈 필요가 없어졌다. 그 결과 USA Today는 트래픽이 <strong>50%</strong>, 비즈니스 인사이더는 <strong>85%</strong>나 줄었다. 트래픽이 줄면 광고 매출도 함께 무너진다. 레딧(커뮤니티 사이트)도 마찬가지다.</p>
+  <p>구글은 이런 원천 콘텐츠 제공자들에게 돈을 주고 데이터를 사오는 방식으로 관계를 이어왔지만, 이제는 협상력이 뒤바뀌고 있다. 이미 필요한 데이터를 충분히 확보한 구글 입장에서는 재계약에 소극적이다. 한때 트래픽과 광고 수익의 <span class="term">"원청"</span>이었던 퍼블리셔들이 이제는 구글에 종속된 <span class="term">"하청"</span> 신세가 될 처지에 놓였다.</p>
+</section>
+
+<section class="soft fade-in">
+  <div class="eyebrow">Healthcare</div>
+  <h2>헬스케어의 악몽과 한 줄기 빛 — 매크로 먹구름 속 임상 돌파구</h2>
+  <p class="sub">트럼프발 관세 충격 vs 애로우헤드의 임상 성공</p>
+  <p>트럼프 대통령이 복제약(제네릭 의약품)에 <strong>100~200%</strong>의 관세를 부과하겠다고 예고하면서 글로벌 제약 공급망 전체가 흔들렸다. 바이오 실험 장비를 파는 다나허(DHR)는 이 여파와 바이오프로세싱 수요 침체가 겹치며 25년 만의 최대 낙폭인 <strong>−11%</strong>를 기록했다.</p>
+  <p>반대로 애로우헤드(ARWR)는 중증 고중성지방혈증 치료제의 글로벌 임상 3상 1차·2차 평가지표를 모두 통과했다는 소식에 <strong>+26%</strong> 폭등했다. 매크로(거시경제) 압박이 아무리 세도, 임상 성공이라는 개별 호재는 여전히 강력하게 작동한다는 걸 보여준 사례다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="eyebrow">Defensive Playbook</div>
+  <h2>불확실성 시대의 대피소 — 배당과 현금이 만드는 우산</h2>
+  <p class="sub">금리·유가 변동에 크게 흔들리지 않는 현금흐름 강자들</p>
+  <table>
+    <tr><th>종목</th><th>포인트</th></tr>
+    <tr><td>AT&amp;T</td><td class="hi">호실적 + 배당 + 자사주매입 100억 달러 발표</td></tr>
+    <tr><td>필립모리스</td><td>경기 방어적 소비재(담배), 경기 불황·전쟁 국면에서 수요 견조</td></tr>
+    <tr><td>코카콜라</td><td>스트레스·전시 상황에서도 꾸준한 소비, 군납 수요까지</td></tr>
+    <tr><td>CME 그룹</td><td>변동성 확대 국면에서 거래량 증가 수혜 (파생상품 거래소)</td></tr>
+  </table>
+  <p>이런 종목들의 공통점은 금리가 오르든 유가가 뛰든 <strong>확실한 현금흐름과 배당</strong>이 유지된다는 점이다. 불확실성이 커질수록 이런 자산이 계좌를 지켜주는 우산 역할을 한다.</p>
+</section>
+
+<section class="soft fade-in">
+  <div class="eyebrow">The New Rule</div>
+  <h2>시장의 새로운 평가 방정식</h2>
+  <p class="sub">시장이 묻는 단 하나의 질문: 얼마를 투자했는가가 아니라, 얼마를 남겼는가</p>
+  <p>예전에는 <span class="term">"AI"</span>라는 키워드에 무한 성장 기대치와 과감한 자본 지출만 더하면 높은 밸류에이션(가치 평가) 배수를 받을 수 있었다. 하지만 그 공식은 더 이상 통하지 않는다.</p>
+  <div class="equation">
+    <div class="eq-row">
+      <span>실제 입증된 주문량 (Backlog)</span> × <span>마진 방어력 (Gross Margin)</span> × <span>잉여현금흐름 (FCF)</span>
+    </div>
+    <div class="eq-result">= 주가 리레이팅 (Rerating)</div>
+  </div>
+  <p>오늘 이 공식을 가장 완벽하게 보여준 종목이 SMCI였다. 실제 주문(600억 달러 수주), 마진 개선(8.2%→17%), 그리고 방향성 있는 현금흐름까지 세 가지를 모두 보여주며 주가가 리레이팅됐다. 반면 구글은 매출·마진·FCF는 나쁘지 않았지만 <strong>"입증된 주문량"</strong>이 부족했고, 테슬라는 세 가지 중 어느 것도 충족하지 못하며 주가가 눌렸다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="eyebrow">What's Next</div>
+  <h2>다음 변동성의 진원지 — 단기 캐탈리스트 캘린더</h2>
+  <p class="sub">숫자가 좋은 것과 기대치를 넘는 것은 다르다</p>
+  <div class="cal-list">
+    <div class="cal-item">
+      <div class="cal-date">개장 전</div>
+      <div class="cal-body"><b>록히드마틴 &amp; 서모피셔</b><span>방산 수주잔고 업데이트, 헬스케어 장비 수요 회복 여부 검증</span></div>
+    </div>
+    <div class="cal-item">
+      <div class="cal-date">장 마감 후</div>
+      <div class="cal-body"><b>인텔(INTC) 2분기 실적</b><span>서버 CPU 판매량, 파운드리(위탁생산) 신규 계약 여부가 반도체 랠리의 방향을 결정</span></div>
+    </div>
+    <div class="cal-item">
+      <div class="cal-date">7월 28~29일</div>
+      <div class="cal-body"><b>FOMC 회의</b><span>금리 동결은 유력하지만, 유가 급등 속 매파(긴축 선호)적 뉘앙스 변화 여부가 핵심</span></div>
+    </div>
+    <div class="cal-item">
+      <div class="cal-date">8월 11일</div>
+      <div class="cal-body"><b>SMCI 정식 2분기 실적 발표</b><span>600억 달러 백로그의 실제 매출 전환 일정과 영업현금흐름 최종 검증</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="soft fade-in">
+  <div class="eyebrow">Scenario Planning</div>
+  <h2>시장의 방향을 가를 분기점</h2>
+  <p class="sub">다가오는 한 달, 이 조건들을 지켜봐야 한다</p>
+  <div class="scenario-box fade-in">
+    <div class="scenario-tabs">
+      <button class="active bull" data-target="bull">상승 시나리오</button>
+      <button class="bear" data-target="bear">하락 시나리오</button>
+    </div>
+    <div class="scenario-panel active" id="panel-bull">
+      <ul>
+        <li><b>Macro —</b> 브렌트유 90달러 이하 안정화, 10년물 국채금리 4.5%대 회귀</li>
+        <li><b>Micro —</b> 빅테크 실적에서 AI 투자가 클라우드 캐시카우(현금 창출원)로 직접 전환됨을 증명</li>
+        <li><b>Result —</b> AI 하드웨어·장비·전력 인프라 랠리 지속</li>
+      </ul>
+    </div>
+    <div class="scenario-panel" id="panel-bear">
+      <ul>
+        <li><b>Macro —</b> 브렌트유 95달러 이상 안착, 10년물 4.7% 이상 고착화</li>
+        <li><b>Micro —</b> 하이퍼스케일러의 부채 조달형 자본지출(Capex) 심화, 관세발 인플레이션 가중</li>
+        <li><b>Result —</b> 고밸류 성장주 및 엔터프라이즈 소프트웨어 멀티플의 강력한 연쇄 축소</li>
+      </ul>
+    </div>
+  </div>
+  <p class="note">캐펙스(설비 투자)가 꺾이기 시작하면, 그때는 진짜 베어마켓(약세장)으로 가는 신호로 봐야 한다.</p>
+</section>
+
+<section class="fade-in">
+  <div class="eyebrow">Portfolio Strategy</div>
+  <h2>불확실성을 뚫는 바벨 전략</h2>
+  <p class="sub">한쪽엔 수비, 한쪽엔 공격 — 가운데는 비운다</p>
+  <div class="barbell fade-in">
+    <div class="side defense">
+      <h3>수비 (Defense)</h3>
+      <ul>
+        <li>통신 · 필수 소비재</li>
+        <li>송배전·전력망 인프라 기업</li>
+        <li>2027년을 내다보고 꾸준히 모아가는 구간</li>
+      </ul>
+    </div>
+    <div class="side offense">
+      <h3>공격 (Offense)</h3>
+      <ul>
+        <li>마진이 여전히 강한 AI 하드웨어 종목</li>
+        <li>M&amp;A(인수합병) 기대주</li>
+        <li>임상 성공 등 개별 촉매가 있는 종목</li>
+      </ul>
+    </div>
+  </div>
+  <p>애매하거나 어중간한 포지션은 과감하게 축소하거나 제거하는 편이 낫다. 방향성이 뚜렷한 자산에 집중하는 것이 지금 국면에서는 더 유리하다.</p>
+</section>
+
+<div class="closing fade-in">
+  <div class="eyebrow" style="color:var(--accent-2)">Closing Note</div>
+  <h2>실적 시즌엔 내러티브가 통하지 않는다</h2>
+  <div class="pullquote">
+    <p>"환상이나 꿈, 미래 팔이는 실적 발표 앞에서 통하지 않는다. 끊임없이 나오는 숫자를 무시하는 건 그저 기도일 뿐이다."</p>
+  </div>
+  <p>앞으로 한 달, 빅테크와 반도체 기업들의 실적이 연이어 쏟아진다. 이 기간 동안 스토리나 기대감만으로는 주가가 버티지 못한다. 결국 중요한 건 하나다 — <strong>실제 주문이 있는가, 마진을 지킬 수 있는가, 그리고 현금이 실제로 남는가.</strong> 이 세 가지 필터로 종목을 걸러보는 습관이 앞으로의 실적 시즌을 통과하는 열쇠가 될 것이다.</p>
+</div>
+
+<footer>
+  <div class="brand">CIA<span style="color:var(--accent)">.chat</span></div>
+  <div class="note">Creative Investors Association</div>
+  <div class="disclaimer">
+    본 콘텐츠는 정보 제공 및 교육 목적으로 제작되었으며, 투자 조언이 아닙니다. 모든 투자 판단과 그 결과에 대한 책임은 투자자 본인에게 있습니다. 원금 손실 위험이 있으니 충분한 조사와 전문가 상담을 거쳐 신중하게 결정하시기 바랍니다.
+  </div>
+</footer>
+
+<script>
+  // Step 1: fade-in observer
+  const fadeObs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        fadeObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+  // Step 2: chart configs
+  const chartConfigs = {};
+
+  chartConfigs['chartDivergence'] = () => {
+    new Chart(document.getElementById('chartDivergence'), {
+      type: 'bar',
+      data: {
+        labels: ['SMCI', 'MPC', 'S&P500', 'DHR', 'PEGA'],
+        datasets: [{
+          data: [24, 6, -0.14, -11, -16],
+          backgroundColor: ['#e11d48','#e11d48','#6b7280','#1a1a1a','#1a1a1a'],
+          borderRadius: 4,
+          maxBarThickness: 40
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => c.raw + '%' } } },
+        scales: {
+          y: { grid: { color: '#eee' }, ticks: { callback: (v) => v + '%', font: { size: 11 } } },
+          x: { grid: { display: false }, ticks: { font: { size: 12, weight: '600' } } }
+        }
+      }
+    });
+  };
+
+  chartConfigs['chartMargin'] = () => {
+    new Chart(document.getElementById('chartMargin'), {
+      type: 'line',
+      data: {
+        labels: ['1년 전', '6개월 전', '3개월 전', '이번 분기'],
+        datasets: [{
+          label: '테슬라 영업이익률(%)',
+          data: [6.5, 4.2, 2.8, 1.4],
+          borderColor: '#e11d48',
+          backgroundColor: 'rgba(225,29,72,0.08)',
+          fill: true, tension: 0.35, pointRadius: 4, pointBackgroundColor: '#e11d48'
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { grid: { color: '#eee' }, ticks: { callback: (v) => v + '%', font: { size: 11 } } },
+          x: { grid: { display: false }, ticks: { font: { size: 11 } } }
+        }
+      }
+    });
+  };
+
+  chartConfigs['chartSmci'] = () => {
+    new Chart(document.getElementById('chartSmci'), {
+      type: 'bar',
+      data: {
+        labels: ['기존 가이던스', '신규 가이던스'],
+        datasets: [{
+          label: '총마진(%)',
+          data: [8.2, 17],
+          backgroundColor: ['#6b7280', '#e11d48'],
+          borderRadius: 4,
+          maxBarThickness: 60
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => c.raw + '%' } } },
+        scales: {
+          y: { grid: { color: '#eee' }, ticks: { callback: (v) => v + '%', font: { size: 11 } } },
+          x: { grid: { display: false }, ticks: { font: { size: 12, weight: '600' } } }
+        }
+      }
+    });
+  };
+
+  // Step 3: chart intersection observer
+  const chartObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const canvas = e.target.querySelector('canvas');
+        if (canvas && chartConfigs[canvas.id]) {
+          chartConfigs[canvas.id]();
+          e.target.classList.add('chart-ready');
+          chartObs.unobserve(e.target);
+        }
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.chart-container').forEach(el => chartObs.observe(el));
+
+  // Scenario tabs
+  document.querySelectorAll('.scenario-tabs button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.scenario-tabs button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.scenario-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.target).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

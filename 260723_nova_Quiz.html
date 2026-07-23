@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>퀴즈 — 테슬라 실적·마진·FCF 모두 실패</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --bg-soft:#fafafa;
+    --ink:#1a1a1a; --ink-soft:#777777;
+    --accent:#e11d48; --accent-2:#f43f5e;
+    --line:#e5e5e5;
+    --green:#16a34a; --green-bg:#eafaf0;
+    --red:#dc2626; --red-bg:#fdecec;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg-soft); color:var(--ink);
+    font-family:'Noto Sans KR', sans-serif; line-height:1.6;
+    max-width:640px; margin:0 auto;
+  }
+
+  /* header */
+  .head{
+    padding:28px 22px 20px; background:#fff; border-bottom:3px solid var(--ink);
+  }
+  .kicker{ font-size:11px; letter-spacing:.2em; font-weight:700; color:var(--accent); text-transform:uppercase; margin-bottom:10px; }
+  h1{
+    font-family:'Playfair Display', serif; font-weight:900; font-size:24px; line-height:1.3; color:var(--ink);
+  }
+  .head p{ font-size:13px; color:var(--ink-soft); margin-top:10px; }
+
+  /* sticky scoreboard */
+  .scoreboard{
+    position:sticky; top:0; z-index:50; background:#fff; border-bottom:1px solid var(--line);
+    padding:14px 22px; box-shadow:0 2px 8px rgba(0,0,0,0.05);
+  }
+  .sb-row{ display:flex; justify-content:space-between; font-size:12.5px; color:var(--ink-soft); margin-bottom:8px; }
+  .sb-row b{ color:var(--ink); font-size:14px; }
+  .sb-bar-track{ height:7px; background:#eee; border-radius:99px; overflow:hidden; }
+  .sb-bar-fill{ height:100%; width:0%; background:var(--red); transition:width .4s ease, background .4s ease; border-radius:99px; }
+
+  main{ padding:22px 16px 40px; }
+
+  .qcard{
+    background:#fff; margin-bottom:16px; padding:20px 18px; border:1px solid var(--line);
+  }
+  .qcard-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+  .qnum{ font-family:'Playfair Display', serif; font-weight:700; font-size:13px; color:var(--accent); }
+  .badge{
+    font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:99px; letter-spacing:.02em;
+  }
+  .badge.easy{ background:#e7f5ee; color:#16a34a; }
+  .badge.medium{ background:#fff4e5; color:#d97706; }
+  .badge.hard{ background:#fde8ea; color:#e11d48; }
+
+  .qtext{ font-size:15.5px; font-weight:600; color:var(--ink); margin-bottom:16px; line-height:1.55; }
+
+  .options{ display:flex; flex-direction:column; gap:9px; }
+  .opt{
+    text-align:left; padding:12px 14px; border:1.5px solid var(--line); background:#fff;
+    font-family:'Noto Sans KR'; font-size:14px; color:var(--ink); cursor:pointer; border-radius:6px;
+    transition:.15s; position:relative; display:flex; justify-content:space-between; align-items:center;
+  }
+  .opt:hover:not(:disabled){ border-color:var(--accent); background:#fff8f9; }
+  .opt:disabled{ cursor:default; }
+  .opt.correct{ background:var(--green-bg); border-color:var(--green); color:#0f5132; }
+  .opt.wrong{ background:var(--red-bg); border-color:var(--red); color:#7a1c1c; }
+  .opt .tag{ font-size:11px; font-weight:800; padding:2px 8px; border-radius:99px; }
+  .opt.correct .tag{ background:var(--green); color:#fff; }
+  .opt.wrong .tag{ background:var(--red); color:#fff; }
+
+  .ox-row{ display:flex; gap:12px; }
+  .ox-row .opt{ flex:1; text-align:center; justify-content:center; font-weight:700; font-size:16px; padding:16px; }
+
+  .short-row{ display:flex; gap:8px; }
+  .short-row input{
+    flex:1; padding:12px 14px; border:1.5px solid var(--line); border-radius:6px; font-size:14px; font-family:'Noto Sans KR';
+  }
+  .short-row input:focus{ outline:none; border-color:var(--accent); }
+  .short-row button{
+    padding:0 18px; background:var(--ink); color:#fff; border:none; border-radius:6px; font-weight:700; font-size:13.5px; cursor:pointer;
+  }
+  .short-row button:disabled{ opacity:.5; cursor:default; }
+  .short-feedback{
+    margin-top:10px; padding:10px 12px; border-radius:6px; font-size:13.5px; font-weight:600; display:none;
+  }
+  .short-feedback.correct{ display:block; background:var(--green-bg); color:#0f5132; }
+  .short-feedback.wrong{ display:block; background:var(--red-bg); color:#7a1c1c; }
+
+  .explain{
+    display:none; margin-top:14px; padding:14px 15px; background:var(--bg-soft); border-left:3px solid var(--accent);
+    font-size:13.5px; color:#333; border-radius:4px; line-height:1.65;
+  }
+  .explain.show{ display:block; }
+  .explain b{ color:var(--accent); }
+  .explain .quote{ display:block; margin-top:8px; font-style:italic; color:var(--ink-soft); font-size:12.5px; }
+
+  /* final result */
+  .final{
+    display:none; background:#fff; margin-top:8px; padding:36px 24px; text-align:center; border:2px solid var(--ink);
+  }
+  .final.show{ display:block; }
+  .final .grade{
+    font-family:'Playfair Display', serif; font-weight:900; font-size:56px; color:var(--accent); line-height:1;
+  }
+  .final .score{ font-size:15px; color:var(--ink-soft); margin:12px 0 6px; }
+  .final .msg{ font-size:14.5px; color:var(--ink); margin-bottom:22px; font-weight:600; }
+  .final button{
+    padding:13px 28px; background:var(--ink); color:#fff; border:none; border-radius:6px; font-weight:700; font-size:14px; cursor:pointer;
+  }
+  .final button:hover{ background:var(--accent); }
+
+  footer{ text-align:center; padding:20px; font-size:11px; color:var(--ink-soft); }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <div class="kicker">CIA.chat Quiz</div>
+  <h1>테슬라 실적·마진·FCF 모두 실패!<br>구글 클라우드 82% 성장의 함정</h1>
+  <p>오늘 방송 내용을 얼마나 이해했는지 10문제로 확인해보세요.</p>
+</div>
+
+<div class="scoreboard">
+  <div class="sb-row">
+    <span>푼 문제 <b id="sb-solved">0</b> / 10</span>
+    <span>맞힌 문제 <b id="sb-correct">0</b></span>
+    <span>정답률 <b id="sb-rate">0%</b></span>
+  </div>
+  <div class="sb-bar-track"><div class="sb-bar-fill" id="sb-bar"></div></div>
+</div>
+
+<main id="quiz-root"></main>
+
+<div class="final" id="final">
+  <div class="grade" id="final-grade">A</div>
+  <div class="score" id="final-score">10 / 10 문제 정답</div>
+  <div class="msg" id="final-msg">완벽합니다!</div>
+  <button id="retry-btn">다시 풀기</button>
+</div>
+
+<footer>CIA.chat · Creative Investors Association</footer>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id: 1, type: 'ox', difficulty: 'easy',
+    question: "오늘 S&P 500 지수는 상승 마감했다.",
+    answer: "X",
+    explanation: "S&P 500은 −0.14%로 하락 마감했습니다. 나스닥과 다우도 함께 소폭 하락했습니다. 다만 지수 밑에서는 종목 간 디커플링이 크게 벌어졌습니다."
+  },
+  {
+    id: 2, type: 'mc', difficulty: 'easy',
+    question: "6월 매출 발표와 함께 총마진 가이던스를 8.2%에서 17%로 두 배 이상 올려 주가가 +24% 폭등한 회사는?",
+    options: ["엔비디아", "슈퍼마이크로컴퓨터(SMCI)", "마라톤 페트롤리엄", "AT&T"],
+    answer: "슈퍼마이크로컴퓨터(SMCI)",
+    explanation: "SMCI는 매출은 느는데 마진이 낮다는 비판을 받아왔는데, 이번에 총마진 가이던스를 8.2%에서 17%로 상향하고 신규 수주 600억 달러를 발표하며 주가가 폭등했습니다."
+  },
+  {
+    id: 3, type: 'mc', difficulty: 'medium',
+    question: "오늘 6주 만의 최고치를 기록하며 +3.4% 급등한 브렌트유 가격은?",
+    options: ["$84.07", "$89.50", "$94.07", "$101.20"],
+    answer: "$94.07",
+    explanation: "브렌트유는 호르무즈 해협 운송 차질 우려와 중동 긴장 격화로 $94.07까지 올라 6주 만의 최고치를 기록했습니다."
+  },
+  {
+    id: 4, type: 'short', difficulty: 'medium',
+    question: "테슬라의 이번 분기 영업이익률은 몇 %까지 추락했나요? (숫자만, 예: 1.4)",
+    answer: "1.4",
+    explanation: "테슬라는 영업이익이 57% 감소했고, 영업이익률은 1.4%까지 추락했습니다. 인도량은 사상 최고였지만 마진과 잉여현금흐름(FCF)은 2년 내 최저 수준을 보였습니다."
+  },
+  {
+    id: 5, type: 'mc', difficulty: 'medium',
+    question: "오늘 실적 발표에서 알파벳(구글)의 클라우드 부문 매출 성장률은?",
+    options: ["45%", "60%", "82%", "95%"],
+    answer: "82%",
+    explanation: "알파벳 클라우드는 82% 성장했습니다. 다만 AI 자본지출이 449억 달러로 전년 대비 100% 이상 급증해, 실적 발표 이후 주가는 오히려 −3.24% 하락했습니다."
+  },
+  {
+    id: 6, type: 'ox', difficulty: 'medium',
+    question: "알파벳(구글)의 AI 관련 자본지출(Capex)은 전년 대비 감소했다.",
+    answer: "X",
+    explanation: "알파벳의 AI 자본지출은 449억 달러로 전년 대비 100% 이상(2배 이상) 급증했습니다. 매출은 늘었지만 그만큼 현금 소진 속도도 빨라졌습니다."
+  },
+  {
+    id: 7, type: 'short', difficulty: 'hard',
+    question: "새로운 시장 평가 방정식에서, 시장이 던지는 단 하나의 질문은 '얼마를 투자했는가'가 아니라 무엇인가요?",
+    answer: "얼마를 남겼는가",
+    explanation: "이제 시장은 AI 키워드나 무한 성장 기대감이 아니라 '실제 입증된 주문량 × 마진 방어력 × 잉여현금흐름 = 주가 리레이팅' 공식으로 종목을 평가합니다. 핵심 질문은 '얼마를 남겼는가'입니다."
+  },
+  {
+    id: 8, type: 'mc', difficulty: 'medium',
+    question: "GE 버노바(GEV) 주가가 −8.7% 하락한 이유로 언급되지 않은 것은?",
+    options: ["EPS가 시장 예상치를 밑돌았다", "해상풍력 사업에서 4억 달러 손실이 났다", "신규 주문이 감소했다", "PER 44배로 이미 기대치가 선반영되어 있었다"],
+    answer: "신규 주문이 감소했다",
+    explanation: "GEV는 신규 주문이 242억 달러로 오히려 호실적이었습니다. 하지만 EPS 미스와 해상풍력 4억 달러 손실, 그리고 PER 44배라는 높은 밸류에이션 때문에 작은 흠집에도 주가가 크게 빠졌습니다."
+  },
+  {
+    id: 9, type: 'mc', difficulty: 'hard',
+    question: "트럼프 대통령이 복제약(제네릭 의약품)에 부과하겠다고 예고한 관세율은?",
+    options: ["10~20%", "50~100%", "100~200%", "200~300%"],
+    answer: "100~200%",
+    explanation: "트럼프 대통령은 복제약에 100~200%의 관세를 부과하겠다고 예고했고, 이 여파로 바이오 실험 장비 회사 다나허(DHR)가 25년 만의 최대 낙폭인 −11%를 기록했습니다."
+  },
+  {
+    id: 10, type: 'mc', difficulty: 'easy',
+    question: "FTAI 에비에이션이 폐항공기에서 떼어낸 무엇을 개조해 AI 데이터센터에 공급하는 10억 달러 계약을 체결했나요?",
+    options: ["배터리", "제트엔진(가스터빈으로 개조)", "냉각 시스템", "알루미늄 동체"],
+    answer: "제트엔진(가스터빈으로 개조)",
+    explanation: "FTAI 에비에이션은 퇴역한 항공기의 제트엔진을 AI 데이터센터용 가스터빈으로 개조하는 10억 달러 규모 신규 계약을 발표하며 +10% 급등했습니다. 데이터센터들의 전력 확보 절박함을 보여주는 사례입니다."
+  }
+];
+
+let state = { solved: 0, correct: 0, answered: {} };
+
+const diffLabel = { easy: '쉬움', medium: '보통', hard: '어려움' };
+
+function renderQuiz(){
+  const root = document.getElementById('quiz-root');
+  root.innerHTML = '';
+  QUIZ_DATA.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'qcard';
+    card.id = 'q-' + q.id;
+
+    let bodyHtml = '';
+    if(q.type === 'mc'){
+      bodyHtml = `<div class="options">` + q.options.map(opt =>
+        `<button class="opt" data-value="${escapeAttr(opt)}">${opt}<span class="tag" style="display:none"></span></button>`
+      ).join('') + `</div>`;
+    } else if(q.type === 'ox'){
+      bodyHtml = `<div class="ox-row">
+        <button class="opt" data-value="O">O</button>
+        <button class="opt" data-value="X">X</button>
+      </div>`;
+    } else if(q.type === 'short'){
+      bodyHtml = `<div class="short-row">
+        <input type="text" placeholder="답을 입력하세요" id="input-${q.id}">
+        <button id="submit-${q.id}">제출</button>
+      </div>
+      <div class="short-feedback" id="feedback-${q.id}"></div>`;
+    }
+
+    card.innerHTML = `
+      <div class="qcard-top">
+        <span class="qnum">Q${idx+1}</span>
+        <span class="badge ${q.difficulty}">${diffLabel[q.difficulty]}</span>
+      </div>
+      <div class="qtext">${q.question}</div>
+      ${bodyHtml}
+      <div class="explain" id="explain-${q.id}"><b>해설</b><br>${q.explanation}</div>
+    `;
+    root.appendChild(card);
+  });
+
+  // wire up MC / OX
+  QUIZ_DATA.forEach(q => {
+    if(q.type === 'mc' || q.type === 'ox'){
+      const card = document.getElementById('q-' + q.id);
+      card.querySelectorAll('.opt').forEach(btn => {
+        btn.addEventListener('click', () => handleChoiceAnswer(q, btn, card));
+      });
+    } else if(q.type === 'short'){
+      const btn = document.getElementById('submit-' + q.id);
+      const input = document.getElementById('input-' + q.id);
+      btn.addEventListener('click', () => handleShortAnswer(q));
+      input.addEventListener('keydown', (e) => { if(e.key === 'Enter') handleShortAnswer(q); });
+    }
+  });
+
+  document.getElementById('retry-btn').addEventListener('click', resetQuiz);
+}
+
+function escapeAttr(s){ return s.replace(/"/g, '&quot;'); }
+
+function handleChoiceAnswer(q, clickedBtn, card){
+  if(state.answered[q.id]) return;
+  state.answered[q.id] = true;
+
+  const isCorrect = clickedBtn.dataset.value === q.answer;
+  const allBtns = card.querySelectorAll('.opt');
+  allBtns.forEach(b => {
+    b.disabled = true;
+    if(b.dataset.value === q.answer){
+      b.classList.add('correct');
+      const tag = b.querySelector('.tag');
+      if(tag){ tag.style.display='inline-block'; tag.textContent = '✓ 정답!'; }
+      else { b.insertAdjacentHTML('beforeend', ' <span class="tag" style="display:inline-block">✓ 정답!</span>'); }
+    } else if(b === clickedBtn){
+      b.classList.add('wrong');
+      const tag = b.querySelector('.tag');
+      if(tag){ tag.style.display='inline-block'; tag.textContent = '✗ 오답'; }
+      else { b.insertAdjacentHTML('beforeend', ' <span class="tag" style="display:inline-block">✗ 오답</span>'); }
+    }
+  });
+
+  document.getElementById('explain-' + q.id).classList.add('show');
+  registerResult(isCorrect);
+}
+
+function handleShortAnswer(q){
+  if(state.answered[q.id]) return;
+  const input = document.getElementById('input-' + q.id);
+  const val = input.value.trim();
+  if(val === '') return;
+  state.answered[q.id] = true;
+
+  const normalize = s => s.toLowerCase().replace(/[%\s]/g, '');
+  const isCorrect = normalize(val) === normalize(q.answer);
+
+  input.disabled = true;
+  document.getElementById('submit-' + q.id).disabled = true;
+
+  const fb = document.getElementById('feedback-' + q.id);
+  fb.classList.add(isCorrect ? 'correct' : 'wrong');
+  fb.textContent = isCorrect ? '✓ 정답!' : `✗ 오답 · 정답: ${q.answer}`;
+
+  document.getElementById('explain-' + q.id).classList.add('show');
+  registerResult(isCorrect);
+}
+
+function registerResult(isCorrect){
+  state.solved++;
+  if(isCorrect) state.correct++;
+  updateScoreboard();
+  if(state.solved === QUIZ_DATA.length){
+    setTimeout(showFinal, 400);
+  }
+}
+
+function updateScoreboard(){
+  document.getElementById('sb-solved').textContent = state.solved;
+  document.getElementById('sb-correct').textContent = state.correct;
+  const rate = state.solved === 0 ? 0 : Math.round((state.correct / state.solved) * 100);
+  document.getElementById('sb-rate').textContent = rate + '%';
+  const bar = document.getElementById('sb-bar');
+  bar.style.width = rate + '%';
+  if(rate < 40) bar.style.background = '#dc2626';
+  else if(rate < 70) bar.style.background = '#d97706';
+  else bar.style.background = '#16a34a';
+}
+
+function showFinal(){
+  const rate = Math.round((state.correct / QUIZ_DATA.length) * 100);
+  let grade, msg;
+  if(rate >= 90){ grade='A'; msg='완벽합니다! 오늘 방송을 완전히 이해하셨네요.'; }
+  else if(rate >= 70){ grade='B'; msg='훌륭해요! 핵심 내용을 잘 짚으셨습니다.'; }
+  else if(rate >= 50){ grade='C'; msg='나쁘지 않아요. 리포트를 한 번 더 읽어보세요.'; }
+  else { grade='D'; msg='다시 도전해보세요! 분석 리포트를 참고하면 도움이 됩니다.'; }
+
+  document.getElementById('final-grade').textContent = grade;
+  document.getElementById('final-score').textContent = `${state.correct} / ${QUIZ_DATA.length} 문제 정답 (정답률 ${rate}%)`;
+  document.getElementById('final-msg').textContent = msg;
+  document.getElementById('final').classList.add('show');
+  document.getElementById('final').scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+function resetQuiz(){
+  state = { solved: 0, correct: 0, answered: {} };
+  updateScoreboard();
+  document.getElementById('final').classList.remove('show');
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior:'smooth' });
+}
+
+renderQuiz();
+</script>
+</body>
+</html>
