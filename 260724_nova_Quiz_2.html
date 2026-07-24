@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIA.chat 멤버미팅 2026-07-23 · 이해도 점검 10문제</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#fafafa; --txt:#1a1a1a; --txt2:#777777;
+  --accent:#e11d48; --accent2:#f43f5e; --line:#e5e5e5;
+  --ok:#15803d; --okbg:#f0fdf4; --no:#b91c1c; --nobg:#fef2f2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg); color:var(--txt);
+  font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;
+  line-height:1.8; letter-spacing:-0.01em; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:680px;margin:0 auto;padding:0 16px 80px}
+
+/* 헤더 */
+header{padding:44px 0 26px;border-bottom:3px solid var(--txt)}
+.eyebrow{font-size:10.5px;letter-spacing:0.26em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:14px}
+h1{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(27px,7.2vw,38px);line-height:1.16;letter-spacing:-0.02em}
+h1 em{font-style:italic;color:var(--accent)}
+.sub{font-size:13.5px;color:var(--txt2);margin-top:12px;line-height:1.7;font-weight:300}
+
+/* 스티키 채점판 */
+.board{
+  position:sticky; top:0; z-index:50;
+  background:rgba(255,255,255,.97); backdrop-filter:saturate(180%) blur(10px);
+  border-bottom:1px solid var(--line); margin:0 -16px; padding:11px 16px 9px
+}
+.board-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;max-width:680px;margin:0 auto}
+.stat{text-align:center;flex:1}
+.stat .k{font-size:9.5px;letter-spacing:0.12em;color:var(--txt2);text-transform:uppercase}
+.stat .v{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;line-height:1.25}
+.stat .v small{font-size:12px;color:var(--txt2);font-weight:400}
+.bar{height:4px;background:var(--line);margin:8px auto 0;max-width:680px;overflow:hidden}
+.bar i{display:block;height:100%;width:0%;background:var(--accent);transition:width .45s ease, background .45s ease}
+
+/* 문제 카드 */
+.q{border:1px solid var(--line);border-top:3px solid var(--txt);background:var(--bg2);padding:22px 18px;margin:26px 0}
+.q.done{border-top-color:var(--accent)}
+.q-top{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.q-n{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--accent);line-height:1}
+.tag{font-size:9.5px;letter-spacing:0.1em;padding:3px 8px;border:1px solid var(--line);background:#fff;color:var(--txt2);text-transform:uppercase}
+.tag.d1{border-color:#86efac;color:#15803d}
+.tag.d2{border-color:#fdba74;color:#c2410c}
+.tag.d3{border-color:#fca5a5;color:#b91c1c}
+.q-t{font-size:15.8px;font-weight:500;line-height:1.72;margin-bottom:16px}
+
+/* 보기 */
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{
+  display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;
+  background:#fff;border:1px solid var(--line);padding:13px 14px;
+  font-family:inherit;font-size:14.3px;line-height:1.6;color:var(--txt);
+  cursor:pointer;transition:border-color .18s, background .18s;position:relative
+}
+.opt:hover:not(:disabled){border-color:var(--accent);background:#fff7f9}
+.opt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.opt:disabled{cursor:default}
+.opt .mk{
+  min-width:22px;height:22px;border:1px solid var(--line);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--txt2);flex-shrink:0;margin-top:1px
+}
+.opt.correct{background:var(--okbg);border-color:var(--ok)}
+.opt.correct .mk{background:var(--ok);border-color:var(--ok);color:#fff}
+.opt.wrong{background:var(--nobg);border-color:var(--no)}
+.opt.wrong .mk{background:var(--no);border-color:var(--no);color:#fff}
+.badge{margin-left:auto;font-size:10.5px;font-weight:700;letter-spacing:0.04em;white-space:nowrap;padding-top:2px}
+.opt.correct .badge{color:var(--ok)}
+.opt.wrong .badge{color:var(--no)}
+
+/* OX */
+.ox{display:flex;gap:10px}
+.ox .opt{justify-content:center;align-items:center;font-family:'Playfair Display',serif;font-size:26px;font-weight:700;padding:16px}
+.ox .opt .mk{display:none}
+.ox .opt .badge{margin-left:8px;font-family:'Noto Sans KR',sans-serif;font-size:10.5px;padding:0}
+
+/* 단답 */
+.short{display:flex;gap:8px}
+.short input{
+  flex:1;min-width:0;border:1px solid var(--line);background:#fff;padding:13px 14px;
+  font-family:inherit;font-size:15px;color:var(--txt);outline:none
+}
+.short input:focus{border-color:var(--accent)}
+.short input:disabled{background:var(--bg2);color:var(--txt2)}
+.short button{
+  background:var(--txt);color:#fff;border:none;padding:0 20px;
+  font-family:inherit;font-size:13.5px;font-weight:500;cursor:pointer;white-space:nowrap;transition:background .18s
+}
+.short button:hover:not(:disabled){background:var(--accent)}
+.short button:disabled{background:var(--line);color:var(--txt2);cursor:default}
+.short.correct input{background:var(--okbg);border-color:var(--ok);color:var(--ok);font-weight:700}
+.short.wrong input{background:var(--nobg);border-color:var(--no);color:var(--no);font-weight:700}
+
+/* 해설 */
+.exp{max-height:0;overflow:hidden;transition:max-height .45s ease;margin-top:0}
+.exp.open{max-height:560px;margin-top:14px}
+.exp-in{background:#fff;border-left:3px solid var(--accent);padding:15px 16px;font-size:13.6px;line-height:1.78}
+.exp-in b{display:block;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:7px}
+.exp-in .ans{font-weight:700;margin-bottom:7px}
+.exp-in .src{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--txt2)}
+
+/* 결과 모달 */
+.modal{position:fixed;inset:0;background:rgba(26,26,26,.62);display:none;align-items:center;justify-content:center;padding:20px;z-index:100}
+.modal.show{display:flex}
+.card{background:#fff;max-width:400px;width:100%;padding:34px 26px;text-align:center;border-top:5px solid var(--accent);max-height:90vh;overflow-y:auto}
+.card .g{font-family:'Playfair Display',serif;font-size:76px;font-weight:900;line-height:1;color:var(--accent)}
+.card .sc{font-size:14px;color:var(--txt2);margin:10px 0 4px;letter-spacing:0.04em}
+.card .pc{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;margin-bottom:14px}
+.card .ms{font-size:14px;line-height:1.75;margin-bottom:22px}
+.card button{width:100%;padding:14px;font-family:inherit;font-size:13.5px;font-weight:500;cursor:pointer;border:1px solid var(--txt);letter-spacing:0.05em;transition:.2s}
+.btn-a{background:var(--txt);color:#fff;margin-bottom:8px}
+.btn-a:hover{background:var(--accent);border-color:var(--accent)}
+.btn-b{background:none;color:var(--txt)}
+.btn-b:hover{background:var(--bg2)}
+
+.foot{margin-top:52px;padding-top:20px;border-top:3px solid var(--txt);font-size:11.5px;color:var(--txt2);line-height:1.8}
+@media (max-width:360px){ .q{padding:18px 14px} .stat .v{font-size:18px} }
+@media (prefers-reduced-motion:reduce){ *{transition:none!important} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Comprehension Check · 10 Questions</div>
+  <h1>2026 시장<br><em>패러다임의 전환</em></h1>
+  <p class="sub">CIA.chat 멤버미팅 2026년 7월 23일 방송 내용 이해도 점검. 보기를 선택하면 즉시 채점되고 해설이 열립니다.</p>
+</header>
+
+<div class="board">
+  <div class="board-row">
+    <div class="stat"><div class="k">푼 문제</div><div class="v"><span id="sSolved">0</span><small> / 10</small></div></div>
+    <div class="stat"><div class="k">맞힌 문제</div><div class="v" id="sCorrect">0</div></div>
+    <div class="stat"><div class="k">정답률</div><div class="v"><span id="sRate">0</span><small>%</small></div></div>
+  </div>
+  <div class="bar"><i id="sBar"></i></div>
+</div>
+
+<main id="quiz"></main>
+
+<div class="foot">
+  모든 문제는 2026년 7월 23일 CIA.chat 멤버미팅 방송의 자막과 발표 자료에 실제로 등장한 내용만을 근거로 출제되었습니다. 창작된 내용은 없습니다.
+</div>
+</div>
+
+<div class="modal" id="modal">
+  <div class="card">
+    <div class="g" id="mGrade">A</div>
+    <div class="sc" id="mScore">10문제 중 10문제 정답</div>
+    <div class="pc" id="mPct">100%</div>
+    <div class="ms" id="mMsg"></div>
+    <button class="btn-a" id="mRetry">다시 풀기</button>
+    <button class="btn-b" id="mClose">결과 닫기</button>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+var QUIZ_DATA = [
+  {
+    id:1, type:'mc', difficulty:'쉬움',
+    question:'2026년 7월 23일 나스닥 지수의 마감 등락률은?',
+    options:['−1.15%','−2.15%','−3.15%','−4.15%'],
+    answer:1,
+    explanation:'나스닥은 −2.15%로 마감했습니다. 발표자는 장중에 −2.5%대(2.59% 언급)까지 밀리는 것도 봤다고 말했습니다.',
+    source:'자막: "나스닥이 마이너스 2.15 아까 2.5까지 내려갔었죠."'
+  },
+  {
+    id:2, type:'mc', difficulty:'쉬움',
+    question:'이날 하락률이 가장 컸던 종목은?',
+    options:['알파벳(구글)','아마존','테슬라','메타'],
+    answer:2,
+    explanation:'테슬라가 −14%(발표 자료 기준 −14.5%)로 가장 크게 빠졌습니다. 알파벳은 −7%, 아마존 −4.57%, 메타 −3.36%였습니다.',
+    source:'자막: "테슬라가 마이너스 14% 알파벳이 마이너스 7%"'
+  },
+  {
+    id:3, type:'ox', difficulty:'쉬움',
+    question:'테슬라는 이번 실적 발표에서 옵티머스(휴머노이드 로봇)의 출시 타임테이블을 명확히 제시했다.',
+    answer:false,
+    explanation:'제시하지 않았습니다. 발표자는 오히려 테슬라가 옵티머스 이야기를 크게 피했고 캘린더도 전혀 내놓지 않았다는 점을 "지금 로봇을 내놓을 수 없는 상태"라는 신호로 해석했습니다.',
+    source:'자막: "옵티머스가 언제 나오는지 그 칼렌더를 제공하지 않았어요. 이번에는 아예."'
+  },
+  {
+    id:4, type:'mc', difficulty:'보통',
+    question:'알파벳의 2분기 자본지출(CapEx) 규모와 전년 대비 증가율은?',
+    options:['$449억 · 전년비 +100%','$205억 · 전년비 +50%','$1,260억 · 전년비 +82%','$59억 · 전년비 +33%'],
+    answer:0,
+    explanation:'2분기 자본지출은 $449억으로 전년 대비 100%, 즉 2배 늘었습니다. $1,260억은 하반기에 쓸 예정 금액, $59억은 잉여현금흐름 적자 규모, 82%는 클라우드 성장률입니다.',
+    source:'자막: "알파벳 같은 경우는 2분기 자본지출이 449억이에요. 전년비 100%가 늘어났습니다. 2배입니다."'
+  },
+  {
+    id:5, type:'mc', difficulty:'보통',
+    question:'알파벳의 2026년 연간 설비투자 가이던스는 얼마로 상향되었나?',
+    options:['$1,260억','$2,050억','$2,300억','$2,890억'],
+    answer:1,
+    explanation:'$2,050억으로, 기존 대비 $150억이 추가 상향되었습니다. $2,300억은 록히드마틴 수주잔고, $2,890억은 RTX 수주잔고입니다.',
+    source:'자막: "올해 계획된 양이 (…) 2050억 달러였어요. 150억불이 추가가 됐고"'
+  },
+  {
+    id:6, type:'short', difficulty:'보통',
+    question:'이날 브렌트유는 몇 달러 선을 돌파했나? (숫자만 입력, 예: 90)',
+    answer:['100','100.69','$100','100달러','100불'],
+    explanation:'브렌트유는 $100.69로 100달러 선을 돌파했습니다. 한 달 전 70달러 아래였던 것과 비교하면 약 33% 상승입니다. 발표자는 앞으로의 판단 기준을 "유가가 100불이냐 아니냐"로 요약했습니다.',
+    source:'자막: "브렌트유 충격적이죠. 유가가 100불이 넘어갔습니다. (…) 한 달 만에 거의 한 33%가 올라갔어요."'
+  },
+  {
+    id:7, type:'short', difficulty:'어려움',
+    question:'이날 미국 10년물 국채금리는 몇 %까지 올랐나? (숫자만 입력, 예: 3.5)',
+    answer:['4.7','4.70','4.71','4.7%','4.71%'],
+    explanation:'10년물 국채금리는 4.7%(발표 자료 기준 4.71%)에 도달했고 30년물은 5.17%까지 올랐습니다. 발표자는 "10년물이 4.7이라는 건 정말 심각하다"며, 이 수준에서는 고멀티플 성장주가 깨질 수밖에 없다고 설명했습니다.',
+    source:'자막: "채권금리도 4.7까지 왔습니다. (…) 10년물 국채가 4.7이라는 건 정말 정말 심각합니다."'
+  },
+  {
+    id:8, type:'mc', difficulty:'보통',
+    question:'인텔 실적 발표 후 장후 거래에서 13.58% 폭등하며 "곡괭이가 돈을 번다"는 논리를 증명한 후공정·패키징 기업은?',
+    options:['버티브','SMCI','암코','브로드컴'],
+    answer:2,
+    explanation:'암코(Amkor)가 13.58% 폭등했습니다. 엔비디아와의 파트너십 체결 소식도 함께 나왔습니다. 인텔은 장후 3.46% 상승했고, 버티브는 엔비디아 베라루빈 관련 계약으로 강세를 유지했습니다.',
+    source:'자막: "암코드 한번 봅시다. 13.58% 폭등했습니다. (…) 엔비디아랑 또 계약도 했다라는 파트너십 체결 얘기도"'
+  },
+  {
+    id:9, type:'ox', difficulty:'보통',
+    question:'장 마감 후 발표된 관세 조치는 60개국을 대상으로 10~12.5%를 부과하며, 미국 수입품의 99%를 포괄한다.',
+    answer:true,
+    explanation:'맞습니다. 금요일 자정부터 발효되며, USTR이 강제노동 금지를 지키지 않은 60개 주요 교역국에 10~12.5% 관세를 부과합니다. 발표자는 유가가 이미 급등한 상황에서 관세까지 더해지는 것을 두고 상품 인플레이션 우려가 극대화된다고 평가했습니다.',
+    source:'자막: "미국이 금요일 자정부터 60개국에 10에서 12.5%의 관세를 때립니다. 미국 수입비맥 99%가 모두 포함이 되는 상태예요."'
+  },
+  {
+    id:10, type:'mc', difficulty:'어려움',
+    question:'발표자가 제시한 이날 방송의 최종 결론에 가장 가까운 것은?',
+    options:[
+      'AI 버블이 완전히 붕괴했으므로 AI 관련 자산을 모두 정리해야 한다',
+      'AI 버블이 끝난 것이 아니라 시장의 평가 기준이 잉여현금흐름 중심으로 진화한 것이다',
+      '금리가 곧 인하될 것이므로 낙폭 과대 성장주를 적극 매수해야 한다',
+      '유가는 시장과 무관하므로 개별 기업 실적만 보면 된다'
+    ],
+    answer:1,
+    explanation:'발표자의 결론은 "AI 버블이 끝난 것이 아닙니다. 시장의 평가 기준이 진화했을 뿐입니다"였습니다. 단순한 성장 서사만으로 높은 멀티플을 정당화하던 시대가 끝났고, 이제는 투자를 실제 잉여현금흐름(FCF)으로 바꿔내는 기업만 살아남는다는 뜻입니다. 발표 자료는 이를 "AI에 돈을 태우는 자(Spender)에서 그 돈을 거두는 자(Beneficiary)로 시선을 이동하라"고 정리했습니다.',
+    source:'자막: "AI 버블이 끝난 게 아닙니다. 시장의 평가 기준이 진화됐을 뿐입니다."'
+  }
+];
+
+var LETTERS = ['A','B','C','D'];
+var state = { solved:0, correct:0, answered:{} };
+
+var quizEl = document.getElementById('quiz');
+
+function el(tag, cls, html){
+  var e = document.createElement(tag);
+  if(cls) e.className = cls;
+  if(html !== undefined) e.innerHTML = html;
+  return e;
+}
+
+function norm(s){
+  return String(s).trim().toLowerCase().replace(/\s+/g,'').replace(/[%$,]/g,'');
+}
+
+function render(){
+  quizEl.innerHTML = '';
+  state.solved = 0; state.correct = 0; state.answered = {};
+  QUIZ_DATA.forEach(function(q){ quizEl.appendChild(buildQ(q)); });
+  updateBoard();
+}
+
+function diffClass(d){ return d === '쉬움' ? 'd1' : (d === '어려움' ? 'd3' : 'd2'); }
+function typeLabel(t){ return t === 'mc' ? '객관식' : (t === 'ox' ? 'O / X' : '단답형'); }
+
+function buildQ(q){
+  var card = el('article','q');
+  card.id = 'q'+q.id;
+
+  var top = el('div','q-top');
+  top.appendChild(el('span','q-n', String(q.id).padStart(2,'0')));
+  top.appendChild(el('span','tag', typeLabel(q.type)));
+  top.appendChild(el('span','tag '+diffClass(q.difficulty), q.difficulty));
+  card.appendChild(top);
+
+  card.appendChild(el('h2','q-t', q.question));
+
+  var exp = el('div','exp');
+  var expIn = el('div','exp-in');
+  exp.appendChild(expIn);
+
+  if(q.type === 'mc'){
+    var box = el('div','opts');
+    q.options.forEach(function(txt, i){
+      var b = el('button','opt');
+      b.type = 'button';
+      b.innerHTML = '<span class="mk">'+LETTERS[i]+'</span><span>'+txt+'</span>';
+      b.addEventListener('click', function(){ gradeMC(q, card, box, exp, expIn, i); });
+      box.appendChild(b);
+    });
+    card.appendChild(box);
+  }
+  else if(q.type === 'ox'){
+    var oxBox = el('div','opts ox');
+    [['O',true],['X',false]].forEach(function(pair){
+      var b = el('button','opt');
+      b.type = 'button';
+      b.innerHTML = '<span>'+pair[0]+'</span>';
+      b.addEventListener('click', function(){ gradeOX(q, card, oxBox, exp, expIn, pair[1]); });
+      oxBox.appendChild(b);
+    });
+    card.appendChild(oxBox);
+  }
+  else {
+    var sBox = el('div','short');
+    var input = el('input');
+    input.type = 'text';
+    input.placeholder = '답을 입력하세요';
+    input.setAttribute('inputmode','decimal');
+    var btn = el('button', null, '제출');
+    btn.type = 'button';
+    function submit(){ gradeShort(q, card, sBox, input, btn, exp, expIn); }
+    btn.addEventListener('click', submit);
+    input.addEventListener('keydown', function(ev){ if(ev.key === 'Enter') submit(); });
+    sBox.appendChild(input); sBox.appendChild(btn);
+    card.appendChild(sBox);
+  }
+
+  card.appendChild(exp);
+  return card;
+}
+
+function lockOpts(box){
+  box.querySelectorAll('.opt').forEach(function(b){ b.disabled = true; });
+}
+
+function showExp(exp, expIn, q, ansText, isRight){
+  expIn.innerHTML =
+    '<b>'+(isRight ? '정답입니다' : '해설')+'</b>' +
+    '<div class="ans">정답: '+ansText+'</div>' +
+    '<div>'+q.explanation+'</div>' +
+    '<div class="src">근거 — '+q.source+'</div>';
+  exp.classList.add('open');
+}
+
+function gradeMC(q, card, box, exp, expIn, pick){
+  if(state.answered[q.id]) return;
+  state.answered[q.id] = true;
+  var btns = box.querySelectorAll('.opt');
+  var right = (pick === q.answer);
+
+  btns[q.answer].classList.add('correct');
+  btns[q.answer].appendChild(el('span','badge','✓ 정답'));
+  if(!right){
+    btns[pick].classList.add('wrong');
+    btns[pick].appendChild(el('span','badge','✗ 오답'));
+  }
+  lockOpts(box);
+  card.classList.add('done');
+  showExp(exp, expIn, q, LETTERS[q.answer] + '. ' + q.options[q.answer], right);
+  tally(right);
+}
+
+function gradeOX(q, card, box, exp, expIn, pick){
+  if(state.answered[q.id]) return;
+  state.answered[q.id] = true;
+  var btns = box.querySelectorAll('.opt');
+  var rightIdx = q.answer === true ? 0 : 1;
+  var right = (pick === q.answer);
+
+  btns[rightIdx].classList.add('correct');
+  btns[rightIdx].appendChild(el('span','badge','✓ 정답'));
+  if(!right){
+    var wrongIdx = rightIdx === 0 ? 1 : 0;
+    btns[wrongIdx].classList.add('wrong');
+    btns[wrongIdx].appendChild(el('span','badge','✗ 오답'));
+  }
+  lockOpts(box);
+  card.classList.add('done');
+  showExp(exp, expIn, q, (q.answer ? 'O (맞다)' : 'X (틀리다)'), right);
+  tally(right);
+}
+
+function gradeShort(q, card, sBox, input, btn, exp, expIn){
+  if(state.answered[q.id]) return;
+  var v = input.value;
+  if(!v || !v.trim()){
+    input.focus();
+    input.placeholder = '답을 입력한 뒤 제출하세요';
+    return;
+  }
+  state.answered[q.id] = true;
+  var right = q.answer.some(function(a){ return norm(a) === norm(v); });
+  sBox.classList.add(right ? 'correct' : 'wrong');
+  input.disabled = true;
+  btn.disabled = true;
+  btn.textContent = right ? '✓ 정답' : '✗ 오답';
+  card.classList.add('done');
+  showExp(exp, expIn, q, q.answer[0], right);
+  tally(right);
+}
+
+function tally(right){
+  state.solved++;
+  if(right) state.correct++;
+  updateBoard();
+  if(state.solved === QUIZ_DATA.length){
+    setTimeout(showResult, 620);
+  }
+}
+
+function updateBoard(){
+  var rate = state.solved ? Math.round(state.correct / state.solved * 100) : 0;
+  document.getElementById('sSolved').textContent = state.solved;
+  document.getElementById('sCorrect').textContent = state.correct;
+  document.getElementById('sRate').textContent = rate;
+  var bar = document.getElementById('sBar');
+  bar.style.width = rate + '%';
+  bar.style.background = rate < 40 ? '#e11d48' : (rate < 70 ? '#f59e0b' : '#15803d');
+}
+
+function showResult(){
+  var n = QUIZ_DATA.length;
+  var pct = Math.round(state.correct / n * 100);
+  var grade, msg;
+  if(pct >= 90){ grade='A'; msg='완벽합니다. 오늘 방송의 핵심인 <strong>잉여현금흐름 중심의 평가 기준 전환</strong>을 정확히 이해하고 계십니다.'; }
+  else if(pct >= 70){ grade='B'; msg='잘 이해하셨습니다. 놓친 문항의 해설에서 <strong>수치와 근거</strong>를 한 번 더 확인해 보세요.'; }
+  else if(pct >= 50){ grade='C'; msg='큰 흐름은 잡으셨습니다. 알파벳의 자본지출과 금리·유가 수치를 다시 정리해 보시면 좋겠습니다.'; }
+  else { grade='D'; msg='해설을 천천히 읽어보시고 다시 도전해 보세요. <strong>유가 100달러와 금리 4.7%</strong> 두 가지만 잡아도 절반은 이해한 것입니다.'; }
+
+  document.getElementById('mGrade').textContent = grade;
+  document.getElementById('mScore').textContent = n + '문제 중 ' + state.correct + '문제 정답';
+  document.getElementById('mPct').textContent = pct + '%';
+  document.getElementById('mMsg').innerHTML = msg;
+  document.getElementById('modal').classList.add('show');
+}
+
+document.getElementById('mRetry').addEventListener('click', function(){
+  document.getElementById('modal').classList.remove('show');
+  render();
+  window.scrollTo({ top:0, behavior:'smooth' });
+});
+document.getElementById('mClose').addEventListener('click', function(){
+  document.getElementById('modal').classList.remove('show');
+});
+document.getElementById('modal').addEventListener('click', function(ev){
+  if(ev.target === this) this.classList.remove('show');
+});
+
+render();
+})();
+</script>
+</body>
+</html>

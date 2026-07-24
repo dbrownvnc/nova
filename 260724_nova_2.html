@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 시장 패러다임의 전환 · CIA.chat 멤버미팅 2026-07-23</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#ffffff; --bg2:#fafafa; --txt:#1a1a1a; --txt2:#777777;
+  --accent:#e11d48; --accent2:#f43f5e; --line:#e5e5e5;
+  --c1:#e11d48; --c2:#1a1a1a; --c3:#6b7280; --c4:#2563eb;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg); color:var(--txt);
+  font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;
+  font-weight:400; line-height:1.85; letter-spacing:-0.01em;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:680px;margin:0 auto;padding:0 20px 90px}
+
+/* ── 헤더 ── */
+.masthead{padding:52px 0 30px;border-bottom:3px solid var(--txt)}
+.eyebrow{
+  font-size:11px;letter-spacing:0.28em;text-transform:uppercase;
+  color:var(--accent);font-weight:700;margin-bottom:18px
+}
+h1.title{
+  font-family:'Playfair Display',serif;font-weight:900;
+  font-size:clamp(32px,8.5vw,48px);line-height:1.14;letter-spacing:-0.02em;
+  margin-bottom:14px
+}
+h1.title em{font-style:italic;color:var(--accent)}
+.dek{font-size:15px;color:var(--txt2);line-height:1.7;font-weight:300}
+.byline{
+  display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:24px;
+  font-size:11.5px;color:var(--txt2);letter-spacing:0.06em
+}
+.byline b{color:var(--txt);font-weight:500}
+
+/* ── 티커 ── */
+.ticker{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:1px;
+  background:var(--line);border:1px solid var(--line);margin:26px 0 0
+}
+.ticker div{background:var(--bg2);padding:13px 14px}
+.ticker .k{font-size:10.5px;color:var(--txt2);letter-spacing:0.1em;text-transform:uppercase}
+.ticker .v{font-family:'Playfair Display',serif;font-size:23px;font-weight:700;margin-top:3px}
+.dn{color:var(--accent)} .up{color:var(--c4)}
+
+/* ── 섹션 ── */
+section{padding-top:52px}
+.snum{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:13px;color:var(--accent);letter-spacing:0.05em;margin-bottom:6px
+}
+h2{
+  font-family:'Playfair Display',serif;font-weight:700;
+  font-size:clamp(23px,5.6vw,29px);line-height:1.3;letter-spacing:-0.01em;
+  padding-bottom:12px;border-bottom:1px solid var(--txt);margin-bottom:22px
+}
+h3{
+  font-size:16.5px;font-weight:700;margin:30px 0 10px;
+  padding-left:11px;border-left:3px solid var(--accent)
+}
+p{margin-bottom:15px;font-size:15.3px}
+.lead::first-letter{
+  font-family:'Playfair Display',serif;float:left;font-size:56px;
+  line-height:0.82;font-weight:900;margin:6px 9px 0 0;color:var(--accent)
+}
+strong{font-weight:700;color:var(--txt)}
+mark{background:linear-gradient(transparent 58%,rgba(225,29,72,.16) 58%);padding:0 1px}
+.term{color:var(--txt2);font-size:13.5px}
+
+/* ── 인용 ── */
+blockquote{
+  margin:26px 0;padding:22px 20px;background:var(--bg2);
+  border-left:4px solid var(--accent);
+  font-family:'Playfair Display',serif;font-size:18px;line-height:1.6;font-style:italic
+}
+blockquote span{
+  display:block;margin-top:10px;font-family:'Noto Sans KR',sans-serif;
+  font-style:normal;font-size:12px;color:var(--txt2);letter-spacing:0.05em
+}
+
+/* ── 박스 ── */
+.note{
+  background:var(--bg2);border:1px solid var(--line);border-top:3px solid var(--txt);
+  padding:18px;margin:24px 0;font-size:13.8px;line-height:1.75
+}
+.note b{display:block;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.warn{border-top-color:var(--accent2)}
+
+/* ── 테이블 ── */
+.tw{overflow-x:auto;margin:22px 0;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:100%}
+th{background:var(--accent);color:#fff;font-weight:500;padding:11px 10px;text-align:left;font-size:12.5px;letter-spacing:0.03em;white-space:nowrap}
+td{background:var(--bg2);border-bottom:1px solid var(--line);padding:11px 10px;vertical-align:top}
+td:first-child{font-weight:700;white-space:nowrap}
+
+/* ── 차트 ── */
+.chart-container{position:relative;max-height:340px;margin:24px 0 8px}
+.chart-container canvas{opacity:0;transition:opacity .4s ease;max-height:300px}
+.chart-container.chart-ready canvas{opacity:1}
+.cap{font-size:11.5px;color:var(--txt2);text-align:center;margin-bottom:26px;line-height:1.6}
+
+/* ── 인터랙티브 ── */
+.sim{border:1px solid var(--line);border-top:3px solid var(--accent);background:var(--bg2);padding:22px 18px;margin:28px 0}
+.sim-h{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;margin-bottom:4px}
+.sim-s{font-size:12.5px;color:var(--txt2);margin-bottom:18px;line-height:1.6}
+.ctl{margin-bottom:18px}
+.ctl label{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;font-weight:500;margin-bottom:8px;gap:10px}
+.ctl label output{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--accent)}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;width:100%;height:3px;
+  background:var(--line);outline:none;cursor:pointer;border-radius:2px
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;
+  background:var(--accent);cursor:grab;border:3px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.22)
+}
+input[type=range]::-moz-range-thumb{
+  width:24px;height:24px;border-radius:50%;background:var(--accent);
+  cursor:grab;border:3px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.22)
+}
+input[type=range]:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+.out{background:#fff;border:1px solid var(--line);padding:16px;margin-top:4px}
+.out-badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.1em;padding:5px 11px;color:#fff;margin-bottom:10px}
+.out-big{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;line-height:1.2;margin-bottom:8px}
+.out-txt{font-size:13.3px;line-height:1.7;color:var(--txt)}
+.reset{
+  margin-top:14px;background:none;border:1px solid var(--txt);color:var(--txt);
+  padding:9px 18px;font-family:inherit;font-size:12px;font-weight:500;
+  letter-spacing:0.06em;cursor:pointer;transition:.2s;width:100%
+}
+.reset:hover,.reset:focus-visible{background:var(--txt);color:#fff}
+.hint{font-size:11px;color:var(--txt2);margin-top:10px;text-align:center;letter-spacing:0.04em}
+
+/* 플립카드 */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:22px 0}
+.flip{background:none;border:none;padding:0;perspective:800px;height:132px;cursor:pointer;font-family:inherit}
+.flip-in{position:relative;width:100%;height:100%;transition:transform .55s;transform-style:preserve-3d}
+.flip.on .flip-in{transform:rotateY(180deg)}
+.ff,.fb{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:12px;border:1px solid var(--line);text-align:center}
+.ff{background:#fff}
+.ff b{font-size:15px;font-weight:700}
+.ff i{font-style:normal;font-size:10px;color:var(--txt2);letter-spacing:0.12em;margin-top:8px}
+.fb{background:var(--accent);color:#fff;transform:rotateY(180deg);font-size:12.4px;line-height:1.55}
+.flip:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+/* 플로우 */
+.flow{margin:24px 0}
+.step{border:1px solid var(--line);background:#fff;margin-bottom:8px;overflow:hidden}
+.step-h{width:100%;background:none;border:none;padding:15px;display:flex;align-items:center;gap:12px;cursor:pointer;font-family:inherit;text-align:left}
+.step-h:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.step-n{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--accent);min-width:26px}
+.step-t{font-size:14.5px;font-weight:500;flex:1}
+.step-c{max-height:0;overflow:hidden;transition:max-height .4s ease;background:var(--bg2)}
+.step.on .step-c{max-height:340px}
+.step-c div{padding:15px;font-size:13.4px;line-height:1.75;border-top:1px solid var(--line)}
+.step.on .step-t{color:var(--accent)}
+
+/* fade */
+.fade-in{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+@media (prefers-reduced-motion:reduce){
+  .fade-in{opacity:1;transform:none;transition:none}
+  .flip-in{transition:none}
+}
+.end{margin-top:60px;padding-top:22px;border-top:3px solid var(--txt);font-size:11.5px;color:var(--txt2);line-height:1.8}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <div class="eyebrow">Daily Market Insight · CIA.chat 멤버미팅</div>
+  <h1 class="title">2026 시장<br><em>패러다임의 전환</em></h1>
+  <p class="dek">AI 자본지출(CapEx) 쇼크와 100달러 유가의 귀환이 촉발한 '자본 효율성'의 시대 — 시장이 기업에게 묻는 질문이 완전히 바뀌었습니다.</p>
+  <div class="byline">
+    <span><b>방송일</b> 2026. 07. 23 (뉴욕시간 목요일)</span>
+    <span><b>출처</b> CIA.chat 멤버미팅</span>
+  </div>
+</header>
+
+<div class="ticker">
+  <div><div class="k">Nasdaq</div><div class="v dn">−2.15%</div></div>
+  <div><div class="k">Tesla</div><div class="v dn">−14.5%</div></div>
+  <div><div class="k">Brent Crude</div><div class="v dn">$100.69</div></div>
+  <div><div class="k">US 10Y</div><div class="v dn">4.71%</div></div>
+</div>
+
+<!-- 1 -->
+<section>
+  <div class="snum">One</div>
+  <h2>피바다가 된 하루</h2>
+  <p class="lead">오늘 미국 증시는 그야말로 피바다였습니다. 테슬라와 구글(알파벳) 둘이 무너지자 나스닥 전체가 끌려 내려갔고, 기관부터 개인까지 자금이 빠져나가는 흐름이 뚜렷했습니다. 나스닥은 <mark>−2.15%</mark>로 마감했지만 장중에는 −2.5%대까지 밀리기도 했습니다.</p>
+
+  <p>주목할 점은 특정 두 종목만의 문제가 아니었다는 것입니다. 메가캡(시가총액이 아주 큰 대형 기술주) 전체가 함께 흔들렸습니다.</p>
+
+  <div class="chart-container fade-in"><canvas id="ch1" height="240"></canvas></div>
+  <div class="cap">2026년 7월 23일 주요 종목 등락률 (%)</div>
+
+  <p>테슬라 −14%, 알파벳 −7%가 헤드라인이지만 아마존 −4.57%, 메타 −3.36%, 마이크로소프트 −2.24%, 엔비디아 −1.56%, 애플 −1.3%, 브로드컴 −1.09%까지 예외가 거의 없었습니다.</p>
+
+  <div class="note warn">
+    <b>원문 표기 그대로 · 확인 필요</b>
+    자막에서는 "스페이스X가 오늘 2.59% 올랐다"고 언급되었습니다. 원본 수치를 그대로 옮기되, 스페이스X는 일반적으로 공개시장에서 거래되는 종목이 아니므로 어떤 상품·지표를 가리킨 것인지는 자막만으로 확정할 수 없습니다.
+  </div>
+</section>
+
+<!-- 2 -->
+<section>
+  <div class="snum">Two</div>
+  <h2>양쪽 뺨을 때리는 두 개의 손</h2>
+  <p>발표자는 오늘 시장 상황을 "유가 100불과 금리 4.7%에게 왼쪽 오른쪽 뺨을 맞고 있다"고 표현했습니다. 이 두 가지가 오늘의 모든 것을 설명합니다.</p>
+
+  <h3>① 유가 — 한 달 만에 33% 급등</h3>
+  <p>브렌트유(유럽 기준 국제 원유 가격)가 <mark>$100.69</mark>를 돌파했습니다. 불과 한 달 전만 해도 70달러 아래까지 내려갔던 것을 감안하면 약 33% 상승입니다. WTI(미국 기준 원유)는 $92.19, 미국 평균 휘발유 가격은 갤런당 $4.09로 올랐습니다.</p>
+
+  <div class="chart-container fade-in"><canvas id="ch2" height="230"></canvas></div>
+  <div class="cap">브렌트유: 한 달 전 70달러 아래 → 현재 $100.69 (약 +33%)</div>
+
+  <p>원인은 지정학입니다. 후티 반군이 사우디 유조선 2척을 공격하면서 홍해 항로 차질이 현실화됐고, 트럼프 대통령은 이란을 향해 '중대한 군사적 응징'을 경고했습니다. 미국 배가 당한 것이 아니어도 가만히 있기 어려운 구도라는 것이 발표자의 설명입니다.</p>
+
+  <h3>② 금리 — 10년물 4.7%의 무게</h3>
+  <p>유가가 오르면 물가가 오르고, 물가가 오르면 금리가 뜁니다. 미 국채 10년물 금리가 <mark>4.7%(4.71%)</mark>, 30년물은 5.17%에 도달했습니다. 발표자는 "10년물이 4.7이면 정말 심각한 수준"이라고 말합니다.</p>
+
+  <div class="note warn">
+    <b>수치 불일치 안내</b>
+    자막에서 9월 연준 금리 <b>인상</b> 확률이 "82%까지 올라가는 소동"이 있었다고 언급된 뒤, 화면의 CME 자료를 확인하면서는 "56.3%"라는 수치를 함께 읽었습니다. 두 숫자가 함께 등장하므로 원본 그대로 병기합니다. (연준 = 미국 중앙은행, 금리를 결정하는 기관)
+  </div>
+
+  <p>왜 이게 주가에 치명적일까요? 안전한 국채에 돈을 넣어도 연 4.7%를 주는 상황이라면, 굳이 위험한 성장주를 비싸게 살 이유가 줄어듭니다. 특히 <strong>먼 미래의 이익을 근거로 높은 가격을 정당화하던 고멀티플 성장주</strong>는 직격탄을 맞습니다.</p>
+
+  <div class="sim">
+    <div class="sim-h">금리가 미래 가치를 깎는 법</div>
+    <div class="sim-s">10년 뒤에 받을 100달러는 지금 얼마의 가치일까요? 할인율(무위험 금리)을 움직여 보세요. 성장주가 왜 금리에 약한지 눈으로 확인할 수 있습니다.</div>
+    <div class="ctl">
+      <label for="r1">할인율 (무위험 금리) <output id="r1v">4.7%</output></label>
+      <input type="range" id="r1" min="1" max="8" step="0.1" value="4.7">
+    </div>
+    <div class="ctl">
+      <label for="r2">현금흐름이 발생하기까지 <output id="r2v">10년</output></label>
+      <input type="range" id="r2" min="1" max="20" step="1" value="10">
+    </div>
+    <div class="out">
+      <div class="out-badge" id="dcfBadge" style="background:var(--accent)">현재 가치</div>
+      <div class="out-big" id="dcfVal">$63.1</div>
+      <div class="out-txt" id="dcfTxt"></div>
+    </div>
+    <button class="reset" id="dcfReset">오늘 시장 기준(4.7% · 10년)으로 되돌리기</button>
+    <div class="hint">슬라이더를 드래그하세요</div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section>
+  <div class="snum">Three</div>
+  <h2>매출 서프라이즈의 역설</h2>
+  <p class="lead">오늘 하루를 한 문장으로 요약하면 <strong>'잉여현금흐름(FCF)'</strong>입니다. FCF는 회사가 영업으로 번 돈에서 설비·시설 투자에 쓴 돈을 뺀, 진짜 손에 남는 현금을 말합니다.</p>
+
+  <blockquote>
+    폭발적인 AI 수요를 증명하는 것은 끝났다. 이제 시장은 그 수요를 채우기 위해 '얼마나 많은 현금을 태워야 하는지' 묻기 시작했다.
+    <span>— 2026. 07. 23 멤버미팅 발표 자료</span>
+  </blockquote>
+
+  <p>알파벳도, 테슬라도 매출은 늘었고 인도량도 늘었습니다. 그런데 현금은 쭉쭉 빠지고 있습니다. 매출이 좋다는 소식이 오히려 주가를 무너뜨린 이유가 여기 있습니다.</p>
+
+  <h3>알파벳 — 상장 이래 첫 FCF 적자</h3>
+  <div class="tw">
+  <table>
+    <thead><tr><th>항목</th><th>내용</th></tr></thead>
+    <tbody>
+      <tr><td>2분기 자본지출</td><td>$449억 (전년비 +100%, 즉 2배)</td></tr>
+      <tr><td>연간 CapEx 가이던스</td><td>$2,050억 (기존 대비 $150억 상향)</td></tr>
+      <tr><td>하반기 지출 예정</td><td>약 $1,260억</td></tr>
+      <tr><td>잉여현금흐름</td><td>2004년 상장 이래 최초 <strong>−$59억 적자 전환</strong></td></tr>
+      <tr><td>클라우드 성장률</td><td>+82%</td></tr>
+      <tr><td>유럽 규제</td><td>EU DMA 위반 과징금 €8.9억(약 $10억), 60일 내 검색 구조 재설계 명령</td></tr>
+      <tr><td>흑자 전환 예상</td><td>2028년 (약 2년 후)</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="chart-container fade-in"><canvas id="ch3" height="230"></canvas></div>
+  <div class="cap">알파벳 자본지출 규모 (억 달러) — 2분기 한 분기에만 $449억을 태웠습니다</div>
+
+  <p>발표 자료의 표현대로, <mark>현금 부자인 구글조차 자본시장에서 800억 달러를 조달해야 하는 구조적 모순</mark>이 드러난 것입니다. 클라우드가 82% 성장했음에도 말이죠. 모건 스탠리는 목표가를 오히려 낮췄습니다.</p>
+
+  <p>발표자의 질문은 날카롭습니다. "매일매일 현금이 창출되는 광고회사인 구글이 이렇다면, 다른 회사들은 어떻겠습니까?" 지금 메가캡들은 AI에 <strong>올인</strong>했고, 승자 독식 시장이라는 걸 알기 때문에 멈출 수도 없습니다.</p>
+
+  <div class="sim">
+    <div class="sim-h">잉여현금흐름 계산해보기</div>
+    <div class="sim-s">개념 이해용 실습입니다. 영업으로 번 돈에서 설비투자를 빼면 FCF가 됩니다. 매출이 아무리 좋아도 투자가 더 크면 어떻게 되는지 직접 만들어 보세요.</div>
+    <div class="ctl">
+      <label for="f1">영업으로 번 돈 <output id="f1v">$1,990억</output></label>
+      <input type="range" id="f1" min="500" max="3000" step="10" value="1990">
+    </div>
+    <div class="ctl">
+      <label for="f2">설비·AI 투자 지출 <output id="f2v">$2,050억</output></label>
+      <input type="range" id="f2" min="500" max="3000" step="10" value="2050">
+    </div>
+    <div class="out">
+      <div class="out-badge" id="fcfBadge" style="background:var(--accent)">적자</div>
+      <div class="out-big" id="fcfVal">−$60억</div>
+      <div class="out-txt" id="fcfTxt"></div>
+    </div>
+    <button class="reset" id="fcfReset">초기값으로 되돌리기</button>
+    <div class="hint">두 값을 움직여 흑자·적자 구간을 찾아보세요</div>
+  </div>
+
+  <h3>테슬라 — 서사(narrative)마저 사라졌다</h3>
+  <p>테슬라의 영업이익률은 <mark>4.1%에서 1.4%로 붕괴</mark>했고, 잉여현금흐름도 마이너스입니다. 중국에서 들어오는 부품 비용과 이자 부담이 물가를 직방으로 맞고 있다는 것이 발표자의 진단입니다.</p>
+
+  <p>하지만 더 심각한 건 숫자가 아니라 <strong>침묵</strong>입니다. 사람들은 일론 머스크에게 계획이 있을 거라 믿었지만, 실적 발표에서 나온 건 "우리가 가장 빨리 움직이고 있으니 자본 효율이 없더라도 빨리빨리 해야 한다"는 말뿐이었습니다.</p>
+
+  <p>특히 <mark>옵티머스(휴머노이드 로봇)에 대한 타임테이블이 아예 제시되지 않았습니다.</mark> 평소 같았으면 가장 크게 홍보했을 주제를 피했다는 것 — 발표자는 이를 "지금 로봇을 내놓을 수 없는 상태"라는 신호로 읽습니다. 중국 로봇들이 격투 대회에서 돌려차기로 상대 머리를 날리는 수준까지 온 상황에서, 옵티머스는 거기까지 가지 못했다는 것입니다.</p>
+
+  <blockquote>
+    테슬라는 서사로 먹고 사는 주식인데, 그 서사마저 지금 내놓을 수가 없는 것입니다.
+    <span>— 멤버미팅 발표 중</span>
+  </blockquote>
+</section>
+
+<!-- 4 -->
+<section>
+  <div class="snum">Four</div>
+  <h2>곡괭이를 파는 사람들</h2>
+  <p>골드러시 때 돈을 번 건 금을 캔 사람이 아니라 곡괭이를 판 사람이었다는 오래된 비유가 오늘 그대로 재현됐습니다. AI에 돈을 <strong>태우는 쪽</strong>은 무너졌고, 그 돈을 <strong>받는 쪽</strong>은 올랐습니다.</p>
+
+  <div class="chart-container fade-in"><canvas id="ch4" height="240"></canvas></div>
+  <div class="cap">인프라·하드에셋 진영의 등락률 (%) — 인텔·암코는 장후(애프터마켓) 기준</div>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>기업</th><th>움직임</th><th>배경</th></tr></thead>
+    <tbody>
+      <tr><td>암코 (AMKR)</td><td class="up"><strong>+13.58%</strong></td><td>후공정·패키징 실적 증명, 엔비디아 파트너십 체결</td></tr>
+      <tr><td>클리블랜드클리프 (CLF)</td><td><strong>+16%</strong></td><td>3분기 EBITDA 2배 급증 예고, 강력한 가이던스</td></tr>
+      <tr><td>인텔 (INTC)</td><td><strong>+3.46%</strong></td><td>실적 발표 후 장후 상승, 반도체 선물 일제히 반등</td></tr>
+      <tr><td>록히드마틴 (LMT)</td><td><strong>+10.5%</strong></td><td>2분기 사상 최대 수주잔고 $2,300억 확보</td></tr>
+      <tr><td>RTX</td><td><strong>+7.7%</strong></td><td>애프터마켓 폭증, 수주잔고 $2,890억</td></tr>
+      <tr><td>하니웰 (HON)</td><td><strong>+5.7%</strong></td><td>항공우주 분사 완료, 빌딩 오토메이션 수주 +13%</td></tr>
+      <tr><td>버티브 (VRT)</td><td>강세 유지</td><td>엔비디아 베라루빈 관련 계약</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>발표자는 이들을 <strong>'딱따구리'</strong>라고 부릅니다. 계약서가 있고, 영수증이 있고, 현재와 가까운 미래까지 매출이 확정된 기업들입니다. 클리블랜드클리프가 왜 철강회사인데 오르냐고요? 국방 수요와 맞물리고, AI 데이터센터라는 거대한 창고를 짓는 데 철강 제품이 엄청나게 들어가기 때문입니다.</p>
+
+  <div class="note">
+    <b>왜 지금 이들이 프리미엄을 받는가</b>
+    고물가 · 고금리 · 지정학 — 세 가지가 동시에 작동할 때, 시장은 '먼 미래의 AI 환상'보다 '이미 계약된 확실한 매출'과 '가격 전가력(원가 상승분을 소비자에게 넘길 수 있는 힘)'에 값을 매깁니다.
+  </div>
+</section>
+
+<!-- 5 -->
+<section>
+  <div class="snum">Five</div>
+  <h2>소비자는 이미 지쳤다</h2>
+  <p>유가와 금리의 압박은 기업 마진을 직접 무너뜨립니다. 오늘 그 증거가 여러 곳에서 나왔습니다.</p>
+
+  <div class="chart-container fade-in"><canvas id="ch5" height="230"></canvas></div>
+  <div class="cap">소비·운송 관련 종목 등락률 (%)</div>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>기업</th><th>주가</th><th>내용</th></tr></thead>
+    <tbody>
+      <tr><td>아메리칸항공 (AAL)</td><td class="dn">−8.4%</td><td>사상 최대 분기 매출 $167억에도 3분기 손실 예고. 항공유 비용 전년비 +83%</td></tr>
+      <tr><td>알버슨 (ACI)</td><td class="dn">−21.7%</td><td>동일점포매출 −0.8% 역성장. 고물가에 지친 중·저소득층 소비 둔화</td></tr>
+      <tr><td>T모빌 (TMUS)</td><td class="dn">−10.8%</td><td>후불제 가입자 순증 전년비 13% 감소</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>알버슨 사례에 대한 발표자의 관찰이 특히 인상적입니다. 미국의 저소득층은 병원 대신 약국을 이용하기 때문에 원래 약을 많이 삽니다. 그런데 이제는 <mark>아픈 것마저 참으면서 약도 사지 않는 상황</mark>이 됐다는 것입니다.</p>
+
+  <p>여기에 정책 변수까지 겹칩니다. 장 마감 직후, 미국은 금요일 자정부터 강제노동 금지를 지키지 않은 <strong>60개국에 10~12.5%의 관세</strong>를 부과한다고 발표했습니다. 미국 수입품의 99%를 포괄하는 규모입니다. 유가가 오른 상황에서 관세까지 더해지면 상품 인플레이션 우려는 극대화됩니다.</p>
+
+  <p>한편 헬스케어 쪽에는 호재가 있었습니다. FDA 자문위원회가 BPC-157, TB-500 등 웰니스 펩타이드 화합물의 합법화를 <strong>8-6으로 권고</strong>했습니다. 회색지대에 있던 시장이 합법화되면서 HIMS 같은 웰니스 플랫폼이 장중 두 자릿수 급등했습니다. (펩타이드 = 아미노산이 짧게 이어진 화합물. 체중 감량 약물 등에 쓰입니다)</p>
+</section>
+
+<!-- 6 -->
+<section>
+  <div class="snum">Six</div>
+  <h2>유가가 모든 것을 정한다</h2>
+  <p>발표자의 결론은 단순합니다. <strong>"유가가 100불이냐 아니냐, 그것이 문제로다."</strong> 앞으로의 포트폴리오 의사결정은 유가 하나를 기준으로 삼으라는 것입니다.</p>
+
+  <div class="sim">
+    <div class="sim-h">브렌트유 시나리오 시뮬레이터</div>
+    <div class="sim-s">유가를 움직여 보세요. 어느 구간에 들어가느냐에 따라 시장의 성격과 대응 전략이 완전히 달라집니다.</div>
+    <div class="ctl">
+      <label for="oil">브렌트유 가격 <output id="oilv">$100.69</output></label>
+      <input type="range" id="oil" min="70" max="130" step="0.5" value="100.69">
+    </div>
+    <div class="out">
+      <div class="out-badge" id="oilBadge">시나리오 B · 경계권</div>
+      <div class="out-big" id="oilName">$100 ~ $110 유지</div>
+      <div class="out-txt" id="oilTxt"></div>
+    </div>
+    <button class="reset" id="oilReset">현재 유가($100.69)로 되돌리기</button>
+    <div class="hint">$100 · $110 두 지점을 넘겨보세요</div>
+  </div>
+
+  <p>그리고 이 유가를 결정하는 것은 결국 지정학, 구체적으로는 <strong>이란과 어떤 관계를 맺느냐</strong>입니다. 트럼프 대통령은 "이란이 우리와 얘기하고 싶어 한다"면서 동시에 "우리가 더 많이 때릴 것"이라고도 말하고 있습니다.</p>
+
+  <h3>포트폴리오 재배분 플레이북</h3>
+  <div class="tw">
+  <table>
+    <thead><tr><th>구분</th><th>대상</th></tr></thead>
+    <tbody>
+      <tr><td>🔴 비중 축소</td><td>FCF 훼손이 증명된 AI 하이퍼스케일러(명확한 ROI 확보 전까지) · 연료비 민감 운송주(항공사 등) · 저가 경쟁으로 마진이 압박받는 소비재</td></tr>
+      <tr><td>🟡 관망 / 순환매</td><td>기술적 과매도 구간(RSI 하단)에 진입한 빅테크 플랫폼 · 추격 매도는 자제하되 시장 안정화 시 반등을 활용한 비중 조절</td></tr>
+      <tr><td>🟢 비중 확대</td><td>AI 투자금 수혜 인프라(서버 CPU, 첨단 패키징, 전력·냉각) · 장기 수주잔고를 확보한 방산 및 산업재(LMT, RTX, CLF 등) · 인플레이션 헤지 자산(30년물 TIPS)</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>발표자는 채권 쪽 흐름도 짚었습니다. 돈값(금리)이 올라가면서 주식보다 채권에 넣는 게 낫지 않겠냐는 의견이 모이고 있고, 물가연동국채(TIPS·물가가 오르면 원금도 함께 오르는 국채)에 관심이 쏠린다는 것입니다. 다만 "이게 또 오래 갈까?"라는 의문도 함께 남겼습니다. 참고로 원화 환율은 1,400원대까지 왔습니다.</p>
+</section>
+
+<!-- 7 -->
+<section>
+  <div class="snum">Seven</div>
+  <h2>차트와 시간표</h2>
+  <p>S&amp;P500 4시간봉에서 발표자는 역헤드앤숄더(바닥권에서 상승 반전을 뜻하는 패턴) 형성을 기대했지만, 트럼프 대통령의 강경 발언이 나오면서 <strong>7월 17일(지난주 금요일)부터 패턴이 깨졌습니다.</strong> 십자가(도지) 캔들이 나온 지점이 의심스러웠다는 사후 평가입니다.</p>
+
+  <p>회복 조건은 명확합니다. <mark>7,510선을 완전히 벗어나야</mark> 그림이 나옵니다. QQQ(나스닥100 ETF)는 S&amp;P보다 상태가 더 나쁩니다. 이미 갭(가격이 뛰며 생긴 빈 구간)을 채우러 내려온 상태입니다.</p>
+
+  <div class="note">
+    <b>시간표에 대한 경고</b>
+    지금은 7월이고 선거는 11월입니다. 발표자는 <strong>선거 때까지 하락이 이어질 가능성이 상당히 높아진 상황</strong>이라고 봅니다. 8·9·10·11월 — 2023년의 그림과 상당히 유사하다는 진단입니다. 시장은 트럼프 대통령이 어떻게 하느냐에 따라 모든 것이 결정되는 장이 됐습니다.
+  </div>
+
+  <p>다음 주에는 연준 회의가 있습니다. 최근 계속 나오는 표현이 <strong>'트랜지토리(일시적)'</strong>인데, 인플레이션이 일시적이지 않고 고착화되면 되돌릴 수 없는 수준까지 갈 가능성이 있습니다.</p>
+
+  <div class="flow">
+    <div class="step"><button class="step-h"><span class="step-n">01</span><span class="step-t">이번 주말 — 트럼프 대통령의 발언</span></button><div class="step-c"><div>내일(금요일) 잠깐 오르는 것은 중요하지 않습니다. 주말 동안 트럼프 대통령이 이란에 대해 어떤 말을 하는지가 다음 주 시장의 방향을 정합니다. 말 한마디 한마디를 팔로우하라는 조언입니다.</div></div></div>
+    <div class="step"><button class="step-h"><span class="step-n">02</span><span class="step-t">금요일 자정 — 60개국 관세 발효</span></button><div class="step-c"><div>10~12.5% 관세가 미국 수입품의 99%에 적용됩니다. 유가 급등과 겹치면서 상품 인플레이션 우려가 어떻게 소화되는지 확인해야 합니다.</div></div></div>
+    <div class="step"><button class="step-h"><span class="step-n">03</span><span class="step-t">다음 주 — 연준의 언어</span></button><div class="step-c"><div>인플레이션을 계속 '일시적'이라고 규정할지, 아니면 고착화를 인정할지가 핵심입니다. 9월 금리 인상 가능성에 대한 시그널이 여기서 나옵니다.</div></div></div>
+    <div class="step"><button class="step-h"><span class="step-n">04</span><span class="step-t">8월 ~ 11월 — 선거까지의 구간</span></button><div class="step-c"><div>2023년과 유사한 지저분한 흐름이 이어질 가능성. 여기서 정리하고 올라가느냐, 더 내려가느냐의 갈림길입니다. 이 기간에는 무리한 헤지보다 관망하며 다음 스텝을 준비하라는 것이 발표자의 권고입니다.</div></div></div>
+  </div>
+</section>
+
+<!-- 8 -->
+<section>
+  <div class="snum">Eight</div>
+  <h2>버블이 끝난 게 아니다</h2>
+  <blockquote>
+    AI 버블이 끝난 것이 아닙니다. 시장의 평가 기준이 진화했을 뿐입니다.
+    <span>— 멤버미팅 결론</span>
+  </blockquote>
+
+  <p>"우리 AI 합니다"라는 말만으로 주가가 올라가던 시대는 끝났습니다. 단순한 '성장' 서사 하나로 높은 멀티플을 정당화하던 시대도 저물었습니다. 고유가($100)와 고금리(4.7%) 환경에서는 <strong>투자를 실제 잉여현금흐름으로 변환하는 기업만 생존합니다.</strong></p>
+
+  <p>일론 머스크의 서사도 더 이상 통하지 않게 됐습니다. "옵티머스가 어떻고, 로보틱스가 어떻고"가 중요한 게 아니라, <strong>언제부터 돈을 벌 것인지 시간 약속</strong>을 할 수 있느냐가 중요해졌습니다.</p>
+
+  <blockquote>
+    AI에 돈을 태우는 자(Spender)에서, 그 돈을 거두는 자(Beneficiary)로 시선을 이동하십시오.
+    <span>— 발표 자료 마지막 슬라이드</span>
+  </blockquote>
+
+  <h3>핵심 용어 복습</h3>
+  <p class="term">카드를 눌러 뜻을 확인하세요.</p>
+  <div class="cards" id="cards"></div>
+
+  <div class="note warn">
+    <b>사칭 계정 주의</b>
+    발표자는 방송 중 상당한 시간을 할애해 사칭 계정 피해를 경고했습니다. 프로필 사진과 배너를 그대로 복사한 계정이 링크를 보내 플랫폼 입금을 유도하는 방식입니다. 발표자는 "여러분에게 입금하라고 한 적이 단 한 번도 없다"고 강조했습니다. 계정 아래쪽의 실제 아이디(@)를 반드시 확인하십시오.
+  </div>
+
+  <p>마지막으로, 이런 기간에 유빅스 같은 상품으로 헤지해서 수익을 내려는 시도에는 한계가 있다는 조언도 있었습니다. 시장이 이렇게 움직일 때는 모든 포트폴리오가 깨집니다. <strong>관망하면서 다음 스텝을 준비하라</strong>는 것이 오늘의 마무리입니다.</p>
+</section>
+
+<div class="end">
+  본 문서는 2026년 7월 23일(뉴욕시간) CIA.chat 멤버미팅 방송 내용과 발표 자료를 정리한 것입니다. 모든 수치와 발언은 원본 자막 및 슬라이드에 근거하며, 원문에 없는 내용은 추가하지 않았습니다. 수치가 상충하는 부분은 본문에 별도 표기했습니다.<br><br>
+  투자 판단의 책임은 투자자 본인에게 있습니다. 본 문서는 정보 정리 목적이며 특정 종목의 매수·매도를 권유하지 않습니다.
+</div>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var C = { red:'#e11d48', ink:'#1a1a1a', gray:'#6b7280', blue:'#2563eb', line:'#e5e5e5', sub:'#777777' };
+  var FONT = "'Noto Sans KR', sans-serif";
+
+  /* ── fade-in ── */
+  var fadeObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e,i){
+      if(e.isIntersecting){
+        setTimeout(function(){ e.target.classList.add('visible'); }, i*80);
+        fadeObs.unobserve(e.target);
+      }
+    });
+  }, { threshold:0.12 });
+  document.querySelectorAll('.fade-in').forEach(function(el){ fadeObs.observe(el); });
+
+  /* ── charts ── */
+  if(window.Chart){
+    Chart.defaults.font.family = FONT;
+    Chart.defaults.font.size = 11;
+    Chart.defaults.color = C.sub;
+  }
+  function pctBar(id, labels, data, colors, horizontal){
+    return function(){
+      new Chart(document.getElementById(id), {
+        type:'bar',
+        data:{ labels:labels, datasets:[{ data:data, backgroundColor:colors, borderWidth:0, borderRadius:2, barPercentage:0.72 }] },
+        options:{
+          indexAxis: horizontal ? 'y' : 'x',
+          responsive:true, maintainAspectRatio:false,
+          animation:{ duration:1100, easing:'easeOutQuart' },
+          plugins:{
+            legend:{ display:false },
+            tooltip:{
+              backgroundColor:C.ink, padding:10, cornerRadius:2, displayColors:false,
+              callbacks:{ label:function(ctx){ return (ctx.parsed[horizontal?'x':'y'] > 0 ? '+' : '') + ctx.parsed[horizontal?'x':'y'] + '%'; } }
+            }
+          },
+          scales:{
+            x:{ grid:{ color:horizontal?C.line:'transparent', drawBorder:false }, ticks:{ font:{size:10.5} } },
+            y:{ grid:{ color:horizontal?'transparent':C.line, drawBorder:false }, ticks:{ font:{size:10.5} } }
+          }
+        }
+      });
+    };
+  }
+
+  var chartConfigs = {};
+
+  chartConfigs['ch1'] = pctBar('ch1',
+    ['테슬라','알파벳','아마존','메타','MSFT','엔비디아','애플','브로드컴'],
+    [-14.5,-7.1,-4.57,-3.36,-2.24,-1.56,-1.3,-1.09],
+    [C.red,C.red,C.red,C.red,C.gray,C.gray,C.gray,C.gray],
+    true);
+
+  chartConfigs['ch2'] = function(){
+    new Chart(document.getElementById('ch2'), {
+      type:'bar',
+      data:{ labels:['한 달 전 (70달러 아래)','현재'],
+        datasets:[{ data:[69.5,100.69], backgroundColor:[C.gray,C.red], borderWidth:0, borderRadius:2, barPercentage:0.5 }] },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        animation:{ duration:1100, easing:'easeOutQuart' },
+        plugins:{ legend:{display:false},
+          tooltip:{ backgroundColor:C.ink, padding:10, cornerRadius:2, displayColors:false,
+            callbacks:{ label:function(ctx){ return '$' + ctx.parsed.y; } } } },
+        scales:{
+          x:{ grid:{display:false, drawBorder:false}, ticks:{ font:{size:11} } },
+          y:{ beginAtZero:true, grid:{ color:C.line, drawBorder:false },
+              ticks:{ callback:function(v){ return '$'+v; }, font:{size:10.5} } }
+        }
+      }
+    });
+  };
+
+  chartConfigs['ch3'] = function(){
+    new Chart(document.getElementById('ch3'), {
+      type:'bar',
+      data:{ labels:['2분기 자본지출','하반기 예정','연간 가이던스'],
+        datasets:[{ data:[449,1260,2050], backgroundColor:[C.red,C.blue,C.ink], borderWidth:0, borderRadius:2, barPercentage:0.6 }] },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        animation:{ duration:1200, easing:'easeOutQuart' },
+        plugins:{ legend:{display:false},
+          tooltip:{ backgroundColor:C.ink, padding:10, cornerRadius:2, displayColors:false,
+            callbacks:{ label:function(ctx){ return '$' + ctx.parsed.y.toLocaleString() + '억'; } } } },
+        scales:{
+          x:{ grid:{display:false, drawBorder:false}, ticks:{ font:{size:11} } },
+          y:{ beginAtZero:true, grid:{ color:C.line, drawBorder:false },
+              ticks:{ callback:function(v){ return v.toLocaleString(); }, font:{size:10.5} } }
+        }
+      }
+    });
+  };
+
+  chartConfigs['ch4'] = pctBar('ch4',
+    ['CLF','암코','LMT','RTX','하니웰','인텔(장후)'],
+    [16,13.58,10.5,7.7,5.7,3.46],
+    [C.blue,C.blue,C.blue,C.ink,C.ink,C.gray],
+    true);
+
+  chartConfigs['ch5'] = pctBar('ch5',
+    ['알버슨','T모빌','아메리칸항공'],
+    [-21.7,-10.8,-8.4],
+    [C.red,C.red,C.red],
+    true);
+
+  var chartObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        var canvas = e.target.querySelector('canvas');
+        if(canvas && chartConfigs[canvas.id]){
+          chartConfigs[canvas.id]();
+          e.target.classList.add('chart-ready');
+          chartObs.unobserve(e.target);
+        }
+      }
+    });
+  }, { threshold:0.15 });
+  document.querySelectorAll('.chart-container').forEach(function(el){ chartObs.observe(el); });
+
+  /* ── DCF 계산기 ── */
+  var r1=document.getElementById('r1'), r2=document.getElementById('r2');
+  var r1v=document.getElementById('r1v'), r2v=document.getElementById('r2v');
+  var dcfVal=document.getElementById('dcfVal'), dcfTxt=document.getElementById('dcfTxt'), dcfBadge=document.getElementById('dcfBadge');
+  function renderDcf(){
+    var r=parseFloat(r1.value), n=parseInt(r2.value,10);
+    if(isNaN(r)||r<1) r=1; if(isNaN(n)||n<1) n=1;
+    var pv = 100/Math.pow(1+r/100, n);
+    var base = 100/Math.pow(1.02, n);
+    var drop = (1 - pv/base)*100;
+    r1v.textContent = r.toFixed(1)+'%';
+    r2v.textContent = n+'년';
+    dcfVal.textContent = '$' + pv.toFixed(1);
+    if(r >= 4.5){ dcfBadge.style.background='#e11d48'; dcfBadge.textContent='고금리 구간'; }
+    else if(r >= 3){ dcfBadge.style.background='#6b7280'; dcfBadge.textContent='중립 구간'; }
+    else { dcfBadge.style.background='#2563eb'; dcfBadge.textContent='저금리 구간'; }
+    dcfTxt.innerHTML = n+'년 뒤의 100달러는 지금 <strong>$'+pv.toFixed(1)+'</strong>의 가치입니다. '+
+      '금리가 2%였을 때($'+base.toFixed(1)+')와 비교하면 <strong>'+(drop>=0?drop.toFixed(0)+'% 낮아진':Math.abs(drop).toFixed(0)+'% 높아진')+'</strong> 값입니다.'+
+      (r>=4.5 && n>=8 ? ' 먼 미래의 이익만 내세우는 성장주가 지금 무너지는 이유가 바로 이 계산입니다.' : '');
+  }
+  r1.addEventListener('input', renderDcf);
+  r2.addEventListener('input', renderDcf);
+  document.getElementById('dcfReset').addEventListener('click', function(){
+    r1.value=4.7; r2.value=10; renderDcf();
+  });
+  renderDcf();
+
+  /* ── FCF 계산기 ── */
+  var f1=document.getElementById('f1'), f2=document.getElementById('f2');
+  var f1v=document.getElementById('f1v'), f2v=document.getElementById('f2v');
+  var fcfVal=document.getElementById('fcfVal'), fcfTxt=document.getElementById('fcfTxt'), fcfBadge=document.getElementById('fcfBadge');
+  function renderFcf(){
+    var a=parseInt(f1.value,10), b=parseInt(f2.value,10);
+    if(isNaN(a)) a=1990; if(isNaN(b)) b=2050;
+    var fcf = a-b;
+    f1v.textContent = '$'+a.toLocaleString()+'억';
+    f2v.textContent = '$'+b.toLocaleString()+'억';
+    fcfVal.textContent = (fcf<0?'−$':'+$') + Math.abs(fcf).toLocaleString() + '억';
+    if(fcf<0){
+      fcfBadge.style.background='#e11d48'; fcfBadge.textContent='적자';
+      fcfVal.style.color='#e11d48';
+      fcfTxt.innerHTML='번 돈보다 쓴 돈이 많습니다. 매출이 아무리 좋아도 이 상태면 <strong>부족한 현금을 빌리거나 자금을 조달해야</strong> 합니다. 알파벳이 2004년 상장 이래 처음으로 이 구간에 들어갔습니다.';
+    } else {
+      fcfBadge.style.background='#2563eb'; fcfBadge.textContent='흑자';
+      fcfVal.style.color='#2563eb';
+      fcfTxt.innerHTML='투자를 하고도 현금이 남습니다. 지금 시장이 프리미엄을 주는 것은 <strong>바로 이 상태를 증명한 기업</strong>입니다.';
+    }
+  }
+  f1.addEventListener('input', renderFcf);
+  f2.addEventListener('input', renderFcf);
+  document.getElementById('fcfReset').addEventListener('click', function(){
+    f1.value=1990; f2.value=2050; renderFcf();
+  });
+  renderFcf();
+
+  /* ── 유가 시나리오 ── */
+  var oil=document.getElementById('oil'), oilv=document.getElementById('oilv');
+  var oilBadge=document.getElementById('oilBadge'), oilName=document.getElementById('oilName'), oilTxt=document.getElementById('oilTxt');
+  function renderOil(){
+    var p=parseFloat(oil.value);
+    if(isNaN(p)) p=100.69;
+    oilv.textContent = '$'+p.toFixed(2);
+    if(p < 100){
+      oilBadge.style.background='#2563eb'; oilBadge.textContent='시나리오 A · 안정권';
+      oilName.textContent='$100 밑으로 복귀';
+      oilName.style.color='#2563eb';
+      oilTxt.innerHTML='안도 랠리가 가능합니다. 낙폭이 과대했던 고평가 성장주의 <strong>기술적 반등</strong>을 활용할 수 있는 구간입니다.';
+    } else if(p <= 110){
+      oilBadge.style.background='#1a1a1a'; oilBadge.textContent='시나리오 B · 경계권';
+      oilName.textContent='$100 ~ $110 유지';
+      oilName.style.color='#1a1a1a';
+      oilTxt.innerHTML='인플레이션 우려가 지속됩니다. 확실한 수주잔고와 가격 전가력을 갖춘 <strong>방산 · 에너지 · 가치주</strong> 비중을 확대하는 전략입니다. 현재 시장이 여기에 있습니다.';
+    } else {
+      oilBadge.style.background='#e11d48'; oilBadge.textContent='시나리오 C · 위험권';
+      oilName.textContent='$110 초과 상승';
+      oilName.style.color='#e11d48';
+      oilTxt.innerHTML='연준 인상 리스크가 극대화되고 소비재 · 항공 마진이 연쇄 붕괴합니다. <strong>현금 및 단기채 비중을 최대화</strong>하고 스태그플레이션 헤지를 구축해야 하는 구간입니다.';
+    }
+  }
+  oil.addEventListener('input', renderOil);
+  document.getElementById('oilReset').addEventListener('click', function(){
+    oil.value=100.69; renderOil();
+  });
+  renderOil();
+
+  /* ── 플립카드 ── */
+  var TERMS = [
+    ['잉여현금흐름','FCF','영업으로 번 돈에서 설비투자를 뺀, 실제로 손에 남는 현금'],
+    ['자본지출','CapEx','공장·서버·데이터센터 같은 시설에 쓰는 돈'],
+    ['멀티플','Multiple','이익 대비 주가가 몇 배인지. 높을수록 미래 기대가 크다는 뜻'],
+    ['가격 전가력','Pricing Power','원가가 올라도 그만큼 값을 올려 받을 수 있는 힘'],
+    ['수주잔고','Backlog','이미 계약돼서 앞으로 매출로 잡힐 물량'],
+    ['물가연동국채','TIPS','물가가 오르면 원금도 함께 오르는 국채']
+  ];
+  var cardsEl = document.getElementById('cards');
+  TERMS.forEach(function(t){
+    var b = document.createElement('button');
+    b.className='flip'; b.type='button';
+    b.setAttribute('aria-label', t[0]+' 뜻 보기');
+    b.innerHTML = '<span class="flip-in"><span class="ff"><b>'+t[0]+'</b><i>'+t[1]+'</i></span><span class="fb">'+t[2]+'</span></span>';
+    b.addEventListener('click', function(){ b.classList.toggle('on'); });
+    cardsEl.appendChild(b);
+  });
+
+  /* ── 아코디언 ── */
+  document.querySelectorAll('.step-h').forEach(function(h){
+    h.addEventListener('click', function(){ h.parentElement.classList.toggle('on'); });
+  });
+})();
+</script>
+</body>
+</html>
