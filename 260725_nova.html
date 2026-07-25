@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시장의 지각변동: AI CapEx 공포와 터틀 모드의 시작 | NOVA Real Invest 분석</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#ffffff;
+  --bg-alt:#fafafa;
+  --text:#1a1a1a;
+  --text-sub:#777777;
+  --accent:#e11d48;
+  --accent-2:#f43f5e;
+  --line:#e5e5e5;
+  --c1:#e11d48;
+  --c2:#1a1a1a;
+  --c3:#6b7280;
+  --c4:#2563eb;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{
+  margin:0;padding:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;
+  font-weight:400;
+  line-height:1.75;
+  font-size:16px;
+  letter-spacing:-0.01em;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:680px;margin:0 auto;padding:0 20px 80px;}
+
+/* ---------- HERO ---------- */
+.hero{padding:56px 0 40px;border-bottom:3px solid var(--text);}
+.kicker{
+  font-family:'Playfair Display',serif;
+  font-style:italic;font-size:15px;color:var(--accent);
+  letter-spacing:0.02em;margin:0 0 14px;
+}
+h1{
+  font-family:'Playfair Display',serif;
+  font-weight:900;font-size:35px;line-height:1.22;
+  margin:0 0 18px;letter-spacing:-0.02em;
+}
+h1 em{font-style:italic;color:var(--accent);}
+.hero-sub{font-size:15px;color:var(--text-sub);margin:0 0 24px;line-height:1.7;}
+.meta{
+  display:flex;flex-wrap:wrap;gap:8px 18px;
+  font-size:12.5px;color:var(--text-sub);
+  border-top:1px solid var(--line);padding-top:16px;
+  letter-spacing:0.02em;
+}
+.meta b{color:var(--text);font-weight:500;}
+
+/* ---------- SECTION ---------- */
+section{padding:44px 0 8px;border-bottom:1px solid var(--line);}
+section:last-of-type{border-bottom:none;}
+.sec-num{
+  font-family:'Playfair Display',serif;
+  font-size:13px;font-weight:700;color:var(--accent);
+  letter-spacing:0.18em;text-transform:uppercase;
+  display:block;margin-bottom:10px;
+}
+h2{
+  font-family:'Playfair Display',serif;
+  font-weight:700;font-size:26px;line-height:1.3;
+  margin:0 0 8px;letter-spacing:-0.01em;
+}
+h2 .ko{
+  display:block;font-family:'Noto Sans KR',sans-serif;
+  font-weight:700;font-size:20px;margin-top:4px;letter-spacing:-0.02em;
+}
+h3{
+  font-family:'Noto Sans KR',sans-serif;
+  font-weight:700;font-size:17px;margin:32px 0 10px;
+  letter-spacing:-0.02em;
+}
+h3::before{
+  content:'';display:inline-block;width:14px;height:2px;
+  background:var(--accent);vertical-align:middle;
+  margin-right:8px;margin-bottom:3px;
+}
+p{margin:0 0 14px;font-size:15.3px;}
+.lead{font-size:16.5px;color:var(--text);line-height:1.8;}
+strong{font-weight:700;color:var(--text);}
+.hl{background:linear-gradient(transparent 62%, rgba(225,29,72,0.18) 62%);font-weight:500;}
+.term{color:var(--text-sub);font-size:0.9em;font-weight:400;}
+
+/* ---------- PULL QUOTE ---------- */
+blockquote{
+  margin:26px 0;padding:22px 0 22px 20px;
+  border-left:3px solid var(--accent);
+  font-family:'Playfair Display',serif;
+  font-size:19px;font-style:italic;line-height:1.55;
+  color:var(--text);
+}
+blockquote cite{
+  display:block;font-family:'Noto Sans KR',sans-serif;
+  font-style:normal;font-size:12.5px;color:var(--text-sub);
+  margin-top:10px;letter-spacing:0.02em;
+}
+
+/* ---------- CARDS ---------- */
+.card{
+  background:var(--bg-alt);border:1px solid var(--line);
+  padding:20px;margin:20px 0;border-radius:2px;
+}
+.card-t{font-weight:700;font-size:15px;margin:0 0 8px;letter-spacing:-0.02em;}
+.card p:last-child{margin-bottom:0;}
+.card.red{border-left:3px solid var(--accent);}
+.card.dark{background:var(--text);color:#fff;border-color:var(--text);}
+.card.dark .card-t{color:var(--accent-2);}
+.card.dark p{color:#e8e8e8;}
+
+/* ---------- TABLE ---------- */
+.tbl-scroll{overflow-x:auto;margin:20px 0;-webkit-overflow-scrolling:touch;}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:100%;}
+th{
+  background:var(--accent);color:#fff;font-weight:500;
+  padding:11px 10px;text-align:left;letter-spacing:-0.01em;
+  font-size:12.5px;white-space:nowrap;
+}
+td{padding:11px 10px;border-bottom:1px solid var(--line);background:var(--bg-alt);vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+td.up{color:#15803d;font-weight:700;}
+td.down{color:var(--accent);font-weight:700;}
+td.tick{font-weight:700;white-space:nowrap;}
+
+/* ---------- CHART ---------- */
+.chart-container{position:relative;max-height:340px;margin:24px 0;}
+.chart-container canvas{opacity:0;transition:opacity 0.4s ease;max-height:300px;}
+.chart-container.chart-ready canvas{opacity:1;}
+.cap{font-size:12px;color:var(--text-sub);text-align:center;margin:-6px 0 22px;line-height:1.5;}
+
+/* ---------- FADE ---------- */
+.fade-in{opacity:0;transform:translateY(18px);transition:opacity 0.7s ease, transform 0.7s ease;}
+.fade-in.visible{opacity:1;transform:translateY(0);}
+@media (prefers-reduced-motion:reduce){
+  .fade-in{opacity:1;transform:none;transition:none;}
+}
+
+/* ---------- INTERACTIVE BOX ---------- */
+.ix{
+  border:1.5px solid var(--text);padding:22px 18px;margin:26px 0;
+  background:var(--bg);border-radius:2px;
+}
+.ix-label{
+  font-family:'Playfair Display',serif;font-size:11px;font-weight:700;
+  letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);
+  display:block;margin-bottom:6px;
+}
+.ix-t{font-weight:700;font-size:16px;margin:0 0 4px;letter-spacing:-0.02em;}
+.ix-d{font-size:13px;color:var(--text-sub);margin:0 0 18px;line-height:1.6;}
+
+/* flow */
+.flow-steps{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+.fstep{
+  flex:1 1 70px;min-width:70px;cursor:pointer;padding:11px 6px;
+  border:1px solid var(--line);background:var(--bg-alt);
+  text-align:center;font-size:11.5px;font-weight:500;color:var(--text-sub);
+  border-radius:2px;transition:all .22s ease;line-height:1.35;
+}
+.fstep:hover{border-color:var(--accent);color:var(--accent);}
+.fstep.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700;}
+.fstep b{display:block;font-family:'Playfair Display',serif;font-size:14px;margin-bottom:3px;}
+.flow-body{
+  background:var(--bg-alt);border:1px solid var(--line);
+  padding:16px;min-height:132px;border-radius:2px;
+}
+.flow-body h4{margin:0 0 8px;font-size:15px;font-weight:700;letter-spacing:-0.02em;}
+.flow-body p{font-size:13.5px;margin:0 0 8px;line-height:1.7;}
+.flow-body ul{margin:8px 0 0;padding-left:18px;font-size:13px;color:var(--text-sub);}
+.flow-body li{margin-bottom:4px;}
+
+/* toggle */
+.tgl{display:flex;gap:8px;margin-bottom:16px;}
+.tgl button{
+  flex:1;padding:12px 8px;border:1.5px solid var(--line);background:var(--bg);
+  font-family:'Noto Sans KR',sans-serif;font-size:13.5px;font-weight:700;
+  color:var(--text-sub);cursor:pointer;border-radius:2px;transition:all .2s ease;
+  letter-spacing:-0.02em;
+}
+.tgl button:hover{border-color:var(--text);}
+.tgl button.on{background:var(--text);border-color:var(--text);color:#fff;}
+.tgl button.on.bear{background:var(--accent);border-color:var(--accent);}
+
+/* slider */
+.slider-row{margin-bottom:18px;}
+.slider-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
+.slider-head label{font-size:13.5px;font-weight:500;letter-spacing:-0.02em;}
+.slider-val{
+  font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--accent);
+}
+input[type=range]{
+  width:100%;-webkit-appearance:none;appearance:none;height:3px;
+  background:var(--line);outline:none;cursor:pointer;margin:8px 0 0;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;
+  background:var(--accent);cursor:pointer;border:3px solid #fff;
+  box-shadow:0 1px 5px rgba(0,0,0,0.25);
+}
+input[type=range]::-moz-range-thumb{
+  width:22px;height:22px;border-radius:50%;background:var(--accent);
+  cursor:pointer;border:3px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,0.25);
+}
+input[type=number],input[type=text]{
+  width:100%;padding:11px 12px;border:1px solid var(--line);
+  font-family:'Noto Sans KR',sans-serif;font-size:15px;color:var(--text);
+  border-radius:2px;background:var(--bg-alt);
+}
+input[type=number]:focus,input[type=text]:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent);}
+.btn-reset{
+  padding:9px 16px;border:1px solid var(--text);background:var(--bg);
+  font-family:'Noto Sans KR',sans-serif;font-size:12.5px;font-weight:500;
+  color:var(--text);cursor:pointer;border-radius:2px;transition:all .2s ease;
+}
+.btn-reset:hover{background:var(--text);color:#fff;}
+.err{color:var(--accent);font-size:12.5px;margin-top:8px;display:none;}
+.err.show{display:block;}
+
+.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px;}
+.rcell{background:var(--bg-alt);border:1px solid var(--line);padding:13px 8px;text-align:center;border-radius:2px;}
+.rcell .rl{font-size:11px;color:var(--text-sub);display:block;margin-bottom:5px;letter-spacing:0.02em;}
+.rcell .rv{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;line-height:1.1;}
+.rv.pos{color:#15803d;}
+.rv.neg{color:var(--accent);}
+.rv.neu{color:var(--text);}
+.bar-track{height:5px;background:var(--line);margin-top:8px;position:relative;overflow:hidden;border-radius:3px;}
+.bar-fill{height:100%;width:0;transition:width .45s ease;border-radius:3px;}
+
+/* playbook body */
+.pb-body{background:var(--bg-alt);border:1px solid var(--line);padding:16px;border-radius:2px;}
+.pb-body h4{margin:0 0 6px;font-size:15px;font-weight:700;}
+.pb-body .trig{font-size:12.5px;color:var(--text-sub);margin:0 0 12px;line-height:1.6;}
+.pb-body ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.8;}
+.pb-body li{margin-bottom:6px;}
+.pb-body li b{color:var(--accent);}
+
+/* quadrant */
+.quad{
+  display:grid;grid-template-columns:1fr 1fr;gap:2px;
+  background:var(--line);border:1px solid var(--line);margin:20px 0;
+}
+.qcell{background:var(--bg-alt);padding:16px 12px;min-height:112px;}
+.qcell .qh{font-size:11px;letter-spacing:0.05em;color:var(--text-sub);display:block;margin-bottom:7px;}
+.qcell .qn{font-weight:700;font-size:13.5px;margin-bottom:7px;letter-spacing:-0.02em;}
+.qcell .qt{font-size:12.5px;line-height:1.65;color:var(--text-sub);}
+.qcell.good{border-top:3px solid #15803d;}
+.qcell.good .qn{color:#15803d;}
+.qcell.bad{border-top:3px solid var(--accent);}
+.qcell.bad .qn{color:var(--accent);}
+.qaxis{font-size:11px;color:var(--text-sub);text-align:center;margin:-14px 0 22px;letter-spacing:0.02em;}
+
+/* timeline */
+.tl{margin:22px 0;border-left:2px solid var(--line);padding-left:0;}
+.tl-item{position:relative;padding:0 0 22px 22px;border-left:2px solid var(--line);margin-left:5px;}
+.tl-item:last-child{border-left-color:transparent;padding-bottom:4px;}
+.tl-item::before{
+  content:'';position:absolute;left:-7px;top:4px;width:12px;height:12px;
+  border-radius:50%;background:var(--bg);border:2.5px solid var(--accent);
+}
+.tl-date{
+  font-family:'Playfair Display',serif;font-size:13px;font-weight:700;
+  color:var(--accent);letter-spacing:0.04em;display:block;margin-bottom:3px;
+}
+.tl-t{font-weight:700;font-size:15px;margin-bottom:4px;letter-spacing:-0.02em;}
+.tl-d{font-size:13px;color:var(--text-sub);line-height:1.65;}
+
+/* note */
+.note{
+  background:var(--bg-alt);border:1px dashed var(--line);
+  padding:18px;margin:26px 0;font-size:13px;color:var(--text-sub);
+  line-height:1.75;border-radius:2px;
+}
+.note b{color:var(--text);}
+.note ul{margin:8px 0 0;padding-left:18px;}
+.note li{margin-bottom:6px;}
+
+footer{
+  margin-top:48px;padding-top:24px;border-top:3px solid var(--text);
+  font-size:12px;color:var(--text-sub);line-height:1.8;
+}
+footer .fh{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px;}
+
+@media (max-width:420px){
+  h1{font-size:29px;}
+  h2{font-size:22px;}
+  h2 .ko{font-size:18px;}
+  .wrap{padding:0 16px 60px;}
+  .result-grid{grid-template-columns:1fr;}
+  .quad{grid-template-columns:1fr;}
+  .fstep{flex:1 1 45%;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HERO -->
+<header class="hero">
+  <p class="kicker">NOVA Real Invest · 일일 시장 브리핑</p>
+  <h1>시장의 지각변동:<br>AI CapEx 공포와<br><em>터틀 모드</em>의 시작</h1>
+  <p class="hero-sub">지수는 +0.05%로 평온했다. 그러나 그 아래에서는 AI 하드웨어에서 빠져나온 자금이 헬스케어·데이터센터 리츠·배당주로 이동하는 거대한 엑소더스가 벌어졌다. 내러티브의 시대가 끝나고 <strong>잉여현금흐름(FCF)</strong>이 절대 잣대가 된 날의 기록.</p>
+  <div class="meta">
+    <span><b>방송일</b> 2026년 7월 24일(현지)</span>
+    <span><b>정리일</b> 2026년 7월 25일</span>
+    <span><b>채널</b> NOVA Real Invest</span>
+  </div>
+</header>
+
+<!-- 1 -->
+<section>
+  <span class="sec-num">01 — The Illusion</span>
+  <h2>The Calm Index<span class="ko">지수의 평온함은 착시였다</span></h2>
+
+  <p class="lead">오늘 S&amp;P 500은 <strong>+0.05%</strong>. 숫자만 보면 아무 일도 없었던 하루다. 하지만 뚜껑을 열어보면 완전히 다른 그림이 나온다.</p>
+
+  <p>나스닥은 <strong>-0.64%</strong>, 반도체 지수(SOX)는 <strong>-4.3%</strong>로 무너졌다. 반면 다우는 <strong>+0.46%</strong>로 혼자 축제였다. 나스닥은 장중 살아났다가 다시 죽었고, 장 막판에 겨우 올라와 마감했다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="chartMovers" height="240"></canvas>
+  </div>
+  <p class="cap">7월 24일 주요 종목·지수 등락률. 왼쪽(붉은색)은 AI 하드웨어·고CapEx 진영, 오른쪽(파란색)은 자금이 몰려간 피난처.</p>
+
+  <blockquote>
+    자본의 대이동이 지금 움직이고 있습니다. 기술주에서 빠져서 전부 다 딴 데로 넘어가고 있어요. 이걸 우리가 거의 한 달 동안 보고 있는 겁니다.
+    <cite>— NOVA Real Invest</cite>
+  </blockquote>
+
+  <h3>오늘의 명암 한눈에</h3>
+  <div class="tbl-scroll">
+  <table>
+    <thead><tr><th>구분</th><th>종목/지수</th><th>등락률</th><th>성격</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="4">투매</td><td class="tick">INTC 인텔</td><td class="down">-7.9%</td><td>CapEx 200억 달러 쇼크</td></tr>
+      <tr><td class="tick">MU 마이크론</td><td class="down">-6.9%</td><td>메모리 밸류에이션 리셋</td></tr>
+      <tr><td class="tick">SOX 반도체</td><td class="down">-4.3%</td><td>섹터 전반 청산</td></tr>
+      <tr><td class="tick">MXL 맥심</td><td class="down">-21.5%</td><td>고CapEx / 저현금</td></tr>
+      <tr><td rowspan="5">피난</td><td class="tick">THC 테넷헬스케어</td><td class="up">+17.2%</td><td>AI 논쟁과 무관한 실적</td></tr>
+      <tr><td class="tick">SLB</td><td class="up">+11.1%</td><td>데이터센터 전력·냉각</td></tr>
+      <tr><td class="tick">DLR 디지털리얼티</td><td class="up">+10.9%</td><td>데이터센터 임대 폭발</td></tr>
+      <tr><td class="tick">BAH 부즈알렌</td><td class="up">+10.1%</td><td>국가 안보 예산 수익</td></tr>
+      <tr><td class="tick">AAPL 애플</td><td class="up">+3.5%</td><td>돈을 안 쓰는 빅테크</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- 2 -->
+<section>
+  <span class="sec-num">02 — The Bill</span>
+  <h2>The 'Show-Me' Moment<span class="ko">실적 서프라이즈보다 무서운 CapEx 청구서</span></h2>
+
+  <p class="lead">시장이 갑자기 태도를 바꾼 이유는 하나다. <span class="hl">이제는 ROI를 증명하라는 것</span>. AI에 돈을 쏟아붓는 것만으로는 더 이상 주가가 오르지 않는다. <span class="term">(CapEx = 자본지출, 공장·장비·데이터센터에 쓰는 돈 / ROI = 투자 대비 수익률)</span></p>
+
+  <p>인텔은 <strong>15년 만의 최고 매출 성장률(25%)</strong>을 냈고 EPS도 예상을 이겼다. 그런데 주가는 -7.9%, 시총 <strong>900억 달러</strong>가 증발했다. 이유는 단 하나 — 2026년 CapEx가 <strong>200억 달러 이상</strong>이라는 청구서가 함께 나왔기 때문이다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="chartCapex" height="230"></canvas>
+  </div>
+  <p class="cap">CapEx는 늘어나는데 잉여현금흐름(FCF)은 마이너스로 꺾였다. 테슬라 -10.9억 달러, 알파벳 -58.6억 달러.</p>
+
+  <div class="card red">
+    <p class="card-t">잉여현금흐름(FCF)이란?</p>
+    <p>회사가 벌어들인 돈에서 설비 투자에 쓴 돈을 뺀 <strong>실제로 손에 남는 현금</strong>이다. 매출이 아무리 커도 투자로 다 써버리면 FCF는 마이너스가 된다. 지금 시장은 매출이 아니라 이 숫자를 본다.</p>
+  </div>
+
+  <h3>인텔에게 지금 필요한 것</h3>
+  <p>파트너십 발표는 이제 아무 의미가 없다. 인텔에 필요한 건 <strong>대형 고객(빅 클라이언트)의 실제 계약</strong>이다. 예를 들어 엔비디아가 인텔 파운드리를 쓰기로 했다는 식의 뉴스가 나와야 진짜 한 방이 된다. 현재까지 나온 건 테슬라의 테라팹을 대신 지어주겠다는 것 하나뿐이다.</p>
+
+  <div class="card">
+    <p class="card-t">⚠️ 장전·장후 움직임은 가짜다</p>
+    <p>인텔은 전날 십몇 퍼센트 폭등했고, 당일 장전에도 급등했다. 그걸 보고 들어간 사람은 고점 대비 <strong>약 20%</strong>를 몇 시간 만에 잃었다. 지금 이 구간에서 인기 종목의 장전·장후 움직임은 <strong>개인들끼리의 폭탄 돌리기</strong>에 가깝다. 특히 한국 투자자의 미국 주식 참여가 늘면서 이 왜곡은 더 심해졌다.</p>
+  </div>
+</section>
+
+<!-- 3 -->
+<section>
+  <span class="sec-num">03 — Contagion</span>
+  <h2>The Hardware Meltdown<span class="ko">국경을 넘나든 공포의 전염</span></h2>
+
+  <p class="lead">이번 하락은 미국에서 시작해 한국을 거쳐 다시 미국으로 돌아온 <strong>왕복 전염</strong>이었다. 아래 단계를 눌러 경로를 따라가 보자.</p>
+
+  <div class="ix">
+    <span class="ix-label">Interactive</span>
+    <p class="ix-t">공포 전염 경로 4단계</p>
+    <p class="ix-d">각 단계를 눌러 무슨 일이 벌어졌는지 확인하세요.</p>
+    <div class="flow-steps" id="flowSteps"></div>
+    <div class="flow-body" id="flowBody"></div>
+  </div>
+
+  <blockquote>
+    한국장이라고 쓰고 반도체라고 읽는다. 삼성과 SK하이닉스가 50% 이상을 차지하기 때문에, 미국 반도체가 어떻게 움직일지는 먼저 열리는 한국장을 보고 판단하면 됩니다.
+    <cite>— NOVA Real Invest</cite>
+  </blockquote>
+
+  <p>마이크론은 테슬라향 메모리 할당이라는 호재가 있었음에도 -6.9% 급락했다. 이유는 간단하다. <span class="hl">지금은 말(이빨)이 안 먹히는 장</span>이기 때문이다. 테슬라의 테라팹은 아직 몇 년 뒤의 일이고, 시장은 미래 약속에 값을 쳐주지 않는다.</p>
+
+  <div class="card dark">
+    <p class="card-t">일론 머스크 시간 환산법</p>
+    <p>"내년" → 실제로는 4~5년 후. "올해 말" → 역시 수년 후. 테라팹 2년 내 완공도 현실적으로는 <strong>4~5년</strong>으로 보는 것이 맞다. 시장이 뜨거울 때는 늑대소년의 말도 믿어줬지만, 지금은 몽둥이가 돌아온다.</p>
+  </div>
+
+  <p>이번 급락은 <strong>펀더멘털의 붕괴가 아니라 밸류에이션 리셋과 기계적인 포지션 청산(De-risking)</strong>이라는 점이 중요하다. 기업이 망가진 게 아니라, 값이 너무 비쌌던 것이 정리되는 국면이다.</p>
+</section>
+
+<!-- 4 -->
+<section>
+  <span class="sec-num">04 — Rotation</span>
+  <h2>The Great Rotation Matrix<span class="ko">자금의 대이동</span></h2>
+
+  <p class="lead">시장은 지금 딱 두 부류로 종목을 나누고 있다. 기준은 오직 <strong>돈을 쓰느냐, 돈이 남느냐</strong>다.</p>
+
+  <div class="quad">
+    <div class="qcell good">
+      <span class="qh">저CapEx / 고현금</span>
+      <div class="qn">폭풍 속 항구</div>
+      <div class="qt">AAPL +3.5%<br>SAP +9.4%</div>
+    </div>
+    <div class="qcell bad">
+      <span class="qh">고CapEx / 저현금</span>
+      <div class="qn">투매의 표적</div>
+      <div class="qt">TSLA · INTC · GOOGL<br>MXL -21.5%</div>
+    </div>
+  </div>
+  <p class="qaxis">가로축: 자본 지출 부담(좌 낮음 → 우 높음) · 세로축: 잉여현금흐름 창출력</p>
+
+  <p>애플과 SAP의 급등은 이들이 AI 경쟁에서 뒤처졌기 때문이 아니라, <span class="hl">'자본을 태우지 않고도 현금을 뽑아내는' 희소성</span>이 프리미엄으로 재평가받았다는 뜻이다.</p>
+
+  <h3>애플의 록펠러 전략</h3>
+  <p>남들이 석유를 파면, 록펠러는 그걸 정제해서 팔았다. 애플의 전략도 같다. <strong>"너희가 AI 개발해라. 다 되면 우리가 라이선스로 사서 예쁘게 포장해 팔겠다."</strong> 남의 비용으로 만든 기술을 디바이스 표준 위에 얹어 파는 방식이다.</p>
+  <p>여기에 포드가 EV 플랫폼에 <strong>애플 맵을 기본 탑재</strong>하겠다는 소식이 더해졌다. 이날 포드는 +1.55%, GM은 +2.44% 올랐다. 애플이 자동차라는 새 표준 자리를 무혈 입성한 셈이다.</p>
+</section>
+
+<!-- 5 -->
+<section>
+  <span class="sec-num">05 — Safe Havens</span>
+  <h2>The 'Turtle Mode' Havens<span class="ko">대안 피난처의 부상</span></h2>
+
+  <p class="lead">시장은 뚜렷한 주도주 없이 방어 태세에 들어갔다. 이것이 <strong>터틀 모드(거북이 모드)</strong>다. 단단한 껍질 속으로 들어가되, 완전히 멈추지는 않는 상태.</p>
+
+  <div class="tbl-scroll">
+  <table>
+    <thead><tr><th>섹터</th><th>대표 종목</th><th>등락</th><th>논리</th></tr></thead>
+    <tbody>
+      <tr><td>방산/정부</td><td class="tick">BAH<br><span class="term">부즈알렌해밀턴</span></td><td class="up">+10.1%</td><td>AI 논쟁과 무관한 국가 안보 예산의 독립적 수익</td></tr>
+      <tr><td>헬스케어</td><td class="tick">THC<br><span class="term">테넷헬스케어</span></td><td class="up">+17.2%</td><td>고마진 외래수술센터 중심 모델 입증, 연간 전망 상향</td></tr>
+      <tr><td>결제/소비<br><span class="term">주의</span></td><td class="tick">AXP<br><span class="term">아멕스</span></td><td class="down">-6.1%</td><td>지출은 견조하나 고객 유지 마케팅 비용 12% 급증</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>주목할 점은 결제·소비 섹터가 <strong>피난처가 아니었다</strong>는 것이다. 소비자 지출 자체는 버티고 있지만, 그 고객을 붙잡기 위해 회사가 쓰는 비용이 늘고 있다. 이것도 결국 CapEx 문제와 같은 구조 — 돈을 써야 유지되는 사업은 지금 벌을 받는다.</p>
+</section>
+
+<!-- 6 -->
+<section>
+  <span class="sec-num">06 — The Paradox</span>
+  <h2>The AI Infrastructure Paradox<span class="ko">남의 비용이 나의 수익으로</span></h2>
+
+  <p class="lead">이 방송의 핵심 아이디어다. 하이퍼스케일러의 수익성은 위협받지만, <span class="hl">그들이 쏟아붓는 수조 원은 누군가의 확정 매출로 직결된다</span>. 즉 <strong>CapEx를 쓰는 쪽</strong>이 아니라 <strong>CapEx를 빨아먹는 쪽</strong>을 사라는 것.</p>
+
+  <div class="tbl-scroll">
+  <table>
+    <thead><tr><th>종목</th><th>등락</th><th>수익의 출처</th></tr></thead>
+    <tbody>
+      <tr><td class="tick">DLR<br><span class="term">디지털리얼티</span></td><td class="up">+10.9%</td><td>데이터센터 임대 수요 폭발, 2026년 FFO 전망 상향. 계속 내려오다 하루에 완전 회복</td></tr>
+      <tr><td class="tick">SLB</td><td class="up">+11.1%</td><td>원래 에너지 인프라 구축 회사. 데이터센터 전력·냉각으로 진출해 <strong>매출 80% 폭증</strong></td></tr>
+      <tr><td class="tick">VZ<br><span class="term">버라이즌</span></td><td class="up">+5.9%</td><td>본사가 버지니아. 구글 데이터센터 백본 연결 <strong>10억 달러 다크파이버 계약</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="card red">
+    <p class="card-t">SLB가 특별한 이유</p>
+    <p>가스·원유 발전 인프라를 짓던 회사가, 데이터센터가 돈이 된다는 냄새를 맡고 진입했다. 문제는 이게 <strong>원래 하던 일</strong>이라는 것 — 에너지 인프라 구축 경험이 그대로 녹아들었고, 이번 실적에서 숫자로 증명됐다.</p>
+  </div>
+
+  <p>버라이즌은 T-모바일과 정반대다. T-모바일이 기존 고객마저 잃는 동안 AT&amp;T와 버라이즌은 고객을 빼앗아 왔다. 그런데 버라이즌은 <strong>단순히 전화기를 판 게 아니라</strong> 데이터센터 백본 사업에 다리를 걸치고 있었다는 점에서 AT&amp;T보다도 특이한 케이스다.</p>
+</section>
+
+<!-- 7 -->
+<section>
+  <span class="sec-num">07 — Macro I</span>
+  <h2>Oil Rollercoaster<span class="ko">유가 롤러코스터와 지정학적 줄타기</span></h2>
+
+  <p class="lead">브렌트유는 <strong>$96.78</strong>. 하루 만에 약 4% 급락하며 100달러 선에서 후퇴했고, 이것이 시장 붕괴를 막았다.</p>
+
+  <div class="tbl-scroll">
+  <table>
+    <thead><tr><th>방향</th><th>재료</th></tr></thead>
+    <tbody>
+      <tr><td class="down">상승 압력</td><td>트럼프의 역대 최대 공급 검토 발언 · 미군 13일 연속 타격</td></tr>
+      <tr><td class="up">하락 압력</td><td>파키스탄·중국 주도의 미-이란 평화 협상 모색 (로이터 보도)</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>유가가 내려간 덕분에 인플레이션 공포가 살짝 수그러들었다. 다행스러운 일이다 — 바로 다음 주에 연준의 통화정책 발표가 기다리고 있기 때문이다. 다만 <strong>트럼프의 공습 확대 카드가 살아있는 한 지정학 리스크는 여전히 증시의 목줄을 쥐고 있다</strong>.</p>
+</section>
+
+<!-- 8 -->
+<section>
+  <span class="sec-num">08 — Macro II</span>
+  <h2>The 99.4% Tariff<span class="ko">99.4%를 덮친 관세 충격</span></h2>
+
+  <p class="lead">이번 달 만료되는 임시 관세(10%)를 대체해, 무역법 301조를 근거로 한 신규 관세가 발효됐다. 대상은 <strong>60개 교역상대국</strong>, 커버리지는 <strong>미국 수입품의 99.4%</strong>, 세율은 <strong>10~12.5%</strong>다.</p>
+
+  <div class="card red">
+    <p class="card-t">한국이 왜 들어갔나</p>
+    <p>명분은 <strong>강제노동으로 만든 수출품 제재</strong>다. 한국에 강제노동이 있어서가 아니라, <span class="hl">중국에서 강제노동으로 만든 철강 등 부품을 한국이 가져다 쓴다</span>는 논리다. 코에 걸면 코걸이, 귀에 걸면 귀걸이가 되어버린 상황.</p>
+  </div>
+
+  <p>경로는 명확하다. <strong>소비재·제조업 마진 압박 → 소비자 가격 전가 → 3분기 인플레이션 재점화</strong>. 물가와 유가가 이미 이 지경인데 관세를 또 건드린 것이다. 신규 관세가 다음 달부터 진행되면 3분기 물가는 올라갈 수밖에 없다.</p>
+</section>
+
+<!-- 9 -->
+<section>
+  <span class="sec-num">09 — The Fed</span>
+  <h2>The Fed's Dilemma<span class="ko">통제 불능의 꼬리 위험</span></h2>
+
+  <p class="lead">연준은 진짜 딜레마에 빠졌다. 본연의 기능만 놓고 보면 <strong>금리를 인상하는 것이 논리적으로 맞다</strong>. 그런데 그럴 수 없는 이유가 있다.</p>
+
+  <div class="chart-container fade-in">
+    <canvas id="chartFed" height="220"></canvas>
+  </div>
+  <p class="cap">CME FedWatch 기준 금리 인상 확률과 미 국채 10년물 금리(4.68%). ※ 아래 검증 노트 참고</p>
+
+  <div class="tbl-scroll">
+  <table>
+    <thead><tr><th>동결 논거 (Hold)</th><th>인상 논거 (Hike)</th></tr></thead>
+    <tbody>
+      <tr><td>고용 둔화<br>소비 탄력성</td><td>유가 상승<br>신규 관세<br>마진 데드(과열)</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>왜 인상하지 못할까</h3>
+  <p>새 연준 의장 <strong>케빈 워시</strong>는 트럼프가 임명한 사람이다. 아무리 용감해도 나올 답은 뻔하다 — <em>"물가 상승 요인이 있으나 일시적(transitory)이다."</em> 제롬 파월이 했던 것과 똑같은 문장이다. 다만 의장 혼자 결정하는 게 아니라 연준 위원들이 갈릴 것이므로, <strong>"이번엔 동결, 다음엔 꼭 인상"</strong> 식의 절충안이 나올 가능성이 크다.</p>
+
+  <div class="card dark">
+    <p class="card-t">만약 실제로 인상된다면</p>
+    <p>2022년 꼴이 난다. 성장주·고밸류 AI 주식에게는 최악의 거시 환경이며, 주식시장 전체가 큰 충격을 받을 수밖에 없다. 10년물 금리가 4.68%에 있는 지금, 안심할 수 있는 구간이 아니다.</p>
+  </div>
+</section>
+
+<!-- 10 -->
+<section>
+  <span class="sec-num">10 — The Complex</span>
+  <h2>The Musk Complex<span class="ko">내러티브 프리미엄의 가치 파괴</span></h2>
+
+  <p class="lead">테슬라와 스페이스X, 양대 시장에서 일론 머스크로 대변되는 '미래 모빌리티 및 우주 테마'가 혹독한 재평가를 받고 있다.</p>
+
+  <div class="tbl-scroll">
+  <table>
+    <thead><tr><th>테슬라 [TSLA]</th><th>스페이스X [SPCX]</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>주간 <strong>19% 하락</strong> 경로<br>자동차 마진 <strong>16%</strong>로 붕괴<br>TTM P/E <strong>296배</strong><br>CapEx 142% 급증(57.9억 달러)<br>FCF <strong>-10.9억 달러</strong></td>
+        <td>6월 IPO 공모가 대비 <strong>15% 하락</strong> (사상 최저가)<br>8월 6일 대규모 락업 해제 공포<br>공매도 미실현 이익 <strong>155억 달러</strong></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>테슬라는 <strong>사상 최대 매출</strong>을 냈다. 그런데 FCF가 마이너스로 깨졌고 자동차 마진은 16%까지 내려왔다. 사이버트럭은 지금까지 약 <strong>5만 대</strong> 판매에 그쳤다.</p>
+
+  <blockquote>
+    스페이스X가 100달러가 된다면, 이 회사는 AI 프리미엄이 전혀 없는 그냥 제조업 회사다.
+    <cite>— 모건스탠리 경고 (방송 인용)</cite>
+  </blockquote>
+
+  <p>모건스탠리의 논리는 이렇다. 시장은 스페이스X에 <strong>AI가 돈을 벌어줄 것</strong>이라는 기대(우주 데이터센터 등)를 얹어 값을 매겼다. 그런데 실제로는 돈이 계속 까이고 있다. 머스크는 <strong>2030년 손익분기점</strong>을 말했지만, 현재 현금 소진 속도로는 가능성이 희박하다는 평가다.</p>
+
+  <p>머스크가 실적 발표에서 언급한 마이크론 대규모 메모리 할당도 전혀 먹히지 않았다. <span class="hl">수익성 입증 없는 내러티브는 더 이상 방어되지 않는다.</span></p>
+</section>
+
+<!-- 11 -->
+<section>
+  <span class="sec-num">11 — Playbook</span>
+  <h2>Tactical Playbook<span class="ko">갈림길에 선 터틀 모드 전략</span></h2>
+
+  <p class="lead">현재는 방향성을 예단할 수 없는 극심한 변동성 구간이다. 그래서 <strong>불(Bull)과 베어(Bear) 두 시나리오를 모두 준비</strong>해야 한다.</p>
+
+  <div class="ix">
+    <span class="ix-label">Interactive</span>
+    <p class="ix-t">시나리오별 포지션 플레이북</p>
+    <p class="ix-d">어느 쪽으로 갈지 눌러서 대응 전략을 확인하세요.</p>
+    <div class="tgl">
+      <button id="btnBull" class="on">🐂 Bull 시나리오</button>
+      <button id="btnBear" class="bear">🐻 Bear 시나리오</button>
+    </div>
+    <div class="pb-body" id="pbBody"></div>
+  </div>
+
+  <h3>방망이는 짧게</h3>
+  <p>지금은 뭔가를 크게 해서는 안 되는 장이다. 그래도 꼭 플레이해보고 싶다면, <strong>보유 현금의 2%만</strong> 쓰라는 것이 방송의 조언이다. 간을 보는 정도로만.</p>
+
+  <div class="ix">
+    <span class="ix-label">Calculator</span>
+    <p class="ix-t">2% 룰 포지션 계산기</p>
+    <p class="ix-d">보유 현금을 입력하면 방송이 제시한 '간 보기' 금액이 계산됩니다.</p>
+    <div class="slider-row">
+      <div class="slider-head"><label for="cashInput">보유 현금 (달러)</label></div>
+      <input type="number" id="cashInput" value="50000" min="0" max="100000000" step="1000" inputmode="numeric">
+      <p class="err" id="cashErr">0 이상 1억 달러 이하의 숫자를 입력하세요.</p>
+    </div>
+    <div class="slider-row">
+      <div class="slider-head">
+        <label for="riskSlider">투입 비중</label>
+        <span class="slider-val" id="riskVal">2%</span>
+      </div>
+      <input type="range" id="riskSlider" min="1" max="20" value="2" step="1">
+    </div>
+    <div class="result-grid">
+      <div class="rcell"><span class="rl">투입 금액</span><span class="rv neu" id="posAmt">$1,000</span></div>
+      <div class="rcell"><span class="rl">남는 현금</span><span class="rv pos" id="restAmt">$49,000</span></div>
+      <div class="rcell"><span class="rl">-30% 시 손실</span><span class="rv neg" id="lossAmt">-$300</span></div>
+    </div>
+    <p style="font-size:12px;color:var(--text-sub);margin:14px 0 0;line-height:1.6;">권장 구간(1~2%)을 넘기면 경고가 표시됩니다. 손실 예시는 이해를 돕기 위한 가정치입니다.</p>
+    <p style="margin:12px 0 0;"><button class="btn-reset" id="resetCalc">초기값으로 되돌리기</button></p>
+  </div>
+
+  <div class="ix">
+    <span class="ix-label">Simulator</span>
+    <p class="ix-t">터틀 모드 자산 배분 시뮬레이터</p>
+    <p class="ix-d">현금 비중과 주식 구성을 조절해, 세 가지 시장 상황에서 포트폴리오가 어떻게 움직이는지 비교해 보세요.</p>
+
+    <div class="slider-row">
+      <div class="slider-head"><label for="cashRatio">현금 비중</label><span class="slider-val" id="cashRatioVal">30%</span></div>
+      <input type="range" id="cashRatio" min="0" max="100" value="30" step="5">
+    </div>
+    <div class="slider-row">
+      <div class="slider-head"><label for="turtleRatio">주식 중 터틀 방어주 비중</label><span class="slider-val" id="turtleRatioVal">50%</span></div>
+      <input type="range" id="turtleRatio" min="0" max="100" value="50" step="5">
+      <p style="font-size:11.5px;color:var(--text-sub);margin:6px 0 0;">나머지는 AI 고CapEx 성장주로 가정합니다.</p>
+    </div>
+
+    <div class="result-grid">
+      <div class="rcell">
+        <span class="rl">🐂 Bull</span><span class="rv pos" id="simBull">+0.0%</span>
+        <div class="bar-track"><div class="bar-fill" id="barBull" style="background:#15803d"></div></div>
+      </div>
+      <div class="rcell">
+        <span class="rl">중립</span><span class="rv neu" id="simNeu">+0.0%</span>
+        <div class="bar-track"><div class="bar-fill" id="barNeu" style="background:#6b7280"></div></div>
+      </div>
+      <div class="rcell">
+        <span class="rl">🐻 Bear</span><span class="rv neg" id="simBear">+0.0%</span>
+        <div class="bar-track"><div class="bar-fill" id="barBear" style="background:#e11d48"></div></div>
+      </div>
+    </div>
+    <p id="simMsg" style="font-size:13px;margin:16px 0 0;padding:12px;background:var(--bg-alt);border-left:3px solid var(--accent);line-height:1.65;"></p>
+    <p style="font-size:11.5px;color:var(--text-sub);margin:12px 0 0;line-height:1.6;">※ 시나리오별 수익률은 원본 방송에 없는 <strong>이해용 가정치</strong>입니다. 실제 수익률 예측이 아닙니다.</p>
+    <p style="margin:12px 0 0;"><button class="btn-reset" id="resetSim">초기값으로 되돌리기</button></p>
+  </div>
+</section>
+
+<!-- 12 -->
+<section>
+  <span class="sec-num">12 — Reckoning</span>
+  <h2>The Week of Reckoning<span class="ko">시장의 운명을 가를 슈퍼위크</span></h2>
+
+  <p class="lead">다음 주는 그야말로 슈퍼위크다. 화·수요일 빅테크의 CapEx 발표와 FOMC 결합은 <strong>이번 하락이 단기 조정인지 중장기 베어마켓의 시작인지</strong> 결정할 최대 분수령이다.</p>
+
+  <div class="tl">
+    <div class="tl-item">
+      <span class="tl-date">7 / 29 · 월</span>
+      <div class="tl-t">SK하이닉스 실적</div>
+      <div class="tl-d">메모리 투매가 진정될지 여부의 분수령. 한국발 반도체 투매는 미국 시장으로 즉시 전염된다.</div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-date">7 / 30 · 화 ~ 7 / 31 · 수</span>
+      <div class="tl-t">MSFT · META 실적 &amp; FOMC 금리 결정</div>
+      <div class="tl-d">빅테크 CapEx 가이던스 확인, 그리고 새 연준 의장의 매파적 스탠스 점검.</div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-date">8 / 1 · 목</span>
+      <div class="tl-t">미국 Q2 GDP &amp; Core PCE</div>
+      <div class="tl-d">관세·유가발 인플레이션의 향방을 숫자로 확인하는 날.</div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-date">8 / 2 · 금</span>
+      <div class="tl-t">애플 실적</div>
+      <div class="tl-d">잉여현금흐름(FCF) 방어력의 최종 증명. 로테이션 논리가 맞았는지 판가름난다.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 13 -->
+<section>
+  <span class="sec-num">13 — Synthesis</span>
+  <h2>Final Synthesis<span class="ko">수익 없는 혁신은 처벌받는다</span></h2>
+
+  <p class="lead">맹목적인 내러티브 투자의 시대가 저물고, <strong>잉여현금흐름(FCF)이 절대 잣대</strong>가 되었다. 자본 지출을 통제하거나, 타인의 지출을 나의 확정 수익으로 전환하라 — 이것이 이 국면의 유일한 문장이다.</p>
+
+  <h3>기업에게 적용되는 잣대는 투자자에게도 똑같다</h3>
+  <p>포트폴리오도 마찬가지다. 과거에 테슬라로 몇백 퍼센트를 벌었는지, 최고가가 얼마였는지는 지금 중요하지 않다. <span class="hl">지금 현금이 얼마 있느냐</span>가 중요하다. 현금이 없으면 무슨 일이 벌어졌을 때 손발이 다 묶인다.</p>
+
+  <div class="card">
+    <p class="card-t">주식은 세 단계다 — 그런데 3번이 제일 어렵다</p>
+    <p><strong>① What to buy</strong> — 무엇을 살 것인가<br>
+    <strong>② When to buy</strong> — 언제 살 것인가<br>
+    <strong>③ When to sell</strong> — 언제 팔 것인가</p>
+    <p style="margin-top:10px;">3번을 못 하면 앞의 두 개는 도루묵이다. 기분만 좋았다가 끝난다. 주식의 목표는 덕질도 팬질도 미래에 대한 통찰도 아니고 <strong>돈을 버는 것</strong>이다.</p>
+  </div>
+
+  <h3>장기 투자자라면</h3>
+  <p>장투가 가능한 사람이라면 방식은 단순하다. <strong>시가총액 상위 10개 종목으로만 채우고</strong>, 분기별로 한 번씩 점검하는 것. 그 정도면 유튜브를 볼 이유도 없다는 게 방송의 조언이다.</p>
+
+  <h3>지금 해야 할 일 요약</h3>
+  <div class="tbl-scroll">
+  <table>
+    <thead><tr><th>항목</th><th>지침</th></tr></thead>
+    <tbody>
+      <tr><td>포지션 크기</td><td>방망이 짧게. 플레이는 현금의 2% 이내</td></tr>
+      <tr><td>현금 비중</td><td>단단하게 확보. 현금이 곧 옵션이다</td></tr>
+      <tr><td>금지 사항</td><td>무지성 AI 롱 포지션 — 망가질 가능성이 크게 높아졌다</td></tr>
+      <tr><td>확인 지점</td><td>다음 주 빅테크 CapEx 발표를 <strong>보고 나서</strong> 움직인다</td></tr>
+      <tr><td>이동 방향</td><td>AI 데이터센터 임대 · 전력 · 냉각 · 통신 · 부동산</td></tr>
+      <tr><td>신호 무시</td><td>장전·장후 움직임은 믿지 않는다</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <blockquote>
+    맹목적인 내러티브 투자의 시대가 저물고, 잉여현금흐름(FCF)이 절대적 잣대가 되었습니다. 자본 지출을 통제하거나, 타인의 지출을 나의 확정 수익으로 전환하십시오.
+    <cite>— 방송 마무리 슬라이드</cite>
+  </blockquote>
+</section>
+
+<!-- NOTE -->
+<div class="note">
+  <b>📋 데이터 검증 노트</b>
+  <p style="margin:8px 0 0;font-size:13px;">원본 음성과 방송 슬라이드 사이에 수치가 다른 부분이 있어 아래와 같이 밝힙니다. 본문은 <strong>슬라이드 표기 값</strong>을 기준으로 정리했습니다.</p>
+  <ul>
+    <li><b>9월 금리 인상 확률</b> — 음성: 56.2% / 슬라이드: 82%. 본문 차트는 슬라이드 기준.</li>
+    <li><b>DLR 등락률</b> — 음성에서 10.9%와 11.01%가 함께 언급됨. 슬라이드 표기인 +10.9%를 채택.</li>
+    <li><b>AAPL 등락률</b> — 음성: 3.53% / 슬라이드: +3.5%. 반올림 차이로 판단.</li>
+    <li><b>SLB</b> — 음성에서는 'SRB'로도 들리나, 슬라이드 표기 <strong>SLB</strong>가 정확합니다.</li>
+    <li>시뮬레이터의 시나리오별 수익률은 원본에 없는 <strong>가정치</strong>이며 이해를 돕기 위한 것입니다.</li>
+  </ul>
+</div>
+
+<footer>
+  <div class="fh">Disclaimer</div>
+  <p style="margin:0;">본 문서는 NOVA Real Invest 2026년 7월 24일자 방송 내용을 정리한 요약본입니다. 원본 방송은 개인의 투자 일상과 사적 의견을 보여주는 <strong>투자 브이로그</strong>이며, 투자 정보나 투자 조언이 아닙니다. 모든 주식 거래와 투자 결정은 본인이 조사하고 결정하는 것이며, 원금 손실의 상당한 위험성이 있는 귀하의 결정이고 그 결과도 귀하의 책임입니다.</p>
+  <p style="margin:14px 0 0;">정리: 2026년 7월 25일 · 수치는 원본 자료 그대로 유지했습니다.</p>
+</footer>
+
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ===== FADE OBSERVER ===== */
+var fadeObs = new IntersectionObserver(function(entries){
+  entries.forEach(function(e,i){
+    if(e.isIntersecting){
+      setTimeout(function(){ e.target.classList.add('visible'); }, i*80);
+      fadeObs.unobserve(e.target);
+    }
+  });
+},{threshold:0.12});
+document.querySelectorAll('.fade-in').forEach(function(el){ fadeObs.observe(el); });
+
+/* ===== CHART CONFIGS ===== */
+var C = {accent:'#e11d48', dark:'#1a1a1a', gray:'#6b7280', blue:'#2563eb', line:'#e5e5e5', sub:'#777777'};
+if(window.Chart){
+  Chart.defaults.font.family = "'Noto Sans KR', sans-serif";
+  Chart.defaults.font.size = 11;
+  Chart.defaults.color = C.sub;
+}
+
+var chartConfigs = {};
+
+chartConfigs['chartMovers'] = function(){
+  var labels = ['MXL','INTC','MU','SOX','NAS','S&P','DOW','AAPL','SAP','BAH','DLR','SLB','THC'];
+  var vals   = [-21.5,-7.9,-6.9,-4.3,-0.64,0.05,0.46,3.5,9.4,10.1,10.9,11.1,17.2];
+  new Chart(document.getElementById('chartMovers'),{
+    type:'bar',
+    data:{labels:labels,datasets:[{
+      label:'등락률 (%)',
+      data:vals,
+      backgroundColor:vals.map(function(v){ return v<0?C.accent:C.blue; }),
+      borderRadius:2,
+      barPercentage:0.78
+    }]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      animation:{duration:1100, easing:'easeOutQuart'},
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:C.dark, padding:10, cornerRadius:2, displayColors:false,
+          callbacks:{ label:function(ctx){ return (ctx.parsed.y>0?'+':'')+ctx.parsed.y+'%'; } }
+        }
+      },
+      scales:{
+        y:{ grid:{color:C.line}, ticks:{callback:function(v){return v+'%';}} },
+        x:{ grid:{display:false}, ticks:{maxRotation:60, minRotation:45} }
+      }
+    }
+  });
+};
+
+chartConfigs['chartCapex'] = function(){
+  new Chart(document.getElementById('chartCapex'),{
+    type:'bar',
+    data:{
+      labels:['알파벳 GOOGL','인텔 INTC','테슬라 TSLA'],
+      datasets:[
+        {label:'2026 CapEx (억 달러)', data:[2050,2000,57.9], backgroundColor:C.accent, borderRadius:2, yAxisID:'y'},
+        {label:'최근 FCF (억 달러)', data:[-58.6,null,-10.9], backgroundColor:C.dark, borderRadius:2, yAxisID:'y'}
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      animation:{duration:1100, easing:'easeOutQuart'},
+      plugins:{
+        legend:{position:'bottom', labels:{boxWidth:11, padding:14, font:{size:11}}},
+        tooltip:{
+          backgroundColor:C.dark, padding:10, cornerRadius:2,
+          callbacks:{ label:function(ctx){
+            if(ctx.parsed.y===null) return ctx.dataset.label+': 미공개';
+            return ctx.dataset.label+': '+ctx.parsed.y+'억 달러';
+          }}
+        }
+      },
+      scales:{
+        y:{ type:'logarithmic', grid:{color:C.line}, ticks:{callback:function(v){return v;}}, title:{display:true,text:'억 달러 (로그 스케일)', font:{size:10}} },
+        x:{ grid:{display:false} }
+      }
+    }
+  });
+};
+
+chartConfigs['chartFed'] = function(){
+  new Chart(document.getElementById('chartFed'),{
+    type:'bar',
+    data:{
+      labels:['7월 인상 확률','9월 인상 확률','10년물 금리'],
+      datasets:[{
+        label:'%', data:[36,82,4.68],
+        backgroundColor:[C.gray,C.accent,C.blue],
+        borderRadius:2, barPercentage:0.55
+      }]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true, maintainAspectRatio:false,
+      animation:{duration:1100, easing:'easeOutQuart'},
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:C.dark, padding:10, cornerRadius:2, displayColors:false,
+          callbacks:{ label:function(ctx){ return ctx.parsed.x+'%'; } }
+        }
+      },
+      scales:{
+        x:{ grid:{color:C.line}, ticks:{callback:function(v){return v+'%';}}, max:100 },
+        y:{ grid:{display:false} }
+      }
+    }
+  });
+};
+
+var chartObs = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){
+      var canvas = e.target.querySelector('canvas');
+      if(canvas && chartConfigs[canvas.id]){
+        chartConfigs[canvas.id]();
+        e.target.classList.add('chart-ready');
+        chartObs.unobserve(e.target);
+      }
+    }
+  });
+},{threshold:0.15});
+document.querySelectorAll('.chart-container').forEach(function(el){ chartObs.observe(el); });
+
+/* ===== FLOW ===== */
+var FLOW = [
+  {n:'01', s:'진원지', loc:'미국', title:'GOOGL & TSLA — CapEx 쇼크 발생',
+   body:'AI 인프라 투자의 회수율에 대한 근본적 의구심이 시작됐다. 알파벳은 2026년 CapEx를 2,050억 달러로 상향했고, 테슬라는 CapEx가 142% 급증(57.9억 달러)했다.',
+   list:['알파벳 FCF -58.6억 달러','테슬라 FCF -10.9억 달러']},
+  {n:'02', s:'폭발', loc:'미국', title:'INTC 실적 발표 — 호실적도 소용없었다',
+   body:'매출은 좋았지만 자본지출 상향이 모든 걸 덮었다. 15년 만의 최고 매출 성장률(25%)과 EPS 어닝 비트도 200억 달러 CapEx 청구서 앞에서는 무용지물이었다.',
+   list:['INTC -7.9%','시총 900억 달러 증발']},
+  {n:'03', s:'해외 전이', loc:'한국', title:'KOSPI 투매 발생',
+   body:'미국의 AI 하드웨어 공포가 한국 반도체로 그대로 옮겨붙었다. 여기에 중국 CXMT에 대한 우려도 겹쳤다.',
+   list:['KOSPI -5.7%','삼성전자 -7.6%','SK하이닉스 -8.3%']},
+  {n:'04', s:'역류', loc:'미국', title:'한국발 투매가 미국 시장을 재강타',
+   body:'한국장은 먼저 열린다. 그 투매가 다시 미국 반도체·메모리 종목으로 돌아왔다. 인텔이 당일 추가로 빠진 것도 결국 한국이 빠졌기 때문이다.',
+   list:['MU -6.9%','WDC 및 샌디스크 -9~10% 폭락']}
+];
+
+var stepsEl = document.getElementById('flowSteps');
+var bodyEl = document.getElementById('flowBody');
+
+function renderFlow(idx){
+  Array.prototype.forEach.call(stepsEl.children, function(b,i){
+    b.classList.toggle('on', i===idx);
+    b.setAttribute('aria-selected', i===idx ? 'true':'false');
+  });
+  var f = FLOW[idx];
+  var html = '<h4>'+f.title+'</h4><p>'+f.body+'</p>';
+  if(f.list && f.list.length){
+    html += '<ul>'+f.list.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul>';
+  }
+  bodyEl.innerHTML = html;
+}
+
+FLOW.forEach(function(f,i){
+  var b = document.createElement('button');
+  b.className = 'fstep';
+  b.type = 'button';
+  b.setAttribute('role','tab');
+  b.innerHTML = '<b>'+f.n+'</b>'+f.s+'<br><span style="opacity:.7">('+f.loc+')</span>';
+  b.addEventListener('click', function(){ renderFlow(i); });
+  stepsEl.appendChild(b);
+});
+renderFlow(0);
+
+/* ===== PLAYBOOK ===== */
+var PB = {
+  bull:{
+    title:'🐂 Bull — 안도 랠리 시나리오',
+    trig:'트리거: 중동 협상 진전 → 유가 하락 → 연준 비둘기파 스탠스',
+    items:[
+      '<b>과대 낙폭 우량 AI 인프라주</b>(네트워킹·반도체)의 단기 반등 노리기',
+      '<b>소프트웨어 비중 확대</b> — SAP, 서비스나우 등 실적과 분위기 모두 양호',
+      '단, 무지성 롱이 아니라 <b>낙폭 우량주</b>에 한정',
+      '다음 주 빅테크 CapEx 발표를 확인한 뒤 움직인다'
+    ]
+  },
+  bear:{
+    title:'🐻 Bear — 붕괴 시나리오',
+    trig:'트리거: 이란 확전 → 유가 $100 돌파 → 연준 금리 인상 쇼크',
+    items:[
+      '<b>에너지·유통 / 방산(BAH) / 헬스케어(THC)</b> 롱 포지션 유지',
+      '철저한 <b>매크로 헤징</b> 및 기계적 손절매 실행',
+      'AI 데이터센터 임대·전력·냉각·부동산으로 비중 이동',
+      '현금 비중을 단단하게 유지 — 현금이 곧 다음 기회다'
+    ]
+  }
+};
+var pbBody = document.getElementById('pbBody');
+var btnBull = document.getElementById('btnBull');
+var btnBear = document.getElementById('btnBear');
+
+function renderPB(key){
+  var d = PB[key];
+  pbBody.innerHTML = '<h4>'+d.title+'</h4><p class="trig">'+d.trig+'</p><ul>'+
+    d.items.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul>';
+  btnBull.classList.toggle('on', key==='bull');
+  btnBear.classList.toggle('on', key==='bear');
+}
+btnBull.addEventListener('click', function(){ renderPB('bull'); });
+btnBear.addEventListener('click', function(){ renderPB('bear'); });
+renderPB('bull');
+
+/* ===== 2% CALCULATOR ===== */
+var cashInput = document.getElementById('cashInput');
+var riskSlider = document.getElementById('riskSlider');
+var riskVal = document.getElementById('riskVal');
+var posAmt = document.getElementById('posAmt');
+var restAmt = document.getElementById('restAmt');
+var lossAmt = document.getElementById('lossAmt');
+var cashErr = document.getElementById('cashErr');
+
+function fmt(n){
+  return '$' + Math.round(n).toLocaleString('en-US');
+}
+function calcPos(){
+  var raw = cashInput.value.trim();
+  var cash = parseFloat(raw);
+  var bad = (raw==='' || isNaN(cash) || cash < 0 || cash > 100000000);
+  cashErr.classList.toggle('show', bad);
+  if(bad){ cash = 0; }
+  var pct = parseInt(riskSlider.value,10);
+  riskVal.textContent = pct + '%';
+  riskVal.style.color = pct <= 2 ? '#e11d48' : (pct <= 5 ? '#b45309' : '#7f1d1d');
+  var pos = cash * pct / 100;
+  posAmt.textContent = fmt(pos);
+  restAmt.textContent = fmt(cash - pos);
+  lossAmt.textContent = '-' + fmt(pos * 0.30);
+  posAmt.className = 'rv ' + (pct<=2 ? 'neu' : 'neg');
+}
+cashInput.addEventListener('input', calcPos);
+riskSlider.addEventListener('input', calcPos);
+document.getElementById('resetCalc').addEventListener('click', function(){
+  cashInput.value = 50000; riskSlider.value = 2; calcPos();
+});
+calcPos();
+
+/* ===== ALLOCATION SIMULATOR ===== */
+var SCEN = {
+  bull:{ai:9, turtle:3},
+  neu :{ai:-2, turtle:2},
+  bear:{ai:-18, turtle:-4}
+};
+var cashRatio = document.getElementById('cashRatio');
+var turtleRatio = document.getElementById('turtleRatio');
+var cashRatioVal = document.getElementById('cashRatioVal');
+var turtleRatioVal = document.getElementById('turtleRatioVal');
+var simMsg = document.getElementById('simMsg');
+
+function setBar(el, val){
+  var w = Math.min(100, Math.abs(val) / 12 * 100);
+  el.style.width = w + '%';
+}
+function calcSim(){
+  var c = parseInt(cashRatio.value,10);
+  var t = parseInt(turtleRatio.value,10);
+  cashRatioVal.textContent = c + '%';
+  turtleRatioVal.textContent = t + '%';
+
+  var eq = (100 - c) / 100;
+  var wT = eq * (t/100);
+  var wA = eq * (1 - t/100);
+
+  var out = {};
+  ['bull','neu','bear'].forEach(function(k){
+    out[k] = wA * SCEN[k].ai + wT * SCEN[k].turtle;
+  });
+
+  var map = {bull:'simBull', neu:'simNeu', bear:'simBear'};
+  var bars = {bull:'barBull', neu:'barNeu', bear:'barBear'};
+  ['bull','neu','bear'].forEach(function(k){
+    var el = document.getElementById(map[k]);
+    var v = out[k];
+    el.textContent = (v>=0?'+':'') + v.toFixed(1) + '%';
+    el.className = 'rv ' + (v > 0.05 ? 'pos' : (v < -0.05 ? 'neg' : 'neu'));
+    setBar(document.getElementById(bars[k]), v);
+  });
+
+  var msg;
+  if(c >= 50){
+    msg = '<strong>깊은 터틀 모드.</strong> 하락 방어력은 강하지만 반등 구간에서 소외될 수 있습니다. 방송이 말한 "현금이 곧 다음 기회"에 해당하는 배치입니다.';
+  } else if(c >= 25 && t >= 50){
+    msg = '<strong>균형 잡힌 터틀 배치.</strong> 방송이 제시한 방향(현금 확보 + CapEx를 빨아먹는 인프라주)에 가장 가까운 구성입니다.';
+  } else if(wA > 0.5){
+    msg = '<strong>주의:</strong> AI 고CapEx 비중이 절반을 넘습니다. 방송은 지금 구간에서 "무지성 AI 롱 포지션"을 가장 위험한 선택으로 지목했습니다.';
+  } else {
+    msg = '중간 구간입니다. 다음 주 빅테크 CapEx 가이던스를 확인한 뒤 비중을 조정하는 것이 방송의 조언입니다.';
+  }
+  simMsg.innerHTML = msg;
+}
+cashRatio.addEventListener('input', calcSim);
+turtleRatio.addEventListener('input', calcSim);
+document.getElementById('resetSim').addEventListener('click', function(){
+  cashRatio.value = 30; turtleRatio.value = 50; calcSim();
+});
+calcSim();
+
+})();
+</script>
+</body>
+</html>
