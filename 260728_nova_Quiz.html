@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시험문제 | 엔비디아 -5% 폭락, 애플 시총 1위 재탈환 (2026.07.27)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,400&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#fafafa; --tx:#1a1a1a; --tx2:#777777;
+    --ac:#e11d48; --ac2:#f43f5e; --line:#e5e5e5;
+    --ok:#15803d; --okbg:#dcfce7; --okline:#86efac;
+    --no:#b91c1c; --nobg:#fee2e2; --noline:#fca5a5;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{
+    margin:0;background:var(--bg);color:var(--tx);
+    font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;
+    line-height:1.8;font-size:16px;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:0 16px 90px;}
+
+  header.hd{padding:44px 0 28px;border-bottom:3px solid var(--tx);}
+  .kick{font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:var(--ac);letter-spacing:.06em;margin:0 0 14px;}
+  .kick::before{content:"";display:inline-block;width:30px;height:1px;background:var(--ac);vertical-align:middle;margin-right:9px;}
+  h1{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(27px,7vw,40px);line-height:1.15;margin:0 0 14px;letter-spacing:-.02em;}
+  h1 em{font-style:italic;color:var(--ac);}
+  .sub{font-size:14px;color:var(--tx2);margin:0;line-height:1.75;}
+  .meta{margin-top:16px;font-size:11.5px;color:var(--tx2);letter-spacing:.05em;text-transform:uppercase;}
+  .meta b{color:var(--tx);}
+
+  /* ===== STICKY SCOREBOARD ===== */
+  .board{
+    position:sticky;top:0;z-index:50;background:#fff;
+    border-bottom:2px solid var(--tx);padding:12px 0 11px;margin-bottom:6px;
+  }
+  .board-in{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+  .bstat{flex:1;text-align:center;}
+  .bstat .n{font-family:'Playfair Display',serif;font-size:23px;font-weight:900;line-height:1;}
+  .bstat .n.ac{color:var(--ac);}
+  .bstat .l{font-size:10px;color:var(--tx2);letter-spacing:.08em;margin-top:4px;}
+  .bbar{height:6px;background:var(--line);margin-top:10px;overflow:hidden;}
+  .bbar i{display:block;height:100%;width:0;background:var(--no);transition:width .4s ease,background .4s ease;}
+
+  /* ===== QUESTION CARD ===== */
+  .q{border:1px solid var(--line);border-top:3px solid var(--tx);padding:22px 18px;margin:22px 0;background:#fff;}
+  .q.done{border-top-color:var(--ac);}
+  .qh{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+  .qn{font-family:'Playfair Display',serif;font-size:15px;font-weight:900;color:var(--ac);letter-spacing:.06em;}
+  .badge{font-size:10px;font-weight:700;padding:3px 8px;letter-spacing:.06em;border:1px solid var(--line);color:var(--tx2);background:var(--bg2);}
+  .badge.d1{border-color:#bbf7d0;background:#f0fdf4;color:#15803d;}
+  .badge.d2{border-color:#fed7aa;background:#fff7ed;color:#c2410c;}
+  .badge.d3{border-color:var(--noline);background:var(--nobg);color:var(--no);}
+  .badge.ty{border-color:var(--tx);color:var(--tx);background:#fff;}
+  .qt{font-size:16.5px;font-weight:700;line-height:1.65;margin:0 0 16px;}
+
+  .opts{display:grid;gap:8px;}
+  .opt{
+    display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;
+    background:var(--bg2);border:1.5px solid var(--line);padding:13px 14px;
+    font-family:inherit;font-size:14.5px;line-height:1.6;color:var(--tx);cursor:pointer;
+    transition:border-color .15s ease,background .15s ease;
+  }
+  .opt:hover:not(:disabled){border-color:var(--ac2);background:#fff;}
+  .opt:disabled{cursor:default;}
+  .opt .mk{
+    flex:0 0 22px;height:22px;border:1.5px solid var(--tx2);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--tx2);
+    margin-top:1px;
+  }
+  .opt.correct{background:var(--okbg);border-color:var(--okline);}
+  .opt.correct .mk{background:var(--ok);border-color:var(--ok);color:#fff;}
+  .opt.wrong{background:var(--nobg);border-color:var(--noline);}
+  .opt.wrong .mk{background:var(--no);border-color:var(--no);color:#fff;}
+  .tag{font-size:10.5px;font-weight:700;padding:2px 7px;margin-left:auto;white-space:nowrap;align-self:center;}
+  .tag.ok{background:var(--ok);color:#fff;}
+  .tag.no{background:var(--no);color:#fff;}
+
+  .ox{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .ox .opt{position:relative;justify-content:center;font-family:'Playfair Display',serif;font-size:26px;font-weight:900;padding:16px 16px 26px;}
+  .ox .opt .mk{display:none;}
+  .ox .opt .tag{position:absolute;left:0;right:0;bottom:7px;margin:0;text-align:center;font-family:'Noto Sans KR',sans-serif;padding:2px 0;}
+
+  .sa{display:flex;gap:8px;}
+  .sa input{
+    flex:1;min-width:0;font-family:inherit;font-size:15px;padding:12px 13px;
+    border:1.5px solid var(--line);background:var(--bg2);color:var(--tx);outline:none;
+  }
+  .sa input:focus{border-color:var(--ac);background:#fff;}
+  .sa input:disabled{color:var(--tx2);}
+  .sa button{
+    font-family:inherit;font-size:13.5px;font-weight:700;background:var(--tx);color:#fff;
+    border:1.5px solid var(--tx);padding:0 20px;cursor:pointer;white-space:nowrap;
+    transition:background .15s ease;
+  }
+  .sa button:hover:not(:disabled){background:var(--ac);border-color:var(--ac);}
+  .sa button:disabled{opacity:.45;cursor:default;}
+  .hint{font-size:11.5px;color:var(--tx2);margin:8px 0 0;}
+
+  .exp{display:none;margin-top:16px;padding:15px 15px;background:var(--bg2);border-left:3px solid var(--ac);font-size:14px;line-height:1.75;}
+  .exp.show{display:block;animation:fadein .35s ease;}
+  .exp .el{display:block;font-size:10.5px;letter-spacing:.14em;color:var(--ac);font-weight:700;margin-bottom:7px;}
+  .exp .ans{font-weight:700;display:block;margin-bottom:8px;}
+  .exp .src{display:block;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--tx2);line-height:1.7;}
+  @keyframes fadein{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:none;}}
+
+  /* ===== RESULT MODAL ===== */
+  .mask{
+    display:none;position:fixed;inset:0;z-index:100;background:rgba(26,26,26,.72);
+    align-items:center;justify-content:center;padding:20px;
+  }
+  .mask.open{display:flex;animation:fadein .3s ease;}
+  .modal{
+    background:#fff;max-width:400px;width:100%;padding:34px 26px 26px;text-align:center;
+    border-top:6px solid var(--ac);max-height:90vh;overflow-y:auto;
+  }
+  .modal .gl{font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:var(--ac);letter-spacing:.1em;margin:0 0 6px;}
+  .modal .grade{font-family:'Playfair Display',serif;font-size:76px;font-weight:900;line-height:1;margin:0 0 8px;color:var(--ac);}
+  .modal .score{font-size:19px;font-weight:700;margin:0 0 6px;}
+  .modal .pct{font-size:13px;color:var(--tx2);margin:0 0 18px;}
+  .modal .cheer{font-size:14.5px;line-height:1.75;padding:15px;background:var(--bg2);border-left:3px solid var(--ac);text-align:left;margin-bottom:20px;}
+  .modal button{
+    font-family:inherit;font-size:14px;font-weight:700;width:100%;padding:14px;
+    background:var(--tx);color:#fff;border:none;cursor:pointer;transition:background .15s ease;
+  }
+  .modal button:hover{background:var(--ac);}
+  .modal .close{background:#fff;color:var(--tx);border:1.5px solid var(--line);margin-top:8px;}
+  .modal .close:hover{background:var(--bg2);color:var(--tx);}
+
+  footer{padding:36px 0 0;border-top:1px solid var(--line);margin-top:34px;font-size:12px;color:var(--tx2);line-height:1.8;}
+
+  @media(max-width:380px){
+    .q{padding:18px 14px;}
+    .bstat .n{font-size:20px;}
+    .sa{flex-direction:column;}
+    .sa button{padding:12px;}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hd">
+  <p class="kick">NOVA Real Invest · 2026.07.27 미국장</p>
+  <h1>엔비디아 -5% 폭락과<br><em>자본의 대이동</em></h1>
+  <p class="sub">벤더 파이낸싱, 중국 DUV 자립화, 타코 지수, CapEx와 FCF — 방송 내용을 얼마나 정확히 이해했는지 확인해 보세요. 총 10문제, 답을 고르면 바로 채점되고 해설이 펼쳐집니다.</p>
+  <p class="meta">객관식 6 · 단답형 2 · OX 2 &nbsp;|&nbsp; <b>총 10문항</b></p>
+</header>
+
+<div class="board">
+  <div class="board-in">
+    <div class="bstat"><div class="n" id="sSolved">0 / 10</div><div class="l">푼 문제</div></div>
+    <div class="bstat"><div class="n ac" id="sCorrect">0</div><div class="l">맞힌 문제</div></div>
+    <div class="bstat"><div class="n" id="sRate">0%</div><div class="l">정답률</div></div>
+  </div>
+  <div class="bbar"><i id="sBar"></i></div>
+</div>
+
+<main id="quiz"></main>
+
+<footer>
+  <p>모든 문항은 2026년 7월 27일 미국장 기준 NOVA Real Invest 라이브 방송 원본 자막 및 방송 슬라이드에 실제로 등장한 내용으로만 출제했습니다.</p>
+  <p>본 자료는 학습용이며 <strong>투자 권유나 투자 조언이 아닙니다.</strong> 원본 방송은 엔터테인먼트 채널을 표방하며 진행자의 사적 의견을 담고 있습니다. 모든 투자 판단과 결과의 책임은 본인에게 있습니다.</p>
+</footer>
+
+</div>
+
+<div class="mask" id="mask">
+  <div class="modal">
+    <p class="gl">FINAL RESULT</p>
+    <p class="grade" id="mGrade">A</p>
+    <p class="score" id="mScore">10 / 10 문제 정답</p>
+    <p class="pct" id="mPct">정답률 100%</p>
+    <div class="cheer" id="mCheer"></div>
+    <button id="mRetry">다시 풀기</button>
+    <button class="close" id="mClose">결과 닫고 해설 보기</button>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id:1, type:'mc', difficulty:'쉬움',
+    question:'애플이 엔비디아를 제치고 시가총액 글로벌 1위를 탈환했을 때, 방송에서 제시된 애플의 시가총액은?',
+    options:['약 3조 9,900억 달러 ($3.99T)','약 4조 9,500억 달러 ($4.95T)','약 5조 3,600억 달러 ($5.36T)','약 4조 100억 달러 ($4.01T)'],
+    answer:1,
+    explanation:'애플은 시가총액 약 $4.95T(4조 9,500억 달러)에 도달하며 엔비디아를 제치고 272일 만에 글로벌 1위를 되찾았습니다.',
+    source:'원본: "애플이 4.948 트릴리언 달러로 1등을 회복을 했습니다." / 슬라이드: "시가총액 $4.95T 도달. [NVDA]를 제치고 272일 만에 글로벌 1위 탈환." 참고로 $3.99T는 3위 구글의 시가총액입니다.'
+  },
+  {
+    id:2, type:'mc', difficulty:'보통',
+    question:'진행자는 엔비디아 급락의 원인을 두 가지로 꼽으면서, 그중 하나를 "이게 진짜 큰 것"이라고 지목했습니다. 무엇일까요?',
+    options:['중국의 국산 DUV 장비 양산 소식','엔비디아의 네이버·SK하이닉스 지분 매입','엔비디아가 오픈AI 벤더 파이낸싱 보증(백스탑)을 설지 모른다는 소식','2분기 실적 가이던스 하향'],
+    answer:2,
+    explanation:'중국 DUV 양산도 큰 재료였지만, 진행자는 오픈AI에 대한 금융 보증(백스탑) 우려가 "진짜 큰 것"이라고 못 박았습니다. 고객사가 잘못되면 엔비디아가 전부 독박을 쓰는 구조이기 때문입니다.',
+    source:'원본: "그래서 오늘 마이너스 5% 급락한 진짜 이유다. 중국산 DUV 장비 양산 그것도 크긴 큰 거지만 이게 진짜 큰 거죠. 만약에 오픈AI 잘못되면 어떻게 하는 거야?"'
+  },
+  {
+    id:3, type:'mc', difficulty:'보통',
+    question:'벤더 파이낸싱이 시장에 특히 큰 공포를 준 이유로, 방송에서 언급된 닷컴버블 당시의 사례 기업은?',
+    options:['시스코(Cisco)','인텔(Intel)','아마존(Amazon)','노키아(Nokia)'],
+    answer:0,
+    explanation:'라우터·스위치·모뎀 등 인터넷 장비를 팔던 시스코가 고객사에 금융 지원을 하는 벤더 파이낸싱을 했고, 닷컴버블이 꺼지자 함께 무너진 사례가 소환됐습니다.',
+    source:'원본: "옛날에 닷컴버블 당시에 시스코가 이거를 했었어요. 벤더 파이낸싱을. (…) 닷컴버블이 끝나버리니까 시스코가 어떻게 되는 거야?"'
+  },
+  {
+    id:4, type:'ox', difficulty:'쉬움',
+    question:'EUV 노광장비는 전 세계에서 ASML만 만들 수 있고, DUV는 ASML 외에 캐논·니콘도 만든다.',
+    answer:'O',
+    explanation:'맞습니다. EUV는 ASML의 독점 기술이고, DUV는 ASML·캐논·니콘이 생산합니다. 그리고 이번에 중국 국영 지원 기업이 여기에 합류했다는 것이 이날의 핵심 사건이었습니다.',
+    source:'원본: "eub 기술은 asml밖에 없어요. (…) 그런데 dub는 asml에서도 만들고 그리고 캐논, 니콘 이런 데서 DUV 장비를 만듭니다." (자막의 dub/eub는 DUV/EUV의 오기)'
+  },
+  {
+    id:5, type:'sa', difficulty:'보통',
+    question:'중국 제1의 D램 제조사로, 상하이 증시 상장 첫날 466% 폭등하며 기업가치 약 4,870억 달러를 기록한 회사의 이름(영문 약자)은?',
+    accept:['CXMT','창신메모리','창신 메모리','changxin'],
+    answer:'CXMT',
+    explanation:'CXMT(창신메모리)입니다. 상장 첫날 466% 폭등해 기업가치 약 $487B을 달성했고, 애플이 CXMT 칩을 테스트했다는 소식까지 겹치며 메모리 공급 과잉 공포를 키웠습니다.',
+    source:'원본: "중국의 제1 디램 제조사 CXMT가 상하이 증시에 상장하자마자 (…) 466%나 폭등했습니다. 기업가치가 거의 4870억 달러."'
+  },
+  {
+    id:6, type:'mc', difficulty:'쉬움',
+    question:'AT&T 네트워크 최적화에 양자 어닐링 기술을 전면 도입한 D-Wave(QBTS)는, 기존 1시간 걸리던 처리 시간을 얼마로 단축했나요?',
+    options:['5분','1분','15초','3초'],
+    answer:2,
+    explanation:'1시간 걸리던 연산을 단 15초로 단축(99.6% 효율)했다는 소식이 나오면서 QBTS 주가가 +20.45% 폭등했고, 양자컴퓨팅 섹터가 동반 상승했습니다.',
+    source:'원본: "수 시간이 걸리는 계산을 15초 만에 끝내버렸다. (…) 양자 컴퓨팅 처리 시간을 1시간에서 단 15초만으로 줄여버렸습니다." 동시에 암호 해독 우려로 크립토 시장은 하락했습니다.'
+  },
+  {
+    id:7, type:'sa', difficulty:'어려움',
+    question:'시그넘 글로벌 어드바이저가 만든 타코(TACO) 지수에서, 4개 지표의 평균 스트레스가 이 수치 이상이 되면 "타코가 발동"한다고 방송에서 설명했습니다. 그 숫자는? (소수점 포함)',
+    accept:['2.9','2,9'],
+    answer:'2.9',
+    explanation:'4개 지표(브렌트 원유 가격, 미국 10년 국채금리, 호르무즈 해협 선박 통과 횟수, S&P 500)를 각각 1~5점 스트레스 지수로 환산해 평균을 냅니다. 평균이 2.9 이상이면 트럼프 대통령이 물러서며 휴전 카드를 꺼낸다는 논리입니다.',
+    source:'원본: "예를 들자면 평균 2.9 이상 되면 위험한 거예요. (…) 평균값이 만약에 2.9 이상 딱 되면 트럼프 대통령이 겁을 먹고 우리 휴전했다잉 (…) 이렇게 한다라는 거예요."'
+  },
+  {
+    id:8, type:'mc', difficulty:'보통',
+    question:'유가가 8% 가까이 폭락해 에너지 섹터가 무너진 날, 홀로 +5.83% 급등한 기업과 그 이유로 올바른 것은?',
+    options:['셰브론(CVX) — 정제 마진 개선','베이커휴즈(BKR) — AI 데이터센터용 가스터빈·발전 설비 수요','엑슨(XOM) — 배당 확대 발표','옥시덴탈(OXY) — 대규모 자사주 매입'],
+    answer:1,
+    explanation:'베이커휴즈는 단순 석유 시추 회사가 아니라 AI 데이터센터에 들어가는 가스터빈과 발전 설비를 공급하는 회사입니다. 2분기 산업·에너지기술(IET) 부문 주문이 전년 대비 2배($7.1B) 증가했고, 총 잔여수행의무(RPO)는 $40.1B에 달했습니다. 반면 CVX는 -1.78%로 하락했습니다.',
+    source:'원본: "유가가 오늘 8%나 폭락했는데 오늘 막 베이커 휴즈가 5.83% 폭등했다? 단순한 석유회사가 아닙니다. AI 데이터 센터에 들어가는 가스터빈, 발전설비 (…) 2분기에 주문량이 전년 대비 2배 폭증했습니다."'
+  },
+  {
+    id:9, type:'mc', difficulty:'어려움',
+    question:'이번 주 메가캡 실적 슈퍼위크에서, 진행자가 매출·EPS·가이던스보다 더 중요한 관전 포인트로 강조한 두 가지는?',
+    options:['매출총이익률과 재고회전율','CapEx(자본지출)와 FCF(잉여현금흐름)','R&D 비용과 인건비','부채비율과 이자보상배율'],
+    answer:1,
+    explanation:'수십조 달러 규모의 AI 자본지출이 잉여현금흐름을 갉아먹지 않고 영업 마진으로 돌아오고 있는지 — 이 비대칭 구조를 어떻게 극복하는지가 핵심이라고 강조했습니다. 선행 발표된 알파벳의 FCF 악화와 CapEx 상향 가이던스가 매도세를 촉발한 것이 그 배경입니다.',
+    source:'원본: "매출 중요하겠죠. EPS 중요하겠죠. 가이던스 중요하겠죠. 그러나 그거보다 중요한 게 뭐다? CAPEX와 FCF."'
+  },
+  {
+    id:10, type:'ox', difficulty:'보통',
+    question:'진행자가 "현금을 잔뜩 빼놓으라"고 강조한 근거로 제시한, 전 세계 메모리 가격이 꺾이기 시작한 기점은 6월 25일이다.',
+    answer:'O',
+    explanation:'맞습니다. 미국 시간 6월 25일 목요일을 기점으로 끝없이 오르던 메모리 가격이 한 계단씩 내려오기 시작했고, 진행자는 이를 수요·공급 균형이 변곡점을 지났다는 신호로 해석했습니다.',
+    source:'원본: "6월 25일이 목요일이에요 미국 시간으로. (…) 6.25 때 무슨 일이 있었냐면 전세계 메모리 가격이 깎이기 시작했어요. (…) 이 뉴스 하나로 저는 이제 맛이 가는구나."'
+  }
+];
+
+let state = { solved:0, correct:0 };
+const answered = {};
+
+const DIFF_CLASS = { '쉬움':'d1', '보통':'d2', '어려움':'d3' };
+const TYPE_LABEL = { 'mc':'객관식', 'sa':'단답형', 'ox':'O / X' };
+const LETTERS = ['A','B','C','D'];
+
+const quizEl = document.getElementById('quiz');
+
+function esc(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function render(){
+  quizEl.innerHTML = '';
+  QUIZ_DATA.forEach(q => {
+    const card = document.createElement('article');
+    card.className = 'q';
+    card.id = 'q' + q.id;
+
+    let body = '';
+    if (q.type === 'mc'){
+      body = '<div class="opts">' + q.options.map((o,i) =>
+        '<button class="opt" data-q="'+q.id+'" data-i="'+i+'"><span class="mk">'+LETTERS[i]+'</span><span>'+esc(o)+'</span></button>'
+      ).join('') + '</div>';
+    } else if (q.type === 'ox'){
+      body = '<div class="opts ox">' +
+        '<button class="opt" data-q="'+q.id+'" data-v="O"><span class="mk"></span><span>O</span></button>' +
+        '<button class="opt" data-q="'+q.id+'" data-v="X"><span class="mk"></span><span>X</span></button>' +
+        '</div>';
+    } else {
+      body = '<div class="sa">' +
+        '<input type="text" id="in'+q.id+'" placeholder="정답을 입력하세요" autocomplete="off">' +
+        '<button data-q="'+q.id+'" data-sa="1">제출</button>' +
+        '</div><p class="hint">한글·영문 모두 인정됩니다. 대소문자와 띄어쓰기는 무시합니다.</p>';
+    }
+
+    card.innerHTML =
+      '<div class="qh">' +
+        '<span class="qn">Q' + String(q.id).padStart(2,'0') + '</span>' +
+        '<span class="badge ty">' + TYPE_LABEL[q.type] + '</span>' +
+        '<span class="badge ' + DIFF_CLASS[q.difficulty] + '">' + q.difficulty + '</span>' +
+      '</div>' +
+      '<p class="qt">' + esc(q.question) + '</p>' +
+      body +
+      '<div class="exp" id="exp'+q.id+'"></div>';
+
+    quizEl.appendChild(card);
+  });
+  bind();
+}
+
+function bind(){
+  quizEl.querySelectorAll('.opt').forEach(b => {
+    b.addEventListener('click', () => {
+      const id = parseInt(b.dataset.q, 10);
+      if (answered[id]) return;
+      const q = QUIZ_DATA.find(x => x.id === id);
+      if (q.type === 'mc') gradeMC(q, parseInt(b.dataset.i, 10));
+      else gradeOX(q, b.dataset.v);
+    });
+  });
+  quizEl.querySelectorAll('button[data-sa]').forEach(b => {
+    b.addEventListener('click', () => {
+      const id = parseInt(b.dataset.q, 10);
+      if (answered[id]) return;
+      gradeSA(QUIZ_DATA.find(x => x.id === id));
+    });
+  });
+  QUIZ_DATA.filter(q => q.type === 'sa').forEach(q => {
+    const inp = document.getElementById('in' + q.id);
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !answered[q.id]) gradeSA(q);
+    });
+  });
+}
+
+function lockCard(q){
+  const card = document.getElementById('q' + q.id);
+  card.classList.add('done');
+  card.querySelectorAll('.opt, input, button[data-sa]').forEach(el => el.disabled = true);
+}
+
+function tagEl(ok){
+  const s = document.createElement('span');
+  s.className = 'tag ' + (ok ? 'ok' : 'no');
+  s.textContent = ok ? '✓ 정답!' : '✗ 오답';
+  return s;
+}
+
+function gradeMC(q, picked){
+  const ok = picked === q.answer;
+  const btns = document.querySelectorAll('#q'+q.id+' .opt');
+  btns[picked].classList.add(ok ? 'correct' : 'wrong');
+  btns[picked].appendChild(tagEl(ok));
+  if (!ok){
+    btns[q.answer].classList.add('correct');
+    btns[q.answer].appendChild(tagEl(true));
+  }
+  finish(q, ok, q.options[q.answer]);
+}
+
+function gradeOX(q, picked){
+  const ok = picked === q.answer;
+  const btns = document.querySelectorAll('#q'+q.id+' .opt');
+  btns.forEach(b => {
+    if (b.dataset.v === picked) { b.classList.add(ok ? 'correct' : 'wrong'); b.appendChild(tagEl(ok)); }
+    if (!ok && b.dataset.v === q.answer) { b.classList.add('correct'); b.appendChild(tagEl(true)); }
+  });
+  finish(q, ok, q.answer);
+}
+
+function norm(s){ return String(s).toLowerCase().replace(/[\s.,·]/g,''); }
+
+function gradeSA(q){
+  const inp = document.getElementById('in' + q.id);
+  const raw = inp.value.trim();
+  if (!raw){
+    inp.style.borderColor = '#e11d48';
+    inp.placeholder = '답을 입력한 뒤 제출하세요';
+    setTimeout(() => { inp.style.borderColor = ''; }, 1400);
+    return;
+  }
+  const v = norm(raw);
+  const ok = q.accept.some(a => norm(a) === v);
+  inp.style.borderColor = ok ? '#86efac' : '#fca5a5';
+  inp.style.background = ok ? '#dcfce7' : '#fee2e2';
+  finish(q, ok, q.answer);
+}
+
+function finish(q, ok, correctText){
+  answered[q.id] = true;
+  state.solved += 1;
+  if (ok) state.correct += 1;
+  lockCard(q);
+
+  const exp = document.getElementById('exp' + q.id);
+  exp.innerHTML =
+    '<span class="el">' + (ok ? '✓ 정답입니다' : '✗ 아쉬워요') + ' · 해설</span>' +
+    '<span class="ans">정답: ' + esc(correctText) + '</span>' +
+    esc(q.explanation) +
+    '<span class="src">📌 원본 근거 — ' + esc(q.source) + '</span>';
+  exp.classList.add('show');
+
+  updateBoard();
+  if (state.solved === QUIZ_DATA.length) setTimeout(showResult, 620);
+}
+
+function updateBoard(){
+  const total = QUIZ_DATA.length;
+  const rate = state.solved ? Math.round(state.correct / state.solved * 100) : 0;
+  document.getElementById('sSolved').textContent = state.solved + ' / ' + total;
+  document.getElementById('sCorrect').textContent = state.correct;
+  document.getElementById('sRate').textContent = rate + '%';
+  const bar = document.getElementById('sBar');
+  bar.style.width = rate + '%';
+  bar.style.background = rate >= 70 ? '#15803d' : (rate >= 40 ? '#f97316' : '#b91c1c');
+}
+
+function showResult(){
+  const total = QUIZ_DATA.length;
+  const pct = Math.round(state.correct / total * 100);
+  let grade, cheer;
+  if (pct >= 90){ grade = 'A'; cheer = '완벽합니다. 벤더 파이낸싱의 순환 구조부터 CapEx·FCF 비대칭까지, 방송의 핵심 논리를 전부 잡아냈습니다. 이 정도면 이번 주 실적 발표를 직접 해석하며 볼 수 있어요.'; }
+  else if (pct >= 70){ grade = 'B'; cheer = '탄탄합니다. 큰 그림은 정확히 잡았어요. 틀린 문항의 해설에서 숫자와 원본 근거를 한 번만 더 확인하면 빈틈이 메워집니다.'; }
+  else if (pct >= 50){ grade = 'C'; cheer = '절반은 잡았습니다. 순환 금융 구조, 중국 DUV 자립화, 자본의 대이동 — 이 세 갈래를 중심으로 분석 리포트를 다시 훑어보세요.'; }
+  else { grade = 'D'; cheer = '괜찮아요, 내용이 꽤 촘촘한 회차였습니다. 해설의 원본 근거를 먼저 읽고 다시 도전해 보세요. 두 번째엔 확실히 달라집니다.'; }
+
+  document.getElementById('mGrade').textContent = grade;
+  document.getElementById('mScore').textContent = state.correct + ' / ' + total + ' 문제 정답';
+  document.getElementById('mPct').textContent = '정답률 ' + pct + '%';
+  document.getElementById('mCheer').textContent = cheer;
+  document.getElementById('mask').classList.add('open');
+}
+
+document.getElementById('mClose').addEventListener('click', () => {
+  document.getElementById('mask').classList.remove('open');
+});
+document.getElementById('mRetry').addEventListener('click', () => {
+  state = { solved:0, correct:0 };
+  Object.keys(answered).forEach(k => delete answered[k]);
+  document.getElementById('mask').classList.remove('open');
+  render();
+  updateBoard();
+  window.scrollTo({ top:0, behavior:'smooth' });
+});
+document.getElementById('mask').addEventListener('click', e => {
+  if (e.target.id === 'mask') document.getElementById('mask').classList.remove('open');
+});
+
+render();
+updateBoard();
+</script>
+</body>
+</html>
