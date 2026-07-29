@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>거대한 자금 이동 (The Great Rotation) — 2026.07.28 시장 분석</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#ffffff;
+  --bg2:#fafafa;
+  --tx:#1a1a1a;
+  --tx2:#777777;
+  --ac:#e11d48;
+  --ac2:#f43f5e;
+  --bd:#e5e5e5;
+  --blue:#2563eb;
+  --gray:#6b7280;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--tx);
+  font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;
+  font-weight:400;
+  line-height:1.75;
+  font-size:16px;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:680px;margin:0 auto;padding:0 20px 90px;}
+
+/* ===== 마스트헤드 ===== */
+.masthead{
+  border-bottom:3px double var(--tx);
+  padding:34px 0 14px;
+  margin-bottom:30px;
+}
+.mast-top{
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--tx2);font-weight:500;border-bottom:1px solid var(--bd);
+  padding-bottom:9px;margin-bottom:16px;
+}
+.mast-top b{color:var(--ac);font-weight:700;}
+.kicker{
+  display:inline-block;font-size:10.5px;letter-spacing:.2em;font-weight:700;
+  color:#fff;background:var(--ac);padding:4px 10px;margin-bottom:14px;
+}
+h1.title{
+  font-family:'Playfair Display',serif;
+  font-weight:900;font-size:clamp(34px,9.5vw,52px);
+  line-height:1.02;letter-spacing:-.02em;margin-bottom:6px;
+}
+h1.title em{font-style:italic;color:var(--ac);font-weight:700;display:block;font-size:.62em;margin-top:8px;letter-spacing:0;}
+.standfirst{
+  font-size:15px;color:#3d3d3d;margin-top:16px;line-height:1.8;
+  padding-left:14px;border-left:3px solid var(--ac);
+}
+.byline{
+  margin-top:18px;font-size:11.5px;color:var(--tx2);letter-spacing:.04em;
+  display:flex;flex-wrap:wrap;gap:6px 14px;
+}
+
+/* ===== 섹션 ===== */
+section{margin-top:56px;}
+.sec-head{border-top:2px solid var(--tx);padding-top:12px;margin-bottom:22px;}
+.sec-num{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:13px;color:var(--ac);letter-spacing:.1em;display:block;margin-bottom:4px;
+}
+h2{
+  font-family:'Playfair Display',serif;font-weight:700;
+  font-size:clamp(23px,6vw,30px);line-height:1.22;letter-spacing:-.01em;
+}
+h3{
+  font-size:16.5px;font-weight:700;margin:30px 0 12px;
+  padding-left:11px;border-left:4px solid var(--ac);line-height:1.4;
+}
+h4{font-size:14.5px;font-weight:700;margin:20px 0 8px;color:var(--tx);}
+p{margin-bottom:15px;}
+p.lead{font-size:17px;font-weight:500;line-height:1.8;}
+strong{font-weight:700;color:var(--ac);}
+.pl{background:linear-gradient(transparent 62%,#fde4ea 62%);font-weight:700;color:var(--tx);}
+.term{color:var(--tx2);font-size:.9em;font-weight:400;}
+ul,ol{margin:0 0 16px 20px;}
+li{margin-bottom:8px;}
+
+/* ===== 드롭캡 ===== */
+.dropcap::first-letter{
+  font-family:'Playfair Display',serif;float:left;font-size:56px;line-height:.82;
+  font-weight:900;margin:6px 9px 0 0;color:var(--ac);
+}
+
+/* ===== 카드/박스 ===== */
+.card{background:var(--bg2);border:1px solid var(--bd);padding:18px;margin:20px 0;}
+.callout{
+  border-left:4px solid var(--ac);background:var(--bg2);
+  padding:16px 18px;margin:22px 0;font-size:14.5px;line-height:1.75;
+}
+.callout .cl-t{font-weight:700;font-size:12px;letter-spacing:.13em;color:var(--ac);display:block;margin-bottom:7px;}
+.pull{
+  font-family:'Playfair Display',serif;font-style:italic;font-weight:500;
+  font-size:clamp(19px,5.2vw,24px);line-height:1.42;text-align:center;
+  border-top:2px solid var(--tx);border-bottom:2px solid var(--tx);
+  padding:24px 8px;margin:34px 0;color:var(--tx);
+}
+.pull span{color:var(--ac);font-weight:700;}
+.note{
+  font-size:12.5px;color:var(--tx2);background:#fff;border:1px dashed var(--bd);
+  padding:11px 13px;margin:16px 0;line-height:1.65;
+}
+
+/* ===== 스탯 그리드 ===== */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--bd);border:1px solid var(--bd);margin:22px 0;}
+.stat{background:#fff;padding:15px 13px;}
+.stat .lb{font-size:10.5px;letter-spacing:.11em;color:var(--tx2);font-weight:500;margin-bottom:5px;text-transform:uppercase;}
+.stat .vl{font-family:'Playfair Display',serif;font-weight:900;font-size:26px;line-height:1;letter-spacing:-.02em;}
+.stat .sb{font-size:11.5px;color:var(--tx2);margin-top:5px;}
+.up{color:#15803d;}
+.dn{color:var(--ac);}
+
+/* ===== 테이블 ===== */
+.tw{overflow-x:auto;margin:20px 0;-webkit-overflow-scrolling:touch;}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:100%;}
+th{background:var(--ac);color:#fff;font-weight:700;padding:10px 9px;text-align:left;font-size:12.5px;letter-spacing:.03em;}
+td{background:var(--bg2);border:1px solid var(--bd);padding:10px 9px;vertical-align:top;}
+tbody tr:nth-child(even) td{background:#fff;}
+
+/* ===== 차트 ===== */
+.fade-in{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+.fade-in.visible{opacity:1;transform:translateY(0);}
+.chart-container{position:relative;max-height:340px;margin:8px 0 6px;}
+.chart-container canvas{opacity:0;transition:opacity .4s ease;max-height:300px;}
+.chart-container.chart-ready canvas{opacity:1;}
+.figbox{border:1px solid var(--bd);background:#fff;padding:15px 13px 10px;margin:22px 0;}
+.figbox .figtitle{font-size:13px;font-weight:700;letter-spacing:.03em;margin-bottom:2px;}
+.figbox .figsub{font-size:11.5px;color:var(--tx2);margin-bottom:10px;}
+.figcap{font-size:11.5px;color:var(--tx2);border-top:1px solid var(--bd);padding-top:8px;margin-top:6px;line-height:1.6;}
+
+/* ===== 인터랙티브 공통 ===== */
+.ix{border:2px solid var(--tx);background:#fff;margin:26px 0;}
+.ix-head{background:var(--tx);color:#fff;padding:11px 15px;font-size:12px;letter-spacing:.13em;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.ix-head .hint{font-size:10px;color:#c9c9c9;letter-spacing:.05em;font-weight:400;}
+.ix-body{padding:17px 15px;}
+
+/* 탭 */
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--bd);flex-wrap:wrap;}
+.tab{
+  flex:1;min-width:96px;padding:11px 7px;background:var(--bg2);border:none;border-bottom:3px solid transparent;
+  font-family:inherit;font-size:12.5px;font-weight:700;color:var(--tx2);cursor:pointer;transition:.2s;line-height:1.35;
+}
+.tab:hover{background:#f2f2f2;color:var(--tx);}
+.tab.on{background:#fff;color:var(--ac);border-bottom-color:var(--ac);}
+.tab:focus-visible{outline:2px solid var(--blue);outline-offset:-2px;}
+.panel{display:none;padding:16px 2px 2px;font-size:14.5px;}
+.panel.on{display:block;animation:fi .35s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* 슬라이더 */
+.ctl{margin-bottom:15px;}
+.ctl label{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;font-weight:700;margin-bottom:7px;gap:8px;}
+.ctl label .v{font-family:'Playfair Display',serif;font-size:17px;color:var(--ac);font-weight:700;}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:4px;background:var(--bd);outline:none;border-radius:2px;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;background:var(--ac);border-radius:50%;cursor:pointer;border:3px solid #fff;box-shadow:0 0 0 1px var(--ac);}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;background:var(--ac);border-radius:50%;cursor:pointer;border:3px solid #fff;box-shadow:0 0 0 1px var(--ac);}
+input[type=range]:focus-visible{outline:2px solid var(--blue);outline-offset:4px;}
+.btn{
+  font-family:inherit;font-size:12.5px;font-weight:700;padding:9px 16px;cursor:pointer;
+  background:#fff;color:var(--tx);border:1.5px solid var(--tx);transition:.15s;
+}
+.btn:hover{background:var(--tx);color:#fff;}
+.btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
+.btn.pri{background:var(--ac);border-color:var(--ac);color:#fff;}
+.btn.pri:hover{background:#be1740;border-color:#be1740;}
+
+/* 결과 박스 */
+.res{background:var(--bg2);border:1px solid var(--bd);padding:14px;margin-top:15px;}
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.res-item .rl{font-size:10.5px;color:var(--tx2);letter-spacing:.09em;font-weight:500;margin-bottom:3px;}
+.res-item .rv{font-family:'Playfair Display',serif;font-size:21px;font-weight:900;line-height:1.1;}
+.bar-wrap{margin-top:14px;}
+.bar-lbl{display:flex;justify-content:space-between;font-size:11px;color:var(--tx2);margin-bottom:5px;}
+.bar-track{height:22px;background:#e8e8e8;position:relative;overflow:hidden;}
+.bar-fill{height:100%;background:var(--ac);width:0;transition:width .45s cubic-bezier(.3,.9,.4,1);}
+.bar-fill.cash{background:var(--tx);}
+
+/* 병목 다이어그램 */
+.flow{display:grid;grid-template-columns:1fr;gap:9px;}
+.flownode{
+  border:1.5px solid var(--bd);background:var(--bg2);padding:12px 13px;cursor:pointer;
+  transition:.2s;text-align:left;font-family:inherit;width:100%;
+}
+.flownode:hover{border-color:var(--ac);background:#fff;}
+.flownode.on{border-color:var(--ac);border-width:2px;background:#fff;box-shadow:0 3px 0 var(--ac2);}
+.flownode:focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
+.flownode .fn-tag{font-size:10px;letter-spacing:.12em;font-weight:700;margin-bottom:4px;}
+.flownode.out .fn-tag{color:var(--ac);}
+.flownode.in .fn-tag{color:#15803d;}
+.flownode .fn-t{font-size:14.5px;font-weight:700;line-height:1.35;}
+.flownode .fn-s{font-size:12px;color:var(--tx2);margin-top:3px;}
+.flow-arrow{text-align:center;color:var(--ac);font-size:17px;line-height:1;margin:2px 0;}
+.flow-detail{margin-top:14px;padding:14px;background:var(--bg2);border-left:4px solid var(--ac);font-size:13.5px;line-height:1.72;min-height:60px;}
+
+/* 체크리스트 */
+.gate{border:1.5px solid var(--bd);margin-bottom:9px;background:#fff;}
+.gate-btn{
+  width:100%;display:flex;gap:11px;align-items:flex-start;padding:13px;
+  background:none;border:none;font-family:inherit;text-align:left;cursor:pointer;transition:.15s;
+}
+.gate-btn:hover{background:var(--bg2);}
+.gate-btn:focus-visible{outline:2px solid var(--blue);outline-offset:-2px;}
+.gate-box{
+  flex:0 0 22px;width:22px;height:22px;border:2px solid var(--tx2);
+  display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;margin-top:1px;
+}
+.gate.pass .gate-box{background:#15803d;border-color:#15803d;}
+.gate.pass{border-color:#15803d;}
+.gate-txt .gt{font-size:14px;font-weight:700;line-height:1.4;}
+.gate-txt .gs{font-size:12.5px;color:var(--tx2);margin-top:3px;line-height:1.55;}
+.verdict{padding:15px;text-align:center;border:2px solid var(--tx);margin-top:14px;transition:.25s;}
+.verdict .vt{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;margin-bottom:5px;}
+.verdict .vs{font-size:13px;line-height:1.65;}
+
+/* 매트릭스 토글 */
+.mtx-sw{display:flex;border:2px solid var(--tx);margin-bottom:15px;}
+.mtx-sw button{
+  flex:1;padding:11px 6px;background:#fff;border:none;font-family:inherit;
+  font-size:13px;font-weight:700;color:var(--tx2);cursor:pointer;transition:.2s;
+}
+.mtx-sw button.on{background:var(--ac);color:#fff;}
+.mtx-sw button:focus-visible{outline:2px solid var(--blue);outline-offset:-3px;}
+.mtx-row{display:grid;grid-template-columns:86px 1fr;gap:1px;background:var(--bd);margin-bottom:1px;}
+.mtx-row div{background:#fff;padding:11px 10px;font-size:13.5px;}
+.mtx-row .mk{background:var(--bg2);font-size:11.5px;font-weight:700;color:var(--tx2);letter-spacing:.04em;}
+
+/* 플레이북 */
+.rule{display:flex;gap:13px;padding:16px 0;border-bottom:1px solid var(--bd);}
+.rule:last-child{border-bottom:none;}
+.rule-n{
+  font-family:'Playfair Display',serif;font-size:34px;font-weight:900;line-height:.85;
+  color:var(--ac);flex:0 0 40px;
+}
+.rule-b .rt{font-size:15.5px;font-weight:700;margin-bottom:5px;line-height:1.4;}
+.rule-b .rd{font-size:13.5px;color:#444;line-height:1.7;}
+
+/* Q&A */
+.qa{border-top:1px solid var(--bd);padding:14px 0;}
+.qa .qt{font-size:14.5px;font-weight:700;margin-bottom:6px;}
+.qa .qt::before{content:'Q. ';color:var(--ac);font-family:'Playfair Display',serif;font-weight:900;}
+.qa .qd{font-size:13.5px;color:#444;line-height:1.72;}
+
+footer{margin-top:60px;border-top:3px double var(--tx);padding-top:18px;font-size:11.5px;color:var(--tx2);line-height:1.75;}
+
+@media (max-width:400px){
+  .stats{grid-template-columns:1fr;}
+  .res-grid{grid-template-columns:1fr;}
+  .mtx-row{grid-template-columns:72px 1fr;}
+  .rule-n{font-size:28px;flex:0 0 32px;}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;}
+  .fade-in{opacity:1;transform:none;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ============ 마스트헤드 ============ -->
+<header class="masthead">
+  <div class="mast-top">
+    <span>NOVA REAL INVEST</span>
+    <span><b>2026.07.28</b> 시장 리뷰</span>
+  </div>
+  <span class="kicker">MARKET EDITORIAL</span>
+  <h1 class="title">거대한 자금 이동<em>The Great Rotation</em></h1>
+  <p class="standfirst">반도체의 겨울, 블루칩의 봄. 시장은 무너진 것이 아니라 <strong>주도주가 통째로 바뀌었다.</strong> 기대가 주가를 올리던 시대가 끝나고, 이제는 현금을 숫자로 증명해야 하는 시대가 열렸다.</p>
+  <div class="byline">
+    <span>출처 · NOVA Real Invest 멤버 미팅 (CIA.chat)</span>
+    <span>분석 · 경제/시장 관점</span>
+    <span>읽는 시간 · 약 15분</span>
+  </div>
+</header>
+
+<!-- ============ 한눈에 ============ -->
+<section style="margin-top:36px;">
+  <div class="sec-head">
+    <span class="sec-num">At a Glance</span>
+    <h2>오늘 하루, 숫자 여섯 개</h2>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="lb">다우존스</div><div class="vl up">+537pt</div><div class="sb">+1.03% · 전통 가치주 강세</div></div>
+    <div class="stat"><div class="lb">나스닥</div><div class="vl dn">-0.22%</div><div class="sb">기술주 약세 지속</div></div>
+    <div class="stat"><div class="lb">필라델피아 반도체(SOX)</div><div class="vl dn">-4.49%</div><div class="sb">6월 고점 대비 -24.5%</div></div>
+    <div class="stat"><div class="lb">동일가중 S&amp;P(RSP)</div><div class="vl up">+1.1%</div><div class="sb">490여 개 종목으로 자본 분산</div></div>
+    <div class="stat"><div class="lb">애플 시가총액</div><div class="vl">5조 달러</div><div class="sb">장중 돌파 · 세계 1위 탈환</div></div>
+    <div class="stat"><div class="lb">블룸에너지(BE)</div><div class="vl up">+14%</div><div class="sb">시간외 · 장중 -11%에서 급반전</div></div>
+  </div>
+  <p class="lead" style="margin-top:22px;">한 문장으로 요약하면 이렇다. <span class="pl">돈은 AI 밖으로 나간 게 아니라, AI 안에서 자리를 옮겼다.</span> 그리고 그 옆에서는 공장을 새로 지을 필요가 없는 옛날 회사들이 조용히 사상 최고가를 갱신하고 있었다.</p>
+</section>
+
+<!-- ============ 1. 디커플링 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">01 — Decoupling</span>
+    <h2>같은 시장, 정반대의 색깔</h2>
+  </div>
+  <p class="dropcap">오늘 시장은 극단적인 디커플링<span class="term">(같이 움직이던 것들이 서로 반대로 갈라지는 현상)</span>을 보여줬다. 나스닥에서 반도체 쪽은 화면이 온통 붉은색이었던 반면, 다우지수와 전통 가치주는 초록초록했다. 헬스케어와 금융이 좋았고, 특이하게도 소프트웨어가 상당히 많이 올라왔다. 반도체와 에너지만 좋지 않았다.</p>
+  <p>문제는 많은 투자자의 계좌가 반도체 위주로 쏠려 있다는 점이다. 지수는 멀쩡한데 내 계좌만 빨간 이유가 여기에 있다.</p>
+
+  <div class="figbox">
+    <div class="figtitle">주요 지수·섹터 하루 등락률</div>
+    <div class="figsub">단위 % · 막대를 터치하면 정확한 수치가 표시됩니다</div>
+    <div class="chart-container fade-in"><canvas id="chartIndex" height="230"></canvas></div>
+    <div class="figcap">다우와 RSP(동일가중 S&amp;P 500)는 강하게 올랐고, 반도체는 홀로 -4.49%를 기록했다. 같은 날 시장 안에서 5.5%포인트가 넘는 격차가 벌어진 셈이다.</div>
+  </div>
+
+  <h3>RSP가 오르면 좋은 걸까?</h3>
+  <p>동일가중 S&amp;P 500 ETF인 <strong>RSP가 1.1% 올랐다.</strong> RSP는 500개 종목을 똑같은 비중으로 담기 때문에, 이게 오르면 "시장 전체가 좋다"는 뜻으로 읽을 수 있다. 소수의 빅테크 쏠림에서 490여 개 전통 기업으로 자본이 분산됐다는 신호다.</p>
+  <p>다만 방송에서는 한 가지 경고를 덧붙였다. <span class="pl">RSP는 뒤늦게 움직인다.</span> 다른 종목들이 다 오르고 52주 신고가도 다 찍은 다음에야 "우리 이제 왔어" 하고 따라오는 아이라는 것이다. 그래서 RSP의 상승은 상승세의 시작일 수도, 끝물일 수도 있다. 확실한 건 <b>끝물에서 나타나는 현상</b>이라는 점이다.</p>
+
+  <div class="callout">
+    <span class="cl-t">쉽게 말하면</span>
+    시가총액 가중 지수(나스닥·S&amp;P)는 덩치 큰 몇 개 회사가 지수를 끌고 간다. 동일가중(RSP)은 모든 종목이 똑같은 한 표를 갖는다. 그래서 RSP가 오르는데 나스닥이 빠졌다면, "대장주는 쉬고 나머지 다수가 뛰었다"는 뜻이다.
+  </div>
+</section>
+
+<!-- ============ 2. 자본 이동 경로 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">02 — Capital Flow</span>
+    <h2>자본은 어디서 나와 어디로 갔나</h2>
+  </div>
+  <p>자금이 이탈하는 쪽과 유입되는 쪽이 오늘처럼 선명하게 갈린 날은 드물다. 포지션이 극단적으로 쏠려 있던 AI 하드웨어에서 <strong>잉여현금흐름 방어력이 뛰어난 고품질 방어주</strong>로 유동성이 블랙홀처럼 빨려 들어갔다.</p>
+
+  <div class="figbox">
+    <div class="figtitle">Outflow vs Inflow — 대표 종목 등락률</div>
+    <div class="figsub">단위 % · 붉은색은 자금 이탈, 회색은 자금 유입</div>
+    <div class="chart-container fade-in"><canvas id="chartFlow" height="255"></canvas></div>
+    <div class="figcap">유출: 반도체(MU) -8.85%, 패키징(AMKR) -24.8%, 스토리지(SNDK) -14.25%, 광통신(GLW) -12.1%, 에너지(WTI 유가) -4%. 유입: 헬스케어(IQV) +14.1%, 셔윈-윌리엄스(SHW) +8.24%, 워크데이(WDAY) +8.23%, 코카콜라(KO) +5.00%, 보잉(BA) +4.70%.</div>
+  </div>
+
+  <div class="pull">"내 눈앞에 현금을 보여다오." <span>Show me the money.</span></div>
+  <p>왜 이런 이동이 일어났나. 답은 단순하다. <strong>잉여현금흐름<span class="term">(FCF · 벌어들인 돈에서 투자비를 빼고 실제로 회사 손에 남는 현금)</span>에 대한 불안감</strong>이다. 월가가 지금 계속 요구하는 건 화려한 미래 계획이 아니라 통장에 찍힌 현금이다.</p>
+</section>
+
+<!-- ============ 3. 반도체 투매 트리거 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">03 — Triggers</span>
+    <h2>반도체 투매를 부른 세 가지 방아쇠</h2>
+  </div>
+  <p>오늘의 반도체 급락은 하나의 원인이 아니라 세 가지가 겹쳤다. 아래 탭을 눌러 각각의 논리를 확인해 보자.</p>
+
+  <div class="ix">
+    <div class="ix-head"><span>SELL-OFF TRIGGERS</span><span class="hint">탭을 눌러보세요</span></div>
+    <div class="ix-body" style="padding-top:0;padding-left:0;padding-right:0;">
+      <div class="tabs" role="tablist">
+        <button class="tab on" data-tab="t1" role="tab">① 중국<br>공급망 위협</button>
+        <button class="tab" data-tab="t2" role="tab">② AI 수요<br>진위 논란</button>
+        <button class="tab" data-tab="t3" role="tab">③ 가이던스<br>눈높이</button>
+      </div>
+      <div style="padding:0 15px 4px;">
+        <div class="panel on" id="t1">
+          <h4>중국이 장비와 메모리를 동시에 들고 나왔다</h4>
+          <ul>
+            <li><b>DUV 노광장비 양산 착수</b> — 중국 국가 지원 기업이 올해 5대, 이후 20대 생산 목표를 제시했다. <span class="term">(노광장비: 반도체 회로를 웨이퍼에 빛으로 새기는 핵심 장비)</span></li>
+            <li><b>창신메모리(CXMT) 상하이 증시 상장</b> — 86억 달러를 조달하며 성공적으로 데뷔했다.</li>
+          </ul>
+          <p>이 두 소식이 합쳐지면서 <strong>"메모리 사이클의 피크가 끝난 것 아니냐", "범용 DRAM 공급 과잉이 오는 것 아니냐"</strong>는 공포가 촉발됐다.</p>
+          <div class="stats" style="margin:14px 0;">
+            <div class="stat"><div class="lb">마이크론 MU</div><div class="vl dn">-8.85%</div></div>
+            <div class="stat"><div class="lb">삼성전자</div><div class="vl dn">-13.39%</div></div>
+            <div class="stat"><div class="lb">SK하이닉스</div><div class="vl dn">-14.65%</div></div>
+            <div class="stat"><div class="lb">패키징 AMKR</div><div class="vl dn">-24.8%</div></div>
+          </div>
+          <div class="callout">
+            <span class="cl-t">냉정하게 보면</span>
+            창신메모리는 갑자기 뿅 하고 나타난 회사가 아니다. 원래 있던 회사고, 상장한다는 것도 다들 알고 있던 사실이다. 중국 장비 역시 <b>실제 물건을 내놔봐야 쓸만한지 알 수 있다.</b> ASML은 여전히 최고 기술을 갖고 있다. 그럼에도 시장은 일단 걱정부터 하고 본다 — 이번 뉴스는 새로운 충격이라기보다, 과밀 포지션을 청산하기 위한 <strong>완벽한 명분</strong>으로 작용했다.
+          </div>
+          <p style="font-size:13.5px;color:var(--tx2);">SK하이닉스 실적은 매출과 EPS 모두 예상치를 밑돌았다. 한국장이 다시 열리는 내일도 이 공포가 한 번 더 반복될 가능성이 높다.</p>
+        </div>
+
+        <div class="panel" id="t2">
+          <h4>돌고 도는 자금 — Around and around we go</h4>
+          <p>엔비디아를 비롯한 참여자들 사이에서 <strong>돈이 계속 원을 그리며 돌고 있다는 의심</strong>이 커졌다. 불티나게 팔리는 AI 칩 수요가 진짜 수요가 아니라, 엔비디아가 뒤에서 자금을 대주고 있기 때문에 벌어지는 일 아니냐는 것이다.</p>
+          <div class="tw">
+          <table>
+            <thead><tr><th>노드</th><th>내용</th></tr></thead>
+            <tbody>
+              <tr><td><b>A</b></td><td>[NVDA] 신용 제공 — 최대 2,500억 달러 백스톱 논의</td></tr>
+              <tr><td><b>B</b></td><td>[OpenAI] 오하이오 10GW 데이터센터 리스 조달</td></tr>
+              <tr><td><b>C</b></td><td>[NVDA] 칩 구매 자금 별도 지원 논의 — 최대 3,500억 달러</td></tr>
+            </tbody>
+          </table>
+          </div>
+          <p>이런 순환 구조는 어느 한 곳이 잘못되면 전부 우르르 무너질 수 있다는 불안을 낳는다. 사람들 머릿속에 <b>인터넷 닷컴 시대</b>의 기억이 계속 떠오르는 이유다.</p>
+          <div class="callout">
+            <span class="cl-t">핵심</span>
+            시장은 이제 묻지마 AI 지출을 넘어 <strong>'자본비용 상승 대비 투자수익률(ROI)'</strong> 증명을 강하게 요구하고 있다. 하이퍼스케일러의 현금흐름은 줄어드는데 반도체 이익 기대치는 올라가는 괴리가 계속 벌어지고 있다.
+          </div>
+        </div>
+
+        <div class="panel" id="t3">
+          <h4>실적은 좋았다. 문제는 1%였다</h4>
+          <p>회사마다 다르지만, 오늘 가이던스<span class="term">(회사가 직접 제시하는 다음 분기 실적 전망)</span>를 아쉽게 뽑은 곳들이 있었다. <b>앰코, 코닝, 그리고 장 마감 후 발표한 KLA</b>가 그랬다.</p>
+          <p>이들의 실적 자체는 엄청나게 좋았다. 그냥 좋은 정도가 아니라 상당히 좋았다. 그런데 <strong>가이던스가 시장 기대치에 1% 모자랐다.</strong> 단 1%다.</p>
+          <div class="pull" style="margin:22px 0;">시장의 눈높이가 <span>압도적으로</span> 높다</div>
+          <p>적당히 좋은 실적, 적당히 좋은 가이던스로는 주가를 움직일 여력이 전혀 없다. 압도적인 숫자를 보여줘야만 한다. 반면 같은 날 장 마감 후 발표한 <b>씨게이트와 블룸에너지</b>는 가이던스가 상당히 좋았고, 시간외에서 급등했다. 옥석이 갈리는 중이다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. 블루칩 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">04 — Blue Chips</span>
+    <h2>블루칩의 화려한 귀환</h2>
+  </div>
+  <p class="lead">시장은 '기대'가 아니라 '<span class="pl">당장의 이익</span>'에 열광했다.</p>
+
+  <h3>코카콜라 (KO) +5.00%</h3>
+  <p>사상 최고가를 경신하며 52주 신고가를 매일 갱신하고 있다. <strong>월드컵 특수로 판매량이 5% 증가</strong>했고, 인플레이션 국면에서 가격을 올렸는데 그게 그대로 먹혔다. 가격 전가력<span class="term">(비용이 올라도 소비자에게 가격을 넘길 수 있는 힘)</span>의 교과서적 사례다.</p>
+
+  <h3>셔윈-윌리엄스 (SHW) +8.24%</h3>
+  <p>2022년 이후 최고 일간 상승률. 건설 경기 둔화 우려로 어렵게 봤는데, 웬걸 페인트가 잘 팔리고 있었다. 이유가 재미있다. <b>집주인들이 페인트를 직접 사다가 자기가 칠하고 있었던 것.</b> EPS는 $3.70로 예상치 $3.56을 상회했다.</p>
+
+  <h3>보잉 (BA) +4.70%</h3>
+  <p>상업용 민항기 인도가 14% 증가했고, 무엇보다 <strong>잉여현금흐름이 +6억 3,100만 달러로 흑자 전환</strong>했다. 그동안 계속 적자였던 항목이다. 현금 창출 능력 회복에 대한 신뢰가 붙었다.</p>
+
+  <div class="callout">
+    <span class="cl-t">이 회사들의 공통점</span>
+    <b>공장을 새로 지을 필요가 없다.</b> 천문학적 비용을 들여 설비 투자를 새로 하지 않는다. 있던 설비로 계속 만들고 팔면 된다. 그러면 현금은 계속 쌓일 수밖에 없다. 이 안정적인 재무 구조가 지금 시장에서 <strong>완벽한 피난처</strong>로 작용하고 있다.
+  </div>
+</section>
+
+<!-- ============ 5. 애플 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">05 — The Apple Paradox</span>
+    <h2>'CapEx 회피' 프리미엄</h2>
+  </div>
+  <p><strong>애플은 AI에 돈을 쓰지 않는 AI 회사다.</strong> 그리고 그게 지금 최고의 무기가 됐다.</p>
+  <div class="stats">
+    <div class="stat"><div class="lb">장중 시가총액</div><div class="vl">$5조</div><div class="sb">돌파 후 소폭 하락 · 시총 1위 유지</div></div>
+    <div class="stat"><div class="lb">올해 주가 상승률</div><div class="vl up">+25%</div><div class="sb">엔비디아 +6% 대비 아웃퍼폼</div></div>
+  </div>
+  <p>애플은 잉여현금흐름이 워낙 좋고, 부채를 만들지도 회사채를 찍어내지도 않는다. 남들이 실험하고 실패하고 실수하는 걸 다 지켜본 뒤, 완벽한 제품으로 손님 앞에 나선다. 외부(구글 제미나이 등) 조달을 통해 자본 지출을 최소화하는 전략이다.</p>
+
+  <h3>오늘 발표된 'Apple Upgrade'</h3>
+  <p>고가의 하드웨어를 <b>리스(임대)해서 쓰라</b>는 새 프로그램이다. Love it / Reset / Upgrade 구조로, 새 제품이 나올 때마다 갈아탈 수 있게 만든다. 애플 생태계 안에 소비자를 완전히 가두는 동시에, <strong>고가 하드웨어를 안정적인 현금흐름으로 전환</strong>하는 장치다.</p>
+  <p>웹사이트에는 'pocket-friendly payment', 한국어로는 <b>'부담 없는 가격'</b>이라고 적혀 있다. 최근 애플이 가격을 많이 올렸고 소비자가 부담을 느낀다는 걸 정확히 캐치한 것이다. 경쟁사들은 메모리·CPU·GPU 가격 폭등에 시달리는데, 애플은 우리 주머니 사정까지 계산했다. 방송의 평가는 이랬다 — <span class="pl">천재적이고, 조금 얄밉다.</span></p>
+  <p style="font-size:13.5px;color:var(--tx2);">참고로 애플 폴더블폰 출시설도 계속 나오고 있다. 다만 X(구 트위터)에 도는 이미지들은 AI로 만든 것 같다는 게 방송의 관전평이다.</p>
+</section>
+
+<!-- ============ 6. AI Phase 2 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">06 — AI Phase 2</span>
+    <h2>AI는 끝나지 않았다, 병목이 이동했을 뿐</h2>
+  </div>
+  <p>가장 중요한 통찰이 여기 있다. <strong>돈이 AI 밖으로 빠져나간 게 아니다. AI 안에 있다.</strong> 그동안 지겹도록 들었던 메모리 병목<span class="term">(전체 속도를 결정하는 가장 좁은 구간)</span>은 이제 끝났고, 병목이 다음 구간으로 옮겨 갔다.</p>
+
+  <div class="ix">
+    <div class="ix-head"><span>BOTTLENECK MAP</span><span class="hint">항목을 눌러보세요</span></div>
+    <div class="ix-body">
+      <div class="flow">
+        <button class="flownode out on" data-fn="f0">
+          <div class="fn-tag">OUTFLOW</div>
+          <div class="fn-t">GPU / 연산</div>
+          <div class="fn-s">엔비디아 · AMD · 마이크론</div>
+        </button>
+        <div class="flow-arrow">▼ ▼ ▼</div>
+        <button class="flownode in" data-fn="f1">
+          <div class="fn-tag">INFLOW · 01</div>
+          <div class="fn-t">데이터 스토리지</div>
+          <div class="fn-s">[STX] 씨게이트 시간외 +7~9%</div>
+        </button>
+        <button class="flownode in" data-fn="f2">
+          <div class="fn-tag">INFLOW · 02</div>
+          <div class="fn-t">전력 인프라</div>
+          <div class="fn-s">[BE] 블룸에너지 시간외 급등</div>
+        </button>
+        <button class="flownode in" data-fn="f3">
+          <div class="fn-tag">INFLOW · 03</div>
+          <div class="fn-t">테스트 / 패키징</div>
+          <div class="fn-s">[TER] 테라다인 시간외 +14%</div>
+        </button>
+      </div>
+      <div class="flow-detail" id="flowDetail"></div>
+    </div>
+  </div>
+
+  <p>연산칩이 발달하고 GPU·CPU가 발달하고 DRAM을 엄청나게 갖다 붙이다 보니, <b>저장할 공간(하드디스크)</b>이 필요해졌다. 전기도 부족하다는 걸 모두가 안다. 그래서 자본이 스토리지·전력·테스팅·패키징으로 <strong>스마트하게 이동</strong>하고 있는 것이다.</p>
+
+  <div class="figbox">
+    <div class="figtitle">AI 2막 수혜주 — 시간외 등락률</div>
+    <div class="figsub">단위 % · 장 마감 후 실적·가이던스 발표 직후 기준</div>
+    <div class="chart-container fade-in"><canvas id="chartPhase2" height="215"></canvas></div>
+    <div class="figcap">블룸에너지는 장중 -11%까지 밀렸다가 시간외에서 급반전했다. 방송 시점 기준 하루 동안 약 20%포인트가 움직인 셈이다. 차트상으로는 4월 갭을 채우러 온 모습이다.</div>
+  </div>
+</section>
+
+<!-- ============ 7. 소프트웨어 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">07 — Software Rotation</span>
+    <h2>조용한 소프트웨어 로테이션</h2>
+  </div>
+  <p>소프트웨어는 그동안 엄청나게 빠졌다. 100% 가까이 빠진 종목도 있었고, <strong>평균적으로 고점 대비 약 60%</strong> 하락했다. 52주 최저치를 찍은 종목이 너무나 많았다.</p>
+  <p>그러다 서서히 바닥을 다졌다는 얘기가 나왔고, 하드웨어와 반도체 칩에서 이탈한 돈들이 <b>바닥 냄새를 맡고 스물스물 들어오기 시작했다.</b> 어제부터 시작된 흐름이다.</p>
+
+  <div class="figbox">
+    <div class="figtitle">소프트웨어 대표주 상승률</div>
+    <div class="figsub">단위 % · B2B SaaS 중심의 자금 유입</div>
+    <div class="chart-container fade-in"><canvas id="chartSW" height="215"></canvas></div>
+    <div class="figcap">워크데이(WDAY)는 AI 플랫폼 통합 비전으로 +8.23%를 기록하며 소프트웨어 랠리를 이끌었다.</div>
+  </div>
+
+  <div class="callout">
+    <span class="cl-t">왜 소프트웨어인가</span>
+    GPU와 데이터센터는 막대한 <b>'자본을 소비'</b>한다. 반면 B2B SaaS 소프트웨어는 AI를 활용해 고객당 <strong>'매출과 마진을 높이는'</strong> 명확한 투자수익률(ROI)을 제공한다. 캐펙스<span class="term">(CapEx · 설비 투자)</span>를 쓰지 않고 돈만 벌면 되는 구조다.
+  </div>
+  <p>RSI<span class="term">(주가가 과열인지 침체인지 보여주는 지표)</span>가 워낙 낮았기 때문에 더 이상 팔래야 팔 사람이 없는 상태였다는 점도 반등 배경이다. 지금 벌어지는 일은 결국 <strong>순환매</strong>다 — 반도체·기술주에서 빠져나온 자금이 헬스케어·금융·필수소비재로 순서대로 이동하는, 교과서적인 흐름이다.</p>
+</section>
+
+<!-- ============ 8. 매크로 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">08 — Macro</span>
+    <h2>다우 랠리를 지탱한 배경, 그리고 균열</h2>
+  </div>
+  <div class="tw">
+  <table>
+    <thead><tr><th style="width:34%;">지표</th><th>내용</th></tr></thead>
+    <tbody>
+      <tr><td><b>WTI 원유</b></td><td>미국-이란 군사 공격 일시 중단 소식에 <b class="dn">-4% 급락 ($79.26)</b> → 그러나 장 마감 후 이란이 요르단 미군기지에 탄도미사일 기습 발사, 이 뉴스로 <b class="up">+5% 급등</b>하며 낙폭을 되돌림 (미군은 모두 요격했다고 발표)</td></tr>
+      <tr><td><b>미 10년물 국채금리</b></td><td>4.60%로 하락 안정화 — 다우 및 소비재 랠리의 직접적 동력</td></tr>
+      <tr><td><b>소비자신뢰지수</b></td><td>7월 컨퍼런스보드 90.8로 하락 (예상 하회) — 소비자들이 찜찜함을 느끼고 있다는 신호</td></tr>
+      <tr><td><b>UPS</b></td><td>실적은 상회했으나 하반기 배송 물량 감소 전망으로 <b class="dn">-6.6% 급락</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>UPS 신호는 가볍게 볼 게 아니다. <span class="pl">물류가 망가지면 경제가 간다.</span> 상반기 실적은 좋았지만 3분기가 안 좋다는 이야기가 나오는 만큼, 매일 체크해야 할 항목이다.</p>
+  <p style="font-size:13.5px;color:var(--tx2);">중동 상황 자체는 협상 국면으로 접어드는 분위기다. 네타냐후 총리와 트럼프 대통령이 아침부터 통화했다는 이야기가 나오고 있다. 다만 방송의 평가는 "본인 능력으로 해결되는 전쟁이 아니다"였다.</p>
+</section>
+
+<!-- ============ 9. 심판대 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">09 — Judgment Day</span>
+    <h2>내일, 최후의 심판대</h2>
+  </div>
+  <p>내일은 두 개의 거대한 이벤트가 겹친다. <strong>연준(FOMC) 발표</strong>와 <strong>하이퍼스케일러 실적</strong>이다. 아침부터 소파이·보스턴사이언티픽·버티브·제너릭, 그리고 마이크로소프트·메타·로빈후드·ARM·퀄컴·램리서치까지 줄줄이 대기 중이다.</p>
+
+  <h3>관문 ①②③ — 캐펙스 vs 프리캐시플로우</h3>
+  <p>싸움의 구도는 <b>CapEx versus FCF</b>다. 세 가지 관문을 그냥 통과해서는 안 되고 <strong>압도적인 숫자로 뚫어내야</strong> 한다. 아래 체크박스를 눌러 시나리오를 만들어 보자.</p>
+
+  <div class="ix">
+    <div class="ix-head"><span>THREE GATES SIMULATOR</span><span class="hint">체크해 보세요</span></div>
+    <div class="ix-body">
+      <div class="gate" id="g0">
+        <button class="gate-btn" data-gate="0">
+          <span class="gate-box">✓</span>
+          <span class="gate-txt"><span class="gt">Check 1 · CapEx 지속성</span><span class="gs">천문학적 AI 자본 지출 전망을 내년·내후년에도 계속 유지할 것인가?</span></span>
+        </button>
+      </div>
+      <div class="gate" id="g1">
+        <button class="gate-btn" data-gate="1">
+          <span class="gate-box">✓</span>
+          <span class="gate-txt"><span class="gt">Check 2 · 수익화 증명</span><span class="gs">늘어나는 지출 대비 클라우드(Azure) 성장과 AI 수익이 더 빠르게 증가하는가?</span></span>
+        </button>
+      </div>
+      <div class="gate" id="g2">
+        <button class="gate-btn" data-gate="2">
+          <span class="gate-box">✓</span>
+          <span class="gate-txt"><span class="gt">Check 3 · 잉여현금흐름</span><span class="gs">막대한 인프라 지출에도 방어 가능한 FCF를 창출하는가? 아니면 구글처럼 마이너스로 갈 가능성이 있는가?</span></span>
+        </button>
+      </div>
+      <div class="verdict" id="verdict">
+        <div class="vt" id="vTitle">0 / 3 통과</div>
+        <div class="vs" id="vText">관문을 체크해 시나리오를 확인하세요.</div>
+      </div>
+      <button class="btn" id="gateReset" style="margin-top:12px;">초기값으로 되돌리기</button>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="cl-t">실패하면</span>
+    세 관문을 압도적으로 넘지 못하면, 오늘 같은 <strong>반도체 투매가 기술주 전반으로 확산될 가능성</strong>이 상당히 높다. 난리를 치고 돈을 쏟아부었는데 벌지 못한다면 시장은 용서하지 않는다.
+  </div>
+
+  <h3>FOMC — 세 가지 관전 포인트</h3>
+  <p>시장은 <strong>금리 동결(3.50~3.75%)</strong>을 기정사실로 보고 있다. 다만 오늘 한 기관에서 "올릴 수도 있다"는 의견을 냈다. 성명서도 중요하지만, 진짜는 <b>연준 의장의 입</b>이다.</p>
+  <div class="tw">
+  <table>
+    <thead><tr><th style="width:30%;">포인트</th><th>봐야 할 것</th></tr></thead>
+    <tbody>
+      <tr><td><b>① 9월 인하 시그널</b></td><td>9월 금리 인하에 대한 명확한 포워드 가이던스를 제시할 것인가. 의장은 이미 "가이던스를 주지 않겠다"고 밝혔지만, 기자회견 중 실수나 다른 연준 위원 언급이 나올 수 있다.</td></tr>
+      <tr><td><b>② 물가 스탠스</b></td><td>최근 에너지(유가)·관세발 인플레이션 재점화 가능성을 얼마나 매파적으로 평가하는가. "물가가 세다" / "안 내려간다" / "일시적(transitory)이다" — 어느 쪽이냐에 따라 해석이 갈린다.</td></tr>
+      <tr><td><b>③ 금융 여건</b></td><td>장기금리 상승을 긴축으로 인정하고 완화적 태도를 보일 것인가. 국채를 사줄 것인가, 밸런스시트를 어떻게 할 것인가. 여기에 따라 고평가 반도체·성장주의 밸류에이션 압박이 커지거나 풀린다.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note"><b>시간표</b> — 미국 뉴욕시간 오후 <b>2시</b> 통화정책 발표, <b>2시 30분</b> 기자회견. 2시 · 2시 30분 · 3시에 시장의 표정이 달라진다.</div>
+</section>
+
+<!-- ============ 10. 매트릭스 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">10 — Diagnosis</span>
+    <h2>AI 1막에서 2막으로</h2>
+  </div>
+  <p>지금 벌어지는 일을 한 장으로 정리하면 이렇다. 아래 버튼으로 두 시대를 비교해 보자.</p>
+
+  <div class="ix">
+    <div class="ix-head"><span>PHASE MATRIX</span><span class="hint">전환해 보세요</span></div>
+    <div class="ix-body">
+      <div class="mtx-sw">
+        <button class="on" data-ph="1">AI Phase 1 (과거)</button>
+        <button data-ph="2">AI Phase 2 (현재~미래)</button>
+      </div>
+      <div id="mtxBody"></div>
+    </div>
+  </div>
+
+  <div class="pull">기대가 주가를 올리던 시대는 끝났다.<br><span>이제는 현금과 마진을 숫자로 증명해야 하는 옥석 가리기의 시대.</span></div>
+</section>
+
+<!-- ============ 11. 플레이북 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">11 — Playbook</span>
+    <h2>전술적 플레이북</h2>
+  </div>
+
+  <div class="rule">
+    <div class="rule-n">1</div>
+    <div class="rule-b">
+      <div class="rt">성급한 물타기 자제</div>
+      <div class="rd">반도체가 많이 빠졌다고 지금 잡으면 안 된다. 마이크로소프트·메타 실적과 FOMC를 확인하기 전까지는 전면적 저가 매수를 보류한다. 이번 주에 메타·애플·아마존이 있고, 다음 주와 그 다음 주에도 실적이 줄줄이 대기 중이다. <b>실적장세는 마무리되는 걸 끝까지 봐야 전체 그림을 말할 수 있다.</b></div>
+    </div>
+  </div>
+  <div class="rule">
+    <div class="rule-n">2</div>
+    <div class="rule-b">
+      <div class="rt">현금흐름 방어주 비중 유지</div>
+      <div class="rd">코카콜라, 헬스케어 같은 캐시카우는 덜어내지 말고 밸런스를 유지한다. 비중이 아예 없는 사람이라면 늘려가야 한다. 잉여현금흐름 수익률이 높고 영업 마진 방어력이 뛰어난 배당 우량주 중심의 포트폴리오 밸런스를 지킨다.</div>
+    </div>
+  </div>
+  <div class="rule">
+    <div class="rule-n">3</div>
+    <div class="rule-b">
+      <div class="rt">차기 AI 섹터 주시</div>
+      <div class="rd">차기 AI 섹터란 <b>AI에 돈 안 쓰면서 AI를 하는 종목들</b>이다. 소프트웨어(B2B SaaS), 전력, 데이터 스토리지(씨게이트·블룸에너지)를 집중 모니터링하며 워치리스트에 계속 쌓아 나간다.</div>
+    </div>
+  </div>
+
+  <h3>그래도 사고 싶다면 — 2% 규칙</h3>
+  <p>정말 사고 싶다면, <strong>빠질 때마다 배분 금액의 2%씩만</strong> 사라는 것이 방송의 구체적 조언이다. 이유는 단순하다. <span class="pl">캐시가 있어야 하기 때문이다.</span> 아래에서 직접 계산해 보자.</p>
+
+  <div class="ix">
+    <div class="ix-head"><span>2% RULE SIMULATOR</span><span class="hint">슬라이더를 움직여 보세요</span></div>
+    <div class="ix-body">
+      <div class="ctl">
+        <label for="s1">이 종목에 배분한 총 금액 <span class="v" id="v1">1,000만원</span></label>
+        <input type="range" id="s1" min="100" max="10000" step="100" value="1000">
+      </div>
+      <div class="ctl">
+        <label for="s2">1회 매수 비율 <span class="v" id="v2">2%</span></label>
+        <input type="range" id="s2" min="1" max="10" step="1" value="2">
+      </div>
+      <div class="ctl">
+        <label for="s3">하락 시 매수 횟수 <span class="v" id="v3">10회</span></label>
+        <input type="range" id="s3" min="1" max="50" step="1" value="10">
+      </div>
+      <div class="res">
+        <div class="res-grid">
+          <div class="res-item"><div class="rl">1회 매수 금액</div><div class="rv" id="r1">20만원</div></div>
+          <div class="res-item"><div class="rl">총 투입 금액</div><div class="rv dn" id="r2">200만원</div></div>
+          <div class="res-item"><div class="rl">남은 현금</div><div class="rv" id="r3">800만원</div></div>
+          <div class="res-item"><div class="rl">현금 소진까지</div><div class="rv" id="r4">50회</div></div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-lbl"><span>투입 <b id="pctIn">20%</b></span><span>현금 <b id="pctCash">80%</b></span></div>
+          <div class="bar-track"><div class="bar-fill" id="barIn"></div></div>
+        </div>
+        <div id="simMsg" style="font-size:12.5px;color:var(--tx2);margin-top:11px;line-height:1.6;"></div>
+      </div>
+      <button class="btn pri" id="simReset" style="margin-top:13px;">초기값으로 되돌리기</button>
+      <div class="note" style="margin-bottom:0;">2%로 나눠 사면 최대 50번을 살 수 있다. "오늘 2% 샀네" 하는 심리적 위안과 함께, <b>다음 하락에 쓸 실탄이 남는다</b>는 게 핵심이다. 이 시뮬레이터는 방송에서 제시된 원칙을 계산으로 옮긴 것으로, 특정 종목의 매매 권유가 아닙니다.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 12. Q&A ============ -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">12 — Q&amp;A</span>
+    <h2>시청자 질문, 종목별 코멘트</h2>
+  </div>
+
+  <div class="qa">
+    <div class="qt">테슬라 바닥은 언제인가요?</div>
+    <div class="qd">지금은 좀 심각하다. 갭이 만들어졌는데 보통 갭이 나오면 데드캣 바운스<span class="term">(급락 후 일시적 반등)</span>가 한 번 나오기 마련인데, 지금은 그렇지 않다. 더군다나 <b>받쳐주는 물량이 사그라들고 있다.</b> 볼륨 프로파일<span class="term">(가격대별 거래량 분포)</span>은 230 부근에 있다. 270까지, 더 밀리면 230까지도 가능하다. 테슬라뿐 아니라 반도체 쪽이 다 비슷한 차트를 갖고 있다.</div>
+  </div>
+
+  <div class="qa">
+    <div class="qt">소프트웨어 섹터 추세 전환일까요?</div>
+    <div class="qd">그렇다고 볼 수 있다. RSI가 워낙 낮아 더 팔 사람이 없고, 사줄 사람이 조금씩 나오는 상황이다. IGV(소프트웨어 ETF)는 머리어깨형을 만든 뒤 빠졌고 바닥을 다진 모습인데, <strong>95 지점을 넘어서야 자력 상승이 가능하다.</strong> 이 부근이 테스트 구간이다. 다만 그동안 쌓인 거래량 구조는 아래가 상당히 단단해 보인다.</div>
+  </div>
+
+  <div class="qa">
+    <div class="qt">로켓랩(RKLB), ASTS는 어떻게 보시나요?</div>
+    <div class="qd">차트로는 불안하기 짝이 없고 변동성이 상당히 크다. 그러나 <b>펀더멘탈로는 좋게 보는 회사</b>다. 스페이스X 덕분에 돈을 버는 회사들이고, 언젠가 보상해 줄 것이라 본다. 장기투자 관점이라면 충분히 반등 가능하다. 밑에서 받쳐주는 거래량도 나쁘지 않다 — 누군가는 여전히 싸다고 생각하고 있다는 뜻이다. 트럼프 대통령이 우주 관련 산업 규제(환경) 완화에 서명했다는 소식도 있어 우주 섹터 이야기는 계속 나올 것이다.</div>
+  </div>
+
+  <div class="qa">
+    <div class="qt">스페이스X는요?</div>
+    <div class="qd">돈을 벌려면 <strong>통신으로 가야 한다.</strong> 스타링크든 셀폰 사업이든 통신을 해야 한다. 화성에 간다는 이야기는 사기이고, 말도 안 되고, 돈도 안 되고, 갈 이유도 없다는 게 방송의 직설적 평가다. 덧붙여 — 내러티브는 일종의 사기인데, 사람들이 <b>잘 모르는 분야일수록 사기치기 쉽다.</b> 기관들이 우주 이야기를 계속 꺼내는 이유다.</div>
+  </div>
+
+  <div class="qa">
+    <div class="qt">지브라(ZBRA)는 왜 오르나요?</div>
+    <div class="qd">원래 RFID 하던 회사인데 최근 로봇을 한다고 하고 있다. 피지컬 AI·로봇 테마로 오르는 것 같은데, <b>실제 하는 일과는 거리가 있다.</b> 시총이 작아 하루 5~10%씩 움직이는, 애널리스트들이 장난치기 좋은 스타일이다. 다만 1년 차트는 상당히 좋고 컵앤핸들<span class="term">(컵 모양 뒤 작은 손잡이 형태의 상승 패턴)</span>을 만든 것으로 보여 단기적으로는 나쁘지 않다.</div>
+  </div>
+</section>
+
+<!-- ============ 마무리 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">Closing</span>
+    <h2>흐름을 읽는 사람에게 오는 기회</h2>
+  </div>
+  <p>방송은 2025년 4월을 다시 꺼냈다. 트럼프 대통령의 관세로 시장이 완전히 폭락했을 때 "인생에 세 번 오는 기회 중 하나일 수 있다"고 했고, SPY는 610에서 484까지 밀렸다가 지금 이만큼 올라왔다. <b>그만큼 빠지는 기회는 흔치 않다.</b></p>
+  <p>현재 차트 패턴은 플래그<span class="term">(깃발 모양의 횡보 구간 · 다음 움직임을 위해 에너지를 모으는 형태)</span>로 보인다. 어떻게 끝날지는 알 수 없지만, 플래그는 <strong>엄청난 에너지를 모으고 있는 상태</strong>다. 그래서 지금은 더 집중해야 할 시간이다.</p>
+  <div class="pull">지금 시장을 떠나면, <span>평생 후회할 일을 하나 더 만드는 것</span></div>
+  <p>실적 시즌이지만 <b>매크로가 훨씬 더 중요해진 시대</b>다. 하반기는 새로운 작전이 필요할 수도 있다. 최종 강령은 하나다 — <strong>AI라는 테마 이름표가 아니라, 실제 벌어들이는 현금흐름의 질(Quality)에 투자하라.</strong></p>
+</section>
+
+<!-- ============ 데이터 노트 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">Editor's Note</span>
+    <h2>원본 자료의 수치 차이</h2>
+  </div>
+  <p style="font-size:14px;">원본 방송 음성과 발표 자료 사이에 일부 수치가 다르게 나타났습니다. 임의로 정하지 않고 그대로 적어 둡니다.</p>
+  <div class="tw">
+  <table>
+    <thead><tr><th style="width:30%;">항목</th><th>차이</th></tr></thead>
+    <tbody>
+      <tr><td>중국 DUV 20대 목표 시점</td><td>음성 "내년" ↔ 자료 "2027년"</td></tr>
+      <tr><td>블룸에너지 시간외 상승률</td><td>자료 "+10%" ↔ 음성 "10%가 아니라 14%(발언 시점 기준)"</td></tr>
+      <tr><td>연준 의장 호칭</td><td>음성에서는 특정 인물명으로 언급 ↔ 자료 슬라이드 표기는 다름. 본문에서는 <b>'연준 의장'</b>으로 통일했습니다.</td></tr>
+      <tr><td>보잉 상승률</td><td>자금 흐름 도표 "+4%" ↔ 상세 슬라이드 "+4.70%"</td></tr>
+      <tr><td>나스닥 고점 대비 낙폭</td><td>음성에서 "고점 대비 20%라는 이야기도 나왔다"고 전달 (자료에는 미표기)</td></tr>
+      <tr><td>SOX 6월 고점 대비</td><td>음성 "-24%" ↔ 자료 "-24.5%"</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<footer>
+  <p><b>거대한 자금 이동 (The Great Rotation)</b><br>
+  2026년 7월 28일 미국 시장 리뷰 · NOVA Real Invest 멤버 미팅 기반 정리</p>
+  <p style="margin-top:12px;">이 문서는 방송 내용을 정리·해설한 교육 자료입니다. 특정 종목의 매수·매도를 권유하지 않으며, 모든 투자 판단과 그 결과에 대한 책임은 투자자 본인에게 있습니다. 수치는 방송 시점 기준이며 이후 변동될 수 있습니다.</p>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ===== fade-in observer ===== */
+  var fadeObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e, i){
+      if(e.isIntersecting){
+        setTimeout(function(){ e.target.classList.add('visible'); }, i * 80);
+        fadeObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(function(el){ fadeObs.observe(el); });
+
+  /* ===== Chart.js 공통 ===== */
+  var C = { ac:'#e11d48', tx:'#1a1a1a', gray:'#6b7280', blue:'#2563eb', bd:'#e5e5e5', tx2:'#777777' };
+  if (window.Chart) {
+    Chart.defaults.font.family = "'Noto Sans KR', sans-serif";
+    Chart.defaults.font.size = 11;
+    Chart.defaults.color = C.tx2;
+  }
+  function baseOpts(unit, horizontal){
+    return {
+      indexAxis: horizontal ? 'y' : 'x',
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1100, easing: 'easeOutQuart' },
+      plugins: {
+        legend: { display:false },
+        tooltip: {
+          backgroundColor:'#1a1a1a', titleFont:{size:12,weight:'700'}, bodyFont:{size:12},
+          padding:10, displayColors:false,
+          callbacks:{ label:function(ctx){ var v = horizontal ? ctx.parsed.x : ctx.parsed.y; return (v>0?'+':'') + v + unit; } }
+        }
+      },
+      scales: {
+        x: { grid:{ display:horizontal, color:C.bd }, border:{color:C.bd}, ticks:{ font:{size:10.5} } },
+        y: { grid:{ display:!horizontal, color:C.bd }, border:{color:C.bd}, ticks:{ font:{size:10.5} } }
+      }
+    };
+  }
+
+  var chartConfigs = {};
+
+  chartConfigs['chartIndex'] = function(){
+    new Chart(document.getElementById('chartIndex'), {
+      type:'bar',
+      data:{
+        labels:['동일가중 RSP','다우존스','나스닥','반도체 SOX'],
+        datasets:[{
+          data:[1.1, 1.03, -0.22, -4.49],
+          backgroundColor:[C.gray, C.tx, C.ac2, C.ac],
+          borderWidth:0, borderRadius:2, barPercentage:0.62
+        }]
+      },
+      options: baseOpts('%', false)
+    });
+  };
+
+  chartConfigs['chartFlow'] = function(){
+    new Chart(document.getElementById('chartFlow'), {
+      type:'bar',
+      data:{
+        labels:['IQV 헬스케어','SHW 셔윈윌리엄스','WDAY 워크데이','KO 코카콜라','BA 보잉','WTI 에너지','MU 마이크론','GLW 광통신','SNDK 스토리지','AMKR 패키징'],
+        datasets:[{
+          data:[14.1, 8.24, 8.23, 5.00, 4.70, -4, -8.85, -12.1, -14.25, -24.8],
+          backgroundColor:function(ctx){ return ctx.raw >= 0 ? C.gray : C.ac; },
+          borderWidth:0, borderRadius:2, barPercentage:0.72
+        }]
+      },
+      options: baseOpts('%', true)
+    });
+  };
+
+  chartConfigs['chartPhase2'] = function(){
+    new Chart(document.getElementById('chartPhase2'), {
+      type:'bar',
+      data:{
+        labels:['BE 블룸에너지','TER 테라다인','STX 씨게이트'],
+        datasets:[{
+          data:[14, 14, 8],
+          backgroundColor:[C.ac, C.blue, C.tx],
+          borderWidth:0, borderRadius:2, barPercentage:0.55
+        }]
+      },
+      options: baseOpts('%', false)
+    });
+  };
+
+  chartConfigs['chartSW'] = function(){
+    new Chart(document.getElementById('chartSW'), {
+      type:'bar',
+      data:{
+        labels:['WDAY 워크데이','CRM 세일즈포스','ADBE 어도비','NOW 서비스나우'],
+        datasets:[{
+          data:[8.23, 5.96, 5.95, 5.60],
+          backgroundColor:[C.ac, C.tx, C.gray, C.blue],
+          borderWidth:0, borderRadius:2, barPercentage:0.6
+        }]
+      },
+      options: baseOpts('%', false)
+    });
+  };
+
+  var chartObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        var canvas = e.target.querySelector('canvas');
+        if(canvas && chartConfigs[canvas.id]){
+          chartConfigs[canvas.id]();
+          e.target.classList.add('chart-ready');
+          chartObs.unobserve(e.target);
+        }
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.chart-container').forEach(function(el){ chartObs.observe(el); });
+
+  /* ===== 탭 ===== */
+  var tabs = document.querySelectorAll('.tab');
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      tabs.forEach(function(x){ x.classList.remove('on'); });
+      document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('on'); });
+      t.classList.add('on');
+      var target = document.getElementById(t.dataset.tab);
+      if(target) target.classList.add('on');
+    });
+  });
+
+  /* ===== 병목 다이어그램 ===== */
+  var FLOW = {
+    f0: '<b>GPU / 연산 — 차익 실현 및 병목 해소 구간</b><br>엔비디아, AMD, 마이크론이 이끌던 메모리 병목은 사실상 끝났습니다. 시장은 이 구간에서 차익을 실현하고, 다음 병목으로 자금을 옮기고 있습니다. 돈이 AI 밖으로 나간 것이 아니라는 점이 핵심입니다.',
+    f1: '<b>데이터 스토리지 — [STX] 씨게이트 시간외 +7~9%</b><br>연산칩과 DRAM이 폭증하면서 그 데이터를 저장할 공간이 부족해졌습니다. 강력한 클라우드 대용량 수요가 확인됐고, 실적과 가이던스 모두 엄청났습니다.',
+    f2: '<b>전력 인프라 — [BE] 블룸에너지</b><br>데이터센터가 늘어날수록 전기가 부족합니다. GPU에서 전력으로 병목이 이동했다는 것을 증명한 종목으로, 장중 -11%에서 시간외 급등하며 하루 약 20%포인트가 움직였습니다. 차트상 4월 갭을 채우러 온 모습입니다.',
+    f3: '<b>테스트 / 패키징 — [TER] 테라다인 시간외 +14%</b><br>칩을 아무리 많이 만들어도 검사하고 포장하는 공정을 통과해야 출하됩니다. 이 구간에서도 실적·가이던스·병목이 모두 확인됐습니다.'
+  };
+  var fnodes = document.querySelectorAll('.flownode');
+  var fdet = document.getElementById('flowDetail');
+  function setFlow(key){
+    fnodes.forEach(function(n){ n.classList.toggle('on', n.dataset.fn === key); });
+    fdet.innerHTML = FLOW[key];
+  }
+  fnodes.forEach(function(n){
+    n.addEventListener('click', function(){ setFlow(n.dataset.fn); });
+  });
+  setFlow('f0');
+
+  /* ===== 3관문 ===== */
+  var gateState = [false,false,false];
+  var vTitle = document.getElementById('vTitle');
+  var vText  = document.getElementById('vText');
+  var VERDICT = [
+    { t:'0 / 3 통과', s:'세 관문을 모두 놓치면 오늘의 반도체 투매가 기술주 전반으로 확산될 가능성이 큽니다. 방송 표현 그대로 "흐덜덜한 상태"입니다.', c:'#e11d48' },
+    { t:'1 / 3 통과', s:'하나만 통과해서는 부족합니다. 시장의 눈높이가 압도적으로 높아, 적당히 좋은 숫자로는 주가를 움직일 여력이 없습니다.', c:'#e11d48' },
+    { t:'2 / 3 통과', s:'아쉽습니다. 앰코·코닝·KLA 사례처럼 실적이 좋아도 한 항목이 1% 모자라면 주가는 흔들립니다.', c:'#f59e0b' },
+    { t:'3 / 3 통과', s:'세 관문을 압도적인 숫자로 뚫어냈습니다. 기술주 반등의 문이 열릴 수 있는 유일한 시나리오입니다.', c:'#15803d' }
+  ];
+  function renderGate(){
+    var n = gateState.filter(Boolean).length;
+    var v = VERDICT[n];
+    vTitle.textContent = v.t;
+    vTitle.style.color = v.c;
+    vText.textContent = v.s;
+    document.getElementById('verdict').style.borderColor = v.c;
+  }
+  document.querySelectorAll('.gate-btn').forEach(function(b){
+    b.addEventListener('click', function(){
+      var i = parseInt(b.dataset.gate, 10);
+      gateState[i] = !gateState[i];
+      document.getElementById('g'+i).classList.toggle('pass', gateState[i]);
+      renderGate();
+    });
+  });
+  document.getElementById('gateReset').addEventListener('click', function(){
+    gateState = [false,false,false];
+    for(var i=0;i<3;i++){ document.getElementById('g'+i).classList.remove('pass'); }
+    renderGate();
+  });
+  renderGate();
+
+  /* ===== Phase 매트릭스 ===== */
+  var MTX = {
+    '1':[['투자의 초점','내러티브 중심, 하드웨어 연산(GPU) 집중'],
+         ['재무적 특징','묻지마 자본 지출(CapEx) 허용'],
+         ['주가 반응','기대치 상회만으로 폭등'],
+         ['대표 자산군','엔비디아, 마이크론, 코닝']],
+    '2':[['투자의 초점','ROI 중심, 전력/스토리지 인프라 확보'],
+         ['재무적 특징','잉여현금흐름 방어 및 수익화(SaaS) 요구'],
+         ['주가 반응','기대치를 압도적으로 넘지 못하면 투매'],
+         ['대표 자산군','애플, 워크데이, 씨게이트, 블룸에너지']]
+  };
+  var mtxBody = document.getElementById('mtxBody');
+  function renderMtx(ph){
+    mtxBody.innerHTML = MTX[ph].map(function(r){
+      return '<div class="mtx-row"><div class="mk">'+r[0]+'</div><div>'+r[1]+'</div></div>';
+    }).join('');
+  }
+  document.querySelectorAll('.mtx-sw button').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.mtx-sw button').forEach(function(x){ x.classList.remove('on'); });
+      b.classList.add('on');
+      renderMtx(b.dataset.ph);
+    });
+  });
+  renderMtx('1');
+
+  /* ===== 2% 시뮬레이터 ===== */
+  var s1 = document.getElementById('s1'), s2 = document.getElementById('s2'), s3 = document.getElementById('s3');
+  function fmt(n){ return Math.round(n).toLocaleString('ko-KR'); }
+  function sim(){
+    var total = parseInt(s1.value,10);          // 만원
+    var pct   = parseInt(s2.value,10);          // %
+    var times = parseInt(s3.value,10);          // 회
+    if(isNaN(total)||isNaN(pct)||isNaN(times)) return;
+    var maxTimes = Math.floor(100/pct);
+    var capped = Math.min(times, maxTimes);
+    var per = total * pct / 100;
+    var used = per * capped;
+    var left = total - used;
+    var inPct = Math.min(100, pct * capped);
+
+    document.getElementById('v1').textContent = fmt(total)+'만원';
+    document.getElementById('v2').textContent = pct+'%';
+    document.getElementById('v3').textContent = times+'회';
+    document.getElementById('r1').textContent = fmt(per)+'만원';
+    document.getElementById('r2').textContent = fmt(used)+'만원';
+    document.getElementById('r3').textContent = fmt(left)+'만원';
+    document.getElementById('r4').textContent = maxTimes+'회';
+    document.getElementById('pctIn').textContent = inPct.toFixed(0)+'%';
+    document.getElementById('pctCash').textContent = (100-inPct).toFixed(0)+'%';
+    document.getElementById('barIn').style.width = inPct+'%';
+
+    var msg;
+    if(times > maxTimes){
+      msg = '⚠ '+pct+'%씩이면 최대 '+maxTimes+'회에서 배분 금액이 모두 소진됩니다. 입력한 '+times+'회는 계산에서 '+maxTimes+'회로 제한했습니다.';
+    } else if(pct <= 2){
+      msg = '방송이 제시한 원칙 그대로입니다. '+capped+'번을 샀는데도 '+fmt(left)+'만원의 실탄이 남습니다. 다음 하락에 대응할 여력이 핵심입니다.';
+    } else if(pct <= 5){
+      msg = '한 번에 '+pct+'%씩이면 '+maxTimes+'번 만에 현금이 바닥납니다. 바닥이 어디인지 모르는 국면에서는 여력이 빠르게 줄어듭니다.';
+    } else {
+      msg = '한 번에 '+pct+'%는 사실상 몰빵에 가깝습니다. '+maxTimes+'번이면 끝입니다. 언제 얼마나 더 빠질지 알 수 없다는 점을 기억하세요.';
+    }
+    document.getElementById('simMsg').textContent = msg;
+  }
+  [s1,s2,s3].forEach(function(el){ el.addEventListener('input', sim); });
+  document.getElementById('simReset').addEventListener('click', function(){
+    s1.value = 1000; s2.value = 2; s3.value = 10; sim();
+  });
+  sim();
+
+})();
+</script>
+</body>
+</html>

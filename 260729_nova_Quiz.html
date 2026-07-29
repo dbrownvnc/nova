@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>거대한 자금 이동 — 이해도 확인 문제 10선</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#fafafa; --tx:#1a1a1a; --tx2:#777777;
+  --ac:#e11d48; --ac2:#f43f5e; --bd:#e5e5e5;
+  --ok:#15803d; --okbg:#eaf7ee; --no:#dc2626; --nobg:#fdecec; --warn:#ea580c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg); color:var(--tx);
+  font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;
+  line-height:1.72; font-size:16px; -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:680px;margin:0 auto;padding:0 18px 80px;}
+
+/* 헤더 */
+header{border-bottom:3px double var(--tx);padding:30px 0 16px;margin-bottom:0;}
+.eyebrow{
+  display:inline-block;font-size:10px;letter-spacing:.22em;font-weight:700;
+  color:#fff;background:var(--ac);padding:4px 10px;margin-bottom:12px;
+}
+h1{
+  font-family:'Playfair Display',serif;font-weight:900;
+  font-size:clamp(27px,7.5vw,40px);line-height:1.06;letter-spacing:-.02em;
+}
+h1 em{display:block;font-style:italic;font-size:.55em;color:var(--ac);margin-top:8px;font-weight:700;}
+header p{font-size:13px;color:var(--tx2);margin-top:13px;line-height:1.7;}
+
+/* 스티키 채점판 */
+.board{
+  position:sticky; top:0; z-index:50;
+  background:#fff; border-bottom:2px solid var(--tx);
+  padding:11px 0 10px; margin-bottom:26px;
+}
+.board-in{max-width:680px;margin:0 auto;padding:0 18px;}
+.board-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+.bstat{text-align:center;flex:1;}
+.bstat:first-child{text-align:left;}
+.bstat:last-child{text-align:right;}
+.bstat .bl{font-size:9.5px;letter-spacing:.13em;color:var(--tx2);font-weight:500;display:block;}
+.bstat .bv{font-family:'Playfair Display',serif;font-weight:900;font-size:21px;line-height:1.15;}
+.track{height:6px;background:#ededed;margin-top:8px;overflow:hidden;}
+.fill{height:100%;width:0;background:var(--no);transition:width .4s ease,background-color .4s ease;}
+
+/* 문제 카드 */
+.q{border:1px solid var(--bd);background:#fff;padding:20px 17px;margin-bottom:20px;}
+.q-top{display:flex;align-items:center;gap:9px;margin-bottom:12px;flex-wrap:wrap;}
+.q-no{
+  font-family:'Playfair Display',serif;font-weight:900;font-size:22px;
+  color:var(--ac);line-height:1;
+}
+.badge{font-size:10px;letter-spacing:.09em;font-weight:700;padding:3px 8px;border:1px solid var(--bd);color:var(--tx2);}
+.badge.type{background:var(--tx);color:#fff;border-color:var(--tx);}
+.badge.d1{color:var(--ok);border-color:var(--ok);}
+.badge.d2{color:var(--warn);border-color:var(--warn);}
+.badge.d3{color:var(--ac);border-color:var(--ac);}
+.q-text{font-size:16px;font-weight:700;line-height:1.62;margin-bottom:15px;}
+
+/* 보기 */
+.opts{display:flex;flex-direction:column;gap:8px;}
+.opt{
+  display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;
+  padding:12px 13px;background:var(--bg2);border:1.5px solid var(--bd);
+  font-family:inherit;font-size:14.5px;line-height:1.55;color:var(--tx);
+  cursor:pointer;transition:background .15s,border-color .15s;
+}
+.opt:hover:not(:disabled){background:#fff;border-color:var(--ac);}
+.opt:focus-visible{outline:2px solid #2563eb;outline-offset:2px;}
+.opt:disabled{cursor:default;}
+.opt .mk{
+  flex:0 0 21px;width:21px;height:21px;border:1.5px solid var(--tx2);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:var(--tx2);
+}
+.opt.correct{background:var(--okbg);border-color:var(--ok);}
+.opt.correct .mk{background:var(--ok);border-color:var(--ok);color:#fff;}
+.opt.wrong{background:var(--nobg);border-color:var(--no);}
+.opt.wrong .mk{background:var(--no);border-color:var(--no);color:#fff;}
+.tag{margin-left:auto;font-size:11px;font-weight:700;white-space:nowrap;padding-left:6px;}
+.tag.o{color:var(--ok);}
+.tag.x{color:var(--no);}
+
+/* OX */
+.ox{display:flex;gap:10px;}
+.ox .opt{justify-content:center;font-family:'Playfair Display',serif;font-size:26px;font-weight:900;padding:14px 0;}
+.ox .opt .mk{display:none;}
+.ox .opt .tag{margin-left:8px;font-family:'Noto Sans KR',sans-serif;font-size:11px;}
+
+/* 단답 */
+.sa{display:flex;gap:8px;}
+.sa input{
+  flex:1;min-width:0;padding:12px 13px;border:1.5px solid var(--bd);background:var(--bg2);
+  font-family:inherit;font-size:15px;color:var(--tx);
+}
+.sa input:focus{outline:none;border-color:var(--ac);background:#fff;}
+.sa input:disabled{color:var(--tx2);}
+.sa button{
+  padding:0 18px;background:var(--ac);color:#fff;border:1.5px solid var(--ac);
+  font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:.15s;white-space:nowrap;
+}
+.sa button:hover:not(:disabled){background:#be1740;border-color:#be1740;}
+.sa button:disabled{background:#c9c9c9;border-color:#c9c9c9;cursor:default;}
+.sa button:focus-visible{outline:2px solid #2563eb;outline-offset:2px;}
+.sa-res{margin-top:10px;font-size:13.5px;font-weight:700;display:none;}
+.sa-res.show{display:block;}
+.sa-res.o{color:var(--ok);}
+.sa-res.x{color:var(--no);}
+.sa-hint{font-size:12px;color:var(--tx2);margin-top:7px;}
+
+/* 해설 */
+.exp{
+  display:none;margin-top:15px;padding:14px;background:var(--bg2);
+  border-left:4px solid var(--ac);font-size:13.5px;line-height:1.78;
+}
+.exp.show{display:block;animation:sd .35s ease;}
+@keyframes sd{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.exp .et{font-size:11px;letter-spacing:.13em;font-weight:700;color:var(--ac);display:block;margin-bottom:6px;}
+.exp .src{
+  display:block;margin-top:10px;padding-top:9px;border-top:1px dashed var(--bd);
+  font-size:12.5px;color:var(--tx2);
+}
+.exp .src b{color:var(--tx);}
+
+/* 결과 */
+.final{display:none;border:3px double var(--tx);padding:28px 20px;margin-top:34px;text-align:center;}
+.final.show{display:block;animation:sd .5s ease;}
+.final .fl{font-size:10.5px;letter-spacing:.22em;color:var(--tx2);font-weight:700;}
+.final .grade{font-family:'Playfair Display',serif;font-size:76px;font-weight:900;line-height:1;margin:8px 0 4px;}
+.final .score{font-size:19px;font-weight:700;margin-bottom:10px;}
+.final .msg{font-size:14px;color:#444;line-height:1.75;margin-bottom:20px;}
+.final button{
+  font-family:inherit;font-size:14px;font-weight:700;padding:12px 26px;
+  background:var(--tx);color:#fff;border:none;cursor:pointer;transition:.15s;
+}
+.final button:hover{background:var(--ac);}
+.final button:focus-visible{outline:2px solid #2563eb;outline-offset:2px;}
+
+footer{margin-top:44px;border-top:1px solid var(--bd);padding-top:16px;font-size:11.5px;color:var(--tx2);line-height:1.7;}
+
+@media (max-width:360px){
+  .q{padding:17px 13px;}
+  .bstat .bv{font-size:18px;}
+  .final .grade{font-size:60px;}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">COMPREHENSION CHECK</span>
+    <h1>거대한 자금 이동<em>이해도 확인 문제 10선</em></h1>
+    <p>2026년 7월 28일 NOVA Real Invest 멤버 미팅 내용을 바탕으로 한 문제입니다. 보기를 누르면 바로 채점되고 해설이 펼쳐집니다.</p>
+  </header>
+</div>
+
+<div class="board">
+  <div class="board-in">
+    <div class="board-row">
+      <div class="bstat"><span class="bl">푼 문제</span><span class="bv"><span id="bSolved">0</span> / 10</span></div>
+      <div class="bstat"><span class="bl">맞힌 문제</span><span class="bv" id="bCorrect">0</span></div>
+      <div class="bstat"><span class="bl">정답률</span><span class="bv" id="bRate">0%</span></div>
+    </div>
+    <div class="track"><div class="fill" id="bFill"></div></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div id="quiz"></div>
+
+  <div class="final" id="final">
+    <div class="fl">FINAL RESULT</div>
+    <div class="grade" id="fGrade">A</div>
+    <div class="score" id="fScore">10 / 10 · 정답률 100%</div>
+    <div class="msg" id="fMsg"></div>
+    <button id="retry">다시 풀기</button>
+  </div>
+
+  <footer>
+    문제는 원본 방송 자막에 실제로 등장한 내용만을 근거로 출제했습니다. 이 자료는 교육 목적의 복습 도구이며, 특정 종목의 매수·매도를 권유하지 않습니다.
+  </footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+var QUIZ_DATA = [
+  {
+    id:1, type:'mc', difficulty:'쉬움',
+    question:'이날 다우존스 산업평균지수는 몇 포인트 상승하며 마감했나요?',
+    options:['537포인트 (+1.03%)','249포인트 (+0.48%)','631포인트 (+1.24%)','90포인트 (+0.18%)'],
+    answer:0,
+    explanation:'다우는 537포인트, 비율로는 +1.03% 올랐습니다. 같은 날 나스닥은 마이너스를 기록해 극단적인 디커플링(같이 움직이던 것들이 반대로 갈라지는 현상)이 나타났습니다.',
+    source:'"다우는 무려 537포인트나 올라갔어요. 상당히 높은 거죠." / "다운은 무려 1.03%나 올라간 상태로 마무리가 됐고요."'
+  },
+  {
+    id:2, type:'mc', difficulty:'보통',
+    question:'6월 고점 대비 반도체 섹터의 낙폭은 어느 정도로 언급됐나요?',
+    options:['약 -10%','약 -15%','약 -24%','약 -40%'],
+    answer:2,
+    explanation:'6월 고점 대비 반도체는 약 -24% 수준으로, 기술적으로 베어마켓(고점 대비 20% 이상 하락한 약세장)에 진입했다고 설명했습니다. 발표 자료에는 -24.5%로 표기돼 있습니다.',
+    source:'"6월 고점 대비 계산을 보니까 반도체 쪽만 보면 마이너스 24% 상당하죠. 거의 베어마켓 기술적으로 보면 그렇게 말씀드릴 수 있습니다."'
+  },
+  {
+    id:3, type:'ox', difficulty:'쉬움',
+    question:'방송에서는 동일가중 S&P 500 ETF인 RSP가 시장 전체 흐름보다 뒤늦게 움직이는 성격이 있다고 설명했다.',
+    options:['O','X'],
+    answer:0,
+    explanation:'맞습니다. RSP 상승은 "시장 전체가 좋다"로 읽을 수 있지만, 실제로는 다른 종목들이 다 오르고 난 뒤 뒤늦게 따라오는 성격이 있어 상승세의 끝물에서 나타나는 현상이라고 경고했습니다.',
+    source:'"사실은 이게 뒤늦게 움직여요. rsp가 보면. 시장의 전체적인 흐름에 뒤늦게 와서 야 니네 파티하니? 이러는 아이가 사실은 rsp입니다."'
+  },
+  {
+    id:4, type:'mc', difficulty:'보통',
+    question:'반도체 투매의 첫 번째 트리거로 언급된 중국의 DUV 노광장비 생산 계획은?',
+    options:['올해 2대, 이후 10대','올해 5대, 이후 20대','올해 20대, 이후 50대','올해 10대, 이후 30대'],
+    answer:1,
+    explanation:'중국이 DUV 노광장비(반도체 회로를 빛으로 새기는 핵심 장비)를 올해 5대, 이후 20대 생산할 수 있게 됐다는 보도가 나왔습니다. 창신메모리 상장과 함께 메모리 공급 과잉 공포를 촉발했습니다. 참고로 20대 달성 시점은 자막에서는 "내년", 발표 자료에서는 "2027년"으로 다르게 표기돼 있습니다.',
+    source:'"중국에서 DUV 노광장비를 생산을 할 수 있게 됐다. 올해 5대 내년에 20대 이렇게 했고"'
+  },
+  {
+    id:5, type:'sa', difficulty:'보통',
+    question:'상하이 증시에 성공적으로 상장하며 메모리 공급 과잉 공포를 키운 중국 메모리 업체의 영문 약자를 쓰세요. (알파벳 4글자)',
+    accept:['CXMT','CXMP'],
+    placeholder:'예: ABCD',
+    answer:'CXMT',
+    explanation:'중국 메모리 업체 창신메모리(CXMT)입니다. 상하이 증시에 상장해 86억 달러를 조달했습니다. 다만 방송에서는 "원래 있던 회사가 갑자기 뿅 하고 나타난 게 아니다"라며, 새로운 충격이라기보다 과밀 포지션 청산의 명분에 가깝다고 평가했습니다.',
+    source:'"메모리 회사죠. 창신메모리 CXMP 요게 이제 엄청난 성공적인 상장을 불러일으켰습니다." (자막 표기는 CXMP, 정식 약자는 CXMT)'
+  },
+  {
+    id:6, type:'mc', difficulty:'어려움',
+    question:'앰코·코닝·KLA처럼 실적은 좋았지만 주가가 하락한 기업들의 가이던스는 시장 기대치에 어느 정도 모자랐나요?',
+    options:['1% 모자랐다','5% 모자랐다','10% 모자랐다','20% 모자랐다'],
+    answer:0,
+    explanation:'단 1% 모자랐습니다. 실적 자체는 "그냥 좋은 게 아니라 상당히 좋은" 수준이었는데도 주가가 빠졌다는 점이 핵심입니다. 시장의 눈높이가 압도적으로 높아, 적당히 좋은 실적과 가이던스로는 주가를 움직일 여력이 없다는 것을 보여줍니다.',
+    source:'"얼마나 모자릅니까? 1% 모자라요. 1%. 그러니까 시장의 기대치는 너무나 높습니다."'
+  },
+  {
+    id:7, type:'mc', difficulty:'쉬움',
+    question:'애플에 대한 설명 중 방송 내용과 다른 것은?',
+    options:['올 한 해 동안 25% 상승했다','이날 장중 시가총액 5조 달러를 찍었다','고가 하드웨어를 리스로 쓰는 \'애플 업그레이드\'를 발표했다','AI 데이터센터에 대규모 자본을 직접 투자하고 있다'],
+    answer:3,
+    explanation:'애플은 오히려 "AI에 돈을 쓰지 않는 AI 회사"로 설명됐습니다. 자체 투자 대신 남들이 실험하고 실패하는 것을 지켜본 뒤 완성된 제품을 내놓는 전략이며, 이 CapEx 회피가 강력한 잉여현금흐름으로 이어져 프리미엄을 받고 있다는 것이 핵심입니다.',
+    source:'"애플이 올 한 해 동안 25% 상승을 했습니다... 오늘 5트릴리언을 만들었어요." / "AI는 투자 하나도 안 하면서 일불도 투자 안 하면서 그냥 기다렸다가 니들 만들어라. 우린 네 거 갖다 쓸게."'
+  },
+  {
+    id:8, type:'ox', difficulty:'보통',
+    question:'방송은 이번 반도체 급락에 대해 "돈이 AI 밖으로 완전히 빠져나갔다"고 진단했다.',
+    options:['O','X'],
+    answer:1,
+    explanation:'반대입니다. "돈이 AI 밖으로 빠져나간 게 아니라 AI 안에 있다"고 강조했습니다. 메모리 병목이 끝나고 데이터 스토리지·전력 인프라·테스트/패키징으로 병목이 이동하면서, 자본이 AI 생태계 안에서 스마트하게 자리를 옮기고 있다는 진단입니다.',
+    source:'"돈이 AI 밖으로 빠져나간 게 아니에요. AI 안에 있습니다... 이쪽으로 스토리지 전력 테스팅 패키징 이쪽으로 지금 자본이 스마트하게 움직이고 있다라는 겁니다."'
+  },
+  {
+    id:9, type:'mc', difficulty:'보통',
+    question:'AI 2막(Phase 2)에서 새로운 병목으로 자금이 유입되는 영역으로 언급되지 않은 것은?',
+    options:['데이터 스토리지 (씨게이트)','전력 인프라 (블룸에너지)','테스트·패키징 (테라다인)','GPU 연산 (엔비디아)'],
+    answer:3,
+    explanation:'GPU/연산은 자금이 빠져나가는(Outflow) 쪽으로 분류됐습니다. 연산칩과 DRAM이 폭증하면서 저장 공간과 전기가 부족해졌고, 그래서 스토리지·전력·테스트/패키징이 새로운 병목이자 자금 유입처가 됐다는 설명입니다.',
+    source:'"메모리 병목은 이제 끝난 거예요... 그리고 이쪽으로 스토리지 전력 테스팅 패키징 이쪽으로 지금 자본이 스마트하게 움직이고 있다"'
+  },
+  {
+    id:10, type:'sa', difficulty:'어려움',
+    question:'그래도 사고 싶은 종목이 있다면, 하락할 때마다 배분 금액의 몇 %씩 사라고 조언했나요? (숫자만)',
+    accept:['2','2%','2퍼','2퍼센트'],
+    placeholder:'예: 5',
+    answer:'2',
+    explanation:'2%입니다. 이유는 단순합니다 — 현금(캐시)이 남아 있어야 하기 때문입니다. 2%씩 나눠 사면 최대 50번을 살 수 있어, 언제 얼마나 더 빠질지 모르는 국면에서도 다음 하락에 대응할 실탄이 남습니다.',
+    source:'"빠질 때마다 여러분들이 가지고 있는 캐시 지분에서 2%만 사세요... 왜 제가 2%라고 하는 거예요? 여러분 캐시가 있어야 되기 때문에 그런 거예요."'
+  }
+];
+
+var TYPE_LABEL = { mc:'객관식', ox:'O / X', sa:'단답형' };
+var DIFF_CLASS = { '쉬움':'d1', '보통':'d2', '어려움':'d3' };
+
+var state = { solved:0, correct:0, done:{} };
+
+var quizEl   = document.getElementById('quiz');
+var bSolved  = document.getElementById('bSolved');
+var bCorrect = document.getElementById('bCorrect');
+var bRate    = document.getElementById('bRate');
+var bFill    = document.getElementById('bFill');
+var finalEl  = document.getElementById('final');
+
+function norm(s){
+  return String(s).trim().toUpperCase().replace(/\s+/g,'').replace(/[.,]/g,'');
+}
+
+function render(){
+  quizEl.innerHTML = '';
+  QUIZ_DATA.forEach(function(q, idx){
+    var card = document.createElement('div');
+    card.className = 'q';
+    card.id = 'q'+q.id;
+
+    var top = '<div class="q-top">'
+      + '<span class="q-no">'+String(idx+1).padStart(2,'0')+'</span>'
+      + '<span class="badge type">'+TYPE_LABEL[q.type]+'</span>'
+      + '<span class="badge '+DIFF_CLASS[q.difficulty]+'">'+q.difficulty+'</span>'
+      + '</div>';
+
+    var body = '<div class="q-text">'+q.question+'</div>';
+
+    if(q.type === 'mc' || q.type === 'ox'){
+      var cls = (q.type === 'ox') ? 'opts ox' : 'opts';
+      body += '<div class="'+cls+'" data-opts="'+q.id+'">';
+      q.options.forEach(function(o, i){
+        var mark = String.fromCharCode(9312 + i); // ①②③④
+        body += '<button class="opt" data-q="'+q.id+'" data-i="'+i+'">'
+             +  (q.type === 'ox' ? '' : '<span class="mk">'+mark+'</span>')
+             +  '<span class="ot">'+o+'</span></button>';
+      });
+      body += '</div>';
+    } else {
+      body += '<div class="sa">'
+           +  '<input type="text" id="in'+q.id+'" placeholder="'+q.placeholder+'" autocomplete="off">'
+           +  '<button data-sa="'+q.id+'">제출</button>'
+           +  '</div>'
+           +  '<div class="sa-res" id="sar'+q.id+'"></div>';
+    }
+
+    body += '<div class="exp" id="exp'+q.id+'">'
+         +  '<span class="et">해설</span>'
+         +  q.explanation
+         +  '<span class="src"><b>자막 근거 —</b> '+q.source+'</span>'
+         +  '</div>';
+
+    card.innerHTML = top + body;
+    quizEl.appendChild(card);
+  });
+
+  quizEl.querySelectorAll('.opt').forEach(function(b){
+    b.addEventListener('click', function(){ pickOption(b); });
+  });
+  quizEl.querySelectorAll('[data-sa]').forEach(function(b){
+    b.addEventListener('click', function(){ submitSA(parseInt(b.dataset.sa,10)); });
+  });
+  QUIZ_DATA.forEach(function(q){
+    if(q.type === 'sa'){
+      var inp = document.getElementById('in'+q.id);
+      inp.addEventListener('keydown', function(e){
+        if(e.key === 'Enter'){ e.preventDefault(); submitSA(q.id); }
+      });
+    }
+  });
+}
+
+function getQ(id){
+  for(var i=0;i<QUIZ_DATA.length;i++){ if(QUIZ_DATA[i].id === id) return QUIZ_DATA[i]; }
+  return null;
+}
+
+function pickOption(btn){
+  var id = parseInt(btn.dataset.q,10);
+  if(state.done[id]) return;
+  var q = getQ(id);
+  var chosen = parseInt(btn.dataset.i,10);
+  var isRight = (chosen === q.answer);
+
+  var group = document.querySelector('[data-opts="'+id+'"]');
+  group.querySelectorAll('.opt').forEach(function(o){
+    o.disabled = true;
+    var i = parseInt(o.dataset.i,10);
+    if(i === q.answer){
+      o.classList.add('correct');
+      if(i === chosen){ o.insertAdjacentHTML('beforeend','<span class="tag o">✓ 정답!</span>'); }
+      else { o.insertAdjacentHTML('beforeend','<span class="tag o">✓ 정답</span>'); }
+    } else if(i === chosen){
+      o.classList.add('wrong');
+      o.insertAdjacentHTML('beforeend','<span class="tag x">✗ 오답</span>');
+    }
+  });
+
+  finish(id, isRight);
+}
+
+function submitSA(id){
+  if(state.done[id]) return;
+  var q = getQ(id);
+  var inp = document.getElementById('in'+q.id);
+  var val = inp.value;
+  if(!val || !val.trim()){
+    var r0 = document.getElementById('sar'+id);
+    r0.className = 'sa-res show x';
+    r0.textContent = '답을 입력한 뒤 제출해 주세요.';
+    inp.focus();
+    return;
+  }
+  var isRight = q.accept.some(function(a){ return norm(a) === norm(val); });
+
+  inp.disabled = true;
+  var btn = document.querySelector('[data-sa="'+id+'"]');
+  btn.disabled = true;
+  btn.textContent = '제출됨';
+
+  var res = document.getElementById('sar'+id);
+  res.className = 'sa-res show ' + (isRight ? 'o' : 'x');
+  res.textContent = isRight
+    ? '✓ 정답! — ' + q.answer
+    : '✗ 오답 — 내가 쓴 답: ' + val.trim() + ' / 정답: ' + q.answer;
+
+  finish(id, isRight);
+}
+
+function finish(id, isRight){
+  state.done[id] = true;
+  state.solved += 1;
+  if(isRight) state.correct += 1;
+  document.getElementById('exp'+id).classList.add('show');
+  updateBoard();
+  if(state.solved === QUIZ_DATA.length) showFinal();
+}
+
+function updateBoard(){
+  var rate = state.solved ? Math.round(state.correct / state.solved * 100) : 0;
+  bSolved.textContent  = state.solved;
+  bCorrect.textContent = state.correct;
+  bRate.textContent    = rate + '%';
+  bFill.style.width    = (state.solved / QUIZ_DATA.length * 100) + '%';
+  var color = '#dc2626';
+  if(rate >= 70) color = '#15803d';
+  else if(rate >= 40) color = '#ea580c';
+  bFill.style.backgroundColor = color;
+}
+
+function showFinal(){
+  var total = QUIZ_DATA.length;
+  var rate = Math.round(state.correct / total * 100);
+  var grade, msg;
+  if(rate >= 90){ grade='A'; msg='완벽합니다. 자금 이동의 방향과 3관문 프레임을 정확히 이해하고 계십니다. 이제 실제 시장에서 흐름이 어떻게 이어지는지 확인해 보세요.'; }
+  else if(rate >= 70){ grade='B'; msg='탄탄합니다. 큰 그림은 잡으셨어요. 틀린 문항의 해설을 한 번 더 읽으면 세부 수치까지 정리됩니다.'; }
+  else if(rate >= 50){ grade='C'; msg='절반은 잡으셨습니다. AI 1막과 2막의 차이, 그리고 병목이 어디로 이동했는지를 중심으로 다시 훑어보세요.'; }
+  else { grade='D'; msg='괜찮습니다. 해설에는 자막 근거가 함께 붙어 있으니 순서대로 읽고 다시 도전해 보세요. 반복이 가장 빠른 길입니다.'; }
+
+  document.getElementById('fGrade').textContent = grade;
+  document.getElementById('fGrade').style.color =
+    rate >= 70 ? '#15803d' : (rate >= 50 ? '#ea580c' : '#e11d48');
+  document.getElementById('fScore').textContent = state.correct + ' / ' + total + ' · 정답률 ' + rate + '%';
+  document.getElementById('fMsg').textContent = msg;
+  finalEl.classList.add('show');
+  setTimeout(function(){ finalEl.scrollIntoView({ behavior:'smooth', block:'center' }); }, 260);
+}
+
+document.getElementById('retry').addEventListener('click', function(){
+  state = { solved:0, correct:0, done:{} };
+  finalEl.classList.remove('show');
+  render();
+  updateBoard();
+  window.scrollTo({ top:0, behavior:'smooth' });
+});
+
+render();
+updateBoard();
+
+})();
+</script>
+</body>
+</html>
