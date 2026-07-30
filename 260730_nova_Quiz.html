@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz - The End of AI Blind Faith (2026.07.29 Market Report)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;}
+  :root{
+    --bg:#ffffff; --bg2:#fafafa; --tx:#1a1a1a; --tx2:#777777;
+    --ac:#e11d48; --ac2:#f43f5e; --bd:#e5e5e5;
+    --ok:#15803d; --okbg:#dcfce7; --no:#b91c1c; --nobg:#fee2e2; --warn:#ea580c;
+  }
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0; background:var(--bg); color:var(--tx);
+    font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;
+    font-size:16px; line-height:1.75; letter-spacing:-0.01em; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px; margin:0 auto; padding:0 18px 80px;}
+  h1,h2,h3{font-family:'Playfair Display','Noto Serif KR',Georgia,serif; margin:0; letter-spacing:-0.02em;}
+
+  /* header */
+  header{padding:40px 0 26px; border-bottom:3px double var(--tx); text-align:center;}
+  header .kick{font-size:11px; font-weight:700; letter-spacing:0.22em; color:var(--ac); text-transform:uppercase; margin-bottom:12px;}
+  header h1{font-size:32px; line-height:1.24;}
+  header h1 em{font-style:italic; color:var(--ac);}
+  header p{margin:14px 0 0; font-size:13.5px; color:var(--tx2); line-height:1.7;}
+
+  /* sticky scoreboard */
+  .board{
+    position:sticky; top:0; z-index:50; background:rgba(255,255,255,0.97);
+    backdrop-filter:saturate(160%) blur(8px); -webkit-backdrop-filter:saturate(160%) blur(8px);
+    border-bottom:1px solid var(--bd); margin:0 -18px 6px; padding:10px 18px 11px;
+  }
+  .board .stats{display:flex; justify-content:space-between; align-items:flex-end; gap:6px;}
+  .board .st{flex:1; text-align:center;}
+  .board .st .l{font-size:9.5px; letter-spacing:0.14em; color:var(--tx2); text-transform:uppercase;}
+  .board .st .v{font-family:'Playfair Display',serif; font-size:22px; font-weight:900; line-height:1.15;}
+  .board .st .v span{font-size:12px; color:var(--tx2); font-weight:500;}
+  .board .st:nth-child(2) .v{color:var(--ok);}
+  .board .st:nth-child(3) .v{color:var(--ac);}
+  .bar{height:5px; background:var(--bd); margin-top:9px; overflow:hidden;}
+  .bar > i{display:block; height:100%; width:0%; background:var(--no); transition:width .45s cubic-bezier(.4,.2,.2,1), background .3s ease;}
+
+  /* question card */
+  .q{border:1px solid var(--bd); background:#fff; margin:22px 0; padding:20px 18px 18px;}
+  .q.done{background:var(--bg2);}
+  .q-top{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:12px;}
+  .q-no{font-family:'Playfair Display',serif; font-size:13px; font-weight:900; color:var(--ac); letter-spacing:0.1em;}
+  .badge{font-size:9.5px; font-weight:700; letter-spacing:0.12em; padding:3px 7px; text-transform:uppercase; color:#fff;}
+  .badge.easy{background:#15803d;} .badge.mid{background:#ea580c;} .badge.hard{background:var(--ac);}
+  .badge.type{background:var(--tx);}
+  .q-text{font-size:16.5px; font-weight:500; line-height:1.68; margin:0 0 16px;}
+
+  .opts{display:flex; flex-direction:column; gap:8px;}
+  .opt{
+    display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left;
+    font-family:'Noto Sans KR',sans-serif; font-size:14.5px; line-height:1.6;
+    background:#fff; border:1px solid var(--bd); padding:12px 13px; cursor:pointer; color:var(--tx);
+    transition:border-color .16s ease, background .16s ease, transform .12s ease;
+  }
+  .opt:hover:not(:disabled),.opt:focus-visible:not(:disabled){border-color:var(--ac); background:#fff7f9; transform:translateX(2px); outline:none;}
+  .opt .mk{
+    flex:0 0 auto; width:22px; height:22px; border:1px solid var(--bd); border-radius:50%;
+    font-family:'Playfair Display',serif; font-size:12px; font-weight:700; color:var(--tx2);
+    display:flex; align-items:center; justify-content:center; margin-top:1px;
+  }
+  .opt:disabled{cursor:default; opacity:1;}
+  .opt.correct{background:var(--okbg); border-color:var(--ok); color:#14532d;}
+  .opt.correct .mk{background:var(--ok); border-color:var(--ok); color:#fff;}
+  .opt.wrong{background:var(--nobg); border-color:var(--no); color:#7f1d1d;}
+  .opt.wrong .mk{background:var(--no); border-color:var(--no); color:#fff;}
+  .opt .tag{margin-left:auto; flex:0 0 auto; font-size:10px; font-weight:700; letter-spacing:0.08em; padding:2px 6px; align-self:center;}
+  .opt.correct .tag{background:var(--ok); color:#fff;}
+  .opt.wrong .tag{background:var(--no); color:#fff;}
+
+  /* OX */
+  .ox{display:flex; gap:10px;}
+  .ox .opt{justify-content:center; font-family:'Playfair Display',serif; font-size:26px; font-weight:900; padding:16px 10px;}
+  .ox .opt .mk{display:none;}
+  .ox .opt .tag{position:static; margin-left:8px; font-family:'Noto Sans KR',sans-serif; font-size:10px;}
+
+  /* short answer */
+  .sa{display:flex; gap:8px; flex-wrap:wrap;}
+  .sa input[type=text]{
+    flex:1 1 160px; min-width:0; font-family:'Noto Sans KR',sans-serif; font-size:15px;
+    padding:12px 13px; border:1px solid var(--bd); background:#fff; color:var(--tx); outline:none;
+  }
+  .sa input[type=text]:focus{border-color:var(--ac);}
+  .sa input[type=text]:disabled{background:var(--bg2); color:var(--tx2);}
+  .sa button{
+    flex:0 0 auto; font-family:'Noto Sans KR',sans-serif; font-size:13px; font-weight:700; letter-spacing:0.04em;
+    background:var(--tx); color:#fff; border:1px solid var(--tx); padding:12px 18px; cursor:pointer;
+  }
+  .sa button:hover:not(:disabled),.sa button:focus-visible:not(:disabled){background:var(--ac); border-color:var(--ac);}
+  .sa button:disabled{background:var(--bd); border-color:var(--bd); color:var(--tx2); cursor:default;}
+  .sa-res{width:100%; font-size:13.5px; font-weight:700; margin-top:4px;}
+  .sa-res.ok{color:var(--ok);} .sa-res.no{color:var(--no);}
+  .hintx{font-size:12px; color:var(--tx2); margin:8px 0 0;}
+
+  /* explanation */
+  .exp{
+    max-height:0; overflow:hidden; opacity:0;
+    transition:max-height .45s ease, opacity .35s ease, margin .35s ease;
+    border-left:4px solid var(--ac); background:var(--bg2); margin-top:0;
+  }
+  .exp.show{max-height:900px; opacity:1; margin-top:14px;}
+  .exp .in{padding:14px 15px;}
+  .exp .h{font-size:11px; font-weight:700; letter-spacing:0.14em; color:var(--ac); text-transform:uppercase; margin-bottom:7px;}
+  .exp p{margin:0 0 9px; font-size:14px; line-height:1.72;}
+  .exp p:last-child{margin-bottom:0;}
+  .exp .src{font-size:12.5px; color:var(--tx2); padding-top:9px; border-top:1px dashed var(--bd); line-height:1.68;}
+  .exp .ansline{font-weight:700;}
+
+  /* final modal */
+  .ov{
+    position:fixed; inset:0; background:rgba(26,26,26,0.72); z-index:100;
+    display:none; align-items:center; justify-content:center; padding:20px;
+  }
+  .ov.on{display:flex;}
+  .modal{
+    background:#fff; border:1px solid var(--bd); max-width:400px; width:100%;
+    padding:32px 26px 26px; text-align:center; animation:pop .4s cubic-bezier(.2,.9,.3,1.2);
+  }
+  @keyframes pop{from{transform:scale(.9) translateY(14px); opacity:0;} to{transform:none; opacity:1;}}
+  .modal .kick{font-size:10.5px; letter-spacing:0.2em; color:var(--ac); font-weight:700; text-transform:uppercase;}
+  .modal .grade{font-family:'Playfair Display',serif; font-size:78px; font-weight:900; line-height:1; margin:8px 0 4px;}
+  .modal .score{font-family:'Playfair Display',serif; font-size:20px; font-weight:700; margin-bottom:6px;}
+  .modal .msg{font-size:14.5px; color:var(--tx2); line-height:1.7; margin:0 0 22px;}
+  .modal .mbtns{display:flex; gap:8px; flex-direction:column;}
+  .modal button{
+    font-family:'Noto Sans KR',sans-serif; font-size:13.5px; font-weight:700; letter-spacing:0.04em;
+    padding:13px 16px; cursor:pointer; border:1px solid var(--tx); background:var(--tx); color:#fff;
+  }
+  .modal button.ghost{background:#fff; color:var(--tx);}
+  .modal button:hover,.modal button:focus-visible{background:var(--ac); border-color:var(--ac); color:#fff;}
+
+  footer{margin-top:40px; padding-top:20px; border-top:3px double var(--tx); font-size:12px; color:var(--tx2); text-align:center; line-height:1.8;}
+
+  @media (max-width:400px){
+    header h1{font-size:26px;}
+    .board .st .v{font-size:18px;}
+    .q{padding:17px 14px 15px;}
+    .modal .grade{font-size:64px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important; animation:none !important;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kick">NOVA REAL INVEST · 2026.07.29 방송</p>
+  <h1>AI 맹신 시대의 종말<br><em>이해도 점검 10문제</em></h1>
+  <p>보기를 누르면 바로 채점되고 해설이 펼쳐집니다.<br>객관식 6 · 단답형 2 · OX 2 문항</p>
+</header>
+
+<div class="board">
+  <div class="stats">
+    <div class="st"><div class="l">푼 문제</div><div class="v"><b id="sSolved">0</b><span> / 10</span></div></div>
+    <div class="st"><div class="l">맞힌 문제</div><div class="v" id="sCorrect">0</div></div>
+    <div class="st"><div class="l">정답률</div><div class="v" id="sRate">0<span>%</span></div></div>
+  </div>
+  <div class="bar"><i id="sBar"></i></div>
+</div>
+
+<main id="quiz"></main>
+
+<footer>
+  출제 근거: 2026년 7월 29일(미국 시간) NOVA REAL INVEST 방송 원본 자막<br>
+  본 자료는 교육·복습 목적이며 투자 권유가 아닙니다.
+</footer>
+</div>
+
+<div class="ov" id="ov">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <p class="kick" id="mTitle">최종 결과</p>
+    <div class="grade" id="mGrade">A</div>
+    <div class="score" id="mScore">10 / 10 · 100점</div>
+    <p class="msg" id="mMsg"></p>
+    <div class="mbtns">
+      <button type="button" id="mAgain">다시 풀기</button>
+      <button type="button" class="ghost" id="mClose">결과 닫고 해설 보기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  var QUIZ_DATA = [
+    {
+      id:1, type:'mc', difficulty:'쉬움',
+      question:'이날 나스닥100이 고점 대비 11% 하락한 것을 진행자는 무엇이라고 규정했나요?',
+      options:['공식적인 조정장 진입','공식적인 하락장(베어마켓) 진입','일시적 기술적 조정에 불과','대공황급 시스템 붕괴'],
+      answer:0,
+      explanation:'고점 대비 약 10%대 하락은 조정장(Correction), 20% 이상 하락은 하락장(베어마켓)으로 구분합니다.',
+      source:'"나스닥은 이제 마이너스 11%입니다. 바로 공식적인 조정장에 들어갔다는 거죠. 하락장은 아닙니다."'
+    },
+    {
+      id:2, type:'ox', difficulty:'쉬움',
+      question:'이번 회의에서 연준은 기준금리를 동결했다.',
+      answer:'O',
+      explanation:'연준은 기준금리를 3.50~3.75%로 동결했습니다. 다만 위원 3명이 25bp 인상을 주장하며 반대표를 던진 것이 시장에 충격을 줬습니다.',
+      source:'"연준이 금리를 동결한다. 이 소식으로 2시쯤에 뿅 하고 올라갔어요." / 화면 자료: 9명 동결(3.50~3.75%), 3명 25bp 인상 주장'
+    },
+    {
+      id:3, type:'sa', difficulty:'쉬움',
+      question:'중동 리스크 재부각으로 브렌트유는 장중 몇 % 급등했나요? (숫자만 입력)',
+      accepts:['7','7%','7퍼','7퍼센트','칠'],
+      answerLabel:'7 (%)',
+      placeholder:'예: 7',
+      explanation:'이란의 미군기지 공격과 미국의 보복 경고로 브렌트유가 장중 7% 급등해 배럴당 $90.50을 돌파했습니다(WTI $84.60). 직전 3거래일간의 하락폭 16%를 단숨에 되돌린 움직임입니다.',
+      source:'"브랜트유가 장중에 무려 7%나 급등했습니다. 배럴당 90불이나 넘어가 버렸죠."'
+    },
+    {
+      id:4, type:'mc', difficulty:'보통',
+      question:'25bp 금리 인상을 주장하며 반대표를 던진 연준 위원 3명은 누구인가요?',
+      options:['파월, 브레이너드, 윌리엄스','해맥, 카시카리, 로건','워시, 굴스비, 보먼','다이먼, 옐런, 서머스'],
+      answer:1,
+      explanation:'해맥(Hammack), 카시카리(Kashkari), 로건(Logan) 3명이 지금 당장 인상해야 한다며 반대표를 행사했습니다. 3인 반대표는 2016년 이후 최초로, 연준 내부 분열의 신호로 읽혔습니다.',
+      source:'"해맥, 카시카리, 로건 3명입니다. 이분들은 이번에 올리지 않으면 큰일 나. 이렇게 된 거죠."'
+    },
+    {
+      id:5, type:'mc', difficulty:'보통',
+      question:'케빈 워시 연준 의장이 기자회견에서 밝힌 인플레이션 목표에 관한 입장은?',
+      options:['물가 목표를 3%로 현실화하겠다','당분간 목표치를 공개하지 않겠다','느슨한 인플레이션 목표는 없고 오직 2%뿐이다','고용 지표를 물가보다 우선하겠다'],
+      answer:2,
+      explanation:'그동안 "2% 목표가 비현실적이니 3% 정도로 바꿔야 한다"는 의견이 많았는데, 워시 의장은 이를 정면으로 거부하고 2% 목표를 못 박았습니다. 여기에 "포워드 가이던스(향후 힌트)를 주지 않겠다"는 태도까지 겹쳤습니다.',
+      source:'"연준의 느슨한 인플레이션 목표는 없다. (…) 오직 2% 오직 2% 요거를 이제 얘기를 한 거예요."'
+    },
+    {
+      id:6, type:'sa', difficulty:'보통',
+      question:'이날 5.2%를 돌파해 2007년 이후 최고치를 기록한 미 국채는 몇 년물인가요? (숫자만 입력)',
+      accepts:['30','30년','30년물','삼십','30 year','30년만기'],
+      answerLabel:'30 (년물)',
+      placeholder:'예: 30',
+      explanation:'30년물 국채금리가 5.2%를 돌파했습니다. 20년 이상 장기 자금조달 비용의 기준선이 통째로 재설정된 것으로, 미래 현금흐름을 깎는 할인율 쇼크와 리츠·데이터센터의 내부수익률(IRR) 훼손으로 이어집니다.',
+      source:'"도미노 효과 보도록 하겠습니다. 30년물이 5.2%를 돌파했습니다." / 화면 자료: 30년물 5.22% (2007년 이후 최고치)'
+    },
+    {
+      id:7, type:'mc', difficulty:'보통',
+      question:'메타(META)가 시간외에서 최대 -10% 급락한 핵심 이유는 무엇인가요?',
+      options:['광고 매출이 전년 대비 감소로 전환됐기 때문','CapEx 확대로 FCF 마진이 22%에서 1.3%로 붕괴됐기 때문','데이터센터 건설 허가가 전면 취소됐기 때문','Azure와의 클라우드 경쟁에서 밀렸기 때문'],
+      answer:1,
+      explanation:'메타는 AI 데이터센터에 자본지출을 더 늘렸고(2026년 하한선 $130B~$145B로 상향), 그 결과 잉여현금흐름 마진이 22%에서 1.3%로 사실상 사라졌습니다. 광고회사에서 인프라·제조 회사로 성격이 바뀌는 국면입니다.',
+      source:'"캐펙스를 늘려서 잉여 현금 흐름이 어떻게 됐냐? 원래 22%였습니다. 근데 1.3%로 붕괴가 된 거죠."'
+    },
+    {
+      id:8, type:'mc', difficulty:'보통',
+      question:'같은 날 마이크로소프트(MSFT)가 시간외에서 상승한 결정적 근거는?',
+      options:['자본지출을 전면 중단하겠다고 발표','윈도우 라이선스 가격 인상 발표','Azure 클라우드 성장률 43% 재가속 및 연 1,000억 달러 돌파','반도체 자체 생산 진출 선언'],
+      answer:2,
+      explanation:'투자한 돈이 실제 매출로 돌아오고 있음을 숫자로 증명한 것이 차이였습니다. 4분기 CapEx는 예상치를 하회해 비용 통제까지 보여줬고, 상업용 잔여계약가치는 $678B(+84%)로 늘었습니다. 시장의 질문은 "쓴 만큼 회수하고 있나"였습니다.',
+      source:'"애저 클라우드 성장률이 43%로 늘어났습니다. 천억 달러 돌파했어요. (…) 자신들이 실제로 투자한 돈이 실제 매출로 돌아오고 있어요."'
+    },
+    {
+      id:9, type:'mc', difficulty:'어려움',
+      question:'실적이 좋았던 블룸에너지(BE)가 장중 강세에서 마감 하락으로 돌아선 원인으로 언급된 것은?',
+      options:['터빈 수명 단축 우려 (10년 수명이 3년으로 끝날 수 있다는 지적)','핵심 경영진의 대규모 지분 매각','미국 정부의 수출 허가 취소','수주 잔고가 전년 대비 절반으로 감소'],
+      answer:0,
+      explanation:'터빈의 통상 수명은 10년 정도인데, 데이터센터 수요로 쉬지 않고 돌리면 3년 만에 끝날 수 있다는 우려가 제기됐습니다. 실적(매출 29%, EPS 90% 서프라이즈)이 좋아도 뉴스가 전력 인프라 전반의 신뢰를 건드린 사례입니다.',
+      source:'"터빈 수명 단축 우려라는 게 나왔습니다. (…) 보통 이 터빈의 생명 주기가 10년이래요. (…) 이거 보니까 3년 정도면 끝날 것 같아. 라는 얘기가 있어요."'
+    },
+    {
+      id:10, type:'ox', difficulty:'어려움',
+      question:'진행자는 스페이스X가 살아남는 방법으로 "화성 사업 확대"를 제시했고, 실제로 스페이스X가 이를 실행에 옮겼다고 말했다.',
+      answer:'X',
+      explanation:'진행자는 두 달 가까이 "화성 같은 얘기 말고 통신을 해야 한다"고 반복해왔고, 스페이스X가 도심용 주파수를 확보해 통신·셀폰 사업에 나선 것을 그 근거로 들었습니다. 이 소식에 버라이즌·AT&T·T모바일 등 전통 통신주가 -4%대로 밀렸습니다.',
+      source:'"스페이스X는 돈을 벌려면 화성 이딴 거 말도 안 되는 얘기 하지 말고 (…) 통신사업을 해야 한다. (…) 도심용 주파수를 확보했어요."'
+    }
+  ];
+
+  var DIFF_CLASS = { '쉬움':'easy', '보통':'mid', '어려움':'hard' };
+  var TYPE_LABEL = { mc:'객관식', sa:'단답형', ox:'OX' };
+  var LETTER = ['A','B','C','D'];
+
+  var state = { solved:0, correct:0 };
+  var quizEl = document.getElementById('quiz');
+  var elSolved = document.getElementById('sSolved');
+  var elCorrect = document.getElementById('sCorrect');
+  var elRate = document.getElementById('sRate');
+  var elBar = document.getElementById('sBar');
+  var ov = document.getElementById('ov');
+
+  function normalize(s){
+    return String(s == null ? '' : s)
+      .toLowerCase()
+      .replace(/\s+/g, '')
+      .replace(/[.,!?~'"“”·]/g, '');
+  }
+
+  function updateBoard(){
+    elSolved.textContent = state.solved;
+    elCorrect.textContent = state.correct;
+    var rate = state.solved > 0 ? Math.round((state.correct / state.solved) * 100) : 0;
+    elRate.innerHTML = rate + '<span>%</span>';
+    elBar.style.width = rate + '%';
+    var col = '#b91c1c';
+    if (rate >= 70) col = '#15803d';
+    else if (rate >= 40) col = '#ea580c';
+    elBar.style.background = col;
+  }
+
+  function showExp(card){
+    var exp = card.querySelector('.exp');
+    if (exp) exp.classList.add('show');
+    card.classList.add('done');
+  }
+
+  function finish(){
+    var score = state.correct * 10;
+    var grade, msg;
+    if (state.correct >= 9) { grade = 'A'; msg = '거의 완벽합니다. FCF 중심의 새 규칙과 금리 도미노 구조를 정확히 이해하고 있습니다.'; }
+    else if (state.correct >= 7) { grade = 'B'; msg = '핵심은 잡았습니다. 틀린 문항의 해설에서 숫자(금리·유가·FCF)를 한 번 더 확인해보세요.'; }
+    else if (state.correct >= 5) { grade = 'C'; msg = '절반은 맞혔습니다. 30년물 5.2%가 왜 할인율 쇼크로 이어지는지 다시 훑어보면 그림이 잡힙니다.'; }
+    else { grade = 'D'; msg = '괜찮습니다. 해설을 따라 읽으며 "돈을 태운 자 vs 벌어온 자" 구도부터 정리해보세요.'; }
+    document.getElementById('mGrade').textContent = grade;
+    document.getElementById('mGrade').style.color = (grade === 'A' || grade === 'B') ? '#15803d' : (grade === 'C' ? '#ea580c' : '#b91c1c');
+    document.getElementById('mScore').textContent = state.correct + ' / 10 · ' + score + '점';
+    document.getElementById('mMsg').textContent = msg;
+    ov.classList.add('on');
+  }
+
+  function afterGrade(isCorrect, card){
+    state.solved++;
+    if (isCorrect) state.correct++;
+    updateBoard();
+    showExp(card);
+    if (state.solved === QUIZ_DATA.length) {
+      setTimeout(finish, 620);
+    }
+  }
+
+  function buildExp(q){
+    var wrap = document.createElement('div');
+    wrap.className = 'exp';
+    var ansTxt;
+    if (q.type === 'mc') ansTxt = LETTER[q.answer] + '. ' + q.options[q.answer];
+    else if (q.type === 'ox') ansTxt = q.answer;
+    else ansTxt = q.answerLabel;
+    wrap.innerHTML =
+      '<div class="in">' +
+        '<div class="h">해설</div>' +
+        '<p class="ansline">정답: ' + ansTxt + '</p>' +
+        '<p>' + q.explanation + '</p>' +
+        '<p class="src">📌 원본 근거 — ' + q.source + '</p>' +
+      '</div>';
+    return wrap;
+  }
+
+  function render(){
+    quizEl.innerHTML = '';
+    state.solved = 0; state.correct = 0;
+    updateBoard();
+
+    QUIZ_DATA.forEach(function(q, idx){
+      var card = document.createElement('article');
+      card.className = 'q';
+
+      var top = document.createElement('div');
+      top.className = 'q-top';
+      top.innerHTML =
+        '<span class="q-no">Q' + (idx + 1 < 10 ? '0' : '') + (idx + 1) + '</span>' +
+        '<span class="badge type">' + TYPE_LABEL[q.type] + '</span>' +
+        '<span class="badge ' + DIFF_CLASS[q.difficulty] + '">' + q.difficulty + '</span>';
+      card.appendChild(top);
+
+      var qt = document.createElement('p');
+      qt.className = 'q-text';
+      qt.textContent = q.question;
+      card.appendChild(qt);
+
+      var exp = buildExp(q);
+
+      if (q.type === 'mc' || q.type === 'ox') {
+        var box = document.createElement('div');
+        box.className = q.type === 'ox' ? 'opts ox' : 'opts';
+        var labels = q.type === 'ox' ? ['O', 'X'] : q.options;
+
+        labels.forEach(function(text, i){
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'opt';
+          if (q.type === 'ox') {
+            b.innerHTML = '<span>' + text + '</span>';
+          } else {
+            b.innerHTML = '<span class="mk">' + LETTER[i] + '</span><span>' + text + '</span>';
+          }
+          b.addEventListener('click', function(){
+            var isCorrect = (q.type === 'ox') ? (text === q.answer) : (i === q.answer);
+            var all = box.querySelectorAll('.opt');
+            all.forEach(function(x){ x.disabled = true; });
+
+            b.classList.add(isCorrect ? 'correct' : 'wrong');
+            var tag = document.createElement('span');
+            tag.className = 'tag';
+            tag.textContent = isCorrect ? '✓ 정답!' : '✗ 오답';
+            b.appendChild(tag);
+
+            if (!isCorrect) {
+              var ci = (q.type === 'ox') ? (q.answer === 'O' ? 0 : 1) : q.answer;
+              var right = all[ci];
+              if (right) {
+                right.classList.add('correct');
+                var t2 = document.createElement('span');
+                t2.className = 'tag';
+                t2.textContent = '정답';
+                right.appendChild(t2);
+              }
+            }
+            afterGrade(isCorrect, card);
+          });
+          box.appendChild(b);
+        });
+        card.appendChild(box);
+      } else {
+        var sa = document.createElement('div');
+        sa.className = 'sa';
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.placeholder = q.placeholder || '답을 입력하세요';
+        input.setAttribute('inputmode', 'text');
+        input.setAttribute('aria-label', '단답형 답 입력');
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = '제출';
+        var res = document.createElement('div');
+        res.className = 'sa-res';
+
+        var submit = function(){
+          var raw = input.value;
+          if (normalize(raw) === '') {
+            res.className = 'sa-res no';
+            res.textContent = '답을 입력한 뒤 제출해주세요.';
+            input.focus();
+            return;
+          }
+          var v = normalize(raw);
+          var isCorrect = q.accepts.some(function(a){ return normalize(a) === v; });
+          input.disabled = true; btn.disabled = true;
+          res.className = 'sa-res ' + (isCorrect ? 'ok' : 'no');
+          res.textContent = isCorrect
+            ? '✓ 정답! 입력: ' + raw
+            : '✗ 오답 — 입력: ' + raw + ' / 정답: ' + q.answerLabel;
+          afterGrade(isCorrect, card);
+        };
+        btn.addEventListener('click', submit);
+        input.addEventListener('keydown', function(e){
+          if (e.key === 'Enter') { e.preventDefault(); if (!input.disabled) submit(); }
+        });
+
+        sa.appendChild(input); sa.appendChild(btn); sa.appendChild(res);
+        card.appendChild(sa);
+
+        var hint = document.createElement('p');
+        hint.className = 'hintx';
+        hint.textContent = '숫자만 입력해도 정답으로 인정됩니다.';
+        card.appendChild(hint);
+      }
+
+      card.appendChild(exp);
+      quizEl.appendChild(card);
+    });
+  }
+
+  document.getElementById('mAgain').addEventListener('click', function(){
+    ov.classList.remove('on');
+    render();
+    window.scrollTo({ top:0, behavior:'smooth' });
+  });
+  document.getElementById('mClose').addEventListener('click', function(){
+    ov.classList.remove('on');
+  });
+  ov.addEventListener('click', function(e){
+    if (e.target === ov) ov.classList.remove('on');
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
