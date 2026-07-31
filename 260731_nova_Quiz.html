@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dual Reality Market Quiz 2026.07.30</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,500&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#fafafa; --tx:#1a1a1a; --tx2:#777777;
+  --ac:#e11d48; --ac2:#f43f5e; --bd:#e5e5e5;
+  --ok:#15803d; --okbg:#f0fdf4; --okbd:#bbf7d0;
+  --no:#e11d48; --nobg:#fef2f2; --nobd:#fecaca;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);
+  font-family:'Noto Sans KR',sans-serif;line-height:1.75;font-size:16px;letter-spacing:-.01em}
+.wrap{max-width:680px;margin:0 auto;padding:0 18px 90px}
+
+/* ── HEAD ── */
+header{padding:48px 0 26px;border-bottom:3px solid var(--tx);text-align:center}
+.kicker{font-size:11px;letter-spacing:.28em;color:var(--ac);font-weight:700;margin-bottom:14px}
+header h1{font-family:'Playfair Display',serif;font-size:38px;line-height:1.1;margin:0;font-weight:900;letter-spacing:-.02em}
+header h1 em{font-style:italic;color:var(--ac);font-weight:500}
+header p{font-size:13.5px;color:var(--tx2);margin:14px 0 0;line-height:1.8}
+
+/* ── SCOREBOARD ── */
+.board{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--bd);
+  padding:12px 0 11px;margin-bottom:8px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.bstats{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:9px}
+.bs{text-align:center;flex:1}
+.bs .lb{font-size:10px;letter-spacing:.12em;color:var(--tx2);display:block}
+.bs .vl{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;line-height:1.15;display:block}
+.bs .vl small{font-size:13px;color:var(--tx2);font-weight:400}
+.bar{height:5px;background:var(--bd);overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--ac);transition:width .45s ease,background-color .45s ease}
+
+/* ── CARD ── */
+.q{border:1px solid var(--bd);padding:22px 18px;margin:22px 0;background:#fff}
+.qh{display:flex;align-items:center;gap:9px;margin-bottom:14px;flex-wrap:wrap}
+.qn{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--ac);line-height:1}
+.badge{font-size:10px;letter-spacing:.1em;padding:3px 8px;border:1px solid var(--bd);color:var(--tx2)}
+.b-e{border-color:#bbf7d0;color:var(--ok);background:var(--okbg)}
+.b-m{border-color:#fde68a;color:#b45309;background:#fffbeb}
+.b-h{border-color:var(--nobd);color:var(--no);background:var(--nobg)}
+.b-t{background:var(--bg2)}
+.qt{font-size:16.5px;font-weight:500;line-height:1.7;margin:0 0 16px}
+
+/* ── OPTIONS ── */
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;
+  padding:13px 14px;background:#fff;border:1px solid var(--bd);cursor:pointer;
+  font-family:'Noto Sans KR',sans-serif;font-size:14.5px;line-height:1.6;color:var(--tx);transition:.18s}
+.opt:hover:not(:disabled){border-color:var(--ac);background:#fff5f7}
+.opt:disabled{cursor:default}
+.opt:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.opt .mk{font-family:'Playfair Display',serif;font-weight:700;font-size:15px;color:var(--tx2);flex-shrink:0;min-width:16px}
+.opt.correct{background:var(--okbg);border-color:var(--okbd);color:var(--ok);font-weight:500}
+.opt.correct .mk{color:var(--ok)}
+.opt.wrong{background:var(--nobg);border-color:var(--nobd);color:var(--no);font-weight:500}
+.opt.wrong .mk{color:var(--no)}
+.opt .tag{margin-left:auto;font-size:10.5px;letter-spacing:.06em;padding:2px 7px;color:#fff;flex-shrink:0;align-self:center}
+.opt.correct .tag{background:var(--ok)}
+.opt.wrong .tag{background:var(--no)}
+
+/* ── OX ── */
+.ox{display:flex;gap:10px}
+.ox .opt{justify-content:center;font-family:'Playfair Display',serif;font-size:26px;font-weight:700;padding:16px}
+.ox .opt .tag{font-family:'Noto Sans KR';font-size:10.5px;margin-left:8px;align-self:center}
+
+/* ── SHORT ── */
+.sa{display:flex;gap:8px}
+.sa input{flex:1;padding:13px 14px;border:1px solid var(--bd);font-family:'Noto Sans KR',sans-serif;
+  font-size:15px;color:var(--tx);background:#fff;min-width:0}
+.sa input:focus{outline:none;border-color:var(--ac)}
+.sa input:disabled{background:var(--bg2);color:var(--tx2)}
+.sa button{padding:13px 20px;background:var(--tx);color:#fff;border:none;font-family:'Noto Sans KR',sans-serif;
+  font-size:13.5px;font-weight:500;letter-spacing:.06em;cursor:pointer;transition:.2s;flex-shrink:0}
+.sa button:hover:not(:disabled){background:var(--ac)}
+.sa button:disabled{background:var(--bd);color:var(--tx2);cursor:default}
+.sa button:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.hint{font-size:11.5px;color:var(--tx2);margin-top:7px}
+
+/* ── EXPLAIN ── */
+.ex{margin-top:15px;padding:15px 16px;background:var(--bg2);border-left:3px solid var(--ac);
+  font-size:13.5px;line-height:1.85;display:none}
+.ex.show{display:block;animation:sl .35s ease}
+@keyframes sl{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.ex .et{font-size:11px;letter-spacing:.16em;color:var(--ac);font-weight:700;margin-bottom:7px}
+.ex .ans{font-weight:700;margin-bottom:6px}
+.ex .src{margin-top:10px;padding-top:10px;border-top:1px dotted var(--bd);font-size:12.5px;color:var(--tx2);font-style:italic}
+@media (prefers-reduced-motion:reduce){.ex.show{animation:none}}
+
+/* ── RESULT ── */
+.result{display:none;margin:36px 0 0;border:1px solid var(--bd);border-top:5px solid var(--ac);padding:34px 22px;text-align:center;background:var(--bg2)}
+.result.show{display:block;animation:sl .5s ease}
+.result .gl{font-size:11px;letter-spacing:.24em;color:var(--ac);font-weight:700}
+.result .gr{font-family:'Playfair Display',serif;font-size:82px;font-weight:900;line-height:1;margin:8px 0 4px;color:var(--ac)}
+.result .sc{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;margin-bottom:10px}
+.result .sc small{font-size:15px;color:var(--tx2);font-weight:400}
+.result .msg{font-size:14px;color:var(--tx2);line-height:1.9;margin-bottom:22px}
+.result button{padding:13px 34px;background:var(--tx);color:#fff;border:none;font-family:'Noto Sans KR',sans-serif;
+  font-size:13.5px;font-weight:500;letter-spacing:.08em;cursor:pointer;transition:.2s}
+.result button:hover{background:var(--ac)}
+.result button:focus-visible{outline:2px solid var(--ac);outline-offset:3px}
+
+footer{margin-top:54px;padding-top:22px;border-top:3px solid var(--tx);font-size:11.5px;color:var(--tx2);line-height:1.9;text-align:center}
+@media(max-width:400px){
+  header h1{font-size:30px}
+  .bs .vl{font-size:20px}
+  .q{padding:18px 14px}
+  .qt{font-size:15.5px}
+  .result .gr{font-size:64px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">NOVA REAL INVEST · 2026.07.30</div>
+  <h1>이중 현실<br><em>Comprehension Check</em></h1>
+  <p>7월 30일 멤버 미팅 방송의 핵심을 10문제로 확인합니다.<br>보기를 고르면 즉시 채점되고 해설이 펼쳐집니다.</p>
+</header>
+
+<div class="board">
+  <div class="bstats">
+    <div class="bs"><span class="lb">푼 문제</span><span class="vl" id="stSolved">0 <small>/ 10</small></span></div>
+    <div class="bs"><span class="lb">맞힌 문제</span><span class="vl" id="stCorrect">0</span></div>
+    <div class="bs"><span class="lb">정답률</span><span class="vl" id="stRate">0<small>%</small></span></div>
+  </div>
+  <div class="bar"><span id="stBar"></span></div>
+</div>
+
+<main id="quiz"></main>
+
+<div class="result" id="result">
+  <div class="gl">FINAL SCORE</div>
+  <div class="gr" id="rGrade">A</div>
+  <div class="sc" id="rScore">10 <small>/ 10</small></div>
+  <p class="msg" id="rMsg"></p>
+  <button id="retry">다시 풀기</button>
+</div>
+
+<footer>
+  본 문제는 2026년 7월 30일 NOVA Real Invest 방송 내용만을 근거로 출제되었습니다.<br>
+  학습 목적의 자료이며 투자 권유가 아닙니다.
+</footer>
+
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    id:1, type:'mc', difficulty:'쉬움',
+    question:'7월 30일 30년물 미국 국채금리가 5.21%를 기록했습니다. 방송에서 이 수치를 두고 지적한 핵심 의미는 무엇인가요?',
+    options:[
+      '2007년 이후 19년 만의 최고치로, 금융위기 직전과 같은 레벨의 경고 신호다',
+      '연준이 곧 금리를 인하할 것이라는 확실한 신호다',
+      '장기 투자자에게 안정적인 수익 기회가 열렸다는 뜻이다',
+      '단기물 금리가 함께 급등해 경기 과열을 나타낸다'
+    ],
+    answer:0,
+    explanation:'30년물 5.21%는 2007년 이후 19년 만의 최고치입니다. 방송에서는 "2007년에 무슨 일이 있었어요? 금융위기가 터지기 직전"이라며 지금 채권 시장이 그때와 같은 레벨의 신호를 보내고 있다고 지적했습니다. 또한 단기물(2년)은 오히려 살짝 내렸고 장기물만 급등했으므로 4번도 틀립니다.',
+    source:'"5.21이에요. 2007년 이후 19년 만에 최고치입니다. (…) 금융위기가 터지기 직전이라는 표시입니다."'
+  },
+  {
+    id:2, type:'mc', difficulty:'보통',
+    question:'S&P 500 지수가 상승했음에도 방송에서 "건강한 강세장이 아니다"라고 판단한 근거로 제시된 것은?',
+    options:[
+      '거래량이 평소보다 크게 줄어들었기 때문',
+      '마이크로소프트 한 종목이 지수 상승분의 54%를 만들어냈고, 동일가중 ETF(RSP)는 오히려 하락했기 때문',
+      '외국인 투자자가 순매도로 돌아섰기 때문',
+      '반도체 지수(SOX)가 하락 마감했기 때문'
+    ],
+    answer:1,
+    explanation:'지수를 움직인 종목은 사실상 마이크로소프트 한 종목이었습니다. S&P 500 상승분의 54%, 다우 상승폭 614pt 중 470pt가 MSFT 몫이었고, 동일가중 ETF인 RSP는 -0.2%로 하락했으며 다우 30종목 중 16종목이 하락 마감했습니다. 참고로 SOX 반도체 지수는 오히려 +8.2%로 급등했습니다.',
+    source:'"S&P 500 지수의 1.66%에서 54%는 누구 덕이다? 마이크로소프트. 단 한 종목이 다 끌어올린 겁니다. (…) 절반은 피를 흘리고 있었습니다."'
+  },
+  {
+    id:3, type:'sa', difficulty:'보통',
+    question:'오늘 반도체 폭등의 진짜 원인이 된 사건입니다. 청산된 Situational Awareness 펀드의 포트폴리오를 전격 인수한 헤지펀드의 이름은 무엇인가요?',
+    answer:['시타델','citadel','씨타델','시타델증권'],
+    explanation:'마진콜로 강제 청산된 포트폴리오를 시타델(Citadel)이 통째로 인수했습니다. 이 사실이 알려지면서 "기계적 매도 물량이 모두 소화됐다"는 인식이 퍼졌고, 여기에 J.P.모건의 "헤지펀드 디레버리징 90% 완료" 발언이 더해지며 대규모 숏커버링이 터졌습니다. 방송에서는 "시타델만 좋은 일 한 거지"라고 표현했습니다.',
+    source:'"근데 이거를 누가 줍줍하냐? 시타델이 다 사버립니다. 시타델도 해지펀드예요."'
+  },
+  {
+    id:4, type:'ox', difficulty:'보통',
+    question:'방송에서는 최근 반도체 주식의 급락 원인을 "기업 펀더멘털이 실제로 망가졌기 때문"이라고 결론지었다.',
+    answer:'X',
+    explanation:'정반대입니다. 방송의 핵심 결론은 급락이 펀더멘털 붕괴가 아니라 레버리지 강제 청산이라는 수급 요인 때문이었다는 것입니다. 근거로 "어제와 오늘 마이크론이나 샌디스크 회사가 변했나요? 새로운 뉴스가 나왔나요? 똑같습니다"라고 반문했습니다.',
+    source:'"최근에 반도체 하락이 기업의 펀더멘탈이 망가진 게 아니라는 걸 보여주고 기계적인 레버리지 청산 때문에 일어난 일이라는 걸 오늘 보여준 거예요."'
+  },
+  {
+    id:5, type:'mc', difficulty:'쉬움',
+    question:'마이크로소프트와 아마존의 실적을 두고 방송이 제시한 "시장의 새로운 잣대"는 무엇인가요?',
+    options:[
+      '배당 수익률과 자사주 매입 규모',
+      '직원 수 증가율과 인건비 비중',
+      'CapEx(자본지출)를 쓰면서도 잉여현금흐름(FCF) 또는 수주잔고를 보여주는가',
+      '해외 매출 비중과 환율 민감도'
+    ],
+    answer:2,
+    explanation:'방송은 "캡엑스하고 프리캐시플로우가 중요하다"고 반복했습니다. 같은 AI 투자라도 ①돈을 쓰면서 현금이 빠져나가기만 하는 기업과 ②투자하면서도 현금을 벌거나 수주잔고로 미래 매출을 보여주는 기업으로 진영이 갈렸다는 것입니다. MSFT는 CapEx $41B에도 FCF $19.6B를 창출했고, AMZN은 FCF가 -$7.6B로 적자 전환했으나 백로그 $496B로 방어했습니다.',
+    source:'"시장의 새로운 잣대. 캡백스하고 프리캐시플로우가 중요하다. (…) AI인데 돈을 계속 쓰면서 프리캐시 플로우가 날아가 버리는 아이냐, 아니면 AI 투자를 했는데 돈을 막 벌고 있어."'
+  },
+  {
+    id:6, type:'sa', difficulty:'어려움',
+    question:'삼성전자 실적 발표의 핵심을 방송에서는 "수요 폭발"로 요약하면서, 메모리 공급 부족이 몇 년까지 이어질 것이라고 했나요? (연도 네 자리 숫자로 답하세요)',
+    answer:['2028','2028년','28','28년'],
+    explanation:'삼성전자 발표의 요점은 "2028년까지 공급 부족"이었습니다. 방송에서는 지금이 2026년이므로 앞으로 2년 넘게 메모리가 모자란다는 뜻이라고 짚었습니다. 이 발표가 SNDK·MU·LRCX 등 메모리 관련주 폭등의 직접적인 트리거였습니다.',
+    source:'"삼성전자의 딱 한 줄로 정리하면 수요 폭발인데 구체적으로 숫자를 넣으면 2028년까지 공급 부족이다."'
+  },
+  {
+    id:7, type:'mc', difficulty:'보통',
+    question:'메모리 가격 상승 국면에서 방송이 "피해자"로 분류한 기업의 조합으로 가장 적절한 것은?',
+    options:[
+      '마이크론, 샌디스크, SK하이닉스',
+      '램리서치, ASML, 웨스턴디지털',
+      '애플, 퀄컴 등 메모리를 사서 제품에 넣는 기업',
+      '퀀타 서비스, 블룸에너지 등 전력 인프라 기업'
+    ],
+    answer:2,
+    explanation:'메모리를 파는 쪽(마이크론·샌디스크·삼성전자·SK·ASML·램리서치)은 수혜자, 메모리를 사서 써야 하는 쪽(애플·퀄컴, 그리고 데이터센터를 짓는 빅테크)은 피해자입니다. 방송은 "누군가의 원재료 가격 상승은 다른 누군가의 마진 훼손"이라며 반드시 편을 갈라서 보라고 강조했습니다.',
+    source:'"피해자는 누굽니까? 애플, 퀄컴, 구글, 마이크로소프트, 아마존, 스페이스X 기타 등등. (…) 메모리 가격 상승이 원가를 압박하니까 투자하실 때 반드시 편을 갈라서 보셔야 됩니다."'
+  },
+  {
+    id:8, type:'mc', difficulty:'어려움',
+    question:'애플의 이번 실적이 잘 나왔음에도 방송에서 "EPS가 페이크"라고 평가한 이유는?',
+    options:[
+      '중국 판매량을 과대 계상했기 때문',
+      '관세 환급을 받은 것이 엄청난 이익으로 잡혔기 때문',
+      '자사주 매입으로 주식 수를 크게 줄였기 때문',
+      '서비스 부문 매출을 하드웨어 매출로 분류했기 때문'
+    ],
+    answer:1,
+    explanation:'애플 실적 호조의 원인은 관세 환급이었고, 이것이 큰 폭의 이익으로 계상됐습니다. 방송은 "관세 환급 받은 걸 산입 안 하면 이 정도 마진이 나올 수 없다"고 지적했습니다. 다만 노바는 "애플이 완전히 맛이 간 것은 아니며 앞으로 어떤 제품이 나올지 추적해야 한다"고 덧붙였습니다.',
+    source:'"애플이 실적이 잘 나온 이유가? 관세 환급을 받았기 때문입니다. 이게 엄청난 이익으로 잡혀버렸어요. 그러니까 페이크죠. EPS가 페이크야."'
+  },
+  {
+    id:9, type:'ox', difficulty:'쉬움',
+    question:'방송의 행동 강령에 따르면, 오늘 15~26% 급등한 반도체 종목은 다음 날 시초가에 적극적으로 추격 매수해야 한다.',
+    answer:'X',
+    explanation:'행동 강령의 레드라이트 항목이 바로 "단기 추격 매수 금지"입니다. 아직 페이크인지 확인되지 않았으므로, 정 사고 싶다면 한 번에 2%씩만, 그것도 올라갈 때가 아니라 내려갈 때 사라는 것이 방송의 지침이었습니다. 반도체는 200일 이동평균선 지지 테스트 시 분할 접근하라고 안내했습니다.',
+    source:'"추격매수 하라고 그랬어요? (…) 2%씩 사라고. 왜? 확인이 될 때까지. (…) 정 사고 싶으시면 내려갈 때 사."'
+  },
+  {
+    id:10, type:'mc', difficulty:'어려움',
+    question:'방송 마지막에 매수·매도 시스템(Rule 720 Bot)에 즉시 추가하라고 지시한 리스크 필터 기준은?',
+    options:[
+      'VIX 지수 30 돌파 여부',
+      '나스닥 200일 이동평균선 이탈 여부',
+      '30년물 국채금리 5.25% 돌파 여부 및 빅테크 CDS 스프레드 변동성',
+      '공포탐욕지수 20 이하 진입 여부'
+    ],
+    answer:2,
+    explanation:'방송은 "매수 매도 로직, 30년물 국채금리 5.25% 돌파 여부 이거 중요해요"라고 못 박았고, 발표 자료에도 이 항목과 빅테크 CDS 스프레드 변동성을 리스크 필터로 즉시 추가하라고 명시돼 있습니다. 국채 시장이 주식 시장보다 훨씬 크고 연준 금리도 결국 국채 움직임을 보고 결정된다는 것이 근거입니다.',
+    source:'"매수 매도 로직 30년물 국채금리 5.25 돌파 여부 이거 중요해요. (…) 국채금리가 중심이 돼서 생각하십시오."'
+  }
+];
+
+const state = { solved:0, correct:0, done:new Set() };
+const quizEl = document.getElementById('quiz');
+
+const DIFF = { '쉬움':'b-e', '보통':'b-m', '어려움':'b-h' };
+const TYPE = { mc:'객관식', sa:'단답형', ox:'O / X' };
+const MARK = ['A','B','C','D'];
+
+function esc(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function render(){
+  quizEl.innerHTML = '';
+  QUIZ_DATA.forEach(q => {
+    const card = document.createElement('article');
+    card.className = 'q';
+    card.id = 'q'+q.id;
+
+    let body = '';
+    if(q.type === 'mc'){
+      body = '<div class="opts">' + q.options.map((o,i)=>
+        `<button class="opt" data-i="${i}"><span class="mk">${MARK[i]}</span><span>${esc(o)}</span></button>`
+      ).join('') + '</div>';
+    } else if(q.type === 'ox'){
+      body = '<div class="opts ox">'
+        + '<button class="opt" data-v="O">O</button>'
+        + '<button class="opt" data-v="X">X</button>'
+        + '</div>';
+    } else {
+      body = '<div class="sa">'
+        + `<input type="text" placeholder="답을 입력하세요" aria-label="${q.id}번 답 입력">`
+        + '<button class="sub">제출</button></div>'
+        + '<div class="hint">정확한 단어 또는 숫자만 입력해도 됩니다.</div>';
+    }
+
+    card.innerHTML =
+      `<div class="qh">
+         <span class="qn">${String(q.id).padStart(2,'0')}</span>
+         <span class="badge b-t">${TYPE[q.type]}</span>
+         <span class="badge ${DIFF[q.difficulty]}">${q.difficulty}</span>
+       </div>
+       <p class="qt">${esc(q.question)}</p>
+       ${body}
+       <div class="ex"></div>`;
+
+    quizEl.appendChild(card);
+    bind(card, q);
+  });
+}
+
+function bind(card, q){
+  if(q.type === 'mc'){
+    card.querySelectorAll('.opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if(state.done.has(q.id)) return;
+        const pick = parseInt(btn.dataset.i,10);
+        const ok = pick === q.answer;
+        card.querySelectorAll('.opt').forEach((b,i) => {
+          b.disabled = true;
+          if(i === q.answer) mark(b,'correct', i===pick ? '✓ 정답!' : '정답');
+          else if(i === pick) mark(b,'wrong','✗ 오답');
+        });
+        finish(card, q, ok, q.options[q.answer]);
+      });
+    });
+  } else if(q.type === 'ox'){
+    card.querySelectorAll('.opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if(state.done.has(q.id)) return;
+        const pick = btn.dataset.v;
+        const ok = pick === q.answer;
+        card.querySelectorAll('.opt').forEach(b => {
+          b.disabled = true;
+          if(b.dataset.v === q.answer) mark(b,'correct', b.dataset.v===pick ? '✓ 정답!' : '정답');
+          else if(b.dataset.v === pick) mark(b,'wrong','✗ 오답');
+        });
+        finish(card, q, ok, q.answer);
+      });
+    });
+  } else {
+    const input = card.querySelector('input');
+    const btn = card.querySelector('.sub');
+    const submit = () => {
+      if(state.done.has(q.id)) return;
+      const raw = input.value.trim();
+      if(!raw){
+        input.focus();
+        input.style.borderColor = '#e11d48';
+        setTimeout(()=>{ input.style.borderColor = ''; }, 900);
+        return;
+      }
+      const norm = raw.toLowerCase().replace(/\s+/g,'');
+      const ok = q.answer.some(a => a.toLowerCase().replace(/\s+/g,'') === norm);
+      input.disabled = true; btn.disabled = true;
+      input.style.borderColor = ok ? '#bbf7d0' : '#fecaca';
+      input.style.background = ok ? '#f0fdf4' : '#fef2f2';
+      input.style.color = ok ? '#15803d' : '#e11d48';
+      btn.textContent = ok ? '✓ 정답!' : '✗ 오답';
+      finish(card, q, ok, q.answer[0]);
+    };
+    btn.addEventListener('click', submit);
+    input.addEventListener('keydown', e => { if(e.key === 'Enter') submit(); });
+  }
+}
+
+function mark(el, cls, label){
+  el.classList.add(cls);
+  const tag = document.createElement('span');
+  tag.className = 'tag';
+  tag.textContent = label;
+  el.appendChild(tag);
+}
+
+function finish(card, q, ok, answerText){
+  state.done.add(q.id);
+  state.solved++;
+  if(ok) state.correct++;
+
+  const ex = card.querySelector('.ex');
+  ex.innerHTML =
+    `<div class="et">${ok ? 'CORRECT · 해설' : 'REVIEW · 해설'}</div>
+     <div class="ans">정답: ${esc(answerText)}</div>
+     <div>${esc(q.explanation)}</div>
+     <div class="src">원본 근거 — ${esc(q.source)}</div>`;
+  ex.classList.add('show');
+
+  updateBoard();
+  if(state.solved === QUIZ_DATA.length) showResult();
+}
+
+function updateBoard(){
+  const rate = state.solved ? Math.round(state.correct / state.solved * 100) : 0;
+  document.getElementById('stSolved').innerHTML = state.solved + ' <small>/ 10</small>';
+  document.getElementById('stCorrect').textContent = state.correct;
+  document.getElementById('stRate').innerHTML = rate + '<small>%</small>';
+  const bar = document.getElementById('stBar');
+  bar.style.width = (state.solved / QUIZ_DATA.length * 100) + '%';
+  bar.style.backgroundColor = rate >= 70 ? '#15803d' : (rate >= 40 ? '#f59e0b' : '#e11d48');
+}
+
+function showResult(){
+  const n = state.correct;
+  const grade = n >= 9 ? 'A' : n >= 7 ? 'B' : n >= 5 ? 'C' : 'D';
+  const msg = {
+    A:'완벽합니다. 듀얼 리얼리티의 구조와 수급의 정체까지 정확히 짚어냈습니다. 이제 남은 건 원칙을 지키는 일뿐입니다.',
+    B:'탄탄합니다. 큰 그림은 잡혔으니 틀린 문항의 해설만 다시 읽어 보세요. 특히 숫자가 나오는 항목을 점검해 보시길 권합니다.',
+    C:'절반은 잡았습니다. CapEx와 잉여현금흐름의 구분, 그리고 레버리지 청산이 만든 수급 변화를 다시 정리해 보세요.',
+    D:'해설을 천천히 다시 읽어 보세요. 오늘의 핵심은 단 세 가지입니다. 국채금리, 수급 청산, 그리고 파워(전력 인프라).'
+  }[grade];
+
+  document.getElementById('rGrade').textContent = grade;
+  document.getElementById('rScore').innerHTML = n + ' <small>/ 10</small>';
+  document.getElementById('rMsg').textContent = msg;
+  const box = document.getElementById('result');
+  box.classList.add('show');
+  setTimeout(()=> box.scrollIntoView({behavior:'smooth', block:'center'}), 320);
+}
+
+document.getElementById('retry').addEventListener('click', () => {
+  state.solved = 0; state.correct = 0; state.done.clear();
+  document.getElementById('result').classList.remove('show');
+  render();
+  updateBoard();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+render();
+updateBoard();
+</script>
+</body>
+</html>
